@@ -3,7 +3,7 @@
  *
  * \brief Uart Serial for SAM.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -142,6 +142,13 @@ static inline void usart_serial_init(usart_if p_usart,
 # ifdef UART3
 	if (UART3 == (Uart*)p_usart) {
 		sysclk_enable_peripheral_clock(ID_UART3);
+		/* Configure UART */
+		uart_init((Uart*)p_usart, &uart_settings);
+	}
+# endif
+# ifdef UART4
+	if (UART4 == (Uart*)p_usart) {
+		sysclk_enable_peripheral_clock(ID_UART4);
 		/* Configure UART */
 		uart_init((Uart*)p_usart, &uart_settings);
 	}

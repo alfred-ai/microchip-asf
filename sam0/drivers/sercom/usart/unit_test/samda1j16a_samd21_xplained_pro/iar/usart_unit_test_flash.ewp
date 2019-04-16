@@ -2009,6 +2009,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/tc7.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/adc.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/tc6.h</name>
 							</file>
 							<file>
@@ -2078,7 +2081,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/ac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/adc.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/pac2.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/i2s.h</name>
@@ -2097,9 +2100,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/dsu.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/pac2.h</name>
 							</file>
 						</group>
 						<file>
@@ -2129,9 +2129,6 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/wdt.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/dmac.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/hmatrixb.h</name>
 							</file>
 							<file>
@@ -2151,6 +2148,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/sysctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/dmac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/dac.h</name>
@@ -2178,6 +2178,9 @@
 							</file>
 						</group>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j16b.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g15a.h</name>
 						</file>
 						<group>
@@ -2198,7 +2201,28 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e16a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e15b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j14b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j15b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g15b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g16a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e14b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j16b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g14b.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e15a.h</name>
@@ -2207,7 +2231,13 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g14a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e16b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e14a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g16b.h</name>
 							</file>
 						</group>
 						<file>
@@ -2217,10 +2247,19 @@
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e16a.h</name>
 						</file>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g14b.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j14a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e15a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g15b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e14b.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j16a.h</name>
@@ -2229,7 +2268,22 @@
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e14a.h</name>
 						</file>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j15b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g16b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e15b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j14b.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g14a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e16b.h</name>
 						</file>
 					</group>
 				</group>
@@ -2481,10 +2535,10 @@
 				</file>
 			</group>
 			<file>
-				<name>$PROJ_DIR$/../../../../../../../common/utils/interrupt.h</name>
+				<name>$PROJ_DIR$/../../../../../../../common/utils/parts.h</name>
 			</file>
 			<file>
-				<name>$PROJ_DIR$/../../../../../../../common/utils/parts.h</name>
+				<name>$PROJ_DIR$/../../../../../../../common/utils/interrupt.h</name>
 			</file>
 		</group>
 		<group>

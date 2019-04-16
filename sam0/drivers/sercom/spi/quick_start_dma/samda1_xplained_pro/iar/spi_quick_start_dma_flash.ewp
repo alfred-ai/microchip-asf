@@ -2051,6 +2051,9 @@
 						<group>
 							<name>samda1_xplained_pro</name>
 							<file>
+								<name>$PROJ_DIR$/../conf_quick_start.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../conf_board.h</name>
 							</file>
 							<group>
@@ -2061,9 +2064,6 @@
 							</group>
 							<file>
 								<name>$PROJ_DIR$/../conf_dma.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_quick_start.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../conf_spi.h</name>
@@ -2079,15 +2079,15 @@
 					<file>
 						<name>$PROJ_DIR$/../../../spi.c</name>
 					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../spi.h</name>
-					</file>
 					<group>
 						<name>quick_start_master</name>
 						<file>
 							<name>$PROJ_DIR$/../../../quick_start_master/qs_spi_master_basic.h</name>
 						</file>
 					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../spi.h</name>
+					</file>
 					<group>
 						<name>quick_start_slave</name>
 						<file>
@@ -2183,9 +2183,6 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/port.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/tcc0.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/sercom2.h</name>
 							</file>
 							<file>
@@ -2196,9 +2193,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/sysctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/rtc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/usb.h</name>
@@ -2219,6 +2213,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/sercom3.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/tcc0.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/mtb.h</name>
 							</file>
 							<file>
@@ -2229,6 +2226,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/eic.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/rtc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/instance/pac1.h</name>
@@ -2297,9 +2297,6 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/wdt.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/dmac.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/hmatrixb.h</name>
 							</file>
 							<file>
@@ -2319,6 +2316,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/sysctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/dmac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/component/dac.h</name>
@@ -2346,12 +2346,18 @@
 							</file>
 						</group>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j16b.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g15a.h</name>
 						</file>
 						<group>
 							<name>pio</name>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j16a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g15b.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j15a.h</name>
@@ -2366,7 +2372,25 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e16a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e15b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j14b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j15b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g16a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e14b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1j16b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g14b.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e15a.h</name>
@@ -2375,20 +2399,35 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g14a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e16b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1e14a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/pio/samda1g16b.h</name>
 							</file>
 						</group>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j14a.h</name>
-						</file>
-						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e16a.h</name>
 						</file>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j14a.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e15a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g15b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e14b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g14b.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j16a.h</name>
@@ -2397,7 +2436,22 @@
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e14a.h</name>
 						</file>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j15b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g16b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e15b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1j14b.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1g14a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samda1/include/samda1e16b.h</name>
 						</file>
 					</group>
 				</group>
@@ -2448,10 +2502,10 @@
 				</file>
 			</group>
 			<file>
-				<name>$PROJ_DIR$/../../../../../../../common/utils/interrupt.h</name>
+				<name>$PROJ_DIR$/../../../../../../../common/utils/parts.h</name>
 			</file>
 			<file>
-				<name>$PROJ_DIR$/../../../../../../../common/utils/parts.h</name>
+				<name>$PROJ_DIR$/../../../../../../../common/utils/interrupt.h</name>
 			</file>
 		</group>
 		<group>

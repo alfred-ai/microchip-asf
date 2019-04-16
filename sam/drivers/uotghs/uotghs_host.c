@@ -4,7 +4,7 @@
  * \brief USB host driver
  * Compliance with common driver UHD
  *
- * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -1964,14 +1964,14 @@ static void uhd_pipe_interrupt_dma(uint8_t pipe)
 	nb_remaining = (uhd_pipe_dma_get_status(pipe) &
 			UOTGHS_HSTDMASTATUS_BUFF_COUNT_Msk)
 			>> UOTGHS_HSTDMASTATUS_BUFF_COUNT_Pos;
+
+	// Get job corresponding at endpoint
+	ptr_job = &uhd_pipe_job[pipe - 1];
+	// Update number of transfered data
+	ptr_job->nb_trans = uhd_pipes_dma_nb_trans[pipe - 1] - nb_remaining;
+
 	if (nb_remaining) {
-		// Get job corresponding at endpoint
-		ptr_job = &uhd_pipe_job[pipe - 1];
-
 		// Transfer no complete (short packet or ZLP) then:
-		// Update number of transfered data
-		ptr_job->nb_trans =uhd_pipes_dma_nb_trans[pipe - 1] - nb_remaining;
-
 		// Set transfer complete to stop the transfer
 		ptr_job->buf_size = ptr_job->nb_trans;
 	}
