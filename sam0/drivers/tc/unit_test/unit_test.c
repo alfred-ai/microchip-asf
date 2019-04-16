@@ -71,7 +71,7 @@
  * \copydetails appdoc_preface
  *
  * The following kit is required for carrying out the test:
- *  - SAM D20/D21/R21/L21/L22/DA1/C21/R30 Xplained Pro board
+ *  - SAM D20/D21/R21/L21/L22/DA1/C21/R30/HA1G16A Xplained Pro board
  *
  * \section appdoc_sam0_tc_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -80,6 +80,7 @@
  *  - \b SAM L21 Xplained Pro:EXTINT 0 (PB00, EXT3 pin 3)  <-----> TC0 WO1 (PB09, EXT1 pin 13)
  *  - \b SAM L22 Xplained Pro:EXTINT 2 (PB16, EXT3 pin 7)  <-----> TC0 WO1 (PB09, EXT1 pin 8)
  *  - \b SAM DA1 Xplained Pro:EXTINT 0 (PA16, EXT2 pin 17) <-----> TC4 WO1 (PB09, EXT1 pin 13)
+ *  - \b SAM HA1G16A Xplained Pro:EXTINT 0 (PA16, EXT1 pin 10) <-----> TC3 WO1 (PA19, EXT1 pin 8)
  *  - \b SAM C21 Xplained Pro:EXTINT 0 (PB16, EXT2 pin 9)  <-----> TC0 WO1 (PB09, EXT1 pin 3)
  *  - \b SAM R30 Xplained Pro:EXTINT 0 (PA16, EXT1 pin 11)  <-----> TC0 WO1 (PA23, EXT1 pin 10)
  *

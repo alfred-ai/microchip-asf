@@ -184,7 +184,7 @@ static void config_dma_for_wave(void)
 	descriptor_config.dst_increment_enable = false;
 	descriptor_config.source_address =
 			(uint32_t)compare_values + sizeof(compare_values);
-#if (SAMR21) || (SAMD21) || (SAMDA1)
+#if (SAMR21) || (SAMD21) || (SAMDA1) || (SAMHA1)
 	descriptor_config.destination_address =
 			(uint32_t)&CONF_PWM_MODULE->CC[CONF_PWM_CHANNEL];
 #else

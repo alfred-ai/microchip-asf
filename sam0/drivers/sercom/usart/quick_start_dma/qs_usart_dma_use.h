@@ -3,7 +3,7 @@
  *
  * \brief SAM Quick Start Guide for Using Usart driver with DMA
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -52,6 +52,7 @@
  *    - SAM R21 Xplained Pro
  *    - SAM D11 Xplained Pro
  *    - SAM DA1 Xplained Pro
+ *    - SAM HA1G16A Xplained Pro
  *    - SAM L21 Xplained Pro
  *    - SAM L22 Xplained Pro
  *    - SAM C21 Xplained Pro

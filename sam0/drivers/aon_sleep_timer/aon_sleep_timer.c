@@ -211,7 +211,6 @@ void aon_sleep_timer_init(const struct aon_sleep_timer_config *config)
 				AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Msk)
 				!= AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Msk) {
 		}
-		AON_SLEEP_TIMER0->CONTROL.reg = 0;
 	}
 
 	system_register_isr(RAM_ISR_TABLE_AON_SLEEP_TIMER_INDEX, (uint32_t)aon_sleep_timer_isr_handler);

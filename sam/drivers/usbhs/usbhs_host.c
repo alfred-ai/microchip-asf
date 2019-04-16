@@ -4,7 +4,7 @@
  * \brief USB host driver
  * Compliance with common driver UHD
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -440,6 +440,7 @@ static void uhd_pipe_out_ready(uint8_t pipe);
 static void uhd_pipe_in_received(uint8_t pipe);
 #endif
 #ifdef UHD_PIPE_DMA_SUPPORTED
+static uint32_t uhd_pipes_dma_nb_trans[USBHS_EPT_NUM - 1];
 static void uhd_pipe_trans_complet(uint8_t pipe);
 static void uhd_pipe_interrupt_dma(uint8_t pipe);
 #endif
@@ -626,6 +627,7 @@ void uhd_enable(void)
 		otg_unfreeze_clock();
 	}
 # else
+	uhd_enable_vbus(); // enable VBUS
 	USBHS->USBHS_HSTIER = USBHS_HSTIER_HWUPIES;
 	uhd_sleep_mode(UHD_STATE_DISCONNECT);
 #endif
@@ -635,7 +637,6 @@ void uhd_enable(void)
 	USBHS->USBHS_HSTIER = USBHS_HSTIER_DCONNIES | USBHS_HSTIER_HSOFIES
 				| USBHS_HSTIER_RSTIES;
 
-	otg_freeze_clock();
 	uhd_sleep_mode(UHD_STATE_NO_VBUS);
 
 	cpu_irq_restore(flags);
@@ -1126,6 +1127,9 @@ static void uhd_interrupt(void)
 		return;
 	}
 
+	// Check USB clock ready after asynchronous interrupt
+	while (!Is_otg_clock_usable());
+
 	// Manage dis/connection event
 	if (Is_uhd_disconnection() && Is_uhd_disconnection_int_enabled()) {
 		uhd_ack_disconnection();
@@ -1162,20 +1166,6 @@ static void uhd_interrupt(void)
 		uhd_resume_start = 0;
 		uhc_notify_connection(true);
 		return;
-	}
-
-      /* If Wakeup interrupt is enabled and triggered and connection intterupt is enabled  */
-	if(Is_uhd_wakeup() && Is_uhd_connection_int_enabled()) {
-		 // Check USB clock ready after asynchronous interrupt
-		while (!Is_otg_clock_usable());
-		otg_unfreeze_clock();
-		// Here the wakeup interrupt has been used to detect connection
-		// with an asynchrone interrupt
-		USBHS->USBHS_HSTIDR = USBHS_HSTIDR_HWUPIEC;
-		//uhd_sleep_mode(UHD_STATE_IDLE);
-		uhd_enable_vbus(); // enable VBUS
-		uhd_sleep_mode(UHD_STATE_DISCONNECT);
-		UHC_VBUS_CHANGE(true);
 	}
 
 	if (Is_uhd_wakeup_interrupt_enabled() && (Is_uhd_wakeup() ||
@@ -1925,7 +1915,7 @@ static void uhd_pipe_trans_complet(uint8_t pipe)
 				}
 			}
 			uhd_pipe_dma_set_control(pipe, uhd_dma_ctrl);
-			ptr_job->nb_trans += next_trans;
+			uhd_pipes_dma_nb_trans[pipe - 1] = next_trans;
 			cpu_irq_restore(flags);
 			return;
 		}
@@ -1977,7 +1967,7 @@ static void uhd_pipe_interrupt_dma(uint8_t pipe)
 
 		// Transfer no complete (short packet or ZLP) then:
 		// Update number of transfered data
-		ptr_job->nb_trans -= nb_remaining;
+		ptr_job->nb_trans = uhd_pipes_dma_nb_trans[pipe - 1] - nb_remaining;
 
 		// Set transfer complete to stop the transfer
 		ptr_job->buf_size = ptr_job->nb_trans;

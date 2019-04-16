@@ -3,7 +3,7 @@
  *
  * \brief SAM TC - Timer Counter Driver Quick Start
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -95,6 +95,8 @@
  * - SAM L22 Xplained Pro.
  *   \snippet saml22_xplained_pro/conf_qs_tc_timer.h definition_tc
  * - SAM DA1 Xplained Pro.
+ *   \snippet samda1_xplained_pro/conf_qs_tc_timer.h definition_tc
+ * - SAM HA1G16A Xplained Pro.
  *   \snippet samda1_xplained_pro/conf_qs_tc_timer.h definition_tc
  * - SAM C21 Xplained Pro.
  *   \snippet samc21_xplained_pro/conf_qs_tc_timer.h definition_tc

@@ -512,7 +512,7 @@ typedef struct
  * \return The count of leading zero bits in \a u.
  */
 #if (defined __GNUC__) || (defined __CC_ARM)
-#   define clz(u)              __builtin_clz(u)
+#   define clz(u)              ((u) ? __builtin_clz(u) : 32)
 #else
 #   define clz(u)              (((u) == 0)          ? 32 : \
                                 ((u) & (1ul << 31)) ?  0 : \

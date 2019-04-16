@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAM D21/D11/L21/DA1/C21 Quick Start Guide for Using ADC/DAC driver with DMA
+ * \brief SAM D21/D11/L21/DA1/C21/HA1G16A Quick Start Guide for Using ADC/DAC driver with DMA
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -50,6 +50,7 @@
  *    - SAM L21 Xplained Pro
  *    - SAM DA1 Xplained Pro
  *    - SAM C21 Xplained Pro
+ *    - SAM HA1G16A Xplained Pro
  *
  * This quick start will convert an analog input signal from AIN4 and output
  * the converted value to DAC on PA2. The data between ADC and DAC with be

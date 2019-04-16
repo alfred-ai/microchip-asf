@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM I2C Slave with DMA Quick Start Guide
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,6 +51,7 @@
  *    - SAML22 Xplained Pro
  *    - SAMDA1 Xplained Pro
  *    - SAMC21 Xplained Pro
+ *    - SAMHA1G16A Xplained Pro
  *
  * In this use case, the I<SUP>2</SUP>C will used and set up as follows:
  *  - Slave mode

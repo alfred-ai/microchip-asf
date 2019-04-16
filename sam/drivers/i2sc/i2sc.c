@@ -6,7 +6,7 @@
  *
  * This file defines a useful set of functions for the I2S on SAM devices.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -459,6 +459,8 @@ void I2SC1_Handler(void)
 
 /**
  * \brief Get I2SC PDC base address.
+ *
+ * \note The second PDC base address for the same instance is the return value plus 0x100.
  *
  * \param dev_inst  Device structure pointer.
  *

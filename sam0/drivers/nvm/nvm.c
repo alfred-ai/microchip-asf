@@ -821,7 +821,7 @@ static void _nvm_translate_raw_fusebits_to_struct (
 			((raw_user_row[1] & FUSES_BOD33_HYST_Msk)
 			>> FUSES_BOD33_HYST_Pos);
 
-#elif (SAMD20) || (SAMD21) || (SAMR21)|| (SAMDA1) || (SAMD09) || (SAMD10)
+#elif (SAMD20) || (SAMD21) || (SAMR21)|| (SAMDA1) || (SAMD09) || (SAMD10) || (SAMD11) || (SAMHA1)
 	fusebits->bod33_level = (uint8_t)
 			((raw_user_row[0] & FUSES_BOD33USERLEVEL_Msk)
 			>> FUSES_BOD33USERLEVEL_Pos);
@@ -851,23 +851,6 @@ static void _nvm_translate_raw_fusebits_to_struct (
 
 	fusebits->bodvdd_hysteresis = (raw_user_row[1] & FUSES_BODVDD_HYST_Msk)
 									>> FUSES_BODVDD_HYST_Pos;
-#else
-	fusebits->bod33_level = (uint8_t)
-				((raw_user_row[0] & SYSCTRL_FUSES_BOD33USERLEVEL_Msk)
-				>> SYSCTRL_FUSES_BOD33USERLEVEL_Pos);
-
-	fusebits->bod33_enable = (bool)
-			((raw_user_row[0] & SYSCTRL_FUSES_BOD33_EN_Msk)
-			>> SYSCTRL_FUSES_BOD33_EN_Pos);
-
-	fusebits->bod33_action = (enum nvm_bod33_action)
-			((raw_user_row[0] & SYSCTRL_FUSES_BOD33_ACTION_Msk)
-			>> SYSCTRL_FUSES_BOD33_ACTION_Pos);
-
-	fusebits->bod33_hysteresis = (bool)
-			((raw_user_row[1] & SYSCTRL_FUSES_BOD33_HYST_Msk)
-			>> SYSCTRL_FUSES_BOD33_HYST_Pos);
-
 #endif
 
 #ifdef FEATURE_BOD12
@@ -1023,7 +1006,7 @@ enum status_code nvm_set_fuses(struct nvm_fusebits *fb)
 	fusebits[1] &= (~FUSES_BOD33_HYST_Msk);
 	fusebits[1] |= fb->bod33_hysteresis << FUSES_BOD33_HYST_Pos;
 
-#elif (SAMD20) || (SAMD21) || (SAMR21) || (SAMDA1) || (SAMD09) || (SAMD10)
+#elif (SAMD20) || (SAMD21) || (SAMR21) || (SAMDA1) || (SAMD09) || (SAMD10) || (SAMD11) || (SAMHA1)
 	fusebits[0] &= (~FUSES_BOD33USERLEVEL_Msk);
 	fusebits[0] |= FUSES_BOD33USERLEVEL(fb->bod33_level);
 
@@ -1048,19 +1031,6 @@ enum status_code nvm_set_fuses(struct nvm_fusebits *fb)
 
 	fusebits[1] &= (~FUSES_BODVDD_HYST_Msk);
 	fusebits[1] |= fb->bodvdd_hysteresis << FUSES_BODVDD_HYST_Pos;
-
-#else
-	fusebits[0] &= (~SYSCTRL_FUSES_BOD33USERLEVEL_Msk);
-	fusebits[0] |= SYSCTRL_FUSES_BOD33USERLEVEL(fb->bod33_level);
-
-	fusebits[0] &= (~SYSCTRL_FUSES_BOD33_EN_Msk);
-	fusebits[0] |= (fb->bod33_enable) << SYSCTRL_FUSES_BOD33_EN_Pos;
-
-	fusebits[0] &= (~SYSCTRL_FUSES_BOD33_ACTION_Msk);
-	fusebits[0] |= fb->bod33_action << SYSCTRL_FUSES_BOD33_ACTION_Pos;
-
-	fusebits[1] &= (~SYSCTRL_FUSES_BOD33_HYST_Msk);
-	fusebits[1] |= fb->bod33_hysteresis << SYSCTRL_FUSES_BOD33_HYST_Pos;
 
 #endif
 

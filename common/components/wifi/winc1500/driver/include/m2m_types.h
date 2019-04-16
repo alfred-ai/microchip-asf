@@ -131,11 +131,11 @@ MACROS
 */
 
 
-#define M2M_DRIVER_VERSION_MINOR_NO						(3)
+#define M2M_DRIVER_VERSION_MINOR_NO						(4)
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO						(0)
+#define M2M_DRIVER_VERSION_PATCH_NO						(4)
 /*!< Driver patch release version number.
 */
 

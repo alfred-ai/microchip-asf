@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC - Timer Counter for Control Applications Driver Quick Start
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,7 +48,7 @@
  * \page asfdoc_sam0_tcc_timer_use_case Quick Start Guide for TCC - Timer
  *
  * The supported board list:
- *    - SAM D21/R21/L21/L22/DA1/C21 Xplained Pro
+ *    - SAM D21/R21/L21/L22/DA1/C21/HA1G16A Xplained Pro
  *    - SAM D11 Xplained Pro
  *
  * In this use case, the TCC will be used as a timer, to generate overflow and
@@ -78,7 +78,7 @@
  * \section asfdoc_sam0_tcc_timer_use_case_setup Quick Start
  *
  * \subsection asfdoc_sam0_tcc_timer_use_case_prereq Prerequisites
- * For this use case, XOSC32K should be enabled and available through GCLK
+ * For this use case, XOSC32K/OSC32K should be enabled and available through GCLK
  * generator 1 clock source selection. Within Atmel Software Framework (ASF)
  * it can be done through modifying <i>conf_clocks.h</i>.
  * See \ref asfdoc_sam0_system_clock_group "System Clock Management Driver" for

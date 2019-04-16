@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAM DA0/DA1 System Interrupt Driver
+ * \brief SAM DA1 System Interrupt Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *

@@ -3,7 +3,7 @@
  *
  * \brief SAM Direct Memory Access Controller(DMAC) Driver Quick Start
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,6 +54,7 @@
  *    - SAM L21 Xplained Pro
  *    - SAM L22 Xplained Pro
  *    - SAM DA1 Xplained Pro
+ *    - SAM HA1G16A Xplained Pro
  *
  * In this use case, the DMAC is configured for:
  *  \li Moving data from memory to memory

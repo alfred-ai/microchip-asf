@@ -3,7 +3,7 @@
  *
  * \brief UART functions
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -58,6 +58,9 @@ struct usart_config usart_conf;
 static uint8_t tx_data;
 static uint8_t rx_data;
 
+/* USART TX callback flag */
+static volatile uint8_t tx_callback_flag = 0;
+
 /**
  * \internal
  * \brief USART interrupt callback function
@@ -68,6 +71,7 @@ static uint8_t rx_data;
  */
 static void usart_tx_callback(struct usart_module *const module)
 {
+	tx_callback_flag = 1;
 	/* Data ready to be sent */
 	if (uhi_cdc_is_rx_ready(0)) {
 		/* Transmit next data */
@@ -79,6 +83,7 @@ static void usart_tx_callback(struct usart_module *const module)
 		usart_disable_callback(&usart_module_edbg, USART_CALLBACK_BUFFER_TRANSMITTED);
 		ui_com_rx_stop();
 	}
+	tx_callback_flag = 0;
 }
 
 /**
@@ -111,11 +116,13 @@ static void usart_rx_callback(struct usart_module *const module)
 
 void uart_rx_notify(void)
 {
+if (!tx_callback_flag) {
 	/* Transmit first data */
 	ui_com_rx_start();
 	usart_enable_callback(&usart_module_edbg, USART_CALLBACK_BUFFER_TRANSMITTED);
 	tx_data = uhi_cdc_getc(0);
 	usart_write_buffer_job(&usart_module_edbg, &tx_data, 1);
+}
 }
 
 void uart_config(usb_cdc_line_coding_t *cfg)

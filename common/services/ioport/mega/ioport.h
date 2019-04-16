@@ -65,6 +65,10 @@
 #define IOPORT_PORTD    3
 #endif
 
+#if AVR8_PART_IS_DEFINED(ATmega328PB) || AVR8_PART_IS_DEFINED(ATmega324PB)
+#define IOPORT_PORTE    4
+#endif
+
 #if MEGA_XX0_1 || MEGA_RF
 #define IOPORT_PORTE    4
 #define IOPORT_PORTF    5
@@ -309,7 +313,7 @@ __always_inline static void arch_ioport_set_pin_level(ioport_pin_t pin,
  * \param: level high/low
  */
 __always_inline static void arch_ioport_set_port_level(ioport_port_t port,
-		ioport_port_mask_t mask, ioport_port_mask_t level)
+		ioport_port_mask_t mask, enum ioport_value level)
 {
 	PORT_t *base = arch_ioport_port_to_base(port);
 

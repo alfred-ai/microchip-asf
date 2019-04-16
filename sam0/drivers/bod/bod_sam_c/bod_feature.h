@@ -162,7 +162,7 @@ enum bodvdd_prescale {
 enum bodvdd_mode_in_active {
 	/** BODVDD will sample the supply line continuously */
 	BODVDD_ACTCFG_CONTINUOUS = 0,
-	/** BODVDD will use the BODVDD sampling clock (1KHz) to sample the supply line */
+	/** BODVDD will use the BODVDD sampling clock (1kHz) to sample the supply line */
 	BODVDD_ACTCFG_SAMPLED    = SUPC_BODVDD_ACTCFG,
 };
 
@@ -174,7 +174,7 @@ enum bodvdd_mode_in_active {
 enum bodvdd_mode_in_standby {
 	/** BODVDD will sample the supply line continuously */
 	BODVDD_STDBYCFG_CONTINUOUS = 0,
-	/** BODVDD will use the BODVDD sampling clock (1KHz) to sample the supply line */
+	/** BODVDD will use the BODVDD sampling clock (1kHz) to sample the supply line */
 	BODVDD_STDBYCFG_SAMPLED    = SUPC_BODVDD_STDBYCFG,
 };
 
@@ -196,7 +196,7 @@ enum bodvdd_action {
 
 /** Configuration structure for a BODVDD module. */
 struct bodvdd_config {
-	/** Input sampler clock prescaler factor, to reduce the 1KHz clock from the
+	/** Input sampler clock prescaler factor, to reduce the 1kHz clock from the
 	 *  ULP32K to lower the sampling rate of the BODVDD */
 	enum bodvdd_prescale prescaler;
 	/** BODVDD configuration in active mode */
@@ -205,7 +205,7 @@ struct bodvdd_config {
 	enum bodvdd_mode_in_standby mode_in_standby;
 	/** Action to perform when a low power detection is made */
 	enum bodvdd_action action;
-	/** BODVDD level to trigger at when monitors VDD excpt in backup sleep mode */
+	/** BODVDD level to trigger at when monitors VDD except in backup sleep mode */
 	uint8_t level;
 	/** If \c true, the BODVDD is kept enabled and sampled during standby */
 	bool run_in_standby;
@@ -305,7 +305,7 @@ static inline bool bodvdd_is_detected(void)
 /**
  * \brief Clears the low voltage detection state of the BODVDD.
  *
- * Clears the low voltage condition of BODVDD module, so that new
+ * Clears the low voltage condition of the BODVDD module, so that new
  * low voltage conditions can be detected.
  *
  */
@@ -385,8 +385,8 @@ static inline void bodvdd_clear_detected(void)
  * When it is desirable to set it in software, see the below use case.
  *
  * In this use case, a new BODVDD level might be set in SW if the clock settings
- * are adjusted up after a battery has charged to a higher level. When the battery
- * discharges, the chip will reset when the battery level is below SW BODVDD level.
+ * are adjusted after a battery has charged to a higher level. When the battery
+ * discharges, the chip will reset when the battery level is below the SW BODVDD level.
  * Now the chip will run at a lower clock rate and the BODVDD level from fuse.
  * The chip should always measure the voltage before adjusting the frequency up.
  *
@@ -400,7 +400,7 @@ static inline void bodvdd_clear_detected(void)
  *	</tr>
  *	<tr>
  *		<td>42701A</td>
- *		<td>03/2016</td>
+ *		<td>07/2016</td>
  *		<td>Initial document release</td>
  *	</tr>
  * </table>

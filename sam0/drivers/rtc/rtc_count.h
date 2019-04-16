@@ -71,6 +71,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
@@ -131,7 +132,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_CONTINUOUSLY_UPDATED</td>
- *    <td>SAM D20, SAM D21, SAM R21, SAM D10, SAM D11, SAM DA1</td>
+ *    <td>SAM D20, SAM D21, SAM R21, SAM D10, SAM D11, SAM DA1, SAM HA1</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_TAMPER_DETECTION</td>
@@ -237,7 +238,7 @@
  * \section asfdoc_sam0_rtc_count_special_considerations Special Considerations
  *
  * \subsection asfdoc_sam0_rtc_count_special_considerations_clock Clock Setup
- * \subsubsection asfdoc_sam0_rtc_count_clock_samd_r SAM D20/D21/R21/D10/D11/DA1 Clock Setup
+ * \subsubsection asfdoc_sam0_rtc_count_clock_samd_r SAM D20/D21/R21/D10/D11/DA1/HA1 Clock Setup
  * The RTC is typically clocked by a specialized GCLK generator that has a
  * smaller prescaler than the others. By default the RTC clock is on, selected
  * to use the internal 32KHz RC-oscillator with a prescaler of 32, giving a

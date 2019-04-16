@@ -221,21 +221,22 @@ static enum status_code _i2c_master_read_packet(
 	/* Address I2C slave in case of Master mode enabled. */
 	i2c_module->TRANSMIT_DATA.reg = I2C_TRANSMIT_DATA_ADDRESS_FLAG_1 |
 			(packet->address << 1) | I2C_TRANSFER_READ;
-	do {
-		status = i2c_module->RECEIVE_STATUS.reg;
-		if (status & I2C_RECEIVE_STATUS_RX_FIFO_NOT_EMPTY)
-			packet->data[counter++] = i2c_module->RECEIVE_DATA.reg;
-	} while (counter < length); 
 
 	/* Now check whether the core has sent the data out and free the bus. */
 	while (!(status & I2C_TRANSMIT_STATUS_TX_FIFO_EMPTY)) {
 		status = i2c_module->TRANSMIT_STATUS.reg;
 	}
 
-	/* Send stop condition. */
-	if (!module->no_stop) {
-		i2c_module->I2C_ONBUS.reg = I2C_ONBUS_ONBUS_ENABLE_0;
-	}
+	do {
+		/* Send stop condition. */
+		if ((!module->no_stop) && (counter == (length - 1))) {
+			i2c_module->I2C_ONBUS.reg = I2C_ONBUS_ONBUS_ENABLE_0;
+		}
+
+		status = i2c_module->RECEIVE_STATUS.reg;
+		if (status & I2C_RECEIVE_STATUS_RX_FIFO_NOT_EMPTY)
+			packet->data[counter++] = i2c_module->RECEIVE_DATA.reg;
+	} while (counter < length);
 
 	return STATUS_OK;
 }

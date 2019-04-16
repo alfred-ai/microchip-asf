@@ -308,12 +308,12 @@
 					<state>$PROJ_DIR$/../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/boards</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../sam0</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samd20/include</state>
@@ -579,12 +579,12 @@
 					<state>$PROJ_DIR$/../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/boards</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../sam0</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samd20/include</state>
@@ -1275,12 +1275,12 @@
 					<state>$PROJ_DIR$/../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/boards</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../sam0</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samd20/include</state>
@@ -1546,12 +1546,12 @@
 					<state>$PROJ_DIR$/../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/boards</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../sam0</state>
+					<state>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samd20/include</state>
@@ -2333,24 +2333,24 @@
 						<name>$PROJ_DIR$/../../../../../../sam0/drivers/system/pinmux/pinmux.h</name>
 					</file>
 				</group>
+				<group>
+					<name>reset</name>
+					<group>
+						<name>reset_sam_d_r_h</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h/reset.h</name>
+						</file>
+					</group>
+				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../sam0/drivers/system/system.h</name>
 				</file>
 				<group>
-					<name>reset</name>
-					<group>
-						<name>reset_sam_d_r</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../sam0/drivers/system/reset/reset_sam_d_r/reset.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
 					<name>power</name>
 					<group>
-						<name>power_sam_d_r</name>
+						<name>power_sam_d_r_h</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r/power.h</name>
+							<name>$PROJ_DIR$/../../../../../../sam0/drivers/system/power/power_sam_d_r_h/power.h</name>
 						</file>
 					</group>
 				</group>

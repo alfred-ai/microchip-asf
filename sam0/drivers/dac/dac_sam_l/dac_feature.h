@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Digital-to-Analog Converter Driver
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -367,14 +367,14 @@ enum dac_reference {
  * Enum for the current in output buffer according the conversion rate.
  */
 enum dac_current_ctrl {
-	/** 1MHz < GCLK_DAC < 12MHz */
-	DAC_CURRENT_12M  = DAC_DACCTRL_CCTRL(0),
-	/** 100KHz < GCLK_DAC < 1MHz */
+	/** GCLK_DAC <= 1.2MHz */
+	DAC_CURRENT_100K  = DAC_DACCTRL_CCTRL(0),
+	/** 1.2MHz < GCLK_DAC <= 6MHz */
 	DAC_CURRENT_1M   = DAC_DACCTRL_CCTRL(1),
-	/** 10KHz < GCLK_DAC < 100KHz */
-	DAC_CURRENT_100K = DAC_DACCTRL_CCTRL(2),
-	/** GCLK_DAC < 10KHz */
-	DAC_CURRENT_10K  = DAC_DACCTRL_CCTRL(3),
+	/** 6MHz < GCLK_DAC <= 12MHz */
+	DAC_CURRENT_12M = DAC_DACCTRL_CCTRL(2),
+	/** Reserved */
+	DAC_CURRENT_RESERVED  = DAC_DACCTRL_CCTRL(3),
 };
 
 /**

@@ -287,16 +287,20 @@ void pmc_sleep(int sleep_mode)
 #if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CM || SAM4CP || SAMG || SAMV71 || SAMV70 || SAMS70 || SAME70)
 		SCB->SCR &= (uint32_t)~SCR_SLEEPDEEP;
 		cpu_irq_enable();
+		__DSB();
 		__WFI();
 		break;
 #else
 		PMC->PMC_FSMR &= (uint32_t)~PMC_FSMR_LPM;
 		SCB->SCR &= (uint32_t)~SCR_SLEEPDEEP;
 		cpu_irq_enable();
-		if (sleep_mode == SAM_PM_SMODE_SLEEP_WFI)
+		if (sleep_mode == SAM_PM_SMODE_SLEEP_WFI) {
+			__DSB();
 			__WFI();
-		else
+		} else {
+			__DSB();
 			__WFE();
+		}
 		break;
 #endif
 

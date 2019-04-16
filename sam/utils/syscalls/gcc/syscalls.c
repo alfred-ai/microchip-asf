@@ -122,6 +122,7 @@ extern int _lseek(int file, int ptr, int dir)
 extern void _exit(int status)
 {
 	asm("BKPT #0");
+	for (;;);
 }
 
 extern void _kill(int pid, int sig)

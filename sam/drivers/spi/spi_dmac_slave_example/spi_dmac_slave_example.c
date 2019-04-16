@@ -492,7 +492,6 @@ static void spi_master_transfer(void *p_buf, uint32_t ul_size)
 	dmac_trans.ul_descriptor_addr = 0;
 	dmac_channel_single_buf_transfer_init(DMAC, BOARD_SPI_DMAC_TX_CH,
 			(dma_transfer_descriptor_t *) & dmac_trans);
-	dmac_channel_enable(DMAC, BOARD_SPI_DMAC_TX_CH);
 
 	dmac_channel_disable(DMAC, BOARD_SPI_DMAC_RX_CH);
 	dmac_trans.ul_source_addr = (uint32_t) & SPI_MASTER_BASE->SPI_RDR;
@@ -506,6 +505,8 @@ static void spi_master_transfer(void *p_buf, uint32_t ul_size)
 	dmac_trans.ul_descriptor_addr = 0;
 	dmac_channel_single_buf_transfer_init(DMAC, BOARD_SPI_DMAC_RX_CH,
 			&dmac_trans);
+
+	dmac_channel_enable(DMAC, BOARD_SPI_DMAC_TX_CH);
 	dmac_channel_enable(DMAC, BOARD_SPI_DMAC_RX_CH);
 }
 

@@ -3,7 +3,7 @@
  *
  * \brief SAM DAC Unit Test
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -71,6 +71,7 @@
  *  - SAM D21 Xplained Pro board
  *  - SAM L21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM HA1G16A Xplained Pro board
  *  - SAM C21 Xplained Pro board
  *  - SAM D20 Xplained Pro board
  *

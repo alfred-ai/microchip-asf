@@ -102,6 +102,10 @@
 #  include "samc21.h"
 #endif
 
+#if (SAMHA1)
+#  include "samha1.h"
+#endif
+
 #if (SAMB11)
 #  include "samb11.h"
 #endif

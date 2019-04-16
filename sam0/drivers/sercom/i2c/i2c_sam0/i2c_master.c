@@ -179,7 +179,7 @@ static enum status_code _i2c_master_set_config(
 	uint32_t trise       = config->sda_scl_rise_time_ns;
 	
 	tmp_baud = (int32_t)(div_ceil(
-			fgclk - fscl * (10 + fgclk * trise * 0.000000001), 2 * fscl));
+			fgclk - fscl * (10 + (fgclk * 0.000000001)* trise), 2 * fscl));
 	
 	/* For High speed mode, set the SCL ratio of high:low to 1:2. */
 	if (config->transfer_speed == I2C_MASTER_SPEED_HIGH_SPEED) {

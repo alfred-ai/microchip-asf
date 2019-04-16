@@ -139,6 +139,7 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 	/*Interrupt on falling edge*/
 	pio_handler_set(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_PIO_ID,
 	CONF_WINC_SPI_INT_MASK, PIO_PULLUP | PIO_IT_FALL_EDGE, chip_isr);
+	pio_get_interrupt_status(CONF_WINC_SPI_INT_PIO);
 	pio_enable_interrupt(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_MASK);
 	NVIC_EnableIRQ((IRQn_Type) CONF_WINC_SPI_INT_PIO_ID);
 	pio_handler_set_priority(CONF_WINC_SPI_INT_PIO, (IRQn_Type)CONF_WINC_SPI_INT_PIO_ID,
@@ -154,6 +155,7 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 {
 	if (u8Enable) {
+		pio_get_interrupt_status(CONF_WINC_SPI_INT_PIO);
 		pio_enable_interrupt(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_MASK);
 	}
 	else {

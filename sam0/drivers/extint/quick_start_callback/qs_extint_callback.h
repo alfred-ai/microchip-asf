@@ -3,7 +3,7 @@
  *
  * \brief SAM External Interrupt Driver Quick Start
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -52,6 +52,7 @@
  *    - SAM L22 Xplained Pro
  *    - SAM DA1 Xplained Pro
  *    - SAM C21 Xplained Pro
+ *    - SAM HA1G16A Xplained Pro
  *
  * In this use case, the EXTINT module is configured for:
  *  - External interrupt channel connected to the board LED is used

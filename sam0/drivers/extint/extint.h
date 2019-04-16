@@ -70,6 +70,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_extint_prerequisites

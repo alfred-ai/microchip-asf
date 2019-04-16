@@ -3,7 +3,7 @@
  *
  * \brief Chip Identifier (CHIPID) example for SAM.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -254,9 +254,9 @@ const chipidtype_t chipid_archsize[CHIPID_ARCH_SIZE] = {
 	{0x93,              "ATSAM3NxA/SAM4NxA Series"},
 	{0x94,              "ATSAM3NxB/SAM4NxB Series"},
 	{0x95,              "ATSAM3NxC/SAM4NxC Series"},
-	{0x98,              "ATSAM3SDxA Series"},
-	{0x99,              "ATSAM3SDxB Series"},
-	{0x9A,              "ATSAM3SDxC Series"},
+	{0x98,              "ATSAM3SD/SAM4SD xA Series"},
+	{0x99,              "ATSAM3SD/SAM4SD xB Series"},
+	{0x9A,              "ATSAM3SD/SAM4SD xC Series"},
 	{0xA5,              "ATSAM5A Series"},
 	{0xF0,              "AT75Cxx Series"}
 };

@@ -3,7 +3,7 @@
  *
  * \brief SAM DAC Callback Quick Start
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -264,7 +264,7 @@ int main(void)
 
 //! [setup_dac_data]
 	for (i = 0;i < DATA_LENGTH;i++) {
-		dac_data[i] = 0xfff * i;
+		dac_data[i] = 0x3f * i;
 	}
 //! [setup_dac_data]
 //! [setup_init]

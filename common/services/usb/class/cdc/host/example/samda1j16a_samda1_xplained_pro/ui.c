@@ -3,7 +3,7 @@
  *
  * \brief User Interface
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -177,7 +177,7 @@ void ui_usb_enum_event(uhc_device_t *dev, uhc_enum_status_t status)
 		/* USB Device CDC connected
 		   Open and configure UART and USB CDC ports */
 		usb_cdc_line_coding_t cfg = {
-			.dwDTERate   = CPU_TO_LE32(115200),
+			.dwDTERate   = CPU_TO_LE32(19200),
 			.bCharFormat = CDC_STOP_BITS_1,
 			.bParityType = CDC_PAR_NONE,
 			.bDataBits   = 8,

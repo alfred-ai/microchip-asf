@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Digital-to-Analog Converter Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -65,7 +65,7 @@ extern "C" {
  * Define DAC features set according to different device families.
  * @{
  */
-#if (SAMD21 || SAMD10 || SAMD11 || SAMDA1)
+#if (SAMD21 || SAMD10 || SAMD11 || SAMDA1 || SAMHA1)
 #  define FEATURE_DAC_DATABUF_WRITE_PROTECTION
 #endif
 /**@}*/

@@ -71,6 +71,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_tc_prerequisites
@@ -487,7 +488,7 @@
 #if SAMD20 || SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30
 #  define TC_INSTANCE_OFFSET 0
 #endif
-#if SAMD21 || SAMR21 || SAMDA1
+#if SAMD21 || SAMR21 || SAMDA1 || SAMHA1
 #  define TC_INSTANCE_OFFSET 3
 #endif
 #if SAMD09 || SAMD10 || SAMD11

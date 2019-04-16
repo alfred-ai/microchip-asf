@@ -316,7 +316,11 @@ static udd_ep_job_t udd_ep_job[2 * USB_DEVICE_MAX_EP];
  */
 static udd_ep_job_t* udd_ep_get_job(udd_ep_id_t ep)
 {
-	return &udd_ep_job[(2 * (ep & USB_EP_ADDR_MASK) + ((ep & USB_EP_DIR_IN) ? 1 : 0)) - 2];
+	if ((ep == 0) || (ep == 0x80)) {
+		return NULL;
+	} else {
+		return &udd_ep_job[(2 * (ep & USB_EP_ADDR_MASK) + ((ep & USB_EP_DIR_IN) ? 1 : 0)) - 2];
+	}
 }
 
 /**

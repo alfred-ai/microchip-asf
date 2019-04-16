@@ -3,7 +3,7 @@
  *
  * \brief SAM Clock Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -1458,7 +1458,7 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  *	<tr>
  *		<td>E</td>
  *		<td>04/2015</td>
- *		<td>Added support for SAMDAx.</td>
+ *		<td>Added support for SAMDA1.</td>
  *	</tr>
  *	<tr>
  *		<td>D</td>

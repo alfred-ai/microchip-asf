@@ -178,6 +178,11 @@ static inline void _system_clock_source_dfll_set_config_errata_9905(void)
 	_system_dfll_wait_for_sync();
 
 	OSCCTRL->DFLLMUL.reg = _system_clock_inst.dfll.mul;
+
+	/* Disable ONDEMAND mode while writing configurations */
+	OSCCTRL->DFLLCTRL.reg = OSCCTRL_DFLLCTRL_ENABLE;
+	_system_dfll_wait_for_sync();
+
 	OSCCTRL->DFLLVAL.reg = _system_clock_inst.dfll.val;
 
 	/* Write full configuration to DFLL control register */

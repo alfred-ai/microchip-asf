@@ -3,7 +3,7 @@
  *
  * \brief SAM TC Driver Quick Start
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -101,6 +101,9 @@
  *   \snippet quick_start_dma/saml22_xplained_pro/conf_quick_start.h definition_pwm
  *   \snippet quick_start_dma/saml22_xplained_pro/conf_quick_start.h definition_dma
  * - SAM DA1 Xplained Pro.
+ *   \snippet quick_start_dma/samda1_xplained_pro/conf_quick_start.h definition_pwm
+ *   \snippet quick_start_dma/samda1_xplained_pro/conf_quick_start.h definition_dma
+ * - SAM HA1G16A Xplained Pro.
  *   \snippet quick_start_dma/samda1_xplained_pro/conf_quick_start.h definition_pwm
  *   \snippet quick_start_dma/samda1_xplained_pro/conf_quick_start.h definition_dma
  * - SAM C21 Xplained Pro.

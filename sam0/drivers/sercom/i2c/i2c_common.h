@@ -90,6 +90,7 @@ extern "C" {
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *
  * The outline of this documentation is as follows:
  * - \ref asfdoc_sam0_sercom_i2c_prerequisites
@@ -121,19 +122,19 @@ extern "C" {
  *	</tr>
  *	<tr>
  *		<td>FEATURE_I2C_FAST_MODE_PLUS_AND_HIGH_SPEED</td>
- *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21</td>
+ *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/HA1</td>
  *	</tr>
  *	<tr>
  *		<td>FEATURE_I2C_10_BIT_ADDRESS</td>
- *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21</td>
+ *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/HA1</td>
  *	</tr>
  *	<tr>
  *		<td>FEATURE_I2C_SCL_STRETCH_MODE</td>
- *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21</td>
+ *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/HA1</td>
  *	</tr>
  *	<tr>
  *		<td>FEATURE_I2C_SCL_EXTEND_TIMEOUT</td>
- *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21</td>
+ *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/HA1</td>
  *	</tr>
  * </table>
  * \note The specific features are only available in the driver when the selected
@@ -406,7 +407,7 @@ extern "C" {
  * @{
  */
 #if (SAMD21) || (SAMR21) || (SAMD10) || (SAMD11) || (SAML21) || (SAMDA1) || \
-	(SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || defined(__DOXYGEN__)
+	(SAMHA1) || (SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || defined(__DOXYGEN__)
 /** Fast mode plus and high speed support. */
 #  define FEATURE_I2C_FAST_MODE_PLUS_AND_HIGH_SPEED
 /** 10-bit address support */

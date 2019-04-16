@@ -306,7 +306,7 @@
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/source</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../system/power</state>
-					<state>$PROJ_DIR$/../../../../../system/reset</state>
+					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../i2c_sam0</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -319,20 +319,20 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/include</state>
-					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../system</state>
+					<state>$PROJ_DIR$/../../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -589,7 +589,7 @@
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/source</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../system/power</state>
-					<state>$PROJ_DIR$/../../../../../system/reset</state>
+					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../i2c_sam0</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -602,20 +602,20 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/include</state>
-					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../system</state>
+					<state>$PROJ_DIR$/../../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1297,7 +1297,7 @@
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/source</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../system/power</state>
-					<state>$PROJ_DIR$/../../../../../system/reset</state>
+					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../i2c_sam0</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1310,20 +1310,20 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/include</state>
-					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../system</state>
+					<state>$PROJ_DIR$/../../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1580,7 +1580,7 @@
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/source</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../system/power</state>
-					<state>$PROJ_DIR$/../../../../../system/reset</state>
+					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../i2c_sam0</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1593,20 +1593,20 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd21/include</state>
-					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../../../system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../system</state>
+					<state>$PROJ_DIR$/../../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -2053,12 +2053,6 @@
 					<file>
 						<name>$PROJ_DIR$/../../../i2c_master.h</name>
 					</file>
-					<group>
-						<name>quick_start_slave_callback</name>
-						<file>
-							<name>$PROJ_DIR$/../../../quick_start_slave_callback/qs_i2c_slave_callback.h</name>
-						</file>
-					</group>
 					<file>
 						<name>$PROJ_DIR$/../../../i2c_slave_interrupt.h</name>
 					</file>
@@ -2072,6 +2066,12 @@
 						<name>$PROJ_DIR$/../../../i2c_slave.h</name>
 					</file>
 					<group>
+						<name>quick_start_slave_callback</name>
+						<file>
+							<name>$PROJ_DIR$/../../../quick_start_slave_callback/qs_i2c_slave_callback.h</name>
+						</file>
+					</group>
+					<group>
 						<name>quick_start_master</name>
 						<file>
 							<name>$PROJ_DIR$/../../../quick_start_master/qs_i2c_master_basic_use.h</name>
@@ -2084,6 +2084,9 @@
 						</file>
 					</group>
 				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../sercom.c</name>
+				</file>
 				<group>
 					<name>usart</name>
 					<file>
@@ -2107,15 +2110,15 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../usart/usart_interrupt.h</name>
 					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../usart/usart.h</name>
+					</file>
 					<group>
 						<name>quick_start</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../usart/quick_start/qs_usart_basic_use.h</name>
 						</file>
 					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../usart/usart.h</name>
-					</file>
 					<group>
 						<name>quick_start_callback</name>
 						<file>
@@ -2123,9 +2126,6 @@
 						</file>
 					</group>
 				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../sercom.c</name>
-				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../sercom_interrupt.h</name>
 				</file>
@@ -2141,18 +2141,18 @@
 				<group>
 					<name>clock</name>
 					<group>
-						<name>clock_samd21_r21_da</name>
+						<name>clock_samd21_r21_da_ha1</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da/clock.c</name>
+							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1/gclk.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da/gclk.c</name>
+							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1/clock.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da/clock_config_check.h</name>
+							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1/clock_feature.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da/clock_feature.h</name>
+							<name>$PROJ_DIR$/../../../../../system/clock/clock_samd21_r21_da_ha1/clock_config_check.h</name>
 						</file>
 					</group>
 					<file>
@@ -2201,18 +2201,18 @@
 				<group>
 					<name>reset</name>
 					<group>
-						<name>reset_sam_d_r</name>
+						<name>reset_sam_d_r_h</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r/reset.h</name>
+							<name>$PROJ_DIR$/../../../../../system/reset/reset_sam_d_r_h/reset.h</name>
 						</file>
 					</group>
 				</group>
 				<group>
 					<name>power</name>
 					<group>
-						<name>power_sam_d_r</name>
+						<name>power_sam_d_r_h</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../system/power/power_sam_d_r/power.h</name>
+							<name>$PROJ_DIR$/../../../../../system/power/power_sam_d_r_h/power.h</name>
 						</file>
 					</group>
 				</group>

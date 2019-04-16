@@ -104,9 +104,9 @@ extern void vApplicationTickHook(void);
 extern void vApplicationMallocFailedHook(void);
 extern void xPortSysTickHandler(void);
 
-#if !(defined(SAMV71) || defined(SAME70))
+#if !(SAMV71 || SAME70)
 /**
- * \brief Handler for Sytem Tick interrupt.
+ * \brief Handler for System Tick interrupt.
  */
 void SysTick_Handler(void)
 {
@@ -230,7 +230,7 @@ int main(void)
 	/* Initialize the console uart */
 	configure_console();
 
-	/* Output demo infomation. */
+	/* Output demo information. */
 	printf("-- Freertos Example --\n\r");
 	printf("-- %s\n\r", BOARD_NAME);
 	printf("-- Compiled: %s %s --\n\r", __DATE__, __TIME__);

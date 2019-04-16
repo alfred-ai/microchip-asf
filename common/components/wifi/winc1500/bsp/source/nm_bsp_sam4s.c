@@ -142,6 +142,7 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 	pio_pull_up(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_MASK, PIO_PULLUP);
 //	pio_set_debounce_filter(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_MASK, 10);
 	pio_handler_set_pin(CONF_WINC_SPI_INT_PIN, PIO_IT_LOW_LEVEL, chip_isr);
+	pio_get_interrupt_status(CONF_WINC_SPI_INT_PIO);
 	pio_enable_interrupt(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_MASK);
 	pio_handler_set_priority(CONF_WINC_SPI_INT_PIO, (IRQn_Type)CONF_WINC_SPI_INT_PIO_ID,
 			CONF_WINC_SPI_INT_PRIORITY);
@@ -156,6 +157,7 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 {
 	if (u8Enable) {
+		pio_get_interrupt_status(CONF_WINC_SPI_INT_PIO);
 		pio_enable_interrupt(CONF_WINC_SPI_INT_PIO, CONF_WINC_SPI_INT_MASK);
 	}
 	else {

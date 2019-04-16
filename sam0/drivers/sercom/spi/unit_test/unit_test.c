@@ -78,6 +78,7 @@
  *  - SAM L21 Xplained Pro board
  *  - SAM L22 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM HA1G16A Xplained Pro board
  *  - SAM C21 Xplained Pro board
  *  - SAM R30 Xplained Pro board 
  *
@@ -93,6 +94,11 @@
  *  - \b SS_0:  EXT3 PIN16 (PB22) <--> EXT2 PIN16 (PA18)
  *  - \b DI/DO: EXT3 PIN17 (PB16) <--> EXT2 PIN17 (PA16)
  *  - \b DO/DI: EXT3 PIN18 (PB23) <--> EXT2 PIN18 (PA19)
+ * -SAM HA1G16A Xplained Pro
+ *  - \b SCK:   EXT3 PIN17 (PA16) <--> EXT1 PIN16 (PA04)
+ *  - \b SS_0:  EXT3 PIN18 (PA17) <--> EXT1 PIN18 (PA05)
+ *  - \b DI/DO: EXT3 PIN15 (PA20) <--> EXT1 PIN15 (PA10)
+ *  - \b DO/DI: EXT3 PIN16 (PA21) <--> EXT1 PIN17 (PA11)
  * - SAM R21 Xplained Pro
  *  - \b SS_0:  EXT1 PIN15 (PB03) <--> EXT1 PIN12 (PA17)
  *  - \b DI/D0: EXT1 PIN16 (PB22) <--> EXT1 PIN7  (PA18)
@@ -239,11 +245,13 @@ static void run_spi_init_test(const struct test_case *test)
 
 	/* Configure the SPI master */
 	spi_get_config_defaults(&config);
+
 	config.mux_setting     = CONF_SPI_MASTER_SPI_MUX;
 	config.pinmux_pad0     = CONF_SPI_MASTER_DATA_IN_PIN_MUX;
 	config.pinmux_pad1     = PINMUX_UNUSED;
 	config.pinmux_pad2     = CONF_SPI_MASTER_DATA_OUT_PIN_MUX;
 	config.pinmux_pad3     = CONF_SPI_MASTER_SCK_PIN_MUX;
+
 	config.mode_specific.master.baudrate = TEST_SPI_BAUDRATE;
 	status = spi_init(&master, CONF_SPI_MASTER_MODULE, &config);
 	test_assert_true(test, status == STATUS_OK,
@@ -261,6 +269,7 @@ static void run_spi_init_test(const struct test_case *test)
 	config.pinmux_pad1          = CONF_SPI_SLAVE_SS_PIN_MUX;
 	config.pinmux_pad2          = CONF_SPI_SLAVE_DATA_OUT_PIN_MUX;
 	config.pinmux_pad3          = CONF_SPI_SLAVE_SCK_PIN_MUX;
+
 	config.mode_specific.slave.frame_format   = SPI_FRAME_FORMAT_SPI_FRAME;
 	config.mode_specific.slave.preload_enable = true;
 	status = spi_init(&slave, CONF_SPI_SLAVE_MODULE, &config);
@@ -476,6 +485,7 @@ static void run_baud_test(const struct test_case *test)
 
 	/* Configure the SPI master */
 	spi_get_config_defaults(&config);
+
 	config.mux_setting     = CONF_SPI_MASTER_SPI_MUX;
 	config.pinmux_pad0     = CONF_SPI_MASTER_DATA_IN_PIN_MUX;
 	config.pinmux_pad1     = PINMUX_UNUSED;
@@ -528,11 +538,13 @@ static void setup_transfer_9bit_test(const struct test_case *test)
 
 	/* Configure the SPI master */
 	spi_get_config_defaults(&config);
+
 	config.mux_setting     = CONF_SPI_MASTER_SPI_MUX;
 	config.pinmux_pad0     = CONF_SPI_MASTER_DATA_IN_PIN_MUX;
 	config.pinmux_pad1     = PINMUX_UNUSED;
 	config.pinmux_pad2     = CONF_SPI_MASTER_DATA_OUT_PIN_MUX;
 	config.pinmux_pad3     = CONF_SPI_MASTER_SCK_PIN_MUX;
+
 	config.mode_specific.master.baudrate = TEST_SPI_BAUDRATE;
 	config.character_size  = SPI_CHARACTER_SIZE_9BIT;
 	status = spi_init(&master, CONF_SPI_MASTER_MODULE, &config);
@@ -546,11 +558,13 @@ static void setup_transfer_9bit_test(const struct test_case *test)
 	/* Configure the SPI slave */
 	spi_get_config_defaults(&config);
 	config.mode                 = SPI_MODE_SLAVE;
+
 	config.mux_setting          = CONF_SPI_SLAVE_SPI_MUX;
 	config.pinmux_pad0          = CONF_SPI_SLAVE_DATA_IN_PIN_MUX;
 	config.pinmux_pad1          = CONF_SPI_SLAVE_SS_PIN_MUX;
 	config.pinmux_pad2          = CONF_SPI_SLAVE_DATA_OUT_PIN_MUX;
 	config.pinmux_pad3          = CONF_SPI_SLAVE_SCK_PIN_MUX;
+
 	config.mode_specific.slave.frame_format   = SPI_FRAME_FORMAT_SPI_FRAME;
 	config.mode_specific.slave.preload_enable = true;
 	config.character_size       = SPI_CHARACTER_SIZE_9BIT;

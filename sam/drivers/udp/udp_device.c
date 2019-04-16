@@ -609,9 +609,6 @@ void udd_disable(void)
 
 	udd_detach();
 
-	udd_disable_periph_ck();
-	sysclk_disable_usb();
-
 #ifndef UDD_NO_SLEEP_MGR
 	sleepmgr_unlock_mode(UDP_SLEEP_MODE_USB_SUSPEND);
 #endif
@@ -759,7 +756,7 @@ bool udd_ep_alloc(udd_ep_id_t ep, uint8_t bmAttributes,
 	udd_reset_endpoint(ep);
 	// Set configuration of new endpoint
 	udd_configure_endpoint(ep,
-		(b_dir_in ? (bmAttributes | 0x4) : bmAttributes),
+		(b_dir_in ? ((bmAttributes&USB_EP_TYPE_MASK) | 0x4) : (bmAttributes&USB_EP_TYPE_MASK)),
 		0);
 	return true;
 }

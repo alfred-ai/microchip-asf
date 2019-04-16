@@ -1066,6 +1066,10 @@ static enum status_code _tcc_set_compare_value(
 #if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30)
 		tcc_module->CCBUF[channel_index].reg = compare;
 #else
+		while(tcc_module->STATUS.reg  &
+				(TCC_STATUS_CCBV0 << channel_index)) {
+			/* Valid check */
+		}
 		while(tcc_module->SYNCBUSY.reg  &
 				(TCC_SYNCBUSY_CCB0 << channel_index)) {
 			/* Sync wait */

@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC - Timer Counter for Control Applications Callback Driver Quick Start (with Recoverable Fault)
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,7 +48,7 @@
  * \page asfdoc_sam0_tcc_faultn_use_case Quick Start Guide for TCC - Recoverable Fault
  *
  * The supported board list:
- *    - SAM D21/R21/L21/L22/DA1/C21 Xplained Pro
+ *    - SAM D21/R21/L21/L22/DA1/C21/HA1G16A Xplained Pro
  *
  * In this use case, the TCC will be used to generate a PWM signal, with a
  * varying duty cycle. Here the pulse width is increased each time the timer
@@ -61,22 +61,26 @@
  * a button, the LED will be frozen and not changing it's light
  * when the button is down and will go on when the button is up.
  * To see the PWM waveform, you may need an oscilloscope.
+ * SAMHA1G16A Xpro LED is PA00 which isn't connected out, use PA04 instead,
+ * so we can't see LED blink but only see the waveform from oscilloscope.
  *
  * The PWM output and fault input is set up as follows:
  * <table>
- *  <tr><th> Board         </td><th> Pin  </td><th> Connect to </td></tr>
- *  <tr><td> SAM D21 Xpro  </td><td> PB30 </td><td> LED0       </td></tr>
- *  <tr><td> SAM D21 Xpro  </td><td> PA15 </td><td> SW0        </td></tr>
- *  <tr><td> SAM R21 Xpro  </td><td> PA06 </td><td> EXT1 Pin 3 </td></tr>
- *  <tr><td> SAM R21 Xpro  </td><td> PA28 </td><td> SW0        </td></tr>
- *  <tr><td> SAM L21 Xpro  </td><td> PB10 </td><td> LED0       </td></tr>
- *  <tr><td> SAM L21 Xpro  </td><td> PA16 </td><td> SW0        </td></tr>
- *  <tr><td> SAM L22 Xpro  </td><td> PB18 </td><td> EXT3 Pin 9 </td></tr>
- *  <tr><td> SAM L22 Xpro  </td><td> PC01 </td><td> SW0        </td></tr>
- *  <tr><td> SAM DA1 Xpro  </td><td> PB30 </td><td> LED0       </td></tr>
- *  <tr><td> SAM DA1 Xpro  </td><td> PA15 </td><td> SW0        </td></tr>
- *  <tr><td> SAM C21 Xpro  </td><td> PA15 </td><td> LED0       </td></tr>
- *  <tr><td> SAM C21 Xpro  </td><td> PA28 </td><td> SW0        </td></tr>
+ *  <tr><th> Board             </td><th> Pin  </td><th> Connect to </td></tr>
+ *  <tr><td> SAM D21 Xpro      </td><td> PB30 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM D21 Xpro      </td><td> PA15 </td><td> SW0        </td></tr>
+ *  <tr><td> SAM R21 Xpro      </td><td> PA06 </td><td> EXT1 Pin 3 </td></tr>
+ *  <tr><td> SAM R21 Xpro      </td><td> PA28 </td><td> SW0        </td></tr>
+ *  <tr><td> SAM L21 Xpro      </td><td> PB10 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM L21 Xpro      </td><td> PA16 </td><td> SW0        </td></tr>
+ *  <tr><td> SAM L22 Xpro      </td><td> PB18 </td><td> EXT3 Pin 9 </td></tr>
+ *  <tr><td> SAM L22 Xpro      </td><td> PC01 </td><td> SW0        </td></tr>
+ *  <tr><td> SAM DA1 Xpro      </td><td> PB30 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM DA1 Xpro      </td><td> PA15 </td><td> SW0        </td></tr>
+ *  <tr><td> SAM C21 Xpro      </td><td> PA15 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM C21 Xpro      </td><td> PA28 </td><td> SW0        </td></tr>
+ *  <tr><td> SAM HA1G16A Xpro  </td><td> PA04 </td><td> NULL       </td></tr>
+ *  <tr><td> SAM HA1G16A Xpro  </td><td> PB03 </td><td> SW0        </td></tr>
  * </table>
  *
  * The TCC module will be set up as follows:
@@ -126,6 +130,9 @@
  * - SAM C21 Xplained Pro
  *   \snippet samc21_xplained_pro/conf_quick_start_faultx.h definition_pwm
  *   \snippet samc21_xplained_pro/conf_quick_start_faultx.h definition_fault
+  * - SAM HA1G16A Xplained Pro:
+ *   \snippet samha1g16a_xplained_pro/conf_quick_start_faultx.h definition_pwm
+ *   \snippet samha1g16a_xplained_pro/conf_quick_start_faultx.h definition_fault
  *
  * Add to the main application source file, before any functions:
  * \snippet qs_tcc_faultn.c additional_include

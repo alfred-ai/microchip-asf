@@ -290,6 +290,86 @@
 /** List of all push button definitions. */
 #define PINS_PUSHBUTTONS    {PIN_PUSHBUTTON_1,PIN_PUSHBUTTON_2}
 
+//! \name Extension header #1 pin definitions
+//@{
+#define EXT1_PIN_3                PIO_PC31_IDX
+#define EXT1_PIN_4                PIO_PA19_IDX
+#define EXT1_PIN_5                PIO_PB3_IDX
+#define EXT1_PIN_6                PIO_PB2_IDX
+#define EXT1_PIN_7                PIO_PA0_IDX
+#define EXT1_PIN_8                PIO_PC30_IDX
+#define EXT1_PIN_9                PIO_PD28_IDX
+#define EXT1_PIN_10               PIO_PA5_IDX
+#define EXT1_PIN_11               PIO_PA3_IDX
+#define EXT1_PIN_12               PIO_PA4_IDX
+#define EXT1_PIN_13               PIO_PB0_IDX
+#define EXT1_PIN_14               PIO_PB1_IDX
+#define EXT1_PIN_15               PIO_PD25_IDX
+#define EXT1_PIN_16               PIO_PD21_IDX
+#define EXT1_PIN_17               PIO_PD20_IDX
+#define EXT1_PIN_18               PIO_PD22_IDX
+//@}
+
+//! \name Extension header #1 pin definitions by function
+//@{
+#define EXT1_PIN_ADC_0            EXT1_PIN_3
+#define EXT1_PIN_ADC_1            EXT1_PIN_4
+#define EXT1_PIN_GPIO_0           EXT1_PIN_5
+#define EXT1_PIN_GPIO_1           EXT1_PIN_6
+#define EXT1_PIN_PWM_0            EXT1_PIN_7
+#define EXT1_PIN_PWM_1            EXT1_PIN_8
+#define EXT1_PIN_IRQ              EXT1_PIN_9
+#define EXT1_PIN_TWI_SDA          EXT1_PIN_11
+#define EXT1_PIN_TWI_SCL          EXT1_PIN_12
+#define EXT1_PIN_UART_RX          EXT1_PIN_13
+#define EXT1_PIN_UART_TX          EXT1_PIN_14
+#define EXT1_PIN_SPI_SS_1         EXT1_PIN_10
+#define EXT1_PIN_SPI_SS_0         EXT1_PIN_15
+#define EXT1_PIN_SPI_MOSI         EXT1_PIN_16
+#define EXT1_PIN_SPI_MISO         EXT1_PIN_17
+#define EXT1_PIN_SPI_SCK          EXT1_PIN_18
+//@}
+
+//! \name Extension header #2 pin definitions
+//@{
+#define EXT2_PIN_3                PIO_PD30_IDX
+#define EXT2_PIN_4                PIO_PC13_IDX
+#define EXT2_PIN_5                PIO_PA6_IDX
+#define EXT2_PIN_6                PIO_PD11_IDX
+#define EXT2_PIN_7                PIO_PC19_IDX
+#define EXT2_PIN_8                PIO_PD26_IDX
+#define EXT2_PIN_9                PIO_PA2_IDX
+#define EXT2_PIN_10               PIO_PA24_IDX
+#define EXT2_PIN_11               PIO_PA3_IDX
+#define EXT2_PIN_12               PIO_PA4_IDX
+#define EXT2_PIN_13               PIO_PA21_IDX
+#define EXT2_PIN_14               PIO_PB4_IDX
+#define EXT2_PIN_15               PIO_PD27_IDX
+#define EXT2_PIN_16               PIO_PD21_IDX
+#define EXT2_PIN_17               PIO_PD20_IDX
+#define EXT2_PIN_18               PIO_PD22_IDX
+//@}
+
+//! \name Extension header #2 pin definitions by function
+//@{
+#define EXT2_PIN_ADC_0            EXT2_PIN_3
+#define EXT2_PIN_ADC_1            EXT2_PIN_4
+#define EXT2_PIN_GPIO_0           EXT2_PIN_5
+#define EXT2_PIN_GPIO_1           EXT2_PIN_6
+#define EXT2_PIN_PWM_0            EXT2_PIN_7
+#define EXT2_PIN_PWM_1            EXT2_PIN_8
+#define EXT2_PIN_IRQ              EXT2_PIN_9
+#define EXT2_PIN_TWI_SDA          EXT2_PIN_11
+#define EXT2_PIN_TWI_SCL          EXT2_PIN_12
+#define EXT2_PIN_UART_RX          EXT2_PIN_13
+#define EXT2_PIN_UART_TX          EXT2_PIN_14
+#define EXT2_PIN_SPI_SS_1         EXT2_PIN_10
+#define EXT2_PIN_SPI_SS_0         EXT2_PIN_15
+#define EXT2_PIN_SPI_MOSI         EXT2_PIN_16
+#define EXT2_PIN_SPI_MISO         EXT2_PIN_17
+#define EXT2_PIN_SPI_SCK          EXT2_PIN_18
+//@}
+
 /** PCK0 pin definition (PA6) */
 #define PIN_PCK0         (PIO_PA6_IDX)
 #define PIN_PCK0_MUX     (IOPORT_MODE_MUX_B)

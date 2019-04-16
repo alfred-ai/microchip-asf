@@ -3,7 +3,7 @@
  *
  * \brief Component description for NVMCTRL
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -483,54 +483,6 @@ typedef struct {
 #define NVMCTRL_FUSES_REGION_LOCKS_Pos 16           /**< \brief (NVMCTRL_USER) NVM Region Locks */
 #define NVMCTRL_FUSES_REGION_LOCKS_Msk (0xFFFFul << NVMCTRL_FUSES_REGION_LOCKS_Pos)
 #define NVMCTRL_FUSES_REGION_LOCKS(value) (NVMCTRL_FUSES_REGION_LOCKS_Msk & ((value) << NVMCTRL_FUSES_REGION_LOCKS_Pos))
-
-/* Compatible definition for previous driver (begin 1) */
-#define SYSCTRL_FUSES_BOD12USERLEVEL_ADDR NVMCTRL_USER
-#define SYSCTRL_FUSES_BOD12USERLEVEL_Pos 17           /**< \brief (NVMCTRL_USER) BOD12 User Level */
-#define SYSCTRL_FUSES_BOD12USERLEVEL_Msk (0x1Fu << SYSCTRL_FUSES_BOD12USERLEVEL_Pos)
-#define SYSCTRL_FUSES_BOD12USERLEVEL(value) ((SYSCTRL_FUSES_BOD12USERLEVEL_Msk & ((value) << SYSCTRL_FUSES_BOD12USERLEVEL_Pos)))
-
-#define SYSCTRL_FUSES_BOD12_ACTION_ADDR NVMCTRL_USER
-#define SYSCTRL_FUSES_BOD12_ACTION_Pos 23           /**< \brief (NVMCTRL_USER) BOD12 Action */
-#define SYSCTRL_FUSES_BOD12_ACTION_Msk (0x3u << SYSCTRL_FUSES_BOD12_ACTION_Pos)
-#define SYSCTRL_FUSES_BOD12_ACTION(value) ((SYSCTRL_FUSES_BOD12_ACTION_Msk & ((value) << SYSCTRL_FUSES_BOD12_ACTION_Pos)))
-
-#define SYSCTRL_FUSES_BOD12_EN_ADDR NVMCTRL_USER
-#define SYSCTRL_FUSES_BOD12_EN_Pos  22           /**< \brief (NVMCTRL_USER) BOD12 Enable */
-#define SYSCTRL_FUSES_BOD12_EN_Msk  (0x1u << SYSCTRL_FUSES_BOD12_EN_Pos)
-
-#define SYSCTRL_FUSES_BOD12_HYST_ADDR (NVMCTRL_USER + 4)
-#define SYSCTRL_FUSES_BOD12_HYST_Pos 9            /**< \brief (NVMCTRL_USER) BOD12 Hysteresis */
-#define SYSCTRL_FUSES_BOD12_HYST_Msk (0x1u << SYSCTRL_FUSES_BOD12_HYST_Pos)
-
-#define SYSCTRL_FUSES_BOD33USERLEVEL_ADDR NVMCTRL_USER
-#define SYSCTRL_FUSES_BOD33USERLEVEL_Pos 8            /**< \brief (NVMCTRL_USER) BOD33 User Level */
-#define SYSCTRL_FUSES_BOD33USERLEVEL_Msk (0x3Fu << SYSCTRL_FUSES_BOD33USERLEVEL_Pos)
-#define SYSCTRL_FUSES_BOD33USERLEVEL(value) ((SYSCTRL_FUSES_BOD33USERLEVEL_Msk & ((value) << SYSCTRL_FUSES_BOD33USERLEVEL_Pos)))
-
-#define SYSCTRL_FUSES_BOD33_ACTION_ADDR NVMCTRL_USER
-#define SYSCTRL_FUSES_BOD33_ACTION_Pos 15           /**< \brief (NVMCTRL_USER) BOD33 Action */
-#define SYSCTRL_FUSES_BOD33_ACTION_Msk (0x3u << SYSCTRL_FUSES_BOD33_ACTION_Pos)
-#define SYSCTRL_FUSES_BOD33_ACTION(value) ((SYSCTRL_FUSES_BOD33_ACTION_Msk & ((value) << SYSCTRL_FUSES_BOD33_ACTION_Pos)))
-
-#define SYSCTRL_FUSES_BOD33_EN_ADDR NVMCTRL_USER
-#define SYSCTRL_FUSES_BOD33_EN_Pos  14           /**< \brief (NVMCTRL_USER) BOD33 Enable */
-#define SYSCTRL_FUSES_BOD33_EN_Msk  (0x1u << SYSCTRL_FUSES_BOD33_EN_Pos)
-
-#define SYSCTRL_FUSES_BOD33_HYST_ADDR (NVMCTRL_USER + 4)
-#define SYSCTRL_FUSES_BOD33_HYST_Pos 8            /**< \brief (NVMCTRL_USER) BOD33 Hysteresis */
-#define SYSCTRL_FUSES_BOD33_HYST_Msk (0x1u << SYSCTRL_FUSES_BOD33_HYST_Pos)
-
-#define SYSCTRL_FUSES_OSC32K_ADDR   (NVMCTRL_OTP4 + 4)
-#define SYSCTRL_FUSES_OSC32K_Pos    6            /**< \brief (NVMCTRL_OTP4) OSC32K Calibration */
-#define SYSCTRL_FUSES_OSC32K_Msk    (0x7Fu << SYSCTRL_FUSES_OSC32K_Pos)
-#define SYSCTRL_FUSES_OSC32K(value) ((SYSCTRL_FUSES_OSC32K_Msk & ((value) << SYSCTRL_FUSES_OSC32K_Pos)))
-
-#define SYSCTRL_FUSES_ULPVREG_ADDR  NVMCTRL_OTP4
-#define SYSCTRL_FUSES_ULPVREG_Pos   0            /**< \brief (NVMCTRL_OTP4) ULP Regulator Fallback Mode */
-#define SYSCTRL_FUSES_ULPVREG_Msk   (0x7u << SYSCTRL_FUSES_ULPVREG_Pos)
-#define SYSCTRL_FUSES_ULPVREG(value) ((SYSCTRL_FUSES_ULPVREG_Msk & ((value) << SYSCTRL_FUSES_ULPVREG_Pos)))
-/* Compatible definition for previous driver (end 2) */
 
 #define USB_FUSES_TRANSN_ADDR       (NVMCTRL_OTP4 + 4)
 #define USB_FUSES_TRANSN_Pos        13           /**< \brief (NVMCTRL_OTP4) USB pad Transn calibration */

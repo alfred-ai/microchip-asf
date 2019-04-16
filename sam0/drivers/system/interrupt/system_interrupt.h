@@ -3,7 +3,7 @@
  *
  * \brief SAM System Interrupt Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -67,6 +67,7 @@ extern "C" {
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_system_interrupt_prerequisites

@@ -69,6 +69,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:

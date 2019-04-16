@@ -222,6 +222,7 @@ static enum status_code _usart_set_config(
 		}
 	} else {
 #endif
+	ctrlb |= (uint32_t)config->stopbits;
 	ctrlb |= (uint32_t)config->character_size;
 	/* Check parity mode bits */
 	if (config->parity != USART_PARITY_NONE) {

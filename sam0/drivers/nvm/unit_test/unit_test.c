@@ -77,6 +77,7 @@
  *  - SAM L21 Xplained Pro board
  *  - SAM L22 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM HA1G16A Xplained Pro board
  *  - SAM R30 Xplained Pro board
  *
  * \section appdoc_sam0_nvm_unit_test_setup Setup

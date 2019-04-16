@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC Driver Quick Start with DMA
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,7 +48,7 @@
  * \page asfdoc_sam0_tcc_dma_use_case Quick Start Guide for Using DMA with TCC
  *
  * The supported board list:
- *    - SAM D21/R21/L21/L22/DA1/C21 Xplained Pro
+ *    - SAM D21/R21/L21/L22/DA1/C21/HA1G16A Xplained Pro
  *
  * In this use case, the TCC will be used to generate a PWM signal. Here
  * the pulse width varies through the following values with the help of DMA
@@ -58,16 +58,19 @@
  * viewed using an oscilloscope.
  * The output signal is also fed back to another TCC channel by event system,
  * the event stamps are captured and transferred to a buffer by DMA.
+ * SAMHA1G16A Xpro LED is PA00 which isn't connected out, use PA04 instead,
+ * so we can't see LED blink but only see the waveform from oscilloscope.
  *
  * The PWM output is set up as follows:
  * <table>
- *  <tr><th> Board         </td><th> Pin  </td><th> Connect to </td></tr>
- *  <tr><td> SAM D21 Xpro  </td><td> PB30 </td><td> LED0       </td></tr>
- *  <tr><td> SAM R21 Xpro  </td><td> PA19 </td><td> LED0       </td></tr>
- *  <tr><td> SAM L21 Xpro  </td><td> PB10 </td><td> LED0       </td></tr>
- *  <tr><td> SAM L22 Xpro  </td><td> PC27 </td><td> LED0       </td></tr>
- *  <tr><td> SAM DA1 Xpro  </td><td> PB30 </td><td> LED0       </td></tr>
- *  <tr><td> SAM C21 Xpro  </td><td> PA15 </td><td> LED0       </td></tr>
+ *  <tr><th> Board             </td><th> Pin  </td><th> Connect to </td></tr>
+ *  <tr><td> SAM D21 Xpro      </td><td> PB30 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM R21 Xpro      </td><td> PA19 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM L21 Xpro      </td><td> PB10 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM L22 Xpro      </td><td> PC27 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM DA1 Xpro      </td><td> PB30 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM C21 Xpro      </td><td> PA15 </td><td> LED0       </td></tr>
+ *  <tr><td> SAM HA1G16A Xpro  </td><td> PA04 </td><td> NULL       </td></tr>
  * </table>
  *
  * The TCC module will be setup as follows:

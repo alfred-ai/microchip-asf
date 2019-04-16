@@ -70,6 +70,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
@@ -388,7 +389,7 @@ extern "C" {
  * Define SERCOM SPI features set according to different device family.
  * @{
  */
-#  if (SAMD21) || (SAMR21) || (SAMD11) || (SAMD10) || (SAML21) || (SAMDA1) || \
+#  if (SAMD21) || (SAMR21) || (SAMD11) || (SAMD10) || (SAML21) || (SAMDA1) || (SAMHA1) ||\
 	  (SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || defined(__DOXYGEN__)
 /** SPI slave select low detection. */
 #  define FEATURE_SPI_SLAVE_SELECT_LOW_DETECT

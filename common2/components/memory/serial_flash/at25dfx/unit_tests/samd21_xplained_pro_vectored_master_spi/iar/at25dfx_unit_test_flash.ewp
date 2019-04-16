@@ -314,21 +314,21 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samd21/include</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi_master_vec</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -595,21 +595,21 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samd21/include</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi_master_vec</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1301,21 +1301,21 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samd21/include</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi_master_vec</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1582,21 +1582,21 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samd21/include</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi_master_vec</state>
 					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da</state>
+					<state>$PROJ_DIR$/../../../../../../../../sam0/boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -2045,15 +2045,15 @@
 							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi/quick_start_slave_callback/qs_spi_slave_callback.h</name>
 						</file>
 					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi/spi_interrupt.h</name>
-					</file>
 					<group>
 						<name>quick_start_dma</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi/quick_start_dma/qs_spi_dma_use.h</name>
 						</file>
 					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom/spi/spi_interrupt.h</name>
+					</file>
 					<group>
 						<name>quick_start_master_callback</name>
 						<file>
@@ -2113,30 +2113,6 @@
 					</group>
 				</group>
 				<group>
-					<name>clock</name>
-					<group>
-						<name>clock_samd21_r21_da</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da/clock.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da/gclk.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da/clock_feature.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da/clock_config_check.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/gclk.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock.h</name>
-					</file>
-				</group>
-				<group>
 					<name>pinmux</name>
 					<file>
 						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux/pinmux.c</name>
@@ -2151,15 +2127,39 @@
 						</file>
 					</group>
 				</group>
+				<group>
+					<name>clock</name>
+					<group>
+						<name>clock_samd21_r21_da_ha1</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1/gclk.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1/clock.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1/clock_feature.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1/clock_config_check.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/gclk.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/clock/clock.h</name>
+					</file>
+				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/system.c</name>
 				</file>
 				<group>
 					<name>power</name>
 					<group>
-						<name>power_sam_d_r</name>
+						<name>power_sam_d_r_h</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r/power.h</name>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/power/power_sam_d_r_h/power.h</name>
 						</file>
 					</group>
 				</group>
@@ -2169,9 +2169,9 @@
 				<group>
 					<name>reset</name>
 					<group>
-						<name>reset_sam_d_r</name>
+						<name>reset_sam_d_r_h</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r/reset.h</name>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h/reset.h</name>
 						</file>
 					</group>
 				</group>
@@ -2672,22 +2672,22 @@
 							<name>$PROJ_DIR$/../../../at25dfx.h</name>
 						</file>
 						<group>
-							<name>quick_start_basic</name>
-							<file>
-								<name>$PROJ_DIR$/../../../quick_start_basic/qs_at25dfx_basic.h</name>
-							</file>
-						</group>
-						<group>
 							<name>hal</name>
 							<group>
 								<name>spi_master_vec</name>
 								<file>
-									<name>$PROJ_DIR$/../../../hal/spi_master_vec/at25dfx_hal.h</name>
-								</file>
-								<file>
 									<name>$PROJ_DIR$/../../../hal/spi_master_vec/at25dfx_priv_hal.h</name>
 								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../hal/spi_master_vec/at25dfx_hal.h</name>
+								</file>
 							</group>
+						</group>
+						<group>
+							<name>quick_start_basic</name>
+							<file>
+								<name>$PROJ_DIR$/../../../quick_start_basic/qs_at25dfx_basic.h</name>
+							</file>
 						</group>
 					</group>
 				</group>

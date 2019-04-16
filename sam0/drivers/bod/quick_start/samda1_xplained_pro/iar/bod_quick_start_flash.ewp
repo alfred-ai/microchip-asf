@@ -305,13 +305,13 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/source</state>
 					<state>$PROJ_DIR$/../../../../../boards/samda1_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../bod_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../bod_sam_d_r_h</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -567,13 +567,13 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/source</state>
 					<state>$PROJ_DIR$/../../../../../boards/samda1_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../bod_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../bod_sam_d_r_h</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1254,13 +1254,13 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/source</state>
 					<state>$PROJ_DIR$/../../../../../boards/samda1_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../bod_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../bod_sam_d_r_h</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1516,13 +1516,13 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/source</state>
 					<state>$PROJ_DIR$/../../../../../boards/samda1_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../bod_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../bod_sam_d_r_h</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1923,12 +1923,12 @@
 					</group>
 				</group>
 				<group>
-					<name>bod_sam_d_r</name>
+					<name>bod_sam_d_r_h</name>
 					<file>
-						<name>$PROJ_DIR$/../../../bod_sam_d_r/bod.c</name>
+						<name>$PROJ_DIR$/../../../bod_sam_d_r_h/bod.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../bod_sam_d_r/bod_feature.h</name>
+						<name>$PROJ_DIR$/../../../bod_sam_d_r_h/bod_feature.h</name>
 					</file>
 				</group>
 				<file>
@@ -1942,15 +1942,15 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
 					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
+					</file>
 					<group>
 						<name>quick_start</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
 						</file>
 					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
-					</file>
 				</group>
 			</group>
 			<group>

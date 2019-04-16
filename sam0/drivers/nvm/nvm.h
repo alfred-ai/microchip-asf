@@ -63,6 +63,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
@@ -291,7 +292,8 @@ extern "C" {
  * Define NVM features set according to the different device families.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || (SAMR30) || defined(SAMD21_64K) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || (SAMR30) || defined(SAMD21_64K) || (SAMHA1) \
+	|| defined(__DOXYGEN__)
 /** Read while write EEPROM emulation feature. */
 #  define FEATURE_NVM_RWWEE
 #endif

@@ -1331,11 +1331,14 @@ void pmc_enable_sleepmode(uint8_t uc_type)
 
 #if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CM || SAM4CP || SAMV71 || SAMV70 || SAME70 || SAMS70)
 	UNUSED(uc_type);
+	__DSB();
 	__WFI();
 #else
 	if (uc_type == 0) {
+		__DSB();
 		__WFI();
 	} else {
+		__DSB();
 		__WFE();
 	}
 #endif
@@ -1410,6 +1413,7 @@ void pmc_enable_waitmode(void)
 	PMC->PMC_FSMR |= PMC_FSMR_LPM; /* Enter Wait mode */
 	SCB->SCR &= (uint32_t) ~ SCB_SCR_SLEEPDEEP_Msk; /* Deep sleep */
 
+	__DSB();
 	__WFE();
 
 	/* Waiting for MOSCRCEN bit cleared is strongly recommended
@@ -1438,9 +1442,13 @@ void pmc_enable_backupmode(void)
 	SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
 #if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CM || SAM4CP || SAMG55 || SAMV71 || SAMV70 || SAME70 || SAMS70)
 	SUPC->SUPC_CR = SUPC_CR_KEY_PASSWD | SUPC_CR_VROFF_STOP_VREG;
+	uint32_t ul_dummy = SUPC->SUPC_MR;
+	UNUSED(ul_dummy);
+	__DSB();
 	__WFE();
 	__WFI();
 #else
+	__DSB();
 	__WFE();
 #endif
 }

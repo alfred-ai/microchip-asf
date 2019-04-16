@@ -3,7 +3,7 @@
  *
  * \brief Two-Wire Interface High Speed (TWIHS) driver for SAM.
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -58,7 +58,7 @@ extern "C" {
 /// @endcond
 
 /** Time-out value (number of attempts). */
-#define TWIHS_TIMEOUT              15000
+#define TWIHS_TIMEOUT              30000
 
 /**
  * \brief Return codes for TWIHS APIs.

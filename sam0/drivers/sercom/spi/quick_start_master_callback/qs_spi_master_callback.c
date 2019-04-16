@@ -121,7 +121,6 @@ void configure_spi_master(void)
 //! [mux_setting]
 	config_spi_master.mux_setting = CONF_MASTER_MUX_SETTING;
 //! [mux_setting]
-
 	config_spi_master.pinmux_pad0 = CONF_MASTER_PINMUX_PAD0;
 	config_spi_master.pinmux_pad1 = CONF_MASTER_PINMUX_PAD1;
 	config_spi_master.pinmux_pad2 = CONF_MASTER_PINMUX_PAD2;

@@ -582,7 +582,7 @@ typedef struct
  * \return The count of leading zero bits in \a u.
  */
 #if (defined __GNUC__) || (defined __CC_ARM)
-#   define clz(u)              ((u) ? __builtin_ctz(u) : 32)
+#   define clz(u)              ((u) ? __builtin_clz(u) : 32)
 #elif (defined __ICCARM__)
 #   define clz(u)              ((u) ? __CLZ(u) : 32)
 #else
@@ -628,7 +628,7 @@ typedef struct
  * \return The count of trailing zero bits in \a u.
  */
 #if (defined __GNUC__) || (defined __CC_ARM)
-#   define ctz(u)              __builtin_ctz(u)
+#   define ctz(u)              ((u) ? __builtin_ctz(u) : 32)
 #else
 #   define ctz(u)              ((u) & (1ul <<  0) ?  0 : \
                                 (u) & (1ul <<  1) ?  1 : \
