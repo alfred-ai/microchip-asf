@@ -52,7 +52,7 @@
  *
  *  \par Requirements
  *
- *  This package can be used with SAMV71 XPlAINED ULTRA.
+ *  This package can be used with SAMV71 XPlAINED ULTRA,SAME70 XPlAINED.
  *
  * \section Description
  *

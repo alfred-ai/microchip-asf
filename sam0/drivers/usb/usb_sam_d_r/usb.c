@@ -1767,6 +1767,25 @@ static void _usb_device_interrupt_handler(void)
 					return;
 				}
 
+				// endpoint transfer complete interrupt
+				if (flags & USB_DEVICE_EPINTFLAG_TRCPT_Msk) {
+					if (_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg & USB_DEVICE_EPINTFLAG_TRCPT1) {
+						_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg = USB_DEVICE_EPINTFLAG_TRCPT1;
+						ep_callback_para.endpoint_address = USB_EP_DIR_IN | i;
+						ep_callback_para.sent_bytes = (uint16_t)(usb_descriptor_table.usb_endpoint_table[i].DeviceDescBank[1].PCKSIZE.bit.BYTE_COUNT);
+
+					} else if (_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg & USB_DEVICE_EPINTFLAG_TRCPT0) {
+						_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg = USB_DEVICE_EPINTFLAG_TRCPT0;
+						ep_callback_para.endpoint_address = USB_EP_DIR_OUT | i;
+						ep_callback_para.received_bytes = (uint16_t)(usb_descriptor_table.usb_endpoint_table[i].DeviceDescBank[0].PCKSIZE.bit.BYTE_COUNT);
+						ep_callback_para.out_buffer_size = (uint16_t)(usb_descriptor_table.usb_endpoint_table[i].DeviceDescBank[0].PCKSIZE.bit.MULTI_PACKET_SIZE);
+					}
+					if(flags_run & USB_DEVICE_EPINTFLAG_TRCPT_Msk) {
+						(_usb_instances->device_endpoint_callback[i][USB_DEVICE_ENDPOINT_CALLBACK_TRCPT])(_usb_instances,&ep_callback_para);
+					}
+					return;
+				}
+
 				// endpoint transfer fail interrupt
 				if (flags & USB_DEVICE_EPINTFLAG_TRFAIL_Msk) {
 					if (_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg & USB_DEVICE_EPINTFLAG_TRFAIL1) {
@@ -1791,25 +1810,6 @@ static void _usb_device_interrupt_handler(void)
 
 					if(flags_run & USB_DEVICE_EPINTFLAG_TRFAIL_Msk) {
 						(_usb_instances->device_endpoint_callback[i][USB_DEVICE_ENDPOINT_CALLBACK_TRFAIL])(_usb_instances,&ep_callback_para);
-					}
-					return;
-				}
-
-				// endpoint transfer complete interrupt
-				if (flags & USB_DEVICE_EPINTFLAG_TRCPT_Msk) {
-					if (_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg & USB_DEVICE_EPINTFLAG_TRCPT1) {
-						_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg = USB_DEVICE_EPINTFLAG_TRCPT1;
-						ep_callback_para.endpoint_address = USB_EP_DIR_IN | i;
-						ep_callback_para.sent_bytes = (uint16_t)(usb_descriptor_table.usb_endpoint_table[i].DeviceDescBank[1].PCKSIZE.bit.BYTE_COUNT);
-
-					} else if (_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg & USB_DEVICE_EPINTFLAG_TRCPT0) {
-						_usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg = USB_DEVICE_EPINTFLAG_TRCPT0;
-						ep_callback_para.endpoint_address = USB_EP_DIR_OUT | i;
-						ep_callback_para.received_bytes = (uint16_t)(usb_descriptor_table.usb_endpoint_table[i].DeviceDescBank[0].PCKSIZE.bit.BYTE_COUNT);
-						ep_callback_para.out_buffer_size = (uint16_t)(usb_descriptor_table.usb_endpoint_table[i].DeviceDescBank[0].PCKSIZE.bit.MULTI_PACKET_SIZE);
-					}
-					if(flags_run & USB_DEVICE_EPINTFLAG_TRCPT_Msk) {
-						(_usb_instances->device_endpoint_callback[i][USB_DEVICE_ENDPOINT_CALLBACK_TRCPT])(_usb_instances,&ep_callback_para);
 					}
 					return;
 				}

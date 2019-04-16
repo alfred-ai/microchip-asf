@@ -1142,7 +1142,7 @@ static inline void sdadc_disable_interrupt(struct sdadc_module *const module_ins
  *	</tr>
  *	<tr>
  *		<td>42496A</td>
- *		<td>08/2015</td>
+ *		<td>09/2015</td>
  *		<td>Initial document release</td>
  *	</tr>
  * </table>

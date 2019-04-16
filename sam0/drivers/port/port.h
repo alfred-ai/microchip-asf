@@ -299,7 +299,7 @@ struct port_config {
 	/** Port pull-up/pull-down for input pins */
 	enum port_pin_pull input_pull;
 
-	/** Enable lowest possible powerstate on the pin.
+	/** Enable lowest possible powerstate on the pin
 	 *
 	 *  \note All other configurations will be ignored, the pin will be disabled.
 	 */
@@ -761,7 +761,7 @@ static inline enum status_code port_input_event_set_config(
  *	</tr>
  *	<tr>
  *		<td>42113E</td>
- *		<td>08/2015</td>
+ *		<td>10/2015</td>
  *		<td>Added input event feature and support for SAM L21/L22, SAM C21, and SAM DA1</td>
  *	</tr>
  *	<tr>

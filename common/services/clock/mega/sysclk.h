@@ -97,6 +97,15 @@ enum power_red_id {
  * to support for otherthen megaRF device.
  **************************************************/
 #if MEGA_XX8 || MEGA_XX8_A || MEGA_UNSPECIFIED
+#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#define NUMBER_OF_POWER_REG       2
+/*Starting Address for power reduction*/
+#define POWER_REG_ADD             PRR0
+/* ! \name Power Reduction  Clock Port Numbers */
+enum power_red_id {
+	POWER_RED_REG0,     /* !< Devices on PRR */
+};
+#else
 #define NUMBER_OF_POWER_REG       1
 /*Starting Address for power reduction*/
 #define POWER_REG_ADD             PRR
@@ -105,6 +114,7 @@ enum power_red_id {
 enum power_red_id {
 	POWER_RED_REG0,     /* !< Devices on PRR */
 };
+#endif
 #endif
 
 /* Bit mask for the power reduction register based on */
@@ -133,7 +143,11 @@ enum power_red_id {
 #if !MEGA_UNSPECIFIED
 #define PRTIM0_bm                       1 << PRTIM0
 #define PRTIM2_bm                       1 << PRTIM2
+#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#define PRTWI_bm                        1 << PRTWI0
+#else
 #define PRTWI_bm                        1 << PRTWI
+#endif
 #endif
 
 #if MEGA_XX_UN2
@@ -427,9 +441,15 @@ static inline void sysclk_enable_peripheral_clock(const volatile void *module)
 		sysclk_enable_module(POWER_RED_REG0, PRTIM0_bm);
 	} else if (module == &TCCR2A) {
 		sysclk_enable_module(POWER_RED_REG0, PRTIM2_bm);
+#if AVR8_PART_IS_DEFINED(ATmega328PB)
+	} else if (module == &TWBR0) {
+		sysclk_enable_module(POWER_RED_REG0, PRTWI_bm);
+	}
+#else
 	} else if (module == &TWBR) {
 		sysclk_enable_module(POWER_RED_REG0, PRTWI_bm);
 	}
+#endif
 #endif
 
 #if MEGA_RF
@@ -492,10 +512,17 @@ static inline void sysclk_disable_peripheral_clock(const volatile void *module)
 		sysclk_disable_module(POWER_RED_REG0, PRTIM0_bm);
 	} else if (module == &TCCR2A) {
 		sysclk_disable_module(POWER_RED_REG0, PRTIM2_bm);
+#if AVR8_PART_IS_DEFINED(ATmega328PB)
+	} else if (module == &TWBR0) {
+		sysclk_disable_module(POWER_RED_REG0, PRTWI_bm);
+	}
+#else
 	} else if (module == &TWBR) {
 		sysclk_disable_module(POWER_RED_REG0, PRTWI_bm);
 	}
 #endif
+#endif
+
 #if MEGA_RF
 	else if (module == &UCSR1A) {
 		sysclk_disable_module(POWER_RED_REG1, PRUSART1_bm);
@@ -629,10 +656,17 @@ static inline uint32_t sysclk_get_peripheral_bus_hz(const volatile void *module)
 		return sysclk_get_source_clock_hz();
 	} else if (module == &UCSR0A) {
 		return sysclk_get_source_clock_hz();
+#if AVR8_PART_IS_DEFINED(ATmega328PB)
+	} else if (module == &TWBR0) {
+		sysclk_disable_module(POWER_RED_REG0, PRTWI_bm);
+	}
+#else
 	} else if (module == &TWBR) {
 		return sysclk_get_source_clock_hz();
 	}
 #endif
+#endif
+
 #if MEGA_RF
 	else if (module == &TCCR3A) {
 		return sysclk_get_source_clock_hz();

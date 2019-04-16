@@ -237,13 +237,15 @@ static void gmac_process_arp_packet(uint8_t *p_uc_data, uint32_t ul_size)
 	p_arp_header_t p_arp = (p_arp_header_t) (p_uc_data + ETH_HEADER_SIZE);
 
 	if (SWAP16(p_arp->ar_op) == ARP_REQUEST) {
-		printf("-- IP  %d.%d.%d.%d\n\r",
+		printf("-- MAC %x:%x:%x:%x:%x:%x\n\r",
 				p_eth->et_dest[0], p_eth->et_dest[1],
-				p_eth->et_dest[2], p_eth->et_dest[3]);
+				p_eth->et_dest[2], p_eth->et_dest[3],
+				p_eth->et_dest[4], p_eth->et_dest[5]);
 
-		printf("-- IP  %d.%d.%d.%d\n\r",
+		printf("-- MAC %x:%x:%x:%x:%x:%x\n\r",
 				p_eth->et_src[0], p_eth->et_src[1],
-				p_eth->et_src[2], p_eth->et_src[3]);
+				p_eth->et_src[2], p_eth->et_src[3],
+				p_eth->et_src[4], p_eth->et_src[5]);
 
 		/* ARP reply operation */
 		p_arp->ar_op = SWAP16(ARP_REPLY);
@@ -293,12 +295,12 @@ static void gmac_process_ip_packet(uint8_t *p_uc_data, uint32_t ul_size)
 	p_icmp_echo_header_t p_icmp_echo =
 			(p_icmp_echo_header_t) ((int8_t *) p_ip_header +
 			ETH_IP_HEADER_SIZE);
-	printf("-- IP  %d.%d.%d.%d\n\r", p_eth->et_dest[0], p_eth->et_dest[1],
-			p_eth->et_dest[2], p_eth->et_dest[3]);
+	printf("-- IP  %d.%d.%d.%d\n\r", p_ip_header->ip_dst[0], p_ip_header->ip_dst[1],
+			p_ip_header->ip_dst[2], p_ip_header->ip_dst[3]);
 
 	printf("-- IP  %d.%d.%d.%d\n\r",
-			p_eth->et_src[0], p_eth->et_src[1], p_eth->et_src[2],
-			p_eth->et_src[3]);
+			p_ip_header->ip_src[0], p_ip_header->ip_src[1], p_ip_header->ip_src[2],
+			p_ip_header->ip_src[3]);
 	switch (p_ip_header->ip_p) {
 	case IP_PROT_ICMP:
 		if (p_icmp_echo->type == ICMP_ECHO_REQUEST) {

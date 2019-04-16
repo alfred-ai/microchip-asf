@@ -67,7 +67,7 @@
 #endif
 
 /* The gap between bit EOC15 and DRDY in interrupt register */
-#if defined __SAM4E8C__  || defined __SAM4E16C__
+#if defined __SAM4E8C__  || defined __SAM4E16C__ || defined __SAM4E8CB__ || defined __SAM4E16CB__
 #define AFEC_INTERRUPT_GAP1                  (17UL)
 #elif defined __SAM4E8E__  || defined __SAM4E16E__
 #define AFEC_INTERRUPT_GAP1                  (8UL)
@@ -530,7 +530,7 @@ static void afec_process_callback(Afec *const afec)
 
 	for (cnt = 0; cnt < _AFEC_NUM_OF_INTERRUPT_SOURCE; cnt++) {
 		if (cnt < AFEC_INTERRUPT_DATA_READY) {
-		#if defined __SAM4E8C__  || defined __SAM4E16C__
+		#if defined __SAM4E8C__  || defined __SAM4E16C__ || defined __SAM4E8CB__  || defined __SAM4E16CB__
 			if(cnt == AFEC_INTERRUPT_EOC_15) {
 				if (status & (1 << AFEC_TEMP_INT_SOURCE_NUM)) {
 					afec_interrupt(inst_num, (enum afec_interrupt_source)cnt);

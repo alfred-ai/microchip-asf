@@ -277,7 +277,7 @@
  * Area
  *     Networks (WPANs).\n\n
  * 2)  <a href="http://www.atmel.com/design-support/">Atmel Design
- *Support</a>.\n
+ * Support</a>.\n
  * \page contactinfo Contact Information
  * For further information,visit
  * <A href="http://www.atmel.com/avr">www.atmel.com</A>.\n

@@ -60,7 +60,12 @@
 /// @endcond
 
 /** Type define for an integer type large enough to store a pixel color. */
-typedef uint32_t ili9488_color_t;
+#ifdef ILI9488_EBIMODE
+   typedef uint16_t ili9488_color_t;
+#endif
+#ifdef ILI9488_SPIMODE
+   typedef uint8_t ili9488_color_t;
+#endif
 
 typedef union _union_type
 {
@@ -196,7 +201,7 @@ typedef union _union_type
 #define get_24b_to_32b(x)           (((union_type*)&(x))->byte.byte_32)
 
 /* Define EBI access for ILI9488 16-bit System Interface.*/
-#if defined(BOARD_ILI9488_ADDR)
+#ifdef ILI9488_EBIMODE
 	static inline void LCD_IR(uint8_t lcd_index)
 	{
 		*((volatile uint8_t *)(BOARD_ILI9488_ADDR)) = lcd_index; /* ILI9488 index register address */
@@ -226,8 +231,6 @@ typedef union _union_type
 			*pbuffer++ = *ptr++;
 		}
 	}
-#else
-	#error "Missing module configuration for ILI9488!"
 #endif
 
 /* RGB 24-bits color table definition (RGB888). */
@@ -320,7 +323,7 @@ void ili9488_set_display_direction(enum ili9488_display_direction direction);
 void ili9488_set_window( uint16_t dwX, uint16_t dwY, uint16_t dwWidth, uint16_t dwHeight );
 void ili9488_display_on(void);
 void ili9488_display_off(void);
-void ili9488_set_foreground_color(ili9488_color_t ul_color);
+void ili9488_set_foreground_color(uint32_t ul_color);
 void ili9488_fill(ili9488_color_t ul_color);
 void ili9488_set_cursor_position(uint16_t us_x, uint16_t us_y);
 void ili9488_scroll(uint16_t ul_tfa, uint16_t ul_lines, uint16_t ul_bfa);
@@ -341,10 +344,8 @@ void ili9488_draw_string(uint32_t ul_x, uint32_t ul_y, const uint8_t *p_str);
 void ili9488_draw_pixmap(uint32_t ul_x, uint32_t ul_y, uint32_t ul_width,
 		uint32_t ul_height, const ili9488_color_t *p_ul_pixmap);
 void ili9488_set_display_mirror(uint8_t flags);
-void ili9488_write_register(uint8_t uc_reg, uint16_t *us_data, uint32_t size);
 void ili9488_delay(uint32_t ul_ms);
 void ili9488_write_brightness(uint16_t us_value);
-uint32_t ili9488_read_brightness(void);
 /// @cond 0
 /**INDENT-OFF**/
 #ifdef __cplusplus

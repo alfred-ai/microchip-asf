@@ -45,6 +45,7 @@
 #include "asf.h"
 #include "serial_drv.h"
 #include "conf_serialdrv.h"
+#include "serial_fifo.h"
 
 /* === TYPES =============================================================== */
 
@@ -56,8 +57,16 @@ static void serial_drv_write_cb(struct usart_module *const usart_module);
 
 
 /* === GLOBALS ========================================================== */
-static struct usart_module usart_instance;
+struct usart_module usart_instance;
 
+ser_fifo_desc_t ble_usart_tx_fifo;
+uint8_t ble_usart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+
+ser_fifo_desc_t ble_usart_rx_fifo;
+uint8_t ble_usart_rx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+
+uint16_t g_txdata;
+static uint16_t rx_data;
 
 /* === IMPLEMENTATION ====================================================== */
 
@@ -65,40 +74,62 @@ uint8_t configure_serial_drv(void)
 {
 	struct usart_config config_usart;
 	usart_get_config_defaults(&config_usart);
-	config_usart.baudrate = 115200;
-	//config_usart.generator_source = GCLK_GENERATOR_1;
-	config_usart.mux_setting = USART_RX_1_TX_0_XCK_1;
-	config_usart.pinmux_pad0 = PINMUX_PB08D_SERCOM4_PAD0;
-	config_usart.pinmux_pad1 = PINMUX_PB09D_SERCOM4_PAD1;
-	config_usart.pinmux_pad2 = PINMUX_UNUSED;
-	config_usart.pinmux_pad3 = PINMUX_UNUSED;
+	config_usart.baudrate = CONF_BLE_BAUDRATE;
+	config_usart.generator_source = CONF_BLE_UART_CLOCK;
+	config_usart.mux_setting = CONF_BLE_MUX_SETTING;
+	config_usart.pinmux_pad0 = CONF_BLE_PINMUX_PAD0;
+	config_usart.pinmux_pad1 = CONF_BLE_PINMUX_PAD1;
+	config_usart.pinmux_pad2 = CONF_BLE_PINMUX_PAD2;
+	config_usart.pinmux_pad3 = CONF_BLE_PINMUX_PAD3;
 
-	while (usart_init(&usart_instance, SERCOM4, &config_usart) != STATUS_OK);
+	while (usart_init(&usart_instance, CONF_BLE_USART_MODULE, &config_usart) != STATUS_OK);
 
 	usart_enable(&usart_instance);
+	
+	ser_fifo_init(&ble_usart_rx_fifo, ble_usart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
+	ser_fifo_init(&ble_usart_tx_fifo, ble_usart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
 
-	// register and enable callbacks
+	/* register and enable usart callbacks */
 	usart_register_callback(&usart_instance,
 		serial_drv_read_cb, USART_CALLBACK_BUFFER_RECEIVED);
 	usart_register_callback(&usart_instance,
 		serial_drv_write_cb, USART_CALLBACK_BUFFER_TRANSMITTED);
 	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_RECEIVED);
-	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);	
+	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);
+	serial_read_byte(&rx_data);
 	return STATUS_OK;
 }
 
 uint16_t serial_drv_send(uint8_t* data, uint16_t len)
-{
-  while(STATUS_OK != usart_write_buffer_job(&usart_instance, data, len));
+{  
+  uint16_t i;
+  uint8_t txdata;
+  
+  for (i =0; i < len; i++)
+  {
+	  ser_fifo_push_uint8(&ble_usart_tx_fifo, data[i]);
+  }
+  
+  if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &txdata) == SER_FIFO_OK)
+  {
+	  g_txdata = txdata;
+	  while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
+  }
   return STATUS_OK;
 }
 
+extern void platform_process_rxdata(uint32_t t_rx_data);
 static void serial_drv_read_cb(struct usart_module *const module)
 {
- //call callback
-#if SERIAL_DRV_RX_CB_ENABLE == true
-  SERIAL_DRV_RX_CB();
-#endif
+	 do
+	 {		 
+		 platform_process_rxdata((uint8_t)rx_data);
+	 }while(serial_read_byte(&rx_data) == STATUS_BUSY);
+ 
+	 //call callback
+	 #if SERIAL_DRV_RX_CB_ENABLE == true
+		SERIAL_DRV_RX_CB();
+	 #endif
 }
 
 uint8_t serial_read_data(uint8_t* data, uint16_t max_len)
@@ -113,9 +144,20 @@ uint8_t serial_read_byte(uint16_t* data)
 
 static void serial_drv_write_cb(struct usart_module *const usart_module)
 {
-#if SERIAL_DRV_TX_CB_ENABLE == true
-  SERIAL_DRV_TX_CB();
-#endif
+	/* USART Tx callback */
+	uint8_t txdata;
+	if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &txdata) == SER_FIFO_OK)
+	{
+		g_txdata = txdata;
+		while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
+	}
+	else
+	{
+		#if SERIAL_DRV_TX_CB_ENABLE == true
+			SERIAL_DRV_TX_CB();
+		#endif
+	}	
+	
 }
 
 

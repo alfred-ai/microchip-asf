@@ -421,7 +421,7 @@ struct mcan_extended_message_filter_element {
 /** @} */
 
 /**
- * \defgroup asfdoc_sam0_mcan_group SAM Control Area Network (MCAN) Low Level Driver
+ * \defgroup asfdoc_sam_mcan_group SAM Control Area Network (MCAN) Low Level Driver
  *
  * This driver for Atmel® | SMART SAM devices provides an low level
  * interface for the configuration and management of the device's
@@ -444,46 +444,46 @@ struct mcan_extended_message_filter_element {
  *  - SAMV71
  *
  * The outline of this documentation is as follows:
- *  - \ref asfdoc_sam0_mcan_prerequisites
- *  - \ref asfdoc_sam0_mcan_module_overview
- *  - \ref asfdoc_sam0_mcan_special_considerations
- *  - \ref asfdoc_sam0_mcan_extra_info
- *  - \ref asfdoc_sam0_mcan_examples
- *  - \ref asfdoc_sam0_mcan_api_overview
+ *  - \ref asfdoc_sam_mcan_prerequisites
+ *  - \ref asfdoc_sam_mcan_module_overview
+ *  - \ref asfdoc_sam_mcan_special_considerations
+ *  - \ref asfdoc_sam_mcan_extra_info
+ *  - \ref asfdoc_sam_mcan_examples
+ *  - \ref asfdoc_sam_mcan_api_overview
  *
  *
- * \section asfdoc_sam0_mcan_prerequisites Prerequisites
+ * \section asfdoc_sam_mcan_prerequisites Prerequisites
  *
  * There are no prerequisites for this module.
  *
  *
- * \section asfdoc_sam0_mcan_module_overview Module Overview
+ * \section asfdoc_sam_mcan_module_overview Module Overview
  *
  * This driver provides an interface for the Control Area Network Controller
  * functions on the device.
  *
  *
- * \section asfdoc_sam0_mcan_special_considerations Special Considerations
+ * \section asfdoc_sam_mcan_special_considerations Special Considerations
  *
  * There are no special considerations for this module.
  *
  *
- * \section asfdoc_sam0_mcan_extra_info Extra Information
+ * \section asfdoc_sam_mcan_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_mcan_extra. This includes:
- *  - \ref asfdoc_sam0_mcan_extra_acronyms
- *  - \ref asfdoc_sam0_mcan_extra_dependencies
- *  - \ref asfdoc_sam0_mcan_extra_errata
- *  - \ref asfdoc_sam0_mcan_extra_history
+ * For extra information see \ref asfdoc_sam_mcan_extra. This includes:
+ *  - \ref asfdoc_sam_mcan_extra_acronyms
+ *  - \ref asfdoc_sam_mcan_extra_dependencies
+ *  - \ref asfdoc_sam_mcan_extra_errata
+ *  - \ref asfdoc_sam_mcan_extra_history
  *
  *
- * \section asfdoc_sam0_mcan_examples Examples
+ * \section asfdoc_sam_mcan_examples Examples
  *
  * For a list of examples related to this driver, see
- * \ref asfdoc_sam0_mcan_exqsg.
+ * \ref asfdoc_sam_mcan_exqsg.
  *
  *
- * \section asfdoc_sam0_mcan_api_overview API Overview
+ * \section asfdoc_sam_mcan_api_overview API Overview
  * @{
  */
 
@@ -1180,82 +1180,6 @@ static inline void mcan_clear_interrupt_status(
 #endif
 
 /** @} */
-
-/**
- * \page asfdoc_sam0_mcan_extra Extra Information for MCAN Driver
- *
- * \section asfdoc_sam0_mcan_extra_acronyms Acronyms
- * Below is a table listing the acronyms used in this module, along with their
- * intended meanings.
- *
- * <table>
- *	<tr>
- *		<th>Acronym</th>
- *		<th>Description</th>
- *	</tr>
- *  <tr>
- *		<td>MCAN</td>
- *		<td>Control Area Network (CAN) Controller</td>
- *	</tr>
- *  <tr>
- *		<td>CAN FD</td>
- *		<td>CAN with Flexible Data-Rate</td>
- *	</tr>
- * </table>
- *
- *
- * \section asfdoc_sam0_mcan_extra_dependencies Dependencies
- * This driver has no dependencies.
- *
- *
- * \section asfdoc_sam0_mcan_extra_errata Errata
- * There are no errata related to this driver.
- *
- *
- * \section asfdoc_sam0_mcan_extra_history Module History
- * An overview of the module history is presented in the table below, with
- * details on the enhancements and fixes made to the module since its first
- * release. The current version of this corresponds to the newest version in
- * the table.
- *
- * <table>
- *	<tr>
- *		<th>Changelog</th>
- *	</tr>
-  *	<tr>
- *		<td>Initial Release</td>
- *	</tr>
- * </table>
- */
-
-/**
- * \page asfdoc_sam0_mcan_exqsg Examples for CAN Driver
- *
- * This is a list of the available Quick Start guides (QSGs) and example
- * applications for \ref asfdoc_sam0_mcan_group. QSGs are simple examples with
- * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs mcan be compiled as a standalone application or be
- * added to the user application.
- *
- *  - \subpage asfdoc_sam0_mcan_basic_use_case
- *
- *  - \subpage asfdoc_sam0_mcan_fd_use_case
- *
- * \page asfdoc_sam0_mcan_document_revision_history Document Revision History
- *
- * <table>
- *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
- *	</tr>
- *	<tr>
- *		<td>A</td>
- *		<td>03/2015</td>
- *		<td>Initial release</td>
- *	</tr>
- * </table>
- */
 
 #endif /* CAN_H_INCLUDED */
 

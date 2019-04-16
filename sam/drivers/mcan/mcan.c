@@ -48,6 +48,14 @@
 #include "pmc.h"
 #include <string.h>
 
+/** @cond 0 */
+/**INDENT-OFF**/
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**INDENT-ON**/
+/** @endcond */
+
 /* PCK5 ID,assigned to MCAN module */
 #define PMC_PCK_5               5
 
@@ -612,3 +620,10 @@ enum status_code mcan_get_tx_event_fifo_element(
 	return ERR_INVALID_ARG;
 }
 
+/** @cond 0 */
+/**INDENT-OFF**/
+#ifdef __cplusplus
+}
+#endif
+/**INDENT-ON**/
+/** @endcond */

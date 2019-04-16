@@ -98,4 +98,8 @@
 #  include "samc21.h"
 #endif
 
+#if (SAMB11)
+#  include "samb11.h"
+#endif
+
 #endif /* _SAM_IO_ */

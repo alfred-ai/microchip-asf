@@ -50,7 +50,7 @@
  *
  * \section Requirements
  *
- * This example can be used on any SAM3/4 boards.
+ * This example can be used on any SAM3/4/V71/E70 boards.
  *
  * \section Description
  *

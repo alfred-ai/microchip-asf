@@ -185,6 +185,7 @@ typedef struct _DeviceVectors
   void* pfnDAC_Handler;                   /* 25 Digital Analog Converter */
   void* pfnPTC_Handler;                   /* 26 Peripheral Touch Controller */
   void* pfnI2S_Handler;                   /* 27 Inter-IC Sound Interface */
+  void* pfnReserved28;
 } DeviceVectors;
 
 /* Cortex-M0+ processor handlers */

@@ -50,6 +50,26 @@
 
 /* === MACROS ============================================================== */
 
+#ifndef CONF_UART
+#define CONF_UART            CONSOLE_UART
+#endif
+
+#ifndef CONF_UART_BAUDRATE
+#define CONF_UART_BAUDRATE (115200UL)
+#endif
+
+#ifndef CONF_UART_CHAR_LENGTH
+#define CONF_UART_CHAR_LENGTH	US_MR_CHRL_8_BIT
+#endif
+
+#ifndef CONF_UART_PARITY
+#define CONF_UART_PARITY		US_MR_PAR_NO
+#endif
+
+#ifndef CONF_UART_STOP_BITS
+#define CONF_UART_STOP_BITS		US_MR_NBSTOP_1_BIT
+#endif
+
 /**
  *  Configure console.
  */

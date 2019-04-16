@@ -2297,9 +2297,6 @@
 				<group>
 					<name>sam4e16e_sam4e_ek</name>
 					<file>
-						<name>$PROJ_DIR$/../lwipopts.h</name>
-					</file>
-					<file>
 						<name>$PROJ_DIR$/../conf_uart_serial.h</name>
 					</file>
 					<file>
@@ -2312,10 +2309,10 @@
 						<name>$PROJ_DIR$/../conf_eth.h</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../conf_spi_master.h</name>
+						<name>$PROJ_DIR$/../lwipopts.h</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../conf_ili93xx.h</name>
+						<name>$PROJ_DIR$/../conf_spi_master.h</name>
 					</file>
 					<group>
 						<name>iar</name>
@@ -2323,6 +2320,9 @@
 							<name>$PROJ_DIR$/asf.h</name>
 						</file>
 					</group>
+					<file>
+						<name>$PROJ_DIR$/../conf_ili93xx.h</name>
+					</file>
 					<file>
 						<name>$PROJ_DIR$/../conf_ads7843.h</name>
 					</file>
@@ -2721,6 +2721,9 @@
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/component/tc.h</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/sam4e8cb.h</name>
+						</file>
 						<group>
 							<name>instance</name>
 							<file>
@@ -2754,6 +2757,9 @@
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/instance/piod.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/instance/uart1.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/instance/twi0.h</name>
 							</file>
 							<file>
@@ -2761,9 +2767,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/instance/pwm.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/instance/uart1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/instance/gpbr.h</name>
@@ -2847,11 +2850,11 @@
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/sam4e16c.h</name>
 						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/sam4e.h</name>
-						</file>
 						<group>
 							<name>pio</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/pio/sam4e8cb.h</name>
+							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/pio/sam4e8c.h</name>
 							</file>
@@ -2862,9 +2865,18 @@
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/pio/sam4e16e.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/pio/sam4e16cb.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/pio/sam4e8e.h</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/sam4e.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/sam4e16cb.h</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/sam4e/include/sam4e8c.h</name>
 						</file>

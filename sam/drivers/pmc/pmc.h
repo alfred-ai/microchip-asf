@@ -64,7 +64,11 @@ extern "C" {
 #define PMC_MASK_STATUS1        (0xFFFFFFFF)
 
 /** Loop counter timeout value */
+#if !(SAME70)
 #define PMC_TIMEOUT             (2048)
+#else
+#define PMC_TIMEOUT             (4096)
+#endif
 
 /** Key to unlock CKGR_MOR register */
 #ifndef CKGR_MOR_KEY_PASSWD

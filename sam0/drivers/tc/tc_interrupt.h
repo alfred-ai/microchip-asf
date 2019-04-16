@@ -63,7 +63,7 @@ extern void *_tc_instances[TC_INST_NUM];
 /**
  * \internal Get the interrupt vector for the given device instance
  *
- * \param[in] TC module instance number.
+ * \param[in] TC module instance number
  *
  * \return Interrupt vector for of the given TC module instance.
  */
@@ -107,7 +107,7 @@ enum status_code tc_unregister_callback(
  * interrupt handler when the conditions for the callback type are
  * met. This function will also enable the appropriate interrupts.
  *
- * \param[in]     module Pointer to TC software instance struct
+ * \param[in]     module        Pointer to TC software instance struct
  * \param[in]     callback_type Callback type given by an enum
  */
 static inline void tc_enable_callback(
@@ -144,7 +144,7 @@ static inline void tc_enable_callback(
  * interrupt routine. The function will also disable the appropriate
  * interrupts.
  *
- * \param[in]     module Pointer to TC software instance struct
+ * \param[in]     module        Pointer to TC software instance struct
  * \param[in]     callback_type Callback type given by an enum
  */
 static inline void tc_disable_callback(

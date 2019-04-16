@@ -147,8 +147,11 @@ extern "C" {
 #define SAMW25_XPLAINED_PRO        79  //!< SAMW25 Xplained Pro board.
 #define SAMC21_XPLAINED_PRO        80  //!< SAM C21 Xplained Pro board.
 #define SAMV71_XPLAINED_ULTRA      81  //!< SAMV71 Xplained Ultra board.
-#define SAML22_XPLAINED_PRO        86  //!< SAM L22 Xplained Pro board.
 #define ATMEGA328P_XPLAINED_MINI   82  //!< ATMEGA328P Xplained MINI board.
+#define ATMEGA328PB_XPLAINED_MINI  83  //!< ATMEGA328PB Xplained MINI board.
+#define SAMB11_XPLAINED_PRO        84  //!< SAM B11 Xplained Pro board.
+#define SAME70_XPLAINED            85  //!< SAME70 Xplained board.
+#define SAML22_XPLAINED_PRO        86  //!< SAM L22 Xplained Pro board.
 #define SIMULATOR_XMEGA_A1         97  //!< Simulator for XMEGA A1 devices.
 #define AVR_SIMULATOR_UC3          98  //!< Simulator for the AVR UC3 device family.
 #define USER_BOARD                 99  //!< User-reserved board (if any).
@@ -329,8 +332,6 @@ extern "C" {
 #  include "sam4cp16bmb/sam4cp16bmb.h"
 #elif BOARD == ATPL230AMB
 #  include "atpl230amb/atpl230amb.h"
-#elif BOARD == SIMULATOR_XMEGA_A1
-#  include "simulator/xmega_a1/simulator_xmega_a1.h"
 #elif BOARD == XMEGA_C3_XPLAINED
 #  include "xmega_c3_xplained/xmega_c3_xplained.h"
 #elif BOARD == XMEGA_RF233_ZIGBIT
@@ -345,13 +346,21 @@ extern "C" {
 #  include "xmega_rf212b_zigbit/xmega_rf212b_zigbit.h"
 #elif BOARD == SAM4E_XPLAINED_PRO
 #  include "sam4e_xplained_pro/sam4e_xplained_pro.h"
+#elif BOARD == ATMEGA328P_XPLAINED_MINI
+#  include "atmega328p_xplained_mini/atmega328p_xplained_mini.h"
+#elif BOARD == ATMEGA328PB_XPLAINED_MINI
+#  include "atmega328pb_xplained_mini/atmega328pb_xplained_mini.h"
+#elif BOARD == SAMB11_XPLAINED_PRO
+#  include "samb11_xplained_pro/samb11_xplained_pro.h"
+#elif BOARD == SAME70_XPLAINED
+#  include "same70_xplained/same70_xplained.h"
+#elif BOARD == SIMULATOR_XMEGA_A1
+#  include "simulator/xmega_a1/simulator_xmega_a1.h"
 #elif BOARD == AVR_SIMULATOR_UC3
 #  include "avr_simulator_uc3/avr_simulator_uc3.h"
 #elif BOARD == USER_BOARD
   // User-reserved area: #include the header file of your board here (if any).
 #  include "user_board.h"
-#elif BOARD == ATMEGA328P_XPLAINED_MINI
-#  include "atmega328p_xplained_mini/atmega328p_xplained_mini.h"
 #elif BOARD == DUMMY_BOARD
 #  include "dummy/dummy_board.h"
 #else

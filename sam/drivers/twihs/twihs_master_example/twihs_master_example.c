@@ -53,6 +53,7 @@
  *
  * This package can be used with the following setup:
  *  - SAMV71 Xplained Ultra kit
+ *  - SAME70 Xplained kit
  *
  * \section files Main files:
  *  - twihs.c SAM Two-Wire Interface driver implementation.
@@ -208,7 +209,7 @@ int main(void)
 
 	/* Turn off LEDs */
 	LED_Off(LED0);
-	
+
     /* Initialize the console UART */
 	configure_console();
 

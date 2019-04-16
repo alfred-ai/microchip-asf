@@ -50,8 +50,10 @@
 
 #include "at_ble_api.h"
 
-#define DBG_LOG printf
-#define DBG_LOG_1LVL printf
+#define DBG_LOG_CONT	 printf
+
+#define DBG_LOG		     printf("\r\n");\
+						 printf
 
 #define APP_HT_FAST_ADV 100 //100 ms
 
@@ -72,10 +74,10 @@
 
 #define HT_ADV_DATA_NAME_LEN	 (9)
 #define HT_ADV_DATA_NAME_TYPE	 (0x09)
-#define HT_ADV_DATA_NAME_DATA	 "ATMEL-BLE"
+#define HT_ADV_DATA_NAME_DATA	 "ATMEL-HTP"
 
 /* Typedef for health thermometer profile -  application */
-typedef struct htpt_app{	
+typedef struct htp_app{	
 	
 	/* Measured temperature value. Value may be Cecilius /Fahrenheit */
 	uint32_t temperature;	
@@ -99,7 +101,7 @@ typedef struct htpt_app{
 	at_ble_htpt_db_config_flag optional;
 	
 	at_ble_htpt_temp_flags flags;
-}htpt_app_t;
+}htp_app_t;
 
 /**@brief Temperature measurement stability type
 */
@@ -109,9 +111,23 @@ typedef enum
 	STABLE_TEMPERATURE_VAL=1
 }stable_temp_reading;
 
-void app_init(void);
-void htpt_init(htpt_app_t *htpt_temp);
-void htpt_temperature_send(htpt_app_t *htpt_temp);
-void timer_callback_handler(void);
+#define IEEE11073_EXPONENT				(0xFF000000)
+
+#define IEEE754_MANTISA(val)			((uint32_t)(val * 10))
+
+#define IEEE754_TO_IEEE11073_FLOAT(f_val)	(IEEE11073_EXPONENT | IEEE754_MANTISA(f_val))
+
+/* Converting floating point IEEE754 format to floating point IEEE11073 format
+ * 
+ * @Param[0] f_val floating point IEEE754 format
+ * @return floating point IEEE11073
+ *
+ */
+static inline uint32_t convert_ieee754_ieee11073_float(float f_val)
+{
+	uint32_t ieee11073_float;
+	ieee11073_float = IEEE754_TO_IEEE11073_FLOAT(f_val);
+	return (ieee11073_float);
+}
 
 #endif /* __HTPT_APP_H__ */

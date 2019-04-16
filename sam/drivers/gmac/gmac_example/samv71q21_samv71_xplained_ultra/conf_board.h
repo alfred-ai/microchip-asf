@@ -50,7 +50,4 @@
 /** Enable Com Port. */
 #define CONF_BOARD_UART_CONSOLE
 
-/* Enable ETH PHY: KSZ8061RNBVA feature */
-#define CONF_BOARD_KSZ8061RNB
-
 #endif /* CONF_BOARD_H_INCLUDED */

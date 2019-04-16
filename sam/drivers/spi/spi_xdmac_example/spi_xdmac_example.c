@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Serial Peripheral Interface (SPI) XDMAC example for SAMV71.
+ * \brief Serial Peripheral Interface (SPI) XDMAC example for SAMV71/SAME70.
  *
  * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
@@ -46,7 +46,7 @@
  *
  * \par Purpose
  *
- * This example uses Serial Peripheral Interface (SPI) of samv71_xplained_ultra board in
+ * This example uses Serial Peripheral Interface (SPI) of samv71_xplained_ultra/same70_xplained_pro board in
  * slave mode to communicate with another samv71_xplained_ultra board's SPI in master mode.
  * The memory move operations through the unidirectional communication are controlled by XDMAC
  * for SPI transmitter and receiver,one XDMAC channel for transmitter and one channel for receiver.

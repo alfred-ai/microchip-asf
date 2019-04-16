@@ -213,29 +213,29 @@ enum wdt_period {
 	 *  Window and Early Warning periods; its use as the Watchdog Reset
 	 *  Period is invalid. */
 	WDT_PERIOD_NONE     = 0,
-	/** Watchdog period of 8 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 8 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_8CLK     = 1,
-	/** Watchdog period of 16 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 16 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_16CLK    = 2,
-	/** Watchdog period of 32 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 32 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_32CLK    = 3,
-	/** Watchdog period of 64 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 64 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_64CLK    = 4,
-	/** Watchdog period of 128 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 128 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_128CLK   = 5,
-	/** Watchdog period of 256 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 256 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_256CLK   = 6,
-	/** Watchdog period of 512 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 512 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_512CLK   = 7,
-	/** Watchdog period of 1024 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 1024 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_1024CLK  = 8,
-	/** Watchdog period of 2048 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 2048 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_2048CLK  = 9,
-	/** Watchdog period of 4096 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 4096 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_4096CLK  = 10,
-	/** Watchdog period of 8192 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 8192 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_8192CLK  = 11,
-	/** Watchdog period of 16384 clocks of the Watchdog Timer Generic Clock. */
+	/** Watchdog period of 16384 clocks of the Watchdog Timer Generic Clock */
 	WDT_PERIOD_16384CLK = 12,
 };
 
@@ -248,20 +248,20 @@ enum wdt_period {
  */
 struct wdt_conf {
 	/** If \c true, the Watchdog will be locked to the current configuration
-	 *  settings when the Watchdog is enabled. */
+	 *  settings when the Watchdog is enabled */
 	bool always_on;
-	/** Enable/Disable the Watchdog Timer. */
+	/** Enable/Disable the Watchdog Timer */
 	bool enable;
 #if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21)
-	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20.*/
+	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20*/
 	enum gclk_generator clock_source;
 #endif
-	/** Number of Watchdog timer clock ticks until the Watchdog expires. */
+	/** Number of Watchdog timer clock ticks until the Watchdog expires */
 	enum wdt_period timeout_period;
-	/** Number of Watchdog timer clock ticks until the reset window opens. */
+	/** Number of Watchdog timer clock ticks until the reset window opens */
 	enum wdt_period window_period;
 	/** Number of Watchdog timer clock ticks until the early warning flag is
-	 *  set. */
+	 *  set */
 	enum wdt_period early_warning_period;
 };
 
@@ -471,27 +471,27 @@ void wdt_reset_count(void);
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
- *		<td>08/2015</td>
+ *		<td>42124E</td>
+ *		<td>10/2015</td>
  *		<td>Added support for SAM L21/L22, SAM DA1, and SAM C20/C2</td>
  *	</tr>
  *	<tr>
- *		<td>D</td>
+ *		<td>42124D</td>
  *		<td>12/2014</td>
- *		<td>Added SAMR21 and SAMD10/D11 support</td>
+ *		<td>Added SAM R21 and SAM D10/D11 support</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42124C</td>
  *		<td>01/2014</td>
- *		<td>Add SAMD21 support</td>
+ *		<td>Add SAM D21 support</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42124B</td>
  *		<td>06/2013</td>
  *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42124A</td>
  *		<td>06/2013</td>
  *		<td>Initial release</td>
  *	</tr>

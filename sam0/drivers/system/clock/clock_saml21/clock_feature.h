@@ -966,9 +966,7 @@ static inline void system_main_clock_set_failure_detect(
 static inline void system_cpu_clock_set_divider(
 		const enum system_main_clock_div divider)
 {
-	Assert(((uint32_t)divider & MCLK_CPUDIV_CPUDIV_Msk) == divider);
-	MCLK->CPUDIV.reg = (uint32_t)divider;
-
+	MCLK->CPUDIV.reg = MCLK_CPUDIV_CPUDIV(1 << divider);
 }
 
 /**
@@ -981,9 +979,7 @@ static inline void system_cpu_clock_set_divider(
 static inline void system_low_power_clock_set_divider(
 		const enum system_main_clock_div divider)
 {
-	Assert(((uint32_t)divider & MCLK_LPDIV_LPDIV_Msk) == divider);
-	MCLK->LPDIV.reg = (uint32_t)divider;
-
+	MCLK->LPDIV.reg = MCLK_LPDIV_LPDIV(1 << divider);
 }
 
 /**
@@ -996,9 +992,7 @@ static inline void system_low_power_clock_set_divider(
 static inline void system_backup_clock_set_divider(
 		const enum system_main_clock_div divider)
 {
-	Assert(((uint32_t)divider & MCLK_BUPDIV_BUPDIV_Msk) == divider);
-	MCLK->BUPDIV.reg = (uint32_t)divider;
-
+	MCLK->BUPDIV.reg = MCLK_BUPDIV_BUPDIV(1 << divider);
 }
 
 

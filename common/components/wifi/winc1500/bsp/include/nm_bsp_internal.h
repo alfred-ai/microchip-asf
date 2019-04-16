@@ -91,6 +91,10 @@
 #include "bsp/include/nm_bsp_samg55.h"
 #endif
 
+#ifdef __SAME70Q21__
+#include "bsp/include/nm_bsp_same70.h"
+#endif
+
 #ifdef CORTUS_APP
 #include "crt_iface.h"
 #endif

@@ -907,9 +907,7 @@ uint32_t system_clock_source_get_hz(
 static inline void system_cpu_clock_set_divider(
 		const enum system_main_clock_div divider)
 {
-	Assert(((uint32_t)divider & MCLK_CPUDIV_CPUDIV_Msk) == divider);
-	MCLK->CPUDIV.reg = (uint32_t)divider;
-
+	MCLK->CPUDIV.reg = MCLK_CPUDIV_CPUDIV(1 << divider);
 }
 
 /**
@@ -922,9 +920,7 @@ static inline void system_cpu_clock_set_divider(
 static inline void system_backup_clock_set_divider(
 		const enum system_main_clock_div divider)
 {
-	Assert(((uint32_t)divider & MCLK_BUPDIV_BUPDIV_Msk) == divider);
-	MCLK->BUPDIV.reg = (uint32_t)divider;
-
+	MCLK->BUPDIV.reg = MCLK_BUPDIV_BUPDIV(1 << divider);
 }
 
 
@@ -1374,8 +1370,8 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>08/2015</td>
+ *		<td>42551A</td>
+ *		<td>10/2015</td>
  *		<td>Initial release</td>
  *	</tr>
  * </table>

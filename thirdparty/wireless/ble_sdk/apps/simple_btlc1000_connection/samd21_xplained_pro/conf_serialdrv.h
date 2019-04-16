@@ -44,6 +44,28 @@
 #ifndef CONF_SERIALDRV_H_INCLUDED
 #define CONF_SERIALDRV_H_INCLUDED
 
+#define CONF_BLE_USART_MODULE  EXT1_UART_MODULE
+#define CONF_BLE_MUX_SETTING   EXT1_UART_SERCOM_MUX_SETTING
+#define CONF_BLE_PINMUX_PAD0   EXT1_UART_SERCOM_PINMUX_PAD0
+#define CONF_BLE_PINMUX_PAD1   EXT1_UART_SERCOM_PINMUX_PAD1
+#define CONF_BLE_PINMUX_PAD2   EXT1_UART_SERCOM_PINMUX_PAD2
+#define CONF_BLE_PINMUX_PAD3   EXT1_UART_SERCOM_PINMUX_PAD3
+#define CONF_BLE_BAUDRATE      115200
+#define CONF_BLE_UART_CLOCK	   GCLK_GENERATOR_0
+
+/* BTLC1000 Wakeup Pin */
+#define BTLC1000_WAKEUP_PIN			(EXT1_PIN_6)
+/* BTLC1000 Chip Enable Pin */
+#define BTLC1000_CHIP_ENABLE_PIN	(EXT1_PIN_10)
+
+/* BTLC1000 50ms Reset Duration */
+#define BTLC1000_RESET_MS			(50)
+
+/* set port pin high */
+#define IOPORT_PIN_LEVEL_HIGH		(true)
+/* Set port pin low */
+#define IOPORT_PIN_LEVEL_LOW		(false)
+
 void serial_rx_callback(void);
 void serial_tx_callback(void);
 
@@ -52,29 +74,89 @@ void serial_tx_callback(void);
 #define SERIAL_DRV_TX_CB_ENABLE  true
 #define SERIAL_DRV_RX_CB_ENABLE  true
 
+#define BLE_MAX_TX_PAYLOAD_SIZE 512
+#define BLE_MAX_RX_PAYLOAD_SIZE 512
 
-static inline void ble_enable_pin_init(void)
+
+/* Set BLE Wakeup pin to be low */
+static inline bool ble_wakeup_pin_level(void)
 {
-	struct port_config pin_conf;
-	port_get_config_defaults(&pin_conf);
-
-	/* Configure LEDs as outputs, turn them off */
-	pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
-	port_pin_set_config(PIN_PB07, &pin_conf);
-	port_pin_set_output_level(PIN_PB07, true);
-	port_pin_set_config(PIN_PB05, &pin_conf);
-	port_pin_set_output_level(PIN_PB05, true);
+	return (port_pin_get_output_level(BTLC1000_WAKEUP_PIN));
 }
 
+/* Set BLE Wakeup pin to be low */
+static inline void ble_wakeup_pin_set_low(void)
+{
+	port_pin_set_output_level(BTLC1000_WAKEUP_PIN, 
+							IOPORT_PIN_LEVEL_LOW);
+}
+
+/* Set wakeup pin to high */
+static inline void ble_wakeup_pin_set_high(void)
+{
+	port_pin_set_output_level(BTLC1000_WAKEUP_PIN, 
+							IOPORT_PIN_LEVEL_HIGH);
+}
+
+/* Set enable pin to Low */
 static inline void ble_enable_pin_set_low(void)
 {
-	//port_pin_set_output_level(PIN_PB07, false);
+	port_pin_set_output_level(BTLC1000_CHIP_ENABLE_PIN, 
+							IOPORT_PIN_LEVEL_LOW);
 }
 
+/* Set enable pin to high */
 static inline void ble_enable_pin_set_high(void)
 {
-	//port_pin_set_output_level(PIN_PB07, true);
+	port_pin_set_output_level(BTLC1000_CHIP_ENABLE_PIN, 
+							IOPORT_PIN_LEVEL_HIGH);
 }
 
+/* Configure the BTLC1000 control(chip_enable, wakeup) pins */
+static inline void ble_configure_control_pin(void)
+{
+	struct port_config pin_conf;
+	
+	/* initialize the delay before use */
+	delay_init();
+	
+	/* get the default values for port pin configuration */
+	port_get_config_defaults(&pin_conf);
+
+	/* Configure control pins as output */
+	pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
+	pin_conf.input_pull = PORT_PIN_PULL_DOWN;
+	
+	port_pin_set_config(BTLC1000_WAKEUP_PIN, &pin_conf);
+	/* set wakeup pin to low */
+	ble_wakeup_pin_set_high();
+	
+	port_pin_set_config(BTLC1000_CHIP_ENABLE_PIN, &pin_conf);
+	/* set chip enable to low */
+	ble_enable_pin_set_low();
+	
+	/* Delay for 50ms */
+	delay_ms(BTLC1000_RESET_MS);
+	
+	/* set chip enable to high */
+	ble_enable_pin_set_high();
+	
+}
+
+static inline void ble_reset(void)
+{
+	/* BTLC1000 Reset Sequence @Todo */
+	ble_enable_pin_set_high();
+	ble_wakeup_pin_set_high();
+	delay_ms(BTLC1000_RESET_MS);
+	
+	ble_enable_pin_set_low();
+	ble_wakeup_pin_set_low();
+	delay_ms(BTLC1000_RESET_MS);
+	
+	ble_enable_pin_set_high();
+	ble_wakeup_pin_set_high();
+	delay_ms(BTLC1000_RESET_MS);
+}
 
 #endif /* CONF_SERIALDRV_H_INCLUDED */

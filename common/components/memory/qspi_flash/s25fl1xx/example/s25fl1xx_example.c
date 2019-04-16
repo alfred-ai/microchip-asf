@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SDRAMC on QSPI example for SAMV71.
+ * \brief S25FL1xx QSPI flash example for SAMV71.
  *
  * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
@@ -43,21 +43,21 @@
 
 /**
  *
- * \mainpage QSPI serial memory Example for S25FL116K
+ * \mainpage S25FL116K QSPI Flash Memory Example for SAMV71
  *
  * \section Purpose
  *
- * This example shows how to configure the S25FL116K.
- * It will perform write and read operations to check the configuration.
+ * This example demonstrates how to setup the QSPI Flash in XIP mode to execute 
+ * code from QSPI flash.
  *
  * \section Requirements
  *
- * This package can be used with SAMV71 XPlAINED ULTRA.
+ * This package can be used with SAMV71-XPlAINED-ULTRA.
  *
  * \section Description
  *
- * An accurate one-to-one comparison is processed after the complete flash
- * configuration.
+ * Ths code writes the getting-started application code into flash via SPI and enables 
+ * quad mode spi to read code and to execute from it.
  *
  * \section Compilation Info
  * This software was written for the GNU GCC.
@@ -77,10 +77,10 @@
  * -# In the terminal window, the following text should appear
  *    (values depend on the board and the chip used):
  *    \code
-	-- QSPI Example --
-	-- xxxxxx-xx
-	-- Compiled: xxx xx xxxx xx:xx:xx --
-	...
+  -- S25FL1xx QSPI Flash Example --
+  -- xxxxxx-xx
+  -- Compiled: xxx xx xxxx xx:xx:xx --
+  ...
 \endcode
  *
  */

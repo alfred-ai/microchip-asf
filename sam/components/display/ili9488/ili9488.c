@@ -59,6 +59,13 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "pio.h"
+#ifdef ILI9488_EBIMODE
+#  include "smc.h"
+#  include "pmc.h"
+#endif
+#ifdef ILI9488_SPIMODE
+#  include "spi_master.h"
+#endif
 
 /// @cond 0
 /**INDENT-OFF**/
@@ -69,8 +76,7 @@
 /// @endcond
 
 /* Pixel cache used to speed up communication */
-#define LCD_DATA_CACHE_SIZE ILI9488_LCD_WIDTH
-static ili9488_color_t g_ul_pixel_cache[LCD_DATA_CACHE_SIZE];
+static ili9488_color_t g_ul_pixel_cache[LCD_DATA_CACHE_SIZE*LCD_DATA_COLOR_UNIT];
 
 /* Global variable describing the font size used by the driver */
 const struct ili9488_font gfont = {10, 14};
@@ -275,6 +281,7 @@ const uint8_t p_uc_charset10x14[] = {
 	0xFF, 0xFC, 0xFF, 0xFC, 0xFF, 0xFC, 0xFF, 0xFC, 0xFF, 0xFC
 };
 
+#ifdef ILI9488_EBIMODE
 /**
  * \brief Read 32 bit data.
  */
@@ -354,7 +361,7 @@ static void ili9488_write_ram_buffer(const ili9488_color_t *p_ul_buf, uint32_t u
  * \param us_data data to be written.
  * \param size the number of parameters.
  */
- void ili9488_write_register(uint8_t uc_reg, uint16_t *us_data, uint32_t size)
+ void ili9488_write_register(uint8_t uc_reg, ili9488_color_t *us_data, uint32_t size)
 {
 	volatile uint32_t i;
 
@@ -439,13 +446,105 @@ static uint32_t ili9488_read_register(uint8_t uc_reg)
 
 	return ili9488_lcd_get_16();
 }
+ 
+static uint32_t ili9488_read_chipid(void)
+{
+	return ili9488_read_register(ILI9488_CMD_READ_ID4);
+}
+#endif
+#ifdef ILI9488_SPIMODE
+/**
+ * \brief Prepare to write GRAM data.
+ */
+static void ili9488_write_ram_prepare(void)
+{
+	volatile uint32_t i;
+	pio_set_pin_low(LCD_SPI_CDS_PIO);
+	spi_write(BOARD_ILI9488_SPI, ILI9488_CMD_MEMORY_WRITE, BOARD_ILI9488_SPI_NPCS, 0);
+	for(i = 0; i < 0xFF; i++);
+}
+
+/**
+ * \brief Write data to LCD GRAM.
+ *
+ * \param ul_color 16-bits RGB color.
+ */
+static void ili9488_write_ram(ili9488_color_t ul_color)
+{
+	pio_set_pin_high(LCD_SPI_CDS_PIO);
+	spi_write(BOARD_ILI9488_SPI, ul_color, BOARD_ILI9488_SPI_NPCS, 0);
+}
+
+/**
+ * \brief Write multiple data in buffer to LCD controller.
+ *
+ * \param p_ul_buf data buffer.
+ * \param ul_size size in pixels.
+ */
+static void ili9488_write_ram_buffer(const ili9488_color_t *p_ul_buf, uint32_t ul_size)
+{
+	volatile uint32_t i;
+	pio_set_pin_high(LCD_SPI_CDS_PIO);
+	spi_write_packet(BOARD_ILI9488_SPI, p_ul_buf, ul_size);
+	for(i = 0; i < 0xFF; i++);
+}
+
+/**
+ * \brief Write data to LCD Register.
+ *
+ * \param uc_reg register address.
+ * \param us_data data to be written.
+ * \param size the number of parameters.
+ */
+void ili9488_write_register(uint8_t uc_reg, ili9488_color_t *us_data, uint32_t size)
+{
+	volatile uint32_t i;
+
+	/* Transfer cmd */
+	pio_set_pin_low(LCD_SPI_CDS_PIO);
+	spi_write(BOARD_ILI9488_SPI, uc_reg, BOARD_ILI9488_SPI_NPCS, 0);
+	for(i = 0; i < 0xFF; i++);
+
+	if(size > 0) {
+		/* Transfer data */
+		pio_set_pin_high(LCD_SPI_CDS_PIO);
+		spi_write_packet(BOARD_ILI9488_SPI, us_data, size);
+		for(i = 0; i < 0x3F; i++);
+	}
+}
+
+static uint32_t ili9488_read_chipid(void)
+{
+	uint32_t i, chipid = 0;
+	volatile uint32_t j;
+	ili9488_color_t chipidBuf, reg, param;
+	
+	reg = 0x81;
+	param = 0x0;
+	for (i = 3; i > 0; i--) {
+		ili9488_write_register(ILI9488_CMD_SPI_READ_SETTINGS, &reg, 1);
+ 		reg++;
+		for(j = 0; j < 0xFF; j++);
+		ili9488_write_register(ILI9488_CMD_READ_ID4, 0, 0);
+		{
+			pio_set_pin_high(LCD_SPI_CDS_PIO);
+			spi_read_packet(BOARD_ILI9488_SPI, &chipidBuf, 1);
+			for(j = 0; j < 0xFF; j++);
+		}
+		chipid |= (chipidBuf & 0xFF) << ((i - 1) << 3);
+		ili9488_write_register(ILI9488_CMD_SPI_READ_SETTINGS, &param, 1);
+		for(j = 0; j < 0xFFF; j++);
+	}
+	return chipid;
+}
+#endif
 
 /**
  * \brief Delay function.
  */
 void ili9488_delay(uint32_t ul_ms)
 {
-	 uint32_t i;
+	uint32_t i;
 
 	for(i = 0; i < ul_ms; i++) {
 		for(i = 0; i < 100000; i++) {
@@ -501,7 +600,7 @@ static void ili9488_check_box_coordinates(uint32_t *p_ul_x1, uint32_t *p_ul_y1,
  */
 void ili9488_set_display_direction(enum ili9488_display_direction direction )
 {
-	uint16_t value;
+	ili9488_color_t value;
 	if(direction) {
 		value = 0xE8;
 	} else {
@@ -522,9 +621,9 @@ void ili9488_set_window(uint16_t x, uint16_t y, uint16_t width, uint16_t height 
 {
 	uint16_t col_start, col_end, row_start, row_end;
 	uint32_t cnt = 0;
-	uint16_t buf[4];
+	ili9488_color_t buf[4];
 
-	cnt = sizeof(buf)/sizeof(uint16_t);
+	cnt = sizeof(buf)/sizeof(ili9488_color_t);
 
 	col_start  =  x ;
 	col_end    =  width + x;
@@ -536,7 +635,7 @@ void ili9488_set_window(uint16_t x, uint16_t y, uint16_t width, uint16_t height 
 	buf[1] = get_0b_to_8b(col_start);
 	buf[2] = get_8b_to_16b(col_end);
 	buf[3] = get_0b_to_8b(col_end);
-	ili9488_write_register(ILI9488_CMD_COLUMN_ADDRESS_SET, (uint16_t*)buf, cnt);
+	ili9488_write_register(ILI9488_CMD_COLUMN_ADDRESS_SET, buf, cnt);
 	ili9488_write_register(ILI9488_CMD_NOP, 0, 0);
 
 	/* Set Horizontal Address End Position */
@@ -544,7 +643,7 @@ void ili9488_set_window(uint16_t x, uint16_t y, uint16_t width, uint16_t height 
 	buf[1] = get_0b_to_8b(row_start);
 	buf[2] = get_8b_to_16b(row_end);
 	buf[3] = get_0b_to_8b(row_end);
-	ili9488_write_register(ILI9488_CMD_PAGE_ADDRESS_SET, (uint16_t*)buf, cnt);
+	ili9488_write_register(ILI9488_CMD_PAGE_ADDRESS_SET, buf, cnt);
 	ili9488_write_register(ILI9488_CMD_NOP, 0, 0);
 }
 
@@ -561,8 +660,47 @@ void ili9488_set_window(uint16_t x, uint16_t y, uint16_t width, uint16_t height 
  */
 uint32_t ili9488_init(struct ili9488_opt_t *p_opt)
 {
-	uint16_t param;
+	ili9488_color_t param;
 	uint32_t chipid;
+#ifdef ILI9488_EBIMODE
+	/* Enable peripheral clock */
+	pmc_enable_periph_clk(ID_SMC);
+
+	/* Configure SMC, NCS3 is assigned to LCD */
+	smc_set_setup_timing(SMC, BOARD_ILI9488_EBI_NPCS, SMC_SETUP_NWE_SETUP(2)
+			| SMC_SETUP_NCS_WR_SETUP(0)
+			| SMC_SETUP_NRD_SETUP(0)
+			| SMC_SETUP_NCS_RD_SETUP(0));
+	smc_set_pulse_timing(SMC, BOARD_ILI9488_EBI_NPCS , SMC_PULSE_NWE_PULSE(6)
+			| SMC_PULSE_NCS_WR_PULSE(0xA)
+			| SMC_PULSE_NRD_PULSE(0xA)
+			| SMC_PULSE_NCS_RD_PULSE(0xA));
+	smc_set_cycle_timing(SMC, BOARD_ILI9488_EBI_NPCS, SMC_CYCLE_NWE_CYCLE(0xA)
+			| SMC_CYCLE_NRD_CYCLE(0xA));
+
+
+	smc_set_mode(SMC, BOARD_ILI9488_EBI_NPCS, SMC_MODE_READ_MODE
+			| SMC_MODE_WRITE_MODE
+			| SMC_MODE_DBW_16_BIT
+			| SMC_MODE_EXNW_MODE_DISABLED
+			| SMC_MODE_TDF_CYCLES(0xF));
+#endif
+#ifdef ILI9488_SPIMODE
+	struct spi_device ILI9488_SPI_DEVICE = {
+		// Board specific chip select configuration
+		.id = BOARD_ILI9488_SPI_NPCS
+	};
+
+	/* Init, select and configure the chip */
+	spi_master_init(BOARD_ILI9488_SPI);
+	spi_master_setup_device(BOARD_ILI9488_SPI, &ILI9488_SPI_DEVICE, SPI_MODE_3, ILI9488_SPI_BAUDRATE, 0);
+	spi_configure_cs_behavior(BOARD_ILI9488_SPI, BOARD_ILI9488_SPI_NPCS, SPI_CS_RISE_NO_TX);
+	spi_select_device(BOARD_ILI9488_SPI, &ILI9488_SPI_DEVICE);
+
+	/* Enable the SPI peripheral */
+	spi_enable(BOARD_ILI9488_SPI);
+	spi_enable_interrupt(BOARD_ILI9488_SPI, SPI_IER_RDRF);
+#endif
 
 	ili9488_write_register(ILI9488_CMD_SOFTWARE_RESET, 0x0000, 0);
 	ili9488_delay(200);
@@ -571,7 +709,7 @@ uint32_t ili9488_init(struct ili9488_opt_t *p_opt)
 	ili9488_delay(200);
 
 	/** read chipid */
-	chipid = ili9488_read_register(ILI9488_CMD_READ_ID4);
+	chipid = ili9488_read_chipid();
 	if (chipid != ILI9488_DEVICE_CODE) {
 		return 1;
 	}
@@ -584,12 +722,21 @@ uint32_t ili9488_init(struct ili9488_opt_t *p_opt)
 	param = 0x04;
 	ili9488_write_register(ILI9488_CMD_CABC_CONTROL_9, &param, 1);
 	ili9488_delay(100);
+#ifdef ILI9488_EBIMODE
 	/** Set ILI9488 Pixel Format in SMC mode.*/
 	param = 0x05;
 	ili9488_write_register(ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET, &param, 1);
 	ili9488_delay(100);
+	ili9488_write_register(ILI9488_CMD_PARTIAL_MODE_ON, 0, 0);
+	ili9488_delay(100);
+#endif
+#ifdef ILI9488_SPIMODE
+    param = 0x06;
+	ili9488_write_register(ILI9488_CMD_COLMOD_PIXEL_FORMAT_SET, &param, 1);
+	ili9488_delay(100);
 	ili9488_write_register(ILI9488_CMD_NORMAL_DISP_MODE_ON, 0, 0);
 	ili9488_delay(100);
+#endif
 
 	ili9488_display_on();
 	ili9488_delay(100);
@@ -625,15 +772,22 @@ void ili9488_display_off(void)
  *
  * \param ul_color foreground color.
  */
-void ili9488_set_foreground_color(ili9488_color_t ul_color)
+void ili9488_set_foreground_color(uint32_t ul_color)
 {
 	uint32_t i;
-
+#ifdef ILI9488_EBIMODE
 	/* Fill the cache with selected color */
 	for (i = 0; i < LCD_DATA_CACHE_SIZE; ++i) {
 		g_ul_pixel_cache[i] = ul_color;
 	}
-
+#endif
+#ifdef ILI9488_SPIMODE
+	for (i = 0; i < LCD_DATA_CACHE_SIZE * LCD_DATA_COLOR_UNIT; ) {
+		g_ul_pixel_cache[i++] = ul_color&0xFF;
+		g_ul_pixel_cache[i++] = ul_color>>8;
+		g_ul_pixel_cache[i++] = ul_color>>16;
+	}
+#endif
 }
 
 /**
@@ -664,15 +818,15 @@ void ili9488_set_cursor_position(uint16_t x, uint16_t y)
 	/* Set Horizontal Address Start Position */
 	uint32_t cnt = 0;
 
-	uint16_t buf[4];
-	cnt = sizeof(buf)/sizeof(uint16_t);
+	ili9488_color_t buf[4];
+	cnt = sizeof(buf)/sizeof(ili9488_color_t);
 
 	buf[0] = get_8b_to_16b(x);
 	buf[1] = get_0b_to_8b(x);
 	x+=1;
 	buf[2] = get_8b_to_16b(x);
 	buf[3] = get_0b_to_8b(x);
-	ili9488_write_register(ILI9488_CMD_COLUMN_ADDRESS_SET, (uint16_t*)buf, cnt);
+	ili9488_write_register(ILI9488_CMD_COLUMN_ADDRESS_SET, buf, cnt);
 	ili9488_write_register(ILI9488_CMD_NOP, 0, 0);
 
 
@@ -682,7 +836,7 @@ void ili9488_set_cursor_position(uint16_t x, uint16_t y)
 	y+=1;
 	buf[2] = get_8b_to_16b(y);
 	buf[3] = get_0b_to_8b(y);
-	ili9488_write_register(ILI9488_CMD_PAGE_ADDRESS_SET, (uint16_t*)buf, cnt);
+	ili9488_write_register(ILI9488_CMD_PAGE_ADDRESS_SET, buf, cnt);
 	ili9488_write_register(ILI9488_CMD_NOP, 0, 0);
 }
 
@@ -696,9 +850,9 @@ void ili9488_set_cursor_position(uint16_t x, uint16_t y)
 void ili9488_scroll(uint16_t ul_tfa, uint16_t ul_vsa, uint16_t ul_bfa)
 {
 	uint32_t cnt = 0;
-	uint16_t buf[6];
+	ili9488_color_t buf[6];
 
-	cnt = sizeof(buf)/sizeof(uint16_t);
+	cnt = sizeof(buf)/sizeof(ili9488_color_t);
 
 	buf[0] = get_8b_to_16b(ul_tfa);
 	buf[1] = get_0b_to_8b(ul_tfa);
@@ -721,8 +875,8 @@ void ili9488_set_scroll_address(uint16_t ul_vsp)
 {
 	uint32_t cnt = 0;
 
-	uint16_t buf[2];
-	cnt = sizeof(buf)/sizeof(uint16_t);
+	ili9488_color_t buf[2];
+	cnt = sizeof(buf)/sizeof(ili9488_color_t);
 
 	buf[0] = get_8b_to_16b(ul_vsp);
 	buf[1] = get_0b_to_8b(ul_vsp);
@@ -748,7 +902,7 @@ uint32_t ili9488_draw_pixel(uint32_t ul_x, uint32_t ul_y)
 
 	/* Prepare to write in GRAM */
 	ili9488_write_ram_prepare();
-	ili9488_write_ram(*g_ul_pixel_cache);
+	ili9488_write_ram_buffer(g_ul_pixel_cache, LCD_DATA_COLOR_UNIT);
 	return 0;
 }
 
@@ -762,6 +916,7 @@ uint32_t ili9488_draw_pixel(uint32_t ul_x, uint32_t ul_y)
  */
 ili9488_color_t ili9488_get_pixel(uint32_t ul_x, uint32_t ul_y)
 {
+#ifdef ILI9488_EBIMODE
 	Assert(ul_x <= ILI9488_LCD_WIDTH);
 	Assert(ul_y <= ILI9488_LCD_HEIGHT);
 
@@ -771,6 +926,11 @@ ili9488_color_t ili9488_get_pixel(uint32_t ul_x, uint32_t ul_y)
 	/* Prepare to write in GRAM */
 	ili9488_read_ram_prepare();
 	return ili9488_read_ram();
+#endif
+#ifdef ILI9488_SPIMODE
+	Assert(0);
+	return 0;
+#endif
 }
 
 /**
@@ -895,11 +1055,11 @@ void ili9488_draw_filled_rectangle(uint32_t ul_x1, uint32_t ul_y1,
 	/* Send pixels blocks => one SPI IT / block */
 	blocks = size / LCD_DATA_CACHE_SIZE;
 	while (blocks--) {
-		ili9488_write_ram_buffer(g_ul_pixel_cache, LCD_DATA_CACHE_SIZE);
+		ili9488_write_ram_buffer(g_ul_pixel_cache, LCD_DATA_CACHE_SIZE * LCD_DATA_COLOR_UNIT);
 	}
 
 	/* Send remaining pixels */
-	ili9488_write_ram_buffer(g_ul_pixel_cache, size % LCD_DATA_CACHE_SIZE);
+	ili9488_write_ram_buffer(g_ul_pixel_cache, (size % LCD_DATA_CACHE_SIZE) * LCD_DATA_COLOR_UNIT);
 
 	/* Reset the refresh window area */
 	ili9488_set_window(0, 0, ILI9488_LCD_WIDTH, ILI9488_LCD_HEIGHT);
@@ -1103,14 +1263,14 @@ void ili9488_draw_pixmap(uint32_t ul_x, uint32_t ul_y, uint32_t ul_width,
 	ili9488_check_box_coordinates(&dwX1, &dwY1, &dwX2, &dwY2);
 
 	/* Determine the refresh window area */
-	ili9488_set_window(dwX1, dwY1, (dwX2 - dwX1 + 1), (dwY2 - dwY1 + 1));
+	ili9488_set_window(dwX1, dwY1, (dwX2 - dwX1 - 1), (dwY2 - dwY1 - 1));
 
 	/* Prepare to write in GRAM */
 	ili9488_write_ram_prepare();
 
 	size = (dwX2 - dwX1) * (dwY2 - dwY1);
 
-	ili9488_write_ram_buffer(p_ul_pixmap, size);
+	ili9488_write_ram_buffer(p_ul_pixmap, size * LCD_DATA_COLOR_UNIT);
 
 	/* Reset the refresh window area */
 	ili9488_set_window(0, 0, ILI9488_LCD_WIDTH, ILI9488_LCD_HEIGHT);
@@ -1127,8 +1287,8 @@ void ili9488_draw_pixmap(uint32_t ul_x, uint32_t ul_y, uint32_t ul_width,
 void ili9488_set_display_mirror(uint8_t flags)
 {
 	uint32_t cnt = 0;
-	uint16_t buf[3];
-	cnt = sizeof(buf)/sizeof(uint16_t);
+	ili9488_color_t buf[3];
+	cnt = sizeof(buf)/sizeof(ili9488_color_t);
 
 	buf[0] = 0x2;
 	buf[1] = 0x2;
@@ -1149,29 +1309,7 @@ void ili9488_set_display_mirror(uint8_t flags)
  */
 void ili9488_write_brightness(uint16_t us_value)
 {
-	ili9488_write_register(ILI9488_CMD_WRITE_DISPLAY_BRIGHTNESS, &us_value, 1);
-}
-
-/**
- * \brief read current display brightness
- *
- * \return brightness display brightness value.
- */
-uint32_t ili9488_read_brightness(void)
-{
-	uint32_t value[2];
-	uint32_t brightness;
-
-	pio_clear(PIN_EBI_CDS_PIO, PIN_EBI_CDS_MASK);
-	LCD_IR(0);
-	LCD_IR(ILI9488_CMD_READ_DISPLAY_BRIGHTNESS);
-	/* The first data is dummy*/
-
-	pio_set(PIN_EBI_CDS_PIO, PIN_EBI_CDS_MASK);
-	LCD_MULTI_RD(value, 2);
-
-	brightness = value[1];
-	return brightness;
+	ili9488_write_register(ILI9488_CMD_WRITE_DISPLAY_BRIGHTNESS, (ili9488_color_t *)&us_value, 1);
 }
 
 /// @cond 0

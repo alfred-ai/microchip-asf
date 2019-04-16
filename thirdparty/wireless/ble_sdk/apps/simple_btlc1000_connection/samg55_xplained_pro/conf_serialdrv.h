@@ -44,6 +44,20 @@
 #ifndef CONF_SERIALDRV_H_INCLUDED
 #define CONF_SERIALDRV_H_INCLUDED
 
+/* BTLC1000 Wakeup Pin */
+#define BTLC1000_WAKEUP_PIN			(EXT1_PIN_6)
+
+/* BTLC1000 Chip Enable Pin */
+#define BTLC1000_CHIP_ENABLE_PIN	(EXT1_PIN_10)
+
+/* BTLC1000 50ms Reset Duration */
+#define BTLC1000_RESET_MS			(50)
+
+/* set port pin high */
+#define IOPORT_PIN_LEVEL_HIGH		(true)
+/* Set port pin low */
+#define IOPORT_PIN_LEVEL_LOW		(false)
+
 /** UART Interface */
 #define BLE_UART            EXT1_UART_MODULE
 #define BLE_UART_ID		    ID_FLEXCOM0
@@ -69,24 +83,83 @@ void serial_tx_callback(void);
 #define SERIAL_DRV_TX_CB_ENABLE  true
 #define SERIAL_DRV_RX_CB_ENABLE  true
 
-static inline void ble_enable_pin_init(void)
-{
-	ioport_init();
+#define BLE_MAX_TX_PAYLOAD_SIZE 512
+#define BLE_MAX_RX_PAYLOAD_SIZE 512
 
-	ioport_set_pin_dir(EXT1_PIN_10, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(EXT1_PIN_10, IOPORT_PIN_LEVEL_HIGH);
-	ioport_set_pin_dir(EXT1_PIN_6, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(EXT1_PIN_6, IOPORT_PIN_LEVEL_HIGH);
+/* Set BLE Wakeup pin to be low */
+static inline bool ble_wakeup_pin_level(void)
+{
+	return (ioport_get_pin_level(BTLC1000_WAKEUP_PIN));
 }
 
+/* Set BLE Wakeup pin to be low */
+static inline void ble_wakeup_pin_set_low(void)
+{
+	ioport_set_pin_level(BTLC1000_WAKEUP_PIN,
+	IOPORT_PIN_LEVEL_LOW);
+}
+
+/* Set wakeup pin to high */
+static inline void ble_wakeup_pin_set_high(void)
+{
+	ioport_set_pin_level(BTLC1000_WAKEUP_PIN,
+	IOPORT_PIN_LEVEL_HIGH);
+}
+
+/* Set enable pin to Low */
 static inline void ble_enable_pin_set_low(void)
 {
-	//ioport_set_pin_level(EXT1_PIN_5, IOPORT_PIN_LEVEL_LOW);
+	ioport_set_pin_level(BTLC1000_CHIP_ENABLE_PIN,
+	IOPORT_PIN_LEVEL_LOW);
 }
 
+/* Set enable pin to high */
 static inline void ble_enable_pin_set_high(void)
 {
-	//ioport_set_pin_level(EXT1_PIN_5, IOPORT_PIN_LEVEL_HIGH);
+	ioport_set_pin_level(BTLC1000_CHIP_ENABLE_PIN,
+	IOPORT_PIN_LEVEL_HIGH);
+}
+
+/* Configure the BTLC1000 control(chip_enable, wakeup) pins */
+static inline void ble_configure_control_pin(void)
+{
+	/* initialize the delay before use */
+	delay_init();
+
+	/* Configure control pins as output */
+	ioport_init();
+	
+	ioport_set_pin_dir(BTLC1000_WAKEUP_PIN, IOPORT_DIR_OUTPUT);
+	
+	/* set wakeup pin to low */
+	ble_wakeup_pin_set_high();
+	
+	ioport_set_pin_dir(BTLC1000_CHIP_ENABLE_PIN, IOPORT_DIR_OUTPUT);
+	
+	/* set chip enable to low */
+	ble_enable_pin_set_low();
+	
+	/* Delay for 50ms */
+	delay_ms(BTLC1000_RESET_MS);
+	
+	/* set chip enable to high */
+	ble_enable_pin_set_high();	
+}
+
+static inline void ble_reset(void)
+{
+	/* BTLC1000 Reset Sequence @Todo */
+	ble_enable_pin_set_high();
+	ble_wakeup_pin_set_high();
+	delay_ms(BTLC1000_RESET_MS);
+	
+	ble_enable_pin_set_low();
+	ble_wakeup_pin_set_low();
+	delay_ms(BTLC1000_RESET_MS);
+	
+	ble_enable_pin_set_high();
+	ble_wakeup_pin_set_high();
+	delay_ms(BTLC1000_RESET_MS);
 }
 
 

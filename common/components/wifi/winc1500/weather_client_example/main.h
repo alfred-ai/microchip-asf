@@ -64,7 +64,7 @@ extern "C" {
 #define MAIN_WEATHER_SERVER_NAME        "openweathermap.org"
 
 /** Input City Name. */
-#define MAIN_CITY_NAME                  "seoul"
+#define MAIN_CITY_NAME                  "seoul&appid=ebea1368f9a2bdd172f7115ff8d0371d"
 
 /** Receive buffer size. */
 #define MAIN_WIFI_M2M_BUFFER_SIZE       1024

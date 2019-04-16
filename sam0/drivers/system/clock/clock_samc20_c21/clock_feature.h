@@ -942,9 +942,7 @@ uint32_t system_clock_source_get_hz(
 static inline void system_cpu_clock_set_divider(
 		const enum system_main_clock_div divider)
 {
-	Assert(((uint32_t)divider & MCLK_CPUDIV_CPUDIV_Msk) == divider);
-	MCLK->CPUDIV.reg = (uint32_t)divider;
-
+	MCLK->CPUDIV.reg = MCLK_CPUDIV_CPUDIV(1 << divider);
 }
 
 /**

@@ -113,7 +113,7 @@ static void _dac_set_config(
  * \brief Determines if the hardware module(s) are currently synchronizing to the bus.
  *
  * Checks to see if the underlying hardware peripheral module(s) are currently
- * synchronizing across multiple clock domains to the hardware bus, This
+ * synchronizing across multiple clock domains to the hardware bus. This
  * function can be used to delay further operations on a module until such time
  * that it is ready, to prevent blocking delays for synchronization in the
  * user application.
@@ -364,7 +364,7 @@ void dac_disable(
  * \brief Enables a DAC event input or output.
  *
  *  Enables one or more input or output events to or from the DAC module. See
- *  \ref dac_events "here" for a list of events this module supports.
+ *  \ref dac_events "dac_events" for a list of events this module supports.
  *
  *  \note Events cannot be altered while the module is enabled.
  *
@@ -409,7 +409,7 @@ void dac_enable_events(
  * \brief Disables a DAC event input or output.
  *
  *  Disables one or more input or output events to or from the DAC module. See
- *  \ref dac_events "here" for a list of events this module supports.
+ *  \ref dac_events "dac_events" for a list of events this module supports.
  *
  *  \note Events cannot be altered while the module is enabled.
  *

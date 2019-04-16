@@ -243,10 +243,10 @@
  * \subsubsection asfdoc_sam0_rtc_calendar_clock_samd_r SAM D20/D21/R21/D10/D11/DA1 Clock Setup
  * The RTC is typically clocked by a specialized GCLK generator that has a
  * smaller prescaler than the others. By default the RTC clock is on, selected
- * to use the internal 32KHz RC-oscillator with a prescaler of 32, giving a
- * resulting clock frequency of 1024Hz to the RTC. When the internal RTC
- * prescaler is set to 1024, this yields an end-frequency of 1Hz for correct
- * time keeping operations.
+ * to use the internal 32KHz Resistor/Capacitor (RC)-oscillator with a prescaler
+ * of 32, giving a resulting clock frequency of 1024Hz to the RTC. When the
+ * internal RTC prescaler is set to 1024, this yields an end-frequency of 1Hz
+ * for correct time keeping operations.
  *
  * The implementer also has the option to set other end-frequencies.
  * \ref asfdoc_sam0_rtc_calendar_rtc_out_freq "The table below" lists the
@@ -299,7 +299,7 @@
  *       should be used.
  *
  * \subsubsection asfdoc_sam0_rtc_calendar_clock_saml SAM L21/C20/C21 Clock Setup
- * The RTC clock can be selected from OSC32K, XOSC32K or OSCULP32K , and a 32KHz
+ * The RTC clock can be selected from OSC32K, XOSC32K or OSCULP32K. A 32KHz
  * or 1KHz oscillator clock frequency is required. This clock must be
  * configured and enabled in the 32KHz oscillator controller before using the RTC.
  *
@@ -1379,7 +1379,7 @@ void rtc_tamper_get_stamp (struct rtc_module *const module,
  *	</tr>
  *	<tr>
  *		<td>42126E</td>
- *		<td>08/2015</td>
+ *		<td>10/2015</td>
  *		<td>Added support for SAM L21/L22, SAM C21, and SAM DA1</td>
  *	</tr>
  *	<tr>

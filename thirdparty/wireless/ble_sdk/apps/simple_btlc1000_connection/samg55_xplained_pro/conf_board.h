@@ -51,8 +51,7 @@
 #define CONF_BOARD_UART_CONSOLE
 
 /* USART6 module is used in SYNC. mode. */
-#define CONF_BOARD_USART_RXD
-#define CONF_BOARD_USART_TXD
+#define CONF_BOARD_USART0
 
 
 /** Configure AT30TSE pins */

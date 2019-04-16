@@ -69,7 +69,7 @@
 /**
  * \internal Find the index of given TC module instance.
  *
- * \param[in] TC module instance pointer.
+ * \param[in] TC module instance pointer
  *
  * \return Index of the given TC module instance.
  */

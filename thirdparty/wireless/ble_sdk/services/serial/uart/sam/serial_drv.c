@@ -45,6 +45,18 @@
 #include "asf.h"
 #include "serial_drv.h"
 #include "conf_serialdrv.h"
+#include "serial_fifo.h"
+
+/* === GLOBALS ========================================================== */
+volatile bool ble_usart_tx_cmpl = true;
+
+ser_fifo_desc_t ble_usart_tx_fifo;
+uint8_t ble_usart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+
+ser_fifo_desc_t ble_usart_rx_fifo;
+uint8_t ble_usart_rx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+
+extern void platform_process_rxdata(uint32_t t_rx_data);
 
 /* === TYPES =============================================================== */
 
@@ -70,37 +82,34 @@
 
 uint8_t configure_serial_drv(void)
 {
-	sam_usart_opt_t usart_settings;
+	/* Usart async mode 8 bits transfer test */
+	sam_usart_opt_t usart_settings = {
+		.baudrate     = CONF_UART_BAUDRATE,
+		.char_length  = US_MR_CHRL_8_BIT,
+		.parity_type  = US_MR_PAR_NO,
+		.stop_bits    = US_MR_NBSTOP_1_BIT,
+		.channel_mode = US_MR_CHMODE_NORMAL,
+		/* This field is only used in IrDA mode. */
+		.irda_filter  = 0
+	};
 
-	/* Configure console UART. */
-	sysclk_enable_peripheral_clock(BLE_UART_ID);
-
-	usart_settings.baudrate = CONF_UART_BAUDRATE;
-	usart_settings.char_length = CONF_UART_CHAR_LENGTH;
-	usart_settings.parity_type = CONF_UART_PARITY;
-	usart_settings.stop_bits= CONF_UART_STOP_BITS;
-	usart_settings.channel_mode= US_MR_CHMODE_NORMAL;
-
-	ioport_set_pin_peripheral_mode(EXT1_PIN_UART_RX,
-	IOPORT_MODE_MUX_A);
-	ioport_set_pin_peripheral_mode(EXT1_PIN_UART_TX,
-	IOPORT_MODE_MUX_A);
-
+	/* Enable the peripheral and set USART mode. */
 	flexcom_enable(BLE_USART_FLEXCOM);
 	flexcom_set_opmode(BLE_USART_FLEXCOM, FLEXCOM_USART);
 
 	/* Configure USART */
 	usart_init_rs232(BLE_UART, &usart_settings,
-				 sysclk_get_peripheral_hz());
-				 
+	sysclk_get_peripheral_hz());
+	
 	/* Enable the receiver and transmitter. */
 	usart_enable_tx(BLE_UART);
-	usart_enable_rx(BLE_UART);	
+	usart_enable_rx(BLE_UART);
 
 	/* Enable UART IRQ */
 	usart_enable_interrupt(BLE_UART, US_IER_RXRDY);
-	//usart_enable_interrupt(BLE_UART, US_IER_ENDRX);
-	//usart_enable_interrupt(BLE_UART, US_IER_RXBUFF);
+	
+	ser_fifo_init(&ble_usart_rx_fifo, ble_usart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
+	ser_fifo_init(&ble_usart_tx_fifo, ble_usart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
 
 	/* Enable UART interrupt */
 	NVIC_EnableIRQ(BLE_UART_IRQn);
@@ -110,27 +119,62 @@ uint8_t configure_serial_drv(void)
 
 void BLE_UART_Handler(void)
 {
-	uint32_t status_isr;
-	status_isr = usart_get_status(BLE_UART);
-	
-	if ((status_isr & US_CSR_RXRDY))
+	if (usart_is_rx_ready(BLE_UART))
 	{
-		#if SERIAL_DRV_RX_CB_ENABLE == true
-			SERIAL_DRV_RX_CB();
-		#endif
+		uint32_t rx_data = 0;
+		if (usart_read(BLE_UART, &rx_data) == 0)
+		{
+			platform_process_rxdata(rx_data);
+		}
+	}
+	
+	if ((usart_is_tx_empty(BLE_UART))  && (!ble_usart_tx_cmpl))
+	{
+		uint8_t txdata;
+		if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &txdata) == SER_FIFO_OK)
+		{
+			usart_putchar(BLE_UART, txdata);
+		}
+		else
+		{
+			usart_disable_interrupt(BLE_UART, US_IER_TXEMPTY);
+			ble_usart_tx_cmpl  = true;
+		}
 	}
 }
 
 uint16_t serial_drv_send(uint8_t* data, uint16_t len)
 {
- uint32_t temp, i;
- for (i =0; i < len; i++)
- {
-	temp = *data++;
-	usart_putchar(BLE_UART, temp); 
- }
- while(usart_is_tx_ready(BLE_UART) == 0);
- return STATUS_OK;
+  uint16_t i;
+  uint8_t txdata;
+  
+  while(ble_usart_tx_cmpl == false);
+  for (i =0; i < len; i++)
+  {
+	  ser_fifo_push_uint8(&ble_usart_tx_fifo, data[i]);
+  }
+  
+  //Set Tx Data write complete to false
+  ble_usart_tx_cmpl = false;
+  
+
+  if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &txdata) == SER_FIFO_OK)
+  {
+	  usart_putchar(BLE_UART, txdata);
+	  //Enable the USART Empty Interrupt
+	  usart_enable_interrupt(BLE_UART, US_IER_TXEMPTY);
+	  //Wait for Tx Data write complete
+	  while(ble_usart_tx_cmpl == false);
+  }
+  
+  if(ble_usart_tx_cmpl)
+  {
+	  #if SERIAL_DRV_TX_CB_ENABLE
+		  SERIAL_DRV_TX_CB();
+	  #endif		 
+  }
+  
+  return STATUS_OK;
 }
 
 uint8_t serial_read_data(uint8_t* data, uint16_t max_len)
@@ -148,7 +192,7 @@ uint8_t serial_read_data(uint8_t* data, uint16_t max_len)
 			return i;
 		}
 	}
- return max_len;
+	return max_len;
 }
 
 uint8_t serial_read_byte(uint16_t* data)
@@ -160,7 +204,7 @@ uint8_t serial_read_byte(uint16_t* data)
 	   return STATUS_OK;
    }
    else
-   {	  
+   {
 	   return STATUS_ERR_BUSY;
    }
 }

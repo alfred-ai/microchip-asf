@@ -50,10 +50,11 @@
 /**
  * \defgroup asfdoc_sam0_tsens_group SAM Temperature Sensor (TSENS) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
- * and management of the device's Configurable Custom Logic functionality.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of the device's
+ * Configurable Custom Logic functionality.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - TSENS (Temperature Sensor)
  *
  * The following devices can use this module:
@@ -190,13 +191,13 @@ extern "C" {
  * @{
  */
 
-/** TSENS result ready. */
+/** TSENS result ready */
 #define TSENS_STATUS_RESULT_READY  (1UL << 0)
-/** TSENS result overwritten before read. */
+/** TSENS result overwritten before read */
 #define TSENS_STATUS_OVERRUN       (1UL << 1)
-/** Window monitor match. */
+/** Window monitor match */
 #define TSENS_STATUS_WINDOW        (1UL << 2)
-/** TSENS result overflows. */
+/** TSENS result overflows */
 #define TSENS_STATUS_OVERFLOW      (1UL << 3)
 
 /** @} */
@@ -397,7 +398,7 @@ static inline void tsens_clear_status(const uint32_t status_flags)
  */
 
 /**
- * \brief Determines if the hardware module(s) are currently synchronizing to the bus.
+ * \brief Determines if the hardware module is currently synchronizing to the bus.
  *
  * Checks to see if the underlying hardware peripheral module(s) are currently
  * synchronizing across multiple clock domains to the hardware bus. This
@@ -474,7 +475,7 @@ static inline void tsens_reset(void)
  * \brief Enables an TSENS event output.
  *
  *  Enables one or more input or output events to or from the TSENS module. See
- *  \ref tsens_events "here" for a list of events this module supports.
+ *  \ref tsens_events "tsens_events" for a list of events this module supports.
  *
  *  \note Events cannot be altered while the module is enabled.
  *
@@ -499,7 +500,7 @@ static inline void tsens_enable_events(struct tsens_events *const events)
  * \brief Disables an TSENS event output.
  *
  *  Disables one or more output events to or from the TSENS module. See
- *  \ref tsens_events "here" for a list of events this module supports.
+ *  \ref tsens_events "tsens_events" for a list of events this module supports.
  *
  *  \note Events cannot be altered while the module is enabled.
  *
@@ -592,7 +593,7 @@ enum status_code tsens_read(int32_t *result);
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_tsens_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_tsens_basic_use_case
@@ -607,8 +608,8 @@ enum status_code tsens_read(int32_t *result);
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>06/2015</td>
+ *		<td>42542A</td>
+ *		<td>10/2015</td>
  *		<td>Initial release</td>
  *	</tr>
  * </table>

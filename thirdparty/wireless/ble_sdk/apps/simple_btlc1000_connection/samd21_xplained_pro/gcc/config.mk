@@ -53,7 +53,10 @@ TARGET_SRAM = simple_btlc1000_connection_samd21_xplained_pro_sram.elf
 # List of C source files.
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
+       common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/samd21_xplained_pro/board_init.c       \
+       sam0/drivers/extint/extint_callback.c              \
+       sam0/drivers/extint/extint_sam_d_r/extint.c        \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
@@ -66,9 +69,13 @@ CSRCS = \
        sam0/drivers/system/system.c                       \
        sam0/utils/cmsis/samd21/source/gcc/startup_samd21.c \
        sam0/utils/cmsis/samd21/source/system_samd21.c     \
+       sam0/utils/stdio/read.c                            \
+       sam0/utils/stdio/write.c                           \
        sam0/utils/syscalls/gcc/syscalls.c                 \
        thirdparty/wireless/ble_sdk/apps/simple_btlc1000_connection/main.c \
+       thirdparty/wireless/ble_sdk/services/console/sam0/console_serial.c \
        thirdparty/wireless/ble_sdk/services/serial/uart/sam0/serial_drv.c \
+       thirdparty/wireless/ble_sdk/services/serial_fifo/serial_fifo.c \
        thirdparty/wireless/ble_sdk/src/platform.c
 
 # List of assembler source files.
@@ -77,9 +84,14 @@ ASSRCS =
 # List of include paths.
 INC_PATH = \
        common/boards                                      \
+       common/services/serial                             \
        common/utils                                       \
+       common2/services/delay                             \
+       common2/services/delay/sam0                        \
        sam0/boards                                        \
        sam0/boards/samd21_xplained_pro                    \
+       sam0/drivers/extint                                \
+       sam0/drivers/extint/extint_sam_d_r                 \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \
@@ -98,17 +110,21 @@ INC_PATH = \
        sam0/utils/cmsis/samd21/source                     \
        sam0/utils/header_files                            \
        sam0/utils/preprocessor                            \
+       sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
        thirdparty/wireless/ble_sdk/apps/simple_btlc1000_connection/samd21_xplained_pro \
        thirdparty/wireless/ble_sdk/inc                    \
-       thirdparty/wireless/ble_sdk/services/serial/uart \
+       thirdparty/wireless/ble_sdk/services/console       \
+       thirdparty/wireless/ble_sdk/services/serial/uart   \
+       thirdparty/wireless/ble_sdk/services/serial_fifo   \
+       thirdparty/wireless/ble_sdk/utils \
        thirdparty/wireless/ble_sdk/apps/simple_btlc1000_connection/samd21_xplained_pro/gcc
 
 # Additional search paths for libraries.
 LIB_PATH =  \
        thirdparty/CMSIS/Lib/GCC                           \
-       thirdparty/wireless/ble_sdk/lib/samd21/gcc        
+       thirdparty/wireless/ble_sdk/lib/cm0p/gcc          
 
 # List of libraries to use during linking.
 LIBS =  \
@@ -154,7 +170,12 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
+       -D ATT_DB_MEMORY=1                                 \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
+       -D ENABLE_POWER_SAVE                               \
+       -D EXTINT_CALLBACK_MODE=true                       \
+       -D NEW_EVT_HANDLER                                 \
+       -D SYSTICK_MODE                                    \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAMD21J18A__
 

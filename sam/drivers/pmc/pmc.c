@@ -1359,8 +1359,8 @@ void pmc_set_flash_in_wait_mode(uint32_t ul_flash_state)
 /**
  * \brief Enable Wait Mode. Enter condition: (WAITMODE bit = 1) + FLPM
  *
- * \note In this function, FLPM will retain, WAITMODE bit will be set, 
- * Generally, this function will be called by pmc_sleep() in order to 
+ * \note In this function, FLPM will retain, WAITMODE bit will be set,
+ * Generally, this function will be called by pmc_sleep() in order to
  * complete all sequence entering wait mode.
  * See \ref pmc_sleep() for entering different sleep modes.
  */
@@ -1540,7 +1540,7 @@ uint32_t pmc_enable_sleepwalking(uint32_t ul_id)
 			return 1;
 		}
 		return 0;
-	}	
+	}
 #if (SAMV71 || SAMV70 || SAME70 || SAMS70)
 	else if ((32 <= ul_id) && (ul_id<= 60)) {
 		ul_id -= 32;
@@ -1556,7 +1556,7 @@ uint32_t pmc_enable_sleepwalking(uint32_t ul_id)
 		}
 		return 0;
 	}
-#endif	
+#endif
 	else {
 		return 1;
 	}
@@ -1578,7 +1578,7 @@ uint32_t pmc_disable_sleepwalking(uint32_t ul_id)
 	if ((7 <= ul_id) && (ul_id<= 29)) {
 #else
 	if ((8 <= ul_id) && (ul_id<= 29)) {
-#endif		
+#endif
 		PMC->PMC_SLPWK_DR0 = 1 << ul_id;
 		return 0;
 	}
@@ -1587,8 +1587,8 @@ uint32_t pmc_disable_sleepwalking(uint32_t ul_id)
 		ul_id -= 32;
 		PMC->PMC_SLPWK_DR1 = 1 << ul_id;
 		return 0;
-	}	
-#endif	
+	}
+#endif
 	else {
 		return 1;
 	}

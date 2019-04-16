@@ -336,6 +336,28 @@ static void _setup_memory_region( void )
 }
 #endif
 
+#ifdef CONF_BOARD_ENABLE_TCM_AT_INIT
+#if defined(__GNUC__)
+extern char _itcm_lma, _sitcm, _eitcm;
+#endif
+
+/** \brief  TCM memory enable
+* The function enables TCM memories
+*/
+static inline void tcm_enable(void)
+{
+
+	__DSB();
+	__ISB();
+	
+	SCB->ITCMCR = (SCB_ITCMCR_EN_Msk  | SCB_ITCMCR_RMW_Msk | SCB_ITCMCR_RETEN_Msk);
+	SCB->DTCMCR = ( SCB_DTCMCR_EN_Msk | SCB_DTCMCR_RMW_Msk | SCB_DTCMCR_RETEN_Msk);
+	
+	__DSB();
+	__ISB();
+}
+#endif
+
 void board_init(void)
 {
 #ifndef CONF_BOARD_KEEP_WATCHDOG_AT_INIT
@@ -515,7 +537,42 @@ void board_init(void)
 	MATRIX->CCFG_SMCNFCS = CCFG_SMCNFCS_SDRAMEN;
 #endif
 
+#ifdef CONF_BOARD_ENABLE_TCM_AT_INIT
+	tcm_enable();
+#if defined(__GNUC__)
+	volatile char *dst = &_sitcm;
+	volatile char *src = &_itcm_lma;
+	/* copy code_TCM from flash to ITCM */
+	while(dst < &_eitcm){
+		*dst++ = *src++;
+	}
+#endif
+#endif
+
+
+#ifdef CONF_BOARD_ISI
+	pio_configure_pin(ISI_D0_PIO, ISI_D0_FLAGS);
+	pio_configure_pin(ISI_D1_PIO, ISI_D1_FLAGS);
+	pio_configure_pin(ISI_D2_PIO, ISI_D2_FLAGS);
+	pio_configure_pin(ISI_D3_PIO, ISI_D3_FLAGS);
+	pio_configure_pin(ISI_D4_PIO, ISI_D4_FLAGS);
+	pio_configure_pin(ISI_D5_PIO, ISI_D5_FLAGS);
+	pio_configure_pin(ISI_D6_PIO, ISI_D6_FLAGS);
+	pio_configure_pin(ISI_D7_PIO, ISI_D7_FLAGS);
+	pio_configure_pin(ISI_D8_PIO, ISI_D8_FLAGS);
+	pio_configure_pin(ISI_D9_PIO, ISI_D9_FLAGS);
+	pio_configure_pin(ISI_D10_PIO, ISI_D10_FLAGS);
+	pio_configure_pin(ISI_D11_PIO, ISI_D11_FLAGS);
+	pio_configure_pin(ISI_HSYNC_PIO, ISI_HSYNC_FLAGS);
+	pio_configure_pin(ISI_VSYNC_PIO, ISI_VSYNC_FLAGS);
+	pio_configure_pin(ISI_PCK_PIO, ISI_PCK_FLAGS);
+	pio_configure_pin(ISI_PCK0_PIO, ISI_PCK0_FLAGS);
+	pio_configure_pin(OV_PWD_GPIO, OV_PWD_FLAGS);
+	pio_configure_pin(OV_RST_GPIO, OV_RST_FLAGS);
+#endif
+
 #ifdef CONF_BOARD_CONFIG_MPU_AT_INIT
 	_setup_memory_region();
 #endif
+
 }

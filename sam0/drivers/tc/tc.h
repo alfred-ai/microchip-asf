@@ -48,7 +48,7 @@
 #define TC_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam0_tc_group SAM Timer/Counter Driver (TC)
+ * \defgroup asfdoc_sam0_tc_group SAM Timer/Counter (TC) Driver 
  *
  * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the timer modules within the device, for waveform
@@ -61,7 +61,7 @@
  * \endif
  *
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - TC (Timer/Counter)
  *
  * The following devices can use this module:
@@ -155,8 +155,8 @@
  * In compare mode, the counter value is compared against one or more of the
  * configured channel compare values. When the counter value coincides with a
  * compare value an action can be taken automatically by the module, such as
- * generating an output event or toggling a pin when used for frequency or PWM
- * signal generation.
+ * generating an output event or toggling a pin when used for frequency or
+ * Pulse Width Modulation (PWM) signal generation.
  *
  * \note The connection of events between modules requires the use of the
  *       \ref asfdoc_sam0_events_group "SAM Event System Driver (EVENTS)"
@@ -473,12 +473,12 @@
 #  define FEATURE_TC_STAMP_PW_CAPTURE
 /** Read synchronization of COUNT. */
 #  define FEATURE_TC_READ_SYNC
-/** IO pin edge capture. */
+/** I/O pin edge capture. */
 #  define FEATURE_TC_IO_CAPTURE
 #endif
 
 #if (SAML21XXXB) || defined(__DOXYGEN__)
-/** Generate DMA triggers*/
+/** Generate Direct Memory Access (DMA) triggers. */
 #  define FEATURE_TC_GENERATE_DMA_TRIGGER
 #endif
 /*@}*/
@@ -502,11 +502,11 @@
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC1_CC8_NUM
 #else
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC3_CC8_NUM
-   /* Same number for 8-, 16- and 32-bit TC and all TC instances */
+   /* Same number for 8-, 16- or 32-bit TC and all TC instances */
 #endif
 
 /** TC Instance MAX ID Number. */
-#if SAMD20E || SAMD21G || SAMD21E || SAMR21
+#if SAMD20E || SAMD20G || SAMD21G || SAMD21E || SAMR21
 #  if SAMD21GXXL
 #    define TC_INST_MAX_ID  7
 #  else
@@ -535,16 +535,16 @@ extern "C" {
 #if TC_ASYNC == true
 /** Enum for the possible callback types for the TC module. */
 enum tc_callback {
-	/** Callback for TC overflow. */
+	/** Callback for TC overflow */
 	TC_CALLBACK_OVERFLOW,
-	/** Callback for capture overflow error. */
+	/** Callback for capture overflow error */
 	TC_CALLBACK_ERROR,
-	/** Callback for capture compare channel 0. */
+	/** Callback for capture compare channel 0 */
 	TC_CALLBACK_CC_CHANNEL0,
-	/** Callback for capture compare channel 1. */
+	/** Callback for capture compare channel 1 */
 	TC_CALLBACK_CC_CHANNEL1,
 #  if !defined(__DOXYGEN__)
-	/** Number of available callbacks. */
+	/** Number of available callbacks */
 	TC_CALLBACK_N,
 #  endif
 };
@@ -602,9 +602,9 @@ enum tc_callback {
  * operations on.
  */
 enum tc_compare_capture_channel {
-	/** Index of compare capture channel 0. */
+	/** Index of compare capture channel 0 */
 	TC_COMPARE_CAPTURE_CHANNEL_0,
-	/** Index of compare capture channel 1. */
+	/** Index of compare capture channel 1 */
 	TC_COMPARE_CAPTURE_CHANNEL_1,
 };
 
@@ -630,22 +630,22 @@ enum tc_compare_capture_channel {
  */
 enum tc_wave_generation {
 	/** Top is maximum, except in 8-bit counter size where it is the PER
-	 * register.
+	 * register
 	 */
 	TC_WAVE_GENERATION_NORMAL_FREQ      = TC_WAVE_GENERATION_NORMAL_FREQ_MODE,
 
 	/** Top is CC0, except in 8-bit counter size where it is the PER
-	 * register.
+	 * register
 	 */
 	TC_WAVE_GENERATION_MATCH_FREQ       = TC_WAVE_GENERATION_MATCH_FREQ_MODE,
 
 	/** Top is maximum, except in 8-bit counter size where it is the PER
-	 * register.
+	 * register
 	 */
 	TC_WAVE_GENERATION_NORMAL_PWM       = TC_WAVE_GENERATION_NORMAL_PWM_MODE,
 
 	/** Top is CC0, except in 8-bit counter size where it is the PER
-	 * register.
+	 * register
 	 */
 	TC_WAVE_GENERATION_MATCH_PWM        = TC_WAVE_GENERATION_MATCH_PWM_MODE,
 };
@@ -657,7 +657,7 @@ enum tc_wave_generation {
  */
 enum tc_counter_size {
 	/** The counter's maximum value is 0xFF, the period register is
-	 * available to be used as top value.
+	 * available to be used as top value
 	 */
 	TC_COUNTER_SIZE_8BIT                = TC_CTRLA_MODE_COUNT8,
 
@@ -683,16 +683,16 @@ enum tc_counter_size {
  */
 enum tc_reload_action {
 	/** The counter is reloaded/reset on the next GCLK and starts
-	 * counting on the prescaler clock.
+	 * counting on the prescaler clock
 	 */
 	TC_RELOAD_ACTION_GCLK               = TC_CTRLA_PRESCSYNC_GCLK,
 
-	/** The counter is reloaded/reset on the next prescaler clock.
+	/** The counter is reloaded/reset on the next prescaler clock
 	 */
 	TC_RELOAD_ACTION_PRESC              = TC_CTRLA_PRESCSYNC_PRESC,
 
 	/** The counter is reloaded/reset on the next GCLK, and the
-	 * prescaler is restarted as well.
+	 * prescaler is restarted as well
 	 */
 	TC_RELOAD_ACTION_RESYNC             = TC_CTRLA_PRESCSYNC_RESYNC,
 };
@@ -705,21 +705,21 @@ enum tc_reload_action {
  * module to make the counter count slower.
  */
 enum tc_clock_prescaler {
-	/** Divide clock by 1. */
+	/** Divide clock by 1 */
 	TC_CLOCK_PRESCALER_DIV1             = TC_CTRLA_PRESCALER(0),
-	/** Divide clock by 2. */
+	/** Divide clock by 2 */
 	TC_CLOCK_PRESCALER_DIV2             = TC_CTRLA_PRESCALER(1),
-	/** Divide clock by 4. */
+	/** Divide clock by 4 */
 	TC_CLOCK_PRESCALER_DIV4             = TC_CTRLA_PRESCALER(2),
-	/** Divide clock by 8. */
+	/** Divide clock by 8 */
 	TC_CLOCK_PRESCALER_DIV8             = TC_CTRLA_PRESCALER(3),
-	/** Divide clock by 16. */
+	/** Divide clock by 16 */
 	TC_CLOCK_PRESCALER_DIV16            = TC_CTRLA_PRESCALER(4),
-	/** Divide clock by 64. */
+	/** Divide clock by 64 */
 	TC_CLOCK_PRESCALER_DIV64            = TC_CTRLA_PRESCALER(5),
-	/** Divide clock by 256. */
+	/** Divide clock by 256 */
 	TC_CLOCK_PRESCALER_DIV256           = TC_CTRLA_PRESCALER(6),
-	/** Divide clock by 1024. */
+	/** Divide clock by 1024 */
 	TC_CLOCK_PRESCALER_DIV1024          = TC_CTRLA_PRESCALER(7),
 };
 
@@ -729,14 +729,14 @@ enum tc_clock_prescaler {
  * Timer/Counter count direction.
  */
 enum tc_count_direction {
-	/** Timer should count upward from zero to MAX. */
+	/** Timer should count upward from zero to MAX */
 	TC_COUNT_DIRECTION_UP,
 
-	/** Timer should count downward to zero from MAX. */
+	/** Timer should count downward to zero from MAX */
 	TC_COUNT_DIRECTION_DOWN,
 };
 
-/** Waveform inversion mode. */
+/** Waveform inversion mode */
 #if SAML21 || SAML22 || SAMC20 || SAMC21
 #define TC_WAVEFORM_INVERT_CC0_MODE  TC_DRVCTRL_INVEN(1)
 #define TC_WAVEFORM_INVERT_CC1_MODE  TC_DRVCTRL_INVEN(2)
@@ -751,11 +751,11 @@ enum tc_count_direction {
  * Output waveform inversion mode.
  */
 enum tc_waveform_invert_output {
-	/** No inversion of the waveform output. */
+	/** No inversion of the waveform output */
 	TC_WAVEFORM_INVERT_OUTPUT_NONE      = 0,
-	/** Invert output from compare channel 0. */
+	/** Invert output from compare channel 0 */
 	TC_WAVEFORM_INVERT_OUTPUT_CHANNEL_0 = TC_WAVEFORM_INVERT_CC0_MODE,
-	/** Invert output from compare channel 1. */
+	/** Invert output from compare channel 1 */
 	TC_WAVEFORM_INVERT_OUTPUT_CHANNEL_1 = TC_WAVEFORM_INVERT_CC1_MODE,
 };
 
@@ -765,28 +765,28 @@ enum tc_waveform_invert_output {
  * Event action to perform when the module is triggered by an event.
  */
 enum tc_event_action {
-	/** No event action. */
+	/** No event action */
 	TC_EVENT_ACTION_OFF                 = TC_EVCTRL_EVACT_OFF,
-	/** Re-trigger on event. */
+	/** Re-trigger on event */
 	TC_EVENT_ACTION_RETRIGGER           = TC_EVCTRL_EVACT_RETRIGGER,
-	/** Increment counter on event. */
+	/** Increment counter on event */
 	TC_EVENT_ACTION_INCREMENT_COUNTER   = TC_EVCTRL_EVACT_COUNT,
-	/** Start counter on event. */
+	/** Start counter on event */
 	TC_EVENT_ACTION_START               = TC_EVCTRL_EVACT_START,
 
 	/** Store period in capture register 0, pulse width in capture
-	 *  register 1.
+	 *  register 1
 	 */
 	TC_EVENT_ACTION_PPW                 = TC_EVCTRL_EVACT_PPW,
 
 	/** Store pulse width in capture register 0, period in capture
-	 *  register 1.
+	 *  register 1
 	 */
 	TC_EVENT_ACTION_PWP                 = TC_EVCTRL_EVACT_PWP,
 #ifdef FEATURE_TC_STAMP_PW_CAPTURE
-	/** Time stamp capture. */
+	/** Time stamp capture */
 	TC_EVENT_ACTION_STAMP               = TC_EVCTRL_EVACT_STAMP,
-	/** Pulse width capture. */
+	/** Pulse width capture */
 	TC_EVENT_ACTION_PW                  = TC_EVCTRL_EVACT_PW,
 #endif
 };
@@ -797,18 +797,18 @@ enum tc_event_action {
  * Event flags for the \ref tc_enable_events() and \ref tc_disable_events().
  */
 struct tc_events {
-	/** Generate an output event on a compare channel match. */
+	/** Generate an output event on a compare channel match */
 	bool generate_event_on_compare_channel
 			[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
-	/** Generate an output event on counter overflow. */
+	/** Generate an output event on counter overflow */
 	bool generate_event_on_overflow;
-	/** Perform the configured event action when an incoming event is signalled. */
+	/** Perform the configured event action when an incoming event is signalled */
 	bool on_event_perform_action;
 	/** Specifies if the input event source is inverted, when used in PWP or
-	 *  PPW event action modes.
+	 *  PPW event action modes
 	 */
 	bool invert_event_input;
-	/** Specifies which event to trigger if an event is triggered. */
+	/** Specifies which event to trigger if an event is triggered */
 	enum tc_event_action event_action;
 };
 
@@ -816,11 +816,11 @@ struct tc_events {
  * \brief Configuration struct for TC module in 8-bit size counter mode.
  */
 struct tc_8bit_config {
-	/** Initial timer count value. */
+	/** Initial timer count value */
 	uint8_t value;
-	/** Where to count to or from depending on the direction on the counter. */
+	/** Where to count to or from depending on the direction on the counter */
 	uint8_t period;
-	/** Value to be used for compare match on each channel. */
+	/** Value to be used for compare match on each channel */
 	uint8_t compare_capture_channel[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
 };
 
@@ -828,9 +828,9 @@ struct tc_8bit_config {
  * \brief Configuration struct for TC module in 16-bit size counter mode.
  */
 struct tc_16bit_config {
-	/** Initial timer count value. */
+	/** Initial timer count value */
 	uint16_t value;
-	/** Value to be used for compare match on each channel. */
+	/** Value to be used for compare match on each channel */
 	uint16_t compare_capture_channel[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
 };
 
@@ -838,9 +838,9 @@ struct tc_16bit_config {
  * \brief Configuration struct for TC module in 32-bit size counter mode.
  */
 struct tc_32bit_config {
-	/** Initial timer count value. */
+	/** Initial timer count value */
 	uint32_t value;
-	/** Value to be used for compare match on each channel. */
+	/** Value to be used for compare match on each channel */
 	uint32_t compare_capture_channel[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
 };
 
@@ -848,11 +848,11 @@ struct tc_32bit_config {
  * \brief Configuration struct for TC module in 32-bit size counter mode.
  */
 struct tc_pwm_channel {
-	/** When \c true, PWM output for the given channel is enabled. */
+	/** When \c true, PWM output for the given channel is enabled */
 	bool enabled;
-	/** Specifies pin output for each channel. */
+	/** Specifies pin output for each channel */
 	uint32_t pin_out;
-	/** Specifies MUX setting for each output channel pin. */
+	/** Specifies Multiplexer (MUX) setting for each output channel pin */
 	uint32_t pin_mux;
 };
 
@@ -864,24 +864,24 @@ struct tc_pwm_channel {
  * modified by the user application.
  */
 struct tc_config {
-	/** GCLK generator used to clock the peripheral. */
+	/** GCLK generator used to clock the peripheral */
 	enum gclk_generator clock_source;
 
-	/** When \c true the module is enabled during standby. */
+	/** When \c true the module is enabled during standby */
 	bool run_in_standby;
 #if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
-	/** Run on demand. */
+	/** Run on demand */
 	bool on_demand;
 #endif
-	/** Specifies either 8-, 16-, or 32-bit counter size. */
+	/** Specifies either 8-, 16-, or 32-bit counter size */
 	enum tc_counter_size counter_size;
-	/** Specifies the prescaler value for GCLK_TC. */
+	/** Specifies the prescaler value for GCLK_TC */
 	enum tc_clock_prescaler clock_prescaler;
-	/** Specifies which waveform generation mode to use. */
+	/** Specifies which waveform generation mode to use */
 	enum tc_wave_generation wave_generation;
 
 	/** Specifies the reload or reset time of the counter and prescaler
-	 *  resynchronization on a re-trigger event for the TC.
+	 *  resynchronization on a re-trigger event for the TC
 	 */
 	enum tc_reload_action reload_action;
 
@@ -890,34 +890,34 @@ struct tc_config {
 	uint8_t waveform_invert_output;
 
 	/** Specifies which channel(s) to enable channel capture
-	 *  operation on.
+	 *  operation on
 	 */
 	bool enable_capture_on_channel[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
 #ifdef 	FEATURE_TC_IO_CAPTURE
 	/** Specifies which channel(s) to enable I/O capture
-	 *  operation on.
+	 *  operation on
 	 */
 	bool enable_capture_on_IO[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
 #endif
 
 	/** When \c true, one-shot will stop the TC on next hardware or software
-	 *  re-trigger event or overflow/underflow.
+	 *  re-trigger event or overflow/underflow
 	 */
 	bool oneshot;
 
-	/** Specifies the direction for the TC to count. */
+	/** Specifies the direction for the TC to count */
 	enum tc_count_direction count_direction;
 
-	/** Specifies the PWM channel for TC. */
+	/** Specifies the PWM channel for TC */
 	struct tc_pwm_channel pwm_channel[NUMBER_OF_COMPARE_CAPTURE_CHANNELS];
 
-	/** Access the different counter size settings though this configuration member. */
+	/** Access the different counter size settings though this configuration member */
 	union {
-		/** Struct for 8-bit specific timer configuration. */
+		/** Struct for 8-bit specific timer configuration */
 		struct tc_8bit_config counter_8_bit;
-		/** Struct for 16-bit specific timer configuration. */
+		/** Struct for 16-bit specific timer configuration */
 		struct tc_16bit_config counter_16_bit;
-		/** Struct for 32-bit specific timer configuration. */
+		/** Struct for 32-bit specific timer configuration */
 		struct tc_32bit_config counter_32_bit;
 	};
 
@@ -933,10 +933,10 @@ struct tc_config {
 };
 
 #if TC_ASYNC == true
-/* Forward Declaration for the device instance. */
+/** Forward Declaration for the device instance */
 struct tc_module;
 
-/* Type of the callback functions. */
+/** Type of the callback functions */
 typedef void (*tc_callback_t)(struct tc_module *const module);
 #endif
 
@@ -951,21 +951,21 @@ typedef void (*tc_callback_t)(struct tc_module *const module);
  */
 struct tc_module {
 #if !defined(__DOXYGEN__)
-	/** Hardware module pointer of the associated Timer/Counter peripheral. */
+	/** Hardware module pointer of the associated Timer/Counter peripheral */
 	Tc *hw;
 
-	/** Size of the initialized Timer/Counter module configuration. */
+	/** Size of the initialized Timer/Counter module configuration */
 	enum tc_counter_size counter_size;
 #  if TC_ASYNC == true
-	/** Array of callbacks. */
+	/** Array of callbacks */
 	tc_callback_t callback[TC_CALLBACK_N];
-	/** Bit mask for callbacks registered. */
+	/** Bit mask for callbacks registered */
 	uint8_t register_callback_mask;
-	/** Bit mask for callbacks enabled. */
+	/** Bit mask for callbacks enabled */
 	uint8_t enable_callback_mask;
 #  endif
 #ifdef FEATURE_TC_DOUBLE_BUFFERED
-	/** Set to \c true to enable double buffering write. */
+	/** Set to \c true to enable double buffering write */
 	bool double_buffering_enabled;
 #endif
 #endif
@@ -983,7 +983,7 @@ uint8_t _tc_get_inst_index(
 
 /**
  * \brief Determines if the hardware module(s) are currently synchronizing to
- *the bus.
+ * the bus.
  *
  * Checks to see if the underlying hardware peripheral module(s) are currently
  * synchronizing across multiple clock domains to the hardware bus. This
@@ -1426,7 +1426,7 @@ static inline void tc_sync_read_count(
 
 #ifdef FEATURE_TC_GENERATE_DMA_TRIGGER
 /**
- * \name Generate TC DMA Triggers command
+ * \name Generate TC DMA Triggers Command
  * @{
  */
 
@@ -1691,10 +1691,10 @@ static inline void tc_clear_status(
  *		<th>Changelog</th>
  *	</tr>
  *	<tr>
- *    <td>Added support for SAMD21 and do some modifications as below:
+ *    <td>Added support for SAM D21 and do some modifications as below:
  *          \li Clean up in the configuration structure, the counter size
  *              setting specific registers is accessed through the counter_8_bit,
- *              counter_16_bit and counter_32_bit structures
+ *              counter_16_bit, and counter_32_bit structures
  *          \li All event related settings moved into the tc_event structure </td>
  *	</tr>
  *	<tr>
@@ -1733,33 +1733,28 @@ static inline void tc_clear_status(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>F</td>
- *		<td>08/2015</td>
- *		<td>Added support for SAM C21 and SAM L22</td>
+ *		<td>42123E</td>
+ *		<td>10/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, and SAM C21</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
- *		<td>04/2015</td>
- *		<td>Added support for SAM L21 and SAM DA1</td>
- *	</tr>
- *	<tr>
- *		<td>D</td>
+ *		<td>42123D</td>
  *		<td>12/2014</td>
  *		<td>Added timer use case.
  *		    Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42123C</td>
  *		<td>01/2014</td>
  *		<td>Added support for SAM D21</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42123B</td>
  *		<td>06/2013</td>
  *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42123A</td>
  *		<td>06/2013</td>
  *		<td>Initial release</td>
  *	</tr>

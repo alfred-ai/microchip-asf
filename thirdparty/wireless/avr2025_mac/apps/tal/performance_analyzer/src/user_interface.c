@@ -204,12 +204,14 @@ bool app_debounce_button(void)
  */
 bool button_pressed(void)
 {
+#ifdef SW0_PIN
 #if SAMD || SAMR21 || SAML21
 	if (port_pin_get_input_level(SW0_PIN)) {
 		return false;
 	} else {
 		return true;
 	}
+#endif
 #endif
 
 #ifdef SENSOR_TERMINAL_BOARD

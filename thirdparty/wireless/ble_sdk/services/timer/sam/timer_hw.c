@@ -56,7 +56,7 @@ void hw_timer_init(void)
 	sysclk_enable_peripheral_clock(ID_TC);
 	// Init timer counter  channel.
 	tc_init(TIMER, TIMER_CHANNEL_ID,						
-			TC_CMR_TCCLKS_TIMER_CLOCK1 | TC_CMR_WAVE |
+			TC_CMR_TCCLKS_TIMER_CLOCK4 |
 			TC_CMR_WAVSEL_UP);				
 	
 	tc_write_rc(TIMER, TIMER_CHANNEL_ID, UINT16_MAX);
@@ -74,7 +74,6 @@ void TC0_Handler(void)
 {
 	uint32_t ul_status;
 	static uint16_t tc_count;
-	uint8_t flags = cpu_irq_save();
 	
 	ul_status = tc_get_status(TIMER, TIMER_CHANNEL_ID);
 	ul_status &= tc_get_interrupt_mask(TIMER, TIMER_CHANNEL_ID);
@@ -92,9 +91,7 @@ void TC0_Handler(void)
 				timer_callback();
 			}
 		}
-	}
-	
-	cpu_irq_restore(flags);
+	}	
 }
 
 void hw_timer_start(uint32_t timer_val)

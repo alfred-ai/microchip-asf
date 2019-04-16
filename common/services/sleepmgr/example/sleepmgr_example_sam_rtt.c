@@ -61,6 +61,8 @@
  *  - SAMG53 Xplained Pro kit
  *  - SAMG55 Xplained Pro kit
  *  - SAM4C evaluation kit
+ *  - SAMV71 Xplained Ultra kit
+ *  - SAME70 Xplained Pro kit
  *
  * \section exampledescription Description of the example
  * The device is put to sleep in sleep modes with increasing "depth", and is

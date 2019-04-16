@@ -152,6 +152,7 @@ void rtc_calendar_disable(struct rtc_module *const module)
 
 /**
  * \brief Resets the RTC module.
+ *
  * Resets the RTC module to hardware defaults.
  *
  * \param[in,out] module  Pointer to the software instance struct

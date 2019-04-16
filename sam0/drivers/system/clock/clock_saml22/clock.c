@@ -1038,8 +1038,8 @@ void system_clock_init(void)
 #  endif
 
 	/* CPU and BUS clocks */
-	system_cpu_clock_set_divider(CONF_CLOCK_CPU_DIVIDER);
 	system_backup_clock_set_divider(CONF_CLOCK_BACKUP_DIVIDER);
+	system_cpu_clock_set_divider(CONF_CLOCK_CPU_DIVIDER);
 
 	/* GCLK 0 */
 #if CONF_CLOCK_CONFIGURE_GCLK == true
