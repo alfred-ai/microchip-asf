@@ -56,6 +56,9 @@
 #include <compiler.h>
 #include <status_codes.h>
 
+// From module: GPIO - General purpose Input/Output
+#include <gpio.h>
+
 // From module: Generic board support
 #include <board.h>
 
@@ -67,6 +70,9 @@
 
 // From module: Interrupt management - SAM implementation
 #include <interrupt.h>
+
+// From module: MPU - Memory Protect Unit
+#include <mpu.h>
 
 // From module: PIO - Parallel Input/Output Controller
 #include <pio.h>

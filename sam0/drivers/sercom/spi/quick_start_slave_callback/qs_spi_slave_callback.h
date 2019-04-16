@@ -59,7 +59,7 @@
  * \section asfdoc_sam0_sercom_spi_slave_callback_use_setup Setup
  *
  * \subsection asfdoc_sam0_sercom_spi_slave_callback_useprereq Prerequisites
- * The device must be connected to a SPI master which must read from the device.
+ * The device must be connected to a SPI master, which must read from the device.
  *
  * \subsection asfdoc_sam0_sercom_spi_slave_callback_use_setup_code Code
  * The following must be added to the user application source file, outside
@@ -88,7 +88,7 @@
  * \subsection asfdoc_sam0_sercom_spi_slave_callback_use_workflow Workflow
  * -# Initialize system.
  *    \snippet qs_spi_slave_callback.c system_init
- * -# Setup the SPI.
+ * -# Set-up the SPI.
  *    \snippet qs_spi_slave_callback.c run_config
  *   -# Create configuration struct.
  *      \snippet qs_spi_slave_callback.c config
@@ -114,7 +114,7 @@
  *      \snippet qs_spi_slave_callback.c init
  *   -# Enable SPI module.
  *      \snippet qs_spi_slave_callback.c enable
- * -# Setup the callback functionality.
+ * -# Setup of the callback functionality.
  *    \snippet qs_spi_slave_callback.c run_callback_config
  *   -# Register callback function for buffer transmitted.
  *      \snippet qs_spi_slave_callback.c reg_callback

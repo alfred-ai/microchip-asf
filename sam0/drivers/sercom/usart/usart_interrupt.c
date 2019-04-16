@@ -152,9 +152,9 @@ enum status_code _usart_read_buffer(
 /**
  * \brief Registers a callback
  *
- * Registers a callback function which is implemented by the user.
+ * Registers a callback function, which is implemented by the user.
  *
- * \note The callback must be enabled by \ref usart_enable_callback,
+ * \note The callback must be enabled by \ref usart_enable_callback
  *       in order for the interrupt handler to call it when the conditions for
  *       the callback type are met.
  *
@@ -182,7 +182,7 @@ void usart_register_callback(
 /**
  * \brief Unregisters a callback
  *
- * Unregisters a callback function which is implemented by the user.
+ * Unregisters a callback function, which is implemented by the user.
  *
  * \param[in,out]  module         Pointer to USART software instance struct
  * \param[in]      callback_type  Callback type given by an enum
@@ -203,7 +203,7 @@ void usart_unregister_callback(
 }
 
 /**
- * \brief Asynchronous write a data
+ * \brief Asynchronous write a single char
  *
  * Sets up the driver to write the data given. If registered and enabled,
  * a callback function will be called when the transmit is completed.
@@ -236,7 +236,7 @@ enum status_code usart_write_job(
 }
 
 /**
- * \brief Asynchronous read a data
+ * \brief Asynchronous read a single char
  *
  * Sets up the driver to read data from the USART module to the data
  * pointer given. If registered and enabled, a callback will be called

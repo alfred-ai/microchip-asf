@@ -300,6 +300,7 @@
 					<state>$PROJ_DIR$/../../../../power</state>
 					<state>$PROJ_DIR$/../../../../reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../port</state>
@@ -308,7 +309,6 @@
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../interrupt</state>
-					<state>$PROJ_DIR$/../../../clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -569,6 +569,7 @@
 					<state>$PROJ_DIR$/../../../../power</state>
 					<state>$PROJ_DIR$/../../../../reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../port</state>
@@ -577,7 +578,6 @@
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../interrupt</state>
-					<state>$PROJ_DIR$/../../../clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1263,6 +1263,7 @@
 					<state>$PROJ_DIR$/../../../../power</state>
 					<state>$PROJ_DIR$/../../../../reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../port</state>
@@ -1271,7 +1272,6 @@
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../interrupt</state>
-					<state>$PROJ_DIR$/../../../clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1532,6 +1532,7 @@
 					<state>$PROJ_DIR$/../../../../power</state>
 					<state>$PROJ_DIR$/../../../../reset</state>
 					<state>$PROJ_DIR$/../../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../port</state>
@@ -1540,7 +1541,6 @@
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../interrupt</state>
-					<state>$PROJ_DIR$/../../../clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -2018,19 +2018,10 @@
 							</file>
 						</group>
 						<group>
-							<name>pio</name>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/pio/samd11d14am.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/pio/samd11d14as.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/pio/samd11c14a.h</name>
-							</file>
-						</group>
-						<group>
 							<name>instance</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/pac1.h</name>
+							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/sbmatrix.h</name>
 							</file>
@@ -2095,7 +2086,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/rtc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/pac1.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/adc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/dmac.h</name>
@@ -2106,8 +2097,17 @@
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/tcc0.h</name>
 							</file>
+						</group>
+						<group>
+							<name>pio</name>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/instance/adc.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/pio/samd11d14am.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/pio/samd11d14as.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samd11/include/pio/samd11c14a.h</name>
 							</file>
 						</group>
 						<file>
@@ -2161,6 +2161,21 @@
 			<group>
 				<name>system</name>
 				<group>
+					<name>interrupt</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../interrupt/system_interrupt.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../interrupt/system_interrupt.h</name>
+					</file>
+					<group>
+						<name>system_interrupt_samd10_d11</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../interrupt/system_interrupt_samd10_d11/system_interrupt_features.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
 					<name>pinmux</name>
 					<file>
 						<name>$PROJ_DIR$/../../../../pinmux/pinmux.c</name>
@@ -2178,18 +2193,18 @@
 				<group>
 					<name>clock</name>
 					<group>
-						<name>clock_samd10_d11</name>
+						<name>clock_samd09_d10_d11</name>
 						<file>
-							<name>$PROJ_DIR$/../../../clock_samd10_d11/clock.c</name>
+							<name>$PROJ_DIR$/../../../clock_samd09_d10_d11/clock.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../clock_samd10_d11/gclk.c</name>
+							<name>$PROJ_DIR$/../../../clock_samd09_d10_d11/gclk.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../clock_samd10_d11/clock_feature.h</name>
+							<name>$PROJ_DIR$/../../../clock_samd09_d10_d11/clock_feature.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../clock_samd10_d11/clock_config_check.h</name>
+							<name>$PROJ_DIR$/../../../clock_samd09_d10_d11/clock_config_check.h</name>
 						</file>
 					</group>
 					<group>
@@ -2219,21 +2234,6 @@
 					<file>
 						<name>$PROJ_DIR$/../../../gclk.h</name>
 					</file>
-				</group>
-				<group>
-					<name>interrupt</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../interrupt/system_interrupt.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../interrupt/system_interrupt.h</name>
-					</file>
-					<group>
-						<name>system_interrupt_samd10_d11</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../interrupt/system_interrupt_samd10_d11/system_interrupt_features.h</name>
-						</file>
-					</group>
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../../system.c</name>

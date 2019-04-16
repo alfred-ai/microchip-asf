@@ -1978,6 +1978,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_count.h</name>
 				</file>
 				<file>
@@ -2239,9 +2242,6 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/opamp.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc3_100.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom4.h</name>
 							</file>
 							<file>
@@ -2270,6 +2270,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom5.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc3_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom3.h</name>

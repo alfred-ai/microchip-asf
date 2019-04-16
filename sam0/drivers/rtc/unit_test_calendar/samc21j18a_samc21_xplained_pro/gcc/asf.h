@@ -74,6 +74,7 @@
 // From module: RTC - Real Time Counter in Calendar Mode (Callback APIs)
 #include <rtc_calendar.h>
 #include <rtc_calendar_interrupt.h>
+#include <rtc_tamper.h>
 
 // From module: SERCOM Callback API
 #include <sercom.h>

@@ -129,7 +129,7 @@ static void _events_release_channel(uint8_t channel)
 #endif
 void _system_events_init(void)
 {
-#if (SAMC20) || (SAMC21)
+#if (SAML22) || (SAMC20) || (SAMC21)
 	/* Enable EVSYS register interface */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, MCLK_APBCMASK_EVSYS);
 #else

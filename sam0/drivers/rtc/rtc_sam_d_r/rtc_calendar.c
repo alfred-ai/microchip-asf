@@ -167,9 +167,15 @@ void rtc_calendar_reset(struct rtc_module *const module)
 }
 
 /**
- * \internal Convert time structure to register_value.
+ * \brief Convert time structure to register_value.
+ * Retrieves register_value convert by the time structure.
+ *
+ * \param[in, out] module  Pointer to the software instance struct
+ * \param[in] time  Pointer to the time structure
+ *
+ * \return 32-bit value
  */
-static uint32_t _rtc_calendar_time_to_register_value(
+uint32_t rtc_calendar_time_to_register_value(
 		struct rtc_module *const module,
 		const struct rtc_calendar_time *const time)
 {
@@ -205,9 +211,14 @@ static uint32_t _rtc_calendar_time_to_register_value(
 }
 
 /**
- * \internal Convert register_value to time structure.
+ * \brief Convert register_value to time structure.
+ * Retrieves the time structure convert by register_value.
+ *
+ * \param[in, out] module  Pointer to the software instance struct
+ * \param[in] register_value  The value stored in register
+ * \param[out] time  Pointer to the time structure
  */
-static void _rtc_calendar_register_value_to_time(
+void rtc_calendar_register_value_to_time(
 		struct rtc_module *const module,
 		const uint32_t register_value,
 		struct rtc_calendar_time *const time)
@@ -462,7 +473,7 @@ void rtc_calendar_set_time(
 
 	Rtc *const rtc_module = module->hw;
 
-	uint32_t register_value = _rtc_calendar_time_to_register_value(module, time);
+	uint32_t register_value = rtc_calendar_time_to_register_value(module, time);
 
 	while (rtc_calendar_is_syncing(module)) {
 		/* Wait for synchronization */
@@ -505,7 +516,7 @@ void rtc_calendar_get_time(
 	uint32_t register_value = rtc_module->MODE2.CLOCK.reg;
 
 	/* Convert value to time structure. */
-	_rtc_calendar_register_value_to_time(module, register_value, time);
+	rtc_calendar_register_value_to_time(module, register_value, time);
 }
 
 /**
@@ -538,7 +549,7 @@ enum status_code rtc_calendar_set_alarm(
 	}
 
 	/* Get register_value from time. */
-	uint32_t register_value = _rtc_calendar_time_to_register_value(module, &(alarm->time));
+	uint32_t register_value = rtc_calendar_time_to_register_value(module, &(alarm->time));
 
 	while (rtc_calendar_is_syncing(module)) {
 		/* Wait for synchronization */
@@ -588,7 +599,7 @@ enum status_code rtc_calendar_get_alarm(
 			rtc_module->MODE2.Mode2Alarm[alarm_index].ALARM.reg;
 
 	/* Convert to time structure. */
-	_rtc_calendar_register_value_to_time(module, register_value, &(alarm->time));
+	rtc_calendar_register_value_to_time(module, register_value, &(alarm->time));
 
 	/* Read alarm mask */
 	alarm->mask = (enum rtc_calendar_alarm_mask)rtc_module->MODE2.Mode2Alarm[alarm_index].MASK.reg;

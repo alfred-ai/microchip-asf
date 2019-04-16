@@ -515,8 +515,10 @@ enum status_code i2c_slave_read_packet_wait(
 /**
  * \brief Waits for a start condition on the bus
  *
+ * \note This function is only available for 7-bit slave addressing.
+ *
  * Waits for the master to issue a start condition on the bus.
- * Note that this function does not check for errors in the last transfer,
+ * \note This function does not check for errors in the last transfer,
  * this will be discovered when reading or writing.
  *
  * \param[in]  module  Pointer to software module structure

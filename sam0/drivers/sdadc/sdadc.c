@@ -60,13 +60,13 @@ static inline void _sdadc_configure_ain_pin(uint32_t pin)
 	/* Pinmapping table for AINxx -> GPIO pin number */
 	const uint32_t pinmapping[] = {
 #if (SAMC21E)
-			PIN_PA06B_SDADC_INN0, PIN_PA07B_SDADC_INP0, 
+			PIN_PA06B_SDADC_INN0, PIN_PA07B_SDADC_INP0,
 #elif (SAMC21G)
-			PIN_PA06B_SDADC_INN0, PIN_PA07B_SDADC_INP0, 
-			PIN_PB08B_SDADC_INN1, PIN_PB09B_SDADC_INP1, 
+			PIN_PA06B_SDADC_INN0, PIN_PA07B_SDADC_INP0,
+			PIN_PB08B_SDADC_INN1, PIN_PB09B_SDADC_INP1,
 #elif (SAMC21J)
-			PIN_PA06B_SDADC_INN0, PIN_PA07B_SDADC_INP0, 
-			PIN_PB08B_SDADC_INN1, PIN_PB09B_SDADC_INP1, 
+			PIN_PA06B_SDADC_INN0, PIN_PA07B_SDADC_INP0,
+			PIN_PB08B_SDADC_INN1, PIN_PB09B_SDADC_INP1,
 			PIN_PB06B_SDADC_INN2, PIN_PB07B_SDADC_INP2,
 #else
 #  error SDADC pin mappings are not defined for this device.
@@ -83,7 +83,7 @@ static inline void _sdadc_configure_ain_pin(uint32_t pin)
 
 	pin_map_result = pinmapping[pin * 2];
 	system_pinmux_pin_set_config(pin_map_result, &config);
-	
+
 	pin_map_result = pinmapping[pin * 2 + 1];
 	system_pinmux_pin_set_config(pin_map_result, &config);
 }

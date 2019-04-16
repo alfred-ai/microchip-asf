@@ -83,7 +83,7 @@ void configure_i2c_slave(void)
 
 	/* Initialize and enable device with config_i2c_slave */
 	//! [init_module]
-	i2c_slave_init(&i2c_slave_instance, SERCOM2, &config_i2c_slave);
+	i2c_slave_init(&i2c_slave_instance, CONF_I2C_SLAVE_MODULE, &config_i2c_slave);
 	//! [init_module]
 
 	//! [enable_module]

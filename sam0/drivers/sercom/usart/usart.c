@@ -71,7 +71,11 @@ static enum status_code _usart_set_config(
 	/* Cache new register values to minimize the number of register writes */
 	uint32_t ctrla = 0;
 	uint32_t ctrlb = 0;
+#ifdef FEATURE_USART_ISO7816
+	uint32_t ctrlc = 0;
+#endif
 	uint16_t baud  = 0;
+	uint32_t transfer_mode;
 
 	enum sercom_asynchronous_operation_mode mode = SERCOM_ASYNC_OPERATION_MODE_ARITHMETIC;
 	enum sercom_asynchronous_sample_num sample_num = SERCOM_ASYNC_SAMPLE_NUM_16;
@@ -115,8 +119,19 @@ static enum status_code _usart_set_config(
 
 	enum status_code status_code = STATUS_OK;
 
+	transfer_mode = (uint32_t)config->transfer_mode;
+#ifdef FEATURE_USART_ISO7816
+	if(config->iso7816_config.enabled) {
+		transfer_mode = config->iso7816_config.protocol_t;
+	}
+#endif
 	/* Get baud value from mode and clock */
-	switch (config->transfer_mode)
+#ifdef FEATURE_USART_ISO7816
+	if(config->iso7816_config.enabled) {
+		baud = config->baudrate;
+	} else {
+#endif
+	switch (transfer_mode)
 	{
 		case USART_TRANSFER_SYNCHRONOUSLY:
 			if (!config->use_external_clock) {
@@ -145,6 +160,9 @@ static enum status_code _usart_set_config(
 		/* Abort */
 		return status_code;
 	}
+#ifdef FEATURE_USART_ISO7816
+	}
+#endif
 
 #ifdef FEATURE_USART_IRDA
 	if(config->encoding_format_enable) {
@@ -159,7 +177,7 @@ static enum status_code _usart_set_config(
 	usart_hw->BAUD.reg = baud;
 
 	/* Set sample mode */
-	ctrla |= config->transfer_mode;
+	ctrla |= transfer_mode;
 
 	if (config->use_external_clock == false) {
 		ctrla |= SERCOM_USART_CTRLA_MODE(0x1);
@@ -168,8 +186,8 @@ static enum status_code _usart_set_config(
 		ctrla |= SERCOM_USART_CTRLA_MODE(0x0);
 	}
 
-	/* Set stopbits, character size and enable transceivers */
-	ctrlb = (uint32_t)config->stopbits | (uint32_t)config->character_size |
+	/* Set stopbits and enable transceivers */
+	ctrlb =  
 		#ifdef FEATURE_USART_IRDA
 			(config->encoding_format_enable << SERCOM_USART_CTRLB_ENC_Pos) |
 		#endif
@@ -182,6 +200,29 @@ static enum status_code _usart_set_config(
 			(config->receiver_enable << SERCOM_USART_CTRLB_RXEN_Pos) |
 			(config->transmitter_enable << SERCOM_USART_CTRLB_TXEN_Pos);
 
+#ifdef FEATURE_USART_ISO7816
+	if(config->iso7816_config.enabled) {
+		ctrla |= SERCOM_USART_CTRLA_FORM(0x07);
+		if (config->iso7816_config.enable_inverse) {
+			ctrla |= SERCOM_USART_CTRLA_TXINV | SERCOM_USART_CTRLA_RXINV;
+		}
+		ctrlb |=  USART_CHARACTER_SIZE_8BIT;
+		
+		switch(config->iso7816_config.protocol_t) {
+			case ISO7816_PROTOCOL_T_0:
+				ctrlb |= (uint32_t)config->stopbits;	
+				ctrlc |= SERCOM_USART_CTRLC_GTIME(config->iso7816_config.guard_time) | \
+						(config->iso7816_config.inhibit_nack) | \
+						(config->iso7816_config.successive_recv_nack) | \
+						SERCOM_USART_CTRLC_MAXITER(config->iso7816_config.max_iterations);
+				break;	
+			case ISO7816_PROTOCOL_T_1:
+				ctrlb |= USART_STOPBITS_1;
+				break;		
+		}
+	} else {
+#endif
+	ctrlb |= (uint32_t)config->character_size;
 	/* Check parity mode bits */
 	if (config->parity != USART_PARITY_NONE) {
 		ctrla |= SERCOM_USART_CTRLA_FORM(1);
@@ -197,6 +238,9 @@ static enum status_code _usart_set_config(
 		ctrla |= SERCOM_USART_CTRLA_FORM(0);
 #endif
 	}
+#ifdef FEATURE_USART_ISO7816
+	}
+#endif
 
 #ifdef FEATURE_USART_LIN_MASTER
 	usart_hw->CTRLC.reg = ((usart_hw->CTRLC.reg) & SERCOM_USART_CTRLC_GTIME_Msk)
@@ -227,8 +271,18 @@ static enum status_code _usart_set_config(
 	usart_hw->CTRLA.reg = ctrla;
 
 #ifdef FEATURE_USART_RS485
-	usart_hw->CTRLC.reg &= ~(SERCOM_USART_CTRLC_GTIME(0x7));
-	usart_hw->CTRLC.reg |= SERCOM_USART_CTRLC_GTIME(config->rs485_guard_time);
+	if ((usart_hw->CTRLA.reg & SERCOM_USART_CTRLA_FORM_Msk) != \
+		SERCOM_USART_CTRLA_FORM(0x07)) {
+		usart_hw->CTRLC.reg &= ~(SERCOM_USART_CTRLC_GTIME(0x7));
+		usart_hw->CTRLC.reg |= SERCOM_USART_CTRLC_GTIME(config->rs485_guard_time);
+	}
+#endif
+
+#ifdef FEATURE_USART_ISO7816
+	if(config->iso7816_config.enabled) {
+		_usart_wait_for_sync(module);
+		usart_hw->CTRLC.reg = ctrlc;
+	}
 #endif
 
 	return STATUS_OK;
@@ -249,7 +303,7 @@ static enum status_code _usart_set_config(
  * \retval STATUS_OK                       The initialization was successful
  * \retval STATUS_BUSY                     The USART module is busy
  *                                         resetting
- * \retval STATUS_ERR_DENIED               The USART have not been disabled in
+ * \retval STATUS_ERR_DENIED               The USART has not been disabled in
  *                                         advance of initialization
  * \retval STATUS_ERR_INVALID_ARG          The configuration struct contains
  *                                         invalid configuration
@@ -281,7 +335,7 @@ enum status_code usart_init(
 
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
 	uint32_t pm_index, gclk_index; 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 #if (SAML21)
 	if (sercom_index == 5) {
 		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
@@ -340,6 +394,9 @@ enum status_code usart_init(
 #endif
 #ifdef FEATURE_USART_START_FRAME_DECTION
 	module->start_frame_detection_enabled = config->start_frame_detection_enable;
+#endif
+#ifdef FEATURE_USART_ISO7816
+	module->iso7816_mode_enabled = config->iso7816_config.enabled;
 #endif
 	/* Set configuration according to the config struct */
 	status_code = _usart_set_config(module, config);

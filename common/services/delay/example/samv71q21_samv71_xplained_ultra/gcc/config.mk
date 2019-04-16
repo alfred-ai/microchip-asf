@@ -57,6 +57,7 @@ CSRCS = \
        common/services/delay/sam/cycle_counter.c          \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        sam/boards/samv71_xplained_ultra/init.c            \
+       sam/drivers/mpu/mpu.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -79,6 +80,7 @@ INC_PATH = \
        common/utils                                       \
        sam/boards                                         \
        sam/boards/samv71_xplained_ultra                   \
+       sam/drivers/mpu                                    \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/utils                                          \

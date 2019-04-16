@@ -80,9 +80,11 @@
 //#define  USB_DEVICE_LOW_SPEED
 
 //! To authorize the High speed
-#if (UC3A3||UC3A4)
+#if (UC3A3 || UC3A4)
 //#define  USB_DEVICE_HS_SUPPORT
-#elif (SAM3XA||SAM3U)
+#elif (SAM3XA || SAM3U)
+//#define  USB_DEVICE_HS_SUPPORT
+#elif (SAMV71 || SAMV70 || SAMS70 || SAME70)
 //#define  USB_DEVICE_HS_SUPPORT
 #endif
 //@}

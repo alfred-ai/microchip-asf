@@ -53,7 +53,7 @@
  *  - Div 2 clock prescaler
  *  - Over Sampling Ratio is 64
  *  - Skip 2 samples
- *  - Mux input on SDADC AIN1
+ *  - MUX input on SDADC AIN1
  *  - All events (input and generation) disabled
  *  - Free running disabled
  *  - Run in standby disabled
@@ -85,18 +85,18 @@
  *          In most cases, this should be global.
  *
  * -# Configure the SDADC module.
- *  -# Create a SDADC module configuration struct, which can be filled out to
+ *  - Create a SDADC module configuration struct, which can be filled out to
  *     adjust the configuration of a physical SDADC peripheral.
  *     \snippet qs_sdadc_basic.c setup_config
- *  -# Initialize the SDADC configuration struct with the module's default values.
+ *  - Initialize the SDADC configuration struct with the module's default values.
  *     \snippet qs_sdadc_basic.c setup_config_defaults
  *     \note This should always be performed before using the configuration
  *           struct to ensure that all values are initialized to known default
  *           settings.
  *
- *  -# Set SDADC configurations.
+ *  - Set SDADC configurations.
  *     \snippet qs_sdadc_basic.c setup_set_config
- *  -# Enable the SDADC module so that conversions can be made.
+ *  - Enable the SDADC module so that conversions can be made.
  *     \snippet qs_sdadc_basic.c setup_enable
  *
  * \section asfdoc_sam0_sdadc_basic_use_case_use Use Case

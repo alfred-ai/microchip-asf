@@ -188,7 +188,6 @@ int main(void)
 {
 	uint8_t slot = 0;
 	sd_mmc_err_t err;
-
 	const usart_serial_options_t usart_serial_options = {
 		.baudrate   = CONF_TEST_BAUDRATE,
 		.charlength = CONF_TEST_CHARLENGTH,

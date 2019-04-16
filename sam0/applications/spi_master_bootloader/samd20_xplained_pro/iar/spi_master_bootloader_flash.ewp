@@ -2051,6 +2051,9 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../drivers/rtc/rtc_calendar.h</name>
 				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/rtc/rtc_tamper.h</name>
+				</file>
 			</group>
 			<group>
 				<name>wdt</name>

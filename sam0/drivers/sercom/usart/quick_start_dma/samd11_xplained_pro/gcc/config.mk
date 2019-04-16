@@ -59,8 +59,8 @@ CSRCS = \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/usart/quick_start_dma/qs_usart_dma_use.c \
        sam0/drivers/sercom/usart/usart.c                  \
-       sam0/drivers/system/clock/clock_samd10_d11/clock.c \
-       sam0/drivers/system/clock/clock_samd10_d11/gclk.c  \
+       sam0/drivers/system/clock/clock_samd09_d10_d11/clock.c \
+       sam0/drivers/system/clock/clock_samd09_d10_d11/gclk.c \
        sam0/drivers/system/interrupt/system_interrupt.c   \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
@@ -85,7 +85,7 @@ INC_PATH = \
        sam0/drivers/sercom/usart/quick_start_dma/samd11_xplained_pro \
        sam0/drivers/system                                \
        sam0/drivers/system/clock                          \
-       sam0/drivers/system/clock/clock_samd10_d11         \
+       sam0/drivers/system/clock/clock_samd09_d10_d11     \
        sam0/drivers/system/interrupt                      \
        sam0/drivers/system/interrupt/system_interrupt_samd10_d11 \
        sam0/drivers/system/pinmux                         \

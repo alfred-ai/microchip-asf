@@ -79,13 +79,18 @@
  * the external reference availability.
  *
  * This application has been tested on following boards:
+ * - SAM L22 Xplained Pro
  * - SAM C21 Xplained Pro
  *
  * \section appdoc_sam0_xosc32k_fail_detect_usageinfo Usage
- * Connect an oscilloscope to PA16 of the SAM C21 Xplained Pro. Run the example
- * application, then press and hold the board button to turn off the external
- * XOSC32K crystal clock source to observe the fail-over to the internal clock
- * source. Releasing the button will re-enable the external XOSC32K crystal.
+ * Connect an oscilloscope to the pin:
+ * - SAM L22 Xplained Pro: PA15
+ * - SAM C21 Xplained Pro: PA16
+ * 
+ * Run the example application, then press and hold the board button to turn 
+ * off the external XOSC32K crystal clock source to observe the fail-over to 
+ * the internal clock source. Releasing the button will re-enable the external 
+ * XOSC32K crystal.
  *
  * The board LED will be turned on when the external crystal is used, and
  *  will be turned off when the internal OSCULP32K oscillator is used due to a
@@ -130,7 +135,11 @@ static void init_xosc32k(void)
 	system_clock_source_xosc32k_get_config_defaults(&xosc32k_conf);
 
 	xosc32k_conf.on_demand = false;
+#if (SAML22)
+	xosc32k_conf.clock_failure_detect.cfd_enable = true;
+#else
 	xosc32k_conf.enable_clock_failure_detector = true;
+#endif
 	system_clock_source_xosc32k_set_config(&xosc32k_conf);
 	system_clock_source_enable(SYSTEM_CLOCK_SOURCE_XOSC32K);
 	while(!system_clock_source_is_ready(SYSTEM_CLOCK_SOURCE_XOSC32K));
@@ -169,6 +178,9 @@ static void sim_xosc32k_failure(bool connection)
 			OSC32KCTRL->XOSC32K.bit.XTALEN = 0;
 		}
 		OSC32KCTRL->XOSC32K.bit.EN32K = 0;
+#if (SAML22)
+		system_clock_source_xosc32k_set_switch_back();
+#endif
 	}
 	return;
 }

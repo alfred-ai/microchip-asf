@@ -309,7 +309,10 @@
 					<state>$PROJ_DIR$/../../../../../../sam/utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -570,7 +573,10 @@
 					<state>$PROJ_DIR$/../../../../../../sam/utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1256,7 +1262,10 @@
 					<state>$PROJ_DIR$/../../../../../../sam/utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1517,7 +1526,10 @@
 					<state>$PROJ_DIR$/../../../../../../sam/utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1911,6 +1923,30 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../sam/drivers/pmc/pmc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/mpu/mpu.h</name>
+				</file>
+			</group>
+			<group>
+				<name>pio</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio_handler.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio_handler.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio.h</name>
 				</file>
 			</group>
 		</group>
@@ -2391,6 +2427,18 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../pll.h</name>
+				</file>
+			</group>
+			<group>
+				<name>gpio</name>
+				<group>
+					<name>sam_gpio</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../gpio/sam_gpio/sam_gpio.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../gpio/gpio.h</name>
 				</file>
 			</group>
 			<group>

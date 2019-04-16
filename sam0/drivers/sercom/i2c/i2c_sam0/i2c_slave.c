@@ -66,7 +66,7 @@ static enum status_code _i2c_slave_set_config(
 {
 	uint32_t tmp_ctrla;
 
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(module->hw);
 	Assert(config);
@@ -148,7 +148,7 @@ enum status_code i2c_slave_init(
 		Sercom *const hw,
 		const struct i2c_slave_config *const config)
 {
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(hw);
 	Assert(config);
@@ -158,19 +158,19 @@ enum status_code i2c_slave_init(
 
 	SercomI2cs *const i2c_hw = &(module->hw->I2CS);
 
-	/* Check if module is enabled. */
+	/* Check if module is enabled */
 	if (i2c_hw->CTRLA.reg & SERCOM_I2CS_CTRLA_ENABLE) {
 		return STATUS_ERR_DENIED;
 	}
 
-	/* Check if reset is in progress. */
+	/* Check if reset is in progress */
 	if (i2c_hw->CTRLA.reg & SERCOM_I2CS_CTRLA_SWRST) {
 		return STATUS_BUSY;
 	}
 
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
 	uint32_t pm_index, gclk_index; 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 #if (SAML21)
 	if (sercom_index == 5) {
 		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
@@ -208,26 +208,26 @@ enum status_code i2c_slave_init(
 	sercom_set_gclk_generator(config->generator_source, false);
 
 #if I2C_SLAVE_CALLBACK_MODE == true
-	/* Get sercom instance index. */
+	/* Get sercom instance index */
 	uint8_t instance_index = _sercom_get_sercom_inst_index(module->hw);
 
-	/* Save software module in interrupt handler. */
+	/* Save software module in interrupt handler */
 	_sercom_set_handler(instance_index, _i2c_slave_interrupt_handler);
 
-	/* Save software module. */
+	/* Save software module */
 	_sercom_instances[instance_index] = module;
 
-	/* Initialize values in module. */
+	/* Initialize values in module */
 	module->registered_callback = 0;
 	module->enabled_callback = 0;
 	module->buffer_length = 0;
 	module->nack_on_address = config->enable_nack_on_address;
 #endif
 
-	/* Set SERCOM module to operate in I2C slave mode. */
+	/* Set SERCOM module to operate in I2C slave mode */
 	i2c_hw->CTRLA.reg = SERCOM_I2CS_CTRLA_MODE(0x4);
 
-	/* Set config and return status. */
+	/* Set config and return status */
 	return _i2c_slave_set_config(module, config);
 }
 
@@ -241,14 +241,14 @@ enum status_code i2c_slave_init(
 void i2c_slave_reset(
 		struct i2c_slave_module *const module)
 {
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(module->hw);
 
 	SercomI2cs *const i2c_hw = &(module->hw->I2CS);
 
 #if I2C_SLAVE_CALLBACK_MODE == true
-	/* Reset module instance. */
+	/* Reset module instance */
 	module->registered_callback = 0;
 	module->enabled_callback = 0;
 	module->buffer_length = 0;
@@ -260,16 +260,16 @@ void i2c_slave_reset(
 	i2c_slave_disable(module);
 
 #if I2C_SLAVE_CALLBACK_MODE == true
-	/* Clear all pending interrupts. */
+	/* Clear all pending interrupts */
 	system_interrupt_enter_critical_section();
 	system_interrupt_clear_pending(_sercom_get_interrupt_vector(module->hw));
 	system_interrupt_leave_critical_section();
 #endif
 
-	/* Wait for sync. */
+	/* Wait for sync */
 	_i2c_slave_wait_for_sync(module);
 
-	/* Reset module. */
+	/* Reset module */
 	i2c_hw->CTRLA.reg = SERCOM_I2CS_CTRLA_SWRST;
 }
 
@@ -286,19 +286,19 @@ void i2c_slave_reset(
 static enum status_code _i2c_slave_wait_for_bus(
 		struct i2c_slave_module *const module)
 {
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(module->hw);
 
 	SercomI2cm *const i2c_module = &(module->hw->I2CM);
 
-	/* Wait for reply. */
+	/* Wait for reply */
 	uint16_t timeout_counter = 0;
 	while ((!(i2c_module->INTFLAG.reg & SERCOM_I2CS_INTFLAG_DRDY)) &&
 			(!(i2c_module->INTFLAG.reg & SERCOM_I2CS_INTFLAG_PREC)) &&
 			(!(i2c_module->INTFLAG.reg & SERCOM_I2CS_INTFLAG_AMATCH))) {
 
-		/* Check timeout condition. */
+		/* Check timeout condition */
 		if (++timeout_counter >= module->buffer_timeout) {
 			return STATUS_ERR_TIMEOUT;
 		}
@@ -332,7 +332,7 @@ enum status_code i2c_slave_write_packet_wait(
 		struct i2c_slave_module *const module,
 		struct i2c_slave_packet *const packet)
 {
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(module->hw);
 	Assert(packet);
@@ -468,7 +468,7 @@ enum status_code i2c_slave_read_packet_wait(
 		struct i2c_slave_module *const module,
 		struct i2c_slave_packet *const packet)
 {
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(module->hw);
 	Assert(packet);
@@ -565,7 +565,8 @@ enum status_code i2c_slave_read_packet_wait(
  * \note This function is only available for 7-bit slave addressing.
  *
  * Waits for the master to issue a start condition on the bus.
- * Note that this function does not check for errors in the last transfer,
+ * 
+ * \note This function does not check for errors in the last transfer,
  * this will be discovered when reading or writing.
  *
  * \param[in]  module  Pointer to software module structure
@@ -579,7 +580,7 @@ enum status_code i2c_slave_read_packet_wait(
 enum i2c_slave_direction i2c_slave_get_direction_wait(
 		struct i2c_slave_module *const module)
 {
-	/* Sanity check arguments. */
+	/* Sanity check arguments */
 	Assert(module);
 	Assert(module->hw);
 

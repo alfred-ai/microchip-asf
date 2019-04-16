@@ -317,6 +317,7 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
@@ -587,6 +588,7 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
@@ -1282,6 +1284,7 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
@@ -1552,6 +1555,7 @@
 					<state>$PROJ_DIR$/../../../../usart</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
@@ -1965,6 +1969,15 @@
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../pwm.h</name>
+				</file>
+			</group>
+			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.h</name>
 				</file>
 			</group>
 			<group>

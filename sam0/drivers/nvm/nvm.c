@@ -109,7 +109,7 @@ enum status_code nvm_set_config(
 	/* Get a pointer to the module hardware instance */
 	Nvmctrl *const nvm_module = NVMCTRL;
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	/* Turn on the digital interface clock */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBB, MCLK_APBBMASK_NVMCTRL);
 #else
@@ -195,7 +195,7 @@ enum status_code nvm_execute_command(
 		const uint32_t address,
 		const uint32_t parameter)
 {
-	uint32_t temp;
+	uint32_t ctrlb_bak;
 
 	/* Check that the address given is valid  */
 	if (address > ((uint32_t)_nvm_dev.page_size * _nvm_dev.number_of_pages)
@@ -213,13 +213,13 @@ enum status_code nvm_execute_command(
 	/* Get a pointer to the module hardware instance */
 	Nvmctrl *const nvm_module = NVMCTRL;
 
-	/* turn off cache before issuing flash commands */
-	temp = nvm_module->CTRLB.reg;
+	/* Turn off cache before issuing flash commands */
+	ctrlb_bak = nvm_module->CTRLB.reg;
 #if (SAMC20) || (SAMC21)
-	nvm_module->CTRLB.reg = ((temp &(~(NVMCTRL_CTRLB_CACHEDIS(0x2)))) 
+	nvm_module->CTRLB.reg = ((ctrlb_bak &(~(NVMCTRL_CTRLB_CACHEDIS(0x2)))) 
 							| NVMCTRL_CTRLB_CACHEDIS(0x1));
 #else
-	nvm_module->CTRLB.reg = temp | NVMCTRL_CTRLB_CACHEDIS;
+	nvm_module->CTRLB.reg = ctrlb_bak | NVMCTRL_CTRLB_CACHEDIS;
 #endif
 
 	/* Clear error flags */
@@ -227,6 +227,8 @@ enum status_code nvm_execute_command(
 
 	/* Check if the module is busy */
 	if (!nvm_is_ready()) {
+		/* Restore the setting */
+		nvm_module->CTRLB.reg = ctrlb_bak;
 		return STATUS_BUSY;
 	}
 
@@ -238,6 +240,8 @@ enum status_code nvm_execute_command(
 
 			/* Auxiliary space cannot be accessed if the security bit is set */
 			if (nvm_module->STATUS.reg & NVMCTRL_STATUS_SB) {
+				/* Restore the setting */
+				nvm_module->CTRLB.reg = ctrlb_bak;
 				return STATUS_ERR_IO;
 			}
 
@@ -267,6 +271,8 @@ enum status_code nvm_execute_command(
 			break;
 
 		default:
+			/* Restore the setting */
+			nvm_module->CTRLB.reg = ctrlb_bak;
 			return STATUS_ERR_INVALID_ARG;
 	}
 
@@ -277,8 +283,8 @@ enum status_code nvm_execute_command(
 	while (!nvm_is_ready()) {
 	}
 
-	/* restore the setting */
-	nvm_module->CTRLB.reg = temp;
+	/* Restore the setting */
+	nvm_module->CTRLB.reg = ctrlb_bak;
 
 	return STATUS_OK;
 }
@@ -792,7 +798,7 @@ static void _nvm_translate_raw_fusebits_to_struct (
 			((raw_user_row[0] & NVMCTRL_FUSES_EEPROM_SIZE_Msk)
 			>> NVMCTRL_FUSES_EEPROM_SIZE_Pos);
 
-#if (SAML21)
+#if (SAML21) || (SAML22)
 	fusebits->bod33_level = (uint8_t)
 			((raw_user_row[0] & FUSES_BOD33USERLEVEL_Msk)
 			>> FUSES_BOD33USERLEVEL_Pos);
@@ -809,7 +815,7 @@ static void _nvm_translate_raw_fusebits_to_struct (
 			((raw_user_row[1] & FUSES_BOD33_HYST_Msk)
 			>> FUSES_BOD33_HYST_Pos);
 
-#elif (SAMD20) || (SAMD21) || (SAMR21)|| (SAMDA1)
+#elif (SAMD20) || (SAMD21) || (SAMR21)|| (SAMDA1) || (SAMD09)
 	fusebits->bod33_level = (uint8_t)
 			((raw_user_row[0] & FUSES_BOD33USERLEVEL_Msk)
 			>> FUSES_BOD33USERLEVEL_Pos);
@@ -899,7 +905,7 @@ static void _nvm_translate_raw_fusebits_to_struct (
 	fusebits->wdt_timeout_period = (uint8_t)
 			((raw_user_row[0] & WDT_FUSES_PER_Msk) >> WDT_FUSES_PER_Pos);
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	fusebits->wdt_window_timeout = (enum nvm_wdt_window_timeout)
 			((raw_user_row[1] & WDT_FUSES_WINDOW_Msk) >> WDT_FUSES_WINDOW_Pos);
 #else
@@ -998,7 +1004,7 @@ enum status_code nvm_set_fuses(struct nvm_fusebits *fb)
 	fusebits[0] &= (~NVMCTRL_FUSES_EEPROM_SIZE_Msk);
 	fusebits[0] |= NVMCTRL_FUSES_EEPROM_SIZE(fb->eeprom_size);
 
-#if (SAML21)
+#if (SAML21) || (SAML22)
 	fusebits[0] &= (~FUSES_BOD33USERLEVEL_Msk);
 	fusebits[0] |= FUSES_BOD33USERLEVEL(fb->bod33_level);
 
@@ -1011,7 +1017,7 @@ enum status_code nvm_set_fuses(struct nvm_fusebits *fb)
 	fusebits[1] &= (~FUSES_BOD33_HYST_Msk);
 	fusebits[1] |= fb->bod33_hysteresis << FUSES_BOD33_HYST_Pos;
 
-#elif (SAMD20) || (SAMD21) || (SAMR21) || (SAMDA1)
+#elif (SAMD20) || (SAMD21) || (SAMR21) || (SAMDA1) || (SAMD09)
 	fusebits[0] &= (~FUSES_BOD33USERLEVEL_Msk);
 	fusebits[0] |= FUSES_BOD33USERLEVEL(fb->bod33_level);
 
@@ -1061,7 +1067,7 @@ enum status_code nvm_set_fuses(struct nvm_fusebits *fb)
 	fusebits[0] &= (~WDT_FUSES_PER_Msk);
 	fusebits[0] |= fb->wdt_timeout_period << WDT_FUSES_PER_Pos;
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	fusebits[1] &= (~WDT_FUSES_WINDOW_Msk);
 	fusebits[1] |= fb->wdt_window_timeout << WDT_FUSES_WINDOW_Pos;
 #else

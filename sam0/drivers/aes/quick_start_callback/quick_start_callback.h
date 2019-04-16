@@ -46,6 +46,7 @@
  *
  * The supported board list:
  *    - SAM L21 Xplained Pro
+ *    - SAM L22 Xplained Pro
  *
  * This example demonstrates how to use the AES driver to perform:
  * - ECB encryption and decryption

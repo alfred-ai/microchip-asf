@@ -2135,6 +2135,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../rtc/rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../rtc/rtc_count.h</name>
 				</file>
 			</group>

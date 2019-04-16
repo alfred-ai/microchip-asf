@@ -2284,6 +2284,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_count.h</name>
 				</file>
 				<file>

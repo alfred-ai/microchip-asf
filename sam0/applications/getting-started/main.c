@@ -53,7 +53,7 @@
  * \section Requirements
  *
  * This application has been tested on following boards:
- * - SAM D21/R21/L21/C21 Xplained Pro
+ * - SAM D21/R21/L21/L22/C21 Xplained Pro
  * - SAM D10 Xplained Mini
  *
  * \section Description

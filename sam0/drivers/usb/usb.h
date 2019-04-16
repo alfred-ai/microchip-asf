@@ -69,6 +69,7 @@ extern "C" {
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D11 (Only USB device support on SAM D11 device)
  *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM L22 (Only USB device support on SAM L22 device)
  *  - Atmel | SMART SAM DA1
  *
  * The USB module covers following mode:
@@ -271,7 +272,7 @@ struct usb_module {
 	/** Hardware module pointer of the associated USB peripheral. */
 	Usb *hw;
 
-#if !SAMD11
+#if !SAMD11 && !SAML22
 	/** Array to store host related callback functions */
 	usb_host_callback_t host_callback[USB_HOST_CALLBACK_N];
 	usb_host_pipe_callback_t host_pipe_callback[USB_PIPE_NUM][USB_HOST_PIPE_CALLBACK_N];
@@ -365,7 +366,7 @@ void usb_get_config_defaults(struct usb_config *module_config);
 enum status_code usb_init(struct usb_module *module_inst, Usb *const hw,
 		struct usb_config *module_config);
 
-#if !SAMD11
+#if !SAMD11 && !SAML22
 /**
  * \brief Enable the USB host by setting the VBUS OK
  *
@@ -721,7 +722,7 @@ enum status_code usb_device_endpoint_setup_buffer_job(struct usb_module *module_
 void usb_device_endpoint_abort_job(struct usb_module *module_inst, uint8_t ep);
 /** @} */
 
-#if !SAMD11
+#if !SAMD11 && !SAML22
 /**
  * \name USB Host Pipe Operations
  * @{

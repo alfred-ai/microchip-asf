@@ -58,7 +58,7 @@ void configure_gclock_generator(void)
 	system_gclk_gen_get_config_defaults(&gclock_gen_conf);
 //! [setup_2]
 
-#if (SAML21)
+#if (SAML21) || (SAML22)
 //! [setup_3]
 	gclock_gen_conf.source_clock    = SYSTEM_CLOCK_SOURCE_OSC16M;
 	gclock_gen_conf.division_factor = 128;

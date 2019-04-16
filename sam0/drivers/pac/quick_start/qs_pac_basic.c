@@ -78,7 +78,7 @@ int main (void)
 //! [init_lock]
 
 //! [enable_interrupts]
-#if (SAML21) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC21) || defined(__DOXYGEN__)
 	system_pac_enable_interrupt();
 #endif
 	system_interrupt_enable_global();

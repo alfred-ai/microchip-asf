@@ -74,6 +74,8 @@
  *   \snippet samd11_xplained_pro/conf_qs_events.h definition_event
  * - SAM L21 Xplained Pro
  *   \snippet saml21_xplained_pro/conf_qs_events.h definition_event
+ * - SAM L22 Xplained Pro
+ *   \snippet saml22_xplained_pro/conf_qs_events.h definition_event
  * - SAM DA1 Xplained Pro.
  *   \snippet samda1_xplained_pro/conf_qs_events.h definition_event
  * - SAM C21 Xplained Pro

@@ -74,7 +74,7 @@ void spi_unregister_callback(
 		enum spi_callback callback_type);
 
 /**
- * \brief Enables a SPI callback of a given type
+ * \brief Enables an SPI callback of a given type
  *
  * Enables the callback function registered by the \ref spi_register_callback.
  * The callback function will be called from the interrupt handler when the
@@ -144,7 +144,7 @@ void spi_abort_job(
 /**
  * \brief Retrieves the current status of a job.
  *
- * Retrieves the current statue of a job that was previously issued.
+ * Retrieves the current status of a job that was previously issued.
  *
  * \param[in]  module    Pointer to SPI software instance struct
  *

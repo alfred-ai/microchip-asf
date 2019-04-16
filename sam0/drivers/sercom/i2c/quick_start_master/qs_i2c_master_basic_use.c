@@ -87,7 +87,7 @@ void configure_i2c_master(void)
 
 	/* Initialize and enable device with config. */
 	//! [init_module]
-	i2c_master_init(&i2c_master_instance, SERCOM2, &config_i2c_master);
+	i2c_master_init(&i2c_master_instance, CONF_I2C_MASTER_MODULE, &config_i2c_master);
 	//! [init_module]
 
 	//! [enable_module]

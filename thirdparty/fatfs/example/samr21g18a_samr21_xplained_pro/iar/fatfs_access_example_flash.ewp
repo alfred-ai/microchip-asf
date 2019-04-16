@@ -2398,6 +2398,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
 				</file>
 			</group>
@@ -2461,6 +2464,9 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/ac.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/dsu.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/mtb.h</name>
 							</file>
 							<file>
@@ -2501,9 +2507,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/sysctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/dsu.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/wdt.h</name>
@@ -2609,6 +2612,9 @@
 							</file>
 						</group>
 						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e16a.h</name>
 						</file>
 						<group>
@@ -2635,9 +2641,6 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g18a.h</name>
 							</file>
 						</group>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21.h</name>
-						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21g18a.h</name>
 						</file>

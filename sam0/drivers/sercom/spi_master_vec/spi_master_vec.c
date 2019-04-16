@@ -149,7 +149,7 @@ enum status_code spi_master_vec_init(struct spi_master_vec_module *const module,
 	struct system_gclk_chan_config gclk_chan_conf;
 	uint16_t tmp_baud;
 	uint32_t sercom_index = _sercom_get_sercom_inst_index((Sercom *)spi_hw);
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	uint32_t pm_index = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 #else
 	uint32_t pm_index = sercom_index + PM_APBCMASK_SERCOM0_Pos;

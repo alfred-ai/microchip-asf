@@ -2194,6 +2194,9 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samd21/include/component/evsys.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samd21/include/component/adc.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samd21/include/component/ac.h</name>
 							</file>
 							<file>
@@ -2222,9 +2225,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samd21/include/component/dac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samd21/include/component/adc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samd21/include/component/eic.h</name>
@@ -2562,6 +2562,9 @@
 						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r/rtc_calendar.c</name>
 					</file>
 				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
+				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
 				</file>

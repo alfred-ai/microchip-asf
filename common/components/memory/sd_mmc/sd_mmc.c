@@ -796,7 +796,7 @@ static bool sdio_cmd52_set_high_speed(void)
  */
 static bool sd_cm6_set_high_speed(void)
 {
-	uint8_t switch_status[SD_SW_STATUS_BSIZE];
+	uint8_t switch_status[SD_SW_STATUS_BSIZE] = {0};
 
 	if (!driver_adtc_start(SD_CMD6_SWITCH_FUNC,
 			SD_CMD6_MODE_SWITCH

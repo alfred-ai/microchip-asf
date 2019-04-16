@@ -229,7 +229,7 @@ enum status_code sdadc_get_job_status(
 /**
  * \brief Aborts an ongoing job.
  *
- * Aborts an ongoing job.
+ * Aborts an ongoing job with given type.
  *
  * \param [in]  module_inst Pointer to the SDADC software instance struct
  * \param [in]  type        Type of job to abort

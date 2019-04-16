@@ -47,22 +47,22 @@
 #define PINMUX_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam0_system_pinmux_group SAM System Pin Multiplexer Driver (SYSTEM PINMUX)
+ * \defgroup asfdoc_sam0_system_pinmux_group SAM System Pin Multiplexer (SYSTEM PINMUX) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the
- * configuration and management of the device's physical I/O Pins, to alter the
- * direction and input/drive characteristics as well as to configure the pin 
- * peripheral multiplexer selection.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of the device's physical
+ * I/O Pins, to alter the direction and input/drive characteristics as well as
+ * to configure the pin peripheral multiplexer selection.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - PORT (Port I/O Management)
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * Physically, the modules are interconnected within the device as shown in the
@@ -98,7 +98,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH</td>
- *    <td>SAML21, SAMC20/C21</td>
+ *    <td>SAM L21, SAM C20/C21</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -204,12 +204,12 @@ extern "C" {
 
 /*@{*/
 #if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
-/** Output Driver Strength Selection feature support. */
+/** Output Driver Strength Selection feature support */
 #  define FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH
 #endif
 /*@}*/
 
-/** Peripheral multiplexer index to select GPIO mode for a pin. */
+/** Peripheral multiplexer index to select GPIO mode for a pin */
 #define SYSTEM_PINMUX_GPIO    (1 << 7)
 
 /**
@@ -220,13 +220,13 @@ extern "C" {
  */
 enum system_pinmux_pin_dir {
 	/** The pin's input buffer should be enabled, so that the pin state can
-	 *  be read. */
+	 *  be read */
 	SYSTEM_PINMUX_PIN_DIR_INPUT,
 	/** The pin's output buffer should be enabled, so that the pin state can
-	 *  be set (but not read back). */
+	 *  be set (but not read back) */
 	SYSTEM_PINMUX_PIN_DIR_OUTPUT,
 	/** The pin's output and input buffers should both be enabled, so that the
-	 *  pin state can be set and read back. */
+	 *  pin state can be set and read back */
 	SYSTEM_PINMUX_PIN_DIR_OUTPUT_WITH_READBACK,
 };
 
@@ -237,11 +237,11 @@ enum system_pinmux_pin_dir {
  * structure, to indicate the type of logic level pull the pin should use.
  */
 enum system_pinmux_pin_pull {
-	/** No logical pull should be applied to the pin. */
+	/** No logical pull should be applied to the pin */
 	SYSTEM_PINMUX_PIN_PULL_NONE,
-	/** Pin should be pulled up when idle. */
+	/** Pin should be pulled up when idle */
 	SYSTEM_PINMUX_PIN_PULL_UP,
-	/** Pin should be pulled down when idle. */
+	/** Pin should be pulled down when idle */
 	SYSTEM_PINMUX_PIN_PULL_DOWN,
 };
 
@@ -252,19 +252,18 @@ enum system_pinmux_pin_pull {
  * structure, to indicate the type of sampling a port pin should use.
  */
 enum system_pinmux_pin_sample {
-	/** Pin input buffer should continuously sample the pin state. */
+	/** Pin input buffer should continuously sample the pin state */
 	SYSTEM_PINMUX_PIN_SAMPLE_CONTINUOUS,
-	/** Pin input buffer should be enabled when the IN register is read. */
+	/** Pin input buffer should be enabled when the IN register is read */
 	SYSTEM_PINMUX_PIN_SAMPLE_ONDEMAND,
 };
 
 /**
  * \brief Port pin configuration structure.
  *
- * Configuration structure for a port pin instance. This structure should be
- * structure should be initialized by the
- * \ref system_pinmux_get_config_defaults() function before being modified by
- * the user application.
+ * Configuration structure for a port pin instance. This structure should
+ * be initialized by the \ref system_pinmux_get_config_defaults() function
+ * before being modified by the user application.
  */
 struct system_pinmux_config {
 	/** MUX index of the peripheral that should control the pin, if peripheral
@@ -272,10 +271,10 @@ struct system_pinmux_config {
 	 *  \ref SYSTEM_PINMUX_GPIO. */
 	uint8_t mux_position;
 
-	/** Port buffer input/output direction. */
+	/** Port buffer input/output direction */
 	enum system_pinmux_pin_dir direction;
 
-	/** Logic level pull of the input buffer. */
+	/** Logic level pull of the input buffer */
 	enum system_pinmux_pin_pull input_pull;
 
 	/** Enable lowest possible powerstate on the pin.
@@ -347,7 +346,7 @@ static inline PortGroup* system_pinmux_get_group_from_gpio_pin(
 	uint8_t port_index  = (gpio_pin / 128);
 	uint8_t group_index = (gpio_pin / 32);
 
-	/* Array of available ports. */
+	/* Array of available ports */
 	Port *const ports[PORT_INST_NUM] = PORT_INSTS;
 
 	if (port_index < PORT_INST_NUM) {
@@ -433,9 +432,9 @@ static inline void system_pinmux_pin_set_input_sample_mode(
  * use.
  */
 enum system_pinmux_pin_strength {
-  /** Normal output driver strength. */
+  /** Normal output driver strength */
   SYSTEM_PINMUX_PIN_STRENGTH_NORMAL,
-  /** High current output driver strength. */
+  /** High current output driver strength */
   SYSTEM_PINMUX_PIN_STRENGTH_HIGH,
 };
 
@@ -478,9 +477,9 @@ void system_pinmux_group_set_output_strength(
  * use.
  */
 enum system_pinmux_pin_slew_rate {
-  /** Normal pin output slew rate. */
+  /** Normal pin output slew rate */
   SYSTEM_PINMUX_PIN_SLEW_RATE_NORMAL,
-  /** Enable slew rate limiter on the pin. */
+  /** Enable slew rate limiter on the pin */
   SYSTEM_PINMUX_PIN_SLEW_RATE_LIMITED,
 };
 
@@ -523,9 +522,9 @@ void system_pinmux_group_set_output_slew_rate(
  * structure, to indicate the output mode the pin should use.
  */
 enum system_pinmux_pin_drive {
-  /** Use totem pole output drive mode. */
+  /** Use totem pole output drive mode */
   SYSTEM_PINMUX_PIN_DRIVE_TOTEM,
-  /** Use open drain output drive mode. */
+  /** Use open drain output drive mode */
   SYSTEM_PINMUX_PIN_DRIVE_OPEN_DRAIN,
 };
 
@@ -630,7 +629,7 @@ void system_pinmux_group_set_output_drive(
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_system_pinmux_group. QSGs are simple
  * examples with step-by-step instructions to configure and use this driver in a
- * selection of use cases. Note that QSGs can be compiled as a standalone
+ * selection of use cases. Note that a QSG can be compiled as a standalone
  * application or be added to the user application.
  *
  *  - \subpage asfdoc_sam0_system_pinmux_basic_use_case
@@ -644,32 +643,32 @@ void system_pinmux_group_set_output_drive(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>F</td>
- *		<td>06/2015</td>
- *		<td>Add support for SAML21, SAMDAx, and SAMC20/C21.</td>
+ *		<td>42121F</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, and SAM C20/C21</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
+ *		<td>42121E</td>
  *		<td>12/2014</td>
- *		<td>Add support for SAMR21 and SAMD10/D11.</td>
+ *		<td>Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>D</td>
+ *		<td>42121D</td>
  *		<td>01/2014</td>
- *		<td>Add support for SAMD21.</td>
+ *		<td>Added support for SAM D21</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42121C</td>
  *		<td>09/2013</td>
- *		<td>Fixed incorrect documentation for the device pin sampling mode.</td>
+ *		<td>Fixed incorrect documentation for the device pin sampling mode</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42121B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42121A</td>
  *		<td>06/2013</td>
  *		<td>Initial release</td>
  *	</tr>

@@ -50,7 +50,7 @@
 /**
  * \defgroup asfdoc_sam0_tc_group SAM Timer/Counter Driver (TC)
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the timer modules within the device, for waveform
  * generation and timing operations. The following driver API modes are covered
  * by this manual:
@@ -67,9 +67,9 @@
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -117,27 +117,27 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_DOUBLE_BUFFERED</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_SYNCBUSY_SCHEME_VERSION_2</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_STAMP_PW_CAPTURE</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_READ_SYNC</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_IO_CAPTURE</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_GENERATE_DMA_TRIGGER</td>
- *    <td>SAML21</td>
+ *    <td>SAM L21/L22</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -201,7 +201,7 @@
  * generation match mode.
  *
  * When using 32-bit counter size, two 16-bit counters are chained together
- * in a cascade formation. Except in SAM D10/D11, Even numbered TC modules
+ * in a cascade formation. Except in SAM D09/D10/D11, Even numbered TC modules
  * (e.g. TC0, TC2) can be configured as 32-bit counters. The odd numbered
  * counters will act as slaves to the even numbered masters, and will not
  * be reconfigurable until the master timer is disabled. The pairing of timer
@@ -233,7 +233,7 @@
  *   </tr>
  * </table>
  *
- * In SAMD10/D11, odd numbered TC modules (e.g. TC1) can be configured as 32-bit
+ * In SAM D09/D10/D11, odd numbered TC modules (e.g. TC1) can be configured as 32-bit
  * counters. The even numbered(e.g. TC2) counters will act as slaves to the odd
  * numbered masters.
  *
@@ -464,7 +464,7 @@
  * Define port features set according to different device family
  * @{
 */
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 /** TC double buffered. */
 #  define FEATURE_TC_DOUBLE_BUFFERED
 /** SYNCBUSY scheme version 2. */
@@ -484,21 +484,21 @@
 /*@}*/
 
 #if !defined(__DOXYGEN__)
-#if SAMD20 || SAML21 || SAMC20 || SAMC21
+#if SAMD20 || SAML21 || SAML22 || SAMC20 || SAMC21
 #  define TC_INSTANCE_OFFSET 0
 #endif
 #if SAMD21 || SAMR21 || SAMDA1
 #  define TC_INSTANCE_OFFSET 3
 #endif
-#if SAMD10 || SAMD11
+#if SAMD09 || SAMD10 || SAMD11
 #  define TC_INSTANCE_OFFSET 1
 #endif
 
 #if SAMD20
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC0_CC8_NUM
-#elif SAML21 || SAMC20 || SAMC21
+#elif SAML21 || SAML22 || SAMC20 || SAMC21
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC0_CC_NUM
-#elif SAMD10 || SAMD11
+#elif SAMD09 || SAMD10 || SAMD11
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC1_CC8_NUM
 #else
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC3_CC8_NUM
@@ -513,11 +513,13 @@
 #    define TC_INST_MAX_ID  5
 #  endif
 #elif SAML21 || SAMC20 || SAMC21
-#define TC_INST_MAX_ID  4
-#elif SAMD10 || SAMD11
-#define TC_INST_MAX_ID  2
+#  define TC_INST_MAX_ID  4
+#elif SAML22
+#  define TC_INST_MAX_ID  3
+#elif SAMD09 || SAMD10 || SAMD11
+#  define TC_INST_MAX_ID  2
 #else
-#define TC_INST_MAX_ID  7
+#  define TC_INST_MAX_ID  7
 #endif
 
 #endif
@@ -607,7 +609,7 @@ enum tc_compare_capture_channel {
 };
 
 /** TC wave generation mode. */
-#if SAML21 || SAMC20 || SAMC21
+#if SAML21 || SAML22 || SAMC20 || SAMC21
 #define TC_WAVE_GENERATION_NORMAL_FREQ_MODE TC_WAVE_WAVEGEN_NFRQ
 #define TC_WAVE_GENERATION_MATCH_FREQ_MODE  TC_WAVE_WAVEGEN_MFRQ
 #define TC_WAVE_GENERATION_NORMAL_PWM_MODE  TC_WAVE_WAVEGEN_NPWM
@@ -735,7 +737,7 @@ enum tc_count_direction {
 };
 
 /** Waveform inversion mode. */
-#if SAML21 || SAMC20 || SAMC21
+#if SAML21 || SAML22 || SAMC20 || SAMC21
 #define TC_WAVEFORM_INVERT_CC0_MODE  TC_DRVCTRL_INVEN(1)
 #define TC_WAVEFORM_INVERT_CC1_MODE  TC_DRVCTRL_INVEN(2)
 #else
@@ -867,7 +869,7 @@ struct tc_config {
 
 	/** When \c true the module is enabled during standby. */
 	bool run_in_standby;
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	/** Run on demand. */
 	bool on_demand;
 #endif
@@ -884,7 +886,7 @@ struct tc_config {
 	enum tc_reload_action reload_action;
 
 	/** Specifies which channel(s) to invert the waveform on.
-		For SAML21/C20/C21, it's also used to invert IO input pin. */
+		For SAM L21/L22/C20/C21, it's also used to invert IO input pin. */
 	uint8_t waveform_invert_output;
 
 	/** Specifies which channel(s) to enable channel capture
@@ -1006,7 +1008,7 @@ static inline bool tc_is_syncing(
 	/* Get a pointer to the module's hardware instance */
 	TcCount8 *const tc_module = &(module_inst->hw->COUNT8);
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	return (tc_module->SYNCBUSY.reg);
 #else
 	return (tc_module->STATUS.reg & TC_STATUS_SYNCBUSY);
@@ -1028,10 +1030,10 @@ static inline bool tc_is_syncing(
  *  \li Normal frequency wave generation
  *  \li GCLK reload action
  *  \li Don't run in standby
- *  \li Don't run on demand for SAML21/C20/C21
+ *  \li Don't run on demand for SAM L21/L22/C20/C21
  *  \li No inversion of waveform output
  *  \li No capture enabled
- *  \li No I/O capture enabled for SAML21/C20/C21
+ *  \li No I/O capture enabled for SAM L21/L22/C20/C21
  *  \li No event input enabled
  *  \li Count upward
  *  \li Don't perform one-shot operations
@@ -1060,7 +1062,7 @@ static inline void tc_get_config_defaults(
 	config->wave_generation            = TC_WAVE_GENERATION_NORMAL_FREQ;
 	config->reload_action              = TC_RELOAD_ACTION_GCLK;
 	config->run_in_standby             = false;
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	config->on_demand                  = false;
 #endif
 	config->waveform_invert_output     = TC_WAVEFORM_INVERT_OUTPUT_NONE;
@@ -1456,7 +1458,7 @@ static inline void tc_dma_trigger_command(
 		/* Wait for sync */
 	}
 
-#if (SAMC20) || (SAMC21) || (SAML21XXXB)
+#if (SAMC20) || (SAMC21) || (SAML22) || (SAML21XXXB)
 	/* Write command to execute */
 	tc_module->CTRLBSET.reg = TC_CTRLBSET_CMD(TC_CTRLBSET_CMD_DMAOS_Val);
 #endif
@@ -1732,29 +1734,29 @@ static inline void tc_clear_status(
  *	</tr>
  *	<tr>
  *		<td>F</td>
- *		<td>12/2014</td>
- *		<td>Added support for SAMC21.</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM C21 and SAM L22</td>
  *	</tr>
  *	<tr>
  *		<td>E</td>
  *		<td>04/2015</td>
- *		<td>Added support for SAML21 and SAMDAx.</td>
+ *		<td>Added support for SAM L21 and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>D</td>
  *		<td>12/2014</td>
  *		<td>Added timer use case.
- *		    Added support for SAMR21 and SAMD10/D11.</td>
+ *		    Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
  *		<td>C</td>
  *		<td>01/2014</td>
- *		<td>Added support for SAMD21.</td>
+ *		<td>Added support for SAM D21</td>
  *	</tr>
  *	<tr>
  *		<td>B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
  *		<td>A</td>

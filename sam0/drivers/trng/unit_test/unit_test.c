@@ -69,6 +69,7 @@
  *
  * The following kit is required for carrying out the test:
  *  - SAM L21 Xplained Pro board
+ *  - SAM L22 Xplained Pro board
  *
  * \section appdoc_sam0_trng_unit_test_setup Setup
  * There is no special requirement.

@@ -306,6 +306,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -578,6 +579,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -1275,6 +1277,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -1547,6 +1550,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -2068,6 +2072,15 @@
 		<name>sam</name>
 		<group>
 			<name>drivers</name>
+			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.h</name>
+				</file>
+			</group>
 			<group>
 				<name>ssc</name>
 				<file>

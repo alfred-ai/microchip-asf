@@ -153,13 +153,15 @@ static inline void _system_clock_source_dfll_set_config_errata_9905(void)
 {
 
 	/* Disable ONDEMAND mode while writing configurations */
-	SYSCTRL->DFLLCTRL.reg = _system_clock_inst.dfll.control & ~SYSCTRL_DFLLCTRL_ONDEMAND;
+	SYSCTRL->DFLLCTRL.reg = SYSCTRL_DFLLCTRL_ENABLE;
 	_system_dfll_wait_for_sync();
 
 	SYSCTRL->DFLLMUL.reg = _system_clock_inst.dfll.mul;
 	SYSCTRL->DFLLVAL.reg = _system_clock_inst.dfll.val;
 
 	/* Write full configuration to DFLL control register */
+	SYSCTRL->DFLLCTRL.reg = 0;
+	_system_dfll_wait_for_sync();
 	SYSCTRL->DFLLCTRL.reg = _system_clock_inst.dfll.control;
 }
 
@@ -390,11 +392,13 @@ void system_clock_source_dfll_set_config(
 	if (config->loop_mode == SYSTEM_CLOCK_DFLL_LOOP_MODE_USB_RECOVERY) {
 
 		_system_clock_inst.dfll.mul =
+				SYSCTRL_DFLLMUL_CSTEP(config->coarse_max_step) |
+				SYSCTRL_DFLLMUL_FSTEP(config->fine_max_step)   |
 				SYSCTRL_DFLLMUL_MUL(config->multiply_factor);
 
 		/* Enable the USB recovery mode */
 		_system_clock_inst.dfll.control |= config->loop_mode |
-				SYSCTRL_DFLLCTRL_BPLCKC;
+				SYSCTRL_DFLLCTRL_MODE | SYSCTRL_DFLLCTRL_BPLCKC;
 	}
 }
 
@@ -898,9 +902,10 @@ void system_clock_init(void)
 	dfll_conf.fine_max_step   = CONF_CLOCK_DFLL_MAX_FINE_STEP_SIZE;
 
 	if (CONF_CLOCK_DFLL_LOOP_MODE == SYSTEM_CLOCK_DFLL_LOOP_MODE_USB_RECOVERY) {
+		dfll_conf.fine_max_step   = 10; 
 		dfll_conf.fine_value   = 0x1ff;
 		dfll_conf.quick_lock = SYSTEM_CLOCK_DFLL_QUICK_LOCK_ENABLE;
-		dfll_conf.stable_tracking = SYSTEM_CLOCK_DFLL_STABLE_TRACKING_FIX_AFTER_LOCK;
+		dfll_conf.stable_tracking = SYSTEM_CLOCK_DFLL_STABLE_TRACKING_TRACK_AFTER_LOCK;
 		dfll_conf.wakeup_lock = SYSTEM_CLOCK_DFLL_WAKEUP_LOCK_KEEP;
 		dfll_conf.chill_cycle = SYSTEM_CLOCK_DFLL_CHILL_CYCLE_DISABLE;
 

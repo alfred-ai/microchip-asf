@@ -89,7 +89,6 @@ int main(void)
 	FRESULT res;
 	FATFS fs;
 	FIL file_object;
-
 	const usart_serial_options_t usart_serial_options = {
 		.baudrate   = CONF_TEST_BAUDRATE,
 		.charlength = CONF_TEST_CHARLENGTH,

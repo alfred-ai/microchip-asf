@@ -71,6 +71,7 @@
 // From module: RTC - Real Time Counter in Calendar Mode (Callback APIs)
 #include <rtc_calendar.h>
 #include <rtc_calendar_interrupt.h>
+#include <rtc_tamper.h>
 
 // From module: SYSTEM - Clock Management for SAMC20/C21
 #include <clock.h>

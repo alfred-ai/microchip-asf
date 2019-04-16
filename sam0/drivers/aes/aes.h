@@ -76,6 +76,7 @@ extern "C" {
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM L22
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_drivers_aes_prerequisites
@@ -692,6 +693,11 @@ static inline void aes_gcm_set_gf_multiplication(struct aes_module *const module
  *      <th>Doc. Rev.</td>
  *		<th>Date</td>
  *		<th>Comments</td>
+ *	</tr>
+ *	<tr>
+ *      <td>42445B</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L22</td>
  *	</tr>
  *	<tr>
  *      <td>42445A</td>

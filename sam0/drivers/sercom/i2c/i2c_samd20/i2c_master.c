@@ -141,14 +141,10 @@ static enum status_code _i2c_master_set_config(
 	/* Set configurations in CTRLB. */
 	i2c_module->CTRLB.reg = SERCOM_I2CM_CTRLB_SMEN;
 
-	/* Find and set baudrate, considering sda/scl rise time */
-	uint32_t fgclk       = system_gclk_chan_get_hz(SERCOM0_GCLK_ID_CORE + sercom_index);
-	uint32_t fscl        = 1000*config->baud_rate;
-	uint32_t trise       = config->sda_scl_rise_time_ns;
-	int32_t  numerator   = fgclk - fscl*(10 + fgclk*trise/1000000000);
-	int32_t  denominator = 2*fscl;
-	/* For more accurate result, can use round div. */
-	tmp_baud = (int32_t)(div_ceil(numerator, denominator));
+	/* Find and set baudrate. */
+	tmp_baud = (int32_t)(div_ceil(
+				system_gclk_chan_get_hz(SERCOM0_GCLK_ID_CORE + sercom_index),
+				(2000*(config->baud_rate))) - 5);
 
 	/* Check that baud rate is supported at current speed. */
 	if (tmp_baud > 255 || tmp_baud < 0) {
@@ -443,6 +439,9 @@ static enum status_code _i2c_master_read_packet(
 			/* Send stop command unless arbitration is lost. */
 			_i2c_master_wait_for_sync(module);
 			i2c_module->CTRLB.reg |= SERCOM_I2CM_CTRLB_CMD(3);
+		} else {
+		  	_i2c_master_wait_for_sync(module);
+			i2c_module->CTRLB.reg |= SERCOM_I2CM_CTRLB_CMD(1);
 		}
 
 		/* Save last data to buffer. */

@@ -62,7 +62,7 @@ void configure_wdt(void)
 	/* Set the Watchdog configuration settings */
 	//! [setup_3]
 	config_wdt.always_on      = false;
-#if !((SAML21) || (SAMC21))
+#if !((SAML21) || (SAMC21) || (SAML22))
 	config_wdt.clock_source   = GCLK_GENERATOR_4;
 #endif
 	config_wdt.timeout_period = WDT_PERIOD_2048CLK;

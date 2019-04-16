@@ -49,7 +49,8 @@
 /**
  * \defgroup asfdoc_sam0_ac_group SAM Analog Comparator (AC) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers
+ * provides an interface for the configuration
  * and management of the device's Analog Comparator functionality, for the
  * comparison of analog voltages against a known reference voltage to determine
  * its relative level. The following driver API modes are covered by this
@@ -66,8 +67,8 @@
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -108,19 +109,19 @@
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_HYSTERESIS_LEVEL</td>
- *      <td>SAM L21/C20/C21</td>
+ *      <td>SAM L21/L22/C20/C21</td>
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_SYNCBUSY_SCHEME_VERSION_2</td>
- *      <td>SAM L21/C20/C21</td>
+ *      <td>SAM L21/L22/C20/C21</td>
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_RUN_IN_STANDY_EACH_COMPARATOR</td>
- *      <td>SAM L21/C20/C21</td>
+ *      <td>SAM L21/L22/C20/C21</td>
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_RUN_IN_STANDY_PAIR_COMPARATOR</td>
- *      <td>SAM D20/D21/D10/D11/R21/DAx</td>
+ *      <td>SAM D20/L22/D21/D10/D11/R21/DAx</td>
  *    </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -307,14 +308,14 @@ extern "C" {
  * Define AC driver feature set according to different device family.
  * @{
  */
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
    /** Setting of hysteresis level */
 #  define FEATURE_AC_HYSTERESIS_LEVEL
    /** SYNCBUSY scheme version 2 */
 #  define FEATURE_AC_SYNCBUSY_SCHEME_VERSION_2
 #endif
 
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
  	/** Run in standby feature for each comparator */
 #  define FEATURE_AC_RUN_IN_STANDY_EACH_COMPARATOR
 #else
@@ -490,8 +491,9 @@ enum ac_chan_neg_mux {
 	/** Negative comparator input is connected to the internal band gap voltage
 	 *  reference */
 	AC_CHAN_NEG_MUX_BANDGAP    = AC_COMPCTRL_MUXNEG_BANDGAP,
+#if !(SAML22)
 	/**
-	 * For SAM D20/D21/D10/D11/R21/DAx:
+	 * For SAM D20/D21/D10/D11/R21/DA1:
 	 *     Negative comparator input is connected to the channel's internal DAC
 	 *     channel 0 output.
 	 * For SAM L21/C20/C21:
@@ -499,6 +501,7 @@ enum ac_chan_neg_mux {
 	 *     channel 0 output for Comparator 0 or OPAMP output for Comparator 1.
 	 */
 	AC_CHAN_NEG_MUX_DAC0       = AC_COMPCTRL_MUXNEG_DAC,
+#endif
 };
 
 /**

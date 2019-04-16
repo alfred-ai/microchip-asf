@@ -60,6 +60,7 @@ CSRCS = \
        sam/boards/samv71_xplained_ultra/init.c            \
        sam/drivers/efc/efc.c                              \
        sam/drivers/matrix/matrix.c                        \
+       sam/drivers/mpu/mpu.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_alternate_function_example/pio_alternate_function_example.c \
        sam/drivers/pio/pio_handler.c                      \
@@ -79,6 +80,7 @@ ASSRCS =
 INC_PATH = \
        common/boards                                      \
        common/services/clock                              \
+       common/services/gpio                               \
        common/services/ioport                             \
        common/services/serial                             \
        common/services/serial/sam_uart                    \
@@ -88,6 +90,7 @@ INC_PATH = \
        sam/boards/samv71_xplained_ultra                   \
        sam/drivers/efc                                    \
        sam/drivers/matrix                                 \
+       sam/drivers/mpu                                    \
        sam/drivers/pio                                    \
        sam/drivers/pio/pio_alternate_function_example     \
        sam/drivers/pio/pio_alternate_function_example/samv71q21_samv71_xplained_ultra \

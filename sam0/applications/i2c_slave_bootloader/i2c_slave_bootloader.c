@@ -88,7 +88,7 @@
  * This application implements a I2C Slave bootloader for SAM devices.
  *
  * This application has been tested on following boards:
- * - SAM D20/D21/R21/D11 Xplained Pro
+ * - SAM D20/D21/R21/D11/L22 Xplained Pro
  *
  * \section appdoc_sam0_i2c_slave_bootloader_mem_org Program Memory Organization
  * This bootloader implementation consumes around 8000 bytes (approximately),
@@ -108,6 +108,8 @@
  * on External header 1 (EXT1) of SAM R21 Xplained Pro.
  * I2C master should be connected to PIN11 (PA22 - SDA) and PIN12 (PA23 - SCL)
  * on External header 1 (EXT1) of SAM D10/D11 Xplained Pro.
+ * I2C master should be connected to PIN11 (PB30 - SDA) and PIN12 (PB31 - SCL)
+ * on External header 1 (EXT1) of SAM L22 Xplained Pro.
  * SW0 will be configured as BOOT_LOAD_PIN and LED0 will be used to
  * display the bootloader status. LED0 will be ON when the device is in
  * bootloader mode.
@@ -283,7 +285,9 @@ static void start_application(void)
 	wdt_get_config_defaults(&wdt_config);
 
 	/* Set the required clock source and timeout period */
+#if (SAMD) || (SAMR21)
 	wdt_config.clock_source   = GCLK_GENERATOR_4;
+#endif
 	wdt_config.timeout_period = WDT_PERIOD_256CLK;
 
 	/* Initialize and enable the Watchdog with the user settings */
@@ -314,10 +318,17 @@ static void check_boot_mode(void)
 	uint32_t *app_check_address_ptr;
 
 	/* Check if WDT is locked */
+#if (SAMD) || (SAMR21)
 	if (!(WDT->CTRL.reg & WDT_CTRL_ALWAYSON)) {
 		/* Disable the Watchdog module */
 		WDT->CTRL.reg &= ~WDT_CTRL_ENABLE;
 	}
+#else
+	if (!(WDT->CTRLA.reg & WDT_CTRLA_ALWAYSON)) {
+		/* Disable the Watchdog module */
+		WDT->CTRLA.reg &= ~WDT_CTRLA_ENABLE;
+	}
+#endif
 
 	volatile PortGroup *boot_port = (volatile PortGroup *)
 			(&(PORT->Group[BOOT_LOAD_PIN / 32]));
@@ -333,7 +344,11 @@ static void check_boot_mode(void)
 	boot_en = (boot_port->IN.reg) & GPIO_BOOT_PIN_MASK;
 
 	/* Check the BOOT pin or the reset cause is Watchdog */
+#if (SAMD) || (SAMR21)
 	if ((boot_en) || (PM->RCAUSE.reg & PM_RCAUSE_WDT)) {
+#else
+	if ((boot_en) || (RSTC->RCAUSE.reg & RSTC_RCAUSE_WDT)) {
+#endif
 		app_check_address = APP_START_ADDRESS;
 		app_check_address_ptr = (uint32_t *) app_check_address;
 

@@ -48,7 +48,7 @@
  * \page asfdoc_sam0_tcc_dma_use_case Quick Start Guide for Using DMA with TCC
  *
  * The supported board list:
- *    - SAM D21/R21/L21/DA1/C21 Xplained Pro
+ *    - SAM D21/R21/L21/L22/DA1/C21 Xplained Pro
  *
  * In this use case, the TCC will be used to generate a PWM signal. Here
  * the pulse width varies through following values with the help of DMA
@@ -65,6 +65,7 @@
  *  <tr><td> SAMD21 Xpro  </td><td> PB30 </td><td> LED0       </td></tr>
  *  <tr><td> SAMR21 Xpro  </td><td> PA19 </td><td> LED0       </td></tr>
  *  <tr><td> SAML21 Xpro  </td><td> PB10 </td><td> LED0       </td></tr>
+ *  <tr><td> SAML22 Xpro  </td><td> PC27 </td><td> LED0       </td></tr>
  *  <tr><td> SAMDA1 Xpro  </td><td> PB30 </td><td> LED0       </td></tr>
  *  <tr><td> SAMC21 Xpro  </td><td> PA15 </td><td> LED0       </td></tr>
  * </table>
@@ -135,6 +136,10 @@
  * \snippet saml21_xplained_pro/conf_quick_start_dma.h definition_pwm
  * \snippet saml21_xplained_pro/conf_quick_start_dma.h definition_feedback
  * \snippet saml21_xplained_pro/conf_quick_start_dma.h definition_dma_compare_trigger
+ * - SAM L22 Xplained Pro.
+ * \snippet saml22_xplained_pro/conf_quick_start_dma.h definition_pwm
+ * \snippet saml22_xplained_pro/conf_quick_start_dma.h definition_feedback
+ * \snippet saml22_xplained_pro/conf_quick_start_dma.h definition_dma_compare_trigger
  * - SAM DA1 Xplained Pro.
  * \snippet samda1_xplained_pro/conf_quick_start_dma.h definition_pwm
  * \snippet samda1_xplained_pro/conf_quick_start_dma.h definition_feedback

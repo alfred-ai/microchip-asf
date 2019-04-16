@@ -64,7 +64,7 @@
  * This application demonstrates a simple example to toggle the board LED.
  *
  * This application has been tested on following boards:
- * - SAM D20/D21/R21/D11/L21 Xplained Pro
+ * - SAM D20/D21/R21/D11/L21/L22 Xplained Pro
  * - SAM D10 Xplained Mini
  *
  * \section appdoc_sam0_led_toggle_app_usage Usage

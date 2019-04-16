@@ -525,7 +525,7 @@ enum status_code spi_init(
 		pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 		gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
 	}
-#elif (SAMC21)
+#elif (SAMC21) || (SAML22)
 	if (sercom_index == 5) {
 #  ifdef ID_SERCOM5
 		pm_index     = MCLK_APBCMASK_SERCOM5_Pos;
@@ -554,7 +554,7 @@ enum status_code spi_init(
 		return STATUS_ERR_INVALID_ARG;
 #  endif
 	} else {
-		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);	
+		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);
 	}
 #else
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);

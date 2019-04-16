@@ -45,7 +45,7 @@
  * \page asfdoc_sam0_sercom_spi_master_basic_use Quick Start Guide for SERCOM SPI Master - Polled
  *
  * In this use case, the SPI on extension header 1 of the Xplained Pro board
- * will configured with the following settings:
+ * will be configured with the following settings:
  * - Master Mode enabled
  * - MSB of the data is transmitted first
  * - Transfer mode 0
@@ -84,7 +84,7 @@
  * \section asfdoc_sam0_sercom_spi_master_basic_use_workflow Workflow
  * -# Initialize system.
  *    \snippet qs_spi_master_basic.c system_init
- * -# Setup the SPI.
+ * -# Set-up the SPI.
  *    \snippet qs_spi_master_basic.c run_config
  *   -# Create configuration struct.
  *      \snippet qs_spi_master_basic.c config

@@ -47,21 +47,22 @@
 #define PORT_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam0_port_group SAM Port Driver (PORT)
+ * \defgroup asfdoc_sam0_port_group SAM Port (PORT) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
- * and management of the device's General Purpose Input/Output (GPIO) pin
- * functionality, for manual pin state reading and writing.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of the device's General
+ * Purpose Input/Output (GPIO) pin functionality, for manual pin state reading
+ * and writing.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - PORT (GPIO Management)
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -94,7 +95,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_PORT_INPUT_EVENT</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -169,7 +170,7 @@ extern "C" {
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 /** Event input control feature support for PORT group. */
 #  define FEATURE_PORT_INPUT_EVENT
 #endif
@@ -180,26 +181,26 @@ extern "C" {
  */
 
 /** Convenience definition for GPIO module group A on the device (if
- *  available). */
+ *  available) */
 #if (PORT_GROUPS > 0) || defined(__DOXYGEN__)
 #  define PORTA             PORT->Group[0]
 #endif
 
 #if (PORT_GROUPS > 1) || defined(__DOXYGEN__)
 /** Convenience definition for GPIO module group B on the device (if
- *  available). */
+ *  available) */
 #  define PORTB             PORT->Group[1]
 #endif
 
 #if (PORT_GROUPS > 2) || defined(__DOXYGEN__)
 /** Convenience definition for GPIO module group C on the device (if
- *  available). */
+ *  available) */
 #  define PORTC             PORT->Group[2]
 #endif
 
 #if (PORT_GROUPS > 3) || defined(__DOXYGEN__)
 /** Convenience definition for GPIO module group D on the device (if
- *  available). */
+ *  available) */
 #  define PORTD             PORT->Group[3]
 #endif
 
@@ -213,13 +214,13 @@ extern "C" {
  */
 enum port_pin_dir {
 	/** The pin's input buffer should be enabled, so that the pin state can
-	 *  be read. */
+	 *  be read */
 	PORT_PIN_DIR_INPUT               = SYSTEM_PINMUX_PIN_DIR_INPUT,
 	/** The pin's output buffer should be enabled, so that the pin state can
-	 *  be set. */
+	 *  be set */
 	PORT_PIN_DIR_OUTPUT              = SYSTEM_PINMUX_PIN_DIR_OUTPUT,
 	/** The pin's output and input buffers should be enabled, so that the pin
-	 *  state can be set and read back. */
+	 *  state can be set and read back */
 	PORT_PIN_DIR_OUTPUT_WTH_READBACK = SYSTEM_PINMUX_PIN_DIR_OUTPUT_WITH_READBACK,
 };
 
@@ -230,11 +231,11 @@ enum port_pin_dir {
  *  structure, to indicate the type of logic level pull the pin should use.
  */
 enum port_pin_pull {
-	/** No logical pull should be applied to the pin. */
+	/** No logical pull should be applied to the pin */
 	PORT_PIN_PULL_NONE = SYSTEM_PINMUX_PIN_PULL_NONE,
-	/** Pin should be pulled up when idle. */
+	/** Pin should be pulled up when idle */
 	PORT_PIN_PULL_UP   = SYSTEM_PINMUX_PIN_PULL_UP,
-	/** Pin should be pulled down when idle. */
+	/** Pin should be pulled down when idle */
 	PORT_PIN_PULL_DOWN = SYSTEM_PINMUX_PIN_PULL_DOWN,
 };
 
@@ -245,13 +246,13 @@ enum port_pin_pull {
  *  List of port input events action on pin.
  */
 enum port_input_event_action {
-	/** Event out to pin. */
+	/** Event out to pin */
 	PORT_INPUT_EVENT_ACTION_OUT = 0,
-	/** Set output register of pin on event. */
+	/** Set output register of pin on event */
 	PORT_INPUT_EVENT_ACTION_SET,
-	/** Clear output register pin on event. */
+	/** Clear output register pin on event */
 	PORT_INPUT_EVENT_ACTION_CLR,
-	/** Toggle output register pin on event. */
+	/** Toggle output register pin on event */
 	PORT_INPUT_EVENT_ACTION_TGL,
 };
 
@@ -261,13 +262,13 @@ enum port_input_event_action {
  *  List of port input events.
  */
 enum port_input_event{
-	/** Port input event 0. */
+	/** Port input event 0 */
 	PORT_INPUT_EVENT_0 = 0,
-	/** Port input event 1. */
+	/** Port input event 1 */
 	PORT_INPUT_EVENT_1 = 1,
-	/** Port input event 2. */
+	/** Port input event 2 */
 	PORT_INPUT_EVENT_2 = 2,
-	/** Port input event 3. */
+	/** Port input event 3 */
 	PORT_INPUT_EVENT_3 = 3,
 };
 
@@ -277,9 +278,9 @@ enum port_input_event{
  *  Configuration structure for a port input event.
  */
 struct port_input_event_config{
-	/** Port input event action. */
+	/** Port input event action */
 	enum port_input_event_action  action;
-	/** GPIO pin. */
+	/** GPIO pin */
 	uint8_t gpio_pin;
 };
 #endif
@@ -292,10 +293,10 @@ struct port_input_event_config{
  *  modified by the user application.
  */
 struct port_config {
-	/** Port buffer input/output direction. */
+	/** Port buffer input/output direction */
 	enum port_pin_dir  direction;
 
-	/** Port pull-up/pull-down for input pins. */
+	/** Port pull-up/pull-down for input pins */
 	enum port_pin_pull input_pull;
 
 	/** Enable lowest possible powerstate on the pin.
@@ -422,7 +423,7 @@ static inline void port_group_toggle_output_level(
  *  user application.
  *
  *  The default configuration is as follows:
- *   \li Input mode with internal pullup enabled
+ *   \li Input mode with internal pull-up enabled
  *
  *  \param[out] config  Configuration structure to initialize to default values
  */
@@ -745,7 +746,7 @@ static inline enum status_code port_input_event_set_config(
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_port_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_port_basic_use_case
@@ -759,27 +760,27 @@ static inline enum status_code port_input_event_set_config(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
- *		<td>06/2015</td>
- *		<td>Added input event feature and support for SAML21, SAMC21, and SAMDAx.</td>
+ *		<td>42113E</td>
+ *		<td>08/2015</td>
+ *		<td>Added input event feature and support for SAM L21/L22, SAM C21, and SAM DA1</td>
  *	</tr>
  *	<tr>
- *		<td>D</td>
+ *		<td>42113D</td>
  *		<td>12/2014</td>
- *		<td>Added support for SAMR21 and SAMD10/D11.</td>
+ *		<td>Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42113C</td>
  *		<td>01/2014</td>
- *		<td>Added support for SAMD21.</td>
+ *		<td>Added support for SAM D21</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42113B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42113A</td>
  *		<td>06/2013</td>
  *		<td>Initial release</td>
  *	</tr>

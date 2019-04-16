@@ -2099,6 +2099,9 @@
 					</group>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_count.h</name>
 				</file>
 				<file>
@@ -2240,9 +2243,6 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/sysctrl.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/sercom1.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/sercom0.h</name>
 							</file>
 							<file>
@@ -2304,6 +2304,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/usb.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/sercom1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/tc5.h</name>

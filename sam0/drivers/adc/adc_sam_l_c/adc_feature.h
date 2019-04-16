@@ -56,7 +56,7 @@ extern "C" {
 #endif
 
 /*@{*/
-#if (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 /** Output Driver Strength Selection feature support. */
 #  define FEATURE_ADC_SUPPORT_MASTER_SLAVE
 #endif
@@ -260,7 +260,8 @@ enum adc_positive_input {
 	ADC_POSITIVE_INPUT_PIN18         = ADC_INPUTCTRL_MUXPOS_AIN18,
 	/** ADC19 pin */
 	ADC_POSITIVE_INPUT_PIN19         = ADC_INPUTCTRL_MUXPOS_AIN19,
-	/** ADC20 pin */
+#if !(SAML22)
+	/** ADC20 pin. */
 	ADC_POSITIVE_INPUT_PIN20         = ADC_INPUTCTRL_MUXPOS_AIN20,
 	/** ADC21 pin */
 	ADC_POSITIVE_INPUT_PIN21         = ADC_INPUTCTRL_MUXPOS_AIN21,
@@ -268,7 +269,8 @@ enum adc_positive_input {
 	ADC_POSITIVE_INPUT_PIN22         = ADC_INPUTCTRL_MUXPOS_AIN22,
 	/** ADC23 pin */
 	ADC_POSITIVE_INPUT_PIN23         = ADC_INPUTCTRL_MUXPOS_AIN23,
-	/** Temperature reference */
+#endif
+	/** Temperature reference. */
 	ADC_POSITIVE_INPUT_TEMP          = ADC_INPUTCTRL_MUXPOS_TEMP,
 #endif
 	/** Bandgap voltage */
@@ -277,15 +279,24 @@ enum adc_positive_input {
 	ADC_POSITIVE_INPUT_SCALEDCOREVCC = ADC_INPUTCTRL_MUXPOS_SCALEDCOREVCC,
 	/** 1/4 scaled I/O supply */
 	ADC_POSITIVE_INPUT_SCALEDIOVCC   = ADC_INPUTCTRL_MUXPOS_SCALEDIOVCC,
+#if !(SAML22)
 	/** DAC input */
 	ADC_POSITIVE_INPUT_DAC           = ADC_INPUTCTRL_MUXPOS_DAC,
-#if !(SAMC20) && !(SAMC21)
+#endif
+
+#if (SAML21)
 	/** SCALEDVBAT */
 	ADC_POSITIVE_INPUT_SCALEDVBAT    = ADC_INPUTCTRL_MUXPOS_SCALEDVBAT,
 	/** OPAMP01 */
 	ADC_POSITIVE_INPUT_OPAMP01       = ADC_INPUTCTRL_MUXPOS_OPAMP01,
 	/** OPAMP02 */
 	ADC_POSITIVE_INPUT_OPAMP2        = ADC_INPUTCTRL_MUXPOS_OPAMP2,
+#endif
+#if (SAML22)
+	/** SCALEDVBAT */
+	ADC_POSITIVE_INPUT_SCALEDVBAT    = ADC_INPUTCTRL_MUXPOS_SCALEDVBAT,
+	/** CTAT. */
+	ADC_POSITIVE_INPUT_CTAT          = ADC_INPUTCTRL_MUXPOS_CTAT,
 #endif
 };
 
@@ -469,7 +480,7 @@ struct adc_correction_config {
 	 * This value defines how the ADC conversion result is compensated for gain
 	 * error before written to the result register. This is a fractional value,
 	 * 1-bit integer plus an 11-bit fraction, therefore
-	 * 1/2 ≤ gain_correction < 2. Valid \c gain_correction values ranges from
+	 * 1/2 <= gain_correction < 2. Valid \c gain_correction values ranges from
 	 * \c 0b010000000000 to \c 0b111111111111.
 	 */
 	uint16_t gain_correction;
@@ -698,7 +709,7 @@ static inline void adc_get_sequence_status(
  * \param[in] master_inst  Pointer to the master ADC software instance struct
  * \param[in] slave_inst   Pointer to the slave ADC software instance struct
  * \param[in] dualsel      Dual mode trigger selection
- *                         
+ *
  */
 static inline void adc_set_master_slave_mode(
 		struct adc_module *const master_inst,
@@ -708,10 +719,10 @@ static inline void adc_set_master_slave_mode(
 	/* Sanity check arguments */
 	Assert(master_inst);
 	Assert(slave_inst);
-	
+
 	slave_inst->hw->CTRLA.reg |= ADC_CTRLA_SLAVEEN;
 	master_inst->hw->CTRLC.reg |= dualsel;
-			
+
 };
 #endif
 /** @} */

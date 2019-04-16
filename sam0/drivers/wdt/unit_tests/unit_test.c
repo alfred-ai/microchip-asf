@@ -73,6 +73,7 @@
  *  - SAM D21 Xplained Pro board
  *  - SAM R21 Xplained Pro board
  *  - SAM L21 Xplained Pro board
+ *  - SAM L22 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
  *  - SAM C21 Xplained Pro board
  *
@@ -204,7 +205,7 @@ static void cdc_uart_init(void)
 int main(void)
 {
 	/* Check whether reset cause was Watchdog */
-#if (SAML21) || (SAMC21)
+#if (SAML21) || (SAMC21) || (SAML22)
 	wdr_flag = (system_get_reset_cause() & RSTC_RCAUSE_WDT);
 #else
 	wdr_flag = (system_get_reset_cause() & PM_RCAUSE_WDT);
@@ -221,7 +222,7 @@ int main(void)
 		config_wdt.enable = false;
 	}
 	/* Set the desired configuration */
-#if !((SAML21) || (SAMC21))
+#if !((SAML21) || (SAMC21) || (SAML22))
 	config_wdt.clock_source         = CONF_WDT_GCLK_GEN;
 #endif
 	config_wdt.timeout_period       = CONF_WDT_TIMEOUT_PERIOD;

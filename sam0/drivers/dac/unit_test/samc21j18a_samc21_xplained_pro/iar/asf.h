@@ -82,6 +82,7 @@
 
 // From module: RTC - Real Time Counter in Count Mode (Polled APIs)
 #include <rtc_count.h>
+#include <rtc_tamper.h>
 
 // From module: SERCOM Callback API
 #include <sercom.h>

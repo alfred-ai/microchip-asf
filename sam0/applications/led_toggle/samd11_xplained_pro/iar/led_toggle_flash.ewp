@@ -300,6 +300,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
@@ -309,7 +310,6 @@
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/include</state>
@@ -569,6 +569,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
@@ -578,7 +579,6 @@
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/include</state>
@@ -1263,6 +1263,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
@@ -1272,7 +1273,6 @@
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/include</state>
@@ -1532,6 +1532,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
@@ -1541,7 +1542,6 @@
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd11/include</state>
@@ -1931,22 +1931,37 @@
 		<group>
 			<name>drivers</name>
 			<group>
+				<name>port</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/port/port.c</name>
+				</file>
+				<group>
+					<name>quick_start</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../drivers/port/quick_start/qs_port_basic.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/port/port.h</name>
+				</file>
+			</group>
+			<group>
 				<name>system</name>
 				<group>
 					<name>clock</name>
 					<group>
-						<name>clock_samd10_d11</name>
+						<name>clock_samd09_d10_d11</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11/clock.c</name>
+							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11/clock.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11/gclk.c</name>
+							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11/gclk.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11/clock_config_check.h</name>
+							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11/clock_config_check.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd10_d11/clock_feature.h</name>
+							<name>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd09_d10_d11/clock_feature.h</name>
 						</file>
 					</group>
 					<file>
@@ -2009,21 +2024,6 @@
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../../drivers/system/system.h</name>
-				</file>
-			</group>
-			<group>
-				<name>port</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../drivers/port/port.c</name>
-				</file>
-				<group>
-					<name>quick_start</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../drivers/port/quick_start/qs_port_basic.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../drivers/port/port.h</name>
 				</file>
 			</group>
 		</group>
@@ -2248,10 +2248,10 @@
 					<name>$PROJ_DIR$/../../../../utils/preprocessor/mrecursion.h</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../utils/preprocessor/tpaste.h</name>
+					<name>$PROJ_DIR$/../../../../utils/preprocessor/preprocessor.h</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../utils/preprocessor/preprocessor.h</name>
+					<name>$PROJ_DIR$/../../../../utils/preprocessor/tpaste.h</name>
 				</file>
 			</group>
 			<group>

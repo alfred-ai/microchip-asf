@@ -48,5 +48,6 @@
 #define CONF_DMA_H_INCLUDED
 
 #  define CONF_MAX_USED_CHANNEL_NUM     1
+#  define CONF_I2C_DMA_TRIGGER          SERCOM2_DMAC_ID_RX
 
 #endif

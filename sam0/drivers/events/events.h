@@ -51,12 +51,12 @@ extern "C" {
 #endif
 
 /**
- * \defgroup asfdoc_sam0_events_group SAM Event System (EVENTS) Driver 
+ * \defgroup asfdoc_sam0_events_group SAM Event System (EVENTS) Driver
  *
- * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides 
- * an interface for the configuration and management of the device's peripheral 
- * event resources and users within the device, including enabling and disabling 
- * of peripheral source selection and synchronization of clock domains between 
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of the device's peripheral
+ * event resources and users within the device, including enabling and disabling
+ * of peripheral source selection and synchronization of clock domains between
  * various modules. The following API modes is covered by this manual:
  *  - Polled API
  * \if EVENTS_INTERRUPT_HOOK_MODE
@@ -69,9 +69,9 @@ extern "C" {
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -362,7 +362,7 @@ struct events_config {
 	uint8_t                    generator;
 	/** Clock source for the event channel */
 	uint8_t                    clock_source;
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	/** Run in standby mode for the channel */
 	bool                       run_in_standby;
 	/** Run On Demand */
@@ -385,7 +385,7 @@ struct events_config {
  *
  * @{
  */
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 #  define _EVENTS_START_OFFSET_BUSY_BITS           16
 #  define _EVENTS_START_OFFSET_USER_READY_BIT      0
 #  define _EVENTS_START_OFFSET_DETECTION_BIT       16
@@ -682,9 +682,14 @@ uint32_t _events_find_bit_position(uint8_t channel, uint8_t start_offset);
  *      <th>Comments</td>
  *  </tr>
  *  <tr>
+ *      <td>42108G</td>
+ *      <td>08/2015</td>
+ *      <td>Added support for SAM L22</td>
+ *  </tr>
+ *  <tr>
  *      <td>42108F</td>
  *      <td>08/2015</td>
- *      <td>Added support for SAM L21, SAM DAx and SAM C20/C21</td>
+ *      <td>Added support for SAM L21, SAM DA1 and SAM C20/C21</td>
  *  </tr>
  *  <tr>
  *      <td>42108E</td>

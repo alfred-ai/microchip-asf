@@ -84,6 +84,7 @@
 // From module: RTC - Real Time Counter in Count Mode (Callback APIs)
 #include <rtc_count.h>
 #include <rtc_count_interrupt.h>
+#include <rtc_tamper.h>
 
 // From module: SERCOM Callback API
 #include <sercom.h>
@@ -116,10 +117,10 @@
 // From module: SYSTEM - Interrupt Driver
 #include <system_interrupt.h>
 
-// From module: SYSTEM - Power Management for SAM D20/D21/R21/D10/D11/DA0/DA1
+// From module: SYSTEM - Power Management for SAM D20/D21/R21/D09/D10/D11/DA0/DA1
 #include <power.h>
 
-// From module: SYSTEM - Reset Management for SAM D20/D21/R21/D10/D11/DA0/DA1
+// From module: SYSTEM - Reset Management for SAM D20/D21/R21/D09/D10/D11/DA0/DA1
 #include <reset.h>
 
 // From module: Standard serial I/O (stdio)

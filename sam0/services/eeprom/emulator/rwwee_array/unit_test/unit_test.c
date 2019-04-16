@@ -70,6 +70,7 @@
  *
  * The following kit is required for carrying out the test:
  *      - SAM L21 Xplained Pro board
+ *      - SAM L22 Xplained Pro board
  *      - SAM C21 Xplained Pro board
  *      - SAM DA1 Xplained Pro board
  *

@@ -2213,6 +2213,9 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_count.h</name>
 				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
+				</file>
 			</group>
 			<group>
 				<name>sercom</name>

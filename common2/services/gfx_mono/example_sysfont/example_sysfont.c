@@ -65,6 +65,7 @@
  * - SAM R21 Xplained Pro
  * - SAM D11 Xplained Pro
  * - SAM L21 Xplained Pro
+ * - SAM L22 Xplained Pro
  *
  * \section asfdoc_common2_sysfont_example_description Description of the example application
  * The example application will upon power up display several text strings on the

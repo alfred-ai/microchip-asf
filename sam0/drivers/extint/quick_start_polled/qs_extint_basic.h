@@ -45,12 +45,13 @@
  * \page asfdoc_sam0_extint_basic_use_case Quick Start Guide for EXTINT - Basic
  *
  * The supported board list:
- *    - SAMD20 Xplained Pro
- *    - SAMD21 Xplained Pro
- *    - SAMR21 Xplained Pro
- *    - SAML21 Xplained Pro
- *    - SAMDA1 Xplained Pro
- *    - SAMC21 Xplained Pro
+ *    - SAM D20 Xplained Pro
+ *    - SAM D21 Xplained Pro
+ *    - SAM R21 Xplained Pro
+ *    - SAM L21 Xplained Pro
+ *    - SAM L22 Xplained Pro
+ *    - SAM DA1 Xplained Pro
+ *    - SAM C21 Xplained Pro
  *
  * In this use case, the EXTINT module is configured for:
  *  - External interrupt channel connected to the board LED is used

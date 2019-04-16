@@ -70,6 +70,7 @@
  * - SAM D21 Xplained Pro
  * - SAM R21 Xplained Pro
  * - SAM L21 Xplained Pro
+ * - SAM L22 Xplained Pro
  *
  * \section asfdoc_common2_spinctrl_example_description Description of the example application
  * This example application will initialize string spinner and two integer

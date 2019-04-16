@@ -66,7 +66,7 @@ extern "C" {
 enum extint_callback_type
 {
 	/** Callback type for when an external interrupt detects the configured
-	 *  channel criteria.(i.e. edge or level detection)
+	 *  channel criteria (i.e. edge or level detection)
 	 */
 	EXTINT_CALLBACK_TYPE_DETECT,
 };

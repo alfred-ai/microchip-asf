@@ -64,7 +64,7 @@
  * and DataFlash (an AT45DBX needs to be connected) on SAM3X-EK/SAM3N-EK/
  * SAM3S-EK/SAM3U-EK/SAM4E-EK/SAM4S-EK/SAM4S-Xplained/ATxmega128A1-Xplained/
  * ATxmegaA3BU-Xplained/SAM4N-Xplained-Pro/SAM4CMP16C-SAM4CMP-DB/
- * SAM4CMS16C-SAM4CMS-DB. The file system is created in the
+ * SAM4CMS16C-SAM4CMS-DB/SAMV71-Xplained-Ultra. The file system is created in the
  * Micro SD/MMC on IO1 extension board connected to SAM D/R/L Xplained Pro.
  *
  *  \section Description
@@ -377,11 +377,20 @@ int main(void)
 	usart_enable(&cdc_uart_module);
 #else
 	const usart_serial_options_t usart_serial_options = {
+#  if !SAM
 		.baudrate   = CONF_TEST_BAUDRATE,
 		.paritytype = CONF_TEST_PARITY,
-#  if !SAM
 		.charlength = CONF_TEST_CHARLENGTH,
 		.stopbits   = CONF_TEST_STOPBITS,
+#else
+		.baudrate = CONF_TEST_BAUDRATE,
+#ifdef CONF_TEST_CHARLENGTH
+		.charlength = CONF_TEST_CHARLENGTH,
+#endif
+		.paritytype = CONF_TEST_PARITY,
+#ifdef CONF_TEST_STOPBITS
+		.stopbits = CONF_TEST_STOPBITS,
+#endif
 #  endif
 	};
 	/* Initialize the system */

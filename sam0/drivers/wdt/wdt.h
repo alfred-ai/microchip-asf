@@ -65,9 +65,9 @@
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -162,7 +162,7 @@
  * }
  * \enddot
  *
- * \note SAM L21's Watchdog Counter is \a not provided by GCLK, but it uses an
+ * \note Watchdog Counter of SAM L21/L22 is \a not provided by GCLK, but it uses an
  *       internal 1KHz OSCULP32K output clock.
  *
  * \section asfdoc_sam0_wdt_special_considerations Special Considerations
@@ -252,8 +252,8 @@ struct wdt_conf {
 	bool always_on;
 	/** Enable/Disable the Watchdog Timer. */
 	bool enable;
-#if !(SAML21) && !(SAMC20) && !(SAMC21)
-	/** GCLK generator used to clock the peripheral except SAM L21.*/
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21)
+	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20.*/
 	enum gclk_generator clock_source;
 #endif
 	/** Number of Watchdog timer clock ticks until the Watchdog expires. */
@@ -287,7 +287,7 @@ static inline bool wdt_is_syncing(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	if (WDT_module->SYNCBUSY.reg) {
 #else
 	if (WDT_module->STATUS.reg & WDT_STATUS_SYNCBUSY) {
@@ -325,7 +325,7 @@ static inline void wdt_get_config_defaults(
 	/* Default configuration values */
 	config->always_on            = false;
 	config->enable               = true;
-#if !(SAML21) && !(SAMC20) && !(SAMC21)
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21)
 	config->clock_source         = GCLK_GENERATOR_4;
 #endif
 	config->timeout_period       = WDT_PERIOD_16384CLK;
@@ -347,7 +347,7 @@ static inline bool wdt_is_locked(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 	return (WDT_module->CTRLA.reg & WDT_CTRLA_ALWAYSON);
 #else
 	return (WDT_module->CTRL.reg & WDT_CTRL_ALWAYSON);
@@ -471,29 +471,24 @@ void wdt_reset_count(void);
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>F</td>
- *		<td>01/2015</td>
- *		<td>Added SAMC21 support.</td>
- *	</tr>
- *	<tr>
  *		<td>E</td>
- *		<td>04/2015</td>
- *		<td>Added SAML21 and SAMDAx support.</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, and SAM C20/C2</td>
  *	</tr>
  *	<tr>
  *		<td>D</td>
  *		<td>12/2014</td>
- *		<td>Added SAMR21 and SAMD10/D11 support.</td>
+ *		<td>Added SAMR21 and SAMD10/D11 support</td>
  *	</tr>
  *	<tr>
  *		<td>C</td>
  *		<td>01/2014</td>
- *		<td>Add SAMD21 support.</td>
+ *		<td>Add SAMD21 support</td>
  *	</tr>
  *	<tr>
  *		<td>B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
  *		<td>A</td>

@@ -307,13 +307,16 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../clock</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/supc</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -572,13 +575,16 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../clock</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/supc</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1262,13 +1268,16 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../clock</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/supc</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1527,13 +1536,16 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../clock</state>
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/supc</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../gpio</state>
 					<state>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1915,6 +1927,21 @@
 		<group>
 			<name>drivers</name>
 			<group>
+				<name>pio</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio_handler.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio_handler.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/pio/pio.h</name>
+				</file>
+			</group>
+			<group>
 				<name>pmc</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../sam/drivers/pmc/sleep.c</name>
@@ -1936,6 +1963,15 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../sam/drivers/supc/supc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/mpu/mpu.h</name>
 				</file>
 			</group>
 			<group>
@@ -1999,6 +2035,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/component/uart.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/component/rtt.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/component/acc.h</name>
@@ -2088,9 +2127,6 @@
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/component/chipid.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/component/rtt.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/component/aes.h</name>
 							</file>
 							<file>
@@ -2113,9 +2149,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/instance/gmac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/instance/rtc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/instance/tc1.h</name>
@@ -2239,6 +2272,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/instance/twihs1.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/instance/rtc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/samv71/include/instance/uart4.h</name>
@@ -2458,6 +2494,18 @@
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../../delay/delay.h</name>
+				</file>
+			</group>
+			<group>
+				<name>gpio</name>
+				<group>
+					<name>sam_gpio</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../gpio/sam_gpio/sam_gpio.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../gpio/gpio.h</name>
 				</file>
 			</group>
 			<group>

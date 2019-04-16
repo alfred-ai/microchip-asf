@@ -59,6 +59,7 @@ CSRCS = \
        common/utils/stdio/write.c                         \
        common/utils/unit_test/suite.c                     \
        sam/boards/samv71_xplained_ultra/init.c            \
+       sam/drivers/mpu/mpu.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -78,6 +79,7 @@ ASSRCS =
 INC_PATH = \
        common/boards                                      \
        common/services/clock                              \
+       common/services/gpio                               \
        common/services/ioport                             \
        common/services/serial                             \
        common/services/serial/sam_uart                    \
@@ -85,6 +87,7 @@ INC_PATH = \
        common/utils/stdio/stdio_serial                    \
        sam/boards                                         \
        sam/boards/samv71_xplained_ultra                   \
+       sam/drivers/mpu                                    \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/uart                                   \

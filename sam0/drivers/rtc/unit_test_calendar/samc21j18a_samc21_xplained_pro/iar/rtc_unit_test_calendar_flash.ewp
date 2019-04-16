@@ -2102,6 +2102,9 @@
 					</group>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_calendar_interrupt.h</name>
 				</file>
 				<file>

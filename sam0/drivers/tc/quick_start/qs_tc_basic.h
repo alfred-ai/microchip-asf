@@ -85,6 +85,8 @@
  *   \snippet quick_start/samd11_xplained_pro/conf_quick_start.h definition_pwm
  * - SAM L21 Xplained Pro.
  *   \snippet quick_start/saml21_xplained_pro/conf_quick_start.h definition_pwm
+ * - SAM L22 Xplained Pro.
+ *   \snippet quick_start/saml22_xplained_pro/conf_quick_start.h definition_pwm
  * - SAM DA1 Xplained Pro.
  *   \snippet quick_start/samda1_xplained_pro/conf_quick_start.h definition_pwm
  * - SAM C21 Xplained Pro.

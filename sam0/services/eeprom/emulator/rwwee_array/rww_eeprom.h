@@ -58,10 +58,10 @@
  *  - NVM (Non-Volatile Memory Controller)
  *
  * The following devices can use this module:
- *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM D21
  *  - Atmel | SMART SAM C20/C21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM DA1
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_rww_eeprom_prerequisites
@@ -543,6 +543,11 @@ enum status_code rww_eeprom_emulator_read_buffer(
  *		<th>Doc. Rev.</th>
  *		<th>Date</th>
  *		<th>Comments</th>
+ *	</tr>
+ *	<tr>
+ *		<td>42447B</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L22, SAM DA1 and SAM C20/C21</td>
  *	</tr>
  *	<tr>
  *		<td>42447A</td>

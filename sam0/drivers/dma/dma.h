@@ -66,9 +66,9 @@ extern "C" {
  * The following devices can use this module:
  *  - Atmel | SMART SAM D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -106,15 +106,15 @@ extern "C" {
  *      <th>Dma channel number</th>
  *    </tr>
  *    <tr>
- *      <td>SAMD21/R21/C20/C21</td>
+ *      <td>SAM D21/R21/C20/C21</td>
  *      <td>12</td>
  *    </tr>
  *    <tr>
- *      <td>SAMD10/D11</td>
+ *      <td>SAM D09/D10/D11</td>
  *      <td>6</td>
  *    </tr>
  *    <tr>
- *      <td>SAML21</td>
+ *      <td>SAM L21</td>
  *      <td>16</td>
  *    </tr>
  * </table>
@@ -189,7 +189,7 @@ extern "C" {
  *  </tr>
  *  <tr>
  *    <td>FEATURE_DMA_CHANNEL_STANDBY</td>
- *    <td>SAML21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -319,7 +319,7 @@ extern "C" {
 #include <compiler.h>
 #include "conf_dma.h"
 
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 #define FEATURE_DMA_CHANNEL_STANDBY
 #endif
 
@@ -855,13 +855,13 @@ enum status_code dma_add_descriptor(struct dma_resource *resource,
  *    </tr>
  *    <tr>
  *        <td>C</td>
- *        <td>06/2015</td>
- *        <td>Added SAML21, SAMC21, and SAMDAx support</td>
+ *        <td>08/2015</td>
+ *        <td>Added SAM L21/L22, SAM C21, and SAM DA1 support</td>
  *    </tr>
  *    <tr>
  *        <td>B</td>
  *        <td>12/2014</td>
- *        <td>Added SAMR21 and SAMD10/D11 support</td>
+ *        <td>Added SAM R21 and SAM D10/D11 support</td>
  *    </tr>
  *    <tr>
  *        <td>A</td>

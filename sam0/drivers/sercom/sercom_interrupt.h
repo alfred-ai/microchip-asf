@@ -53,7 +53,7 @@
 extern "C" {
 #endif
 
-/* Look-up table for device instances. */
+/* Look-up table for device instances */
 extern void *_sercom_instances[SERCOM_INST_NUM];
 
 typedef void (*sercom_handler_t)(uint8_t instance);

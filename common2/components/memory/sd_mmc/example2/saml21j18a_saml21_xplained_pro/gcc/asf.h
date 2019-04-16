@@ -82,6 +82,7 @@
 
 // From module: RTC - Real Time Counter in Calendar Mode (Polled APIs)
 #include <rtc_calendar.h>
+#include <rtc_tamper.h>
 
 // From module: SD/MMC Memory Control Access - Enable
 #include <sd_mmc_mem.h>

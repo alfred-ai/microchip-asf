@@ -60,6 +60,9 @@ CSRCS = \
        sam/boards/samv71_xplained_ultra/init.c            \
        sam/drivers/dacc/dacc.c                            \
        sam/drivers/dacc/sinewave_example/sinewave_example.c \
+       sam/drivers/mpu/mpu.c                              \
+       sam/drivers/pio/pio.c                              \
+       sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
        sam/drivers/pmc/sleep.c                            \
        sam/drivers/uart/uart.c                            \
@@ -75,6 +78,7 @@ ASSRCS =
 INC_PATH = \
        common/boards                                      \
        common/services/clock                              \
+       common/services/gpio                               \
        common/services/ioport                             \
        common/services/serial                             \
        common/services/serial/sam_uart                    \
@@ -84,6 +88,8 @@ INC_PATH = \
        sam/boards/samv71_xplained_ultra                   \
        sam/drivers/dacc                                   \
        sam/drivers/dacc/sinewave_example/samv71q21_samv71_xplained_ultra \
+       sam/drivers/mpu                                    \
+       sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/uart                                   \
        sam/drivers/usart                                  \

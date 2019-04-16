@@ -51,20 +51,21 @@ extern "C" {
 #endif
 
 /**
- * \defgroup asfdoc_sam0_system_interrupt_group SAM System Interrupt Driver (SYSTEM INTERRUPT)
+ * \defgroup asfdoc_sam0_system_interrupt_group SAM System Interrupt (SYSTEM INTERRUPT) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
- * and management of internal software and hardware interrupts/exceptions.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of internal software and
+ * hardware interrupts/exceptions.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - NVIC (Nested Vector Interrupt Controller)
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -143,13 +144,13 @@ extern "C" {
  * device.
  */
 enum system_interrupt_priority_level {
-	/** Priority level 0, the highest possible interrupt priority. */
+	/** Priority level 0, the highest possible interrupt priority */
 	SYSTEM_INTERRUPT_PRIORITY_LEVEL_0  = 0,
-	/** Priority level 1. */
+	/** Priority level 1 */
 	SYSTEM_INTERRUPT_PRIORITY_LEVEL_1  = 1,
-	/** Priority level 2. */
+	/** Priority level 2 */
 	SYSTEM_INTERRUPT_PRIORITY_LEVEL_2  = 2,
-	/** Priority level 3, the lowest possible interrupt priority. */
+	/** Priority level 3, the lowest possible interrupt priority */
 	SYSTEM_INTERRUPT_PRIORITY_LEVEL_3  = 3,
 };
 
@@ -379,7 +380,7 @@ enum system_interrupt_priority_level system_interrupt_get_priority(
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_system_interrupt_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_system_interrupt_critsec_use_case
@@ -394,27 +395,27 @@ enum system_interrupt_priority_level system_interrupt_get_priority(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
- *		<td>06/2015</td>
- *		<td>Add support for SAML21, SAMDAx, and SAMC20/C21.</td>
+ *		<td>42122E</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, and SAM C20/C21</td>
  *	</tr>
  *	<tr>
- *		<td>D</td>
+ *		<td>42122D</td>
  *		<td>12/2014</td>
- *		<td>Add support for SAMR21 and SAMD10/D11.</td>
+ *		<td>Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42122C</td>
  *		<td>01/2014</td>
- *		<td>Add support for SAMD21.</td>
+ *		<td>Added support for SAM D21</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42122B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42122A</td>
  *		<td>06/2013</td>
  *		<td>Initial release</td>
  *	</tr>

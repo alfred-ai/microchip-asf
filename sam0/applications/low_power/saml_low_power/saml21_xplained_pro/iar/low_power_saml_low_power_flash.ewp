@@ -2281,6 +2281,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_count.h</name>
 				</file>
 			</group>

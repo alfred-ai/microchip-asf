@@ -305,9 +305,11 @@
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../efc</state>
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../services/flash_efc</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -579,9 +581,11 @@
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../efc</state>
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../services/flash_efc</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -1278,9 +1282,11 @@
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../efc</state>
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../services/flash_efc</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -1552,9 +1558,11 @@
 					<state>$PROJ_DIR$/../../../../pio</state>
 					<state>$PROJ_DIR$/../../../../efc</state>
 					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../services/flash_efc</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
@@ -1999,15 +2007,6 @@
 				</file>
 			</group>
 			<group>
-				<name>uart</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../uart/uart.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../uart/uart.h</name>
-				</file>
-			</group>
-			<group>
 				<name>pmc</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../pmc/sleep.c</name>
@@ -2023,27 +2022,12 @@
 				</file>
 			</group>
 			<group>
-				<name>pio</name>
+				<name>mpu</name>
 				<file>
-					<name>$PROJ_DIR$/../../../../pio/pio.c</name>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.c</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../pio/pio_handler.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../pio/pio_handler.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../pio/pio.h</name>
-				</file>
-			</group>
-			<group>
-				<name>usart</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../usart/usart.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../usart/usart.h</name>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.h</name>
 				</file>
 			</group>
 			<group>
@@ -2053,6 +2037,39 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../efc/efc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>pio</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../pio/pio_handler.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../pio/pio.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../pio/pio_handler.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../pio/pio.h</name>
+				</file>
+			</group>
+			<group>
+				<name>uart</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../uart/uart.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../uart/uart.h</name>
+				</file>
+			</group>
+			<group>
+				<name>usart</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../usart/usart.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../usart/usart.h</name>
 				</file>
 			</group>
 		</group>
@@ -2471,21 +2488,6 @@
 			</group>
 		</group>
 		<group>
-			<name>boards</name>
-			<group>
-				<name>samv71_xplained_ultra</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra/init.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra/led.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra/samv71_xplained_ultra.h</name>
-				</file>
-			</group>
-		</group>
-		<group>
 			<name>components</name>
 			<group>
 				<name>ethernet_phy</name>
@@ -2500,6 +2502,21 @@
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../../../components/ethernet_phy/documentation.h</name>
+				</file>
+			</group>
+		</group>
+		<group>
+			<name>boards</name>
+			<group>
+				<name>samv71_xplained_ultra</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra/init.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra/led.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra/samv71_xplained_ultra.h</name>
 				</file>
 			</group>
 		</group>
@@ -2524,21 +2541,21 @@
 				</group>
 			</group>
 			<group>
-				<name>interrupt</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../common/utils/interrupt/interrupt_sam_nvic.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../common/utils/interrupt/interrupt_sam_nvic.h</name>
-				</file>
-			</group>
-			<group>
 				<name>unit_test</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../common/utils/unit_test/suite.c</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../common/utils/unit_test/suite.h</name>
+				</file>
+			</group>
+			<group>
+				<name>interrupt</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../common/utils/interrupt/interrupt_sam_nvic.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../common/utils/interrupt/interrupt_sam_nvic.h</name>
 				</file>
 			</group>
 			<file>
@@ -2596,6 +2613,18 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../common/services/clock/pll.h</name>
+				</file>
+			</group>
+			<group>
+				<name>gpio</name>
+				<group>
+					<name>sam_gpio</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../common/services/gpio/sam_gpio/sam_gpio.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../common/services/gpio/gpio.h</name>
 				</file>
 			</group>
 			<group>

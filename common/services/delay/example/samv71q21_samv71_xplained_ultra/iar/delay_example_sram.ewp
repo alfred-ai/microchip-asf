@@ -310,6 +310,7 @@
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../gpio</state>
@@ -574,6 +575,7 @@
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../gpio</state>
@@ -1263,6 +1265,7 @@
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../gpio</state>
@@ -1527,6 +1530,7 @@
 					<state>$PROJ_DIR$/../../../../ioport</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pmc</state>
 					<state>$PROJ_DIR$/../../../../../../sam/drivers/pio</state>
+					<state>$PROJ_DIR$/../../../../../../sam/drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../gpio</state>
@@ -1923,6 +1927,15 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../sam/drivers/pmc/pmc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../sam/drivers/mpu/mpu.h</name>
 				</file>
 			</group>
 			<group>

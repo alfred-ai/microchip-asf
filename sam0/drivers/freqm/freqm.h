@@ -63,6 +63,7 @@
  *  - FREQM (Frequency Meter)
  *
  * The following devices can use this module:
+ *  - Atmel | SMART SAM L22
  *  - Atmel | SMART SAM C20
  *  - Atmel | SMART SAM C21
  *
@@ -94,7 +95,6 @@
  * is done. It can be used to wake up the device from sleep modes.
  *
  * This driver provides an interface for the FREQM functions on the device.
- *
  *
  * \section asfdoc_sam0_freqm_special_considerations Special Considerations
  *
@@ -304,6 +304,7 @@ static inline void freqm_disable(
 		/* Wait for all hardware modules to complete synchronization */
 	}
 }
+
 /** @} */
 
 /**

@@ -71,6 +71,7 @@
  * The following kit is required for carrying out the test:
  *  - SAM D21 Xplained Pro board
  *  - SAM L21 Xplained Pro board
+ *  - SAM L22 Xplained Pro board
  *  - SAM R21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
  *  - SAM C21 Xplained Pro board
@@ -117,7 +118,7 @@ struct rtc_module rtc_inst;
 volatile bool interrupt_flag = false;
 
 
-void rtc_count_match_callback(void)
+static void rtc_count_match_callback(void)
 {
 	/* Do something on RTC compare1 match here */
 	interrupt_flag = true;

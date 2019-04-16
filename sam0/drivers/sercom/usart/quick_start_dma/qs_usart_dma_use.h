@@ -48,14 +48,15 @@
  * \page asfdoc_sam0_sercom_usart_dma_use_case Quick Start Guide for Using DMA with SERCOM USART
  *
  * The supported board list:
- *    - SAMD21 Xplained Pro
- *    - SAMR21 Xplained Pro
- *    - SAMD11 Xplained Pro
- *    - SAMDA1 Xplained Pro
- *    - SAML21 Xplained Pro
- *    - SAMC21 Xplained Pro
+ *    - SAM D21 Xplained Pro
+ *    - SAM R21 Xplained Pro
+ *    - SAM D11 Xplained Pro
+ *    - SAM DA1 Xplained Pro
+ *    - SAM L21 Xplained Pro
+ *    - SAM L22 Xplained Pro
+ *    - SAM C21 Xplained Pro
  *
- * This quick start will receiving eight bytes of data from PC terminal and transmit back the string
+ * This quick start will receive eight bytes of data from the PC terminal and transmit back the string
  * to the terminal through DMA. In this use case the USART will be configured with the following
  * settings:
  * - Asynchronous mode

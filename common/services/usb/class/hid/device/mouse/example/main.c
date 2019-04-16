@@ -56,7 +56,7 @@ int main(void)
 {
 	irq_initialize_vectors();
 	cpu_irq_enable();
-#if !SAMD21 && !SAMR21 && !SAMD11 && !SAML21 && !SAMDA1
+#if !SAM0
 	sysclk_init();
 	board_init();
 #else

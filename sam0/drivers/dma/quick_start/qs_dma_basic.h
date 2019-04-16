@@ -52,6 +52,7 @@
  *    - SAMR21 Xplained Pro
  *    - SAMD11 Xplained Pro
  *    - SAML21 Xplained Pro
+ *    - SAML22 Xplained Pro
  *    - SAMDA1 Xplained Pro
  *
  * In this use case, the DMAC is configured for:

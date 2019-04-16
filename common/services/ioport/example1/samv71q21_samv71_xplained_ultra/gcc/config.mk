@@ -57,6 +57,9 @@ CSRCS = \
        common/services/ioport/example1/ioport_example1.c  \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        sam/boards/samv71_xplained_ultra/init.c            \
+       sam/drivers/mpu/mpu.c                              \
+       sam/drivers/pio/pio.c                              \
+       sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
        sam/drivers/pmc/sleep.c                            \
        sam/utils/cmsis/samv71/source/templates/gcc/startup_samv71.c \
@@ -71,12 +74,15 @@ INC_PATH = \
        common/boards                                      \
        common/services/clock                              \
        common/services/delay                              \
+       common/services/gpio                               \
        common/services/ioport                             \
        common/services/ioport/example1                    \
        common/services/ioport/example1/samv71q21_samv71_xplained_ultra \
        common/utils                                       \
        sam/boards                                         \
        sam/boards/samv71_xplained_ultra                   \
+       sam/drivers/mpu                                    \
+       sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/utils                                          \
        sam/utils/cmsis/samv71/include                     \

@@ -73,7 +73,7 @@
  *          struct to ensure that all values are initialized to known default
  *          settings.
  *
- * -# Adjust the configuration struct to request an input pin with pullup
+ * -# Adjust the configuration struct to request an input pin with pull-up
  *    connected to the GPIO peripheral.
  *  \snippet qs_pinmux_basic.c pinmux_update_config_values
  * -# Configure GPIO10 with the initialized pin configuration struct, to enable

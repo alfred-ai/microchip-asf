@@ -90,6 +90,7 @@
  * - samr21g18a_samr21_xplained_pro
  * - 4cmp16c-sam4cmp-db
  * - 4cms16c-sam4cms-db
+ * - samv71q21_samv71_xplained_ultra
  *
  * \section connection_note Connection
  * \subsection SAM4N Xplained Pro extra connection
@@ -274,11 +275,20 @@ int main(void)
 	usart_enable(&cdc_uart_module);
 #else
 	const usart_serial_options_t usart_serial_options = {
-		.baudrate   = CONF_TEST_BAUDRATE,
-		.paritytype = CONF_TEST_PARITY,
 #  if !SAM
-		.charlength = CONF_TEST_CHARLENGTH,
-		.stopbits   = CONF_TEST_STOPBITS,
+	.baudrate   = CONF_TEST_BAUDRATE,
+	.paritytype = CONF_TEST_PARITY,
+	.charlength = CONF_TEST_CHARLENGTH,
+	.stopbits   = CONF_TEST_STOPBITS,
+#else
+	.baudrate = CONF_TEST_BAUDRATE,
+#ifdef CONF_TEST_CHARLENGTH
+	.charlength = CONF_TEST_CHARLENGTH,
+#endif
+	.paritytype = CONF_TEST_PARITY,
+#ifdef CONF_TEST_STOPBITS
+	.stopbits = CONF_TEST_STOPBITS,
+#endif
 #  endif
 	};
 

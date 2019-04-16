@@ -215,7 +215,7 @@ static enum status_code _rtc_count_set_config(
 #endif
 				    | config->prescaler;
 #endif
-#if (SAMC20) || (SAMC21) 
+#if (SAMC20) || (SAMC21) || (SAML22)
 	rtc_module->MODE0.CTRLA.reg = RTC_MODE0_CTRLA_MODE(0) | config->prescaler
 			| (config->enable_read_sync << RTC_MODE0_CTRLA_COUNTSYNC_Pos);
 #endif
@@ -796,3 +796,151 @@ enum status_code rtc_count_frequency_correction(
 	return STATUS_OK;
 }
 
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+/**
+ * \brief Applies the given configuration.
+ *
+ * Sets the configurations given from the configuration structure to the
+ * RTC tamper and it should be called before RTC module enable. 
+ *
+ * \param[in,out]  module  Pointer to the software instance struct
+ * \param[in] config  Pointer to the configuration structure
+ *
+ * \return Status of the configuration procedure.
+ * \retval STATUS_OK               RTC configurations was set successfully
+ * \note If tamper input configured as active layer protection, RTC prescaler
+ *       output automatically enabled in the function.
+ */
+enum status_code rtc_tamper_set_config ( 
+		struct rtc_module *const module,
+		struct rtc_tamper_config *const tamper_cfg)
+{
+	/* Sanity check arguments */
+	Assert(module);
+	Assert(module->hw);
+	Assert(tamper_cfg);
+
+	Rtc *const rtc_module = module->hw;
+	uint16_t ctrl_b = 0;
+
+	/* Configure enable backup and GP register reset on tamper or not. */
+	if(tamper_cfg->bkup_reset_on_tamper) {
+		rtc_module->MODE0.CTRLA.reg |= RTC_MODE0_CTRLA_BKTRST;
+	} else {
+		rtc_module->MODE0.CTRLA.reg &= ~RTC_MODE0_CTRLA_BKTRST;
+	}
+	
+	if (tamper_cfg->gp_reset_on_tamper) {
+		rtc_module->MODE0.CTRLA.reg |= RTC_MODE0_CTRLA_GPTRST;
+	} else {
+		rtc_module->MODE0.CTRLA.reg &= ~RTC_MODE0_CTRLA_GPTRST;
+	}
+
+	/* Configure tamper detection of frequency and debounce setting. */
+	ctrl_b = tamper_cfg->actl_freq_div | tamper_cfg->deb_freq_div;
+	if(tamper_cfg->deb_seq == RTC_TAMPER_DEBOUNCE_ASYNC) {
+		ctrl_b |= RTC_MODE0_CTRLB_DEBASYNC;
+	} else if (tamper_cfg->deb_seq == RTC_TAMPER_DEBOUNCE_MAJORITY) {
+		ctrl_b |= RTC_MODE0_CTRLB_DEBMAJ;
+	}
+	if(tamper_cfg->dma_tamper_enable) {
+		ctrl_b |= RTC_MODE0_CTRLB_DMAEN;
+	}
+	if (tamper_cfg->gp0_enable) {
+		ctrl_b |= RTC_MODE0_CTRLB_GP0EN;
+	}
+
+	/* Configure tamper input. */
+	volatile RTC_TAMPCTRL_Type *tamper_ctrl = &(rtc_module->MODE0.TAMPCTRL);
+
+	struct rtc_tamper_input_config in_cfg;
+	for (uint8_t tamper_id = 0; tamper_id < RTC_TAMPER_NUM; tamper_id++) {
+		in_cfg = tamper_cfg->in_cfg[tamper_id];
+
+		if(in_cfg.action == RTC_TAMPER_INPUT_ACTION_ACTL) {
+			ctrl_b |= RTC_MODE0_CTRLB_RTCOUT;
+		}
+	
+		switch(tamper_id) {
+			case 0:
+				tamper_ctrl->bit.IN0ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL0 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC0 = in_cfg.debounce_enable;
+				break;
+			case 1:
+				tamper_ctrl->bit.IN1ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL1 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC1 = in_cfg.debounce_enable;
+				break;
+			case 2:
+				tamper_ctrl->bit.IN2ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL2 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC2 = in_cfg.debounce_enable;
+				break;
+			case 3:
+				tamper_ctrl->bit.IN3ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL3 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC3 = in_cfg.debounce_enable;
+				break;
+			case 4:
+				tamper_ctrl->bit.IN4ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL4 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC4 = in_cfg.debounce_enable;
+				break;
+			default:
+				Assert(false);
+				break;
+		}
+	}
+
+	rtc_module->MODE0.CTRLB.reg = ctrl_b;
+
+	/* Return status OK if everything was configured. */
+	return STATUS_OK;
+}
+
+/**
+ * \brief Get the tamper stamp value.
+ *
+ * \param[in,out] module  Pointer to the software instance struct
+ *
+ * \return The current tamper stamp value as a 32-bit unsigned integer.
+ */
+uint32_t rtc_tamper_get_stamp (struct rtc_module *const module)
+{
+	/* Sanity check arguments */
+	Assert(module);
+	Assert(module->hw);
+
+	Rtc *const rtc_module = module->hw;
+
+	/* Initialize return value. */
+	uint32_t tamper_stamp = 0;
+
+	while (rtc_count_is_syncing(module)) {
+		/* Wait for synchronization */
+	}
+
+	/* Read value based on mode. */
+	switch (module->mode) {
+		case RTC_COUNT_MODE_32BIT:
+			/* Return stamp value in 32-bit mode. */
+			tamper_stamp = rtc_module->MODE0.TIMESTAMP.reg;
+
+			break;
+
+		case RTC_COUNT_MODE_16BIT:
+			/* Return stamp value in 16-bit mode. */
+			tamper_stamp = (uint32_t)rtc_module->MODE1.TIMESTAMP.reg;
+
+			break;
+
+		default:
+			Assert(false);
+			break;
+	}
+
+	return tamper_stamp;
+}
+
+#endif

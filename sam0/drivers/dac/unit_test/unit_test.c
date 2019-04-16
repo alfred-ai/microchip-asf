@@ -213,7 +213,7 @@ static void run_dac_init_test(const struct test_case *test)
 		{ .on_event_start_conversion = true };
 #endif
 	dac_enable_events(&dac_instance, &events);
-	
+
 	struct dac_chan_config config_dac_chan;
 	dac_chan_get_config_defaults(&config_dac_chan);
 	dac_chan_set_config(&dac_instance, DAC_CHANNEL_0,
@@ -233,11 +233,11 @@ static void run_dac_event_control_test(const struct test_case *test)
 {
 	enum status_code status;
 	uint32_t dac_status;
-	
+
 	status = dac_chan_write(&dac_instance, DAC_CHANNEL_0, 100);
 	test_assert_true(test, status == STATUS_OK,
 			"DAC chan write failed");
-	
+
 	configure_rtc_count();
 	rtc_count_set_period(&rtc_instance, 1);
 	configure_event_resource();
@@ -245,14 +245,14 @@ static void run_dac_event_control_test(const struct test_case *test)
 	/* DAC buffer empty test*/
 	delay_ms(3);
 	dac_status = dac_get_status(&dac_instance);
-	test_assert_true(test, (dac_status & DAC_STATUS_CHANNEL_0_EMPTY) 
+	test_assert_true(test, (dac_status & DAC_STATUS_CHANNEL_0_EMPTY)
 			== DAC_STATUS_CHANNEL_0_EMPTY,
 			"dac channel buffer empty didn't happen");
 
 	/* DAC buffer underrun test*/
 	delay_ms(3);
 	dac_status = dac_get_status(&dac_instance);
-	test_assert_true(test, (dac_status & DAC_STATUS_CHANNEL_0_UNDERRUN) 
+	test_assert_true(test, (dac_status & DAC_STATUS_CHANNEL_0_UNDERRUN)
 			== DAC_STATUS_CHANNEL_0_UNDERRUN,
 			"dac channel buffer underrun didn't happen");
 }

@@ -297,27 +297,29 @@
 				</option>
 				<option>
 					<name>CCIncludePath2</name>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
-					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../uart</state>
-					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
-					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
-					<state>$PROJ_DIR$/../../../../../boards</state>
-					<state>$PROJ_DIR$/../../../../usart</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../../common/boards</state>
-					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
-					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../../pio</state>
-					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial/sam_uart</state>
+					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
+					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
+					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
+					<state>$PROJ_DIR$/../../../../uart</state>
+					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../usart</state>
+					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
+					<state>$PROJ_DIR$/../../../../pio</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -565,27 +567,29 @@
 				</option>
 				<option>
 					<name>AUserIncludes</name>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
-					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../uart</state>
-					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
-					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
-					<state>$PROJ_DIR$/../../../../../boards</state>
-					<state>$PROJ_DIR$/../../../../usart</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../../common/boards</state>
-					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
-					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../../pio</state>
-					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial/sam_uart</state>
+					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
+					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
+					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
+					<state>$PROJ_DIR$/../../../../uart</state>
+					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../usart</state>
+					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
+					<state>$PROJ_DIR$/../../../../pio</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1258,27 +1262,29 @@
 				</option>
 				<option>
 					<name>CCIncludePath2</name>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
-					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../uart</state>
-					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
-					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
-					<state>$PROJ_DIR$/../../../../../boards</state>
-					<state>$PROJ_DIR$/../../../../usart</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../../common/boards</state>
-					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
-					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../../pio</state>
-					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial/sam_uart</state>
+					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
+					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
+					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
+					<state>$PROJ_DIR$/../../../../uart</state>
+					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../usart</state>
+					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
+					<state>$PROJ_DIR$/../../../../pio</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1526,27 +1532,29 @@
 				</option>
 				<option>
 					<name>AUserIncludes</name>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
-					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
-					<state>$PROJ_DIR$/../../../../uart</state>
-					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
-					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
-					<state>$PROJ_DIR$/../../../../../boards</state>
-					<state>$PROJ_DIR$/../../../../usart</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
-					<state>$PROJ_DIR$/../../../../../../common/boards</state>
-					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
-					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../../pio</state>
-					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../../../../common/utils</state>
-					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial/sam_uart</state>
+					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../..</state>
+					<state>$PROJ_DIR$/../../../../../utils/fpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../mpu</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/source/templates</state>
+					<state>$PROJ_DIR$/../../../../../boards/samv71_xplained_ultra</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
+					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/..</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
+					<state>$PROJ_DIR$/../../../../uart</state>
+					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../../usart</state>
+					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../common/boards</state>
+					<state>$PROJ_DIR$/../../../../../../common/services/ioport</state>
+					<state>$PROJ_DIR$/../../../../pio</state>
+					<state>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
 				<option>
@@ -1969,6 +1977,15 @@
 				</file>
 			</group>
 			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../mpu/mpu.h</name>
+				</file>
+			</group>
+			<group>
 				<name>uart</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../uart/uart.c</name>
@@ -2073,9 +2090,6 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/instance/spi1.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/instance/rtc.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/instance/usart0.h</name>
 							</file>
 							<file>
@@ -2113,6 +2127,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/instance/rswdt.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/instance/rtc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/instance/pioe.h</name>
@@ -2223,6 +2240,9 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/component/trng.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/component/rtt.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/component/pwm.h</name>
 							</file>
 							<file>
@@ -2248,9 +2268,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/component/mlb.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/component/rtt.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samv71/include/component/usbhs.h</name>
@@ -2503,6 +2520,18 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../common/services/clock/pll.h</name>
+				</file>
+			</group>
+			<group>
+				<name>gpio</name>
+				<group>
+					<name>sam_gpio</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../common/services/gpio/sam_gpio/sam_gpio.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../common/services/gpio/gpio.h</name>
 				</file>
 			</group>
 			<group>

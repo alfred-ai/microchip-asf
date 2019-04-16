@@ -63,7 +63,7 @@ int main(void)
 
 	// Initialize the sleep manager
 	sleepmgr_init();
-#if !SAMD21 && !SAMR21 && !SAML21
+#if !SAM0
 	sysclk_init();
 	board_init();
 #else

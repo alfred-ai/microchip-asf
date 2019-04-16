@@ -80,7 +80,7 @@
  * -# Enable automatic page write mode. The new data will be written to NVM automaticly.
  *    \snippet qs_nvm_basic.c setup_3
  *    \note If automatic page write mode is disabled, the data will not write to NVM
- *    		until the NVM write command was been invoked. For safe use NVM module,
+ *    		until the NVM write command has been invoked. For safe use of the NVM module,
  *    		disable automatic page write mode and use write command to commit data is
  *    		recommended.
  *
@@ -94,7 +94,7 @@
  * \snippet qs_nvm_basic.c main
  *
  * \subsection asfdoc_sam0_nvm_basic_use_case_main_flow Workflow
- * -# Set up a buffer one NVM page in size to hold data to read or write into
+ * -# Set up a buffer, one NVM page in size, to hold data to read or write into
  *    NVM memory.
  *    \snippet qs_nvm_basic.c main_1
  * -# Fill the buffer with a pattern of data.
@@ -105,9 +105,9 @@
  *    completing a previous operation, a loop is used to retry the command while
  *    the NVM controller is busy.
  *    \snippet qs_nvm_basic.c main_4
- *    \note This must be performed before writing new data into a NVM page.
+ *    \note This must be performed before writing new data into an NVM page.
  *
- * -# Write the buffer of data to the previously erased page of the NVM.
+ * -# Write the databuffer to the previously erased page of the NVM.
  *    \snippet qs_nvm_basic.c main_5
  *    \note The new data will be written to NVM memory automatically, as the
  *          NVM controller is configured in automatic page write mode.

@@ -60,9 +60,9 @@
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM C20/C21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM DA1
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_eeprom_prerequisites
@@ -496,23 +496,23 @@ enum status_code eeprom_emulator_read_buffer(
  *	</tr>
  *	<tr>
  *		<td>42125F</td>
- *		<td>11/2014</td>
- *		<td>Added support for SAMDAx, SAMC20/C21.</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L22, SAM DA1 and SAM C20/C21</td>
  *	</tr>
  *	<tr>
  *		<td>42125E</td>
  *		<td>11/2014</td>
- *		<td>Added support for SAML21.</td>
+ *		<td>Added support for SAM L21</td>
  *	</tr>
  *	<tr>
  *		<td>42125D</td>
  *		<td>09/2014</td>
- *		<td>Added support for SAMR21 and SAMD10/D11.</td>
+ *		<td>Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
  *		<td>42125C</td>
  *		<td>07/2014</td>
- *		<td>Add SAM D21 support.</td>
+ *		<td>Add support for SAM D21</td>
  *	</tr>
  *  <tr>
  *	   <td>42125B</td>

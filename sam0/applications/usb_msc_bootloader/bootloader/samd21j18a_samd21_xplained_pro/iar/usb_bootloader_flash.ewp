@@ -2165,6 +2165,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_calendar.h</name>
 				</file>
 			</group>
@@ -2624,6 +2627,9 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include/component/hmatrixb.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include/component/pac.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include/component/mtb.h</name>
 							</file>
 							<file>
@@ -2640,9 +2646,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include/component/i2s.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include/component/pac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include/component/adc.h</name>
@@ -2787,9 +2790,6 @@
 							<name>$PROJ_DIR$/../conf_sleepmgr.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../conf_extint.h</name>
-						</file>
-						<file>
 							<name>$PROJ_DIR$/../conf_board.h</name>
 						</file>
 						<file>
@@ -2806,6 +2806,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../conf_uart_serial.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../conf_extint.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../conf_access.h</name>

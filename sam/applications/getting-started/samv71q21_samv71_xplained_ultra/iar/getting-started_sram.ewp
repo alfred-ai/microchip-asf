@@ -303,14 +303,16 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
+					<state>$PROJ_DIR$/../../../../drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../boards/samv71_xplained_ultra</state>
 					<state>$PROJ_DIR$/../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../drivers/uart</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/tc</state>
@@ -573,14 +575,16 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
+					<state>$PROJ_DIR$/../../../../drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../boards/samv71_xplained_ultra</state>
 					<state>$PROJ_DIR$/../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../drivers/uart</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/tc</state>
@@ -1268,14 +1272,16 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
+					<state>$PROJ_DIR$/../../../../drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../boards/samv71_xplained_ultra</state>
 					<state>$PROJ_DIR$/../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../drivers/uart</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/tc</state>
@@ -1538,14 +1544,16 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils/fpu</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
+					<state>$PROJ_DIR$/../../../../drivers/mpu</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samv71/source/templates</state>
 					<state>$PROJ_DIR$/../../../../boards/samv71_xplained_ultra</state>
 					<state>$PROJ_DIR$/../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../common/utils/stdio/stdio_serial</state>
+					<state>$PROJ_DIR$/../../../../drivers/matrix</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../../common/services/gpio</state>
 					<state>$PROJ_DIR$/../../../../drivers/uart</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/tc</state>
@@ -1983,6 +1991,15 @@
 				</file>
 			</group>
 			<group>
+				<name>mpu</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/mpu/mpu.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/mpu/mpu.h</name>
+				</file>
+			</group>
+			<group>
 				<name>matrix</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../drivers/matrix/matrix.c</name>
@@ -2129,9 +2146,6 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samv71/include/instance/xdmac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samv71/include/instance/rstc.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samv71/include/instance/pioc.h</name>
 							</file>
 							<file>
@@ -2169,6 +2183,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samv71/include/instance/pmc.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samv71/include/instance/rstc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samv71/include/instance/wdt.h</name>
@@ -2507,6 +2524,18 @@
 					<name>sam</name>
 					<file>
 						<name>$PROJ_DIR$/../../../../../common/services/ioport/sam/ioport_pio.h</name>
+					</file>
+				</group>
+			</group>
+			<group>
+				<name>gpio</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../common/services/gpio/gpio.h</name>
+				</file>
+				<group>
+					<name>sam_gpio</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common/services/gpio/sam_gpio/sam_gpio.h</name>
 					</file>
 				</group>
 			</group>

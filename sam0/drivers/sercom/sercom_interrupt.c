@@ -47,10 +47,10 @@
 
 void *_sercom_instances[SERCOM_INST_NUM];
 
-/** Save status of initialized handlers. */
+/** Save status of initialized handlers */
 static bool _handler_table_initialized = false;
 
-/** Void pointers for saving device instance structures. */
+/** Void pointers for saving device instance structures */
 static void (*_sercom_interrupt_handlers[SERCOM_INST_NUM])(const uint8_t instance);
 
 /**
@@ -76,7 +76,7 @@ void _sercom_set_handler(
 		const uint8_t instance,
 		const sercom_handler_t interrupt_handler)
 {
-	/* Initialize handlers with default handler and device instances with 0. */
+	/* Initialize handlers with default handler and device instances with 0 */
 	if (_handler_table_initialized == false) {
 		for (uint32_t i = 0; i < SERCOM_INST_NUM; i++) {
 			_sercom_interrupt_handlers[i] = &_sercom_default_handler;
@@ -86,7 +86,7 @@ void _sercom_set_handler(
 		_handler_table_initialized = true;
 	}
 
-	/* Save interrupt handler. */
+	/* Save interrupt handler */
 	_sercom_interrupt_handlers[instance] = interrupt_handler;
 }
 

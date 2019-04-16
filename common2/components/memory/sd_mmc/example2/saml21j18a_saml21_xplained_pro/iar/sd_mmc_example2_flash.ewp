@@ -2320,6 +2320,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
 				</file>
 			</group>
@@ -2487,15 +2490,15 @@
 						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/spi.h</name>
 					</file>
 					<group>
-						<name>quick_start_slave_callback</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_slave_callback/qs_spi_slave_callback.h</name>
-						</file>
-					</group>
-					<group>
 						<name>quick_start_dma</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_dma/qs_spi_dma_use.h</name>
+						</file>
+					</group>
+					<group>
+						<name>quick_start_slave_callback</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_slave_callback/qs_spi_slave_callback.h</name>
 						</file>
 					</group>
 					<file>

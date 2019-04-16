@@ -49,10 +49,10 @@
 /**
  * \defgroup asfdoc_sam0_rtc_calendar_group SAM RTC Calendar (RTC CAL) Driver
  *
- * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides 
- * an interface for the configuration and management of the device's Real Time 
- * Clock functionality in Calendar operating mode, for the configuration and 
- * retrieval of the current time and date as maintained by the RTC module. 
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of the device's Real Time
+ * Clock functionality in Calendar operating mode, for the configuration and
+ * retrieval of the current time and date as maintained by the RTC module.
   The following driver API modes are covered by this manual:
  *
  *  - Polled APIs
@@ -66,9 +66,9 @@
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -111,23 +111,27 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_PERIODIC_INT</td>
- *    <td>SAM L21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_PRESCALER_OFF</td>
- *    <td>SAM L21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_CLOCK_SELECTION</td>
- *    <td>SAM L21/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_GENERAL_PURPOSE_REG</td>
- *    <td>SAM L21</td>
+ *    <td>SAM L21/L22</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_CONTINUOUSLY_UPDATED</td>
- *    <td>SAM D20, SAM D21, SAM R21, SAM D10, SAM D11, SAM DAx</td>
+ *    <td>SAM D20, SAM D21, SAM R21, SAM D10, SAM D11, SAM DA1</td>
+ *  </tr>
+ *  <tr>
+ *    <td>FEATURE_RTC_TAMPER_DETECTION</td>
+ *    <td>SAM L22</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -223,6 +227,9 @@
  * and slower when given a negative correction value.
  *
  *
+ * \subsection asfdoc_sam0_rtc_calendar_module_overview_tamper_detect RTC Tamper Detect
+ * see  \ref asfdoc_sam0_rtc_tamper_detect
+ *
  * \section asfdoc_sam0_rtc_calendar_special_considerations Special Considerations
  *
  * \subsection asfdoc_sam0_rtc_calendar_special_considerations_year Year Limit
@@ -233,7 +240,7 @@
  * \f[ [YEAR_{START}, YEAR_{START}+64] \f]
  *
  * \subsection asfdoc_sam0_rtc_calendar_special_considerations_clock Clock Setup
- * \subsubsection asfdoc_sam0_rtc_calendar_clock_samd_r SAM D20/D21/R21/D10/D11/DA0/DA1 Clock Setup
+ * \subsubsection asfdoc_sam0_rtc_calendar_clock_samd_r SAM D20/D21/R21/D10/D11/DA1 Clock Setup
  * The RTC is typically clocked by a specialized GCLK generator that has a
  * smaller prescaler than the others. By default the RTC clock is on, selected
  * to use the internal 32KHz RC-oscillator with a prescaler of 32, giving a
@@ -279,9 +286,9 @@
  * digraph clocking_scheme {
  *     rankdir=LR;
  *     GCLK [shape="record", label="<f0> GCLK | <f1> RTC_GCLK",
- *         bgcolor="lightgray", style="filled", fontname=arial];
- *     RTCPRE [shape="record" label="<f0> RTC | <f1> RTC PRESCALER", fontname=arial];
- *     RTC [shape="record", label="<f0> RTC | <f1> RTC CLOCK", fontname=arial];
+ *         bgcolor="lightgray", style="filled"];
+ *     RTCPRE [shape="record" label="<f0> RTC | <f1> RTC PRESCALER"];
+ *     RTC [shape="record", label="<f0> RTC | <f1> RTC CLOCK"];
  *
  *     GCLK:f1 -> RTCPRE:f1;
  *     RTCPRE:f1 -> RTC:f1;
@@ -374,8 +381,8 @@ extern "C" {
  * Define port features set according to different device family
  * @{
 */
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
-/** RTC periodic interval interrupt */
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+/** RTC periodic interval interrupt. */
 #  define FEATURE_RTC_PERIODIC_INT
 /** RTC prescaler is off */
 #  define FEATURE_RTC_PRESCALER_OFF
@@ -389,6 +396,12 @@ extern "C" {
 /** RTC continuously updated */
 #  define FEATURE_RTC_CONTINUOUSLY_UPDATED
 #endif
+
+#if (SAML22) || defined(__DOXYGEN__)
+/** RTC tamper detection. */
+#  define FEATURE_RTC_TAMPER_DETECTION
+#endif
+
 /*@}*/
 
 #ifdef FEATURE_RTC_CLOCK_SELECTION
@@ -502,6 +515,10 @@ enum rtc_calendar_callback {
 	/** Callback for alarm 3 */
 	RTC_CALENDAR_CALLBACK_ALARM_3,
 #  endif
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	/** Callback for tamper */
+	RTC_CALENDAR_CALLBACK_TAMPER,
+#endif
 	/** Callback for  overflow */
 	RTC_CALENDAR_CALLBACK_OVERFLOW,
 #  if !defined(__DOXYGEN__)
@@ -530,6 +547,10 @@ enum rtc_calendar_callback {
 	/** Callback for alarm 3 */
 	RTC_CALENDAR_CALLBACK_ALARM_3,
 #  endif
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	/** Callback for tamper */
+	RTC_CALENDAR_CALLBACK_TAMPER,
+#endif
 	/** Callback for  overflow */
 	RTC_CALENDAR_CALLBACK_OVERFLOW,
 #  if !defined(__DOXYGEN__)
@@ -674,6 +695,12 @@ struct rtc_calendar_events {
 	 *  counter frequency
 	 */
 	bool generate_event_on_periodic[8];
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	/** Generate an output event on every tamper input */
+	bool generate_event_on_tamper;
+	/** Tamper input event and capture the CLOCK value */
+	bool on_event_to_tamper;
+#endif
 };
 
 /**
@@ -736,6 +763,12 @@ struct rtc_calendar_config {
 	bool clock_24h;
 	/** Initial year for counter value 0 */
 	uint16_t year_init_value;
+#if (SAML22)
+	/** Enable count read synchronization. The CLOCK value requires
+	 * synchronization when reading. Disabling the synchronization
+	 * will prevent the CLOCK value from displaying the current value. */
+	bool enable_read_sync;
+#endif
 	/** Alarm values */
 	struct rtc_calendar_alarm_time alarm[RTC_NUM_OF_ALARMS];
 };
@@ -761,7 +794,7 @@ static inline void rtc_calendar_get_time_defaults(
 	time->minute = 0;
 	time->hour   = 0;
 	time->pm     = 0;
-	time->day 	 = 1;
+	time->day    = 1;
 	time->month  = 1;
 	time->year   = 2000;
 }
@@ -781,6 +814,7 @@ static inline void rtc_calendar_get_time_defaults(
  *  - Events off
  *  - Alarms set to January 1. 2000, 00:00:00
  *  - Alarm will match on second, minute, hour, day, month, and year
+ *  - Clock read synchronization is enabled for SAM L22
  *
  *  \param[out] config  Configuration structure to be initialized to default
  *                      values
@@ -803,6 +837,9 @@ static inline void rtc_calendar_get_config_defaults(
 #endif
 	config->clock_24h           = false;
 	config->year_init_value     = 2000;
+#if (SAML22)
+	config->enable_read_sync    = true;
+#endif
 	for (uint8_t i = 0; i < RTC_NUM_OF_ALARMS; i++) {
 		config->alarm[i].time = time;
 		config->alarm[i].mask = RTC_CALENDAR_ALARM_MASK_YEAR;
@@ -857,6 +894,13 @@ enum status_code rtc_calendar_frequency_correction(
 /** \name Time and Alarm Management
  * @{
  */
+uint32_t rtc_calendar_time_to_register_value(
+		struct rtc_module *const module,
+		const struct rtc_calendar_time *const time);
+void rtc_calendar_register_value_to_time(
+		struct rtc_module *const module,
+		const uint32_t register_value,
+		struct rtc_calendar_time *const time);
 
 void rtc_calendar_set_time(
 		struct rtc_module *const module,
@@ -1098,6 +1142,18 @@ static inline void rtc_calendar_enable_events(
 		}
 	}
 
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	/* Check if the user has requested a tamper event output */
+	if (events->generate_event_on_tamper) {
+		event_mask |= RTC_MODE2_EVCTRL_TAMPEREO;
+	}
+
+	/* Check if the user has requested a tamper event input */
+	if (events->on_event_to_tamper) {
+		event_mask |= RTC_MODE2_EVCTRL_TAMPEVEI;
+	}
+#endif
+
 	/* Enable given event(s) */
 	rtc_module->MODE2.EVCTRL.reg |= event_mask;
 }
@@ -1143,6 +1199,18 @@ static inline void rtc_calendar_disable_events(
 			event_mask |= RTC_MODE2_EVCTRL_PEREO(1 << i);
 		}
 	}
+
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	/* Check if the user has requested a tamper event output */
+	if (events->generate_event_on_tamper) {
+		event_mask |= RTC_MODE2_EVCTRL_TAMPEREO;
+	}
+
+	/* Check if the user has requested a tamper event input */
+	if (events->on_event_to_tamper) {
+		event_mask |= RTC_MODE2_EVCTRL_TAMPEVEI;
+	}
+#endif
 
 	/* Disable given event(s) */
 	rtc_module->MODE2.EVCTRL.reg &= ~event_mask;
@@ -1204,6 +1272,18 @@ static inline uint32_t rtc_read_general_purpose_reg(
 /** @} */
 #endif
 
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+#include "rtc_tamper.h"
+/**
+ * \brief Get the tamper stamp value.
+ *
+ * \param[in,out] module  Pointer to the software instance struct
+ * \param[out] time  Pointer to value that filled with tamper stamp time
+ */
+void rtc_tamper_get_stamp (struct rtc_module *const module,
+		struct rtc_calendar_time *const time);
+#endif
+
 /** @} */
 
 #ifdef __cplusplus
@@ -1259,16 +1339,11 @@ static inline uint32_t rtc_read_general_purpose_reg(
  *		<th>Changelog</th>
  *	</tr>
  *	<tr>
- *		<td>Added support for SAM C21</td>
+ *		<td>Added support for RTC tamper feature</td>
  *	</tr>
  *	<tr>
- *		<td>Added support for SAM L21</td>
- *	</tr>
- *	<tr>
- *		<td>
- *             Added support for SAM D21 and added driver instance parameter to all
- *             API function calls, except get_config_defaults
- *             </td>
+ *		<td>Added driver instance parameter to all API function calls, except
+ *          get_config_defaults</td>
  *	</tr>
  *	<tr>
  *		<td>Updated initialization function to also enable the digital interface
@@ -1303,28 +1378,28 @@ static inline uint32_t rtc_read_general_purpose_reg(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
+ *		<td>42126E</td>
  *		<td>08/2015</td>
- *		<td>Added support for SAM L21, SAM C21, and SAM DAx</td>
+ *		<td>Added support for SAM L21/L22, SAM C21, and SAM DA1</td>
  *	</tr>
  *	<tr>
- *		<td>D</td>
+ *		<td>42126D</td>
  *		<td>12/2014</td>
  *		<td>Added support for SAM R21 and SAM D10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42126C</td>
  *		<td>01/2014</td>
  *		<td>Added support for SAM D21</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42126B</td>
  *		<td>06/2013</td>
  *		<td>Added additional documentation on the event system. Corrected
- *          documentation typos.</td>
+ *          documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42126A</td>
  *		<td>06/2013</td>
  *		<td>Initial release</td>
  *	</tr>

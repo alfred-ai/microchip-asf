@@ -64,13 +64,13 @@
  *
  * The following devices can use this module:
  * \if DEVICE_SAML21_SUPPORT
- *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM C20/C21
  * \else
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM DA1
  * \endif
  *
  * The outline of this documentation is as follows:
@@ -331,7 +331,7 @@
  * conversion is completed, the next conversion will start at the next positive
  * input channel and so on, until all requested pins to scan have been sampled
  * and converted.
- * SAM L21 has automatic sequences feature instead of pin scan mode. In automatic
+ * SAM L21/L22 has automatic sequences feature instead of pin scan mode. In automatic
  * sequence mode, all of 32 positives inputs can be included in a sequence. The
  * sequence starts from the lowest input, and go to the next enabled input
  * automatically.
@@ -1101,6 +1101,11 @@ static inline void adc_disable_interrupt(struct adc_module *const module_inst,
  *		<th>Comments</td>
  *	</tr>
  * \if DEVICE_SAML21_SUPPORT
+  *	<tr>
+ *		<td>42451B</td>
+ *		<td>08/2015</td>
+ *		<td>Added support for SAM L22</td>
+ *	</tr>
  *  <tr>
  *      <td>42451A</td>
  *      <td>07/2015</td>

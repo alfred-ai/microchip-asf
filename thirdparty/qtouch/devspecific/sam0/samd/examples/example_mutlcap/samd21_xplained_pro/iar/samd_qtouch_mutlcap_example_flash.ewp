@@ -2136,7 +2136,7 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e15b.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e16l.h</name>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21g17a.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21g15a.h</name>
@@ -2181,7 +2181,7 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e18a.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21g17a.h</name>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e16l.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e16a.h</name>
@@ -2629,6 +2629,9 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_count.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
 				</file>
 			</group>
 			<group>

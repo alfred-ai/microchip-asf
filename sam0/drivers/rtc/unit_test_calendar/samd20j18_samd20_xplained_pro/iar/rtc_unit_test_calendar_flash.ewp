@@ -2354,6 +2354,9 @@
 					</group>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_calendar.h</name>
 				</file>
 				<file>

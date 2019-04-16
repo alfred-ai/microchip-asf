@@ -74,7 +74,10 @@ enum status_code rtc_count_register_callback(
 
 	/* Overflow callback */
 	if (callback_type == RTC_COUNT_CALLBACK_OVERFLOW
-	    || (callback_type >= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_0
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+		|| callback_type == RTC_COUNT_CALLBACK_TAMPER
+#endif
+		|| (callback_type >= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_0
 			&& callback_type <= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_7)) {
 		status = STATUS_OK;
 	} else {
@@ -129,6 +132,9 @@ enum status_code rtc_count_unregister_callback(
 
 	/* Overflow callback */
 	if (callback_type == RTC_COUNT_CALLBACK_OVERFLOW
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+		|| callback_type == RTC_COUNT_CALLBACK_TAMPER
+#endif
 		|| (callback_type >= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_0
 			&& callback_type <= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_7)) {
 		status = STATUS_OK;
@@ -181,6 +187,10 @@ void rtc_count_enable_callback(
 
 	if (callback_type == RTC_COUNT_CALLBACK_OVERFLOW) {
 		rtc_module->MODE0.INTENSET.reg = RTC_MODE0_INTFLAG_OVF;
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	} else if (callback_type == RTC_COUNT_CALLBACK_TAMPER) {
+		rtc_module->MODE0.INTENSET.reg = RTC_MODE0_INTFLAG_TAMPER;
+#endif
 	} else if (callback_type >= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_0
 			&& callback_type <= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_7) {
 		rtc_module->MODE0.INTENSET.reg = RTC_MODE1_INTFLAG_PER(1 << callback_type);
@@ -212,6 +222,10 @@ void rtc_count_disable_callback(
 	/* Disable interrupt */
 	if (callback_type == RTC_COUNT_CALLBACK_OVERFLOW) {
 		rtc_module->MODE0.INTENCLR.reg = RTC_MODE0_INTFLAG_OVF;
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	} else if (callback_type == RTC_COUNT_CALLBACK_TAMPER) {
+		rtc_module->MODE0.INTENCLR.reg = RTC_MODE0_INTFLAG_TAMPER;
+#endif
 	} else if(callback_type >= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_0
 			&& callback_type <= RTC_COUNT_CALLBACK_PERIODIC_INTERVAL_7){
 		rtc_module->MODE0.INTENCLR.reg = RTC_MODE1_INTFLAG_PER(1 << callback_type);;
@@ -250,6 +264,16 @@ static void _rtc_interrupt_handler(const uint32_t instance_index)
 
 		/* Clear interrupt flag */
 		rtc_module->MODE0.INTFLAG.reg = RTC_MODE0_INTFLAG_OVF;
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+	} else if (interrupt_status & RTC_MODE0_INTFLAG_TAMPER) {
+		/* Tamper interrupt */
+		if (callback_mask & (1 << RTC_COUNT_CALLBACK_TAMPER)) {
+			module->callbacks[RTC_COUNT_CALLBACK_TAMPER]();
+		}
+
+		/* Clear interrupt flag */
+		rtc_module->MODE0.INTFLAG.reg = RTC_MODE0_INTFLAG_TAMPER;
+#endif
 
 	} else if (interrupt_status & RTC_MODE1_INTFLAG_PER(0xff)) {
 		uint8_t i  = 0;

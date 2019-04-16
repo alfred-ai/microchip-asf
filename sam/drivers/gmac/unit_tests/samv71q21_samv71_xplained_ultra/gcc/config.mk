@@ -64,6 +64,7 @@ CSRCS = \
        sam/drivers/gmac/gmac_phy.c                        \
        sam/drivers/gmac/gmac_raw_2.c                      \
        sam/drivers/gmac/unit_tests/unit_tests.c           \
+       sam/drivers/mpu/mpu.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -82,6 +83,7 @@ ASSRCS =
 INC_PATH = \
        common/boards                                      \
        common/services/clock                              \
+       common/services/gpio                               \
        common/services/ioport                             \
        common/services/serial                             \
        common/services/serial/sam_uart                    \
@@ -94,6 +96,7 @@ INC_PATH = \
        sam/drivers/gmac                                   \
        sam/drivers/gmac/unit_tests                        \
        sam/drivers/gmac/unit_tests/samv71q21_samv71_xplained_ultra \
+       sam/drivers/mpu                                    \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/uart                                   \

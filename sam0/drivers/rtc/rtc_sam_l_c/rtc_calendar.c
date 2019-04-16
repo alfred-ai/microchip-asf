@@ -185,9 +185,15 @@ void rtc_calendar_reset(struct rtc_module *const module)
 }
 
 /**
- * \internal Convert time structure to register_value.
+ * \brief Convert time structure to register_value.
+ * Retrieves register_value convert by the time structure.
+ *
+ * \param[in, out] module  Pointer to the software instance struct
+ * \param[in] time  Pointer to the time structure
+ *
+ * \return 32-bit value
  */
-static uint32_t _rtc_calendar_time_to_register_value(
+uint32_t rtc_calendar_time_to_register_value(
 		struct rtc_module *const module,
 		const struct rtc_calendar_time *const time)
 {
@@ -223,9 +229,14 @@ static uint32_t _rtc_calendar_time_to_register_value(
 }
 
 /**
- * \internal Convert register_value to time structure.
+ * \brief Convert register_value to time structure.
+ * Retrieves the time structure convert by register_value.
+ *
+ * \param[in, out] module  Pointer to the software instance struct
+ * \param[in] register_value  The value stored in register
+ * \param[out] time  Pointer to the time structure
  */
-static void _rtc_calendar_register_value_to_time(
+void rtc_calendar_register_value_to_time(
 		struct rtc_module *const module,
 		const uint32_t register_value,
 		struct rtc_calendar_time *const time)
@@ -289,6 +300,12 @@ static void _rtc_calendar_set_config(
 
 	/* Set to calendar mode and set the prescaler. */
 	tmp_reg = RTC_MODE2_CTRLA_MODE(2) | config->prescaler;
+
+#if (SAML22)
+	if(config->enable_read_sync) {
+		tmp_reg |= RTC_MODE2_CTRLA_CLOCKSYNC;
+	}
+#endif
 
 	/* Check clock mode. */
 	if (!(config->clock_24h)) {
@@ -469,7 +486,7 @@ void rtc_calendar_set_time(
 
 	Rtc *const rtc_module = module->hw;
 
-	uint32_t register_value = _rtc_calendar_time_to_register_value(module, time);
+	uint32_t register_value = rtc_calendar_time_to_register_value(module, time);
 
 	while (rtc_calendar_is_syncing(module)) {
 		/* Wait for synchronization */
@@ -509,7 +526,7 @@ void rtc_calendar_get_time(
 	uint32_t register_value = rtc_module->MODE2.CLOCK.reg;
 
 	/* Convert value to time structure. */
-	_rtc_calendar_register_value_to_time(module, register_value, time);
+	rtc_calendar_register_value_to_time(module, register_value, time);
 }
 
 /**
@@ -542,7 +559,7 @@ enum status_code rtc_calendar_set_alarm(
 	}
 
 	/* Get register_value from time. */
-	uint32_t register_value = _rtc_calendar_time_to_register_value(module, &(alarm->time));
+	uint32_t register_value = rtc_calendar_time_to_register_value(module, &(alarm->time));
 
 	while (rtc_calendar_is_syncing(module)) {
 		/* Wait for synchronization */
@@ -600,7 +617,7 @@ enum status_code rtc_calendar_get_alarm(
 			rtc_module->MODE2.Mode2Alarm[alarm_index].ALARM.reg;
 
 	/* Convert to time structure. */
-	_rtc_calendar_register_value_to_time(module, register_value, &(alarm->time));
+	rtc_calendar_register_value_to_time(module, register_value, &(alarm->time));
 
 	/* Read alarm mask */
 	alarm->mask = (enum rtc_calendar_alarm_mask)rtc_module->MODE2.Mode2Alarm[alarm_index].MASK.reg;
@@ -667,3 +684,135 @@ enum status_code rtc_calendar_frequency_correction(
 
 	return STATUS_OK;
 }
+
+#ifdef FEATURE_RTC_TAMPER_DETECTION
+/**
+ * \brief Applies the given configuration.
+ *
+ * Sets the configurations given from the configuration structure to the
+ * RTC tamper and it should be called before RTC module enable.
+ *
+ * \param[in,out]  module  Pointer to the software instance struct
+ * \param[in] config  Pointer to the configuration structure
+ *
+ * \return Status of the configuration procedure.
+ * \retval STATUS_OK               RTC configurations was set successfully
+ *
+ * \note If tamper input configured as active layer protection, RTC prescaler
+ *       output automatically enabled in the function.
+ */
+enum status_code rtc_tamper_set_config ( 
+		struct rtc_module *const module,
+		struct rtc_tamper_config *const tamper_cfg)
+{
+	/* Sanity check arguments */
+	Assert(module);
+	Assert(module->hw);
+	Assert(tamper_cfg);
+
+	Rtc *const rtc_module = module->hw;
+	uint16_t ctrl_b = 0;
+
+	/* Configure enable backup and GP register reset on tamper or not. */
+	if(tamper_cfg->bkup_reset_on_tamper) {
+		rtc_module->MODE2.CTRLA.reg |= RTC_MODE0_CTRLA_BKTRST;
+	} else {
+		rtc_module->MODE2.CTRLA.reg &= ~RTC_MODE0_CTRLA_BKTRST;
+	}
+	
+	if (tamper_cfg->gp_reset_on_tamper) {
+		rtc_module->MODE2.CTRLA.reg |= RTC_MODE0_CTRLA_GPTRST;
+	} else {
+		rtc_module->MODE2.CTRLA.reg &= ~RTC_MODE0_CTRLA_GPTRST;
+	}
+
+	/* Configure tamper detection of frequency and debounce setting. */
+	ctrl_b = tamper_cfg->actl_freq_div | tamper_cfg->deb_freq_div;
+	if(tamper_cfg->deb_seq == RTC_TAMPER_DEBOUNCE_ASYNC) {
+		ctrl_b |= RTC_MODE0_CTRLB_DEBASYNC;
+	} else if (tamper_cfg->deb_seq == RTC_TAMPER_DEBOUNCE_MAJORITY) {
+		ctrl_b |= RTC_MODE0_CTRLB_DEBMAJ;
+	}
+	if(tamper_cfg->dma_tamper_enable) {
+		ctrl_b |= RTC_MODE0_CTRLB_DMAEN;
+	}
+	if (tamper_cfg->gp0_enable) {
+		ctrl_b |= RTC_MODE0_CTRLB_GP0EN;
+	}
+
+	/* Configure tamper input. */
+	volatile RTC_TAMPCTRL_Type *tamper_ctrl = &(rtc_module->MODE2.TAMPCTRL);
+
+	struct rtc_tamper_input_config in_cfg;
+	for (uint8_t tamper_id = 0; tamper_id < RTC_TAMPER_NUM; tamper_id++) {
+		in_cfg = tamper_cfg->in_cfg[tamper_id];
+
+		if(in_cfg.action == RTC_TAMPER_INPUT_ACTION_ACTL) {
+			ctrl_b |= RTC_MODE0_CTRLB_RTCOUT;
+		}
+	
+		switch(tamper_id) {
+			case 0:
+				tamper_ctrl->bit.IN0ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL0 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC0 = in_cfg.debounce_enable;
+				break;
+			case 1:
+				tamper_ctrl->bit.IN1ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL1 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC1 = in_cfg.debounce_enable;
+				break;
+			case 2:
+				tamper_ctrl->bit.IN2ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL2 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC2 = in_cfg.debounce_enable;
+				break;
+			case 3:
+				tamper_ctrl->bit.IN3ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL3 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC3 = in_cfg.debounce_enable;
+				break;
+			case 4:
+				tamper_ctrl->bit.IN4ACT = in_cfg.action;
+				tamper_ctrl->bit.TAMLVL4 = in_cfg.level;
+				tamper_ctrl->bit.DEBNC4 = in_cfg.debounce_enable;
+				break;
+			default:
+				Assert(false);
+				break;
+		}
+	}
+
+	rtc_module->MODE2.CTRLB.reg = ctrl_b;
+
+	/* Return status OK if everything was configured. */
+	return STATUS_OK;
+}
+
+/**
+ * \brief Get the tamper stamp value.
+ *
+ * \param[in,out] module  Pointer to the software instance struct
+ * \param[out] time  Pointer to value that filled with tamper stamp time
+ */
+void rtc_tamper_get_stamp (struct rtc_module *const module,
+		struct rtc_calendar_time *const time)
+{
+	/* Sanity check arguments */
+	Assert(module);
+	Assert(module->hw);
+
+	Rtc *const rtc_module = module->hw;
+
+	while (rtc_calendar_is_syncing(module)) {
+		/* Wait for synchronization */
+	}
+
+	/* Initialize return value. */
+	uint32_t tamper_stamp = rtc_module->MODE2.TIMESTAMP.reg;
+
+	/* Convert value to time structure. */
+	rtc_calendar_register_value_to_time(module, tamper_stamp, time);
+}
+
+#endif

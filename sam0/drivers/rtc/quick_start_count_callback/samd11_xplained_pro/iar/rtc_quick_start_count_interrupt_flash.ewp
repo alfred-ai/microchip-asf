@@ -302,6 +302,7 @@
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/..</state>
@@ -313,7 +314,6 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/include</state>
@@ -574,6 +574,7 @@
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/..</state>
@@ -585,7 +586,6 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/include</state>
@@ -1271,6 +1271,7 @@
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/..</state>
@@ -1282,7 +1283,6 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/include</state>
@@ -1543,6 +1543,7 @@
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd11_xplained_pro</state>
 					<state>$PROJ_DIR$/..</state>
@@ -1554,7 +1555,6 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/source</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_d_r</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd11/include</state>
@@ -1943,87 +1943,6 @@
 		<group>
 			<name>drivers</name>
 			<group>
-				<name>system</name>
-				<group>
-					<name>pinmux</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
-					</file>
-					<group>
-						<name>quick_start</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
-					</file>
-				</group>
-				<group>
-					<name>clock</name>
-					<group>
-						<name>clock_samd10_d11</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11/gclk.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11/clock.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11/clock_feature.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_samd10_d11/clock_config_check.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/clock/gclk.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/clock/clock.h</name>
-					</file>
-				</group>
-				<group>
-					<name>interrupt</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.h</name>
-					</file>
-					<group>
-						<name>system_interrupt_samd10_d11</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd10_d11/system_interrupt_features.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../system/system.c</name>
-				</file>
-				<group>
-					<name>power</name>
-					<group>
-						<name>power_sam_d_r</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/power/power_sam_d_r/power.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../system/system.h</name>
-				</file>
-				<group>
-					<name>reset</name>
-					<group>
-						<name>reset_sam_d_r</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/reset/reset_sam_d_r/reset.h</name>
-						</file>
-					</group>
-				</group>
-			</group>
-			<group>
 				<name>rtc</name>
 				<group>
 					<name>rtc_sam_d_r</name>
@@ -2056,11 +1975,95 @@
 					</group>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_count.h</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../rtc_count_interrupt.h</name>
 				</file>
+			</group>
+			<group>
+				<name>system</name>
+				<group>
+					<name>clock</name>
+					<group>
+						<name>clock_samd09_d10_d11</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11/gclk.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11/clock.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11/clock_config_check.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_samd09_d10_d11/clock_feature.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/clock/gclk.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/clock/clock.h</name>
+					</file>
+				</group>
+				<group>
+					<name>interrupt</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.h</name>
+					</file>
+					<group>
+						<name>system_interrupt_samd10_d11</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd10_d11/system_interrupt_features.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>pinmux</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
+					</file>
+					<group>
+						<name>quick_start</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../system/system.c</name>
+				</file>
+				<group>
+					<name>power</name>
+					<group>
+						<name>power_sam_d_r</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/power/power_sam_d_r/power.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../system/system.h</name>
+				</file>
+				<group>
+					<name>reset</name>
+					<group>
+						<name>reset_sam_d_r</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/reset/reset_sam_d_r/reset.h</name>
+						</file>
+					</group>
+				</group>
 			</group>
 			<group>
 				<name>port</name>

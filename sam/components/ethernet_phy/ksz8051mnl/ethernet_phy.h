@@ -157,6 +157,12 @@
 #define GMII_PAGE_RX          (1 << 1) // New Page Received
 #define GMII_LP_AN_ABLE       (1 << 0) // Link Partner Auto-negotiation Able
 
+// Bit definitions: GMII_PCR1 0x1E PHY Control 1
+#define GMII_OMI_10BASE_T_HD	0x0001
+#define GMII_OMI_100BASE_TX_HD	0x0002
+#define GMII_OMI_10BASE_T_FD	0x0005
+#define GMII_OMI_100BASE_TX_FD	0x0006
+
 /**
  * \brief Perform a HW initialization to the PHY and set up clocks.
  *

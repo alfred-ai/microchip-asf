@@ -47,7 +47,7 @@
 #include "events_hooks.h"
 #include "system_interrupt.h"
 
-#if (SAML21) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
 #  define _EVENTS_INTFLAGS_DETECT  0x0fff0000
 #  define _EVENTS_INTFLAGS_OVERRUN 0x00000fff
 #else

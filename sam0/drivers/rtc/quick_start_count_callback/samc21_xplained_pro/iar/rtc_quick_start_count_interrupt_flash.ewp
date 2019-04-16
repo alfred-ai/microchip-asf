@@ -2059,6 +2059,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../rtc_count.h</name>
 				</file>
 				<file>
@@ -2173,9 +2176,6 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/instance/oscctrl.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/instance/tc4.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/instance/tc3.h</name>
 							</file>
 							<file>
@@ -2213,6 +2213,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/instance/sercom5.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/instance/tc4.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/instance/ccl.h</name>
@@ -2278,6 +2281,9 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/component/tal.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/component/supc.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/component/nvmctrl.h</name>
 							</file>
 							<file>
@@ -2315,9 +2321,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/component/ac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/component/supc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samc21/include/component/mclk.h</name>

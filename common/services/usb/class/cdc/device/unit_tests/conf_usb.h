@@ -81,6 +81,8 @@
 #  define  USB_DEVICE_HS_SUPPORT
 #elif (SAM3XA||SAM3U)
 #  define  USB_DEVICE_HS_SUPPORT
+#elif (SAMV71 || SAMV70 || SAME70 || SAMS70)
+#  define  USB_DEVICE_HS_SUPPORT
 #endif
 //@}
 

@@ -47,10 +47,10 @@
 #define NVM_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam0_nvm_group SAM Non-Volatile Memory (NVM) Driver 
+ * \defgroup asfdoc_sam0_nvm_group SAM Non-Volatile Memory (NVM) Driver
  *
- * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides 
- * an interface for the configuration and management of non-volatile memories 
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of non-volatile memories
  * within the device, for partitioning, erasing, reading, and writing of data.
  *
  * The following peripheral is used by this module:
@@ -59,9 +59,9 @@
  * The following devices can use this module:
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21
- *  - Atmel | SMART SAM D10/D11
- *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM D09/D10/D11
+ *  - Atmel | SMART SAM L21/L22
+ *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
@@ -92,7 +92,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_NVM_RWWEE</td>
- *    <td>SAM L21, SAM D21-64K, SAM DAx, SAM C20/C21</td>
+ *    <td>SAM L21/L22, SAM D21-64K, SAM DA1, SAM C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_BOD12</td>
@@ -285,13 +285,13 @@ extern "C" {
 #endif
 
 /**
- * Define NVM features set according to different device family.
+ * Define NVM features set according to the different device families.
  * @{
 */
-#if (SAML21) || (SAMDA1) || (SAMC20) || (SAMC21) || defined(SAMD21_64K) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || defined(SAMD21_64K) || defined(__DOXYGEN__)
+/** Read while write EEPROM emulation feature. */
 #  define FEATURE_NVM_RWWEE
 #endif
-/** Read while write EEPROM emulation feature. */ 	
 #if (SAML21) || defined(__DOXYGEN__)
 #define FEATURE_BOD12
 #endif
@@ -374,7 +374,7 @@ enum nvm_command {
 	 */
 	NVM_COMMAND_EXIT_LOW_POWER_MODE        = NVMCTRL_CTRLA_CMD_CPRM,
 #ifdef FEATURE_NVM_RWWEE
-	/** Read while write(RWW) EEPROM area erase row */
+	/** Read while write (RWW) EEPROM area erase row */
 	NVM_COMMAND_RWWEE_ERASE_ROW            = NVMCTRL_CTRLA_CMD_RWWEEER,
 	/** RWW EEPROM write page */
 	NVM_COMMAND_RWWEE_WRITE_PAGE           = NVMCTRL_CTRLA_CMD_RWWEEWP,
@@ -476,7 +476,7 @@ struct nvm_parameters {
 	 *  memory space */
 	uint32_t bootloader_number_of_pages;
 #ifdef FEATURE_NVM_RWWEE
-	/** Number of pages in read while write EEPROM(RWWEE) emulation area */
+	/** Number of pages in read while write EEPROM (RWWEE) emulation area */
 	uint16_t rww_eeprom_number_of_pages;
 #endif
 };
@@ -912,8 +912,8 @@ static inline enum nvm_error nvm_get_error(void)
  *	<tr>
  *		<td>42114E</td>
  *		<td>08/2015</td>
- *		<td>Added support for SAM L21, SAM C21 and SAM DAx</td>
- *	</tr> 
+ *		<td>Added support for SAM L21/L22, SAM C21, and SAM DA1</td>
+ *	</tr>
  *	<tr>
  *		<td>42114D</td>
  *		<td>12/2014</td>

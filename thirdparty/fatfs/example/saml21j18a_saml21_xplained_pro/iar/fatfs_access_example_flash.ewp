@@ -2386,6 +2386,9 @@
 					</file>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
 				</file>
 			</group>
@@ -2497,6 +2500,9 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/component/rtc_100.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/component/dsu.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/component/tal.h</name>
 							</file>
 							<file>
@@ -2528,9 +2534,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/component/osc32kctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/component/dsu.h</name>
 							</file>
 						</group>
 						<group>
@@ -2675,10 +2678,10 @@
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/saml21j18a.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/saml21g18a.h</name>
+							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/saml21e18a.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/saml21e18a.h</name>
+							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include/saml21g18a.h</name>
 						</file>
 					</group>
 				</group>

@@ -81,7 +81,7 @@ static void configure_i2c_master(void)
 
 	/* Initialize and enable device with config. */
 	//! [init_module]
-	i2c_master_init(&i2c_master_instance, SERCOM2, &config_i2c_master);
+	i2c_master_init(&i2c_master_instance, CONF_I2C_MASTER_MODULE, &config_i2c_master);
 	//! [init_module]
 
 	//! [enable_module]
@@ -124,7 +124,7 @@ static void configure_dma_resource(struct dma_resource *resource)
 	//! [dma_setup_2]
 
 	//! [dma_setup_3]
-	config.peripheral_trigger = SERCOM2_DMAC_ID_TX;
+	config.peripheral_trigger = CONF_I2C_DMA_TRIGGER;
 	config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
 	//! [dma_setup_3]
 
