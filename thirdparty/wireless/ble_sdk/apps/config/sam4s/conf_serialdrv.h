@@ -3,7 +3,7 @@
  *
  * \brief SAM4S serial driver configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,7 +43,8 @@
 
 #ifndef CONF_SERIALDRV_H_INCLUDED
 #define CONF_SERIALDRV_H_INCLUDED
-#if SAM4S	
+#if SAM4S
+	/* In order to fix compilation during jenkins validation job added the following dummy macros*/
 	#ifndef EXT1_PIN_4
 	#define EXT1_PIN_4 		PIO_PA18_IDX
 	#endif
@@ -78,27 +79,30 @@
 #endif	
 
 #if (UART_FLOWCONTROL_6WIRE_MODE == true)
-#error "This mode is not supported in SAM4S, due to insufficient of UART's in SAM4S XPro Extension Headers"
+#error "This mode is not supported in SAM4S, due to insufficient  UARTs in SAM4S XPro Extension Headers"
 #endif
 
 #if (UART_FLOWCONTROL_4WIRE_MODE == true)
-/* BTLC1000 Wakeup Pin */
-#define BTLC1000_WAKEUP_PIN			(EXT1_PIN_4)
+	#if (BLE_MODULE == BTLC1000_ZR)
+		/* BTLC1000 Wakeup Pin */
+		#define BTLC1000_WAKEUP_PIN			(EXT1_PIN_3)
 
-/* BTLC1000 Chip Enable Pin */
-#define BTLC1000_CHIP_ENABLE_PIN	(EXT1_PIN_10)
+		/* BTLC1000 Chip Enable Pin */
+		#define BTLC1000_CHIP_ENABLE_PIN	(EXT1_PIN_7)
 
-#if SAMG55 || SAM4S
-#warning "EXT1 PIN6 is configured as BTLC1000 Wakeup Pin. \
-Inorder to Use USART0 Hardware Flowcontrol, BTLC1000 Wakeup \
-Pin moved to EXT1 PIN 4 and BTLC1000 Chip Enable Pin moved to ETX1 PIN10"
-#endif
-#else
-/* BTLC1000 Wakeup Pin */
-#define BTLC1000_WAKEUP_PIN			(EXT1_PIN_6)
+ 	#elif (BLE_MODULE == BTLC1000_MR)
+		/* BTLC1000 Wakeup Pin */
+		#define BTLC1000_WAKEUP_PIN			(EXT1_PIN_4)
 
-/* BTLC1000 Chip Enable Pin */
-#define BTLC1000_CHIP_ENABLE_PIN	(EXT1_PIN_4)
+		/* BTLC1000 Chip Enable Pin */
+		#define BTLC1000_CHIP_ENABLE_PIN	(EXT1_PIN_10)
+
+		#if SAMG55 || SAM4S
+		#warning "EXT1 PIN6 is configured as BTLC1000 Wakeup Pin. \
+		Inorder to Use USART0 Hardware Flowcontrol, BTLC1000 Wakeup \
+		Pin moved to EXT1 PIN 4 and BTLC1000 Chip Enable Pin moved to ETX1 PIN10"
+		#endif
+	#endif
 #endif
 
 /* BTLC1000 50ms Reset Duration */
@@ -137,6 +141,70 @@ Pin moved to EXT1 PIN 4 and BTLC1000 Chip Enable Pin moved to ETX1 PIN10"
 
 #define BLE_MAX_RX_PAYLOAD_SIZE 1024
 #define BLE_MAX_TX_PAYLOAD_SIZE 1024
+
+/**
+ * BTLC1000 Host Wakeup Control
+ * @{
+ */
+/* BTLC1000 Host Wakeup Pin */
+#define BTLC1000_HOST_WAKEUP_PIN				(EXT1_PIN_9)
+#define BTLC1000_UART_CTS_PIN					(EXT1_PIN_5)
+#define PIN_BTLC1000_HOST_WAKEUP_PIO			PIOA
+#define PIN_BTLC1000_HOST_WAKEUP_MASK			PIO_PA1
+#define PIN_BTLC1000_HOST_WAKEUP_ID				ID_PIOA
+#define PIN_BTLC1000_HOST_WAKEUP_ATTR			PIO_DEFAULT
+#define BTLC1000_HOST_WAKEUP_WAIT_INPUT_ID		(1u << 1)
+#define BTLC1000_HOST_WAKEUP_BACKUP_INPUT_ID	(1u << 1)
+
+void platform_host_wake_interrupt_handler(void);
+static inline void btlc1000_host_wakeup_config(void);
+static inline void btlc1000_host_wakeup_handler(uint32_t ul_id, uint32_t ul_mask);
+
+
+/* BTLC1000 Host Wakeup Initialization */
+static inline void btlc1000_host_wakeup_config(void)
+{
+	/* Adjust PIO debounce filter parameters, using 1 KHz filter. */
+	pio_set_debounce_filter(PIN_BTLC1000_HOST_WAKEUP_PIO,
+						PIN_BTLC1000_HOST_WAKEUP_MASK, 1000);
+
+	/* Initialize PIO interrupt handlers, see PIO definition in board.h. */
+	pio_handler_set(PIN_BTLC1000_HOST_WAKEUP_PIO, PIN_BTLC1000_HOST_WAKEUP_ID,
+					PIN_BTLC1000_HOST_WAKEUP_MASK, PIN_BTLC1000_HOST_WAKEUP_ATTR,
+					btlc1000_host_wakeup_handler);
+
+	/* Enable PIO controller IRQs. */
+	NVIC_EnableIRQ((IRQn_Type)PIN_BTLC1000_HOST_WAKEUP_ID);
+
+	/* Enable PIO line interrupts. */
+	pio_enable_interrupt(PIN_BTLC1000_HOST_WAKEUP_PIO,
+				         PIN_BTLC1000_HOST_WAKEUP_MASK);
+}
+
+/**
+ * \brief Handler for button interrupt.
+ *
+ * \note This interrupt is for waking up from sleep mode or exiting from active
+ * mode.
+ */
+static inline void btlc1000_host_wakeup_handler(uint32_t ul_id, uint32_t ul_mask)
+{
+	if (PIN_BTLC1000_HOST_WAKEUP_ID == ul_id &&
+			PIN_BTLC1000_HOST_WAKEUP_MASK == ul_mask) {
+		platform_host_wake_interrupt_handler();
+	}
+}
+
+static inline bool host_event_data_ready_pin_level(void)
+{
+	return (ioport_get_pin_level(BTLC1000_HOST_WAKEUP_PIN));
+}
+
+static inline bool btlc1000_cts_pin_level(void)
+{
+	return (ioport_get_pin_level(BTLC1000_UART_CTS_PIN));
+}
+
 
 /* Set BLE Wakeup pin to be low */
 static inline bool ble_wakeup_pin_level(void)

@@ -25,7 +25,7 @@ DOXYFILE_ENCODING      = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = "WINC3400 Firmware Update Project (v1.0.2) for SAMD21 XPlained Pro"
+PROJECT_NAME           = "WINC3400 Firmware Update Project (v1.1.4) for SAMD21 XPlained Pro"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
@@ -1363,7 +1363,7 @@ SEARCH_INCLUDES        = YES
 # contain include files that are not input files but should be processed by
 # the preprocessor.
 
-INCLUDE_PATH           = .. ../.. ../../doc ../../firmware/Tools/serial_bridge ../../../../../../../sam0/boards ../../../../../../../sam0/boards/samd21_xplained_pro ../../../../../../../sam0/utils/cmsis/samd21/include ../../../../../../../sam0/utils/cmsis/samd21/source ../../../../../../../sam0/utils ../../../../../../../sam0/utils/header_files ../../../../../../../sam0/utils/preprocessor ../../../../../../utils ../../../../../../boards ../../../../../../../sam0/drivers/port ../../../../../../../sam0/drivers/system/pinmux
+INCLUDE_PATH           = .. ../.. ../../doc ../../firmware/Tools/serial_bridge ../../firmware/tls_cert_store ../../firmware/tls_cert_store/CA ../../../../../../../sam0/boards ../../../../../../../sam0/boards/samd21_xplained_pro ../../../../../../../sam0/utils/cmsis/samd21/include ../../../../../../../sam0/utils/cmsis/samd21/source ../../../../../../../sam0/utils ../../../../../../../sam0/utils/header_files ../../../../../../../sam0/utils/preprocessor ../../../../../../utils ../../../../../../boards ../../../../../../../sam0/drivers/port ../../../../../../../sam0/drivers/system/pinmux
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard
 # patterns (like *.h and *.hpp) to filter out the header-files in the

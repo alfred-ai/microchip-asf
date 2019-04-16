@@ -168,16 +168,20 @@
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>DTM_MODE</state>
-					<state>__SAMD21J18A__</state>
-					<state>NENABLE_PTS</state>
+					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
+					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
+					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>ENABLE_POWER_SAVE</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
 				</option>
 				<option>
@@ -325,12 +329,12 @@
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
+					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
-					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
@@ -496,16 +500,20 @@
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>DTM_MODE</state>
-					<state>__SAMD21J18A__</state>
-					<state>NENABLE_PTS</state>
+					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
+					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
+					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>ENABLE_POWER_SAVE</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
 				</option>
 				<option>
@@ -620,12 +628,12 @@
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
+					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
-					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
@@ -1183,16 +1191,20 @@
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>DTM_MODE</state>
-					<state>__SAMD21J18A__</state>
-					<state>NENABLE_PTS</state>
+					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
+					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
+					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>ENABLE_POWER_SAVE</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
 				</option>
 				<option>
@@ -1340,12 +1352,12 @@
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
+					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
-					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
@@ -1511,16 +1523,20 @@
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>DTM_MODE</state>
-					<state>__SAMD21J18A__</state>
-					<state>NENABLE_PTS</state>
+					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
+					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
+					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>ENABLE_POWER_SAVE</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
 				</option>
 				<option>
@@ -1635,12 +1651,12 @@
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_samd21_r21_da_ha1</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
+					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samd21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
-					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../services/serial_bridge/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>

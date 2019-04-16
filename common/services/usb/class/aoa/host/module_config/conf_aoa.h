@@ -3,7 +3,7 @@
  *
  * \brief Android Open Accessory configuration
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -60,6 +60,8 @@ changed
 #define AOA_STRING_VERSION        "1.0"
 #define AOA_STRING_URL            "http://www.atmel.com/applications/homeentertainment/mobile_accessories/default.aspx"
 #define AOA_STRING_SERIAL         "0000000012345678"
+
+#define AOA_V2_SUPPORT            1
 
 #ifdef __cplusplus
 }

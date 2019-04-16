@@ -3,7 +3,7 @@
  *
  * \brief Heart Rate Sensor Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -83,40 +83,17 @@ bool notification_confirm = true;
 /** @brief contains the connection handle functions **/
 at_ble_handle_t connection_handle;
 
-static const ble_event_callback_t hr_sensor_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	hr_sensor_connected_state_handler,
-	hr_sensor_disconnect_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t hr_sensor_gap_handle = {
+	.connected = hr_sensor_connected_state_handler,
+	.disconnected = hr_sensor_disconnect_event_handler
 };
 
-static const ble_event_callback_t hr_sensor_gatt_server_handle[] = {
-	hr_sensor_notification_cfm_handler,
-	NULL,
-	hr_sensor_char_changed_handler,
-	NULL,
-	NULL,
-	hr_sensor_char_write_request,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t hr_sensor_gatt_server_handle = {
+	.notification_confirmed = hr_sensor_notification_cfm_handler,
+	.characteristic_changed = hr_sensor_char_changed_handler,
+	.write_authorize_request = hr_sensor_char_write_request
 };
+
 
 /****************************************************************************************
 *							        Implementations
@@ -359,10 +336,10 @@ void hr_sensor_init(void *param)
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	hr_sensor_gap_handle);
+	&hr_sensor_gap_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_SERVER_EVENT_TYPE,
-	hr_sensor_gatt_server_handle);
+	&hr_sensor_gatt_server_handle);
 
 	status = ble_advertisement_data_set();
 	if (status != AT_BLE_SUCCESS) {

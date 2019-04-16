@@ -3,7 +3,7 @@
  *
  * \brief Blood Pressure Sensor Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -84,41 +84,17 @@ blp_indication_callback_t	indication_cb;
 /** @brief contains the connection handle functions **/
 at_ble_handle_t connection_handle;
 
-
-static const ble_event_callback_t blp_sensor_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	blp_sensor_connected_state_handler,
-	blp_sensor_disconnect_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t blp_sensor_gap_handle = {
+	.connected = blp_sensor_connected_state_handler,
+	.disconnected = blp_sensor_disconnect_event_handler
 };
 
-static const ble_event_callback_t blp_sensor_gatt_server_handle[] = {
-	blp_notification_confirmation_handler,
-	blp_indication_confirmation_handler,
-	blp_sensor_char_changed_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t blp_sensor_gatt_server_handle = {
+	.notification_confirmed = blp_notification_confirmation_handler,
+	.indication_confirmed = blp_indication_confirmation_handler,
+	.characteristic_changed = blp_sensor_char_changed_handler
 };
+
 /****************************************************************************************
 *							        Implementations										*
 ****************************************************************************************/
@@ -380,10 +356,10 @@ void blp_sensor_init(void *param)
 	blp_sensor_service_define();
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	blp_sensor_gap_handle);
+	&blp_sensor_gap_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_SERVER_EVENT_TYPE,
-	blp_sensor_gatt_server_handle);
+	&blp_sensor_gatt_server_handle);
 							
 	status = ble_advertisement_data_set();
 	

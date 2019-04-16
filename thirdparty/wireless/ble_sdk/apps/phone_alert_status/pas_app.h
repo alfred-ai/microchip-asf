@@ -3,7 +3,7 @@
 *
 * \brief Phone Alert Status Application declarations
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -63,8 +63,8 @@
 #define READ_RINGER_SETTING			(5)
 #define DISCOVER_ATTRIBUTES			(6)
 
-
-
+/** @brief Button event ID */
+#define APP_BUTTON_EVENT_ID		(1)
 
 /****************************************************************************************
 *							        Function Prototype                                 	*
@@ -79,3 +79,5 @@ static at_ble_status_t app_disconnected_event_handler(void *params);
  * @param[in] at_ble_connected_t
  */
 static at_ble_status_t app_connected_event_handler(void *params);
+
+static at_ble_status_t pas_custom_event(void *param);

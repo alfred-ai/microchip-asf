@@ -2122,6 +2122,9 @@ static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 	uhd_disable_out_ready_interrupt(pipe);
 #ifdef UHD_PIPE_DMA_SUPPORTED
 	if (Is_uhd_pipe_dma_supported(pipe)) {
+		uhd_pipe_job_t *ptr_job = &uhd_pipe_job[pipe - 1];
+		ptr_job->nb_trans =
+				uhd_pipe_dma_get_addr(pipe) - (uint32_t)ptr_job->buf;
 		uhd_pipe_dma_set_control(pipe, 0);
 	}
 #endif

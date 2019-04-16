@@ -3,7 +3,7 @@
  *
  * \brief Heart Rate Service
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -109,7 +109,7 @@ void hr_init_service(hr_gatt_service_handler_t *heart_rate_serv)
 	
 	/* Permissions */
 	heart_rate_serv->serv_chars[0].value_permissions
-							= AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR|AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR;
+							= AT_BLE_ATTR_NO_PERMISSIONS;
 	
 	/* user defined name */
 	heart_rate_serv->serv_chars[0].user_desc = NULL;

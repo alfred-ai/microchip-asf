@@ -3,7 +3,7 @@
  *
  * \brief USB Host Driver header file for UHDP.
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -502,6 +502,8 @@ typedef struct {
 #define  uhd_pipe_dma_get_control(p)          (UOTGHS_UHDMA_ARRAY(p).control)
 //! Set RAM address to selected endpoint DMA channel
 #define  uhd_pipe_dma_set_addr(p,add)         (UOTGHS_UHDMA_ARRAY(p).addr=add)
+//! Get RAM address from selected endpoint DMA channel
+#define  uhd_pipe_dma_get_addr(p)             (UOTGHS_UHDMA_ARRAY(p).addr)
 //! Get status to selected endpoint DMA channel
 #define  uhd_pipe_dma_get_status(p)           (UOTGHS_UHDMA_ARRAY(p).status)
 //! @}

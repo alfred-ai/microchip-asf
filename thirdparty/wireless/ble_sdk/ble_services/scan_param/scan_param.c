@@ -3,7 +3,7 @@
  *
  * \brief Scan Parameters service
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -64,10 +64,23 @@
  * @return none
  */
 
-extern at_ble_connected_t ble_dev_info[BLE_MAX_DEVICE_CONNECTED];
+extern at_ble_connected_t ble_dev_info[BLE_MAX_DEVICE_CONNECTION];
 
 bool volatile sps_notification_flag = false;
+static at_ble_status_t sps_disconnected_event_handler(void *params);
 
+static const ble_gap_event_cb_t sps_gap_cb = {
+	.disconnected = sps_disconnected_event_handler,
+};
+
+/* Callback registered for AT_BLE_DISCONNECTED event from stack */
+static at_ble_status_t sps_disconnected_event_handler(void *params)
+{
+	at_ble_disconnected_t *disconnected = (at_ble_disconnected_t *)params;
+	sps_notification_flag = false;
+	ALL_UNUSED(disconnected);
+	return AT_BLE_SUCCESS;
+}
 /**@brief Initialize the service with its included service, characteristics, and descriptors
  */
 void sps_init_service(sps_gatt_service_handler_t *sps_serv, uint16_t *scan_interval_window, uint8_t *scan_refresh)
@@ -120,6 +133,11 @@ void sps_init_service(sps_gatt_service_handler_t *sps_serv, uint16_t *scan_inter
 		sps_serv->serv_chars[1].client_config_handle = 0;         /*client config handles*/
 		sps_serv->serv_chars[1].server_config_handle = 0;         /*server config handles*/
 		sps_serv->serv_chars[1].presentation_format = NULL;       /* presentation format */
+		
+		/* Register callbacks for gap related events */
+		ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+										BLE_GAP_EVENT_TYPE,
+										&sps_gap_cb);
 }
 
 /**@brief defining a initialized service 
@@ -134,7 +152,7 @@ at_ble_status_t sps_primary_service_define(sps_gatt_service_handler_t *sps_servi
 
 /**@brief Function used to update the scan refresh characteristic value during connection
  */
-at_ble_status_t sps_scan_refresh_char_update(sps_gatt_service_handler_t *sps_serv ,uint8_t scan_refresh_value, bool volatile *flag)
+at_ble_status_t sps_scan_refresh_char_update(sps_gatt_service_handler_t *sps_serv ,uint8_t scan_refresh_value)
 {
 	//updating application data
 	sps_serv->serv_chars[1].init_value = &scan_refresh_value;
@@ -155,7 +173,6 @@ at_ble_status_t sps_scan_refresh_char_update(sps_gatt_service_handler_t *sps_ser
 		else 
 		{
 			DBG_LOG_DEV("sending notification successful");
-			*flag = false;
 			return AT_BLE_SUCCESS;
 		}
 	}
@@ -165,7 +182,7 @@ at_ble_status_t sps_scan_refresh_char_update(sps_gatt_service_handler_t *sps_ser
 
 /**@brief function to check the client characteristic configuration value. 
  */
-at_ble_status_t	sps_char_changed_event(sps_gatt_service_handler_t *sps_service_handler, at_ble_characteristic_changed_t *char_handle, bool volatile *flag)
+at_ble_status_t	sps_char_changed_event(sps_gatt_service_handler_t *sps_service_handler, at_ble_characteristic_changed_t *char_handle)
 {
 	at_ble_characteristic_changed_t change_params;
 	uint16_t scan_interval_window[2];
@@ -183,19 +200,9 @@ at_ble_status_t	sps_char_changed_event(sps_gatt_service_handler_t *sps_service_h
 	
 	if(sps_service_handler->serv_chars[1].client_config_handle == change_params.char_handle)
 	{
-		if(change_params.char_new_value[0])
+		if(change_params.char_new_value[0] == SCP_NOTIFICATION_ENABLE)
 		{
 			sps_notification_flag = true;
-			if((at_ble_notification_send(change_params.conn_handle, sps_service_handler->serv_chars[1].char_val_handle)) == AT_BLE_FAILURE) {
-				DBG_LOG("sending notification failed");
-				return AT_BLE_FAILURE;
-			}
-			else
-			{
-				DBG_LOG_DEV("sending notification successful");
-				*flag = false;
-				return AT_BLE_SUCCESS;
-			}
 		}
 		else
 		{

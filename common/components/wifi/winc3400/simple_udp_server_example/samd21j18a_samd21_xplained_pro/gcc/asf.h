@@ -109,6 +109,10 @@
 // From module: Standard serial I/O (stdio)
 #include <stdio_serial.h>
 
+// From module: TCC - Timer Counter for Control Applications (Callback APIs)
+#include <tcc.h>
+#include <tcc_callback.h>
+
 // From module: USART - Serial interface- SAM implementation for devices with only USART
 #include <serial.h>
 

@@ -3,7 +3,7 @@
  *
  * \brief HID Mouse Device Profile Application declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,6 +62,9 @@
 /** @brief Mouse change direction after number of attempt */
 #define MOUSE_CHANGE_DIRECTION	(5)
 
+/** @brief Button event ID */
+#define APP_BUTTON_EVENT_ID		(1)
+
 /****************************************************************************************
 *							        Enumerations	                                   	*
 ****************************************************************************************/
@@ -75,4 +78,19 @@ typedef enum
 	MOUSE_DOWN_MOVEMENT,	
 }mouse_move;
 
+/****************************************************************************************
+*							        Function                                     		*
+****************************************************************************************/
+
+/** @brief Callback call during custom event */
+static at_ble_status_t hid_custom_event(void *param);
+
+/** @brief Callback call during connect event */
+static at_ble_status_t hid_connect_cb(void *params);
+
+/** @brief Callback call during disconnect event */
+static at_ble_status_t hid_disconnect_cb(void *params);
+
+/** @brief Callback call during notification confirmation */
+static at_ble_status_t hid_notification_confirmed_cb(void *params);
 #endif /*__HID_DEVICE_APP_H__*/

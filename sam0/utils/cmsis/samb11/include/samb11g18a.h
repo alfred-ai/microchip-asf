@@ -3,7 +3,7 @@
  *
  * \brief Header file for ATSAMB11G18A
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,7 +49,7 @@
     - registers and bitfields
     - peripheral base address
     - peripheral ID
-    - PIO definitions 
+    - PIO definitions
  *  @{
  */
 
@@ -67,7 +67,8 @@
     \li to specify the access to peripheral variables.
     \li for automatic generation of peripheral register debug information.
 
-    emark
+
+emark
     CMSIS core has a syntax that differs from this using i.e. __I, __O, or __IO followed by 'uint<size>_t' respective types.
     Default the header files will follow the CMSIS core syntax.
 */
@@ -82,7 +83,7 @@ typedef volatile       uint8_t  RoReg8;  /**< Read only  8-bit register (volatil
 #endif
 typedef volatile       uint32_t WoReg;   /**< Write only 32-bit register (volatile unsigned int) */
 typedef volatile       uint16_t WoReg16; /**< Write only 16-bit register (volatile unsigned int) */
-typedef volatile       uint32_t WoReg8;  /**< Write only  8-bit register (volatile unsigned int) */
+typedef volatile       uint8_t  WoReg8;  /**< Write only  8-bit register (volatile unsigned int) */
 typedef volatile       uint32_t RwReg;   /**< Read-Write 32-bit register (volatile unsigned int) */
 typedef volatile       uint16_t RwReg16; /**< Read-Write 16-bit register (volatile unsigned int) */
 typedef volatile       uint8_t  RwReg8;  /**< Read-Write  8-bit register (volatile unsigned int) */
@@ -299,7 +300,7 @@ void WDT1_Handler             ( void );
 /* ************************************************************************** */
 /**  PERIPHERAL ID DEFINITIONS FOR SAMB11G18A */
 /* ************************************************************************** */
-/** \addtogroup SAMB11G18A_id Peripheral Ids Definitions 
+/** \addtogroup SAMB11G18A_id Peripheral Ids Definitions
  *  @{
  */
 
@@ -311,7 +312,7 @@ void WDT1_Handler             ( void );
 /* ************************************************************************** */
 /*   BASE ADDRESS DEFINITIONS FOR SAMB11G18A */
 /* ************************************************************************** */
-/** \addtogroup SAMB11G18A_base Peripheral Base Address Definitions 
+/** \addtogroup SAMB11G18A_base Peripheral Base Address Definitions
  *  @{
  */
 
@@ -431,7 +432,7 @@ void WDT1_Handler             ( void );
 /* ************************************************************************** */
 /*   PIO DEFINITIONS FOR SAMB11G18A*/
 /* ************************************************************************** */
-/** \addtogroup SAMB11G18A_pio Peripheral Pio Definitions 
+/** \addtogroup SAMB11G18A_pio Peripheral Pio Definitions
  *  @{
  */
 

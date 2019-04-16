@@ -64,11 +64,10 @@ void nm_bsp_reset(void)
 {
 	pio_set_pin_low(CONF_WINC_PIN_CHIP_ENABLE);
 	pio_set_pin_low(CONF_WINC_PIN_RESET);
-	nm_bsp_sleep(100);
+	nm_bsp_sleep(1);
 	pio_set_pin_high(CONF_WINC_PIN_CHIP_ENABLE);
-	nm_bsp_sleep(100);
+	nm_bsp_sleep(10);
 	pio_set_pin_high(CONF_WINC_PIN_RESET);
-	nm_bsp_sleep(100);
 }
 
 

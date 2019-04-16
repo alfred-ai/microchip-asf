@@ -4,7 +4,7 @@
  *
  * \brief Proximity Reporter Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,39 +62,13 @@
 *							        Globals	                                     		*
 ****************************************************************************************/
 
-static const ble_event_callback_t pxp_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	pxp_reporter_connected_state_handler,
-	pxp_reporter_disconnect_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t pxp_gap_handle = {
+	.connected = pxp_reporter_connected_state_handler,
+	.disconnected = pxp_reporter_disconnect_event_handler
 };
 
-static const ble_event_callback_t pxp_gatt_server_handle[] = {
-	NULL,
-	NULL,
-	pxp_reporter_char_changed_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t pxp_gatt_server_handle = {
+	.characteristic_changed = pxp_reporter_char_changed_handler
 };
 
 #ifdef LINK_LOSS_SERVICE
@@ -333,10 +307,10 @@ void pxp_reporter_init(void *param)
 	pxp_reporter_adv();
 	
 	/* Callback registering for BLE-GAP Role */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, pxp_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, &pxp_gap_handle);
 	
 	/* Callback registering for BLE-GATT-Server Role */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, pxp_gatt_server_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, &pxp_gatt_server_handle);
 	
     ALL_UNUSED(param);
 }

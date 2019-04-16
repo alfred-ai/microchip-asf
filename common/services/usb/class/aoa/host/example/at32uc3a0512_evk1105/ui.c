@@ -3,7 +3,7 @@
  *
  * \brief User Interface
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -59,7 +59,8 @@ volatile uint8_t ui_button_state_toggle[5];
 bool ui_button_state[5];
 
 /** Stores the last message from/to the Android device */
-uint8_t ui_msg[54];
+COMPILER_WORD_ALIGNED
+uint8_t ui_msg[64];
 
 /** Indicates the status of a read operation from the Android device */
 uint8_t read_complete_flag;

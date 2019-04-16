@@ -3,7 +3,7 @@
  *
  * \brief Simple Broadcaster Application
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -47,9 +47,98 @@
  */
 
 /**
- * \mainpage
- * \section preface Preface
- * This is the reference manual for the Simple Broadcaster Application
+ * \mainpage Simple Broadcaster
+ * \section Introduction
+ * ******************************Introduction ***********************************
+ *
+ * The Simple Broadcaster application continuously broadcasts the BLE advertisement data over the air.
+ * The Simple Broadcaster example application supports 10 advertisement data types. They are listed below:
+ *  + Incomplete List of 16-bit Service Class UUIDs
+ *  + Complete List of 16-bit Service Class UUIDs 
+ *  + Incomplete List of 32-bit Service Class UUIDs 
+ *  + Complete List of 32-bit Service Class UUIDs 
+ *  + Incomplete List of 128-bit Service Class UUIDs 
+ *  + Complete List of 128-bit Service Class UUIDs 
+ *  + Shortened Local Name 
+ *  + Complete Local Name 
+ *  + Appearance 
+ *  + Manufacturer Specific Data
+ *
+ * - Supported Evolution Kit -
+ *	+ ATSAML21-XPRO-B + ATBTLC1000 XPRO
+ *	+ ATSAMD21-XPRO + ATBTLC1000 XPRO
+ *	+ ATSAMG55-XPRO + ATBTLC1000 XPRO
+ *	+ ATSAM4S-XPRO + ATBTLC1000 XPRO
+ * 
+ * - Running the demo -
+ *  + 1. Build and flash the binary into supported evaluation board.
+ *  + 2. Open the console using TeraTerm or any serial port monitor.
+ *  + 3. Press the Reset button.
+ *  + 4. Wait for around 10 seconds for the patches to be downloaded device will initialize and start-up.
+ *  + 5. The device is now in advertising mode.
+ *
+ * \section Modules
+ * ***************************** MODULES ***************************************** 
+ * - BLE Manager - 
+ *   + The Event Manager is responsible for handling the following:
+ *    + Generic BLE Event Handling:-
+ *       + BLE Event Manager handles the events triggered by BLE stack and also responsible 
+ *  	 for invoking all registered callbacks for respective events. BLE Manager 
+ *  	 handles all GAP related functionality. In addition to that handles multiple connection 
+ *  	 instances, Pairing, Encryption, Scanning.
+ *    + Handling Multi-role/multi-connection:-
+ *  	  + BLE Event Manager is responsible for handling multiple connection instances 
+ *  	  and stores bonding information and Keys to retain the bonded device. 
+ *  	  BLE Manager is able to identify and remove the device information when pairing/encryption 
+ *		  gets failed. In case of multi-role, it handles the state/event handling of both central and peripheral in multiple contexts.
+ *    + Controlling the Advertisement data:-
+ *  	  + BLE Event Manager is responsible for generating the advertisement and scan response data
+ *  	  for BLE profiles/services that are attached with BLE Manager.
+ *
+ * - BLE Platform Services -
+ *  +  Interface Settings -
+ *	  + Connect ATBTLC1000 XPRO to SAML21-XPRO-B -> EXT1
+ *	  + Connect ATBTLC1000 XPRO to SAMD21-XPRO -> EXT1
+ *	  + Connect ATBTLC1000 XPRO to SAMG55-XPRO -> EXT1
+ *	  + Connect ATBTLC1000 XPRO to SAM4S-XPRO  -> EXT1
+ *  +  Serial Console COM port settings -
+ *    + Baudrate 115200
+ *	  + Parity None, Stop Bit 1, Start Bit 1
+ *	  + No Hardware Handshake
+ *	+  6-Wire Mode Connection Setup -
+ *    + Pins are 1:1 match with SAML21/D21 Xpro EXT1 Header to BTLC1000 XPro Header
+ *	  + UART(No Flow Control)-SAM L21/D21 XPro Pins (Rx-Pin13, Tx-Pin14)
+ *	  + UART(With Flow Control)-SAM G55 Xpro Pins (Rx-Pin13, Tx-Pin14, RTS-Pin5, CTS-Pin6, Rx-Pin16, Tx-Pin17)
+ *	  + BTLC1000 Wakeup Pin-SAM G55 XPro Pins(Pin4)
+ *	  + BTLC1000 Chip Enable Pin-SAM G55 XPro Pins(Pin10)
+ *	  + BTLC1000 Vcc Pin-SAM L21/D21/G55 Xpro Pins(Pin20)
+ *	  + BTLC1000 GND Pin-SAM L21/D21/G55 Xpro Pins(Pin19)
+ *  +  4-Wire Mode Connection setup -
+ * 	  + UART(With Flow Control)-SAM L21/D21 XPro Pins (Rx-Pin15, Tx-Pin17, RTS-Pin16, CTS-Pin18)
+ * 	  + BTLC1000 Wakeup Pin-SAM L21/D21 XPro Pins (Rx-Pin6)
+ * 	  + BTLC1000 Chip Enable Pin-SAM L21/D21 XPro Pins (Rx-Pin4)
+ * 	  + UART(With Flow Control)-SAM G55/4S Xpro Pins (Rx-Pin13, Tx-Pin14, RTS-Pin5, CTS-Pin6)
+ * 	  + BTLC1000 Wakeup Pin-SAM G55/4S XPro Pins(Pin4)
+ * 	  + BTLC1000 Chip Enable Pin-SAM G55/4S XPro Pins(Pin10)
+ * 	  + BTLC1000 Vcc Pin-SAM L21/D21/G55/4S Xpro Pins(Pin20)
+ * 	  + BTLC1000 GND Pin-SAM L21/D21/G55/4S Xpro Pins(Pin19)
+ *
+ * \section BluSDK Package
+ * ***************************** BluSDK Package *****************************************
+ * - BluSDK -
+ *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=documents
+ * - ATBTLC1000 - 
+ *		+ http://www.atmel.com/devices/ATBTLC1000.aspx 
+ * - Developement kit -
+ *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=tools
+ *		+ SAM L21 + BTLC1000 XPro -
+ *			+ http://www.atmel.com/tools/ATBTLC1000-XSTK.aspx
+ *		+ BTLC1000 XPro -
+ *				+ http://www.atmel.com/tools/ATBTLC1000-XPRO.aspx
+ * - Applications - 
+ *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=applications
+ * - Support and FAQ: visit -
+ *      + <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 /*- Includes ---------------------------------------------------------------*/
 

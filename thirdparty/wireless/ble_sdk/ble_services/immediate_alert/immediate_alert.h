@@ -3,7 +3,7 @@
  *
  * \brief Immediate Alert Service declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -107,6 +107,7 @@ typedef struct gatt_ias_char_handler
 	at_ble_handle_t start_handle;
 	at_ble_handle_t end_handle;
 	at_ble_handle_t char_handle;
+	at_ble_status_t service_discovery;
 	at_ble_status_t char_discovery;
 	uint8_t *char_data;
 }gatt_ias_char_handler_t;

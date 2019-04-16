@@ -3,7 +3,7 @@
  *
  * \brief HID Service
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -143,6 +143,7 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 	hid_inst[servinst].serv_chars[0].char_val.properties = (AT_BLE_CHAR_READ|AT_BLE_CHAR_WRITE_WITHOUT_RESPONSE);
 	hid_inst[servinst].serv_chars[0].char_val.init_value = mode;
 	hid_inst[servinst].serv_chars[0].char_val.len = sizeof(uint8_t);
+	hid_inst[servinst].serv_chars[0].char_val.max_len = sizeof(uint8_t);
 	
 	/* Configure the HID characteristic value permission */
 	hid_inst[servinst].serv_chars[0].char_val.permissions = (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR | AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);
@@ -222,6 +223,7 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 		hid_inst[servinst].serv_chars[id + 1].char_val.uuid.uuid[1] = (uint8_t)(HID_UUID_CHAR_REPORT >> 8);
 		hid_inst[servinst].serv_chars[id + 1].char_val.init_value = ((report_val[id-1]));
 		hid_inst[servinst].serv_chars[id + 1].char_val.len = report_len[id-1];
+		hid_inst[servinst].serv_chars[id + 1].char_val.max_len = report_len[id-1];
 
 		if(report_type[id-1] == INPUT_REPORT){
 
@@ -288,6 +290,7 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 		
 		/* Configure HID Report Reference Descriptor*/
 		hid_inst[servinst].serv_desc[id - 1].desc_val_length = (sizeof(uint8_t)*2);
+		hid_inst[servinst].serv_desc[id - 1].desc_val_max_length = (sizeof(uint8_t)*2);
 		hid_inst[servinst].serv_desc[id - 1].perm = AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR;
 		hid_inst[servinst].serv_desc[id - 1].uuid.type = AT_BLE_UUID_16;
 		hid_inst[servinst].serv_desc[id - 1].uuid.uuid[0] =(uint8_t) HID_REPORT_REF_DESC;
@@ -329,6 +332,7 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 		hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[1] = (uint8_t)(HID_UUID_CHAR_BOOT_MOUSE_INPUT_REPORT >> 8);
 		hid_inst[servinst].serv_chars[id].char_val.init_value = (uint8_t*)&mouse_in_report;
 		hid_inst[servinst].serv_chars[id].char_val.len = sizeof(mouse_in_report);
+		hid_inst[servinst].serv_chars[id].char_val.max_len = sizeof(mouse_in_report);
 		hid_inst[servinst].serv_chars[id].char_val.properties = (AT_BLE_CHAR_READ|AT_BLE_CHAR_NOTIFY);
 		
 		/* Configure the HID characteristic value permission */
@@ -392,7 +396,8 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 		hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[0] =(uint8_t) HID_UUID_CHAR_BOOT_KEY_OUTPUT_REPORT;
 		hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[1] = (uint8_t)(HID_UUID_CHAR_BOOT_KEY_OUTPUT_REPORT >> 8);
 		hid_inst[servinst].serv_chars[id].char_val.init_value = (uint8_t*)&Keyb_out_report; 
-		hid_inst[servinst].serv_chars[id].char_val.len = sizeof(uint8_t); 
+		hid_inst[servinst].serv_chars[id].char_val.len = sizeof(uint8_t);
+		hid_inst[servinst].serv_chars[id].char_val.max_len = sizeof(uint8_t); 
 		hid_inst[servinst].serv_chars[id].char_val.properties = (AT_BLE_CHAR_READ|AT_BLE_CHAR_WRITE_WITHOUT_RESPONSE|AT_BLE_CHAR_WRITE);
 		
 		/* Configure the HID characteristic value permission */
@@ -436,7 +441,8 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 		 hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[0] =(uint8_t) HID_UUID_CHAR_BOOT_KEY_INPUT_REPORT;
 		 hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[1] = (uint8_t)(HID_UUID_CHAR_BOOT_KEY_INPUT_REPORT >> 8);
 		 hid_inst[servinst].serv_chars[id].char_val.init_value = (uint8_t*)&keyb_in_report;
-		 hid_inst[servinst].serv_chars[id].char_val.len = sizeof(keyb_in_report); 
+		 hid_inst[servinst].serv_chars[id].char_val.len = sizeof(keyb_in_report);
+		 hid_inst[servinst].serv_chars[id].char_val.max_len = sizeof(keyb_in_report); 
 		 hid_inst[servinst].serv_chars[id].char_val.properties = (AT_BLE_CHAR_READ|AT_BLE_CHAR_NOTIFY);
 		 
 		 /* Configure the HID characteristic value permission */
@@ -483,6 +489,7 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
     hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[1] = (uint8_t)(HID_UUID_CHAR_HID_INFORMATION >> 8);
     hid_inst[servinst].serv_chars[id].char_val.init_value = (uint8_t*)info;
     hid_inst[servinst].serv_chars[id].char_val.len = sizeof(hid_info_t);
+	hid_inst[servinst].serv_chars[id].char_val.max_len = sizeof(hid_info_t);
     hid_inst[servinst].serv_chars[id].char_val.properties = AT_BLE_CHAR_READ;
 	
 	/* Configure the HID characteristic value permission */
@@ -527,6 +534,7 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 	hid_inst[servinst].serv_chars[id].char_val.uuid.uuid[1] = (uint8_t)(HID_UUID_CHAR_HID_CONTROL_POINT >> 8);
 	hid_inst[servinst].serv_chars[id].char_val.init_value = (uint8_t*)&ctrl_point;
 	hid_inst[servinst].serv_chars[id].char_val.len = sizeof(uint8_t);
+	hid_inst[servinst].serv_chars[id].char_val.max_len = sizeof(uint8_t);
 	hid_inst[servinst].serv_chars[id].char_val.properties = AT_BLE_CHAR_WRITE_WITHOUT_RESPONSE;
 	
 	/* Configure the HID characteristic value permission */
@@ -573,8 +581,10 @@ void hid_serv_report_map(uint8_t servinst, uint8_t *report_info, uint16_t len)
 {
 	hid_inst[servinst].serv_chars[1].char_val.init_value = report_info;
 	hid_inst[servinst].serv_chars[1].char_val.len = len;
+	hid_inst[servinst].serv_chars[1].char_val.max_len = len;
 	hid_serv_inst[servinst].hid_dev_report_map_char->char_val.init_value = report_info;
 	hid_serv_inst[servinst].hid_dev_report_map_char->char_val.len = len;
+	hid_serv_inst[servinst].hid_dev_report_map_char->char_val.max_len = len;
 }
 
 /**

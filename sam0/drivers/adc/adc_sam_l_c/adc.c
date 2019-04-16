@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Analog-to-Digital Converter Driver
  *
- * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -208,7 +208,9 @@ void adc_set_window_mode(
 	}
 
 	/* Set window mode */
-	adc_module->CTRLC.reg = window_mode;
+	uint32_t ctrlc = adc_module->CTRLC.reg;
+	ctrlc = (ctrlc & (~ADC_CTRLC_WINMODE_Msk)) | window_mode;
+	adc_module->CTRLC.reg = ctrlc;
 
 	while (adc_is_syncing(module_inst)) {
 		/* Wait for synchronization */

@@ -3,7 +3,7 @@
  *
  * \brief Time Information Profile declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,7 +63,7 @@
 //  <i> Defines inteval of Fast advertisement in ms.
 //  <i> Default: 100
 //  <id> tip_fast_adv
-#define APP_TP_FAST_ADV								(1600)		//1000 ms
+#define APP_TP_FAST_ADV								(160)		//100 ms
 
 /** @brief APP_TP_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x028F in 
  *seconds, 0x0000 disables time-out.*/

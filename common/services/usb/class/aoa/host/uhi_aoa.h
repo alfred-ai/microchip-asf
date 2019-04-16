@@ -3,7 +3,7 @@
  *
  * \brief Android Open Accessory Header File
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,12 +46,9 @@
 #ifndef _UHI_AOA_H_
 #define _UHI_AOA_H_
 
-#if !(UC3A || UC3B)
-#error Unsupported Device
-#endif
-
 #include <string.h>
 #include "conf_usb_host.h"
+#include "conf_aoa.h"
 #include "usb_protocol_aoa.h"
 #include "uhc.h"
 #include "uhi.h"
@@ -131,6 +128,35 @@ bool uhi_aoa_read(uint8_t *payload, uint16_t payload_size,
  */
 bool uhi_aoa_write(uint8_t *payload, uint16_t payload_size,
 		uhd_callback_trans_t callback_end);
+
+/**
+ * \brief Register a HID device
+ *
+ * \param[in]  id                ID for the HID device
+ * \param[in]  hid_rpt_desc      Pointer to the HID report descriptor
+ * \param[in]  hid_rpt_desc_len  Total length of the HID report descriptor
+ */
+bool uhi_aoa_register_hid(uint16_t id,
+		uint8_t *hid_rpt_desc, uint16_t hid_rpt_desc_len);
+
+/**
+ * \brief Unregister a HID device
+ *
+ * \param[in]  id ID for HID device
+ */
+bool uhi_aoa_unregister_hid(uint16_t id);
+
+/**
+ * \brief Send HID events
+ *
+ * \param[in]  id       ID for the HID device
+ * \param[in]  hid_rpt  Pointer to the HID report for the event,
+ *                      the report format and data length should follow what
+ *                      is defined in HID report descriptor.
+ * \param[in]  rpt_size The HID report size
+ */
+bool uhi_aoa_send_hid_event(uint16_t id, void *hid_rpt, uint16_t rpt_size);
+
 
 /** @} */
 

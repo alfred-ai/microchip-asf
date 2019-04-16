@@ -4,7 +4,7 @@
  *
  * \brief Battery Service declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -85,12 +85,12 @@ typedef struct bat_gatt_service_handler
  * @param[in] conn_handle connection handle
  * @param[in] battery_serv battery service instance
  * @param[in] char_data New battery level
- * @param[in] flag flag to track the notification sent 
+ * @param[in] notify flag to send the notification 
  *
  * @return @ref AT_BLE_SUCCESS operation completed successfully
  * @return @ref AT_BLE_FAILURE Generic error.
  */
-at_ble_status_t bat_update_char_value (at_ble_handle_t conn_handle, bat_gatt_service_handler_t *battery_serv , uint8_t char_data,bool volatile *flag);
+at_ble_status_t bat_update_char_value (at_ble_handle_t conn_handle, bat_gatt_service_handler_t *battery_serv , uint8_t char_data, bool notify);
 
 /**@brief Battery service and characteristic initialization(Called only once by user).
  *
@@ -111,15 +111,13 @@ at_ble_status_t bat_primary_service_define(bat_gatt_service_handler_t *battery_s
 
 /**@brief function to check the client characteristic configuration value. 
  *
- * @param[in] conn_handle connection handle
  * @param[in] battery_service battery service instance
- * @param[in] char_handle characteristic changed @ref at_ble_characteristic_changed_t
- * @param[in] flag flag to track the notification sent 
+ * @param[in] characteristic_changed_param characteristic changed @ref at_ble_characteristic_changed_t
  *
- * @return @ref AT_BLE_SUCCESS operation completed successfully
- * @return @ref AT_BLE_FAILURE Generic error.
+ * @return @ref AT_BLE_SUCCESS when matches with BAS CCCD 
+ * @return @ref AT_BLE_FAILURE when doesn't matches with BAS CCCD 
  */
-at_ble_status_t bat_char_changed_event(at_ble_handle_t conn_handle, bat_gatt_service_handler_t *battery_service, at_ble_characteristic_changed_t *char_handle, bool volatile *flag);
+at_ble_status_t bat_char_changed_event(bat_gatt_service_handler_t *battery_service, at_ble_characteristic_changed_t *characteristic_changed_param);
 
 #endif /* __BATTERY_H__ */
 // </h>

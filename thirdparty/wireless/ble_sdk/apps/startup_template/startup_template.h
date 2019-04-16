@@ -3,7 +3,7 @@
  *
  * \brief Startup Template declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,11 +49,7 @@
 #ifndef __STARTUP_TEMPLATE_H__
 #define __STARTUP_TEMPLATE_H__
 
-/** @brief APP_FAST_ADV between 0x0020 and 0x4000 in 0.625 ms units (20ms to 10.24s). */
-#define APP_FAST_ADV						(1600)
 
-/** @brief APP_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x028F in seconds, 0x0000 disables time-out.*/
-#define APP_ADV_TIMEOUT						(655)
 
 
 

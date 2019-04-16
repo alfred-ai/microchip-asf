@@ -3,7 +3,7 @@
  *
  * \brief Handles Serial bridge driver functionalities
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,6 +46,7 @@
 #include "serial_bridge.h"
 #include "conf_serialbridge.h"
 #include "serial_fifo.h"
+#include "ble_utils.h"
 #include "conf_serialdrv.h"
 
 /* === TYPES =============================================================== */
@@ -155,6 +156,9 @@ void serial_bridge_task(void)
 		{			
 			g_etxdata = t_rx_data;
 			while(STATUS_OK != usart_write_job(&eusart_instance, &g_etxdata));
+			
+			/* Wait for ongoing transmission complete */
+			while (STATUS_OK != usart_get_job_status(&eusart_instance, USART_TRANSCEIVER_TX));
 		}
 	}	
 	
@@ -166,14 +170,17 @@ void serial_bridge_task(void)
 		{
 			g_txdata = t_rx_data;
 			while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
+			
+			/* Wait for ongoing transmission complete */
+			while (STATUS_OK != usart_get_job_status(&usart_instance, USART_TRANSCEIVER_TX));
 		}
 	}
 }
 
-extern void platfrom_start_rx(void);
+extern void platform_start_rx(void);
 void platform_dtm_interface_receive(uint8_t rx_data)
 {
-	platfrom_start_rx();
+	platform_start_rx();
 	ser_fifo_push_uint8(&ble_usart_rx_fifo, (uint8_t)rx_data);	
 }
 

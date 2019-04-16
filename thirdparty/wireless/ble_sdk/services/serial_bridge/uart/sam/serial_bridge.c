@@ -3,7 +3,7 @@
  *
  * \brief Handles Serial Bridge driver functionalities
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,7 +46,9 @@
 #include "serial_bridge.h"
 #include "conf_serialbridge.h"
 #include "serial_fifo.h"
+#include "ble_utils.h"
 #include "conf_serialdrv.h"
+#include "serial_drv.h"
 
 /* === GLOBALS ========================================================== */
 extern volatile bool ble_usart_tx_cmpl;
@@ -229,8 +231,8 @@ void serial_bridge_task(void)
 			  uart_write(SB_UART, t_rx_data);
 			  //Enable the USART Empty Interrupt
 			  uart_enable_interrupt(SB_UART, US_IER_TXEMPTY);
-			  #endif	
-			  
+			  #endif				  
+			  while(false == ble_eusart_tx_cmpl);		  
 		  }
 		}
 	}
@@ -249,15 +251,15 @@ void serial_bridge_task(void)
 				ble_usart_tx_byte[0] = t_rx_data;
 				ble_usart_tx_cmpl = false;
 				ble_pdc_send_data(ble_usart_tx_byte, 1);
+				while(false == ble_usart_tx_cmpl);
 			}
 		}		
 	}
 }
 
-extern void platfrom_start_rx(void);
 void platform_dtm_interface_receive(uint8_t rx_data)
 {
-	platfrom_start_rx();
+	platform_start_rx();
 	ser_fifo_push_uint8(&ble_usart_rx_fifo, (uint8_t)rx_data);
 }
 

@@ -3,7 +3,7 @@
  *
  * \brief AT30TSE75X Temperature sensor driver configuration file.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *

@@ -3,7 +3,7 @@
  *
  * \brief Timer Driver Configuration Header
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,10 +43,16 @@
 #ifndef CONF_TIMER_H_INCLUDED
 #define CONF_TIMER_H_INCLUDED
 
+#define TMRID0 TC4
+#define TMRID1 TC6
 #define CONF_TC_MODULE TC3
+
+#define STACK_TIMER0 TMRID0
+#define STACK_TIMER1 TMRID1
+#define APP_TIMER	 CONF_TC_MODULE
+
 #define TC_COUNT_1SEC  (48000000ul/1024ul)
 struct tc_module tc_instance;
 
-#define CONF_BUS_TC_MODULE TC4
-struct tc_module bus_tc_instance;
+
 #endif

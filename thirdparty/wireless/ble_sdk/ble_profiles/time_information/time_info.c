@@ -3,7 +3,7 @@
 *
 * \brief Time Information Profile
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -109,7 +109,7 @@ gatt_rtu_handler_t rtu_handle = {0, 0, AT_BLE_INVALID_PARAM, 0, NULL, 0, NULL};
 #endif
 
 /**@breif Peer Connected device info*/
-extern ble_connected_dev_info_t ble_dev_info[BLE_MAX_DEVICE_CONNECTED];
+extern ble_connected_dev_info_t ble_dev_info[BLE_MAX_DEVICE_CONNECTION];
 
 volatile bool current_time_char_found = false;
 volatile bool local_time_char_found = false;
@@ -121,40 +121,19 @@ volatile bool Desc_found = false;
 
 read_response_callback_t read_response_callback = NULL;
 
-static const ble_event_callback_t time_info_gatt_client_handle[] = {
-	time_info_service_found_handler,
-	NULL,
-	time_info_characteristic_found_handler,
-	time_info_descriptor_found_handler,
-	time_info_discovery_complete_handler,
-	time_info_characteristic_read_response,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_client_event_cb_t time_info_gatt_client_handle = {
+	.primary_service_found = time_info_service_found_handler,
+	.characteristic_found = time_info_characteristic_found_handler,
+	.descriptor_found = time_info_descriptor_found_handler,
+	.discovery_complete = time_info_discovery_complete_handler,
+	.characteristic_read_by_uuid_response = time_info_characteristic_read_response
 };
 
-static const ble_event_callback_t ble_mgr_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	time_info_service_discover,
-	time_info_disconnected_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t ble_mgr_gap_handle = {
+	.connected = time_info_service_discover,
+	.disconnected = time_info_disconnected_event_handler
 };
+
 static at_ble_handle_t time_info_conn_handle = 0;
 /***********************************************************************************
  *									Implementations	                               *
@@ -205,11 +184,11 @@ void time_info_init(void)
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 									BLE_GAP_EVENT_TYPE,
-									ble_mgr_gap_handle);
+									&ble_mgr_gap_handle);
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 									BLE_GATT_CLIENT_EVENT_TYPE,
-									time_info_gatt_client_handle);
+									&time_info_gatt_client_handle);
 }
 
 /**

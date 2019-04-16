@@ -114,11 +114,10 @@ void nm_bsp_reset(void)
 {
 	ioport_set_pin_level(CONF_WINC_PIN_CHIP_ENABLE, IOPORT_PIN_LEVEL_LOW);
 	ioport_set_pin_level(CONF_WINC_PIN_RESET, IOPORT_PIN_LEVEL_LOW);
-	nm_bsp_sleep(100);
+	nm_bsp_sleep(1);
 	ioport_set_pin_level(CONF_WINC_PIN_CHIP_ENABLE, IOPORT_PIN_LEVEL_HIGH);
-	nm_bsp_sleep(100);
+	nm_bsp_sleep(10);
 	ioport_set_pin_level(CONF_WINC_PIN_RESET, IOPORT_PIN_LEVEL_HIGH);
-	nm_bsp_sleep(100);
 }
 
 /*

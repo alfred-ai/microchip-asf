@@ -4,7 +4,7 @@
  * \brief USBC host driver
  * Compliance with common driver UHD
  *
- * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -1064,7 +1064,7 @@ static void uhd_interrupt(void)
 		uhd_disable_wakeup_interrupt();
 		goto uhd_interrupt_exit;
 	}
-	
+
 	if (Is_uhd_wakeup_interrupt_enabled() && (Is_uhd_wakeup() ||
 			Is_uhd_downstream_resume() || Is_uhd_upstream_resume())) {
 		dbg_print("Wkup ");
@@ -1868,6 +1868,12 @@ static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 {
 	bool old_toggle = uhd_data_toggle(pipe);
 	uint32_t config;
+	uhd_pipe_job_t *ptr_job = &uhd_pipe_job[pipe - 1];
+
+	// Freeze pipe and update nb_trans
+	uhd_freeze_pipe(pipe);
+	ptr_job->nb_trans += (uhd_is_pipe_out(pipe)) ?
+			uhd_udesc_get_buf0_size(pipe) : uhd_udesc_get_buf0_ctn(pipe);
 
 	// Reset pipe but keep configuration
 	config = USBC_ARRAY(USBC_UPCFG0,pipe);

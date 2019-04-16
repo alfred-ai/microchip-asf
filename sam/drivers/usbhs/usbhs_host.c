@@ -1952,14 +1952,13 @@ static void uhd_pipe_interrupt_dma(uint8_t pipe)
 {
 	uhd_pipe_job_t *ptr_job;
 	uint32_t nb_remaining;
+	uint32_t stat = uhd_pipe_dma_get_status(pipe);
 
-	if (uhd_pipe_dma_get_status(pipe)
-			& USBHS_HSTDMASTATUS_CHANN_ENB) {
+	if (stat & USBHS_HSTDMASTATUS_CHANN_ENB) {
 		return; // Ignore EOT_STA interrupt
 	}
 	// Save number of data no transfered
-	nb_remaining = (uhd_pipe_dma_get_status(pipe) &
-			USBHS_HSTDMASTATUS_BUFF_COUNT_Msk)
+	nb_remaining = (stat & USBHS_HSTDMASTATUS_BUFF_COUNT_Msk)
 			>> USBHS_HSTDMASTATUS_BUFF_COUNT_Pos;
 
 	// Get job corresponding at endpoint
@@ -2119,6 +2118,9 @@ static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 	uhd_disable_out_ready_interrupt(pipe);
 #ifdef UHD_PIPE_DMA_SUPPORTED
 	if (Is_uhd_pipe_dma_supported(pipe)) {
+		uhd_pipe_job_t *ptr_job = &uhd_pipe_job[pipe - 1];
+		ptr_job->nb_trans =
+				uhd_pipe_dma_get_addr(pipe) - (uint32_t)ptr_job->buf;
 		uhd_pipe_dma_set_control(pipe, 0);
 	}
 #endif

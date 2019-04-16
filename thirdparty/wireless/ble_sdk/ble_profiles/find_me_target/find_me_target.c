@@ -4,7 +4,7 @@
  *
  * \brief Find Me Target Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -59,40 +59,15 @@
 *							        Globals	                                     		*
 ****************************************************************************************/
 
-static const ble_event_callback_t fmp_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	fmp_target_connected_state_handler,
-	fmp_target_disconnect_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t fmp_gap_handle = {
+	.connected = fmp_target_connected_state_handler,
+	.disconnected = fmp_target_disconnect_event_handler
 };
 
-static const ble_event_callback_t fmp_gatt_server_handle[] = {
-	NULL,
-	NULL,
-	fmp_target_char_changed_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t fmp_gatt_server_handle = {
+	.characteristic_changed = fmp_target_char_changed_handler
 };
+
 
 /* Immediate alert service declaration */
 #ifdef IMMEDIATE_ALERT_SERVICE
@@ -200,9 +175,7 @@ at_ble_status_t fmp_target_connected_state_handler(void * params)
 	uint16_t len;
 	at_ble_connected_t *conn_params;
 	conn_params = (at_ble_connected_t *)params;
-	///* Upon connection set default value to no alert*/
-	//immediate_alert_cb(IAS_NO_ALERT);
-	
+		
 	if ((status
 				= at_ble_characteristic_value_get(ias_handle.
 					serv_chars.char_val_handle,
@@ -212,6 +185,14 @@ at_ble_status_t fmp_target_connected_state_handler(void * params)
 				"Read of alert value for Immediate alert service failed:reason %x",
 				status);
 	}
+	else
+	{
+			if (immediate_alert_value != INVALID_IAS_PARAM) 
+			{
+				immediate_alert_cb(immediate_alert_value);
+			}
+	}
+	
         ALL_UNUSED(conn_params);
 	return AT_BLE_SUCCESS;
 }
@@ -254,10 +235,10 @@ void fmp_target_init(void *param)
 	fmp_target_adv();
 	
 	/* Callback registering for BLE-GAP Role */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, fmp_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, &fmp_gap_handle);
 	
 	/* Callback registering for BLE-GATT-Server Role */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, fmp_gatt_server_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, &fmp_gatt_server_handle);
 	
 	ALL_UNUSED(param);
 }

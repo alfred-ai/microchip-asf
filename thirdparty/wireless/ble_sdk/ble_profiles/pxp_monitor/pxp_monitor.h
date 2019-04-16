@@ -3,7 +3,7 @@
  *
  * \brief Proximity Monitor Profile declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -95,7 +95,7 @@ typedef enum {
 
 typedef void (*hw_timer_start_func_cb_t)(uint32_t);
 typedef void (*hw_timer_stop_func_cb_t)(void);
-typedef ble_peripheral_state_t (*peripheral_state_cb_t)(void);
+typedef ble_device_ll_state_t (*peripheral_state_cb_t)(void);
 
 /* *@brief Initializes Proximity profile
  * handler Pointer reference to respective variables

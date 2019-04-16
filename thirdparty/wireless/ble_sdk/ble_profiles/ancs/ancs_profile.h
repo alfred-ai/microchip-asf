@@ -4,7 +4,7 @@
 *
 * \brief Alert Notification Profile declarations
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -63,7 +63,7 @@
 //	<i> Defines inteval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> ancs_app_anp_fast_adv
-#define APP_ANP_FAST_ADV						(1600) //1000 ms
+#define APP_ANP_FAST_ADV						(160) //100 ms
 
 /** @brief APP_ANP_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x028F in 
  *seconds, 0x0000 disables time-out.*/

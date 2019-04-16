@@ -3,7 +3,7 @@
  *
  * \brief I2C Master Bootloader Bridge Application
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -151,7 +151,7 @@ static void configure_i2c_master(void)
 
 	struct i2c_master_config config_i2c_master;
 	i2c_master_get_config_defaults(&config_i2c_master);
-
+	config_i2c_master.generator_source = GCLK_GENERATOR_3;
 	config_i2c_master.buffer_timeout = 10000;
 	config_i2c_master.pinmux_pad0	= BOOT_I2C_PAD0;
 	config_i2c_master.pinmux_pad1	= BOOT_I2C_PAD1;
@@ -168,7 +168,7 @@ int main(void)
 
 	uint8_t write_data[PATTERN_TEST_LENGTH];
 	uint8_t read_data[PATTERN_TEST_LENGTH];
-	uint32_t file_size = 0,remaining_len = 0;;
+	uint32_t file_size = 0, remaining_len = 0;
 
 	struct i2c_master_packet tx_buf = {
 		.address     = SLAVE_ADDRESS,

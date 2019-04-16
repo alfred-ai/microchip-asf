@@ -3,7 +3,7 @@
  *
  * \brief Simple Broadcaster Application declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -56,9 +56,10 @@
 #include "console_serial.h"
 #include "timer_hw.h"
 #include "conf_extint.h"
+#include "ble_utils.h"
 #include "conf_serialdrv.h"
 #include "ble_manager.h"
-#include "ble_utils.h"
+
 
 /* 1000 ms */
 #define APP_BROADCAST_FAST_ADV                  (1600)

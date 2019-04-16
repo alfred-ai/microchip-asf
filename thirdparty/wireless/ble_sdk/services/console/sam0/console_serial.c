@@ -3,7 +3,7 @@
  *
  * \brief Serial Console functionalities
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -75,7 +75,7 @@ void serial_console_init(void)
 
 uint8_t getchar_timeout(uint32_t timeout)
 {
-	uint16_t temp = NULL;
+	uint16_t temp = 0xFF;
 
 	while((STATUS_OK != usart_read_wait(&cdc_uart_module, &temp)) && timeout){
 		timeout--;

@@ -3,7 +3,7 @@
  *
  * \brief Timer Driver Configuration Header
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,15 +44,20 @@
 #define CONF_TIMER_H_INCLUDED
 
 #define BLE_APP_TIMER							(TC0)
+#define BLE_APP_TIMER_ID						(ID_TC0)
 #define BLE_APP_TIMER_CHANNEL_ID				0
 
 #define DEF_1MHZ								(1000000)
 #define DEF_120MHz								(120000000)
 #define TIMER_OVF_COUNT_1SEC					(DEF_120MHz/(128*65535))
 
-#define BUS_TIMER								(TC0)
-#define BUS_TIMER_ID							(ID_TC1)
-#define BUS_TIMER_CHANNEL_ID					1
-#define TIMER_OVF_COUNT_1MSEC					(DEF_120MHz/(128*937))
+#define STACK_TIMER_0							(TC0)
+#define STACK_TIMER_0_ID						(ID_TC1)
+#define STACK_TIMER_0_CHANNEL_ID				1
+#define TIMER_OVF_COUNT_1MSEC					(DEF_120MHz/(128*1000))
+
+#define STACK_TIMER_1							(TC0)
+#define STACK_TIMER_1_ID						(ID_TC2)
+#define STACK_TIMER_1_CHANNEL_ID				2
 
 #endif

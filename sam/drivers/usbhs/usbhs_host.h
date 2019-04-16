@@ -3,7 +3,7 @@
  *
  * \brief USB Host Driver header file for USBHS.
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -489,6 +489,8 @@ typedef struct {
 #define  uhd_pipe_dma_get_control(p)          (USBHS_UHDMA_ARRAY(p).control)
 //! Set RAM address to selected endpoint DMA channel
 #define  uhd_pipe_dma_set_addr(p,add)         (USBHS_UHDMA_ARRAY(p).addr=add)
+//! Get RAM address from selected endpoint DMA channel
+#define  uhd_pipe_dma_get_addr(p)             (USBHS_UHDMA_ARRAY(p).addr)
 //! Get status to selected endpoint DMA channel
 #define  uhd_pipe_dma_get_status(p)           (USBHS_UHDMA_ARRAY(p).status)
 //! @}

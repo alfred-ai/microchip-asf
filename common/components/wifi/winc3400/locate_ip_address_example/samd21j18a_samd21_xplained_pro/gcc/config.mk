@@ -52,28 +52,30 @@ TARGET_SRAM = winc3400_locate_ip_address_example_sram.elf
 
 # List of C source files.
 CSRCS = \
-       common/components/wifi/winc3400/ble/ble_services/ble_mgr/ble_manager.c \
-       common/components/wifi/winc3400/bsp/source/nm_bsp_samd21.c \
-       common/components/wifi/winc3400/bus_wrapper/source/nm_bus_wrapper_samd21.c \
-       common/components/wifi/winc3400/common/source/nm_common.c \
-       common/components/wifi/winc3400/driver/source/m2m_ate_mode.c \
-       common/components/wifi/winc3400/driver/source/m2m_crypto.c \
-       common/components/wifi/winc3400/driver/source/m2m_hif.c \
-       common/components/wifi/winc3400/driver/source/m2m_ota.c \
-       common/components/wifi/winc3400/driver/source/m2m_periph.c \
-       common/components/wifi/winc3400/driver/source/m2m_wifi.c \
-       common/components/wifi/winc3400/driver/source/nmasic.c \
-       common/components/wifi/winc3400/driver/source/nmbus.c \
-       common/components/wifi/winc3400/driver/source/nmdrv.c \
-       common/components/wifi/winc3400/driver/source/nmi2c.c \
-       common/components/wifi/winc3400/driver/source/nmspi.c \
-       common/components/wifi/winc3400/driver/source/nmuart.c \
        common/components/wifi/winc3400/locate_ip_address_example/iot/json.c \
        common/components/wifi/winc3400/locate_ip_address_example/iot/stream_writer.c \
        common/components/wifi/winc3400/locate_ip_address_example/iot/sw_timer.c \
        common/components/wifi/winc3400/locate_ip_address_example/main21.c \
-       common/components/wifi/winc3400/socket/source/socket.c \
-       common/components/wifi/winc3400/spi_flash/source/spi_flash.c \
+       common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21.c \
+       common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21_app.c \
+       common/components/wifi/winc3400/wifi_drv/bus_wrapper/source/nm_bus_wrapper_samd21.c \
+       common/components/wifi/winc3400/wifi_drv/common/source/nm_common.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ate_mode.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_crypto.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_flash.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_hif.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ota.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_periph.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_wifi.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmasic.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmbus.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmdrv.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmflash.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmi2c.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmspi.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/nmuart.c \
+       common/components/wifi/winc3400/wifi_drv/socket/source/socket.c \
+       common/components/wifi/winc3400/wifi_drv/spi_flash/source/spi_flash.c \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/samd21_xplained_pro/board_init.c       \
@@ -105,11 +107,11 @@ ASSRCS =
 # List of include paths.
 INC_PATH = \
        common/boards                                      \
-       common/components/wifi/winc3400                    \
        common/components/wifi/winc3400/locate_ip_address_example \
        common/components/wifi/winc3400/locate_ip_address_example/iot \
        common/components/wifi/winc3400/locate_ip_address_example/iot/http \
        common/components/wifi/winc3400/locate_ip_address_example/samd21j18a_samd21_xplained_pro \
+       common/components/wifi/winc3400/wifi_drv           \
        common/services/serial                             \
        common/utils                                       \
        common2/services/delay                             \
@@ -145,13 +147,11 @@ INC_PATH = \
 
 # Additional search paths for libraries.
 LIB_PATH =  \
-       common/components/wifi/winc3400/ble                \
        common/components/wifi/winc3400/locate_ip_address_example/iot/http \
        thirdparty/CMSIS/Lib/GCC                          
 
 # List of libraries to use during linking.
 LIBS =  \
-       at_ble_api_cm0                                     \
        HTTP_CLIENT                                        \
        arm_cortexM0l_math                                
 

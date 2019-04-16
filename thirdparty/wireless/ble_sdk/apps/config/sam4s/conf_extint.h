@@ -3,7 +3,7 @@
  *
  * \brief SAM G55 External Interrupt Driver Configuration Header
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -95,6 +95,15 @@ static inline void button_handler(uint32_t ul_id, uint32_t ul_mask)
 			PIN_PUSHBUTTON_WAKEUP_MASK == ul_mask) {
 		button_cb();
 	}
+}
+
+/**
+ * \brief Read the current state of the button pin
+ *
+ */
+static inline uint8_t button_0_input_level(void) 
+{
+	return ioport_get_pin_level(BUTTON_0_PIN);
 }
 
 #endif
