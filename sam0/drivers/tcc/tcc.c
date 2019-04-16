@@ -72,7 +72,7 @@
 #if !defined(__DOXYGEN__)
 
 #  define _TCC_GCLK_ID(n,unused)           TPASTE3(TCC,n,_GCLK_ID),
-#  if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
+#  if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 #    define _TCC_APBCMASK(n,unused)        TPASTE2(MCLK_APBCMASK_TCC,n),
 #  else
 #    define _TCC_APBCMASK(n,unused)        TPASTE2(PM_APBCMASK_TCC,n),
@@ -637,7 +637,7 @@ enum status_code tcc_init(
 
 	hw->DRVCTRL.reg = drvctrl;
 
-#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22)
+#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30)
 	while (hw->SYNCBUSY.reg & (TCC_SYNCBUSY_WAVE | TCC_SYNCBUSY_WAVEB)) {
 		/* Wait for sync */
 	}
@@ -649,7 +649,7 @@ enum status_code tcc_init(
 	}
 	hw->COUNT.reg = config->counter.count;
 
-#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22)
+#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30)
 	while (hw->SYNCBUSY.reg & (TCC_SYNCBUSY_PER | TCC_SYNCBUSY_PERB)) {
 		/* Wait for sync */
 	}
@@ -657,7 +657,7 @@ enum status_code tcc_init(
 	hw->PER.reg = (config->counter.period);
 
 	for (i = 0; i <  _tcc_cc_nums[module_index]; i ++) {
-#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22)
+#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30)
 		while (hw->SYNCBUSY.reg & (
 			(TCC_SYNCBUSY_CC0 | TCC_SYNCBUSY_CCB0) << i)) {
 			/* Wait for sync */
@@ -929,7 +929,7 @@ enum status_code tcc_set_count_value(
 		return STATUS_ERR_INVALID_ARG;
 	}
 
-	while (tcc_module->SYNCBUSY.bit.COUNT) {
+	while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_COUNT) {
 		/* Wait for sync */
 	}
 
@@ -962,14 +962,14 @@ uint32_t tcc_get_count_value(
 
 	/* Wait last command done */
 	do {
-		while (tcc_module->SYNCBUSY.bit.CTRLB) {
+		while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 		}
 		last_cmd = tcc_module->CTRLBSET.reg & TCC_CTRLBSET_CMD_Msk;
 		if (TCC_CTRLBSET_CMD_NONE == last_cmd) {
 			/* Issue read command and break */
 			tcc_module->CTRLBSET.bit.CMD = TCC_CTRLBSET_CMD_READSYNC_Val;
-			while (tcc_module->SYNCBUSY.bit.CTRLB) {
+			while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 				/* Wait for sync */
 			}
 			break;
@@ -979,7 +979,7 @@ uint32_t tcc_get_count_value(
 		}
 	} while (1);
 
-	while (tcc_module->SYNCBUSY.bit.COUNT) {
+	while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_COUNT) {
 		/* Wait for sync */
 	}
 	return (tcc_module->COUNT.reg);
@@ -1063,7 +1063,7 @@ static enum status_code _tcc_set_compare_value(
 	}
 
 	if (double_buffering_enabled) {
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30)
 		tcc_module->CCBUF[channel_index].reg = compare;
 #else
 		while(tcc_module->SYNCBUSY.reg  &
@@ -1188,7 +1188,7 @@ static enum status_code _tcc_set_top_value(
 	}
 
 	if (double_buffering_enabled) {
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30)
 		tcc_module->PERBUF.reg = top_value;
 #else
 		while(tcc_module->SYNCBUSY.reg  & TCC_SYNCBUSY_PERB) {
@@ -1338,7 +1338,7 @@ enum status_code tcc_set_pattern(
 	}
 
 	if (module_inst->double_buffering_enabled) {
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30)
 		tcc_module->PATTBUF.reg = patt_value;
 #else
 		while(tcc_module->SYNCBUSY.reg  & TCC_SYNCBUSY_PATTB) {
@@ -1453,6 +1453,10 @@ uint32_t tcc_get_status(
 	/* Check for TCC count stop */
 	if (status_flags & TCC_STATUS_STOP) {
 		status |= TCC_STATUS_STOPPED;
+	}
+	/* Check for TCC RAMP index */
+	if (status_flags & TCC_STATUS_IDX) {
+		status |= TCC_STATUS_RAMP_CYCLE_INDEX;
 	}
 	return status;
 }

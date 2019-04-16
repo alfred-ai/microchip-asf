@@ -73,7 +73,7 @@ bool aon_sleep_timer_service_init(uint32_t _sec)
 bool aon_sleep_timer_service_start(aon_sleep_timer_callback_t callback)
 {
 	aon_sleep_timer_register_callback(callback);
-	NVIC_EnableIRQ(AON_SLEEP_TIMER_IRQn);
+	NVIC_EnableIRQ(AON_SLEEP_TIMER0_IRQn);
 		
 	while(!aon_sleep_timer_sleep_timer_active())
 	
@@ -93,6 +93,6 @@ void aon_sleep_timer_service_stop()
 	
 	aon_sleep_timer_disable();
 	aon_sleep_timer_unregister_callback();
-	NVIC_DisableIRQ(AON_SLEEP_TIMER_IRQn);
+	NVIC_DisableIRQ(AON_SLEEP_TIMER0_IRQn);
 }
 

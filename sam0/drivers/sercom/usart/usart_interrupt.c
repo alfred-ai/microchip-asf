@@ -301,7 +301,7 @@ enum status_code usart_write_buffer_job(
 		return STATUS_ERR_INVALID_ARG;
 	}
 
-	/* Check that the receiver is enabled */
+	/* Check that the transmitter is enabled */
 	if (!(module->transmitter_enabled)) {
 		return STATUS_ERR_DENIED;
 	}
@@ -511,11 +511,10 @@ void _usart_interrupt_handler(
 		} else {
 			usart_hw->INTENCLR.reg = SERCOM_USART_INTFLAG_DRE;
 		}
+	}
 
 	/* Check if the Transmission Complete interrupt has occurred and
 	 * that the transmit buffer is empty */
-	}
-
 	if (interrupt_status & SERCOM_USART_INTFLAG_TXC) {
 
 		/* Disable TX Complete Interrupt, and set STATUS_OK */
@@ -526,11 +525,10 @@ void _usart_interrupt_handler(
 		if (callback_status & (1 << USART_CALLBACK_BUFFER_TRANSMITTED)) {
 			(*(module->callback[USART_CALLBACK_BUFFER_TRANSMITTED]))(module);
 		}
+	}
 
 	/* Check if the Receive Complete interrupt has occurred, and that
 	 * there's more data to receive */
-	}
-
 	if (interrupt_status & SERCOM_USART_INTFLAG_RXC) {
 
 		if (module->remaining_rx_buffer_length) {

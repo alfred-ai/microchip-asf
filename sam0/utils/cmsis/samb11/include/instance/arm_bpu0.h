@@ -3,7 +3,7 @@
  *
  * \brief Instance description for ARM_BPU0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,35 +46,39 @@
 
 /* ========== Register definition for ARM_BPU0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_ARM_BPU0_BP_CTRL             (0xe0002000LU) /**< \brief (ARM_BPU0) Break Point Control Register */
-#define REG_ARM_BPU0_BP_COMP0            (0xe0002008LU) /**< \brief (ARM_BPU0) Break Point Compare Register 0 */
-#define REG_ARM_BPU0_BP_COMP1            (0xe000200cLU) /**< \brief (ARM_BPU0) Break Point Compare Register 1 */
-#define REG_ARM_BPU0_BP_COMP2            (0xe0002010LU) /**< \brief (ARM_BPU0) Break Point Compare Register 2 */
-#define REG_ARM_BPU0_BP_COMP3            (0xe0002014LU) /**< \brief (ARM_BPU0) Break Point Compare Register 3 */
-#define REG_ARM_BPU0_BP_PID4             (0xe0002fd0LU) /**< \brief (ARM_BPU0) Peripheral ID Register 4 */
-#define REG_ARM_BPU0_BP_PID0             (0xe0002fe0LU) /**< \brief (ARM_BPU0) Peripheral ID Register 0 */
-#define REG_ARM_BPU0_BP_PID1             (0xe0002fe4LU) /**< \brief (ARM_BPU0) Peripheral ID Register 1 */
-#define REG_ARM_BPU0_BP_PID2             (0xe0002fe8LU) /**< \brief (ARM_BPU0) Peripheral ID Register 2 */
-#define REG_ARM_BPU0_BP_PID3             (0xe0002fecLU) /**< \brief (ARM_BPU0) Peripheral ID Register 3 */
-#define REG_ARM_BPU0_BP_CID0             (0xe0002ff0LU) /**< \brief (ARM_BPU0) Component ID Register 0 */
-#define REG_ARM_BPU0_BP_CID1             (0xe0002ff4LU) /**< \brief (ARM_BPU0) Component ID Register 1 */
-#define REG_ARM_BPU0_BP_CID2             (0xe0002ff8LU) /**< \brief (ARM_BPU0) Component ID Register 2 */
-#define REG_ARM_BPU0_BP_CID3             (0xe0002ffcLU) /**< \brief (ARM_BPU0) Component ID Register 3 */
+
+#define REG_ARM_BPU0_BP_CTRL    (0xE0002000U) /**< (ARM_BPU0) Break Point Control Register */
+#define REG_ARM_BPU0_BP_COMP0   (0xE0002008U) /**< (ARM_BPU0) Break Point Compare Register 0 */
+#define REG_ARM_BPU0_BP_COMP1   (0xE000200CU) /**< (ARM_BPU0) Break Point Compare Register 1 */
+#define REG_ARM_BPU0_BP_COMP2   (0xE0002010U) /**< (ARM_BPU0) Break Point Compare Register 2 */
+#define REG_ARM_BPU0_BP_COMP3   (0xE0002014U) /**< (ARM_BPU0) Break Point Compare Register 3 */
+#define REG_ARM_BPU0_BP_PID4    (0xE0002FD0U) /**< (ARM_BPU0) Peripheral ID Register 4 */
+#define REG_ARM_BPU0_BP_PID0    (0xE0002FE0U) /**< (ARM_BPU0) Peripheral ID Register 0 */
+#define REG_ARM_BPU0_BP_PID1    (0xE0002FE4U) /**< (ARM_BPU0) Peripheral ID Register 1 */
+#define REG_ARM_BPU0_BP_PID2    (0xE0002FE8U) /**< (ARM_BPU0) Peripheral ID Register 2 */
+#define REG_ARM_BPU0_BP_PID3    (0xE0002FECU) /**< (ARM_BPU0) Peripheral ID Register 3 */
+#define REG_ARM_BPU0_BP_CID0    (0xE0002FF0U) /**< (ARM_BPU0) Component ID Register 0 */
+#define REG_ARM_BPU0_BP_CID1    (0xE0002FF4U) /**< (ARM_BPU0) Component ID Register 1 */
+#define REG_ARM_BPU0_BP_CID2    (0xE0002FF8U) /**< (ARM_BPU0) Component ID Register 2 */
+#define REG_ARM_BPU0_BP_CID3    (0xE0002FFCU) /**< (ARM_BPU0) Component ID Register 3 */
+
 #else
-#define REG_ARM_BPU0_BP_CTRL             (*(RwReg8 *)0xe0002000LU) /**< \brief (ARM_BPU0) Break Point Control Register */
-#define REG_ARM_BPU0_BP_COMP0            (*(RwReg  *)0xe0002008LU) /**< \brief (ARM_BPU0) Break Point Compare Register 0 */
-#define REG_ARM_BPU0_BP_COMP1            (*(RwReg  *)0xe000200cLU) /**< \brief (ARM_BPU0) Break Point Compare Register 1 */
-#define REG_ARM_BPU0_BP_COMP2            (*(RwReg  *)0xe0002010LU) /**< \brief (ARM_BPU0) Break Point Compare Register 2 */
-#define REG_ARM_BPU0_BP_COMP3            (*(RwReg  *)0xe0002014LU) /**< \brief (ARM_BPU0) Break Point Compare Register 3 */
-#define REG_ARM_BPU0_BP_PID4             (*(RoReg8 *)0xe0002fd0LU) /**< \brief (ARM_BPU0) Peripheral ID Register 4 */
-#define REG_ARM_BPU0_BP_PID0             (*(RoReg8 *)0xe0002fe0LU) /**< \brief (ARM_BPU0) Peripheral ID Register 0 */
-#define REG_ARM_BPU0_BP_PID1             (*(RoReg8 *)0xe0002fe4LU) /**< \brief (ARM_BPU0) Peripheral ID Register 1 */
-#define REG_ARM_BPU0_BP_PID2             (*(RoReg8 *)0xe0002fe8LU) /**< \brief (ARM_BPU0) Peripheral ID Register 2 */
-#define REG_ARM_BPU0_BP_PID3             (*(RoReg8 *)0xe0002fecLU) /**< \brief (ARM_BPU0) Peripheral ID Register 3 */
-#define REG_ARM_BPU0_BP_CID0             (*(RoReg8 *)0xe0002ff0LU) /**< \brief (ARM_BPU0) Component ID Register 0 */
-#define REG_ARM_BPU0_BP_CID1             (*(RoReg8 *)0xe0002ff4LU) /**< \brief (ARM_BPU0) Component ID Register 1 */
-#define REG_ARM_BPU0_BP_CID2             (*(RoReg8 *)0xe0002ff8LU) /**< \brief (ARM_BPU0) Component ID Register 2 */
-#define REG_ARM_BPU0_BP_CID3             (*(RoReg8 *)0xe0002ffcLU) /**< \brief (ARM_BPU0) Component ID Register 3 */
+
+#define REG_ARM_BPU0_BP_CTRL    (*(__IO uint8_t*)0xE0002000U) /**< (ARM_BPU0) Break Point Control Register */
+#define REG_ARM_BPU0_BP_COMP0   (*(__IO uint32_t*)0xE0002008U) /**< (ARM_BPU0) Break Point Compare Register 0 */
+#define REG_ARM_BPU0_BP_COMP1   (*(__IO uint32_t*)0xE000200CU) /**< (ARM_BPU0) Break Point Compare Register 1 */
+#define REG_ARM_BPU0_BP_COMP2   (*(__IO uint32_t*)0xE0002010U) /**< (ARM_BPU0) Break Point Compare Register 2 */
+#define REG_ARM_BPU0_BP_COMP3   (*(__IO uint32_t*)0xE0002014U) /**< (ARM_BPU0) Break Point Compare Register 3 */
+#define REG_ARM_BPU0_BP_PID4    (*(__I  uint8_t*)0xE0002FD0U) /**< (ARM_BPU0) Peripheral ID Register 4 */
+#define REG_ARM_BPU0_BP_PID0    (*(__I  uint8_t*)0xE0002FE0U) /**< (ARM_BPU0) Peripheral ID Register 0 */
+#define REG_ARM_BPU0_BP_PID1    (*(__I  uint8_t*)0xE0002FE4U) /**< (ARM_BPU0) Peripheral ID Register 1 */
+#define REG_ARM_BPU0_BP_PID2    (*(__I  uint8_t*)0xE0002FE8U) /**< (ARM_BPU0) Peripheral ID Register 2 */
+#define REG_ARM_BPU0_BP_PID3    (*(__I  uint8_t*)0xE0002FECU) /**< (ARM_BPU0) Peripheral ID Register 3 */
+#define REG_ARM_BPU0_BP_CID0    (*(__I  uint8_t*)0xE0002FF0U) /**< (ARM_BPU0) Component ID Register 0 */
+#define REG_ARM_BPU0_BP_CID1    (*(__I  uint8_t*)0xE0002FF4U) /**< (ARM_BPU0) Component ID Register 1 */
+#define REG_ARM_BPU0_BP_CID2    (*(__I  uint8_t*)0xE0002FF8U) /**< (ARM_BPU0) Component ID Register 2 */
+#define REG_ARM_BPU0_BP_CID3    (*(__I  uint8_t*)0xE0002FFCU) /**< (ARM_BPU0) Component ID Register 3 */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_ARM_BPU0_INSTANCE_ */

@@ -4,7 +4,7 @@
  *
  * \brief SAM Segment Liquid Crystal Display(SLCD) Controller.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -189,8 +189,6 @@ struct slcd_config {
 	uint8_t bias_buffer_duration;
 	/** Enable bias buffer if true */
 	bool enable_bias_buffer;
-	/** Enable external bias capacitor if true */
-	bool enable_ext_bias;
 };
 /**
  * \brief SLCD event enable/disable structure

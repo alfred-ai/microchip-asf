@@ -3,7 +3,7 @@
  *
  * \brief SAM B11 SPI configuration
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -55,15 +55,15 @@
 
 #  define CONF_SPI                   SPI1
 
-#  define CONF_SPI_PIN_SCK           PIN_LP_GPIO_17_MUX4_SPI1_SCK
-#  define CONF_SPI_PIN_MOSI          PIN_LP_GPIO_19_MUX4_SPI1_MOSI
+#  define CONF_SPI_PIN_SCK           PIN_LP_GPIO_17
+#  define CONF_SPI_PIN_MOSI          PIN_LP_GPIO_19
 #  define CONF_SPI_PIN_SSN           PINMUX_UNUSED
-#  define CONF_SPI_PIN_MISO          PIN_LP_GPIO_18_MUX4_SPI1_MISO
+#  define CONF_SPI_PIN_MISO          PIN_LP_GPIO_18
 
-#  define CONF_SPI_MUX_SCK           MUX_LP_GPIO_17_MUX4_SPI1_SCK
-#  define CONF_SPI_MUX_MOSI          MUX_LP_GPIO_19_MUX4_SPI1_MOSI
+#  define CONF_SPI_MUX_SCK           MUX_LP_GPIO_17_SPI1_SCK
+#  define CONF_SPI_MUX_MOSI          MUX_LP_GPIO_19_SPI1_MOSI
 #  define CONF_SPI_MUX_SSN           PINMUX_UNUSED
-#  define CONF_SPI_MUX_MISO          MUX_LP_GPIO_18_MUX4_SPI1_MISO
+#  define CONF_SPI_MUX_MISO          MUX_LP_GPIO_18_SPI1_MISO
 
 #  define CONF_PIN_SPI_SSN           PIN_LP_GPIO_16
 

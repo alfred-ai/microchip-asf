@@ -77,6 +77,8 @@ extern "C" {
  * @{
  */
 
+/* Low level time limit of I2C Fast Mode. */
+#define LOW_LEVEL_TIME_LIMIT 384000
 #define I2C_FAST_MODE_SPEED  400000
 #define TWI_CLK_DIVIDER      2
 #if SAMG55
@@ -165,25 +167,53 @@ uint32_t twi_set_speed(Twi *p_twi, uint32_t ul_speed, uint32_t ul_mck)
 {
 	uint32_t ckdiv = 0;
 	uint32_t c_lh_div;
+	uint32_t cldiv, chdiv;
 
 	if (ul_speed > I2C_FAST_MODE_SPEED) {
 		return FAIL;
 	}
 
-	c_lh_div = ul_mck / (ul_speed * TWI_CLK_DIVIDER) - TWI_CLK_CALC_ARGU;
+	/* Low level time not less than 1.3us of I2C Fast Mode. */
+	if (ul_speed > LOW_LEVEL_TIME_LIMIT) {
+		/* Low level of time fixed for 1.3us. */
+		cldiv = ul_mck / (LOW_LEVEL_TIME_LIMIT * TWI_CLK_DIVIDER) - TWI_CLK_CALC_ARGU;
+		chdiv = ul_mck / ((ul_speed + (ul_speed - LOW_LEVEL_TIME_LIMIT)) * TWI_CLK_DIVIDER) - TWI_CLK_CALC_ARGU;
+		
+		/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
+		while ((cldiv > TWI_CLK_DIV_MAX) && (ckdiv < TWI_CLK_DIV_MIN)) {
+			/* Increase clock divider */
+			ckdiv++;
+			/* Divide cldiv value */
+			cldiv /= TWI_CLK_DIVIDER;
+		}
+		/* chdiv must fit in 8 bits, ckdiv must fit in 3 bits */
+		while ((chdiv > TWI_CLK_DIV_MAX) && (ckdiv < TWI_CLK_DIV_MIN)) {
+			/* Increase clock divider */
+			ckdiv++;
+			/* Divide cldiv value */
+			chdiv /= TWI_CLK_DIVIDER;
+		}
 
-	/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
-	while ((c_lh_div > TWI_CLK_DIV_MAX) && (ckdiv < TWI_CLK_DIV_MIN)) {
-		/* Increase clock divider */
-		ckdiv++;
-		/* Divide cldiv value */
-		c_lh_div /= TWI_CLK_DIVIDER;
+		/* set clock waveform generator register */
+		p_twi->TWI_CWGR =
+				TWI_CWGR_CLDIV(cldiv) | TWI_CWGR_CHDIV(chdiv) |
+				TWI_CWGR_CKDIV(ckdiv);		
+	} else {
+		c_lh_div = ul_mck / (ul_speed * TWI_CLK_DIVIDER) - TWI_CLK_CALC_ARGU;
+
+		/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
+		while ((c_lh_div > TWI_CLK_DIV_MAX) && (ckdiv < TWI_CLK_DIV_MIN)) {
+			/* Increase clock divider */
+			ckdiv++;
+			/* Divide cldiv value */
+			c_lh_div /= TWI_CLK_DIVIDER;
+		}
+
+		/* set clock waveform generator register */
+		p_twi->TWI_CWGR =
+				TWI_CWGR_CLDIV(c_lh_div) | TWI_CWGR_CHDIV(c_lh_div) |
+				TWI_CWGR_CKDIV(ckdiv);
 	}
-
-	/* set clock waveform generator register */
-	p_twi->TWI_CWGR =
-			TWI_CWGR_CLDIV(c_lh_div) | TWI_CWGR_CHDIV(c_lh_div) |
-			TWI_CWGR_CKDIV(ckdiv);
 
 	return PASS;
 }

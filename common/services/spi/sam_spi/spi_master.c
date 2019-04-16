@@ -3,7 +3,7 @@
  *
  * \brief SPI master common service for SAM.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -110,7 +110,11 @@ void spi_master_init(Spi *p_spi)
 void spi_master_setup_device(Spi *p_spi, struct spi_device *device,
 		spi_flags_t flags, uint32_t baud_rate, board_spi_select_id_t sel_id)
 {
-	int16_t baud_div = spi_calc_baudrate_div(baud_rate, sysclk_get_cpu_hz());
+#if (SAM4L)
+    int16_t baud_div = spi_calc_baudrate_div(baud_rate, sysclk_get_pba_hz());
+#else
+	int16_t baud_div = spi_calc_baudrate_div(baud_rate, sysclk_get_peripheral_hz());
+#endif
 	/* avoid Cppcheck Warning */
 	UNUSED(sel_id);
 	if (-1 == baud_div) {

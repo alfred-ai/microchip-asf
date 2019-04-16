@@ -3,7 +3,7 @@
  *
  * \brief Instance description for SPI_FLASH0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,29 +46,33 @@
 
 /* ========== Register definition for SPI_FLASH0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_SPI_FLASH0_MODE_CTRL           (0x40012000U) /**< \brief (SPI_FLASH0) SPI Flash Mode Control */
-#define REG_SPI_FLASH0_TRANSACTION_CTRL    (0x40012004U) /**< \brief (SPI_FLASH0) Transaction Control (Cleared after each transaction completes) */
-#define REG_SPI_FLASH0_READ_CTRL           (0x40012008U) /**< \brief (SPI_FLASH0) Read Control (Cleared after each transaction completes) */
-#define REG_SPI_FLASH0_CMD_BUFFER0         (0x4001200cU) /**< \brief (SPI_FLASH0) Command Buffer 0 (Bytes 3 - 0) */
-#define REG_SPI_FLASH0_CMD_BUFFER1         (0x40012010U) /**< \brief (SPI_FLASH0) Command Buffer 1 (Bytes 7 - 4) */
-#define REG_SPI_FLASH0_DIRECTION           (0x40012014U) /**< \brief (SPI_FLASH0) Read/Write bit for Bytes 7 - 0 */
-#define REG_SPI_FLASH0_IRQ_STATUS          (0x40012018U) /**< \brief (SPI_FLASH0) IRQ Status (Write 0 to bit to clear, Read clears interupts) */
-#define REG_SPI_FLASH0_DMA_START_ADDRESS   (0x4001201cU) /**< \brief (SPI_FLASH0) DMA Starting Address */
-#define REG_SPI_FLASH0_CONFIG              (0x40012020U) /**< \brief (SPI_FLASH0) SPI Flash Configuration */
-#define REG_SPI_FLASH0_TX_CONTROL          (0x40012024U) /**< \brief (SPI_FLASH0) TX Control */
-#define REG_SPI_FLASH0_STATUS              (0x40012028U) /**< \brief (SPI_FLASH0) Misc Status */
+
+#define REG_SPI_FLASH0_MODE_CTRL (0x40012000U) /**< (SPI_FLASH0) SPI Flash Mode Control */
+#define REG_SPI_FLASH0_TRANSACTION_CTRL (0x40012004U) /**< (SPI_FLASH0) Transaction Control (Cleared after each transaction completes) */
+#define REG_SPI_FLASH0_READ_CTRL (0x40012008U) /**< (SPI_FLASH0) Read Control (Cleared after each transaction completes) */
+#define REG_SPI_FLASH0_CMD_BUFFER0 (0x4001200CU) /**< (SPI_FLASH0) Command Buffer 0 (Bytes 3 - 0) */
+#define REG_SPI_FLASH0_CMD_BUFFER1 (0x40012010U) /**< (SPI_FLASH0) Command Buffer 1 (Bytes 7 - 4) */
+#define REG_SPI_FLASH0_DIRECTION (0x40012014U) /**< (SPI_FLASH0) Read/Write bit for Bytes 7 - 0 */
+#define REG_SPI_FLASH0_IRQ_STATUS (0x40012018U) /**< (SPI_FLASH0) IRQ Status (Write 0 to bit to clear, Read clears interupts) */
+#define REG_SPI_FLASH0_DMA_START_ADDRESS (0x4001201CU) /**< (SPI_FLASH0) DMA Starting Address */
+#define REG_SPI_FLASH0_CONFIG   (0x40012020U) /**< (SPI_FLASH0) SPI Flash Configuration */
+#define REG_SPI_FLASH0_TX_CONTROL (0x40012024U) /**< (SPI_FLASH0) TX Control */
+#define REG_SPI_FLASH0_STATUS   (0x40012028U) /**< (SPI_FLASH0) Misc Status */
+
 #else
-#define REG_SPI_FLASH0_MODE_CTRL           (*(RwReg8 *)0x40012000U) /**< \brief (SPI_FLASH0) SPI Flash Mode Control */
-#define REG_SPI_FLASH0_TRANSACTION_CTRL    (*(RwReg  *)0x40012004U) /**< \brief (SPI_FLASH0) Transaction Control (Cleared after each transaction completes) */
-#define REG_SPI_FLASH0_READ_CTRL           (*(RwReg  *)0x40012008U) /**< \brief (SPI_FLASH0) Read Control (Cleared after each transaction completes) */
-#define REG_SPI_FLASH0_CMD_BUFFER0         (*(RwReg  *)0x4001200cU) /**< \brief (SPI_FLASH0) Command Buffer 0 (Bytes 3 - 0) */
-#define REG_SPI_FLASH0_CMD_BUFFER1         (*(RwReg  *)0x40012010U) /**< \brief (SPI_FLASH0) Command Buffer 1 (Bytes 7 - 4) */
-#define REG_SPI_FLASH0_DIRECTION           (*(RwReg8 *)0x40012014U) /**< \brief (SPI_FLASH0) Read/Write bit for Bytes 7 - 0 */
-#define REG_SPI_FLASH0_IRQ_STATUS          (*(WoReg8 *)0x40012018U) /**< \brief (SPI_FLASH0) IRQ Status (Write 0 to bit to clear, Read clears interupts) */
-#define REG_SPI_FLASH0_DMA_START_ADDRESS   (*(RwReg  *)0x4001201cU) /**< \brief (SPI_FLASH0) DMA Starting Address */
-#define REG_SPI_FLASH0_CONFIG              (*(RwReg16*)0x40012020U) /**< \brief (SPI_FLASH0) SPI Flash Configuration */
-#define REG_SPI_FLASH0_TX_CONTROL          (*(RwReg16*)0x40012024U) /**< \brief (SPI_FLASH0) TX Control */
-#define REG_SPI_FLASH0_STATUS              (*(RoReg16*)0x40012028U) /**< \brief (SPI_FLASH0) Misc Status */
+
+#define REG_SPI_FLASH0_MODE_CTRL (*(__IO uint8_t*)0x40012000U) /**< (SPI_FLASH0) SPI Flash Mode Control */
+#define REG_SPI_FLASH0_TRANSACTION_CTRL (*(__IO uint32_t*)0x40012004U) /**< (SPI_FLASH0) Transaction Control (Cleared after each transaction completes) */
+#define REG_SPI_FLASH0_READ_CTRL (*(__IO uint32_t*)0x40012008U) /**< (SPI_FLASH0) Read Control (Cleared after each transaction completes) */
+#define REG_SPI_FLASH0_CMD_BUFFER0 (*(__IO uint32_t*)0x4001200CU) /**< (SPI_FLASH0) Command Buffer 0 (Bytes 3 - 0) */
+#define REG_SPI_FLASH0_CMD_BUFFER1 (*(__IO uint32_t*)0x40012010U) /**< (SPI_FLASH0) Command Buffer 1 (Bytes 7 - 4) */
+#define REG_SPI_FLASH0_DIRECTION (*(__IO uint8_t*)0x40012014U) /**< (SPI_FLASH0) Read/Write bit for Bytes 7 - 0 */
+#define REG_SPI_FLASH0_IRQ_STATUS (*(__O  uint8_t*)0x40012018U) /**< (SPI_FLASH0) IRQ Status (Write 0 to bit to clear, Read clears interupts) */
+#define REG_SPI_FLASH0_DMA_START_ADDRESS (*(__IO uint32_t*)0x4001201CU) /**< (SPI_FLASH0) DMA Starting Address */
+#define REG_SPI_FLASH0_CONFIG   (*(__IO uint16_t*)0x40012020U) /**< (SPI_FLASH0) SPI Flash Configuration */
+#define REG_SPI_FLASH0_TX_CONTROL (*(__IO uint16_t*)0x40012024U) /**< (SPI_FLASH0) TX Control */
+#define REG_SPI_FLASH0_STATUS   (*(__I  uint16_t*)0x40012028U) /**< (SPI_FLASH0) Misc Status */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 /* ========== Instance Parameter definitions for SPI_FLASH0 peripheral ========== */

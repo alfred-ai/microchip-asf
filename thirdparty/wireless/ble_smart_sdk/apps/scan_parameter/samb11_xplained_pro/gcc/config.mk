@@ -163,6 +163,7 @@ CPPFLAGS = \
        -D BOARD=SAMB11_XPLAINED_PRO                       \
        -D CHIPVERSION_B0                                  \
        -D NENABLE_PTS                                     \
+       -D OTAU_FEATURE=false                              \
        -D SCAN_PARAM_SERVICE                              \
        -D __SAMB11G18A__
 

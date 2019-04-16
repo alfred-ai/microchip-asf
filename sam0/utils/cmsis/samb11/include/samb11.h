@@ -3,7 +3,7 @@
  *
  * \brief Top header file for SAMB11
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,10 +49,15 @@
  * \brief SAMB11 CMSIS Definitions.
  */
 
-#if   defined(__SAMB11G18A__) || defined(__ATSAMB11G18A__)
+#if   defined(__BTLC1000WLCSP__) || defined(__ATBTLC1000WLCSP__)
+  #include "btlc1000wlcsp.h"
+#elif defined(__SAMB11G18A__) || defined(__ATSAMB11G18A__)
   #include "samb11g18a.h"
+#elif defined(__SAMB11ZR__) || defined(__ATSAMB11ZR__)
+  #include "samb11zr.h"
 #else
-  #error Library does not support the specified device.
+  #error Library does not support the specified device
 #endif
+
 
 #endif /* _SAMB11_ */

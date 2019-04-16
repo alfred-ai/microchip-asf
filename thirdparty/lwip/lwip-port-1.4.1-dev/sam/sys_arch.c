@@ -111,7 +111,7 @@ void sys_sem_free(sys_sem_t *sem)
 	/* Sanity check */
 	if (sem != NULL) {
 		if (SYS_SEM_NULL != *sem) {
-  #ifdef SYS_STATS
+  #if SYS_STATS
 			lwip_stats.sys.sem.used--;
   #endif /* SYS_STATS */
 			vQueueDelete( *sem );
@@ -262,7 +262,7 @@ void sys_mbox_free(sys_mbox_t *mbox)
 	/* Sanity check */
 	if (mbox != NULL) {
 		if (SYS_MBOX_NULL != *mbox) {
-  #ifdef SYS_STATS
+  #if SYS_STATS
 			lwip_stats.sys.mbox.used--;
   #endif /* SYS_STATS */
 			vQueueDelete( *mbox );

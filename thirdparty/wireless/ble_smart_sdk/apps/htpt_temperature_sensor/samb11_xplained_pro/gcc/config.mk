@@ -172,6 +172,7 @@ CPPFLAGS = \
        -D HTPT_SERVICE                                    \
        -D I2C_MASTER_CALLBACK_MODE=true                   \
        -D NENABLE_PTS=false                               \
+       -D OTAU_FEATURE=false                              \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

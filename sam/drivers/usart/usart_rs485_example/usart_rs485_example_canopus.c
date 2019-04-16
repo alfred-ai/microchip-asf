@@ -3,7 +3,7 @@
  *
  * \brief USART RS485 example for SAM.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -287,7 +287,7 @@ static void configure_usart(void)
 
 	/* Configure USART in RS485 mode. */
 	usart_init_rs485(BOARD_USART, &usart_console_settings,
-			sysclk_get_cpu_hz());
+			sysclk_get_peripheral_hz());
 
 	/* enable transmitter timeguard, 4 bit period delay. */
 	usart_set_tx_timeguard(BOARD_USART, 4);

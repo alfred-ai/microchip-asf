@@ -62,6 +62,16 @@
 #define BLE_DEVICE_ROLE BLE_ROLE_ALL
 #endif
 
+#ifndef OTAU_FEATURE
+#define OTAU_FEATURE false
+#endif
+
+#if OTAU_FEATURE
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-OTA"
+#endif /* BLE_DEVICE_NAME */
+#endif /* OTA_FEATURE */
+
 #if defined HID_DEVICE
 	#ifdef HID_KEYBOARD_DEVICE
 	#ifndef BLE_DEVICE_NAME
@@ -74,11 +84,11 @@
 	#define BLE_PAIR_ENABLE				(false)
 	#endif
 
-	#ifdef HID_MOUSE_DEVICE
-	#ifndef BLE_DEVICE_NAME
-		#define BLE_DEVICE_NAME				"ATMEL-HID"
-	#endif	/* BLE_DEVICE_NAME */
-	#endif
+#ifdef HID_MOUSE_DEVICE
+#ifndef BLE_DEVICE_NAME
+	#define BLE_DEVICE_NAME				"ATMEL-HID"
+#endif	/* BLE_DEVICE_NAME */
+#endif
 #endif /* HID_DEVICE */
 
 #if defined PROXIMITY_REPORTER
@@ -205,6 +215,11 @@ typedef enum ble_peripheral_state {
 	PERIPHERAL_ENCRYPTION_STATE,
 	PERIPHERAL_DISCONNECTED_STATE,
 }ble_peripheral_state_t;
+
+typedef enum ble_ulp_mode {
+	BLE_ULP_MODE_CLEAR,
+	BLE_ULP_MODE_SET
+}ble_ulp_mode_t;
 
 typedef at_ble_status_t (*ble_event_callback_t) (void *params);
 
@@ -1661,6 +1676,10 @@ at_ble_status_t ble_undefined_event_handler(void *params);
 bool ble_mgr_events_callback_handler(ble_mgr_event_cb_t event_cb_type,
 							ble_mgr_event_t event_type,
 							const ble_event_callback_t *ble_event_handler);
+							
+at_ble_status_t ble_set_ulp_mode(ble_ulp_mode_t mode);
+
+ble_ulp_mode_t ble_get_ulp_status(void);
 #endif /*__BLE_MANAGER_H__*/
 // </h>
 

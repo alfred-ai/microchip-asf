@@ -170,6 +170,7 @@ CPPFLAGS = \
        -D CURRENT_TIME_SERVICE                            \
        -D NENABLE_PTS                                     \
        -D NEXT_DST_SERVICE                                \
+       -D OTAU_FEATURE=false                              \
        -D REFERENCE_TIME_SERVICE                          \
        -D TIP_CLIENT                                      \
        -D TP_ANDROID                                      \

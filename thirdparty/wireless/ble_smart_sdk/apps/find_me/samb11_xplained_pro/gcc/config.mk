@@ -168,6 +168,7 @@ CPPFLAGS = \
        -D IAS_GATT_SERVER                                 \
        -D IMMEDIATE_ALERT_SERVICE                         \
        -D NENABLE_PTS                                     \
+       -D OTAU_FEATURE=false                              \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

@@ -242,8 +242,8 @@ void dualtimer_init(const struct dualtimer_config *config)
 	/* Common config */
 	if (config->timer1.timer_enable || config->timer2.timer_enable) {
 		LPMCU_MISC_REGS0->LPMCU_CLOCK_ENABLES_0.reg |=
-		LPMCU_MISC_REGS_LPMCU_CLOCK_ENABLES_0_DUALTIMER_CLK_EN;
-		LPMCU_MISC_REGS0->LPMCU_CONTROL.bit.DUALTIMER_CLK_SEL = config->clock_source;
+		LPMCU_MISC_REGS_LPMCU_CLOCK_ENABLES_0_DUALTIMER0_CLK_EN;
+		LPMCU_MISC_REGS0->LPMCU_CTRL.bit.DUALTIMER0_CLK_SEL = config->clock_source;
 	}
 	
 	/* Timer1 config */
@@ -255,14 +255,15 @@ void dualtimer_init(const struct dualtimer_config *config)
 		} else if (config->timer1.counter_mode == DUALTIMER_PERIODIC_MODE) {
 			regval = DUALTIMER_TIMER1CONTROL_TIMER_MODE_1;
 		}
-		regval |= DUALTIMER_TIMER1CONTROL_TIMER_SIZE(config->timer1.counter_size) |
+		regval |= (DUALTIMER_TIMER1CONTROL_TIMER_SIZE &
+				((config->timer1.counter_size) << DUALTIMER_TIMER1CONTROL_TIMER_SIZE_Pos)) |
 				DUALTIMER_TIMER1CONTROL_TIMERPRE(config->timer1.clock_prescaler);
 		if (config->timer1.interrup_enable) {
 			regval |= DUALTIMER_TIMER1CONTROL_INTERRUPT_ENABLE;
 		}
 		DUALTIMER0->TIMER1LOAD.reg = config->timer1.load_value;
 		DUALTIMER0->TIMER1CONTROL.reg = regval;
-		LPMCU_MISC_REGS0->DUALTIMER_CTRL.reg |= LPMCU_MISC_REGS_DUALTIMER_CTRL_CNTR_1_ENABLE;
+		LPMCU_MISC_REGS0->DUALTIMER0_CTRL.reg |= LPMCU_MISC_REGS_DUALTIMER0_CTRL_CNTR_1_ENABLE;
 		dualtimer_enable(DUALTIMER_TIMER1);
 	}
 
@@ -275,14 +276,15 @@ void dualtimer_init(const struct dualtimer_config *config)
 		} else if (config->timer2.counter_mode == DUALTIMER_PERIODIC_MODE) {
 			regval = DUALTIMER_TIMER2CONTROL_TIMER_MODE_1;
 		}
-		regval |= DUALTIMER_TIMER2CONTROL_TIMER_SIZE(config->timer2.counter_size) |
+		regval |= (DUALTIMER_TIMER2CONTROL_TIMER_SIZE &
+				((config->timer2.counter_size) << DUALTIMER_TIMER2CONTROL_TIMER_SIZE_Pos)) |
 				DUALTIMER_TIMER2CONTROL_TIMERPRE(config->timer2.clock_prescaler);
 		if (config->timer2.interrup_enable) {
 			regval |= DUALTIMER_TIMER2CONTROL_INTERRUPT_ENABLE;
 		}
 		DUALTIMER0->TIMER2LOAD.reg = config->timer2.load_value;
 		DUALTIMER0->TIMER2CONTROL.reg = regval;
-		LPMCU_MISC_REGS0->DUALTIMER_CTRL.reg |= LPMCU_MISC_REGS_DUALTIMER_CTRL_CNTR_2_ENABLE;
+		LPMCU_MISC_REGS0->DUALTIMER0_CTRL.reg |= LPMCU_MISC_REGS_DUALTIMER0_CTRL_CNTR_2_ENABLE;
 		dualtimer_enable(DUALTIMER_TIMER2);
 	}
 

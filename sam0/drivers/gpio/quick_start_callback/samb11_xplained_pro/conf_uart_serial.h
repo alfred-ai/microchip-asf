@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAMB11 UART configuration.
+ * \brief SAM B11 Xplained Pro UART configuration.
  *
- * Copyright (C) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,15 +51,15 @@
 //! [conf_uart_serial_settings]
 #define CONF_STDIO_USART_MODULE  EDBG_CDC_MODULE
 
-#define CONF_STDIO_PIN_PAD0   EDBG_CDC_SERCOM_PIN_PAD0
-#define CONF_STDIO_PIN_PAD1   EDBG_CDC_SERCOM_PIN_PAD1
-#define CONF_STDIO_PIN_PAD2   EDBG_CDC_SERCOM_PIN_PAD2
-#define CONF_STDIO_PIN_PAD3   EDBG_CDC_SERCOM_PIN_PAD3
+#define CONF_STDIO_PIN_PAD0   EDBG_CDC_PIN_PAD0
+#define CONF_STDIO_PIN_PAD1   EDBG_CDC_PIN_PAD1
+#define CONF_STDIO_PIN_PAD2   EDBG_CDC_PIN_PAD2
+#define CONF_STDIO_PIN_PAD3   EDBG_CDC_PIN_PAD3
 
-#define CONF_STDIO_MUX_PAD0   EDBG_CDC_SERCOM_MUX_PAD0
-#define CONF_STDIO_MUX_PAD1   EDBG_CDC_SERCOM_MUX_PAD1
-#define CONF_STDIO_MUX_PAD2   EDBG_CDC_SERCOM_MUX_PAD2
-#define CONF_STDIO_MUX_PAD3   EDBG_CDC_SERCOM_MUX_PAD3
+#define CONF_STDIO_MUX_PAD0   EDBG_CDC_MUX_PAD0
+#define CONF_STDIO_MUX_PAD1   EDBG_CDC_MUX_PAD1
+#define CONF_STDIO_MUX_PAD2   EDBG_CDC_MUX_PAD2
+#define CONF_STDIO_MUX_PAD3   EDBG_CDC_MUX_PAD3
 #define CONF_STDIO_BAUDRATE   115200
 //! [conf_uart_serial_settings]
 #endif // CONF_UART_SERIAL_H

@@ -3,7 +3,7 @@
  *
  * \brief Instance description for UART1
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,27 +46,31 @@
 
 /* ========== Register definition for UART1 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_UART1_TRANSMIT_DATA       (0x40005000U) /**< \brief (UART1) Writes one byte to UART Transmit Data FIFO.  */
-#define REG_UART1_TRANSMIT_STATUS     (0x40005004U) /**< \brief (UART1) Status of the UART transmitter. Each field can generate an interrupt if corresponding bit in  the Tx interrupt mask register is set.  */
-#define REG_UART1_TX_INTERRUPT_MASK   (0x40005008U) /**< \brief (UART1) Enable or Disable the generation of interrupts by the tx_status register.  */
-#define REG_UART1_RECEIVE_DATA        (0x40005010U) /**< \brief (UART1) Read one byte from UART Receive Data FIFO.  */
-#define REG_UART1_RECEIVE_STATUS      (0x40005014U) /**< \brief (UART1) Status of the UART receiver. Each field can generate an interrupt if corresponding bit in  the Rx interrupt mask register is set.  */
-#define REG_UART1_RX_INTERRUPT_MASK   (0x40005018U) /**< \brief (UART1) Enable or Disable the generation of interrupts by the rx_status register.  */
-#define REG_UART1_RECEIVE_TIMEOUT     (0x4000501cU) /**< \brief (UART1) Timeout counter configuration.  */
-#define REG_UART1_UART_CONFIGURATION  (0x40005020U) /**< \brief (UART1) UART Operation Configuration Register, for both Rx and Tx.  */
-#define REG_UART1_UART_BAUD_RATE      (0x40005024U) /**< \brief (UART1) Baud Rate Control Register. Bits 15:3 specify the integral division of the clock (divide by n),  and bit 2:0 specify the fractional division.  */
-#define REG_UART1_UART_CLOCK_SOURCE   (0x40005028U) /**< \brief (UART1) Selects Source of UART Clock  */
+
+#define REG_UART1_TRANSMIT_DATA (0x40005000U) /**< (UART1) Writes one byte to UART Transmit Data FIFO.  */
+#define REG_UART1_TRANSMIT_STATUS (0x40005004U) /**< (UART1) Status of the UART transmitter. Each field can generate an interrupt if corresponding bit in  the Tx interrupt mask register is set.  */
+#define REG_UART1_TX_INTERRUPT_MASK (0x40005008U) /**< (UART1) Enable or Disable the generation of interrupts by the tx_status register.  */
+#define REG_UART1_RECEIVE_DATA  (0x40005010U) /**< (UART1) Read one byte from UART Receive Data FIFO.  */
+#define REG_UART1_RECEIVE_STATUS (0x40005014U) /**< (UART1) Status of the UART receiver. Each field can generate an interrupt if corresponding bit in  the Rx interrupt mask register is set.  */
+#define REG_UART1_RX_INTERRUPT_MASK (0x40005018U) /**< (UART1) Enable or Disable the generation of interrupts by the rx_status register.  */
+#define REG_UART1_RECEIVE_TIMEOUT (0x4000501CU) /**< (UART1) Timeout counter configuration.  */
+#define REG_UART1_CONFIGURATION (0x40005020U) /**< (UART1) UART Operation Configuration Register, for both Rx and Tx.  */
+#define REG_UART1_BAUD_RATE     (0x40005024U) /**< (UART1) Baud Rate Control Register. Bits 15:3 specify the integral division of the clock (divide by n),  and bit 2:0 specify the fractional division.  */
+#define REG_UART1_CLOCK_SOURCE  (0x40005028U) /**< (UART1) Selects Source of UART Clock  */
+
 #else
-#define REG_UART1_TRANSMIT_DATA       (*(WoReg8 *)0x40005000U) /**< \brief (UART1) Writes one byte to UART Transmit Data FIFO.  */
-#define REG_UART1_TRANSMIT_STATUS     (*(RoReg8 *)0x40005004U) /**< \brief (UART1) Status of the UART transmitter. Each field can generate an interrupt if corresponding bit in  the Tx interrupt mask register is set.  */
-#define REG_UART1_TX_INTERRUPT_MASK   (*(RwReg8 *)0x40005008U) /**< \brief (UART1) Enable or Disable the generation of interrupts by the tx_status register.  */
-#define REG_UART1_RECEIVE_DATA        (*(RoReg8 *)0x40005010U) /**< \brief (UART1) Read one byte from UART Receive Data FIFO.  */
-#define REG_UART1_RECEIVE_STATUS      (*(RoReg8 *)0x40005014U) /**< \brief (UART1) Status of the UART receiver. Each field can generate an interrupt if corresponding bit in  the Rx interrupt mask register is set.  */
-#define REG_UART1_RX_INTERRUPT_MASK   (*(RwReg8 *)0x40005018U) /**< \brief (UART1) Enable or Disable the generation of interrupts by the rx_status register.  */
-#define REG_UART1_RECEIVE_TIMEOUT     (*(RwReg8 *)0x4000501cU) /**< \brief (UART1) Timeout counter configuration.  */
-#define REG_UART1_UART_CONFIGURATION  (*(RwReg8 *)0x40005020U) /**< \brief (UART1) UART Operation Configuration Register, for both Rx and Tx.  */
-#define REG_UART1_UART_BAUD_RATE      (*(RwReg16*)0x40005024U) /**< \brief (UART1) Baud Rate Control Register. Bits 15:3 specify the integral division of the clock (divide by n),  and bit 2:0 specify the fractional division.  */
-#define REG_UART1_UART_CLOCK_SOURCE   (*(RwReg8 *)0x40005028U) /**< \brief (UART1) Selects Source of UART Clock  */
+
+#define REG_UART1_TRANSMIT_DATA (*(__O  uint8_t*)0x40005000U) /**< (UART1) Writes one byte to UART Transmit Data FIFO.  */
+#define REG_UART1_TRANSMIT_STATUS (*(__I  uint8_t*)0x40005004U) /**< (UART1) Status of the UART transmitter. Each field can generate an interrupt if corresponding bit in  the Tx interrupt mask register is set.  */
+#define REG_UART1_TX_INTERRUPT_MASK (*(__IO uint8_t*)0x40005008U) /**< (UART1) Enable or Disable the generation of interrupts by the tx_status register.  */
+#define REG_UART1_RECEIVE_DATA  (*(__I  uint8_t*)0x40005010U) /**< (UART1) Read one byte from UART Receive Data FIFO.  */
+#define REG_UART1_RECEIVE_STATUS (*(__I  uint8_t*)0x40005014U) /**< (UART1) Status of the UART receiver. Each field can generate an interrupt if corresponding bit in  the Rx interrupt mask register is set.  */
+#define REG_UART1_RX_INTERRUPT_MASK (*(__IO uint8_t*)0x40005018U) /**< (UART1) Enable or Disable the generation of interrupts by the rx_status register.  */
+#define REG_UART1_RECEIVE_TIMEOUT (*(__IO uint8_t*)0x4000501CU) /**< (UART1) Timeout counter configuration.  */
+#define REG_UART1_CONFIGURATION (*(__IO uint8_t*)0x40005020U) /**< (UART1) UART Operation Configuration Register, for both Rx and Tx.  */
+#define REG_UART1_BAUD_RATE     (*(__IO uint16_t*)0x40005024U) /**< (UART1) Baud Rate Control Register. Bits 15:3 specify the integral division of the clock (divide by n),  and bit 2:0 specify the fractional division.  */
+#define REG_UART1_CLOCK_SOURCE  (*(__IO uint8_t*)0x40005028U) /**< (UART1) Selects Source of UART Clock  */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_UART1_INSTANCE_ */

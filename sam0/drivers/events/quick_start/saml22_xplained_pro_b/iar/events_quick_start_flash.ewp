@@ -166,7 +166,7 @@
 				</option>
 				<option>
 					<name>CCDefines</name>
-					<state>EVENTS_INTERRUPT_HOOKS_MODE=true</state>
+					<state>EVENTS_INTERRUPT_HOOKS_MODE=false</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>BOARD=SAML22_XPLAINED_PRO_B</state>
 					<state>__SAML22N18A__</state>
@@ -471,7 +471,7 @@
 				</option>
 				<option>
 					<name>ADefines</name>
-					<state>EVENTS_INTERRUPT_HOOKS_MODE=true</state>
+					<state>EVENTS_INTERRUPT_HOOKS_MODE=false</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>BOARD=SAML22_XPLAINED_PRO_B</state>
 					<state>__SAML22N18A__</state>
@@ -1135,7 +1135,7 @@
 				</option>
 				<option>
 					<name>CCDefines</name>
-					<state>EVENTS_INTERRUPT_HOOKS_MODE=true</state>
+					<state>EVENTS_INTERRUPT_HOOKS_MODE=false</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>BOARD=SAML22_XPLAINED_PRO_B</state>
 					<state>__SAML22N18A__</state>
@@ -1440,7 +1440,7 @@
 				</option>
 				<option>
 					<name>ADefines</name>
-					<state>EVENTS_INTERRUPT_HOOKS_MODE=true</state>
+					<state>EVENTS_INTERRUPT_HOOKS_MODE=false</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>BOARD=SAML22_XPLAINED_PRO_B</state>
 					<state>__SAML22N18A__</state>
@@ -2055,12 +2055,6 @@
 						</file>
 					</group>
 				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../events_hooks.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../events_hooks.h</name>
-				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../events_common.h</name>
 				</file>

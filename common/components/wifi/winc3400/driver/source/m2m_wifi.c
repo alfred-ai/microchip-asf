@@ -43,6 +43,12 @@
 #include "driver/source/m2m_hif.h"
 #include "driver/source/nmasic.h"
 
+/**
+ * \defgroup winc3400_group WINC3400 (Wi-Fi)
+ *
+ * \{
+ */
+
 static volatile uint8 gu8ChNum;
 static volatile uint8 gu8scanInProgress = 0;
 static tpfAppWifiCb gpfAppWifiCb = NULL;

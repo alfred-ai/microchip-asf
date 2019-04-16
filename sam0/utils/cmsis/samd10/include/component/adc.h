@@ -3,7 +3,7 @@
  *
  * \brief Component description for ADC
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -370,8 +370,8 @@ typedef union {
 #define   ADC_INPUTCTRL_MUXNEG_PIN5_Val   0x5ul  /**< \brief (ADC_INPUTCTRL) ADC AIN5 Pin */
 #define   ADC_INPUTCTRL_MUXNEG_PIN6_Val   0x6ul  /**< \brief (ADC_INPUTCTRL) ADC AIN6 Pin */
 #define   ADC_INPUTCTRL_MUXNEG_PIN7_Val   0x7ul  /**< \brief (ADC_INPUTCTRL) ADC AIN7 Pin */
-#define   ADC_INPUTCTRL_MUXNEG_GND_Val    0x18ul  /**< \brief (ADC_INPUTCTRL) Internal Ground */
-#define   ADC_INPUTCTRL_MUXNEG_IOGND_Val  0x19ul  /**< \brief (ADC_INPUTCTRL) I/O Ground */
+#define   ADC_INPUTCTRL_MUXNEG_GND_Val    0x02ul  /**< \brief (ADC_INPUTCTRL) Internal Ground */
+#define   ADC_INPUTCTRL_MUXNEG_IOGND_Val  0x03ul  /**< \brief (ADC_INPUTCTRL) I/O Ground */
 #define ADC_INPUTCTRL_MUXNEG_PIN0   (ADC_INPUTCTRL_MUXNEG_PIN0_Val << ADC_INPUTCTRL_MUXNEG_Pos)
 #define ADC_INPUTCTRL_MUXNEG_PIN1   (ADC_INPUTCTRL_MUXNEG_PIN1_Val << ADC_INPUTCTRL_MUXNEG_Pos)
 #define ADC_INPUTCTRL_MUXNEG_PIN2   (ADC_INPUTCTRL_MUXNEG_PIN2_Val << ADC_INPUTCTRL_MUXNEG_Pos)

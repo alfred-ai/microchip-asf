@@ -3,7 +3,7 @@
  *
  * \brief SAM Sercom Usart driver with DMA quick start
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,8 +61,8 @@ static uint16_t string[BUFFER_LEN];
 
 //! [transfer_descriptor]
 COMPILER_ALIGNED(16)
-DmacDescriptor example_descriptor_rx;
-DmacDescriptor example_descriptor_tx;
+DmacDescriptor example_descriptor_rx SECTION_DMAC_DESCRIPTOR;
+DmacDescriptor example_descriptor_tx SECTION_DMAC_DESCRIPTOR;
 //! [transfer_descriptor]
 
 //! [setup]

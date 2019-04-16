@@ -170,6 +170,7 @@ CPPFLAGS = \
        -D CHIPVERSION_B0                                  \
        -D DEVICE_INFORMATION_SERVICE                      \
        -D NENABLE_PTS                                     \
+       -D OTAU_FEATURE=false                              \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

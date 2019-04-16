@@ -174,6 +174,7 @@ CPPFLAGS = \
        -D IMMEDIATE_ALERT_SERVICE                         \
        -D LINK_LOSS_SERVICE                               \
        -D LLS_GATT_CLIENT                                 \
+       -D OTAU_FEATURE=false                              \
        -D PROXIMITY_MONITOR                               \
        -D TXPS_GATT_CLIENT                                \
        -D TX_POWER_SERVICE                                \

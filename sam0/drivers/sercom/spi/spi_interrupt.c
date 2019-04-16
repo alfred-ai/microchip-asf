@@ -190,6 +190,14 @@ static void _spi_read_buffer(
 		hw->INTFLAG.reg = SPI_INTERRUPT_FLAG_TX_COMPLETE;
 		/* Enable transmit complete interrupt for slave */
 		tmp_intenset |= SPI_INTERRUPT_FLAG_TX_COMPLETE;
+
+		/* Workaround for SSL flag enable */
+#ifdef FEATURE_SPI_SLAVE_SELECT_LOW_DETECT
+		/* Clear SSL flag if set */
+		hw->INTFLAG.reg = SPI_INTERRUPT_FLAG_SLAVE_SELECT_LOW;
+		/* Enable Slave Select Low Interrupt for slave */
+		tmp_intenset |= SPI_INTERRUPT_FLAG_SLAVE_SELECT_LOW;
+#endif
 	}
 #  endif
 

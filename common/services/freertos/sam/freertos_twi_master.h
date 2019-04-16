@@ -136,7 +136,7 @@ status_code_t freertos_twi_read_packet_async(freertos_twi_if p_twi,
  *     call to freertos_twi_master_init().  The
  *     freertos_driver_parameters.options_flags parameter passed to the
  *     initialization function defines the driver behavior.  If
- *     freertos_driver_parameters.options_flags had the USE_TX_ACCESS_MUTEX bit
+ *     freertos_driver_parameters.options_flags had the USE_TX_ACCESS_SEM bit
  *     set, then the driver will only write to the TWI peripheral if it has
  *     first gained exclusive access to it.  block_time_ticks specifies the
  *     maximum amount of time the driver will wait to get exclusive access before
@@ -314,7 +314,7 @@ status_code_t freertos_twi_read_packet_async(freertos_twi_if p_twi,
 	     // function until the transmit is complete, and wait in the receive
 	     // function until reception is complete.  Note that other FreeRTOS tasks
 	     // will execute during the wait period.
-	     (USE_TX_ACCESS_MUTEX | USE_RX_ACCESS_MUTEX | WAIT_TX_COMPLETE | WAIT_RX_COMPLETE)
+	     (USE_TX_ACCESS_SEM | USE_RX_ACCESS_MUTEX | WAIT_TX_COMPLETE | WAIT_RX_COMPLETE)
 	  };
 
 	  /////////////////////////////////////////////////////////////////////////////
@@ -384,7 +384,7 @@ status_code_t freertos_twi_read_packet_async(freertos_twi_if p_twi,
 
 	     // Flags set to allow access from multiple tasks.  Note the
 	     // WAIT_TX_COMPLETE and WAIT_RX_COMPLETE bits are *not* set.
-	     (USE_TX_ACCESS_MUTEX | USE_RX_ACCESS_MUTEX)
+	     (USE_TX_ACCESS_SEM | USE_RX_ACCESS_MUTEX)
 	  };
 
 	 /////////////////////////////////////////////////////////////////////////////

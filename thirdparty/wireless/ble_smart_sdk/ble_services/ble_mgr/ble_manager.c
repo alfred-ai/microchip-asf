@@ -75,6 +75,8 @@ static at_ble_addr_t ble_peripheral_dev_address;
 
 at_ble_connected_t connected_state_info;
 
+volatile ble_ulp_mode_t ulp_status = BLE_ULP_MODE_CLEAR;
+
 const ble_event_callback_t *ble_mgr_gap_event_cb[MAX_GAP_EVENT_SUBSCRIBERS];
 const ble_event_callback_t *ble_mgr_gatt_client_event_cb[MAX_GATT_CLIENT_SUBSCRIBERS];
 const ble_event_callback_t *ble_mgr_gatt_server_event_cb[MAX_GATT_SERVER_SUBSCRIBERS];
@@ -155,14 +157,37 @@ static void init_global_var(void)
 	memset(ble_event_params, 0, BLE_EVENT_PARAM_MAX_SIZE);
 }
 
+at_ble_status_t ble_set_ulp_mode(ble_ulp_mode_t mode)
+{
+	at_ble_status_t status = AT_BLE_SUCCESS;
+	ulp_status = mode;
+	return status;
+}
+
+ble_ulp_mode_t ble_get_ulp_status(void)
+{
+	return ulp_status;
+}
+
 /** @brief function to get event from stack */
 at_ble_status_t ble_event_task(uint32_t timeout)
 {
-	at_ble_status_t status = at_ble_event_get(&event, ble_event_params, timeout);
+	at_ble_status_t status;
+	
+	if (ble_get_ulp_status() == BLE_ULP_MODE_SET)
+	{
+		release_sleep_lock();
+	}	
+	status = at_ble_event_get(&event, ble_event_params, timeout);
+	
+	if (ble_get_ulp_status() == BLE_ULP_MODE_SET)
+	{
+		acquire_sleep_lock();
+	}
+	
     if (status == AT_BLE_SUCCESS) 
-    {
+    {		
             ble_event_manager(event, ble_event_params);
-            return AT_BLE_SUCCESS;
     }
     
     return status;
@@ -1320,7 +1345,7 @@ at_ble_status_t ble_pair_key_request_handler (void *params)
                   DBG_LOG_CONT("%c",passkey[idx]);
           }		
           
-          if(!(at_ble_pair_key_reply(pair_key->handle, pair_key_request.type, passkey)) == AT_BLE_SUCCESS)
+          if(!((at_ble_pair_key_reply(pair_key->handle, pair_key_request.type, passkey)) == AT_BLE_SUCCESS))
           {
                   DBG_LOG("Pair-key reply failed");
           }

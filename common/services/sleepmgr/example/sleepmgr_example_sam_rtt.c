@@ -3,7 +3,7 @@
  *
  * \brief Sleep manager example for SAM series
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -132,7 +132,7 @@ int main(void)
 
 	/* Set wakeup source to rtt_alarm */
 	pmc_set_fast_startup_input(PMC_FSMR_RTTAL);
-#if ((!SAMG51) && (!SAMG53) && (!SAMG54))
+#if (!(SAMG51 || SAMG53 || SAMG54))
 	supc_set_wakeup_mode(SUPC, SUPC_WUMR_RTTEN_ENABLE);
 #endif
 	/* Initialize the sleep manager, lock initial mode. */

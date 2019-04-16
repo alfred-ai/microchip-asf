@@ -3,7 +3,7 @@
  *
  * \brief SAM Sercom SPI Driver with DMA Quick Start
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -87,8 +87,8 @@ static volatile bool transfer_rx_is_done = false;
 
 //! [dma_transfer_descriptor]
 COMPILER_ALIGNED(16)
-DmacDescriptor example_descriptor_tx;
-DmacDescriptor example_descriptor_rx;
+DmacDescriptor example_descriptor_tx SECTION_DMAC_DESCRIPTOR;
+DmacDescriptor example_descriptor_rx SECTION_DMAC_DESCRIPTOR;
 //! [dma_transfer_descriptor]
 
 //! [setup]
@@ -230,22 +230,12 @@ static void configure_spi_master(void)
 //! [spi_master_mux_setting]
 	config_spi_master.mux_setting = CONF_MASTER_MUX_SETTING;
 //! [spi_master_mux_setting]
-	/* Configure pad 0 for data in */
-//! [di]
+
 	config_spi_master.pinmux_pad0 = CONF_MASTER_PINMUX_PAD0;
-//! [di]
-	/* Configure pad 1 as unused */
-//! [ss]
 	config_spi_master.pinmux_pad1 = CONF_MASTER_PINMUX_PAD1;
-//! [ss]
-	/* Configure pad 2 for data out */
-//! [do]
 	config_spi_master.pinmux_pad2 = CONF_MASTER_PINMUX_PAD2;
-//! [do]
-	/* Configure pad 3 for SCK */
-//! [sck]
 	config_spi_master.pinmux_pad3 = CONF_MASTER_PINMUX_PAD3;
-//! [sck]
+
 //! [spi_master_init]
 	spi_init(&spi_master_instance, CONF_MASTER_SPI_MODULE, &config_spi_master);
 //! [spi_master_init]
@@ -280,22 +270,12 @@ static void configure_spi_slave(void)
 //! [spi_slave_mux_setting]
 	config_spi_slave.mux_setting = CONF_SLAVE_MUX_SETTING;
 //! [spi_slave_mux_setting]
-	/* Configure pad 0 for data in */
-//! [di]
+
 	config_spi_slave.pinmux_pad0 = CONF_SLAVE_PINMUX_PAD0;
-//! [di]
-	/* Configure pad 1 as unused */
-//! [ss]
 	config_spi_slave.pinmux_pad1 = CONF_SLAVE_PINMUX_PAD1;
-//! [ss]
-	/* Configure pad 2 for data out */
-//! [do]
 	config_spi_slave.pinmux_pad2 = CONF_SLAVE_PINMUX_PAD2;
-//! [do]
-	/* Configure pad 3 for SCK */
-//! [sck]
 	config_spi_slave.pinmux_pad3 = CONF_SLAVE_PINMUX_PAD3;
-//! [sck]
+
 //! [spi_slave_init]
 	spi_init(&spi_slave_instance, CONF_SLAVE_SPI_MODULE, &config_spi_slave);
 //! [spi_slave_init]

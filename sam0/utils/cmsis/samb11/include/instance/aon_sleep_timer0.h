@@ -3,7 +3,7 @@
  *
  * \brief Instance description for AON_SLEEP_TIMER0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,13 +46,17 @@
 
 /* ========== Register definition for AON_SLEEP_TIMER0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_AON_SLEEP_TIMER0_CONTROL             (0x4000d000U) /**< \brief (AON_SLEEP_TIMER0) Control for the Always On Sleep Timer */
-#define REG_AON_SLEEP_TIMER0_SINGLE_COUNT_DURATION (0x4000d004U) /**< \brief (AON_SLEEP_TIMER0) Count for the single count AND reload */
-#define REG_AON_SLEEP_TIMER0_CURRENT_COUNT_VALUE (0x4000d00cU) /**< \brief (AON_SLEEP_TIMER0) Current count of the sleep timer */
+
+#define REG_AON_SLEEP_TIMER0_CONTROL (0x4000D000U) /**< (AON_SLEEP_TIMER0) Control for the Always On Sleep Timer */
+#define REG_AON_SLEEP_TIMER0_SINGLE_COUNT_DURATION (0x4000D004U) /**< (AON_SLEEP_TIMER0) Count for the single count AND reload */
+#define REG_AON_SLEEP_TIMER0_CURRENT_COUNT_VALUE (0x4000D00CU) /**< (AON_SLEEP_TIMER0) Current count of the sleep timer */
+
 #else
-#define REG_AON_SLEEP_TIMER0_CONTROL             (*(RwReg  *)0x4000d000U) /**< \brief (AON_SLEEP_TIMER0) Control for the Always On Sleep Timer */
-#define REG_AON_SLEEP_TIMER0_SINGLE_COUNT_DURATION (*(RwReg  *)0x4000d004U) /**< \brief (AON_SLEEP_TIMER0) Count for the single count AND reload */
-#define REG_AON_SLEEP_TIMER0_CURRENT_COUNT_VALUE (*(RoReg  *)0x4000d00cU) /**< \brief (AON_SLEEP_TIMER0) Current count of the sleep timer */
+
+#define REG_AON_SLEEP_TIMER0_CONTROL (*(__IO uint32_t*)0x4000D000U) /**< (AON_SLEEP_TIMER0) Control for the Always On Sleep Timer */
+#define REG_AON_SLEEP_TIMER0_SINGLE_COUNT_DURATION (*(__IO uint32_t*)0x4000D004U) /**< (AON_SLEEP_TIMER0) Count for the single count AND reload */
+#define REG_AON_SLEEP_TIMER0_CURRENT_COUNT_VALUE (*(__I  uint32_t*)0x4000D00CU) /**< (AON_SLEEP_TIMER0) Current count of the sleep timer */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_AON_SLEEP_TIMER0_INSTANCE_ */

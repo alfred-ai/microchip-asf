@@ -3,7 +3,7 @@
  *
  * \brief SAM Pin Multiplexer Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -200,7 +200,7 @@ extern "C" {
 #endif
 
 /*@{*/
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || (SAMD10) || (SAMD11) || (SAMR30) || defined(__DOXYGEN__)
 /** Output Driver Strength Selection feature support */
 #  define FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH
 #endif

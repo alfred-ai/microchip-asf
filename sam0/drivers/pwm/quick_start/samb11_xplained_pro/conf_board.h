@@ -3,7 +3,7 @@
  *
  * \brief SAM B11 Xplained Pro board configuration.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,8 +46,8 @@
 #ifndef CONF_BOARD_H_INCLUDED
 #define CONF_BOARD_H_INCLUDED
 
-#define CONF_PWM           PWM1
+#define CONF_PWM           PWM0
 #define CONF_PWM_OUT_PIN   PIN_LP_GPIO_20
-#define CONF_PWM_OUT_MUX   PINMUX_MEGAMUX_FUNCTION_SELECT(MEGAMUX_PWM1_OUT)
+#define CONF_PWM_OUT_MUX   PINMUX_LP_GPIO_20_M_PWM0_OUT
 
 #endif /* CONF_BOARD_H_INCLUDED */

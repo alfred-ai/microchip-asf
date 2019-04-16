@@ -5,7 +5,7 @@
  *        Refer following application note for details.
  *        AT10842-Using the Timer Counter for Control Applications in SAML22.
  * 
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \license
  * \asf_license_start
@@ -421,7 +421,7 @@ void configure_tcc(void)
  * Pattern Generation 
  */
 	CONF_PWM_MODULE->PATT.reg = TCC_PATT_PGE(TCC_PATTERN_PAGE_VAL) | TCC_PATT_PGV(sm_pattern[iIndex++]);
-	while (CONF_PWM_MODULE->SYNCBUSY.bit.PATT);
+	while (CONF_PWM_MODULE->SYNCBUSY.reg & TCC_SYNCBUSY_PATT);
 	CONF_PWM_MODULE->PATTBUF.reg = TCC_PATTBUF_PGEB(TCC_PATTERN_PAGE_VAL) | TCC_PATTBUF_PGVB(sm_pattern[iIndex++]);
 	while (CONF_PWM_MODULE->SYNCBUSY.reg & (1u << 16));
 #endif
@@ -469,8 +469,8 @@ void pattern_generation(void)
 	if (iIndex == PATTERN_SIZE) {
 		iIndex = 0;
 	}
-	while (!(TCC0->INTFLAG.bit.MC0)); 
-	CONF_PWM_MODULE->INTFLAG.bit.MC0 = 1; //TCC0->INTFLAG.bit.MC0 = 1; 
+	while (!(TCC0->INTFLAG.reg & TCC_INTFLAG_MC0)); 
+	CONF_PWM_MODULE->INTFLAG.reg = TCC_INTFLAG_MC0; //TCC0->INTFLAG.bit.MC0 = 1; 
 	CONF_PWM_MODULE->PATTBUF.reg = TCC_PATTBUF_PGEB(TCC_PATTERN_PAGE_VAL) | TCC_PATTBUF_PGVB(sm_pattern[iIndex++]);
 	while (CONF_PWM_MODULE->SYNCBUSY.reg & (1u << 16));
 }
@@ -507,7 +507,7 @@ void swap_operation(void)
 	while (!port_pin_get_input_level(BUTTON_0_PIN)) {
 	}
 	CONF_PWM_MODULE->WAVE.reg ^= TCC_WAVE_SWAP0;
-	while (CONF_PWM_MODULE->SYNCBUSY.bit.WAVE) {
+	while (CONF_PWM_MODULE->SYNCBUSY.reg & TCC_SYNCBUSY_WAVE) {
 	}
 }
 #endif
@@ -670,8 +670,8 @@ int main (void)
 		configu_eic();
 		configure_evsys();
 		while (1) {
-			while(!(TCC0->INTFLAG.bit.MC1));
-			TCC0->INTFLAG.bit.MC1   = 1;
+			while(!(TCC0->INTFLAG.reg & TCC_INTFLAG_MC1));
+			TCC0->INTFLAG.reg = TCC_INTFLAG_MC1;
 			period                  = tcc_get_capture_value(&tcc_instances, 1);
 			pulse_width             = tcc_get_capture_value(&tcc_instances, 0);
 			printf("period=%ld , pulse width =%ld \r\n", period , pulse_width);

@@ -71,6 +71,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_rtc_count_prerequisites
@@ -114,19 +115,19 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_PERIODIC_INT</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_PRESCALER_OFF</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_CLOCK_SELECTION</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_GENERAL_PURPOSE_REG</td>
- *    <td>SAM L21/L22</td>
+ *    <td>SAM L21/L22/R30</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_CONTINUOUSLY_UPDATED</td>
@@ -290,7 +291,7 @@
  * }
  * \enddot
  *
- * \subsubsection asfdoc_sam0_rtc_count_clock_saml SAM L21/C20/C21 Clock Setup
+ * \subsubsection asfdoc_sam0_rtc_count_clock_saml SAM L21/C20/C21/R30 Clock Setup
  * The RTC clock can be selected from OSC32K, XOSC32K, or OSCULP32K, and a 32KHz
  * or 1KHz oscillator clock frequency is required. This clock must be
  * configured and enabled in the 32KHz oscillator controller before using the RTC.
@@ -373,7 +374,7 @@ extern "C" {
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
 /** RTC periodic interval interrupt. */
 #  define FEATURE_RTC_PERIODIC_INT
 /** RTC prescaler is off. */
@@ -406,10 +407,12 @@ enum rtc_clock_sel {
 	RTC_CLOCK_SELECTION_ULP1K = OSC32KCTRL_RTCCTRL_RTCSEL_ULP1K_Val,
 	/** 32.768KHz from 32KHz internal ULP oscillator */
 	RTC_CLOCK_SELECTION_ULP32K = OSC32KCTRL_RTCCTRL_RTCSEL_ULP32K_Val,
+#if !(SAML22)
 	/** 1.024KHz from 32KHz internal oscillator */
 	RTC_CLOCK_SELECTION_OSC1K = OSC32KCTRL_RTCCTRL_RTCSEL_OSC1K_Val,
 	/** 32.768KHz from 32KHz internal oscillator */
 	RTC_CLOCK_SELECTION_OSC32K = OSC32KCTRL_RTCCTRL_RTCSEL_OSC32K_Val,
+#endif
 	/** 1.024KHz from 32KHz external oscillator */
 	RTC_CLOCK_SELECTION_XOSC1K = OSC32KCTRL_RTCCTRL_RTCSEL_XOSC1K_Val,
 	/** 32.768KHz from 32.768KHz external crystal oscillator */
@@ -728,7 +731,7 @@ struct rtc_count_config {
 	 *  needed for reading */
 	bool continuously_update;
 #endif
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 	/** Enable count read synchronization. The COUNT value requires
 	 * synchronization when reading. Disabling the synchronization
 	 * will prevent the COUNT value from displaying the current value. */
@@ -778,7 +781,7 @@ static inline void rtc_count_get_config_defaults(
 #ifdef FEATURE_RTC_CONTINUOUSLY_UPDATED
 	config->continuously_update = false;
 #endif
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 	config->enable_read_sync    = true;
 #endif
 
@@ -1219,6 +1222,9 @@ uint32_t rtc_tamper_get_stamp (struct rtc_module *const module);
  *		<td>Added support for SAM L21/L22</td>
  *	</tr>
  *	<tr>
+ *		<td>Added support for SAM R30</td>
+ *	</tr>
+ *	<tr>
  *		<td>Added support for RTC tamper feature</td>
  *	</tr>
  *	<tr>
@@ -1265,7 +1271,7 @@ uint32_t rtc_tamper_get_stamp (struct rtc_module *const module);
  *	<tr>
  *		<td>42111E</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, and SAM DA1</td>
+ *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, SAMR30 and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>42111D</td>

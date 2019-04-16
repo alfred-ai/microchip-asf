@@ -3,7 +3,7 @@
  *
  * \brief GMAC example for SAM.
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -124,8 +124,8 @@ extern "C" {
 /// @endcond
 
 #define STRING_EOL    "\r"
-#define STRING_HEADER "-- GMAC Example --\r" \
-		"-- "BOARD_NAME" --\r" \
+#define STRING_HEADER "-- GMAC Example --\r\n" \
+		"-- "BOARD_NAME" --\r\n" \
 		"-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL
 
 /** The MAC address used for the test */

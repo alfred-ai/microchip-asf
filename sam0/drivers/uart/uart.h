@@ -4,7 +4,7 @@
  *
  * \brief SAM UART Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -118,9 +118,9 @@ extern "C" {
  */
 enum uart_number_of_bit_selection{
 	/** 8 bit per byte*/
-	UART_8_BITS = UART_UART_CONFIGURATION_NUMBER_OF_BITS_0,
+	UART_8_BITS = UART_CONFIGURATION_NUMBER_OF_BITS_0,
 	/** 7 bit per byte*/
-	UART_7_BITS = UART_UART_CONFIGURATION_NUMBER_OF_BITS_1,
+	UART_7_BITS = UART_CONFIGURATION_NUMBER_OF_BITS_1,
 };
 
 /** \brief UART stop bit selection
@@ -129,9 +129,9 @@ enum uart_number_of_bit_selection{
  */
 enum uart_stop_bit_selection{
 	/** 1 stop bit per byte*/
-	UART_1_STOP_BIT = UART_UART_CONFIGURATION_STOP_BITS_0,
+	UART_1_STOP_BIT = UART_CONFIGURATION_STOP_BITS_0,
 	/** 2 stop bit per byte*/
-	UART_2_STOP_BITS = UART_UART_CONFIGURATION_STOP_BITS_1,
+	UART_2_STOP_BITS = UART_CONFIGURATION_STOP_BITS_1,
 };
 
 

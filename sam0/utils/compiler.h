@@ -3,7 +3,7 @@
  *
  * \brief Commonly used includes, types and macros.
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -556,7 +556,7 @@ typedef struct
  * \return The count of trailing zero bits in \a u.
  */
 #if (defined __GNUC__) || (defined __CC_ARM)
-#   define ctz(u)              __builtin_ctz(u)
+#   define ctz(u)              ((u) ? __builtin_ctz(u) : 32)
 #else
 #   define ctz(u)              ((u) & (1ul <<  0) ?  0 : \
                                 (u) & (1ul <<  1) ?  1 : \
@@ -955,7 +955,7 @@ typedef struct
 #elif defined ( __ICCARM__ ) /* IAR Ewarm 5.41+ */
 #   define OPTIMIZE_HIGH _Pragma("optimize=high")
 #elif defined (  __GNUC__  ) /* GCC CS3 2009q3-68 */
-#   define OPTIMIZE_HIGH __attribute__((optimize(s)))
+#   define OPTIMIZE_HIGH __attribute__((optimize("s")))
 #endif
 #define PASS      0
 #define FAIL      1

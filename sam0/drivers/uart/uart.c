@@ -252,10 +252,10 @@ static void uart_set_baudrate(struct uart_module *const module,
 	}
 	fractionalpart = (i + 1) / 2;
 
-	module->hw->UART_CLOCK_SOURCE.reg = UART_UART_CLOCK_SOURCE_CLOCK_SELECT_0;
+	module->hw->UART_CLOCK_SOURCE.reg = UART_CLOCK_SOURCE_CLOCK_SELECT_0;
 	module->hw->UART_BAUD_RATE.reg =
-		UART_UART_BAUD_RATE_INTEGER_DIVISION(integerpart) |
-		UART_UART_BAUD_RATE_FRACTIONAL_DIVISION(fractionalpart);
+		UART_BAUD_RATE_INTEGER_DIVISION(integerpart) |
+		UART_BAUD_RATE_FRACTIONAL_DIVISION(fractionalpart);
 }
 
 /**
@@ -280,15 +280,16 @@ void uart_get_config_defaults(
 	config->stop_bits = UART_1_STOP_BIT;
 	config->parity = UART_NO_PARITY;
 	config->flow_control = false;
-	config->pin_number_pad[0] = PIN_LP_GPIO_2_MUX2_UART0_RXD;
-	config->pin_number_pad[1] = PIN_LP_GPIO_3_MUX2_UART0_TXD;
-	config->pin_number_pad[2] = PIN_LP_GPIO_4_MUX2_UART0_CTS;
-	config->pin_number_pad[3] = PIN_LP_GPIO_5_MUX2_UART0_RTS;
-	
-	config->pinmux_sel_pad[0] = MUX_LP_GPIO_2_MUX2_UART0_RXD;
-	config->pinmux_sel_pad[1] = MUX_LP_GPIO_3_MUX2_UART0_TXD;
-	config->pinmux_sel_pad[2] = MUX_LP_GPIO_4_MUX2_UART0_CTS;
-	config->pinmux_sel_pad[3] = MUX_LP_GPIO_5_MUX2_UART0_RTS;
+
+	config->pin_number_pad[0] = PIN_LP_GPIO_2;
+	config->pin_number_pad[1] = PIN_LP_GPIO_3;
+	config->pin_number_pad[2] = PIN_LP_GPIO_4;
+	config->pin_number_pad[3] = PIN_LP_GPIO_5;
+
+	config->pinmux_sel_pad[0] = MUX_LP_GPIO_2_UART0_RXD;
+	config->pinmux_sel_pad[1] = MUX_LP_GPIO_3_UART0_TXD;
+	config->pinmux_sel_pad[2] = MUX_LP_GPIO_4_UART0_CTS;
+	config->pinmux_sel_pad[3] = MUX_LP_GPIO_5_UART0_RTS;
 }
 
 /**
@@ -358,6 +359,11 @@ enum status_code uart_init(struct uart_module *const module, Uart * const hw,
 	} else {
 		index = 2;
 	}
+
+#if (BTLC1000)
+    index = 2;  /* BTLC1000 has no flow control function. */
+#endif
+
 	for(i = 0; i < index; i++) {
 		gpio_pinmux_cofiguration(config->pin_number_pad[i], \
 								(uint16_t)(config->pinmux_sel_pad[i]));
@@ -373,33 +379,33 @@ enum status_code uart_init(struct uart_module *const module, Uart * const hw,
 
 	/* program the uart configuration. */
 	if(config->flow_control) {
-		config_temp |= UART_UART_CONFIGURATION_CTS_ENABLE_1;
+		config_temp |= UART_CONFIGURATION_CTS_ENABLE_1;
 	}
 	config_temp |= config->data_bits;
 	config_temp |= config->stop_bits;
 	switch(config->parity) {
 		case UART_NO_PARITY:
-			config_temp |= UART_UART_CONFIGURATION_PARITY_ENABLE_0;
+			config_temp |= UART_CONFIGURATION_PARITY_ENABLE_0;
 			break;
 
 		case UART_EVEN_PARITY:
-			config_temp |= UART_UART_CONFIGURATION_PARITY_ENABLE_1;
-			config_temp |= UART_UART_CONFIGURATION_PARITY_MODE_0;
+			config_temp |= UART_CONFIGURATION_PARITY_ENABLE_1;
+			config_temp |= UART_CONFIGURATION_PARITY_MODE_0;
 			break;
 
 		case UART_ODD_PARITY:
-			config_temp |= UART_UART_CONFIGURATION_PARITY_ENABLE_1;
-			config_temp |= UART_UART_CONFIGURATION_PARITY_MODE_1;
+			config_temp |= UART_CONFIGURATION_PARITY_ENABLE_1;
+			config_temp |= UART_CONFIGURATION_PARITY_MODE_1;
 			break;
 
 		case UART_SPACE_PARITY:
-			config_temp |= UART_UART_CONFIGURATION_PARITY_ENABLE_1;
-			config_temp |= UART_UART_CONFIGURATION_PARITY_MODE_2;
+			config_temp |= UART_CONFIGURATION_PARITY_ENABLE_1;
+			config_temp |= UART_CONFIGURATION_PARITY_MODE_2;
 			break;
 
 		case UART_MARK_PARITY:
-			config_temp |= UART_UART_CONFIGURATION_PARITY_ENABLE_1;
-			config_temp |= UART_UART_CONFIGURATION_PARITY_MODE_3;
+			config_temp |= UART_CONFIGURATION_PARITY_ENABLE_1;
+			config_temp |= UART_CONFIGURATION_PARITY_MODE_3;
 			break;
 
 		default:

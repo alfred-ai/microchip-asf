@@ -3,7 +3,7 @@
  *
  * \brief SAM Control Area Network (MCAN) Low Level Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -212,10 +212,6 @@ typedef union {
 #define MCAN_TX_ELEMENT_T1_DLC_DATA48_Val       0xEul
 /**< \brief (MCAN_RXESC) 64 byte data field */
 #define MCAN_TX_ELEMENT_T1_DLC_DATA64_Val       0xFul
-#define MCAN_TX_ELEMENT_T1_BRS_Pos         20
-#define MCAN_TX_ELEMENT_T1_BRS             (0x1ul << MCAN_TX_ELEMENT_T1_BRS_Pos)
-#define MCAN_TX_ELEMENT_T1_FDF_Pos         21
-#define MCAN_TX_ELEMENT_T1_FDF             (0x1ul << MCAN_TX_ELEMENT_T1_FDF_Pos)
 #define MCAN_TX_ELEMENT_T1_EFC_Pos         23
 #define MCAN_TX_ELEMENT_T1_EFC             (0x1ul << MCAN_TX_ELEMENT_T1_EFC_Pos)
 #define MCAN_TX_ELEMENT_T1_MM_Pos          24
@@ -571,10 +567,10 @@ struct mcan_config {
 	enum mcan_timeout_mode timeout_mode;
 	/** Timeout enable. */
 	bool timeout_enable;
+	/** Transceiver Delay Compensation enable. */	
+	bool tdc_enable;
 	/** Transmitter Delay Compensation Offset : 0x0-0x7F */
 	uint8_t delay_compensation_offset;
-	/** Transmitter Delay Compensation Filter Window Length : 0x0-0x7F */
-	uint8_t delay_compensation_filter_window_length;
 	/** Nonmatching frames action for standard frames. */
 	enum mcan_nonmatching_frames_action nonmatching_frames_action_standard;
 	/** Nonmatching frames action for extended frames. */
@@ -655,8 +651,8 @@ static inline void mcan_get_config_defaults(
 	config->timeout_period = 0xFFFF;
 	config->timeout_mode = MCAN_TIMEOUT_CONTINUES;
 	config->timeout_enable = false;
+	config->tdc_enable = false;
 	config->delay_compensation_offset = 0;
-	config->delay_compensation_filter_window_length = 0;
 	config->nonmatching_frames_action_standard = MCAN_NONMATCHING_FRAMES_REJECT;
 	config->nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_REJECT;
 	config->remote_frames_standard_reject = true;
@@ -672,6 +668,8 @@ static inline void mcan_get_config_defaults(
 
 void mcan_init(struct mcan_module *const module_inst, Mcan *hw,
 		struct mcan_config *config);
+void mcan_set_baudrate(Mcan *hw, uint32_t baudrate);
+void mcan_fd_set_baudrate(Mcan *hw, uint32_t baudrate);
 void mcan_start(struct mcan_module *const module_inst);
 void mcan_stop(struct mcan_module *const module_inst);
 void mcan_enable_fd_mode(struct mcan_module *const module_inst);
@@ -801,10 +799,10 @@ static inline void mcan_rx_clear_buffer_status(
 		struct mcan_module *const module_inst, uint32_t index)
 {
 	if (index < 32) {
-		module_inst->hw->MCAN_NDAT1 |= (1 << index);
+		module_inst->hw->MCAN_NDAT1 = (1 << index);
 	} else {
 		index -= 32;
-		module_inst->hw->MCAN_NDAT2 |= (1 << index);
+		module_inst->hw->MCAN_NDAT2 = (1 << index);
 	}
 }
 
@@ -864,7 +862,7 @@ static inline void mcan_get_standard_message_filter_element_default(
 			MCAN_STANDARD_MESSAGE_FILTER_ELEMENT_S0_SFT_CLASSIC;
 }
 
-enum status_code mcan_set_rx_standand_filter(
+enum status_code mcan_set_rx_standard_filter(
 		struct mcan_module *const module_inst,
 		struct mcan_standard_message_filter_element *sd_filter, uint32_t index);
 
@@ -1180,6 +1178,19 @@ static inline void mcan_clear_interrupt_status(
 #endif
 
 /** @} */
+
+/**
+ * \page asfdoc_sam_mcan_exqsg Examples for MCAN Driver
+ *
+ * This is a list of the available Quick Start guides (QSGs) and example
+ * applications for \ref asfdoc_sam_mcan_group. QSGs are simple examples with
+ * step-by-step instructions to configure and use this driver in a selection of
+ * use cases. Note that a QSG can be compiled as a standalone application or be
+ * added to the user application.
+ *
+ *  - \subpage asfdoc_sam_mcan_module_overview
+ *
+ */
 
 #endif /* CAN_H_INCLUDED */
 

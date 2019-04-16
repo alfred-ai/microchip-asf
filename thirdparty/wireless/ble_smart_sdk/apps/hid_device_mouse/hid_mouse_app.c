@@ -345,7 +345,8 @@ int main(void )
 	
 	/* Callback registering for BLE-GATT-Server Role */
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, hid_app_gatt_server_handle);
-	
+
+	ble_set_ulp_mode(BLE_ULP_MODE_CLEAR);
 	/* Capturing the events  */
 	while(app_exec){
 		ble_event_task(BLE_EVENT_TIMEOUT);

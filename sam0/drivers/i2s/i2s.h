@@ -3,7 +3,7 @@
  *
  * \brief SAM I2S - Inter-IC Sound Controller
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -861,6 +861,9 @@ static inline void i2s_disable(const struct i2s_module *const module_inst)
 	while (module_inst->hw->SYNCBUSY.reg & I2S_SYNCBUSY_ENABLE) {
 		/* Sync wait */
 	}
+
+	module_inst->hw->INTENCLR.reg = I2S_INTENCLR_MASK;
+	module_inst->hw->INTFLAG.reg = I2S_INTFLAG_MASK;
 	module_inst->hw->CTRLA.reg &= ~I2S_SYNCBUSY_ENABLE;
 }
 

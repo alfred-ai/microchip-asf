@@ -192,7 +192,7 @@ void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime )
 			__asm volatile ("wfi");
 
 			// If OVF interrupt flag is set, we know the timer has wrapped
-			if (tc.hw->COUNT32.INTFLAG.bit.OVF)
+			if (tc.hw->COUNT32.INTFLAG.reg & TC_INTFLAG_OVF)
 			{
 				vTaskStepTick(xExpectedIdleTime - 1);
 			}

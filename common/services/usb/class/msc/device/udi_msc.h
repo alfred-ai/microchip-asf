@@ -3,7 +3,7 @@
  *
  * \brief USB Device Mass Storage Class (MSC) interface definitions.
  *
- * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -68,7 +68,7 @@ extern UDC_DESC_STORAGE udi_api_t udi_api_msc;
 
 /**
  * \ingroup udi_msc_group
- * \defgroup udi_msc_group_desc USB interface descriptors
+ * \defgroup udi_msc_group USB interface descriptors
  *
  * The following structures provide predefined USB interface descriptors.
  * It must be used to define the final USB descriptors.

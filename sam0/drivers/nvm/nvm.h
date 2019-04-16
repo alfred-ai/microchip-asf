@@ -63,6 +63,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_nvm_prerequisites
@@ -92,11 +93,11 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_NVM_RWWEE</td>
- *    <td>SAM L21/L22, SAM D21-64K, SAM DA1, SAM C20/C21</td>
+ *    <td>SAM L21/L22, SAM D21-64K, SAM DA1, SAM C20/C21, SAM R30</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_BOD12</td>
- *    <td>SAM L21</td>
+ *    <td>SAM L21, SAMR30</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -290,11 +291,11 @@ extern "C" {
  * Define NVM features set according to the different device families.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || defined(SAMD21_64K) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || (SAMR30) || defined(SAMD21_64K) || defined(__DOXYGEN__)
 /** Read while write EEPROM emulation feature. */
 #  define FEATURE_NVM_RWWEE
 #endif
-#if (SAML21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMR30) || defined(__DOXYGEN__)
 /** Brown-out detector internal to the voltage regulator for VDDCORE. */
 #define FEATURE_BOD12
 #endif
@@ -915,7 +916,7 @@ static inline enum nvm_error nvm_get_error(void)
  *	<tr>
  *		<td>42114E</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, and SAM DA1</td>
+ *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, SAMR30 and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>42114D</td>

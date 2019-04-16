@@ -6,7 +6,7 @@
  *
  * This file defines a useful set of functions for the SLCD on SAM devices.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -125,7 +125,6 @@ void slcd_get_config_defaults(struct slcd_config *config)
 	config->enable_low_resistance = false;
 	config->bias_buffer_duration = 0;
 	config->enable_bias_buffer = false;
-	config->enable_ext_bias = false;
 }
 
 /**
@@ -162,8 +161,7 @@ enum status_code slcd_init(struct slcd_config *const config)
 	SLCD->CTRLB.reg = SLCD_CTRLB_BBD(config->bias_buffer_duration)
   					| (config->enable_bias_buffer << SLCD_CTRLB_BBEN_Pos)
   					| SLCD_CTRLB_LRD(config->low_resistance_duration)
-  					| (config->enable_low_resistance << SLCD_CTRLB_LREN_Pos)
-  					| (config->enable_ext_bias << SLCD_CTRLB_EXTBIAS_Pos);
+  					| (config->enable_low_resistance << SLCD_CTRLB_LREN_Pos);
 
 
     SLCD->CTRLC.reg |= SLCD_CTRLC_LPPM(CONF_SLCD_POWER_MODE) | SLCD_CTRLC_CTST(0x0F);
@@ -200,6 +198,8 @@ void slcd_enable(void)
  */
 void slcd_disable(void)
 {
+	SLCD->INTENCLR.reg = SLCD_INTENCLR_MASK;
+	SLCD->INTFLAG.reg = SLCD_INTFLAG_MASK;
 	SLCD->CTRLA.reg &= ~(SLCD_CTRLA_ENABLE);
 	while (slcd_is_syncing()) {
 		/* Wait for synchronization */
@@ -542,15 +542,10 @@ void slcd_set_display_memory(void)
  */
 void slcd_set_seg_data(uint8_t seg_data,uint8_t byte_offset,uint8_t seg_mask)
 {
-	uint32_t temp = SLCD->ISDATA.reg;
-
-	temp &= (~ SLCD_ISDATA_SDATA(0xff)) | (~ SLCD_ISDATA_OFF(0x3f));
-
 	SLCD->ISDATA.reg = SLCD_ISDATA_SDATA(seg_data)
 					 | SLCD_ISDATA_OFF(byte_offset)
 					 | SLCD_ISDATA_SDMASK(seg_mask);
 
-	SLCD->ISDATA.reg = temp;
 	while (slcd_get_char_writing_status()) {
 	}
 }

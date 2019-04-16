@@ -3,7 +3,7 @@
  *
  * \brief Unit tests for AES driver.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -205,8 +205,8 @@ struct dma_resource example_resource_tx;
 struct dma_resource example_resource_rx;
 
 COMPILER_ALIGNED(16)
-DmacDescriptor example_descriptor_tx;
-DmacDescriptor example_descriptor_rx;
+DmacDescriptor example_descriptor_tx SECTION_DMAC_DESCRIPTOR;
+DmacDescriptor example_descriptor_rx SECTION_DMAC_DESCRIPTOR;
 
 /**
  * \brief Configure usart.

@@ -3,7 +3,7 @@
  *
  * \brief SAM Watchdog Driver
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -69,6 +69,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_wdt_prerequisites
@@ -162,7 +163,7 @@
  * }
  * \enddot
  *
- * \note Watchdog Counter of SAM L21/L22 is \a not provided by GCLK, but it uses an
+ * \note Watchdog Counter of SAM L21/L22/R30 is \a not provided by GCLK, but it uses an
  *       internal 1KHz OSCULP32K output clock.
  *
  * \section asfdoc_sam0_wdt_special_considerations Special Considerations
@@ -252,8 +253,8 @@ struct wdt_conf {
 	bool always_on;
 	/** Enable/Disable the Watchdog Timer */
 	bool enable;
-#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21)
-	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20*/
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30)
+	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20/R30*/
 	enum gclk_generator clock_source;
 #endif
 	/** Number of Watchdog timer clock ticks until the Watchdog expires */
@@ -287,7 +288,7 @@ static inline bool wdt_is_syncing(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 	if (WDT_module->SYNCBUSY.reg) {
 #else
 	if (WDT_module->STATUS.reg & WDT_STATUS_SYNCBUSY) {
@@ -325,7 +326,7 @@ static inline void wdt_get_config_defaults(
 	/* Default configuration values */
 	config->always_on            = false;
 	config->enable               = true;
-#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21)
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30)
 	config->clock_source         = GCLK_GENERATOR_4;
 #endif
 	config->timeout_period       = WDT_PERIOD_16384CLK;
@@ -347,7 +348,7 @@ static inline bool wdt_is_locked(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 	return (WDT_module->CTRLA.reg & WDT_CTRLA_ALWAYSON);
 #else
 	return (WDT_module->CTRL.reg & WDT_CTRL_ALWAYSON);
@@ -473,7 +474,7 @@ void wdt_reset_count(void);
  *	<tr>
  *		<td>42124E</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, and SAM C20/C21</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, SAM R30, and SAM C20/C21</td>
  *	</tr>
  *	<tr>
  *		<td>42124D</td>

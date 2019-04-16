@@ -3,7 +3,7 @@
  *
  * \brief SAM Temperature Sensor (TSENS) Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -443,6 +443,8 @@ static inline void tsens_enable(void)
  */
 static inline void tsens_disable(void)
 {
+	TSENS->INTENCLR.reg = TSENS_INTENCLR_MASK;
+	TSENS->INTFLAG.reg = TSENS_INTFLAG_MASK;
 	TSENS->CTRLA.reg &= ~TSENS_CTRLA_ENABLE;
 
 	while (tsens_is_syncing()) {

@@ -173,6 +173,7 @@ CPPFLAGS = \
        -D LINK_LOSS_SERVICE                               \
        -D LLS_GATT_SERVER                                 \
        -D NENABLE_PTS                                     \
+       -D OTAU_FEATURE=false                              \
        -D PROXIMITY_REPORTER                              \
        -D TXPS_GATT_SERVER                                \
        -D TX_POWER_SERVICE                                \

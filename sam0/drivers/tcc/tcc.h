@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC - Timer Counter for Control Applications Driver
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -73,6 +73,7 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_tcc_prerequisites
@@ -618,7 +619,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TCC_GENERATE_DMA_TRIGGER</td>
- *    <td>SAM L21/L22</td>
+ *    <td>SAM L21/L22/R30</td>
  *  </tr>
  * </table>
  *
@@ -632,10 +633,10 @@
  * used.
  *
  * \subsubsection asfdoc_sam0_tcc_special_considerations_tcc_d21 SAM TCC Feature List
- * For SAM D21/R21/L21/L22/DA1/C21, the TCC features are:
+ * For SAM D21/R21/L21/L22/DA1/C21/R30, the TCC features are:
  * \anchor asfdoc_sam0_tcc_features_d21
  * <table>
- *   <caption>TCC module features for SAM D21/R21/L21/L22/DA1/C21</caption>
+ *   <caption>TCC module features for SAM D21/R21/L21/L22/DA1/C21/R30</caption>
  *   <tr>
  *     <th>TCC#</th>
  *     <th>Match/Capture channels</th>
@@ -771,7 +772,7 @@
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || (SAML22) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMR30) || defined(__DOXYGEN__)
 /** Generate DMA triggers */
 #  define FEATURE_TCC_GENERATE_DMA_TRIGGER
 #endif
@@ -1786,6 +1787,11 @@ static inline void tcc_disable(
 		/* Wait for sync */
 	}
 
+	/* Disbale interrupt */
+	tcc_module->INTENCLR.reg = TCC_INTENCLR_MASK;
+	/* Clear interrupt flag */
+	tcc_module->INTFLAG.reg = TCC_INTFLAG_MASK;
+
 	/* Disable the TCC module */
 	tcc_module->CTRLA.reg  &= ~TC_CTRLA_ENABLE;
 }
@@ -1853,7 +1859,7 @@ static inline void tcc_set_count_direction(
 	/* Get a pointer to the module's hardware instance */
 	Tcc *const tcc_module = module_inst->hw;
 
-	while (tcc_module->SYNCBUSY.bit.CTRLB) {
+	while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 		/* Wait for sync */
 	}
 
@@ -1883,7 +1889,7 @@ static inline void tcc_toggle_count_direction(
 	/* Get a pointer to the module's hardware instance */
 	Tcc *const tcc_module = module_inst->hw;
 
-	while (tcc_module->SYNCBUSY.bit.CTRLB) {
+	while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 		/* Wait for sync */
 	}
 	bool dir_value_1 = tcc_module->CTRLBSET.bit.DIR;
@@ -1938,7 +1944,7 @@ static inline void tcc_stop_counter(
 
 	/* Wait until last command is done */
 	do {
-		while (tcc_module->SYNCBUSY.bit.CTRLB) {
+		while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 		}
 		last_cmd = tcc_module->CTRLBSET.reg & TCC_CTRLBSET_CMD_Msk;
@@ -1977,7 +1983,7 @@ static inline void tcc_restart_counter(
 
 	/* Wait until last command is done */
 	do {
-		while (tcc_module->SYNCBUSY.bit.CTRLB) {
+		while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 		}
 		last_cmd = tcc_module->CTRLBSET.reg & TCC_CTRLBSET_CMD_Msk;
@@ -2021,23 +2027,23 @@ static inline void tcc_dma_trigger_command(
 	/* Get a pointer to the module's hardware instance */
 	Tcc *const tcc_module = module_inst->hw;
 
-	while (tcc_module->SYNCBUSY.bit.CTRLB) {
+	while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 	}
 
 	/* Make certain that there are no conflicting commands in the register */
 	tcc_module->CTRLBCLR.reg = TCC_CTRLBCLR_CMD_NONE;
 
-	while (tcc_module->SYNCBUSY.bit.CTRLB) {
+	while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 	}
 	
-#if !(SAML21 || SAML22)
+#if !(SAML21 || SAML22 || SAMR30)
 	/* Write command to execute */
 	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD_DMATRG;
 #endif
 
-#if (SAML21XXXB) || (SAML22)
+#if (SAML21XXXB) || (SAML22) || (SAMR30)
 	/* Write command to execute */
 	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD_DMAOS;
 #endif
@@ -2117,25 +2123,25 @@ static inline void tcc_set_ramp_index(
 
 	/* Wait until last command is done */
 	do {
-		while (tcc_module->SYNCBUSY.bit.CTRLB) {
+		while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 		}
 		if (TCC_RAMP_INDEX_DEFAULT == ramp_index) {
 			/* Cancel pending command */
-			tcc_module->CTRLBCLR.reg = TCC_CTRLBSET_IDXCMD_DISABLE;
+			tcc_module->CTRLBCLR.reg = TCC_CTRLBSET_IDXCMD_HOLD;
 			return;
 		}
 		last_cmd = tcc_module->CTRLBSET.reg & TCC_CTRLBSET_IDXCMD_Msk;
 		if (last_cmd == TCC_CTRLBSET_IDXCMD_DISABLE) {
 			break;
-		} else if (last_cmd == TCC_CTRLBSET_CMD(ramp_index)) {
+		} else if (last_cmd == TCC_CTRLBSET_IDXCMD(ramp_index)) {
 			/* Command have been issued */
 			return;
 		}
 	} while (1);
 
 	/* Write command to execute */
-	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD(ramp_index);
+	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_IDXCMD(ramp_index);
 }
 
 /** @} */
@@ -2245,7 +2251,7 @@ static inline void tcc_lock_double_buffer_update(
 	Assert(module_inst);
 	Assert(module_inst->hw);
 
-	while (module_inst->hw->SYNCBUSY.bit.CTRLB) {
+	while (module_inst->hw->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 		/* Wait for sync */
 	}
 	module_inst->hw->CTRLBSET.reg = TCC_CTRLBSET_LUPD;
@@ -2267,7 +2273,7 @@ static inline void tcc_unlock_double_buffer_update(
 	Assert(module_inst);
 	Assert(module_inst->hw);
 
-	while (module_inst->hw->SYNCBUSY.bit.CTRLB) {
+	while (module_inst->hw->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 		/* Wait for sync */
 	}
 	module_inst->hw->CTRLBCLR.reg = TCC_CTRLBCLR_LUPD;
@@ -2292,7 +2298,7 @@ static inline void tcc_force_double_buffer_update(
 
 	/* Wait until last command is done */
 	do {
-		while (tcc_module->SYNCBUSY.bit.CTRLB) {
+		while (tcc_module->SYNCBUSY.reg & TCC_SYNCBUSY_CTRLB) {
 			/* Wait for sync */
 		}
 		last_cmd = tcc_module->CTRLBSET.reg & TCC_CTRLBSET_CMD_Msk;

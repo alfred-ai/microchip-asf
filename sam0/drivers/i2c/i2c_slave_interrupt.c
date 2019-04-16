@@ -3,7 +3,7 @@
  *
  * \brief I2C Master Interrupt Driver for SAMB
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,7 +61,7 @@ static void _i2c_slave_read(
 	Assert(module);
 	Assert(module->hw);
 	
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Read byte from master and put in buffer. */
 	*(module->buffer++) = i2c_module->RECEIVE_DATA.reg;
@@ -83,7 +83,7 @@ static void _i2c_slave_write(
 	Assert(module);
 	Assert(module->hw);
 	
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Write byte from buffer to master */
 	i2c_module->TRANSMIT_DATA.reg = *(module->buffer++);
@@ -170,7 +170,7 @@ enum status_code i2c_slave_read_packet_job(
 	Assert(module->hw);
 	Assert(packet);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 	
 	/* Check if the I2C module is busy doing async operation. */
 	if (module->buffer_remaining > 0) {
@@ -214,7 +214,7 @@ enum status_code i2c_slave_write_packet_job(
 	Assert(module->hw);
 	Assert(packet);
 	
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 	
 	if (module->buffer_remaining > 0) {
 		return STATUS_BUSY;
@@ -245,7 +245,7 @@ void _i2c_slave_rx_isr_handler(void)
 
 	Assert(module);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Combine callback registered and enabled masks. */
 	uint8_t callback_mask =
@@ -296,7 +296,7 @@ void _i2c_slave_tx_isr_handler(void)
 
 	Assert(module);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Combine callback registered and enabled masks. */
 	uint8_t callback_mask =

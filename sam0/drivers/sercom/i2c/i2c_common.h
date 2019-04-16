@@ -406,7 +406,7 @@ extern "C" {
  * @{
  */
 #if (SAMD21) || (SAMR21) || (SAMD10) || (SAMD11) || (SAML21) || (SAMDA1) || \
-	(SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || defined(__DOXYGEN__)
+	(SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || defined(__DOXYGEN__)
 /** Fast mode plus and high speed support. */
 #  define FEATURE_I2C_FAST_MODE_PLUS_AND_HIGH_SPEED
 /** 10-bit address support */

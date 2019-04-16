@@ -280,6 +280,8 @@ static inline enum status_code bodvdd_enable(void)
  */
 static inline enum status_code bodvdd_disable(void)
 {
+	SUPC->INTENCLR.reg = SUPC_INTENCLR_BODVDDRDY | SUPC_INTENCLR_BODVDDDET | SUPC_INTENCLR_BVDDSRDY;
+	SUPC->INTFLAG.reg = SUPC_INTFLAG_BODVDDRDY | SUPC_INTFLAG_BODVDDDET | SUPC_INTFLAG_BVDDSRDY;
 	SUPC->BODVDD.reg &= ~SUPC_BODVDD_ENABLE;
 	return STATUS_OK;
 }

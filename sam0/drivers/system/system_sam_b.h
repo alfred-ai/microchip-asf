@@ -3,7 +3,7 @@
  *
  * \brief SAM System related functionality
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -220,12 +220,12 @@ enum system_peripheral {
 	PERIPHERAL_ARM_GATED_PCLK,
 	/** ARM BLE 8K Retention Memory */
 	PERIPHERAL_ARM_BLE,
+	/** Quad Decoder 0 */
+	PERIPHERAL_QDEC0,
 	/** Quad Decoder 1 */
 	PERIPHERAL_QDEC1,
 	/** Quad Decoder 2 */
 	PERIPHERAL_QDEC2,
-	/** Quad Decoder 3 */
-	PERIPHERAL_QDEC3,
 	/** I2C1 Core */
 	PERIPHERAL_I2C1_CORE,
 	/** Low Power Clock Calibration Core */
@@ -244,14 +244,14 @@ enum system_peripheral {
 	PERIPHERAL_EFUSE5,
 	/** EFUSE6 */
 	PERIPHERAL_EFUSE6,
+	/** PWM0 */
+	PERIPHERAL_PWM0,
 	/** PWM1 */
 	PERIPHERAL_PWM1,
 	/** PWM2 */
 	PERIPHERAL_PWM2,
 	/** PWM3 */
 	PERIPHERAL_PWM3,
-	/** PWM4 */
-	PERIPHERAL_PWM4,
 	/** PMU Sensor ADC */
 	PERIPHERAL_ADC,
 	/** SPI0 SCK Phase Internal */

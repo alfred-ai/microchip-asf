@@ -3,7 +3,7 @@
  *
  * \brief SAM QUAD DECODER Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -213,9 +213,9 @@ struct quad_decoder_private_config {
  */
 struct quad_decoder_config {
 	uint8_t qdec_enalbe;
+	struct quad_decoder_private_config qdec0;
 	struct quad_decoder_private_config qdec1;
 	struct quad_decoder_private_config qdec2;
-	struct quad_decoder_private_config qdec3;
 };
 
 /**

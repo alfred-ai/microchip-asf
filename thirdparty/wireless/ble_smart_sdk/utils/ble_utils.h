@@ -109,4 +109,8 @@ static inline uint32_t convert_ieee754_ieee11073_float(float f_val)
 	return (ieee11073_float);
 }
 
+#define BLE_PACK_SET	COMPILER_PACK_SET(1)
+
+#define BLE_PACK_RESET	COMPILER_PACK_RESET()
+
 #endif /*__BLE_UTILS_H__*/

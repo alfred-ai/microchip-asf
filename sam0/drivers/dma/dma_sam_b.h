@@ -3,7 +3,7 @@
  *
  * \brief Direct Memory Access Controller Driver for SAMB
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -262,6 +262,9 @@ extern "C" {
 #include <compiler.h>
 #include <system_sam_b.h>
 #include "conf_dma.h"
+
+/** DMA IRQn number. */
+#define PROV_DMA_CTRL0_IRQn		15
 
 /** DMA invalid channel number. */
 #define DMA_INVALID_CHANNEL        0xff

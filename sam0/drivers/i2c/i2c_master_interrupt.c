@@ -3,7 +3,7 @@
  *
  * \brief I2C Master Interrupt Driver for SAMB
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,7 +61,7 @@ static void _i2c_master_read(
 	Assert(module);
 	Assert(module->hw);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Find index to save next value in buffer */
 	uint16_t buffer_index = module->buffer_length - module->buffer_remaining;
@@ -84,7 +84,7 @@ static void _i2c_master_write(struct i2c_master_module *const module)
 	Assert(module);
 	Assert(module->hw);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Find index to get next byte in buffer */
 	volatile uint16_t buffer_index = module->buffer_length - module->buffer_remaining;
@@ -175,7 +175,7 @@ static enum status_code _i2c_master_read_packet(
 	Assert(module->hw);
 	Assert(packet);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Save packet to software module */
 	module->buffer             = packet->data;
@@ -187,7 +187,7 @@ static enum status_code _i2c_master_read_packet(
 	/* Flush the FIFO */
 	i2c_module->I2C_FLUSH.reg = 1;
 	/* Enable I2C on bus (start condition) */
-	i2c_module->I2C_ONBUS.reg = I2C_I2C_ONBUS_ONBUS_ENABLE_1;
+	i2c_module->I2C_ONBUS.reg = I2C_ONBUS_ONBUS_ENABLE_1;
 	/* Set address and direction bit. Will send start command on bus */
 	i2c_module->TRANSMIT_DATA.reg = I2C_TRANSMIT_DATA_ADDRESS_FLAG_1 |
 			(packet->address << 1) | module->transfer_direction;
@@ -288,7 +288,7 @@ static enum status_code _i2c_master_write_packet(
 	Assert(module->hw);
 	Assert(packet);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Save packet to software module */
 	module->buffer             = packet->data;
@@ -297,7 +297,7 @@ static enum status_code _i2c_master_write_packet(
 	module->status             = STATUS_BUSY;
 
 	/* Enable I2C on bus (start condition) */
-	i2c_module->I2C_ONBUS.reg = I2C_I2C_ONBUS_ONBUS_ENABLE_1;
+	i2c_module->I2C_ONBUS.reg = I2C_ONBUS_ONBUS_ENABLE_1;
 	/* Set address and direction bit, will send start command on bus */
 	i2c_module->TRANSMIT_DATA.reg = I2C_TRANSMIT_DATA_ADDRESS_FLAG_1 |
 			(packet->address << 1) | module->transfer_direction;
@@ -389,7 +389,7 @@ void _i2c_master_isr_handler(void)
 
 	Assert(module);
 
-	I2C *const i2c_module = module->hw;
+	I2c *const i2c_module = module->hw;
 
 	/* Combine callback registered and enabled masks */
 	uint8_t callback_mask = module->enabled_callback &
@@ -409,7 +409,7 @@ void _i2c_master_isr_handler(void)
 
 		if (!module->no_stop) {
 			/* Send stop condition */
-			i2c_module->I2C_ONBUS.reg = I2C_I2C_ONBUS_ONBUS_ENABLE_0;
+			i2c_module->I2C_ONBUS.reg = I2C_ONBUS_ONBUS_ENABLE_0;
 		} 
 
 		if (callback_mask & (1 << I2C_MASTER_CALLBACK_WRITE_COMPLETE)) {
@@ -437,7 +437,7 @@ void _i2c_master_isr_handler(void)
 
 		if (!module->no_stop) {
 			/* Send stop condition */
-			i2c_module->I2C_ONBUS.reg = I2C_I2C_ONBUS_ONBUS_ENABLE_0;
+			i2c_module->I2C_ONBUS.reg = I2C_ONBUS_ONBUS_ENABLE_0;
 		}
 		
 		if ((callback_mask & (1 << I2C_MASTER_CALLBACK_READ_COMPLETE))

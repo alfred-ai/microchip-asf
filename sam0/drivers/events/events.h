@@ -3,7 +3,7 @@
  *
  * \brief SAM Event System Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -73,6 +73,7 @@ extern "C" {
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R30
  *
  * The outline of this documentation is as follows:
  * - \ref asfdoc_sam0_events_prerequisites
@@ -362,7 +363,7 @@ struct events_config {
 	uint8_t                    generator;
 	/** Clock source for the event channel */
 	uint8_t                    clock_source;
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 	/** Run in standby mode for the channel */
 	bool                       run_in_standby;
 	/** Run On Demand */
@@ -385,7 +386,7 @@ struct events_config {
  *
  * @{
  */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 #  define _EVENTS_START_OFFSET_BUSY_BITS           16
 #  define _EVENTS_START_OFFSET_USER_READY_BIT      0
 #  define _EVENTS_START_OFFSET_DETECTION_BIT       16
@@ -689,7 +690,7 @@ uint32_t _events_find_bit_position(uint8_t channel, uint8_t start_offset);
  *  <tr>
  *      <td>42108F</td>
  *      <td>08/2015</td>
- *      <td>Added support for SAM L21, SAM DA1, and SAM C20/C21</td>
+ *      <td>Added support for SAM L21, SAM DA1, SAMR30 and SAM C20/C21</td>
  *  </tr>
  *  <tr>
  *      <td>42108E</td>

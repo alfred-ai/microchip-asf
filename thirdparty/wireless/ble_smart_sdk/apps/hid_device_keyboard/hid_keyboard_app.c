@@ -357,18 +357,13 @@ int main(void )
 #ifdef ENABLE_ULP
 	register_resume_callback(resume_cb);
 	configure_aon_gpio_callbacks();
+	ble_set_ulp_mode(BLE_ULP_MODE_SET);
 #endif
 
 	/* Capturing the events  */
 	while(app_exec)
 	{
-#ifdef ENABLE_ULP
-		release_sleep_lock();
 		ble_event_task(BLE_EVENT_TIMEOUT);
-		acquire_sleep_lock();
-#else
-		ble_event_task(BLE_EVENT_TIMEOUT);
-#endif
 
 		/* Check for key status */
 		if(key_status && conn_status){

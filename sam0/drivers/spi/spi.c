@@ -3,7 +3,7 @@
  *
  * \brief Serial Peripheral Interface Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -308,15 +308,15 @@ void spi_get_config_defaults(
 	config->clock_source     = SPI_CLK_INPUT_0;
 	config->clock_divider    = 129;
 
-	config->pin_number_pad[0] = PIN_LP_GPIO_10_MUX2_SPI0_SCK;
-	config->pin_number_pad[1] = PIN_LP_GPIO_11_MUX2_SPI0_MOSI;
-	config->pin_number_pad[2] = PIN_LP_GPIO_12_MUX2_SPI0_SSN;
-	config->pin_number_pad[3] = PIN_LP_GPIO_13_MUX2_SPI0_MISO;
+	config->pin_number_pad[0] = PIN_LP_GPIO_10;
+	config->pin_number_pad[1] = PIN_LP_GPIO_11;
+	config->pin_number_pad[2] = PIN_LP_GPIO_12;
+	config->pin_number_pad[3] = PIN_LP_GPIO_13;
 
-	config->pinmux_sel_pad[0] = MUX_LP_GPIO_10_MUX2_SPI0_SCK;
-	config->pinmux_sel_pad[1] = MUX_LP_GPIO_11_MUX2_SPI0_MOSI;
-	config->pinmux_sel_pad[2] = MUX_LP_GPIO_12_MUX2_SPI0_SSN;
-	config->pinmux_sel_pad[3] = MUX_LP_GPIO_13_MUX2_SPI0_MISO;
+	config->pinmux_sel_pad[0] = MUX_LP_GPIO_10_SPI0_SCK;
+	config->pinmux_sel_pad[1] = MUX_LP_GPIO_11_SPI0_MOSI;
+	config->pinmux_sel_pad[2] = MUX_LP_GPIO_12_SPI0_SSN;
+	config->pinmux_sel_pad[3] = MUX_LP_GPIO_13_SPI0_MISO;
 };
 
 /**
@@ -409,8 +409,8 @@ enum status_code spi_init(
 	Spi *const spi_module = (module->hw);
 
 	/* Check if module is enabled. */
-	if (spi_module->SPI_MODULE_ENABLE.reg & SPI_SPI_MODULE_ENABLE_MASK) {
-		spi_module->SPI_MODULE_ENABLE.reg = (0x0ul << SPI_SPI_MODULE_ENABLE_ENABLE_Pos);
+	if (spi_module->SPI_MODULE_ENABLE.reg & SPI_MODULE_ENABLE_MASK) {
+		spi_module->SPI_MODULE_ENABLE.reg = (0x0ul << SPI_MODULE_ENABLE_ENABLE_Pos);
 	}
 
 	spi_reset(module);
@@ -513,7 +513,7 @@ void spi_enable(struct spi_module *const module)
 #endif
 
 	/* Enable SPI */
-	spi_module->SPI_MODULE_ENABLE.reg = SPI_SPI_MODULE_ENABLE_ENABLE;
+	spi_module->SPI_MODULE_ENABLE.reg = SPI_MODULE_ENABLE_ENABLE;
 }
 
 /**
@@ -538,7 +538,7 @@ void spi_disable(struct spi_module *const module)
 #  endif
 
 	/* Disable SPI */
-	spi_module->SPI_MODULE_ENABLE.reg = (0x0ul << SPI_SPI_MODULE_ENABLE_ENABLE_Pos);
+	spi_module->SPI_MODULE_ENABLE.reg = (0x0ul << SPI_MODULE_ENABLE_ENABLE_Pos);
 	_spi_clock_disable(module);
 }
 

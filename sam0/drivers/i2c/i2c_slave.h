@@ -3,7 +3,7 @@
  *
  * \brief I2C Slave Driver for SAMB
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -136,7 +136,7 @@ enum i2c_slave_direction {
 struct i2c_slave_module {
 #if !defined(__DOXYGEN__)
 	/** Hardware instance initialized for the struct */
-	I2C *hw;
+	I2c *hw;
 	/** Module lock */
 	volatile bool locked;
 	/** Timeout value for polled functions */
@@ -200,7 +200,7 @@ struct i2c_slave_config {
 void i2c_slave_get_config_defaults(
 		struct i2c_slave_config *const config);
 enum status_code i2c_slave_init(struct i2c_slave_module *const module,
-		I2C *const hw,
+		I2c *const hw,
 		const struct i2c_slave_config *const config);
 enum status_code i2c_slave_write_packet_wait(
 		struct i2c_slave_module *const module,

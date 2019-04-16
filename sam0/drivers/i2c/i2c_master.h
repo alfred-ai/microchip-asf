@@ -3,7 +3,7 @@
  *
  * \brief I2C Master Driver for SAMB
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -139,7 +139,7 @@ typedef void (*i2c_master_callback_t)(
 struct i2c_master_module {
 #if !defined(__DOXYGEN__)
 	/** Hardware instance initialized for the struct */
-	I2C *hw;
+	I2c *hw;
 	/** Module lock */
 	volatile bool locked;
 	/** If true, stop condition will be sent after a read/write */
@@ -196,7 +196,7 @@ void i2c_master_get_config_defaults(
 
  enum status_code i2c_master_init(
 		struct i2c_master_module *const module,
-		I2C *const hw,
+		I2c *const hw,
 		const struct i2c_master_config *const config);
 
 void i2c_master_reset(struct i2c_master_module *const module);

@@ -151,6 +151,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BOARD=SAMB11_XPLAINED_PRO                       \
        -D CHIPVERSION_B0                                  \
+       -D OTAU_FEATURE=false                              \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

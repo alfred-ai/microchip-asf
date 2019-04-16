@@ -173,6 +173,7 @@ CPPFLAGS = \
        -D HID_SERVICE                                     \
        -D NENABLE_PTS                                     \
        -D NENABLE_ULP                                     \
+       -D OTAU_FEATURE=false                              \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

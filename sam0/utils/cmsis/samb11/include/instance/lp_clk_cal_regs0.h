@@ -3,7 +3,7 @@
  *
  * \brief Instance description for LP_CLK_CAL_REGS0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,15 +46,19 @@
 
 /* ========== Register definition for LP_CLK_CAL_REGS0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_LP_CLK_CAL_REGS0_CONFIG_REG          (0x4000c000U) /**< \brief (LP_CLK_CAL_REGS0) Configuration of the calibration clocks and the enable of calibration */
-#define REG_LP_CLK_CAL_REGS0_CALIB_OSC_COUNT_REG (0x4000c004U) /**< \brief (LP_CLK_CAL_REGS0) Calibration OSC Count Register (Any write sets bit 15 and clears bit 31) */
-#define REG_LP_CLK_CAL_REGS0_CALIB_RTC_COUNT_REG (0x4000c008U) /**< \brief (LP_CLK_CAL_REGS0) Calibration RTC Count Register (Any write sets bit 15 and clears bit 31) */
-#define REG_LP_CLK_CAL_REGS0_CALIB_STATUS_REG    (0x4000c00cU) /**< \brief (LP_CLK_CAL_REGS0) Calibration Status Register */
+
+#define REG_LP_CLK_CAL_REGS0_CONFIG_REG (0x4000C000U) /**< (LP_CLK_CAL_REGS0) Configuration of the calibration clocks and the enable of calibration */
+#define REG_LP_CLK_CAL_REGS0_CALIB_OSC_COUNT_REG (0x4000C004U) /**< (LP_CLK_CAL_REGS0) Calibration OSC Count Register (Any write sets bit 15 and clears bit 31) */
+#define REG_LP_CLK_CAL_REGS0_CALIB_RTC_COUNT_REG (0x4000C008U) /**< (LP_CLK_CAL_REGS0) Calibration RTC Count Register (Any write sets bit 15 and clears bit 31) */
+#define REG_LP_CLK_CAL_REGS0_CALIB_STATUS_REG (0x4000C00CU) /**< (LP_CLK_CAL_REGS0) Calibration Status Register */
+
 #else
-#define REG_LP_CLK_CAL_REGS0_CONFIG_REG          (*(RwReg16*)0x4000c000U) /**< \brief (LP_CLK_CAL_REGS0) Configuration of the calibration clocks and the enable of calibration */
-#define REG_LP_CLK_CAL_REGS0_CALIB_OSC_COUNT_REG (*(RoReg  *)0x4000c004U) /**< \brief (LP_CLK_CAL_REGS0) Calibration OSC Count Register (Any write sets bit 15 and clears bit 31) */
-#define REG_LP_CLK_CAL_REGS0_CALIB_RTC_COUNT_REG (*(RoReg  *)0x4000c008U) /**< \brief (LP_CLK_CAL_REGS0) Calibration RTC Count Register (Any write sets bit 15 and clears bit 31) */
-#define REG_LP_CLK_CAL_REGS0_CALIB_STATUS_REG    (*(RoReg8 *)0x4000c00cU) /**< \brief (LP_CLK_CAL_REGS0) Calibration Status Register */
+
+#define REG_LP_CLK_CAL_REGS0_CONFIG_REG (*(__IO uint16_t*)0x4000C000U) /**< (LP_CLK_CAL_REGS0) Configuration of the calibration clocks and the enable of calibration */
+#define REG_LP_CLK_CAL_REGS0_CALIB_OSC_COUNT_REG (*(__I  uint32_t*)0x4000C004U) /**< (LP_CLK_CAL_REGS0) Calibration OSC Count Register (Any write sets bit 15 and clears bit 31) */
+#define REG_LP_CLK_CAL_REGS0_CALIB_RTC_COUNT_REG (*(__I  uint32_t*)0x4000C008U) /**< (LP_CLK_CAL_REGS0) Calibration RTC Count Register (Any write sets bit 15 and clears bit 31) */
+#define REG_LP_CLK_CAL_REGS0_CALIB_STATUS_REG (*(__I  uint8_t*)0x4000C00CU) /**< (LP_CLK_CAL_REGS0) Calibration Status Register */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_LP_CLK_CAL_REGS0_INSTANCE_ */

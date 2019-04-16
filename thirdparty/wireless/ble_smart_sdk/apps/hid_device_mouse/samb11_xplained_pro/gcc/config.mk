@@ -172,6 +172,7 @@ CPPFLAGS = \
        -D HID_MOUSE_DEVICE                                \
        -D HID_SERVICE                                     \
        -D NENABLE_PTS                                     \
+       -D OTAU_FEATURE=false                              \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

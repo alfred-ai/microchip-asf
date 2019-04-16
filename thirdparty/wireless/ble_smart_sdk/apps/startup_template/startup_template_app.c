@@ -62,94 +62,6 @@
 #include "button.h"
 #include "startup_template_app.h"
 
-static at_ble_status_t start_advertisement(void)
-{
-	/* Start of advertisement */
-	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, \
-		NULL, AT_BLE_ADV_FP_ANY, APP_FAST_ADV, APP_ADV_TIMEOUT, 0) == \
-		AT_BLE_SUCCESS)
-	{
-		DBG_LOG("BLE Started Advertisement");
-		return AT_BLE_SUCCESS;
-	}
-	else
-	{
-		DBG_LOG("BLE Advertisement start Failed");
-	}
-	return AT_BLE_FAILURE;
-}
-
-
-/* Callback functions */
-
-/* Callback registered for AT_BLE_PAIR_DONE event from stack */
-static at_ble_status_t ble_paired_app_event(void *param)
-{
-	ALL_UNUSED(param);
-	return AT_BLE_SUCCESS;
-}
-
-/* Callback registered for AT_BLE_DISCONNECTED event from stack */
-static at_ble_status_t ble_disconnected_app_event(void *param)
-{
-	start_advertisement();
-	ALL_UNUSED(param);
-	return AT_BLE_SUCCESS;	
-}
-
-/* Callback registered for AT_BLE_NOTIFICATION_CONFIRMED event from stack */
-static at_ble_status_t ble_notification_confirmed_app_event(void *param)
-{
-	at_ble_cmd_complete_event_t *notification_status = (at_ble_cmd_complete_event_t *)param;
-	if(!notification_status->status)
-	{
-		DBG_LOG_DEV("Notification sent successfully");
-		return AT_BLE_SUCCESS;
-	}
-	return AT_BLE_FAILURE;
-}
-
-/* Callback registered for AT_BLE_CHARACTERISTIC_CHANGED event from stack */
-static at_ble_status_t ble_char_changed_app_event(void *param)
-{
-	ALL_UNUSED(param);
-	return AT_BLE_SUCCESS;
-}
-
-static const ble_event_callback_t startup_template_app_gap_cb[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	ble_disconnected_app_event,
-	NULL,
-	NULL,
-	ble_paired_app_event,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	ble_paired_app_event,
-	NULL,
-	NULL,
-	NULL,
-	NULL
-};
-
-static const ble_event_callback_t startup_template_app_gatt_server_cb[] = {
-	ble_notification_confirmed_app_event,
-	NULL,
-	ble_char_changed_app_event,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
-};
 
 /* timer callback function */
 static void timer_callback_fn(void)
@@ -184,24 +96,10 @@ int main(void)
 	
 	/* initialize the BLE chip  and Set the Device Address */
 	ble_device_init(NULL);
-
-	/* Register Primary/Included service in case of GATT Server */
 	
-	/* set the advertisement data */
-	ble_advertisement_data_set();
-		
-	/* Start the advertisement */
-	start_advertisement();
+	/* Set ULP mode */
+	ble_set_ulp_mode(BLE_ULP_MODE_SET);
 	
-	/* Register callbacks for gap related events */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
-									BLE_GAP_EVENT_TYPE,
-									startup_template_app_gap_cb);
-	
-	/* Register callbacks for gatt server related events */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
-									BLE_GATT_SERVER_EVENT_TYPE,
-									startup_template_app_gatt_server_cb);
 	
 	while(true)
 	{

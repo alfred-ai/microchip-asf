@@ -3,7 +3,7 @@
  *
  * \brief Instance description for ARM_DWT0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,41 +46,45 @@
 
 /* ========== Register definition for ARM_DWT0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_ARM_DWT0_DWT_CTRL            (0xe0001000LU) /**< \brief (ARM_DWT0) Control Register */
-#define REG_ARM_DWT0_DWT_PCSR            (0xe000101cLU) /**< \brief (ARM_DWT0) Program Counter Sample Register */
-#define REG_ARM_DWT0_DWT_COMP0           (0xe0001020LU) /**< \brief (ARM_DWT0) DWT Compare Register 0 */
-#define REG_ARM_DWT0_DWT_MASK0           (0xe0001024LU) /**< \brief (ARM_DWT0) DWT Mask Register 0 */
-#define REG_ARM_DWT0_DWT_FUNCTION0       (0xe0001028LU) /**< \brief (ARM_DWT0) DWT Function Register 0 */
-#define REG_ARM_DWT0_DWT_COMP1           (0xe0001030LU) /**< \brief (ARM_DWT0) DWT Compare Register 1 */
-#define REG_ARM_DWT0_DWT_MASK1           (0xe0001034LU) /**< \brief (ARM_DWT0) DWT Mask Register 1 */
-#define REG_ARM_DWT0_DWT_FUNCTION1       (0xe0001038LU) /**< \brief (ARM_DWT0) DWT Function Register 1 */
-#define REG_ARM_DWT0_DWT_PID4            (0xe0001fd0LU) /**< \brief (ARM_DWT0) Peripheral ID Register 4 */
-#define REG_ARM_DWT0_DWT_PID0            (0xe0001fe0LU) /**< \brief (ARM_DWT0) Peripheral ID Register 0 */
-#define REG_ARM_DWT0_DWT_PID1            (0xe0001fe4LU) /**< \brief (ARM_DWT0) Peripheral ID Register 1 */
-#define REG_ARM_DWT0_DWT_PID2            (0xe0001fe8LU) /**< \brief (ARM_DWT0) Peripheral ID Register 2 */
-#define REG_ARM_DWT0_DWT_PID3            (0xe0001fecLU) /**< \brief (ARM_DWT0) Peripheral ID Register 3 */
-#define REG_ARM_DWT0_DWT_CID0            (0xe0001ff0LU) /**< \brief (ARM_DWT0) Component ID Register 0 */
-#define REG_ARM_DWT0_DWT_CID1            (0xe0001ff4LU) /**< \brief (ARM_DWT0) Component ID Register 1 */
-#define REG_ARM_DWT0_DWT_CID2            (0xe0001ff8LU) /**< \brief (ARM_DWT0) Component ID Register 2 */
-#define REG_ARM_DWT0_DWT_CID3            (0xe0001ffcLU) /**< \brief (ARM_DWT0) Component ID Register 3 */
+
+#define REG_ARM_DWT0_DWT_CTRL   (0xE0001000U) /**< (ARM_DWT0) Control Register */
+#define REG_ARM_DWT0_DWT_PCSR   (0xE000101CU) /**< (ARM_DWT0) Program Counter Sample Register */
+#define REG_ARM_DWT0_DWT_COMP0  (0xE0001020U) /**< (ARM_DWT0) DWT Compare Register 0 */
+#define REG_ARM_DWT0_DWT_MASK0  (0xE0001024U) /**< (ARM_DWT0) DWT Mask Register 0 */
+#define REG_ARM_DWT0_DWT_FUNCTION0 (0xE0001028U) /**< (ARM_DWT0) DWT Function Register 0 */
+#define REG_ARM_DWT0_DWT_COMP1  (0xE0001030U) /**< (ARM_DWT0) DWT Compare Register 1 */
+#define REG_ARM_DWT0_DWT_MASK1  (0xE0001034U) /**< (ARM_DWT0) DWT Mask Register 1 */
+#define REG_ARM_DWT0_DWT_FUNCTION1 (0xE0001038U) /**< (ARM_DWT0) DWT Function Register 1 */
+#define REG_ARM_DWT0_DWT_PID4   (0xE0001FD0U) /**< (ARM_DWT0) Peripheral ID Register 4 */
+#define REG_ARM_DWT0_DWT_PID0   (0xE0001FE0U) /**< (ARM_DWT0) Peripheral ID Register 0 */
+#define REG_ARM_DWT0_DWT_PID1   (0xE0001FE4U) /**< (ARM_DWT0) Peripheral ID Register 1 */
+#define REG_ARM_DWT0_DWT_PID2   (0xE0001FE8U) /**< (ARM_DWT0) Peripheral ID Register 2 */
+#define REG_ARM_DWT0_DWT_PID3   (0xE0001FECU) /**< (ARM_DWT0) Peripheral ID Register 3 */
+#define REG_ARM_DWT0_DWT_CID0   (0xE0001FF0U) /**< (ARM_DWT0) Component ID Register 0 */
+#define REG_ARM_DWT0_DWT_CID1   (0xE0001FF4U) /**< (ARM_DWT0) Component ID Register 1 */
+#define REG_ARM_DWT0_DWT_CID2   (0xE0001FF8U) /**< (ARM_DWT0) Component ID Register 2 */
+#define REG_ARM_DWT0_DWT_CID3   (0xE0001FFCU) /**< (ARM_DWT0) Component ID Register 3 */
+
 #else
-#define REG_ARM_DWT0_DWT_CTRL            (*(RoReg  *)0xe0001000LU) /**< \brief (ARM_DWT0) Control Register */
-#define REG_ARM_DWT0_DWT_PCSR            (*(RoReg  *)0xe000101cLU) /**< \brief (ARM_DWT0) Program Counter Sample Register */
-#define REG_ARM_DWT0_DWT_COMP0           (*(RwReg  *)0xe0001020LU) /**< \brief (ARM_DWT0) DWT Compare Register 0 */
-#define REG_ARM_DWT0_DWT_MASK0           (*(RwReg8 *)0xe0001024LU) /**< \brief (ARM_DWT0) DWT Mask Register 0 */
-#define REG_ARM_DWT0_DWT_FUNCTION0       (*(RoReg  *)0xe0001028LU) /**< \brief (ARM_DWT0) DWT Function Register 0 */
-#define REG_ARM_DWT0_DWT_COMP1           (*(RwReg  *)0xe0001030LU) /**< \brief (ARM_DWT0) DWT Compare Register 1 */
-#define REG_ARM_DWT0_DWT_MASK1           (*(RwReg8 *)0xe0001034LU) /**< \brief (ARM_DWT0) DWT Mask Register 1 */
-#define REG_ARM_DWT0_DWT_FUNCTION1       (*(RoReg  *)0xe0001038LU) /**< \brief (ARM_DWT0) DWT Function Register 1 */
-#define REG_ARM_DWT0_DWT_PID4            (*(RoReg8 *)0xe0001fd0LU) /**< \brief (ARM_DWT0) Peripheral ID Register 4 */
-#define REG_ARM_DWT0_DWT_PID0            (*(RoReg8 *)0xe0001fe0LU) /**< \brief (ARM_DWT0) Peripheral ID Register 0 */
-#define REG_ARM_DWT0_DWT_PID1            (*(RoReg8 *)0xe0001fe4LU) /**< \brief (ARM_DWT0) Peripheral ID Register 1 */
-#define REG_ARM_DWT0_DWT_PID2            (*(RoReg8 *)0xe0001fe8LU) /**< \brief (ARM_DWT0) Peripheral ID Register 2 */
-#define REG_ARM_DWT0_DWT_PID3            (*(RoReg8 *)0xe0001fecLU) /**< \brief (ARM_DWT0) Peripheral ID Register 3 */
-#define REG_ARM_DWT0_DWT_CID0            (*(RoReg8 *)0xe0001ff0LU) /**< \brief (ARM_DWT0) Component ID Register 0 */
-#define REG_ARM_DWT0_DWT_CID1            (*(RoReg8 *)0xe0001ff4LU) /**< \brief (ARM_DWT0) Component ID Register 1 */
-#define REG_ARM_DWT0_DWT_CID2            (*(RoReg8 *)0xe0001ff8LU) /**< \brief (ARM_DWT0) Component ID Register 2 */
-#define REG_ARM_DWT0_DWT_CID3            (*(RoReg8 *)0xe0001ffcLU) /**< \brief (ARM_DWT0) Component ID Register 3 */
+
+#define REG_ARM_DWT0_DWT_CTRL   (*(__I  uint32_t*)0xE0001000U) /**< (ARM_DWT0) Control Register */
+#define REG_ARM_DWT0_DWT_PCSR   (*(__I  uint32_t*)0xE000101CU) /**< (ARM_DWT0) Program Counter Sample Register */
+#define REG_ARM_DWT0_DWT_COMP0  (*(__IO uint32_t*)0xE0001020U) /**< (ARM_DWT0) DWT Compare Register 0 */
+#define REG_ARM_DWT0_DWT_MASK0  (*(__IO uint8_t*)0xE0001024U) /**< (ARM_DWT0) DWT Mask Register 0 */
+#define REG_ARM_DWT0_DWT_FUNCTION0 (*(__I  uint32_t*)0xE0001028U) /**< (ARM_DWT0) DWT Function Register 0 */
+#define REG_ARM_DWT0_DWT_COMP1  (*(__IO uint32_t*)0xE0001030U) /**< (ARM_DWT0) DWT Compare Register 1 */
+#define REG_ARM_DWT0_DWT_MASK1  (*(__IO uint8_t*)0xE0001034U) /**< (ARM_DWT0) DWT Mask Register 1 */
+#define REG_ARM_DWT0_DWT_FUNCTION1 (*(__I  uint32_t*)0xE0001038U) /**< (ARM_DWT0) DWT Function Register 1 */
+#define REG_ARM_DWT0_DWT_PID4   (*(__I  uint8_t*)0xE0001FD0U) /**< (ARM_DWT0) Peripheral ID Register 4 */
+#define REG_ARM_DWT0_DWT_PID0   (*(__I  uint8_t*)0xE0001FE0U) /**< (ARM_DWT0) Peripheral ID Register 0 */
+#define REG_ARM_DWT0_DWT_PID1   (*(__I  uint8_t*)0xE0001FE4U) /**< (ARM_DWT0) Peripheral ID Register 1 */
+#define REG_ARM_DWT0_DWT_PID2   (*(__I  uint8_t*)0xE0001FE8U) /**< (ARM_DWT0) Peripheral ID Register 2 */
+#define REG_ARM_DWT0_DWT_PID3   (*(__I  uint8_t*)0xE0001FECU) /**< (ARM_DWT0) Peripheral ID Register 3 */
+#define REG_ARM_DWT0_DWT_CID0   (*(__I  uint8_t*)0xE0001FF0U) /**< (ARM_DWT0) Component ID Register 0 */
+#define REG_ARM_DWT0_DWT_CID1   (*(__I  uint8_t*)0xE0001FF4U) /**< (ARM_DWT0) Component ID Register 1 */
+#define REG_ARM_DWT0_DWT_CID2   (*(__I  uint8_t*)0xE0001FF8U) /**< (ARM_DWT0) Component ID Register 2 */
+#define REG_ARM_DWT0_DWT_CID3   (*(__I  uint8_t*)0xE0001FFCU) /**< (ARM_DWT0) Component ID Register 3 */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_ARM_DWT0_INSTANCE_ */

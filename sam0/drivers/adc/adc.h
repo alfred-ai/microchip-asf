@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Analog-to-Digital Converter Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -611,6 +611,11 @@ static inline enum status_code adc_enable(
 #   endif
 #endif
 
+	/* Disbale interrupt */
+	adc_module->INTENCLR.reg = ADC_INTENCLR_MASK;
+	/* Clear interrupt flag */
+	adc_module->INTFLAG.reg = ADC_INTFLAG_MASK;
+
 	adc_module->CTRLA.reg |= ADC_CTRLA_ENABLE;
 
 	while (adc_is_syncing(module_inst)) {
@@ -648,6 +653,11 @@ static inline enum status_code adc_disable(
 	while (adc_is_syncing(module_inst)) {
 		/* Wait for synchronization */
 	}
+
+	/* Disbale interrupt */
+	adc_module->INTENCLR.reg = ADC_INTENCLR_MASK;
+	/* Clear interrupt flag */
+	adc_module->INTFLAG.reg = ADC_INTFLAG_MASK;
 
 	adc_module->CTRLA.reg &= ~ADC_CTRLA_ENABLE;
 

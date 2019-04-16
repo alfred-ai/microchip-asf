@@ -135,7 +135,7 @@ uint32_t freertos_uart_serial_read_packet(freertos_uart_if p_uart,
  *     a call to freertos_uart_serial_init().  The
  *     freertos_driver_parameters.options_flags parameter passed to the
  *     initialization function defines the driver behavior.  If
- *     freertos_driver_parameters.options_flags had the USE_TX_ACCESS_MUTEX bit
+ *     freertos_driver_parameters.options_flags had the USE_TX_ACCESS_SEM bit
  *     set, then the driver will only write to the UART peripheral if it has
  *     first gained exclusive access to it.  block_time_ticks specifies the
  *     maximum amount of time the driver will wait to get exclusive access before
@@ -277,7 +277,7 @@ uint32_t freertos_uart_serial_read_packet(freertos_uart_if p_uart,
 	     // Flags set to allow access from multiple tasks, and to wait in the
 	     // transmit function until the transmit is complete.  Note that other
 	     // FreeRTOS tasks will execute during the wait period.
-	     (USE_TX_ACCESS_MUTEX | USE_RX_ACCESS_MUTEX | WAIT_TX_COMPLETE)
+	     (USE_TX_ACCESS_SEM | USE_RX_ACCESS_MUTEX | WAIT_TX_COMPLETE)
 	  };
 
 	  // The RS232 configuration.  This structure, and the values used in its
@@ -356,7 +356,7 @@ uint32_t freertos_uart_serial_read_packet(freertos_uart_if p_uart,
 
 	     // Flags set to allow access from multiple tasks.  Note in this case the
 	     // WAIT_TX_COMPLETE flag is *not* used.
-	     (USE_TX_ACCESS_MUTEX | USE_RX_ACCESS_MUTEX)
+	     (USE_TX_ACCESS_SEM | USE_RX_ACCESS_MUTEX)
 	  };
 
 	  // The RS232 configuration.  This structure, and the values used in its

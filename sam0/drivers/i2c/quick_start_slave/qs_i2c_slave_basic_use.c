@@ -3,7 +3,7 @@
  *
  * \brief I2C Slave Quick Start Guide for SAMB
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -75,10 +75,12 @@ static void configure_i2c_slave(void)
 	/* Change address and address_mode. */
 	//! [conf_changes]
 	config_i2c_slave.address = SLAVE_ADDRESS;
+	
 	config_i2c_slave.pin_number_pad0 = PIN_LP_GPIO_14;
 	config_i2c_slave.pin_number_pad1 = PIN_LP_GPIO_15;
-	config_i2c_slave.pinmux_sel_pad0 = MUX_LP_GPIO_14_MUX4_I2C1_SDA;
-	config_i2c_slave.pinmux_sel_pad1 = MUX_LP_GPIO_15_MUX4_I2C1_SCL;
+	config_i2c_slave.pinmux_sel_pad0 = MUX_LP_GPIO_14_I2C1_SDA;
+	config_i2c_slave.pinmux_sel_pad1 = MUX_LP_GPIO_15_I2C1_SCL;
+	
 	//! [conf_changes]
 	/* Initialize and enable device with config, and enable i2c. */
 	//! [init_module]

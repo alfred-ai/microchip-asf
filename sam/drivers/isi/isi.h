@@ -3,7 +3,7 @@
  *
  * \brief SAM Image Sensor Interface (ISI) driver.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,6 +46,21 @@
 
 #ifndef ISI_H
 #define ISI_H
+
+/**
+ * \defgroup asfdoc_sam_drivers_isi_group SAMV71/V70/E70/S70 Image Sensor Interface Driver
+ *
+ * This driver for Atmel&reg; | SMART ARM&reg;-based SAM Image Sensor Interface (ISI) connects a CMOS-type
+ * image sensor to the processor and provides image capture in various formats.
+ *
+ * Devices from the following series can use this module:
+ * - Atmel | SMART SAMV71
+ * - Atmel | SMART SAMV70
+ * - Atmel | SMART SAMS70
+ * - Atmel | SMART SAME70
+ *
+ * @{
+ */
 
 #include  <compiler.h>
 #include  <status_codes.h>

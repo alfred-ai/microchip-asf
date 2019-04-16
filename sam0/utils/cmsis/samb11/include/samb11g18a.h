@@ -3,7 +3,7 @@
  *
  * \brief Header file for ATSAMB11G18A
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -45,13 +45,13 @@
 #define _SAMB11G18A_
 
 /** \addtogroup SAMB11G18A_definitions SAMB11G18A definitions
- * This file defines all structures and symbols for SAMB11G18A:
- *   - registers and bitfields
- *   - peripheral base address
- *   - peripheral ID
- *   - PIO definitions
-*/
-/*@{*/
+  This file defines all structures and symbols for SAMB11G18A:
+    - registers and bitfields
+    - peripheral base address
+    - peripheral ID
+    - PIO definitions 
+ *  @{
+ */
 
 #ifdef __cplusplus
  extern "C" {
@@ -59,6 +59,18 @@
 
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 #include <stdint.h>
+/* IO definitions (access restrictions to peripheral registers) */
+/**
+    \defgroup Atmel_glob_defs Atmel Global Defines
+
+    <strong>IO Type Qualifiers</strong> are used
+    \li to specify the access to peripheral variables.
+    \li for automatic generation of peripheral register debug information.
+
+    emark
+    CMSIS core has a syntax that differs from this using i.e. __I, __O, or __IO followed by 'uint<size>_t' respective types.
+    Default the header files will follow the CMSIS core syntax.
+*/
 #ifndef __cplusplus
 typedef volatile const uint32_t RoReg;   /**< Read only 32-bit register (volatile const unsigned int) */
 typedef volatile const uint16_t RoReg16; /**< Read only 16-bit register (volatile const unsigned int) */
@@ -112,13 +124,14 @@ typedef enum IRQn
   WDT0_IRQn                 = 12 , /**< 12  SAMB11G18A Watchdog0 Timer (WDT0)   */
   WDT1_IRQn                 = 13 , /**< 13  SAMB11G18A Watchdog0 Timer (WDT1)   */
   DUALTIMER0_IRQn           = 14 , /**< 14  SAMB11G18A ARM General Purpose Dual Timer (DUALTIMER0) */
-  PROV_DMA_CTRL0_IRQn       = 15 , /**< 15  SAMB11G18A 4 Channel DMA Controller (PROV_DMA_CTRL0) */
   SPI_FLASH0_IRQn           = 18 , /**< 18  SAMB11G18A SPI Flash Controller (SPI_FLASH0) */
   GPIO0_IRQn                = 23 , /**< 23  SAMB11G18A GPIO Controller (GPIO0)  */
   GPIO1_IRQn                = 24 , /**< 24  SAMB11G18A GPIO Controller (GPIO1)  */
   GPIO2_IRQn                = 25 , /**< 25  SAMB11G18A GPIO Controller (GPIO2)  */
   TIMER0_IRQn               = 26 , /**< 26  SAMB11G18A ARM General Purpose Timer (TIMER0) */
-  AON_SLEEP_TIMER_IRQn      = 27 , /**< 27  SAMB11G18A ARM Always on Sleep Timer (AON_SLEEP_TIMER) */
+  AON_SLEEP_TIMER0_IRQn     = 27 , /**< 27  SAMB11G18A Always On Sleep Timer (AON_SLEEP_TIMER0) */
+
+  PERIPH_COUNT_IRQn        = 28  /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -159,7 +172,7 @@ typedef struct _DeviceVectors
   void* pfnWDT0_Handler;                         /* 12  SAMB11G18A Watchdog0 Timer (WDT0) */
   void* pfnWDT1_Handler;                         /* 13  SAMB11G18A Watchdog0 Timer (WDT1) */
   void* pfnDUALTIMER0_Handler;                   /* 14  SAMB11G18A ARM General Purpose Dual Timer (DUALTIMER0) */
-  void* pfnPROV_DMA_CTRL0_Handler;               /* 15  SAMB11G18A 4 Channel DMA Controller (PROV_DMA_CTRL0) */
+  void* pfnReserved15;
   void* pfnReserved16;
   void* pfnReserved17;
   void* pfnSPI_FLASH0_Handler;                   /* 18  SAMB11G18A SPI Flash Controller (SPI_FLASH0) */
@@ -171,7 +184,7 @@ typedef struct _DeviceVectors
   void* pfnGPIO1_Handler;                        /* 24  SAMB11G18A GPIO Controller (GPIO1) */
   void* pfnGPIO2_Handler;                        /* 25  SAMB11G18A GPIO Controller (GPIO2) */
   void* pfnTIMER0_Handler;                       /* 26  SAMB11G18A ARM General Purpose Timer (TIMER0) */
-  void* pfnReserved27;
+  void* pfnAON_SLEEP_TIMER0_Handler;             /* 27  SAMB11G18A Always On Sleep Timer (AON_SLEEP_TIMER0) */
 } DeviceVectors;
 
 /* CORTEX-M0 core handlers */
@@ -183,27 +196,27 @@ void PendSV_Handler       ( void );
 void SysTick_Handler      ( void );
 
 /* Peripherals handlers */
-void UART0_RX_Handler    ( void );
-void UART0_TX_Handler    ( void );
-void UART1_RX_Handler    ( void );
-void UART1_TX_Handler    ( void );
-void SPI0_RX_Handler     ( void );
-void SPI0_TX_Handler     ( void );
-void SPI1_RX_Handler     ( void );
-void SPI1_TX_Handler     ( void );
-void I2C0_RX_Handler     ( void );
-void I2C0_TX_Handler     ( void );
-void I2C1_RX_Handler     ( void );
-void I2C1_TX_Handler     ( void );
-void WDT0_Handler        ( void );
-void WDT1_Handler        ( void );
-void DUALTIMER0_Handler  ( void );
-void PROV_DMA_CTRL0_Handler( void );
-void SPI_FLASH0_Handler  ( void );
-void GPIO0_Handler       ( void );
-void GPIO1_Handler       ( void );
-void GPIO2_Handler       ( void );
-void TIMER0_Handler      ( void );
+void AON_SLEEP_TIMER0_Handler ( void );
+void DUALTIMER0_Handler       ( void );
+void GPIO0_Handler            ( void );
+void GPIO1_Handler            ( void );
+void GPIO2_Handler            ( void );
+void I2C0_RX_Handler          ( void );
+void I2C0_TX_Handler          ( void );
+void I2C1_RX_Handler          ( void );
+void I2C1_TX_Handler          ( void );
+void SPI0_RX_Handler          ( void );
+void SPI0_TX_Handler          ( void );
+void SPI1_RX_Handler          ( void );
+void SPI1_TX_Handler          ( void );
+void SPI_FLASH0_Handler       ( void );
+void TIMER0_Handler           ( void );
+void UART0_RX_Handler         ( void );
+void UART0_TX_Handler         ( void );
+void UART1_RX_Handler         ( void );
+void UART1_TX_Handler         ( void );
+void WDT0_Handler             ( void );
+void WDT1_Handler             ( void );
 
 /*
  * \brief Configuration of the CORTEX-M0 Processor and Core Peripherals
@@ -283,6 +296,16 @@ void TIMER0_Handler      ( void );
 #include "instance/arm_rom0.h"
 /*@}*/
 
+/* ************************************************************************** */
+/**  PERIPHERAL ID DEFINITIONS FOR SAMB11G18A */
+/* ************************************************************************** */
+/** \addtogroup SAMB11G18A_id Peripheral Ids Definitions 
+ *  @{
+ */
+
+
+/** @}*/
+
 
 
 /* ************************************************************************** */
@@ -293,113 +316,113 @@ void TIMER0_Handler      ( void );
  */
 
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define TIMER0                 (0x40000000UL)                 /**< \brief (TIMER0    ) Base Address */
-#define DUALTIMER0             (0x40001000UL)                 /**< \brief (DUALTIMER0) Base Address */
-#define PROV_DMA_CTRL0         (0x40002000UL)                 /**< \brief (PROV_DMA_CTRL0) Base Address */
-#define I2C0                   (0x40003000UL)                 /**< \brief (I2C0      ) Base Address */
-#define I2C1                   (0x40003400UL)                 /**< \brief (I2C1      ) Base Address */
-#define UART0                  (0x40004000UL)                 /**< \brief (UART0     ) Base Address */
-#define UART1                  (0x40005000UL)                 /**< \brief (UART1     ) Base Address */
-#define SPI0                   (0x40006000UL)                 /**< \brief (SPI0      ) Base Address */
-#define SPI1                   (0x40007000UL)                 /**< \brief (SPI1      ) Base Address */
-#define WDT0                   (0x40008000UL)                 /**< \brief (WDT0      ) Base Address */
-#define WDT1                   (0x40009000UL)                 /**< \brief (WDT1      ) Base Address */
-#define EFUSE_MISC_REGS0       (0x4000A000UL)                 /**< \brief (EFUSE_MISC_REGS0) Base Address */
-#define LPMCU_MISC_REGS0       (0x4000B000UL)                 /**< \brief (LPMCU_MISC_REGS0) Base Address */
-#define LP_CLK_CAL_REGS0       (0x4000C000UL)                 /**< \brief (LP_CLK_CAL_REGS0) Base Address */
-#define AON_SLEEP_TIMER0       (0x4000D000UL)                 /**< \brief (AON_SLEEP_TIMER0) Base Address */
-#define AON_PWR_SEQ0           (0x4000E000UL)                 /**< \brief (AON_PWR_SEQ0) Base Address */
-#define AON_GP_REGS0           (0x4000F000UL)                 /**< \brief (AON_GP_REGS0) Base Address */
-#define GPIO0                  (0x40010000UL)                 /**< \brief (GPIO0     ) Base Address */
-#define GPIO1                  (0x40011000UL)                 /**< \brief (GPIO1     ) Base Address */
-#define GPIO2                  (0x40013000UL)                 /**< \brief (GPIO2     ) Base Address */
-#define SPI_FLASH0             (0x40012000UL)                 /**< \brief (SPI_FLASH0) Base Address */
-#define ARM_SYSCTRL0           (0xE000E000UL)                 /**< \brief (ARM_SYSCTRL0) Base Address */
-#define ARM_BPU0               (0xE0002000UL)                 /**< \brief (ARM_BPU0  ) Base Address */
-#define ARM_DWT0               (0xE0001000UL)                 /**< \brief (ARM_DWT0  ) Base Address */
-#define ARM_ROM0               (0xE00FF000UL)                 /**< \brief (ARM_ROM0  ) Base Address */
+#define TIMER0                 (0x40000000U)                  /**< \brief (TIMER0    ) Base Address */
+#define DUALTIMER0             (0x40001000U)                  /**< \brief (DUALTIMER0) Base Address */
+#define PROV_DMA_CTRL0         (0x40002000U)                  /**< \brief (PROV_DMA_CTRL0) Base Address */
+#define I2C0                   (0x40003000U)                  /**< \brief (I2C0      ) Base Address */
+#define I2C1                   (0x40003400U)                  /**< \brief (I2C1      ) Base Address */
+#define UART0                  (0x40004000U)                  /**< \brief (UART0     ) Base Address */
+#define UART1                  (0x40005000U)                  /**< \brief (UART1     ) Base Address */
+#define SPI0                   (0x40006000U)                  /**< \brief (SPI0      ) Base Address */
+#define SPI1                   (0x40007000U)                  /**< \brief (SPI1      ) Base Address */
+#define WDT0                   (0x40008000U)                  /**< \brief (WDT0      ) Base Address */
+#define WDT1                   (0x40009000U)                  /**< \brief (WDT1      ) Base Address */
+#define EFUSE_MISC_REGS0       (0x4000A000U)                  /**< \brief (EFUSE_MISC_REGS0) Base Address */
+#define LPMCU_MISC_REGS0       (0x4000B000U)                  /**< \brief (LPMCU_MISC_REGS0) Base Address */
+#define LP_CLK_CAL_REGS0       (0x4000C000U)                  /**< \brief (LP_CLK_CAL_REGS0) Base Address */
+#define AON_SLEEP_TIMER0       (0x4000D000U)                  /**< \brief (AON_SLEEP_TIMER0) Base Address */
+#define AON_PWR_SEQ0           (0x4000E000U)                  /**< \brief (AON_PWR_SEQ0) Base Address */
+#define AON_GP_REGS0           (0x4000F000U)                  /**< \brief (AON_GP_REGS0) Base Address */
+#define GPIO0                  (0x40010000U)                  /**< \brief (GPIO0     ) Base Address */
+#define GPIO1                  (0x40011000U)                  /**< \brief (GPIO1     ) Base Address */
+#define GPIO2                  (0x40013000U)                  /**< \brief (GPIO2     ) Base Address */
+#define SPI_FLASH0             (0x40012000U)                  /**< \brief (SPI_FLASH0) Base Address */
+#define ARM_SYSCTRL0           (0xE000E000U)                  /**< \brief (ARM_SYSCTRL0) Base Address */
+#define ARM_BPU0               (0xE0002000U)                  /**< \brief (ARM_BPU0  ) Base Address */
+#define ARM_DWT0               (0xE0001000U)                  /**< \brief (ARM_DWT0  ) Base Address */
+#define ARM_ROM0               (0xE00FF000U)                  /**< \brief (ARM_ROM0  ) Base Address */
 #else
-#define TIMER0                 ((Timer *)0x40000000UL)        /**< \brief (TIMER0    ) Base Address */
-#define TIMER_INST_NUM         1
-#define TIMER_INSTS            { TIMER0 }
+#define TIMER0                 ((Timer *)0x40000000U)         /**< \brief (TIMER0    ) Base Address */
+#define TIMER_INST_NUM         1                              /**< \brief (TIMER     ) Number of instances */
+#define TIMER_INSTS            { TIMER0 }                     /**< \brief (TIMER     ) Instances List */
 
-#define DUALTIMER0             ((Dualtimer *)0x40001000UL)    /**< \brief (DUALTIMER0) Base Address */
-#define DUALTIMER_INST_NUM     1
-#define DUALTIMER_INSTS        { DUALTIMER0 }
+#define DUALTIMER0             ((Dualtimer *)0x40001000U)     /**< \brief (DUALTIMER0) Base Address */
+#define DUALTIMER_INST_NUM     1                              /**< \brief (DUALTIMER ) Number of instances */
+#define DUALTIMER_INSTS        { DUALTIMER0 }                 /**< \brief (DUALTIMER ) Instances List */
 
-#define PROV_DMA_CTRL0         ((ProvDmaCtrl *)0x40002000UL)  /**< \brief (PROV_DMA_CTRL0) Base Address */
-#define PROV_DMA_CTRL_INST_NUM 1
-#define PROV_DMA_CTRL_INSTS    { PROV_DMA_CTRL0 }
+#define PROV_DMA_CTRL0         ((ProvDmaCtrl *)0x40002000U)   /**< \brief (PROV_DMA_CTRL0) Base Address */
+#define PROV_DMA_CTRL_INST_NUM 1                              /**< \brief (PROV_DMA_CTRL) Number of instances */
+#define PROV_DMA_CTRL_INSTS    { PROV_DMA_CTRL0 }             /**< \brief (PROV_DMA_CTRL) Instances List */
 
-#define I2C0                   ((I2C *)0x40003000UL)          /**< \brief (I2C0      ) Base Address */
-#define I2C1                   ((I2C *)0x40003400UL)          /**< \brief (I2C1      ) Base Address */
-#define I2C_INST_NUM           2
-#define I2C_INSTS              { I2C0, I2C1 }
+#define I2C0                   ((I2c *)0x40003000U)           /**< \brief (I2C0      ) Base Address */
+#define I2C1                   ((I2c *)0x40003400U)           /**< \brief (I2C1      ) Base Address */
+#define I2C_INST_NUM           2                              /**< \brief (I2C       ) Number of instances */
+#define I2C_INSTS              { I2C0, I2C1 }                 /**< \brief (I2C       ) Instances List */
 
-#define UART0                  ((Uart *)0x40004000UL)         /**< \brief (UART0     ) Base Address */
-#define UART1                  ((Uart *)0x40005000UL)         /**< \brief (UART1     ) Base Address */
-#define UART_INST_NUM          2
-#define UART_INSTS             { UART0, UART1 }
+#define UART0                  ((Uart *)0x40004000U)          /**< \brief (UART0     ) Base Address */
+#define UART1                  ((Uart *)0x40005000U)          /**< \brief (UART1     ) Base Address */
+#define UART_INST_NUM          2                              /**< \brief (UART      ) Number of instances */
+#define UART_INSTS             { UART0, UART1 }               /**< \brief (UART      ) Instances List */
 
-#define SPI0                   ((Spi *)0x40006000UL)          /**< \brief (SPI0      ) Base Address */
-#define SPI1                   ((Spi *)0x40007000UL)          /**< \brief (SPI1      ) Base Address */
-#define SPI_INST_NUM           2
-#define SPI_INSTS              { SPI0, SPI1 }
+#define SPI0                   ((Spi *)0x40006000U)           /**< \brief (SPI0      ) Base Address */
+#define SPI1                   ((Spi *)0x40007000U)           /**< \brief (SPI1      ) Base Address */
+#define SPI_INST_NUM           2                              /**< \brief (SPI       ) Number of instances */
+#define SPI_INSTS              { SPI0, SPI1 }                 /**< \brief (SPI       ) Instances List */
 
-#define WDT0                   ((Wdt *)0x40008000UL)          /**< \brief (WDT0      ) Base Address */
-#define WDT1                   ((Wdt *)0x40009000UL)          /**< \brief (WDT1      ) Base Address */
-#define WDT_INST_NUM           2
-#define WDT_INSTS              { WDT0, WDT1 }
+#define WDT0                   ((Wdt *)0x40008000U)           /**< \brief (WDT0      ) Base Address */
+#define WDT1                   ((Wdt *)0x40009000U)           /**< \brief (WDT1      ) Base Address */
+#define WDT_INST_NUM           2                              /**< \brief (WDT       ) Number of instances */
+#define WDT_INSTS              { WDT0, WDT1 }                 /**< \brief (WDT       ) Instances List */
 
-#define EFUSE_MISC_REGS0       ((EfuseMiscRegs *)0x4000a000UL) /**< \brief (EFUSE_MISC_REGS0) Base Address */
-#define EFUSE_MISC_REGS_INST_NUM 1
-#define EFUSE_MISC_REGS_INSTS  { EFUSE_MISC_REGS0 }
+#define EFUSE_MISC_REGS0       ((EfuseMiscRegs *)0x4000A000U) /**< \brief (EFUSE_MISC_REGS0) Base Address */
+#define EFUSE_MISC_REGS_INST_NUM 1                              /**< \brief (EFUSE_MISC_REGS) Number of instances */
+#define EFUSE_MISC_REGS_INSTS  { EFUSE_MISC_REGS0 }           /**< \brief (EFUSE_MISC_REGS) Instances List */
 
-#define LPMCU_MISC_REGS0       ((LpmcuMiscRegs *)0x4000b000UL) /**< \brief (LPMCU_MISC_REGS0) Base Address */
-#define LPMCU_MISC_REGS_INST_NUM 1
-#define LPMCU_MISC_REGS_INSTS  { LPMCU_MISC_REGS0 }
+#define LPMCU_MISC_REGS0       ((LpmcuMiscRegs *)0x4000B000U) /**< \brief (LPMCU_MISC_REGS0) Base Address */
+#define LPMCU_MISC_REGS_INST_NUM 1                              /**< \brief (LPMCU_MISC_REGS) Number of instances */
+#define LPMCU_MISC_REGS_INSTS  { LPMCU_MISC_REGS0 }           /**< \brief (LPMCU_MISC_REGS) Instances List */
 
-#define LP_CLK_CAL_REGS0       ((LpClkCalRegs *)0x4000c000UL) /**< \brief (LP_CLK_CAL_REGS0) Base Address */
-#define LP_CLK_CAL_REGS_INST_NUM 1
-#define LP_CLK_CAL_REGS_INSTS  { LP_CLK_CAL_REGS0 }
+#define LP_CLK_CAL_REGS0       ((LpClkCalRegs *)0x4000C000U)  /**< \brief (LP_CLK_CAL_REGS0) Base Address */
+#define LP_CLK_CAL_REGS_INST_NUM 1                              /**< \brief (LP_CLK_CAL_REGS) Number of instances */
+#define LP_CLK_CAL_REGS_INSTS  { LP_CLK_CAL_REGS0 }           /**< \brief (LP_CLK_CAL_REGS) Instances List */
 
-#define AON_SLEEP_TIMER0       ((AonSleepTimer *)0x4000d000UL) /**< \brief (AON_SLEEP_TIMER0) Base Address */
-#define AON_SLEEP_TIMER_INST_NUM 1
-#define AON_SLEEP_TIMER_INSTS  { AON_SLEEP_TIMER0 }
+#define AON_SLEEP_TIMER0       ((AonSleepTimer *)0x4000D000U) /**< \brief (AON_SLEEP_TIMER0) Base Address */
+#define AON_SLEEP_TIMER_INST_NUM 1                              /**< \brief (AON_SLEEP_TIMER) Number of instances */
+#define AON_SLEEP_TIMER_INSTS  { AON_SLEEP_TIMER0 }           /**< \brief (AON_SLEEP_TIMER) Instances List */
 
-#define AON_PWR_SEQ0           ((AonPwrSeq *)0x4000e000UL)    /**< \brief (AON_PWR_SEQ0) Base Address */
-#define AON_PWR_SEQ_INST_NUM   1
-#define AON_PWR_SEQ_INSTS      { AON_PWR_SEQ0 }
+#define AON_PWR_SEQ0           ((AonPwrSeq *)0x4000E000U)     /**< \brief (AON_PWR_SEQ0) Base Address */
+#define AON_PWR_SEQ_INST_NUM   1                              /**< \brief (AON_PWR_SEQ) Number of instances */
+#define AON_PWR_SEQ_INSTS      { AON_PWR_SEQ0 }               /**< \brief (AON_PWR_SEQ) Instances List */
 
-#define AON_GP_REGS0           ((AonGpRegs *)0x4000f000UL)    /**< \brief (AON_GP_REGS0) Base Address */
-#define AON_GP_REGS_INST_NUM   1
-#define AON_GP_REGS_INSTS      { AON_GP_REGS0 }
+#define AON_GP_REGS0           ((AonGpRegs *)0x4000F000U)     /**< \brief (AON_GP_REGS0) Base Address */
+#define AON_GP_REGS_INST_NUM   1                              /**< \brief (AON_GP_REGS) Number of instances */
+#define AON_GP_REGS_INSTS      { AON_GP_REGS0 }               /**< \brief (AON_GP_REGS) Instances List */
 
-#define GPIO0                  ((Gpio *)0x40010000UL)         /**< \brief (GPIO0     ) Base Address */
-#define GPIO1                  ((Gpio *)0x40011000UL)         /**< \brief (GPIO1     ) Base Address */
-#define GPIO2                  ((Gpio *)0x40013000UL)         /**< \brief (GPIO2     ) Base Address */
-#define GPIO_INST_NUM          3
-#define GPIO_INSTS             { GPIO0, GPIO1, GPIO2 }
+#define GPIO0                  ((Gpio *)0x40010000U)          /**< \brief (GPIO0     ) Base Address */
+#define GPIO1                  ((Gpio *)0x40011000U)          /**< \brief (GPIO1     ) Base Address */
+#define GPIO2                  ((Gpio *)0x40013000U)          /**< \brief (GPIO2     ) Base Address */
+#define GPIO_INST_NUM          3                              /**< \brief (GPIO      ) Number of instances */
+#define GPIO_INSTS             { GPIO0, GPIO1, GPIO2 }        /**< \brief (GPIO      ) Instances List */
 
-#define SPI_FLASH0             ((SpiFlash *)0x40012000UL)     /**< \brief (SPI_FLASH0) Base Address */
-#define SPI_FLASH_INST_NUM     1
-#define SPI_FLASH_INSTS        { SPI_FLASH0 }
+#define SPI_FLASH0             ((SpiFlash *)0x40012000U)      /**< \brief (SPI_FLASH0) Base Address */
+#define SPI_FLASH_INST_NUM     1                              /**< \brief (SPI_FLASH ) Number of instances */
+#define SPI_FLASH_INSTS        { SPI_FLASH0 }                 /**< \brief (SPI_FLASH ) Instances List */
 
-#define ARM_SYSCTRL0           ((ArmSysctrl *)0xe000e000LUL)  /**< \brief (ARM_SYSCTRL0) Base Address */
-#define ARM_SYSCTRL_INST_NUM   1
-#define ARM_SYSCTRL_INSTS      { ARM_SYSCTRL0 }
+#define ARM_SYSCTRL0           ((ArmSysctrl *)0xE000E000U)    /**< \brief (ARM_SYSCTRL0) Base Address */
+#define ARM_SYSCTRL_INST_NUM   1                              /**< \brief (ARM_SYSCTRL) Number of instances */
+#define ARM_SYSCTRL_INSTS      { ARM_SYSCTRL0 }               /**< \brief (ARM_SYSCTRL) Instances List */
 
-#define ARM_BPU0               ((ArmBpu *)0xe0002000LUL)      /**< \brief (ARM_BPU0  ) Base Address */
-#define ARM_BPU_INST_NUM       1
-#define ARM_BPU_INSTS          { ARM_BPU0 }
+#define ARM_BPU0               ((ArmBpu *)0xE0002000U)        /**< \brief (ARM_BPU0  ) Base Address */
+#define ARM_BPU_INST_NUM       1                              /**< \brief (ARM_BPU   ) Number of instances */
+#define ARM_BPU_INSTS          { ARM_BPU0 }                   /**< \brief (ARM_BPU   ) Instances List */
 
-#define ARM_DWT0               ((ArmDwt *)0xe0001000LUL)      /**< \brief (ARM_DWT0  ) Base Address */
-#define ARM_DWT_INST_NUM       1
-#define ARM_DWT_INSTS          { ARM_DWT0 }
+#define ARM_DWT0               ((ArmDwt *)0xE0001000U)        /**< \brief (ARM_DWT0  ) Base Address */
+#define ARM_DWT_INST_NUM       1                              /**< \brief (ARM_DWT   ) Number of instances */
+#define ARM_DWT_INSTS          { ARM_DWT0 }                   /**< \brief (ARM_DWT   ) Instances List */
 
-#define ARM_ROM0               ((ArmRom *)0xe00ff000LUL)      /**< \brief (ARM_ROM0  ) Base Address */
-#define ARM_ROM_INST_NUM       1
-#define ARM_ROM_INSTS          { ARM_ROM0 }
+#define ARM_ROM0               ((ArmRom *)0xE00FF000U)        /**< \brief (ARM_ROM0  ) Base Address */
+#define ARM_ROM_INST_NUM       1                              /**< \brief (ARM_ROM0  ) Number of instances */
+#define ARM_ROM_INSTS          { ARM_ROM0 }                   /**< \brief (ARM_ROM0  ) Instances List */
 
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
@@ -408,34 +431,43 @@ void TIMER0_Handler      ( void );
 /* ************************************************************************** */
 /*   PIO DEFINITIONS FOR SAMB11G18A*/
 /* ************************************************************************** */
-/** \addtogroup SAMB11G18A_pio Peripheral Pio Definitions */
-/*@{*/
+/** \addtogroup SAMB11G18A_pio Peripheral Pio Definitions 
+ *  @{
+ */
 
-#include "pio/pio_samb11g18a.h"
-/*@}*/
+#include "pio/samb11g18a.h"
+/** @}*/
+
 
 /* ************************************************************************** */
 /*   MEMORY MAPPING DEFINITIONS FOR SAMB11G18A*/
 /* ************************************************************************** */
 
-#define BOOTROM_SIZE             0x00020000UL       /*  128kB Memory segment type: rom */
-#define IDRAM_SIZE               0x00020000UL       /*  128kB Memory segment type: ram */
-#define BLERAM_SIZE              0x00002000UL       /*    8kB Memory segment type: ram */
-#define APB_SIZE                 0x00020000UL       /*  128kB Memory segment type: io */
+#define BOOTROM_SIZE             (0x00020000U)       /*  128kB Memory segment type: rom */
+#define IDRAM_SIZE               (0x00020000U)       /*  128kB Memory segment type: ram */
+#define BLERAM_SIZE              (0x00002000U)       /*    8kB Memory segment type: ram */
+#define APB_SIZE                 (0x00020000U)       /*  128kB Memory segment type: io */
 
-#define BOOTROM_ADDR             0x00000000UL       /* Memory segment type: rom */
-#define IDRAM_ADDR               0x10000000UL       /* Memory segment type: ram */
-#define BLERAM_ADDR              0x10040000UL       /* Memory segment type: ram */
-#define APB_ADDR                 0x40000000UL       /* Memory segment type: io */
+#define BOOTROM_ADDR             (0x00000000U)       /**< BOOTROM base address (type: rom)*/
+#define IDRAM_ADDR               (0x10000000U)       /**< IDRAM base address (type: ram)*/
+#define BLERAM_ADDR              (0x10040000U)       /**< BLERAM base address (type: ram)*/
+#define APB_ADDR                 (0x40000000U)       /**< APB base address (type: io)*/
 
 /* ************************************************************************** */
 /**  DEVICE SIGNATURES FOR SAMB11G18A */
 /* ************************************************************************** */
-#define LPMCU_CHIP_ID_REV_ID     0x002000b0UL
+#define LPMCU_CHIP_ID_REV_ID     (0X002000B0UL)
+
+/* ************************************************************************** */
+/**  ELECTRICAL DEFINITIONS FOR SAMB11G18A */
+/* ************************************************************************** */
 
 
 #ifdef __cplusplus
 }
 #endif
+
+/** @}*/
+
 
 #endif /* _SAMB11G18A_ */

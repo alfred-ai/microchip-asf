@@ -97,7 +97,7 @@ enum power_red_id {
  * to support for otherthen megaRF device.
  **************************************************/
 #if MEGA_XX8 || MEGA_XX8_A || MEGA_UNSPECIFIED
-#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#if AVR8_PART_IS_DEFINED(ATmega328PB) || MEGA_UNCATEGORIZED
 #define NUMBER_OF_POWER_REG       2
 /*Starting Address for power reduction*/
 #define POWER_REG_ADD             PRR0
@@ -417,9 +417,12 @@ static inline void sysclk_enable_peripheral_clock(const volatile void *module)
 #if MEGA_RF
 		sysclk_enable_module(POWER_RED_REG0, PRPGA_bm);
 #endif
-	} else if (module == &UCSR0A) {
+	}
+#if !MEGA_UNCATEGORIZED
+	else if (module == &UCSR0A) {
 		sysclk_enable_module(POWER_RED_REG0, PRUSART0_bm);
 	}
+#endif
 #if MEGA_RF
 	else if (module == &SPCR) {
 		sysclk_enable_module(POWER_RED_REG0, PRSPI_bm);
@@ -436,7 +439,7 @@ static inline void sysclk_enable_peripheral_clock(const volatile void *module)
 	}
 #endif
 
-#if !MEGA_XX_UN2
+#if !MEGA_XX_UN2 && !MEGA_UNCATEGORIZED
 	else if (module == &TCCR0A) {
 		sysclk_enable_module(POWER_RED_REG0, PRTIM0_bm);
 	} else if (module == &TCCR2A) {
@@ -490,9 +493,12 @@ static inline void sysclk_disable_peripheral_clock(const volatile void *module)
 #if MEGA_RF
 		sysclk_disable_module(POWER_RED_REG0, PRPGA_bm);
 #endif
-	} else if (module == &UCSR0A) {
+	} 
+#if !MEGA_UNCATEGORIZED
+	else if (module == &UCSR0A) {
 		sysclk_disable_module(POWER_RED_REG0, PRUSART0_bm);
 	}
+#endif
 #if MEGA_RF
 	else if (module == &SPCR) {
 		sysclk_disable_module(POWER_RED_REG0, PRSPI_bm);
@@ -507,7 +513,7 @@ static inline void sysclk_disable_peripheral_clock(const volatile void *module)
 		sysclk_disable_module(POWER_RED_REG0, PRLCD_bm);
 	}
 #endif
-#if !MEGA_XX_UN2
+#if !MEGA_XX_UN2 && !MEGA_UNCATEGORIZED
 	else if (module == &TCCR0A) {
 		sysclk_disable_module(POWER_RED_REG0, PRTIM0_bm);
 	} else if (module == &TCCR2A) {

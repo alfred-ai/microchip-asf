@@ -3,7 +3,7 @@
  *
  * \brief Instance description for TIMER0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,39 +46,43 @@
 
 /* ========== Register definition for TIMER0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_TIMER0_CTRL                (0x40000000U) /**< \brief (TIMER0) Timer Control */
-#define REG_TIMER0_VALUE               (0x40000004U) /**< \brief (TIMER0) Current Value */
-#define REG_TIMER0_RELOAD              (0x40000008U) /**< \brief (TIMER0) Reload Value */
-#define REG_TIMER0_INTSTATUSCLEAR      (0x4000000cU) /**< \brief (TIMER0) Timer Interrupt, write 1 to clear */
-#define REG_TIMER0_PID4                (0x40000fd0U) /**< \brief (TIMER0) Peripheral ID Register 4 */
-#define REG_TIMER0_PID5                (0x40000fd4U) /**< \brief (TIMER0) Peripheral ID Register 5 */
-#define REG_TIMER0_PID6                (0x40000fd8U) /**< \brief (TIMER0) Peripheral ID Register 6 */
-#define REG_TIMER0_PID7                (0x40000fdcU) /**< \brief (TIMER0) Peripheral ID Register 7 */
-#define REG_TIMER0_PID0                (0x40000fe0U) /**< \brief (TIMER0) Peripheral ID Register 0 */
-#define REG_TIMER0_PID1                (0x40000fe4U) /**< \brief (TIMER0) Peripheral ID Register 1 */
-#define REG_TIMER0_PID2                (0x40000fe8U) /**< \brief (TIMER0) Peripheral ID Register 2 */
-#define REG_TIMER0_PID3                (0x40000fecU) /**< \brief (TIMER0) Peripheral ID Register 3 */
-#define REG_TIMER0_CID0                (0x40000ff0U) /**< \brief (TIMER0) Component ID Register 0 */
-#define REG_TIMER0_CID1                (0x40000ff4U) /**< \brief (TIMER0) Component ID Register 1 */
-#define REG_TIMER0_CID2                (0x40000ff8U) /**< \brief (TIMER0) Component ID Register 2 */
-#define REG_TIMER0_CID3                (0x40000ffcU) /**< \brief (TIMER0) Component ID Register 3 */
+
+#define REG_TIMER0_CTRL         (0x40000000U) /**< (TIMER0) Timer Control */
+#define REG_TIMER0_VALUE        (0x40000004U) /**< (TIMER0) Current Value */
+#define REG_TIMER0_RELOAD       (0x40000008U) /**< (TIMER0) Reload Value */
+#define REG_TIMER0_INTSTATUSCLEAR (0x4000000CU) /**< (TIMER0) Timer Interrupt, write 1 to clear */
+#define REG_TIMER0_PID4         (0x40000FD0U) /**< (TIMER0) Peripheral ID Register 4 */
+#define REG_TIMER0_PID5         (0x40000FD4U) /**< (TIMER0) Peripheral ID Register 5 */
+#define REG_TIMER0_PID6         (0x40000FD8U) /**< (TIMER0) Peripheral ID Register 6 */
+#define REG_TIMER0_PID7         (0x40000FDCU) /**< (TIMER0) Peripheral ID Register 7 */
+#define REG_TIMER0_PID0         (0x40000FE0U) /**< (TIMER0) Peripheral ID Register 0 */
+#define REG_TIMER0_PID1         (0x40000FE4U) /**< (TIMER0) Peripheral ID Register 1 */
+#define REG_TIMER0_PID2         (0x40000FE8U) /**< (TIMER0) Peripheral ID Register 2 */
+#define REG_TIMER0_PID3         (0x40000FECU) /**< (TIMER0) Peripheral ID Register 3 */
+#define REG_TIMER0_CID0         (0x40000FF0U) /**< (TIMER0) Component ID Register 0 */
+#define REG_TIMER0_CID1         (0x40000FF4U) /**< (TIMER0) Component ID Register 1 */
+#define REG_TIMER0_CID2         (0x40000FF8U) /**< (TIMER0) Component ID Register 2 */
+#define REG_TIMER0_CID3         (0x40000FFCU) /**< (TIMER0) Component ID Register 3 */
+
 #else
-#define REG_TIMER0_CTRL                (*(RwReg8 *)0x40000000U) /**< \brief (TIMER0) Timer Control */
-#define REG_TIMER0_VALUE               (*(RwReg  *)0x40000004U) /**< \brief (TIMER0) Current Value */
-#define REG_TIMER0_RELOAD              (*(RwReg  *)0x40000008U) /**< \brief (TIMER0) Reload Value */
-#define REG_TIMER0_INTSTATUSCLEAR      (*(RwReg8 *)0x4000000cU) /**< \brief (TIMER0) Timer Interrupt, write 1 to clear */
-#define REG_TIMER0_PID4                (*(RoReg8 *)0x40000fd0U) /**< \brief (TIMER0) Peripheral ID Register 4 */
-#define REG_TIMER0_PID5                (*(RoReg8 *)0x40000fd4U) /**< \brief (TIMER0) Peripheral ID Register 5 */
-#define REG_TIMER0_PID6                (*(RoReg8 *)0x40000fd8U) /**< \brief (TIMER0) Peripheral ID Register 6 */
-#define REG_TIMER0_PID7                (*(RoReg8 *)0x40000fdcU) /**< \brief (TIMER0) Peripheral ID Register 7 */
-#define REG_TIMER0_PID0                (*(RoReg8 *)0x40000fe0U) /**< \brief (TIMER0) Peripheral ID Register 0 */
-#define REG_TIMER0_PID1                (*(RoReg8 *)0x40000fe4U) /**< \brief (TIMER0) Peripheral ID Register 1 */
-#define REG_TIMER0_PID2                (*(RoReg8 *)0x40000fe8U) /**< \brief (TIMER0) Peripheral ID Register 2 */
-#define REG_TIMER0_PID3                (*(RoReg8 *)0x40000fecU) /**< \brief (TIMER0) Peripheral ID Register 3 */
-#define REG_TIMER0_CID0                (*(RoReg8 *)0x40000ff0U) /**< \brief (TIMER0) Component ID Register 0 */
-#define REG_TIMER0_CID1                (*(RoReg8 *)0x40000ff4U) /**< \brief (TIMER0) Component ID Register 1 */
-#define REG_TIMER0_CID2                (*(RoReg8 *)0x40000ff8U) /**< \brief (TIMER0) Component ID Register 2 */
-#define REG_TIMER0_CID3                (*(RoReg8 *)0x40000ffcU) /**< \brief (TIMER0) Component ID Register 3 */
+
+#define REG_TIMER0_CTRL         (*(__IO uint8_t*)0x40000000U) /**< (TIMER0) Timer Control */
+#define REG_TIMER0_VALUE        (*(__IO uint32_t*)0x40000004U) /**< (TIMER0) Current Value */
+#define REG_TIMER0_RELOAD       (*(__IO uint32_t*)0x40000008U) /**< (TIMER0) Reload Value */
+#define REG_TIMER0_INTSTATUSCLEAR (*(__IO uint8_t*)0x4000000CU) /**< (TIMER0) Timer Interrupt, write 1 to clear */
+#define REG_TIMER0_PID4         (*(__I  uint8_t*)0x40000FD0U) /**< (TIMER0) Peripheral ID Register 4 */
+#define REG_TIMER0_PID5         (*(__I  uint8_t*)0x40000FD4U) /**< (TIMER0) Peripheral ID Register 5 */
+#define REG_TIMER0_PID6         (*(__I  uint8_t*)0x40000FD8U) /**< (TIMER0) Peripheral ID Register 6 */
+#define REG_TIMER0_PID7         (*(__I  uint8_t*)0x40000FDCU) /**< (TIMER0) Peripheral ID Register 7 */
+#define REG_TIMER0_PID0         (*(__I  uint8_t*)0x40000FE0U) /**< (TIMER0) Peripheral ID Register 0 */
+#define REG_TIMER0_PID1         (*(__I  uint8_t*)0x40000FE4U) /**< (TIMER0) Peripheral ID Register 1 */
+#define REG_TIMER0_PID2         (*(__I  uint8_t*)0x40000FE8U) /**< (TIMER0) Peripheral ID Register 2 */
+#define REG_TIMER0_PID3         (*(__I  uint8_t*)0x40000FECU) /**< (TIMER0) Peripheral ID Register 3 */
+#define REG_TIMER0_CID0         (*(__I  uint8_t*)0x40000FF0U) /**< (TIMER0) Component ID Register 0 */
+#define REG_TIMER0_CID1         (*(__I  uint8_t*)0x40000FF4U) /**< (TIMER0) Component ID Register 1 */
+#define REG_TIMER0_CID2         (*(__I  uint8_t*)0x40000FF8U) /**< (TIMER0) Component ID Register 2 */
+#define REG_TIMER0_CID3         (*(__I  uint8_t*)0x40000FFCU) /**< (TIMER0) Component ID Register 3 */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_TIMER0_INSTANCE_ */

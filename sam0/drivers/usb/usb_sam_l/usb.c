@@ -1842,6 +1842,8 @@ void usb_disable(struct usb_module *module_inst)
 	Assert(module_inst);
 	Assert(module_inst->hw);
 
+	module_inst->hw->DEVICE.INTENCLR.reg = USB_DEVICE_INTENCLR_MASK;
+	module_inst->hw->DEVICE.INTFLAG.reg = USB_DEVICE_INTFLAG_MASK;
 	module_inst->hw->DEVICE.CTRLA.reg &= ~USB_CTRLA_ENABLE;
 	while (module_inst->hw->DEVICE.SYNCBUSY.reg == USB_SYNCBUSY_ENABLE);
 }

@@ -4,7 +4,7 @@
  * \brief Receptor functionalities in PER Measurement mode - Performance
  * Analyzer
  * application
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,7 +62,7 @@
 #include "conf_board.h"
 #include "perf_api.h"
 #if (LED_COUNT > 0)
-#if !(SAMD || SAMR21 || SAML21)
+#if !(SAMD || SAMR21 || SAML21 || SAMR30)
 #include "led.h"
 #endif
 #endif

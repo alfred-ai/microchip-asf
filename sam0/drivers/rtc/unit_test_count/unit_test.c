@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Count Unit test
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -77,6 +77,7 @@
  *  - SAM DA1 Xplained Pro board
  *  - SAM C21 Xplained Pro board
  *  - SAM D20 Xplained Pro board
+ *  - SAM R30 Xplained Pro board
  *  
  * \section asfdoc_sam0_rtc_unit_test_setup Setup
  *

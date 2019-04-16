@@ -3,7 +3,7 @@
  *
  * \brief SAM I2C Master Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -248,7 +248,7 @@ enum status_code i2c_master_init(
 #if (SAML22) || (SAMC20)
 	pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
-#elif (SAML21)
+#elif (SAML21) || (SAMR30)
 	if (sercom_index == 5) {
 		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
 		gclk_index   = SERCOM5_GCLK_ID_CORE;
@@ -269,7 +269,7 @@ enum status_code i2c_master_init(
 #endif
 
 	/* Turn on module in PM */
-#if (SAML21)
+#if (SAML21) || (SAMR30)
 	if (sercom_index == 5) {
 		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, 1 << pm_index);
 	} else {

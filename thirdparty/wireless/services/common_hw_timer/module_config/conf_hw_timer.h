@@ -93,7 +93,7 @@
 /* ! @} */
 /* ! \name Configuration for SAML21 */
 /* ! @{ */
-#if (SAML21)
+#if (SAML21 || SAMR30)
 #define TIMER      (TC0)
 #endif
 /* ! @} */

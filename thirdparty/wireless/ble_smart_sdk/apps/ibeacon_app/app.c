@@ -96,15 +96,15 @@ static void configure_uart(void)
 	uart_get_config_defaults(&config_uart);
 
 	config_uart.baud_rate = 115200;
-	config_uart.pin_number_pad[0] = EDBG_CDC_SERCOM_PIN_PAD0;
-	config_uart.pin_number_pad[1] = EDBG_CDC_SERCOM_PIN_PAD1;
-	config_uart.pin_number_pad[2] = EDBG_CDC_SERCOM_PIN_PAD2;
-	config_uart.pin_number_pad[3] = EDBG_CDC_SERCOM_PIN_PAD3;
+	config_uart.pin_number_pad[0] = EDBG_CDC_PIN_PAD0;
+	config_uart.pin_number_pad[1] = EDBG_CDC_PIN_PAD1;
+	config_uart.pin_number_pad[2] = EDBG_CDC_PIN_PAD2;
+	config_uart.pin_number_pad[3] = EDBG_CDC_PIN_PAD3;
 	
-	config_uart.pinmux_sel_pad[0] = EDBG_CDC_SERCOM_MUX_PAD0;
-	config_uart.pinmux_sel_pad[1] = EDBG_CDC_SERCOM_MUX_PAD1;
-	config_uart.pinmux_sel_pad[2] = EDBG_CDC_SERCOM_MUX_PAD2;
-	config_uart.pinmux_sel_pad[3] = EDBG_CDC_SERCOM_MUX_PAD3;
+	config_uart.pinmux_sel_pad[0] = EDBG_CDC_MUX_PAD0;
+	config_uart.pinmux_sel_pad[1] = EDBG_CDC_MUX_PAD1;
+	config_uart.pinmux_sel_pad[2] = EDBG_CDC_MUX_PAD2;
+	config_uart.pinmux_sel_pad[3] = EDBG_CDC_MUX_PAD3;
 
 	stdio_serial_init(&uart_instance, CONF_STDIO_USART_MODULE, &config_uart);
 }

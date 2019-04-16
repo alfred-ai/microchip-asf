@@ -118,7 +118,7 @@ enum status_code gpio_pin_set_config(const uint8_t gpio_pin,
 			/* Set GPIO_MSx as digital mode */
 			AON_GP_REGS0->MS_GPIO_MODE.vec.ANALOG_ENABLE_ &= ~(1 << (gpio_pin - PIN_GPIO_MS4));
 		}
-		
+	
 		if ((gpio_pin == PIN_AO_GPIO_0) || (gpio_pin == PIN_AO_GPIO_1) ||
 				(gpio_pin == PIN_AO_GPIO_2)) {
 			/* Active Low, Always On Pull Enable Control */

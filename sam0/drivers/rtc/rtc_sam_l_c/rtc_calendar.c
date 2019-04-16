@@ -142,6 +142,11 @@ void rtc_calendar_disable(struct rtc_module *const module)
 		/* Wait for synchronization */
 	}
 
+	/* Disbale interrupt */
+	rtc_module->MODE2.INTENCLR.reg = RTC_MODE2_INTENCLR_MASK;
+	/* Clear interrupt flag */
+	rtc_module->MODE2.INTFLAG.reg = RTC_MODE2_INTFLAG_MASK;
+
 	/* Disable RTC module. */
 	rtc_module->MODE2.CTRLA.reg &= ~RTC_MODE2_CTRLA_ENABLE;
 
@@ -302,7 +307,7 @@ static void _rtc_calendar_set_config(
 	/* Set to calendar mode and set the prescaler. */
 	tmp_reg = RTC_MODE2_CTRLA_MODE(2) | config->prescaler;
 
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
 	if(config->enable_read_sync) {
 		tmp_reg |= RTC_MODE2_CTRLA_CLOCKSYNC;
 	}

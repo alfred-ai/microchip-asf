@@ -513,7 +513,7 @@ enum status_code spi_init(
 
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
 	uint32_t pm_index, gclk_index;
-#if (SAML21)
+#if (SAML21) || (SAMR30)
 	if (sercom_index == 5) {
 #  ifdef ID_SERCOM5
 		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
@@ -525,10 +525,10 @@ enum status_code spi_init(
 		pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 		gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
 	}
-#elif (SAMC21) || (SAML22)
+#elif (SAMC21) 
 	if (sercom_index == 5) {
 #  ifdef ID_SERCOM5
-		pm_index     = MCLK_APBCMASK_SERCOM5_Pos;
+		pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 		gclk_index   =  SERCOM5_GCLK_ID_CORE;
 #  else
 		return STATUS_ERR_INVALID_ARG;
@@ -537,7 +537,7 @@ enum status_code spi_init(
 		pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 		gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
 	}
-#elif (SAMC20)
+#elif (SAMC20) || (SAML22)
 	pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
 #else
@@ -546,7 +546,7 @@ enum status_code spi_init(
 #endif
 
 	/* Turn on module in PM */
-#if (SAML21)
+#if (SAML21) || (SAMR30)
 	if (sercom_index == 5) {
 #  ifdef ID_SERCOM5
 		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, 1 << pm_index);

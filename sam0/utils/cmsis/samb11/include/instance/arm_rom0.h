@@ -3,7 +3,7 @@
  *
  * \brief Instance description for ARM_ROM0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,35 +46,39 @@
 
 /* ========== Register definition for ARM_ROM0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_ARM_ROM0_ROM_SCS             (0xe00ff000LU) /**< \brief (ARM_ROM0) Points to the SCS at 0xE000E000 */
-#define REG_ARM_ROM0_ROM_DWT             (0xe00ff010LU) /**< \brief (ARM_ROM0) Points to the DWT at 0xE0001000 */
-#define REG_ARM_ROM0_ROM_BPU             (0xe00ff020LU) /**< \brief (ARM_ROM0) Points to the BPU at 0xE0002000 */
-#define REG_ARM_ROM0_ROM_EOT             (0xe00ff030LU) /**< \brief (ARM_ROM0) End of Table Marker */
-#define REG_ARM_ROM0_ROM_CSMT            (0xe00fffccLU) /**< \brief (ARM_ROM0) System Memory accessible through DAP */
-#define REG_ARM_ROM0_ROM_PID4            (0xe00fffd0LU) /**< \brief (ARM_ROM0) Peripheral ID Register 4 */
-#define REG_ARM_ROM0_ROM_PID0            (0xe00fffe0LU) /**< \brief (ARM_ROM0) Peripheral ID Register 0 */
-#define REG_ARM_ROM0_ROM_PID1            (0xe00fffe4LU) /**< \brief (ARM_ROM0) Peripheral ID Register 1 */
-#define REG_ARM_ROM0_ROM_PID2            (0xe00fffe8LU) /**< \brief (ARM_ROM0) Peripheral ID Register 2 */
-#define REG_ARM_ROM0_ROM_PID3            (0xe00fffecLU) /**< \brief (ARM_ROM0) Peripheral ID Register 3 */
-#define REG_ARM_ROM0_ROM_CID0            (0xe00ffff0LU) /**< \brief (ARM_ROM0) Component ID Register 0 */
-#define REG_ARM_ROM0_ROM_CID1            (0xe00ffff4LU) /**< \brief (ARM_ROM0) Component ID Register 1 */
-#define REG_ARM_ROM0_ROM_CID2            (0xe00ffff8LU) /**< \brief (ARM_ROM0) Component ID Register 2 */
-#define REG_ARM_ROM0_ROM_CID3            (0xe00ffffcLU) /**< \brief (ARM_ROM0) Component ID Register 3 */
+
+#define REG_ARM_ROM0_ROM_SCS    (0xE00FF000U) /**< (ARM_ROM0) Points to the SCS at 0xE000E000 */
+#define REG_ARM_ROM0_ROM_DWT    (0xE00FF010U) /**< (ARM_ROM0) Points to the DWT at 0xE0001000 */
+#define REG_ARM_ROM0_ROM_BPU    (0xE00FF020U) /**< (ARM_ROM0) Points to the BPU at 0xE0002000 */
+#define REG_ARM_ROM0_ROM_EOT    (0xE00FF030U) /**< (ARM_ROM0) End of Table Marker */
+#define REG_ARM_ROM0_ROM_CSMT   (0xE00FFFCCU) /**< (ARM_ROM0) System Memory accessible through DAP */
+#define REG_ARM_ROM0_ROM_PID4   (0xE00FFFD0U) /**< (ARM_ROM0) Peripheral ID Register 4 */
+#define REG_ARM_ROM0_ROM_PID0   (0xE00FFFE0U) /**< (ARM_ROM0) Peripheral ID Register 0 */
+#define REG_ARM_ROM0_ROM_PID1   (0xE00FFFE4U) /**< (ARM_ROM0) Peripheral ID Register 1 */
+#define REG_ARM_ROM0_ROM_PID2   (0xE00FFFE8U) /**< (ARM_ROM0) Peripheral ID Register 2 */
+#define REG_ARM_ROM0_ROM_PID3   (0xE00FFFECU) /**< (ARM_ROM0) Peripheral ID Register 3 */
+#define REG_ARM_ROM0_ROM_CID0   (0xE00FFFF0U) /**< (ARM_ROM0) Component ID Register 0 */
+#define REG_ARM_ROM0_ROM_CID1   (0xE00FFFF4U) /**< (ARM_ROM0) Component ID Register 1 */
+#define REG_ARM_ROM0_ROM_CID2   (0xE00FFFF8U) /**< (ARM_ROM0) Component ID Register 2 */
+#define REG_ARM_ROM0_ROM_CID3   (0xE00FFFFCU) /**< (ARM_ROM0) Component ID Register 3 */
+
 #else
-#define REG_ARM_ROM0_ROM_SCS             (*(RoReg  *)0xe00ff000LU) /**< \brief (ARM_ROM0) Points to the SCS at 0xE000E000 */
-#define REG_ARM_ROM0_ROM_DWT             (*(RoReg  *)0xe00ff010LU) /**< \brief (ARM_ROM0) Points to the DWT at 0xE0001000 */
-#define REG_ARM_ROM0_ROM_BPU             (*(RoReg  *)0xe00ff020LU) /**< \brief (ARM_ROM0) Points to the BPU at 0xE0002000 */
-#define REG_ARM_ROM0_ROM_EOT             (*(RoReg  *)0xe00ff030LU) /**< \brief (ARM_ROM0) End of Table Marker */
-#define REG_ARM_ROM0_ROM_CSMT            (*(RoReg8 *)0xe00fffccLU) /**< \brief (ARM_ROM0) System Memory accessible through DAP */
-#define REG_ARM_ROM0_ROM_PID4            (*(RoReg8 *)0xe00fffd0LU) /**< \brief (ARM_ROM0) Peripheral ID Register 4 */
-#define REG_ARM_ROM0_ROM_PID0            (*(RoReg8 *)0xe00fffe0LU) /**< \brief (ARM_ROM0) Peripheral ID Register 0 */
-#define REG_ARM_ROM0_ROM_PID1            (*(RoReg8 *)0xe00fffe4LU) /**< \brief (ARM_ROM0) Peripheral ID Register 1 */
-#define REG_ARM_ROM0_ROM_PID2            (*(RoReg8 *)0xe00fffe8LU) /**< \brief (ARM_ROM0) Peripheral ID Register 2 */
-#define REG_ARM_ROM0_ROM_PID3            (*(RoReg8 *)0xe00fffecLU) /**< \brief (ARM_ROM0) Peripheral ID Register 3 */
-#define REG_ARM_ROM0_ROM_CID0            (*(RoReg8 *)0xe00ffff0LU) /**< \brief (ARM_ROM0) Component ID Register 0 */
-#define REG_ARM_ROM0_ROM_CID1            (*(RoReg8 *)0xe00ffff4LU) /**< \brief (ARM_ROM0) Component ID Register 1 */
-#define REG_ARM_ROM0_ROM_CID2            (*(RoReg8 *)0xe00ffff8LU) /**< \brief (ARM_ROM0) Component ID Register 2 */
-#define REG_ARM_ROM0_ROM_CID3            (*(RoReg8 *)0xe00ffffcLU) /**< \brief (ARM_ROM0) Component ID Register 3 */
+
+#define REG_ARM_ROM0_ROM_SCS    (*(__I  uint32_t*)0xE00FF000U) /**< (ARM_ROM0) Points to the SCS at 0xE000E000 */
+#define REG_ARM_ROM0_ROM_DWT    (*(__I  uint32_t*)0xE00FF010U) /**< (ARM_ROM0) Points to the DWT at 0xE0001000 */
+#define REG_ARM_ROM0_ROM_BPU    (*(__I  uint32_t*)0xE00FF020U) /**< (ARM_ROM0) Points to the BPU at 0xE0002000 */
+#define REG_ARM_ROM0_ROM_EOT    (*(__I  uint32_t*)0xE00FF030U) /**< (ARM_ROM0) End of Table Marker */
+#define REG_ARM_ROM0_ROM_CSMT   (*(__I  uint8_t*)0xE00FFFCCU) /**< (ARM_ROM0) System Memory accessible through DAP */
+#define REG_ARM_ROM0_ROM_PID4   (*(__I  uint8_t*)0xE00FFFD0U) /**< (ARM_ROM0) Peripheral ID Register 4 */
+#define REG_ARM_ROM0_ROM_PID0   (*(__I  uint8_t*)0xE00FFFE0U) /**< (ARM_ROM0) Peripheral ID Register 0 */
+#define REG_ARM_ROM0_ROM_PID1   (*(__I  uint8_t*)0xE00FFFE4U) /**< (ARM_ROM0) Peripheral ID Register 1 */
+#define REG_ARM_ROM0_ROM_PID2   (*(__I  uint8_t*)0xE00FFFE8U) /**< (ARM_ROM0) Peripheral ID Register 2 */
+#define REG_ARM_ROM0_ROM_PID3   (*(__I  uint8_t*)0xE00FFFECU) /**< (ARM_ROM0) Peripheral ID Register 3 */
+#define REG_ARM_ROM0_ROM_CID0   (*(__I  uint8_t*)0xE00FFFF0U) /**< (ARM_ROM0) Component ID Register 0 */
+#define REG_ARM_ROM0_ROM_CID1   (*(__I  uint8_t*)0xE00FFFF4U) /**< (ARM_ROM0) Component ID Register 1 */
+#define REG_ARM_ROM0_ROM_CID2   (*(__I  uint8_t*)0xE00FFFF8U) /**< (ARM_ROM0) Component ID Register 2 */
+#define REG_ARM_ROM0_ROM_CID3   (*(__I  uint8_t*)0xE00FFFFCU) /**< (ARM_ROM0) Component ID Register 3 */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_ARM_ROM0_INSTANCE_ */

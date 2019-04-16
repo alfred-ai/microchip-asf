@@ -3,7 +3,7 @@
  *
  * \brief AT30TSE75X Temperature sensor driver configuration file.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -50,10 +50,10 @@
 
 #define AT30TSE_I2C_MODULE  I2C0
 
-#define AT30TSE_PIN_PAD0 PIN_LP_GPIO_8_MUX2_I2C0_SDA
-#define AT30TSE_PIN_PAD1 PIN_LP_GPIO_9_MUX2_I2C0_SCL
+#define AT30TSE_PIN_PAD0 PIN_LP_GPIO_8
+#define AT30TSE_PIN_PAD1 PIN_LP_GPIO_9
 
-#define AT30TSE_MUX_PAD0 MUX_LP_GPIO_8_MUX2_I2C0_SDA
-#define AT30TSE_MUX_PAD1 MUX_LP_GPIO_9_MUX2_I2C0_SCL
+#define AT30TSE_MUX_PAD0 MUX_LP_GPIO_8_I2C0_SDA
+#define AT30TSE_MUX_PAD1 MUX_LP_GPIO_9_I2C0_SCL
 
 #endif /* CONF_AT30TSE75X_H_INCLUDED */

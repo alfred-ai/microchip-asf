@@ -4,7 +4,7 @@
  * \brief  Common utilities for both Initiator and Receptor in PER Measurement
  * mode - Performance Analyzer application
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -163,7 +163,7 @@ void config_per_test_parameters(void)
 		= default_trx_config_params.retry_enabled = false;
 
 #if (ANTENNA_DIVERSITY == 1)
-#if (TAL_TYPE == AT86RF233) || (TAL_TYPE == ATMEGARFR2)
+#if (TAL_TYPE == AT86RF233) || (TAL_TYPE == ATMEGARFR2) || (TAL_TYPE == AT86RF212B)
 	/* Disable antenna diversity by default. */
 	curr_trx_config_params.antenna_diversity
 		= default_trx_config_params.antenna_diversity
@@ -264,7 +264,7 @@ void config_per_test_parameters(void)
 
 		/* Set the config parameters on peer node */
 #if (ANTENNA_DIVERSITY == 1)
-#if (TAL_TYPE == AT86RF233) || (TAL_TYPE == ATMEGARFR2)
+#if (TAL_TYPE == AT86RF233) || (TAL_TYPE == ATMEGARFR2) || (TAL_TYPE == AT86RF212B)
 		curr_trx_config_params.antenna_diversity_on_peer
 			= default_trx_config_params.
 				antenna_diversity_on_peer

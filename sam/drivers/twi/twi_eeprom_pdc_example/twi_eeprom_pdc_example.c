@@ -413,7 +413,7 @@ int main(void)
 #endif
 
 	/* Configure the options of TWI driver */
-	opt.master_clk = sysclk_get_cpu_hz();
+	opt.master_clk = sysclk_get_peripheral_hz();
 	opt.speed      = TWI_CLK;
 
 	/* Configure the data packet to be transmitted */

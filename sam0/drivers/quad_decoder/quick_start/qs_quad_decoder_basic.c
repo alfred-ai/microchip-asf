@@ -3,7 +3,7 @@
  *
  * \brief SAM QUAD DECODER Driver Quick Start for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -53,17 +53,17 @@ volatile bool       qdec_x_overflow,
 					qdec_z_overflow;
 					
 //! [callback_funcs]
-static void quad_decoder1_callback(void)
+static void quad_decoder0_callback(void)
 {
 	qdec_x_overflow = true;
 }
 
-static void quad_decoder2_callback(void)
+static void quad_decoder1_callback(void)
 {
 	qdec_y_overflow = true;
 }
 
-static void quad_decoder3_callback(void)
+static void quad_decoder2_callback(void)
 {
 	qdec_z_overflow = true;
 }
@@ -79,19 +79,19 @@ static void configure_quad_decoder(void)
 	quad_decoder_get_config_defaults(&config_quad_decoder);
 //! [get_def]
 //! [setup_pinmux]
-	config_quad_decoder.qdec1.pin_number_pad[0] = CONF_QUAD_DECODER_PIN_X_A;
-	config_quad_decoder.qdec1.pin_number_pad[1] = CONF_QUAD_DECODER_PIN_X_B;
-	config_quad_decoder.qdec2.pin_number_pad[0] = CONF_QUAD_DECODER_PIN_Y_A;
-	config_quad_decoder.qdec2.pin_number_pad[1] = CONF_QUAD_DECODER_PIN_Y_B;
-	config_quad_decoder.qdec3.pin_number_pad[0] = CONF_QUAD_DECODER_PIN_Z_A;
-	config_quad_decoder.qdec3.pin_number_pad[1] = CONF_QUAD_DECODER_PIN_Z_B;
+	config_quad_decoder.qdec0.pin_number_pad[0] = CONF_QUAD_DECODER_PIN_X_A;
+	config_quad_decoder.qdec0.pin_number_pad[1] = CONF_QUAD_DECODER_PIN_X_B;
+	config_quad_decoder.qdec1.pin_number_pad[0] = CONF_QUAD_DECODER_PIN_Y_A;
+	config_quad_decoder.qdec1.pin_number_pad[1] = CONF_QUAD_DECODER_PIN_Y_B;
+	config_quad_decoder.qdec2.pin_number_pad[0] = CONF_QUAD_DECODER_PIN_Z_A;
+	config_quad_decoder.qdec2.pin_number_pad[1] = CONF_QUAD_DECODER_PIN_Z_B;
 
-	config_quad_decoder.qdec1.pinmux_sel_pad[0] = CONF_QUAD_DECODER_MUX_X_A;
-	config_quad_decoder.qdec1.pinmux_sel_pad[1] = CONF_QUAD_DECODER_MUX_X_B;
-	config_quad_decoder.qdec2.pinmux_sel_pad[0] = CONF_QUAD_DECODER_MUX_Y_A;
-	config_quad_decoder.qdec2.pinmux_sel_pad[1] = CONF_QUAD_DECODER_MUX_Y_B;
-	config_quad_decoder.qdec3.pinmux_sel_pad[0] = CONF_QUAD_DECODER_MUX_Z_A;
-	config_quad_decoder.qdec3.pinmux_sel_pad[1] = CONF_QUAD_DECODER_MUX_Z_B;
+	config_quad_decoder.qdec0.pinmux_sel_pad[0] = CONF_QUAD_DECODER_MUX_X_A;
+	config_quad_decoder.qdec0.pinmux_sel_pad[1] = CONF_QUAD_DECODER_MUX_X_B;
+	config_quad_decoder.qdec1.pinmux_sel_pad[0] = CONF_QUAD_DECODER_MUX_Y_A;
+	config_quad_decoder.qdec1.pinmux_sel_pad[1] = CONF_QUAD_DECODER_MUX_Y_B;
+	config_quad_decoder.qdec2.pinmux_sel_pad[0] = CONF_QUAD_DECODER_MUX_Z_A;
+	config_quad_decoder.qdec2.pinmux_sel_pad[1] = CONF_QUAD_DECODER_MUX_Z_B;
 //! [setup_pinmux]
 //! [init_qdec]
 	quad_decoder_init(&config_quad_decoder);
@@ -102,9 +102,9 @@ static void configure_quad_decoder(void)
 static void configure_quad_decoder_callback(void)
 {
 //! [setup_register_callback]
-	quad_decoder_register_callback(QDEC_AXIS_X, quad_decoder1_callback);
-	quad_decoder_register_callback(QDEC_AXIS_Y, quad_decoder2_callback);
-	quad_decoder_register_callback(QDEC_AXIS_Z, quad_decoder3_callback);
+	quad_decoder_register_callback(QDEC_AXIS_X, quad_decoder0_callback);
+	quad_decoder_register_callback(QDEC_AXIS_Y, quad_decoder1_callback);
+	quad_decoder_register_callback(QDEC_AXIS_Z, quad_decoder2_callback);
 //! [setup_register_callback]
 //! [enable_IRQ]
 	NVIC_EnableIRQ(25);

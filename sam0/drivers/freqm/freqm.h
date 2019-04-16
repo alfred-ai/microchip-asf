@@ -297,6 +297,11 @@ static inline void freqm_disable(
 
 	Freqm *const freqm_module = module_inst->hw;
 
+	/* Disbale interrupt */
+	freqm_module->INTENCLR.reg = FREQM_INTENCLR_MASK;
+	/* Clear interrupt flag */
+	freqm_module->INTFLAG.reg = FREQM_INTFLAG_MASK;
+
 	/* Disable FREQM */
 	freqm_module->CTRLA.reg &= ~FREQM_CTRLA_ENABLE;
 

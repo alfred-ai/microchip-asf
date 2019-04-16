@@ -3,7 +3,7 @@
  *
  * \brief Smart Card Standard ISO7816 driver.
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,9 +51,11 @@ extern "C" {
 #endif
 
 /**
- * \defgroup sam_services_smart_card_group Smart Card Service
+ * \defgroup asfdoc_sam0_iso7816_group Smart Card Service
  *
  * The smart card service provides functions for cards supporting ISO7816 protocol.
+ *
+ * \ref asfdoc_sam0_iso7816_qs.
  *
  * @{
  */
@@ -431,6 +433,14 @@ void iso7816_init(struct usart_module *const module, uint32_t pin_rst, \
 
 }
 //@}
+
+/**
+ * \page asfdoc_sam0_iso7816_qs
+ *
+ * Driver for smart card via ISO7816.
+ * See \ref appdoc_sam0_smart_card_main "here" for project documentation.
+ *
+ */
 
 #ifdef __cplusplus
 }

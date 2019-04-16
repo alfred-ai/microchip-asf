@@ -3,7 +3,7 @@
  *
  * \brief I2C Common Driver for SAMB
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -303,7 +303,7 @@ enum i2c_clock_input {
  *
  * \param[in]  i2c_module  Pointer to software module structure
  */
-static inline void i2c_wait_for_idle(I2C *const i2c_module)
+static inline void i2c_wait_for_idle(I2c *const i2c_module)
 {
 	while (i2c_module->I2C_STATUS.bit.I2C_ACTIVE) {
 		/* Wait for I2C module to sync. */
@@ -318,12 +318,12 @@ static inline void i2c_wait_for_idle(I2C *const i2c_module)
  * \param[in,out] module Pointer to the driver instance to enable
  *
  */
-static inline void i2c_enable(I2C *const i2c_module)
+static inline void i2c_enable(I2c *const i2c_module)
 {
 	/* Wait for module to sync. */
 	i2c_wait_for_idle(i2c_module);
 	/* Enable module. */
-	i2c_module->I2C_MODULE_ENABLE.reg = (1 << I2C_I2C_MODULE_ENABLE_ENABLE_Pos);
+	i2c_module->I2C_MODULE_ENABLE.reg = (1 << I2C_MODULE_ENABLE_ENABLE_Pos);
 }
 
 /**
@@ -334,7 +334,7 @@ static inline void i2c_enable(I2C *const i2c_module)
  * \param[in,out] i2c_module Pointer to the driver instance to disable
  *
  */
-static inline void i2c_disable(I2C *const i2c_module)
+static inline void i2c_disable(I2c *const i2c_module)
 {
 	i2c_wait_for_idle(i2c_module);
 	i2c_module->I2C_MODULE_ENABLE.reg = 0;
@@ -348,7 +348,7 @@ static inline void i2c_disable(I2C *const i2c_module)
  * \param[in,out] i2c_module Pointer to the driver instance
  *
  */
-static inline void i2c_slave_flush_fifo(I2C *const i2c_module)
+static inline void i2c_slave_flush_fifo(I2c *const i2c_module)
 {
 	i2c_wait_for_idle(i2c_module);
 	i2c_module->I2C_FLUSH.reg = 1;
@@ -363,7 +363,7 @@ static inline void i2c_slave_flush_fifo(I2C *const i2c_module)
  * \param[in]     enable     Enable or Disable
  *
  */
-static inline void i2c_slave_rx_interrupt(I2C *const i2c_module, bool enable)
+static inline void i2c_slave_rx_interrupt(I2c *const i2c_module, bool enable)
 {
 	if (enable) {
 		i2c_module->RX_INTERRUPT_MASK.bit.RX_FIFO_NOT_EMPTY_MASK = 1;
@@ -381,7 +381,7 @@ static inline void i2c_slave_rx_interrupt(I2C *const i2c_module, bool enable)
  * \param[in]     enable     Enable or Disable
  *
  */
-static inline void i2c_slave_tx_interrupt(I2C *const i2c_module, bool enable)
+static inline void i2c_slave_tx_interrupt(I2c *const i2c_module, bool enable)
 {
 	if (enable) {
 		i2c_module->TX_INTERRUPT_MASK.bit.TX_FIFO_NOT_FULL_MASK = 1;

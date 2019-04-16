@@ -264,6 +264,11 @@ static inline void trng_disable(
 
 	Trng *const trng_module = module_inst->hw;
 
+	/* Disbale interrupt */
+	trng_module->INTENCLR.reg = TRNG_INTENCLR_MASK;
+	/* Clear interrupt flag */
+	trng_module->INTFLAG.reg = TRNG_INTFLAG_MASK;
+
 	/* Disable TRNG */
 	trng_module->CTRLA.reg &= ~TRNG_CTRLA_ENABLE;
 }

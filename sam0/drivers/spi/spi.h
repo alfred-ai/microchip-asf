@@ -3,7 +3,7 @@
  *
  * \brief SAM Serial Peripheral Interface Driver for SAMB
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -289,12 +289,12 @@ enum spi_transfer_mode {
 	/** Mode 0. Leading edge: rising, sample. Trailing edge: falling, setup */
 	SPI_TRANSFER_MODE_0 = 0,
 	/** Mode 1. Leading edge: rising, setup. Trailing edge: falling, sample */
-	SPI_TRANSFER_MODE_1 = SPI_SPI_CONFIGURATION_SCK_PHASE_1,
+	SPI_TRANSFER_MODE_1 = SPI_CONFIGURATION_SCK_PHASE_1,
 	/** Mode 2. Leading edge: falling, sample. Trailing edge: rising, setup */
-	SPI_TRANSFER_MODE_2 = SPI_SPI_CONFIGURATION_SCK_POLARITY_1,
+	SPI_TRANSFER_MODE_2 = SPI_CONFIGURATION_SCK_POLARITY_1,
 	/** Mode 3. Leading edge: falling, setup. Trailing edge: rising, sample */
-	SPI_TRANSFER_MODE_3 = SPI_SPI_CONFIGURATION_SCK_PHASE_1 | \
-						SPI_SPI_CONFIGURATION_SCK_POLARITY_1,
+	SPI_TRANSFER_MODE_3 = SPI_CONFIGURATION_SCK_PHASE_1 | \
+						SPI_CONFIGURATION_SCK_POLARITY_1,
 };
 
 /**
@@ -319,7 +319,7 @@ enum spi_data_order {
 	/** The MSB of the data is transmitted first */
 	SPI_DATA_ORDER_MSB      = 0,
 	/** The LSB of the data is transmitted first */
-	SPI_DATA_ORDER_LSB      = SPI_SPI_CONFIGURATION_LSB_FIRST_ENABLE_1,
+	SPI_DATA_ORDER_LSB      = SPI_CONFIGURATION_LSB_FIRST_ENABLE_1,
 };
 
 /**

@@ -159,14 +159,14 @@ extern "C" {
  *  Enum for the possible settings of pwm device configuration.
  */
 enum pwm_device_select {
+	/** PWM module 0 */
+	PWM0 = 0,
 	/** PWM module 1 */
-	PWM1 = 1,
+	PWM1,
 	/** PWM module 2 */
 	PWM2,
 	/** PWM module 3 */
 	PWM3,
-	/** PWM module 4 */
-	PWM4,
 };
 
 /**

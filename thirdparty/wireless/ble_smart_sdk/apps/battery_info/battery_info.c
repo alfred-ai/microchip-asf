@@ -227,9 +227,6 @@ int main(void)
 	platform_driver_init();
 	acquire_sleep_lock();
 
-	/* Initialize the button */
-	/* button_init(); */
-	
 	/* Initialize serial console */
 	serial_console_init();
 
@@ -261,12 +258,12 @@ int main(void)
 									
 	register_resume_callback(resume_cb);
 	
-	release_sleep_lock();
+	ble_set_ulp_mode(BLE_ULP_MODE_SET);
+
 	/* Capturing the events  */ 
 	while (1) {
 		/* BLE Event Task */
 		ble_event_task(BLE_EVENT_TIMEOUT);
-		acquire_sleep_lock();
 		if (timer_cb_done)
 		{
 			timer_cb_done = false;			
@@ -294,7 +291,6 @@ int main(void)
 				}
 			}
 		}
-		release_sleep_lock();
 	}	
 }
 

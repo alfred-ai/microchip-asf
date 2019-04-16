@@ -3,7 +3,7 @@
  *
  * \brief Instance description for GPIO0
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,53 +46,57 @@
 
 /* ========== Register definition for GPIO0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define REG_GPIO0_DATA                (0x40010000U) /**< \brief (GPIO0) Data Value */
-#define REG_GPIO0_DATAOUT             (0x40010004U) /**< \brief (GPIO0) Data Output Register Value */
-#define REG_GPIO0_OUTENSET            (0x40010010U) /**< \brief (GPIO0) Output Enable Set */
-#define REG_GPIO0_OUTENCLR            (0x40010014U) /**< \brief (GPIO0) Output Enable Clear */
-#define REG_GPIO0_INTENSET            (0x40010020U) /**< \brief (GPIO0) Interrupt Enable Set */
-#define REG_GPIO0_INTENCLR            (0x40010024U) /**< \brief (GPIO0) Interrupt Enable Clear */
-#define REG_GPIO0_INTTYPESET          (0x40010028U) /**< \brief (GPIO0) Interrupt Type Set */
-#define REG_GPIO0_INTTYPECLR          (0x4001002cU) /**< \brief (GPIO0) Interrupt Type Clear */
-#define REG_GPIO0_INTPOLSET           (0x40010030U) /**< \brief (GPIO0) Polarity-level, edge IRQ Configuration */
-#define REG_GPIO0_INTPOLCLR           (0x40010034U) /**< \brief (GPIO0) IRQ Configuration Clear */
-#define REG_GPIO0_INTSTATUSCLEAR      (0x40010038U) /**< \brief (GPIO0) Interrupt Status */
-#define REG_GPIO0_PID4                (0x40010fd0U) /**< \brief (GPIO0) Peripheral ID Register 4 */
-#define REG_GPIO0_PID5                (0x40010fd4U) /**< \brief (GPIO0) Peripheral ID Register 5 */
-#define REG_GPIO0_PID6                (0x40010fd8U) /**< \brief (GPIO0) Peripheral ID Register 6 */
-#define REG_GPIO0_PID7                (0x40010fdcU) /**< \brief (GPIO0) Peripheral ID Register 7 */
-#define REG_GPIO0_PID0                (0x40010fe0U) /**< \brief (GPIO0) Peripheral ID Register 0 */
-#define REG_GPIO0_PID1                (0x40010fe4U) /**< \brief (GPIO0) Peripheral ID Register 1 */
-#define REG_GPIO0_PID2                (0x40010fe8U) /**< \brief (GPIO0) Peripheral ID Register 2 */
-#define REG_GPIO0_PID3                (0x40010fecU) /**< \brief (GPIO0) Peripheral ID Register 3 */
-#define REG_GPIO0_CID0                (0x40010ff0U) /**< \brief (GPIO0) Component ID Register 0 */
-#define REG_GPIO0_CID1                (0x40010ff4U) /**< \brief (GPIO0) Component ID Register 1 */
-#define REG_GPIO0_CID2                (0x40010ff8U) /**< \brief (GPIO0) Component ID Register 2 */
-#define REG_GPIO0_CID3                (0x40010ffcU) /**< \brief (GPIO0) Component ID Register 3 */
+
+#define REG_GPIO0_DATA          (0x40010000U) /**< (GPIO0) Data Value */
+#define REG_GPIO0_DATAOUT       (0x40010004U) /**< (GPIO0) Data Output Register Value */
+#define REG_GPIO0_OUTENSET      (0x40010010U) /**< (GPIO0) Output Enable Set */
+#define REG_GPIO0_OUTENCLR      (0x40010014U) /**< (GPIO0) Output Enable Clear */
+#define REG_GPIO0_INTENSET      (0x40010020U) /**< (GPIO0) Interrupt Enable Set */
+#define REG_GPIO0_INTENCLR      (0x40010024U) /**< (GPIO0) Interrupt Enable Clear */
+#define REG_GPIO0_INTTYPESET    (0x40010028U) /**< (GPIO0) Interrupt Type Set */
+#define REG_GPIO0_INTTYPECLR    (0x4001002CU) /**< (GPIO0) Interrupt Type Clear */
+#define REG_GPIO0_INTPOLSET     (0x40010030U) /**< (GPIO0) Polarity-level, edge IRQ Configuration */
+#define REG_GPIO0_INTPOLCLR     (0x40010034U) /**< (GPIO0) IRQ Configuration Clear */
+#define REG_GPIO0_INTSTATUSCLEAR (0x40010038U) /**< (GPIO0) Interrupt Status */
+#define REG_GPIO0_PID4          (0x40010FD0U) /**< (GPIO0) Peripheral ID Register 4 */
+#define REG_GPIO0_PID5          (0x40010FD4U) /**< (GPIO0) Peripheral ID Register 5 */
+#define REG_GPIO0_PID6          (0x40010FD8U) /**< (GPIO0) Peripheral ID Register 6 */
+#define REG_GPIO0_PID7          (0x40010FDCU) /**< (GPIO0) Peripheral ID Register 7 */
+#define REG_GPIO0_PID0          (0x40010FE0U) /**< (GPIO0) Peripheral ID Register 0 */
+#define REG_GPIO0_PID1          (0x40010FE4U) /**< (GPIO0) Peripheral ID Register 1 */
+#define REG_GPIO0_PID2          (0x40010FE8U) /**< (GPIO0) Peripheral ID Register 2 */
+#define REG_GPIO0_PID3          (0x40010FECU) /**< (GPIO0) Peripheral ID Register 3 */
+#define REG_GPIO0_CID0          (0x40010FF0U) /**< (GPIO0) Component ID Register 0 */
+#define REG_GPIO0_CID1          (0x40010FF4U) /**< (GPIO0) Component ID Register 1 */
+#define REG_GPIO0_CID2          (0x40010FF8U) /**< (GPIO0) Component ID Register 2 */
+#define REG_GPIO0_CID3          (0x40010FFCU) /**< (GPIO0) Component ID Register 3 */
+
 #else
-#define REG_GPIO0_DATA                (*(RwReg16*)0x40010000U) /**< \brief (GPIO0) Data Value */
-#define REG_GPIO0_DATAOUT             (*(RwReg16*)0x40010004U) /**< \brief (GPIO0) Data Output Register Value */
-#define REG_GPIO0_OUTENSET            (*(RwReg16*)0x40010010U) /**< \brief (GPIO0) Output Enable Set */
-#define REG_GPIO0_OUTENCLR            (*(RwReg16*)0x40010014U) /**< \brief (GPIO0) Output Enable Clear */
-#define REG_GPIO0_INTENSET            (*(RwReg16*)0x40010020U) /**< \brief (GPIO0) Interrupt Enable Set */
-#define REG_GPIO0_INTENCLR            (*(RwReg16*)0x40010024U) /**< \brief (GPIO0) Interrupt Enable Clear */
-#define REG_GPIO0_INTTYPESET          (*(RwReg16*)0x40010028U) /**< \brief (GPIO0) Interrupt Type Set */
-#define REG_GPIO0_INTTYPECLR          (*(RwReg16*)0x4001002cU) /**< \brief (GPIO0) Interrupt Type Clear */
-#define REG_GPIO0_INTPOLSET           (*(RwReg16*)0x40010030U) /**< \brief (GPIO0) Polarity-level, edge IRQ Configuration */
-#define REG_GPIO0_INTPOLCLR           (*(RwReg16*)0x40010034U) /**< \brief (GPIO0) IRQ Configuration Clear */
-#define REG_GPIO0_INTSTATUSCLEAR      (*(RwReg16*)0x40010038U) /**< \brief (GPIO0) Interrupt Status */
-#define REG_GPIO0_PID4                (*(RoReg8 *)0x40010fd0U) /**< \brief (GPIO0) Peripheral ID Register 4 */
-#define REG_GPIO0_PID5                (*(RoReg8 *)0x40010fd4U) /**< \brief (GPIO0) Peripheral ID Register 5 */
-#define REG_GPIO0_PID6                (*(RoReg8 *)0x40010fd8U) /**< \brief (GPIO0) Peripheral ID Register 6 */
-#define REG_GPIO0_PID7                (*(RoReg8 *)0x40010fdcU) /**< \brief (GPIO0) Peripheral ID Register 7 */
-#define REG_GPIO0_PID0                (*(RoReg8 *)0x40010fe0U) /**< \brief (GPIO0) Peripheral ID Register 0 */
-#define REG_GPIO0_PID1                (*(RoReg8 *)0x40010fe4U) /**< \brief (GPIO0) Peripheral ID Register 1 */
-#define REG_GPIO0_PID2                (*(RoReg8 *)0x40010fe8U) /**< \brief (GPIO0) Peripheral ID Register 2 */
-#define REG_GPIO0_PID3                (*(RoReg8 *)0x40010fecU) /**< \brief (GPIO0) Peripheral ID Register 3 */
-#define REG_GPIO0_CID0                (*(RoReg8 *)0x40010ff0U) /**< \brief (GPIO0) Component ID Register 0 */
-#define REG_GPIO0_CID1                (*(RoReg8 *)0x40010ff4U) /**< \brief (GPIO0) Component ID Register 1 */
-#define REG_GPIO0_CID2                (*(RoReg8 *)0x40010ff8U) /**< \brief (GPIO0) Component ID Register 2 */
-#define REG_GPIO0_CID3                (*(RoReg8 *)0x40010ffcU) /**< \brief (GPIO0) Component ID Register 3 */
+
+#define REG_GPIO0_DATA          (*(__IO uint16_t*)0x40010000U) /**< (GPIO0) Data Value */
+#define REG_GPIO0_DATAOUT       (*(__IO uint16_t*)0x40010004U) /**< (GPIO0) Data Output Register Value */
+#define REG_GPIO0_OUTENSET      (*(__IO uint16_t*)0x40010010U) /**< (GPIO0) Output Enable Set */
+#define REG_GPIO0_OUTENCLR      (*(__IO uint16_t*)0x40010014U) /**< (GPIO0) Output Enable Clear */
+#define REG_GPIO0_INTENSET      (*(__IO uint16_t*)0x40010020U) /**< (GPIO0) Interrupt Enable Set */
+#define REG_GPIO0_INTENCLR      (*(__IO uint16_t*)0x40010024U) /**< (GPIO0) Interrupt Enable Clear */
+#define REG_GPIO0_INTTYPESET    (*(__IO uint16_t*)0x40010028U) /**< (GPIO0) Interrupt Type Set */
+#define REG_GPIO0_INTTYPECLR    (*(__IO uint16_t*)0x4001002CU) /**< (GPIO0) Interrupt Type Clear */
+#define REG_GPIO0_INTPOLSET     (*(__IO uint16_t*)0x40010030U) /**< (GPIO0) Polarity-level, edge IRQ Configuration */
+#define REG_GPIO0_INTPOLCLR     (*(__IO uint16_t*)0x40010034U) /**< (GPIO0) IRQ Configuration Clear */
+#define REG_GPIO0_INTSTATUSCLEAR (*(__IO uint16_t*)0x40010038U) /**< (GPIO0) Interrupt Status */
+#define REG_GPIO0_PID4          (*(__I  uint8_t*)0x40010FD0U) /**< (GPIO0) Peripheral ID Register 4 */
+#define REG_GPIO0_PID5          (*(__I  uint8_t*)0x40010FD4U) /**< (GPIO0) Peripheral ID Register 5 */
+#define REG_GPIO0_PID6          (*(__I  uint8_t*)0x40010FD8U) /**< (GPIO0) Peripheral ID Register 6 */
+#define REG_GPIO0_PID7          (*(__I  uint8_t*)0x40010FDCU) /**< (GPIO0) Peripheral ID Register 7 */
+#define REG_GPIO0_PID0          (*(__I  uint8_t*)0x40010FE0U) /**< (GPIO0) Peripheral ID Register 0 */
+#define REG_GPIO0_PID1          (*(__I  uint8_t*)0x40010FE4U) /**< (GPIO0) Peripheral ID Register 1 */
+#define REG_GPIO0_PID2          (*(__I  uint8_t*)0x40010FE8U) /**< (GPIO0) Peripheral ID Register 2 */
+#define REG_GPIO0_PID3          (*(__I  uint8_t*)0x40010FECU) /**< (GPIO0) Peripheral ID Register 3 */
+#define REG_GPIO0_CID0          (*(__I  uint8_t*)0x40010FF0U) /**< (GPIO0) Component ID Register 0 */
+#define REG_GPIO0_CID1          (*(__I  uint8_t*)0x40010FF4U) /**< (GPIO0) Component ID Register 1 */
+#define REG_GPIO0_CID2          (*(__I  uint8_t*)0x40010FF8U) /**< (GPIO0) Component ID Register 2 */
+#define REG_GPIO0_CID3          (*(__I  uint8_t*)0x40010FFCU) /**< (GPIO0) Component ID Register 3 */
+
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMB11_GPIO0_INSTANCE_ */

@@ -3,7 +3,7 @@
  *
  * \brief SAM TC - Timer Counter Callback Driver
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -72,7 +72,7 @@ static enum system_interrupt_vector _tc_interrupt_get_interrupt_vector(
 {
 	static uint8_t tc_interrupt_vectors[TC_INST_NUM] =
 		{
-#if (SAML21E) || (SAML21G)
+#if (SAML21E) || (SAML21G) || (SAMR30E) || (SAMR30G)
 			SYSTEM_INTERRUPT_MODULE_TC0,
 			SYSTEM_INTERRUPT_MODULE_TC1,
 			SYSTEM_INTERRUPT_MODULE_TC4
