@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -73,6 +73,8 @@ typedef struct {
   __I  uint32_t Reserved3[39];
   __IO uint32_t QSPI_WPMR;     /**< \brief (Qspi Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t QSPI_WPSR;     /**< \brief (Qspi Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved4[4];
+  __I  uint32_t QSPI_VERSION;  /**< \brief (Qspi Offset: 0x00FC) Version Register */
 } Qspi;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- QSPI_CR : (QSPI Offset: 0x00) Control Register -------- */
@@ -231,6 +233,11 @@ typedef struct {
 #define QSPI_WPSR_WPVS (0x1u << 0) /**< \brief (QSPI_WPSR) Write Protection Violation Status */
 #define QSPI_WPSR_WPVSRC_Pos 8
 #define QSPI_WPSR_WPVSRC_Msk (0xffu << QSPI_WPSR_WPVSRC_Pos) /**< \brief (QSPI_WPSR) Write Protection Violation Source */
+/* -------- QSPI_VERSION : (QSPI Offset: 0x00FC) Version Register -------- */
+#define QSPI_VERSION_VERSION_Pos 0
+#define QSPI_VERSION_VERSION_Msk (0xfffu << QSPI_VERSION_VERSION_Pos) /**< \brief (QSPI_VERSION) Hardware Module Version */
+#define QSPI_VERSION_MFN_Pos 16
+#define QSPI_VERSION_MFN_Msk (0x7u << QSPI_VERSION_MFN_Pos) /**< \brief (QSPI_VERSION) Metal Fix Number */
 
 /*@}*/
 

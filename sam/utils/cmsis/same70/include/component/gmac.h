@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -101,7 +101,8 @@ typedef struct {
   __I  uint32_t GMAC_EFRSH;             /**< \brief (Gmac Offset: 0x0EC) PTP Event Frame Received Seconds High Register */
   __I  uint32_t GMAC_PEFTSH;            /**< \brief (Gmac Offset: 0x0F0) PTP Peer Event Frame Transmitted Seconds High Register */
   __I  uint32_t GMAC_PEFRSH;            /**< \brief (Gmac Offset: 0x0F4) PTP Peer Event Frame Received Seconds High Register */
-  __I  uint32_t Reserved3[2];
+  __I  uint32_t Reserved3[1];
+  __I  uint32_t GMAC_MID;               /**< \brief (Gmac Offset: 0x0FC) Module ID Register */
   __I  uint32_t GMAC_OTLO;              /**< \brief (Gmac Offset: 0x100) Octets Transmitted Low Register */
   __I  uint32_t GMAC_OTHI;              /**< \brief (Gmac Offset: 0x104) Octets Transmitted High Register */
   __I  uint32_t GMAC_FT;                /**< \brief (Gmac Offset: 0x108) Frames Transmitted Register */
@@ -121,7 +122,7 @@ typedef struct {
   __I  uint32_t GMAC_EC;                /**< \brief (Gmac Offset: 0x140) Excessive Collisions Register */
   __I  uint32_t GMAC_LC;                /**< \brief (Gmac Offset: 0x144) Late Collisions Register */
   __I  uint32_t GMAC_DTF;               /**< \brief (Gmac Offset: 0x148) Deferred Transmission Frames Register */
-  __I  uint32_t GMAC_CSE;               /**< \brief (Gmac Offset: 0x14C) Carrier Sense Errors Register Register */
+  __I  uint32_t GMAC_CSE;               /**< \brief (Gmac Offset: 0x14C) Carrier Sense Errors Register */
   __I  uint32_t GMAC_ORLO;              /**< \brief (Gmac Offset: 0x150) Octets Received Low Received Register */
   __I  uint32_t GMAC_ORHI;              /**< \brief (Gmac Offset: 0x154) Octets Received High Received Register */
   __I  uint32_t GMAC_FR;                /**< \brief (Gmac Offset: 0x158) Frames Received Register */
@@ -569,6 +570,11 @@ typedef struct {
 /* -------- GMAC_PEFRSH : (GMAC Offset: 0x0F4) PTP Peer Event Frame Received Seconds High Register -------- */
 #define GMAC_PEFRSH_RUD_Pos 0
 #define GMAC_PEFRSH_RUD_Msk (0xffffu << GMAC_PEFRSH_RUD_Pos) /**< \brief (GMAC_PEFRSH) Register Update */
+/* -------- GMAC_MID : (GMAC Offset: 0x0FC) Module ID Register -------- */
+#define GMAC_MID_MREV_Pos 0
+#define GMAC_MID_MREV_Msk (0xffffu << GMAC_MID_MREV_Pos) /**< \brief (GMAC_MID) Module Revision */
+#define GMAC_MID_MID_Pos 16
+#define GMAC_MID_MID_Msk (0xffffu << GMAC_MID_MID_Pos) /**< \brief (GMAC_MID) Module Identification Number */
 /* -------- GMAC_OTLO : (GMAC Offset: 0x100) Octets Transmitted Low Register -------- */
 #define GMAC_OTLO_TXO_Pos 0
 #define GMAC_OTLO_TXO_Msk (0xffffffffu << GMAC_OTLO_TXO_Pos) /**< \brief (GMAC_OTLO) Transmitted Octets */
@@ -626,7 +632,7 @@ typedef struct {
 /* -------- GMAC_DTF : (GMAC Offset: 0x148) Deferred Transmission Frames Register -------- */
 #define GMAC_DTF_DEFT_Pos 0
 #define GMAC_DTF_DEFT_Msk (0x3ffffu << GMAC_DTF_DEFT_Pos) /**< \brief (GMAC_DTF) Deferred Transmission */
-/* -------- GMAC_CSE : (GMAC Offset: 0x14C) Carrier Sense Errors Register Register -------- */
+/* -------- GMAC_CSE : (GMAC Offset: 0x14C) Carrier Sense Errors Register -------- */
 #define GMAC_CSE_CSR_Pos 0
 #define GMAC_CSE_CSR_Msk (0x3ffu << GMAC_CSE_CSR_Pos) /**< \brief (GMAC_CSE) Carrier Sense Error */
 /* -------- GMAC_ORLO : (GMAC Offset: 0x150) Octets Received Low Received Register -------- */
@@ -769,11 +775,11 @@ typedef struct {
 #define GMAC_ISRPQ_HRESP (0x1u << 11) /**< \brief (GMAC_ISRPQ[3]) HRESP Not OK */
 /* -------- GMAC_TBQBAPQ[3] : (GMAC Offset: 0x440) Transmit Buffer Queue Base Address Register Priority Queue  (index = 1) -------- */
 #define GMAC_TBQBAPQ_TXBQBA_Pos 2
-#define GMAC_TBQBAPQ_TXBQBA_Msk (0x3fu << GMAC_TBQBAPQ_TXBQBA_Pos) /**< \brief (GMAC_TBQBAPQ[3]) Transmit Buffer Queue Base Address */
+#define GMAC_TBQBAPQ_TXBQBA_Msk (0x3fffffffu << GMAC_TBQBAPQ_TXBQBA_Pos) /**< \brief (GMAC_TBQBAPQ[2]) Transmit Buffer Queue Base Address */
 #define GMAC_TBQBAPQ_TXBQBA(value) ((GMAC_TBQBAPQ_TXBQBA_Msk & ((value) << GMAC_TBQBAPQ_TXBQBA_Pos)))
 /* -------- GMAC_RBQBAPQ[3] : (GMAC Offset: 0x480) Receive Buffer Queue Base Address Register Priority Queue  (index = 1) -------- */
 #define GMAC_RBQBAPQ_RXBQBA_Pos 2
-#define GMAC_RBQBAPQ_RXBQBA_Msk (0x3fu << GMAC_RBQBAPQ_RXBQBA_Pos) /**< \brief (GMAC_RBQBAPQ[3]) Receive Buffer Queue Base Address */
+#define GMAC_RBQBAPQ_RXBQBA_Msk (0x3fffffffu << GMAC_RBQBAPQ_RXBQBA_Pos) /**< \brief (GMAC_RBQBAPQ[2]) Receive Buffer Queue Base Address */
 #define GMAC_RBQBAPQ_RXBQBA(value) ((GMAC_RBQBAPQ_RXBQBA_Msk & ((value) << GMAC_RBQBAPQ_RXBQBA_Pos)))
 /* -------- GMAC_RBSRPQ[3] : (GMAC Offset: 0x4A0) Receive Buffer Size Register Priority Queue  (index = 1) -------- */
 #define GMAC_RBSRPQ_RBS_Pos 0

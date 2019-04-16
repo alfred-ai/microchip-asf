@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,7 +54,8 @@
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 /** \brief Mcan hardware registers */
 typedef struct {
-  __I  uint32_t Reserved1[2];
+  __I  uint32_t MCAN_CREL;    /**< \brief (Mcan Offset: 0x00) Core Release Register */
+  __I  uint32_t MCAN_ENDN;    /**< \brief (Mcan Offset: 0x04) Endian Register */
   __IO uint32_t MCAN_CUST;    /**< \brief (Mcan Offset: 0x08) Customer Register */
   __IO uint32_t MCAN_FBTP;    /**< \brief (Mcan Offset: 0x0C) Fast Bit Timing and Prescaler Register */
   __IO uint32_t MCAN_TEST;    /**< \brief (Mcan Offset: 0x10) Test Register */
@@ -65,19 +66,19 @@ typedef struct {
   __IO uint32_t MCAN_TSCV;    /**< \brief (Mcan Offset: 0x24) Timestamp Counter Value Register */
   __IO uint32_t MCAN_TOCC;    /**< \brief (Mcan Offset: 0x28) Timeout Counter Configuration Register */
   __IO uint32_t MCAN_TOCV;    /**< \brief (Mcan Offset: 0x2C) Timeout Counter Value Register */
-  __I  uint32_t Reserved2[4];
+  __I  uint32_t Reserved1[4];
   __I  uint32_t MCAN_ECR;     /**< \brief (Mcan Offset: 0x40) Error Counter Register */
   __I  uint32_t MCAN_PSR;     /**< \brief (Mcan Offset: 0x44) Protocol Status Register */
-  __I  uint32_t Reserved3[2];
+  __I  uint32_t Reserved2[2];
   __IO uint32_t MCAN_IR;      /**< \brief (Mcan Offset: 0x50) Interrupt Register */
   __IO uint32_t MCAN_IE;      /**< \brief (Mcan Offset: 0x54) Interrupt Enable Register */
   __IO uint32_t MCAN_ILS;     /**< \brief (Mcan Offset: 0x58) Interrupt Line Select Register */
   __IO uint32_t MCAN_ILE;     /**< \brief (Mcan Offset: 0x5C) Interrupt Line Enable Register */
-  __I  uint32_t Reserved4[8];
+  __I  uint32_t Reserved3[8];
   __IO uint32_t MCAN_GFC;     /**< \brief (Mcan Offset: 0x80) Global Filter Configuration Register */
   __IO uint32_t MCAN_SIDFC;   /**< \brief (Mcan Offset: 0x84) Standard ID Filter Configuration Register */
   __IO uint32_t MCAN_XIDFC;   /**< \brief (Mcan Offset: 0x88) Extended ID Filter Configuration Register */
-  __I  uint32_t Reserved5[1];
+  __I  uint32_t Reserved4[1];
   __IO uint32_t MCAN_XIDAM;   /**< \brief (Mcan Offset: 0x90) Extended ID AND Mask Register */
   __I  uint32_t MCAN_HPMS;    /**< \brief (Mcan Offset: 0x94) High Priority Message Status Register */
   __IO uint32_t MCAN_NDAT1;   /**< \brief (Mcan Offset: 0x98) New Data 1 Register */
@@ -100,12 +101,28 @@ typedef struct {
   __I  uint32_t MCAN_TXBCF;   /**< \brief (Mcan Offset: 0xDC) Transmit Buffer Cancellation Finished Register */
   __IO uint32_t MCAN_TXBTIE;  /**< \brief (Mcan Offset: 0xE0) Transmit Buffer Transmission Interrupt Enable Register */
   __IO uint32_t MCAN_TXBCIE;  /**< \brief (Mcan Offset: 0xE4) Transmit Buffer Cancellation Finished Interrupt Enable Register */
-  __I  uint32_t Reserved6[2];
+  __I  uint32_t Reserved5[2];
   __IO uint32_t MCAN_TXEFC;   /**< \brief (Mcan Offset: 0xF0) Transmit Event FIFO Configuration Register */
   __I  uint32_t MCAN_TXEFS;   /**< \brief (Mcan Offset: 0xF4) Transmit Event FIFO Status Register */
   __IO uint32_t MCAN_TXEFA;   /**< \brief (Mcan Offset: 0xF8) Transmit Event FIFO Acknowledge Register */
 } Mcan;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
+/* -------- MCAN_CREL : (MCAN Offset: 0x00) Core Release Register -------- */
+#define MCAN_CREL_DAY_Pos 0
+#define MCAN_CREL_DAY_Msk (0xffu << MCAN_CREL_DAY_Pos) /**< \brief (MCAN_CREL) Timestamp Day */
+#define MCAN_CREL_MON_Pos 8
+#define MCAN_CREL_MON_Msk (0xffu << MCAN_CREL_MON_Pos) /**< \brief (MCAN_CREL) Timestamp Month */
+#define MCAN_CREL_YEAR_Pos 16
+#define MCAN_CREL_YEAR_Msk (0xfu << MCAN_CREL_YEAR_Pos) /**< \brief (MCAN_CREL) Timestamp Year */
+#define MCAN_CREL_SUBSTEP_Pos 20
+#define MCAN_CREL_SUBSTEP_Msk (0xfu << MCAN_CREL_SUBSTEP_Pos) /**< \brief (MCAN_CREL) Sub-step of Core Release */
+#define MCAN_CREL_STEP_Pos 24
+#define MCAN_CREL_STEP_Msk (0xfu << MCAN_CREL_STEP_Pos) /**< \brief (MCAN_CREL) Step of Core Release */
+#define MCAN_CREL_REL_Pos 28
+#define MCAN_CREL_REL_Msk (0xfu << MCAN_CREL_REL_Pos) /**< \brief (MCAN_CREL) Core Release */
+/* -------- MCAN_ENDN : (MCAN Offset: 0x04) Endian Register -------- */
+#define MCAN_ENDN_ETV_Pos 0
+#define MCAN_ENDN_ETV_Msk (0xffffffffu << MCAN_ENDN_ETV_Pos) /**< \brief (MCAN_ENDN) Endianness Test Value */
 /* -------- MCAN_CUST : (MCAN Offset: 0x08) Customer Register -------- */
 #define MCAN_CUST_CSV_Pos 0
 #define MCAN_CUST_CSV_Msk (0xffffffffu << MCAN_CUST_CSV_Pos) /**< \brief (MCAN_CUST) Customer-specific Value */
@@ -288,6 +305,8 @@ typedef struct {
 #define MCAN_IR_MRAF (0x1u << 17) /**< \brief (MCAN_IR) Message RAM Access Failure */
 #define MCAN_IR_TOO (0x1u << 18) /**< \brief (MCAN_IR) Timeout Occurred */
 #define MCAN_IR_DRX (0x1u << 19) /**< \brief (MCAN_IR) Message stored to Dedicated Receive Buffer */
+#define MCAN_IR_BEC (0x1u << 20) /**< \brief (MCAN_IR) Bit Error Corrected */
+#define MCAN_IR_BEU (0x1u << 21) /**< \brief (MCAN_IR) Bit Error Uncorrected */
 #define MCAN_IR_ELO (0x1u << 22) /**< \brief (MCAN_IR) Error Logging Overflow */
 #define MCAN_IR_EP (0x1u << 23) /**< \brief (MCAN_IR) Error Passive */
 #define MCAN_IR_EW (0x1u << 24) /**< \brief (MCAN_IR) Warning Status */
@@ -319,6 +338,8 @@ typedef struct {
 #define MCAN_IE_MRAFE (0x1u << 17) /**< \brief (MCAN_IE) Message RAM Access Failure Interrupt Enable */
 #define MCAN_IE_TOOE (0x1u << 18) /**< \brief (MCAN_IE) Timeout Occurred Interrupt Enable */
 #define MCAN_IE_DRXE (0x1u << 19) /**< \brief (MCAN_IE) Message stored to Dedicated Receive Buffer Interrupt Enable */
+#define MCAN_IE_BECE (0x1u << 20) /**< \brief (MCAN_IE) Bit Error Corrected Interrupt Enable */
+#define MCAN_IE_BEUE (0x1u << 21) /**< \brief (MCAN_IE) Bit Error Uncorrected Interrupt Enable */
 #define MCAN_IE_ELOE (0x1u << 22) /**< \brief (MCAN_IE) Error Logging Overflow Interrupt Enable */
 #define MCAN_IE_EPE (0x1u << 23) /**< \brief (MCAN_IE) Error Passive Interrupt Enable */
 #define MCAN_IE_EWE (0x1u << 24) /**< \brief (MCAN_IE) Warning Status Interrupt Enable */
@@ -350,6 +371,8 @@ typedef struct {
 #define MCAN_ILS_MRAFL (0x1u << 17) /**< \brief (MCAN_ILS) Message RAM Access Failure Interrupt Line */
 #define MCAN_ILS_TOOL (0x1u << 18) /**< \brief (MCAN_ILS) Timeout Occurred Interrupt Line */
 #define MCAN_ILS_DRXL (0x1u << 19) /**< \brief (MCAN_ILS) Message stored to Dedicated Receive Buffer Interrupt Line */
+#define MCAN_ILS_BECL (0x1u << 20) /**< \brief (MCAN_ILS) Bit Error Corrected Interrupt Line */
+#define MCAN_ILS_BEUL (0x1u << 21) /**< \brief (MCAN_ILS) Bit Error Uncorrected Interrupt Line */
 #define MCAN_ILS_ELOL (0x1u << 22) /**< \brief (MCAN_ILS) Error Logging Overflow Interrupt Line */
 #define MCAN_ILS_EPL (0x1u << 23) /**< \brief (MCAN_ILS) Error Passive Interrupt Line */
 #define MCAN_ILS_EWL (0x1u << 24) /**< \brief (MCAN_ILS) Warning Status Interrupt Line */
@@ -538,36 +561,36 @@ typedef struct {
 #define MCAN_RXESC_F0DS_Pos 0
 #define MCAN_RXESC_F0DS_Msk (0x7u << MCAN_RXESC_F0DS_Pos) /**< \brief (MCAN_RXESC) Receive FIFO 0 Data Field Size */
 #define MCAN_RXESC_F0DS(value) ((MCAN_RXESC_F0DS_Msk & ((value) << MCAN_RXESC_F0DS_Pos)))
-#define   MCAN_RXESC_F0DS_8_BYTE (0x0u << 0) /**< \brief (MCAN_RXESC) 8 byte data field */
-#define   MCAN_RXESC_F0DS_12_BYTE (0x1u << 0) /**< \brief (MCAN_RXESC) 12 byte data field */
-#define   MCAN_RXESC_F0DS_16_BYTE (0x2u << 0) /**< \brief (MCAN_RXESC) 16 byte data field */
-#define   MCAN_RXESC_F0DS_20_BYTE (0x3u << 0) /**< \brief (MCAN_RXESC) 20 byte data field */
-#define   MCAN_RXESC_F0DS_24_BYTE (0x4u << 0) /**< \brief (MCAN_RXESC) 24 byte data field */
-#define   MCAN_RXESC_F0DS_32_BYTE (0x5u << 0) /**< \brief (MCAN_RXESC) 32 byte data field */
-#define   MCAN_RXESC_F0DS_48_BYTE (0x6u << 0) /**< \brief (MCAN_RXESC) 48 byte data field */
-#define   MCAN_RXESC_F0DS_64_BYTE (0x7u << 0) /**< \brief (MCAN_RXESC) 64 byte data field */
+#define   MCAN_RXESC_F0DS_8_BYTE (0x0u << 0) /**< \brief (MCAN_RXESC) 8-byte data field */
+#define   MCAN_RXESC_F0DS_12_BYTE (0x1u << 0) /**< \brief (MCAN_RXESC) 12-byte data field */
+#define   MCAN_RXESC_F0DS_16_BYTE (0x2u << 0) /**< \brief (MCAN_RXESC) 16-byte data field */
+#define   MCAN_RXESC_F0DS_20_BYTE (0x3u << 0) /**< \brief (MCAN_RXESC) 20-byte data field */
+#define   MCAN_RXESC_F0DS_24_BYTE (0x4u << 0) /**< \brief (MCAN_RXESC) 24-byte data field */
+#define   MCAN_RXESC_F0DS_32_BYTE (0x5u << 0) /**< \brief (MCAN_RXESC) 32-byte data field */
+#define   MCAN_RXESC_F0DS_48_BYTE (0x6u << 0) /**< \brief (MCAN_RXESC) 48-byte data field */
+#define   MCAN_RXESC_F0DS_64_BYTE (0x7u << 0) /**< \brief (MCAN_RXESC) 64-byte data field */
 #define MCAN_RXESC_F1DS_Pos 4
 #define MCAN_RXESC_F1DS_Msk (0x7u << MCAN_RXESC_F1DS_Pos) /**< \brief (MCAN_RXESC) Receive FIFO 1 Data Field Size */
 #define MCAN_RXESC_F1DS(value) ((MCAN_RXESC_F1DS_Msk & ((value) << MCAN_RXESC_F1DS_Pos)))
-#define   MCAN_RXESC_F1DS_8_BYTE (0x0u << 4) /**< \brief (MCAN_RXESC) 8 byte data field */
-#define   MCAN_RXESC_F1DS_12_BYTE (0x1u << 4) /**< \brief (MCAN_RXESC) 12 byte data field */
-#define   MCAN_RXESC_F1DS_16_BYTE (0x2u << 4) /**< \brief (MCAN_RXESC) 16 byte data field */
-#define   MCAN_RXESC_F1DS_20_BYTE (0x3u << 4) /**< \brief (MCAN_RXESC) 20 byte data field */
-#define   MCAN_RXESC_F1DS_24_BYTE (0x4u << 4) /**< \brief (MCAN_RXESC) 24 byte data field */
-#define   MCAN_RXESC_F1DS_32_BYTE (0x5u << 4) /**< \brief (MCAN_RXESC) 32 byte data field */
-#define   MCAN_RXESC_F1DS_48_BYTE (0x6u << 4) /**< \brief (MCAN_RXESC) 48 byte data field */
-#define   MCAN_RXESC_F1DS_64_BYTE (0x7u << 4) /**< \brief (MCAN_RXESC) 64 byte data field */
+#define   MCAN_RXESC_F1DS_8_BYTE (0x0u << 4) /**< \brief (MCAN_RXESC) 8-byte data field */
+#define   MCAN_RXESC_F1DS_12_BYTE (0x1u << 4) /**< \brief (MCAN_RXESC) 12-byte data field */
+#define   MCAN_RXESC_F1DS_16_BYTE (0x2u << 4) /**< \brief (MCAN_RXESC) 16-byte data field */
+#define   MCAN_RXESC_F1DS_20_BYTE (0x3u << 4) /**< \brief (MCAN_RXESC) 20-byte data field */
+#define   MCAN_RXESC_F1DS_24_BYTE (0x4u << 4) /**< \brief (MCAN_RXESC) 24-byte data field */
+#define   MCAN_RXESC_F1DS_32_BYTE (0x5u << 4) /**< \brief (MCAN_RXESC) 32-byte data field */
+#define   MCAN_RXESC_F1DS_48_BYTE (0x6u << 4) /**< \brief (MCAN_RXESC) 48-byte data field */
+#define   MCAN_RXESC_F1DS_64_BYTE (0x7u << 4) /**< \brief (MCAN_RXESC) 64-byte data field */
 #define MCAN_RXESC_RBDS_Pos 8
 #define MCAN_RXESC_RBDS_Msk (0x7u << MCAN_RXESC_RBDS_Pos) /**< \brief (MCAN_RXESC) Receive Buffer Data Field Size */
 #define MCAN_RXESC_RBDS(value) ((MCAN_RXESC_RBDS_Msk & ((value) << MCAN_RXESC_RBDS_Pos)))
-#define   MCAN_RXESC_RBDS_8_BYTE (0x0u << 8) /**< \brief (MCAN_RXESC) 8 byte data field */
-#define   MCAN_RXESC_RBDS_12_BYTE (0x1u << 8) /**< \brief (MCAN_RXESC) 12 byte data field */
-#define   MCAN_RXESC_RBDS_16_BYTE (0x2u << 8) /**< \brief (MCAN_RXESC) 16 byte data field */
-#define   MCAN_RXESC_RBDS_20_BYTE (0x3u << 8) /**< \brief (MCAN_RXESC) 20 byte data field */
-#define   MCAN_RXESC_RBDS_24_BYTE (0x4u << 8) /**< \brief (MCAN_RXESC) 24 byte data field */
-#define   MCAN_RXESC_RBDS_32_BYTE (0x5u << 8) /**< \brief (MCAN_RXESC) 32 byte data field */
-#define   MCAN_RXESC_RBDS_48_BYTE (0x6u << 8) /**< \brief (MCAN_RXESC) 48 byte data field */
-#define   MCAN_RXESC_RBDS_64_BYTE (0x7u << 8) /**< \brief (MCAN_RXESC) 64 byte data field */
+#define   MCAN_RXESC_RBDS_8_BYTE (0x0u << 8) /**< \brief (MCAN_RXESC) 8-byte data field */
+#define   MCAN_RXESC_RBDS_12_BYTE (0x1u << 8) /**< \brief (MCAN_RXESC) 12-byte data field */
+#define   MCAN_RXESC_RBDS_16_BYTE (0x2u << 8) /**< \brief (MCAN_RXESC) 16-byte data field */
+#define   MCAN_RXESC_RBDS_20_BYTE (0x3u << 8) /**< \brief (MCAN_RXESC) 20-byte data field */
+#define   MCAN_RXESC_RBDS_24_BYTE (0x4u << 8) /**< \brief (MCAN_RXESC) 24-byte data field */
+#define   MCAN_RXESC_RBDS_32_BYTE (0x5u << 8) /**< \brief (MCAN_RXESC) 32-byte data field */
+#define   MCAN_RXESC_RBDS_48_BYTE (0x6u << 8) /**< \brief (MCAN_RXESC) 48-byte data field */
+#define   MCAN_RXESC_RBDS_64_BYTE (0x7u << 8) /**< \brief (MCAN_RXESC) 64-byte data field */
 /* -------- MCAN_TXBC : (MCAN Offset: 0xC0) Transmit Buffer Configuration Register -------- */
 #define MCAN_TXBC_TBSA_Pos 2
 #define MCAN_TXBC_TBSA_Msk (0x3fffu << MCAN_TXBC_TBSA_Pos) /**< \brief (MCAN_TXBC) Tx Buffers Start Address */
@@ -591,14 +614,14 @@ typedef struct {
 #define MCAN_TXESC_TBDS_Pos 0
 #define MCAN_TXESC_TBDS_Msk (0x7u << MCAN_TXESC_TBDS_Pos) /**< \brief (MCAN_TXESC) Tx Buffer Data Field Size */
 #define MCAN_TXESC_TBDS(value) ((MCAN_TXESC_TBDS_Msk & ((value) << MCAN_TXESC_TBDS_Pos)))
-#define   MCAN_TXESC_TBDS_8_BYTE (0x0u << 0) /**< \brief (MCAN_TXESC) 8 byte data field */
-#define   MCAN_TXESC_TBDS_12_BYTE (0x1u << 0) /**< \brief (MCAN_TXESC) 12 byte data field */
-#define   MCAN_TXESC_TBDS_16_BYTE (0x2u << 0) /**< \brief (MCAN_TXESC) 16 byte data field */
-#define   MCAN_TXESC_TBDS_20_BYTE (0x3u << 0) /**< \brief (MCAN_TXESC) 20 byte data field */
-#define   MCAN_TXESC_TBDS_24_BYTE (0x4u << 0) /**< \brief (MCAN_TXESC) 24 byte data field */
-#define   MCAN_TXESC_TBDS_32_BYTE (0x5u << 0) /**< \brief (MCAN_TXESC) 32 byte data field */
-#define   MCAN_TXESC_TBDS_48_BYTE (0x6u << 0) /**< \brief (MCAN_TXESC) 48 byte data field */
-#define   MCAN_TXESC_TBDS_64_BYTE (0x7u << 0) /**< \brief (MCAN_TXESC) 64 byte data field */
+#define   MCAN_TXESC_TBDS_8_BYTE (0x0u << 0) /**< \brief (MCAN_TXESC) 8-byte data field */
+#define   MCAN_TXESC_TBDS_12_BYTE (0x1u << 0) /**< \brief (MCAN_TXESC) 12-byte data field */
+#define   MCAN_TXESC_TBDS_16_BYTE (0x2u << 0) /**< \brief (MCAN_TXESC) 16-byte data field */
+#define   MCAN_TXESC_TBDS_20_BYTE (0x3u << 0) /**< \brief (MCAN_TXESC) 20-byte data field */
+#define   MCAN_TXESC_TBDS_24_BYTE (0x4u << 0) /**< \brief (MCAN_TXESC) 24-byte data field */
+#define   MCAN_TXESC_TBDS_32_BYTE (0x5u << 0) /**< \brief (MCAN_TXESC) 32-byte data field */
+#define   MCAN_TXESC_TBDS_48_BYTE (0x6u << 0) /**< \brief (MCAN_TXESC) 48- byte data field */
+#define   MCAN_TXESC_TBDS_64_BYTE (0x7u << 0) /**< \brief (MCAN_TXESC) 64-byte data field */
 /* -------- MCAN_TXBRP : (MCAN Offset: 0xCC) Transmit Buffer Request Pending Register -------- */
 #define MCAN_TXBRP_TRP0 (0x1u << 0) /**< \brief (MCAN_TXBRP) Transmission Request Pending for Buffer 0 */
 #define MCAN_TXBRP_TRP1 (0x1u << 1) /**< \brief (MCAN_TXBRP) Transmission Request Pending for Buffer 1 */

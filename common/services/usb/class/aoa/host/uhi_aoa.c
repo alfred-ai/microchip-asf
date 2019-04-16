@@ -115,6 +115,12 @@ struct uhi_aoa_dev_t {
 	usb_ep_t ep_out;
 };
 
+/** \brief Function to end AoA enabling success
+ *  - Called when the process of trying to enable the device in Accessory Mode
+ *    with success.
+ */
+static void uhi_aoa_enable_success(void);
+
 /** Current USB device AOA selected by the UHI AOA */
 #ifdef USB_HOST_HUB_SUPPORT
 static struct uhi_aoa_dev_t *uhi_aoa_dev_sel;
@@ -175,9 +181,13 @@ uhc_enum_status_t uhi_aoa_install(uhc_device_t *dev)
 	}
 
 	if ((dev->dev_desc.idVendor == le16_to_cpu(GOOGLE_VID)) &&
-			((dev->dev_desc.idProduct == le16_to_cpu(AOA_PID)) &&
-			(dev->dev_desc.idProduct ==
-			le16_to_cpu(AOA_ADB_PID)))) {
+			((dev->dev_desc.idProduct == le16_to_cpu(AOA_ACCESSORY_PID)) ||
+			 (dev->dev_desc.idProduct == le16_to_cpu(AOA_ACCESSORY_ADB_PID))
+#if AOA_V2_SUPPORT
+			 || (dev->dev_desc.idProduct == le16_to_cpu(AOA_ACCESSORY_AUDIO_PID))
+			 || (dev->dev_desc.idProduct == le16_to_cpu(AOA_ACCESSORY_AUDIO_ADB_PID))
+#endif
+			 )) {
 		/* Device is in AOA mode */
 		uhi_aoa_dev.dev = dev;
 		uhi_aoa_enable_stage = AOA_ENABLE_STAGE_SUCCESSFUL;
@@ -261,10 +271,11 @@ void uhi_aoa_enable(uhc_device_t *dev)
 		return; /* No interface to enable */
 	}
 
-	if (uhi_aoa_enable_stage == AOA_ENABLE_STAGE_PROCESSING) {
+	if (uhi_aoa_enable_stage == AOA_ENABLE_STAGE_SUCCESSFUL) {
+		uhi_aoa_enable_success();
+	} else if (uhi_aoa_enable_stage == AOA_ENABLE_STAGE_PROCESSING) {
 		uhi_aoa_mode_enable_step1(dev);
 	}
-
 }
 
 void uhi_aoa_uninstall(uhc_device_t *dev)
@@ -369,15 +380,20 @@ void uhi_aoa_mode_enable_complete(
 	(void)payload_trans;
 	if (status == UHD_TRANS_NOERROR) {
 		uhi_aoa_enable_stage = AOA_ENABLE_STAGE_SUCCESSFUL;
-#if AOA_V2_SUPPORT
-		uhi_aoa_dev_sel->protocol = uhi_aoa_protocol;
-#endif
-
-		/* Notify AoA change */
-		UHI_AOA_CHANGE(uhi_aoa_dev_sel->dev, true);
+		uhi_aoa_enable_success();
 	} else {
 		uhi_aoa_enable_stage = AOA_ENABLE_STAGE_FAILED;
 	}
+}
+
+static void uhi_aoa_enable_success(void)
+{
+#if AOA_V2_SUPPORT
+	uhi_aoa_dev_sel->protocol = uhi_aoa_protocol;
+#endif
+
+	/* Notify AoA change */
+	UHI_AOA_CHANGE(uhi_aoa_dev_sel->dev, true);
 }
 
 void uhi_aoa_send_info_string(uint8_t pindex, char *pinfo,
@@ -406,7 +422,7 @@ bool uhi_aoa_write(uint8_t *payload, uint16_t payload_size,
 		uhd_callback_trans_t callback_end)
 {
 	return uhd_ep_run(uhi_aoa_dev_sel->dev->address, uhi_aoa_dev.ep_out,
-			false, payload, payload_size, 100, callback_end);
+			!payload_size, payload, payload_size, 100, callback_end);
 }
 
 

@@ -75,7 +75,7 @@ uint16_t energy_incrementor ;	/*!< energy incrementor for various heart rate val
 uint16_t heart_rate_value = HEART_RATE_MIN_NORM; /*!< to count the heart rate value*/
 uint8_t hr_min_value;/*!<the minimum heart rate value*/
 uint8_t hr_max_value;/*!<the maximum heart rate value*/
-uint8_t inc_changer	= 1;/*!< increment operator to change heart rate */\
+uint8_t inc_changer	= HEART_RATE_INCREMENT_VALUE;/*!< increment operator to change heart rate */\
 uint8_t notification_flag = 0; /*!< flag to show notification*/
 uint8_t prev_activity = DEFAULT_ACTIVITY;/*!< previous activity */
 uint8_t second_counter = 0;	/*!< second_counter to count the time*/
@@ -112,6 +112,8 @@ at_ble_status_t ble_heart_rate_start_advertise(void)
 		DBG_LOG("Failed to set adv data");
 		return AT_BLE_FAILURE;
 	}
+	
+	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
 	
 	/* Start of advertisement */
 	if (at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL,

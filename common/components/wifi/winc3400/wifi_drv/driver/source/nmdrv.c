@@ -339,6 +339,9 @@ sint8 nm_drv_init_start(void * arg)
 	return ret;
 ERR2:
 	nm_bus_iface_deinit();
+#ifdef CONF_WINC_USE_SPI
+	nm_spi_deinit();
+#endif
 ERR1:	
 	return ret;
 }
@@ -347,8 +350,7 @@ ERR1:
 *	@fn		nm_drv_init
 *	@brief	Initialize NMC1000 driver
 *	@return	M2M_SUCCESS in case of success and Negative error code in case of failure
-*   @param [in]	arg
-*				Generic argument
+*   @param [in]	arg - Generic argument passed on to nm_drv_init_start
 *	@author	M. Abdelmawla
 *	@date	15 July 2012
 *	@version	1.0

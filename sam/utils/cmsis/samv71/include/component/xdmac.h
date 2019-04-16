@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -56,7 +56,7 @@
 typedef struct {
   __O  uint32_t XDMAC_CIE;     /**< \brief (XdmacChid Offset: 0x0) Channel Interrupt Enable Register */
   __O  uint32_t XDMAC_CID;     /**< \brief (XdmacChid Offset: 0x4) Channel Interrupt Disable Register */
-  __O  uint32_t XDMAC_CIM;     /**< \brief (XdmacChid Offset: 0x8) Channel Interrupt Mask Register */
+  __I  uint32_t XDMAC_CIM;     /**< \brief (XdmacChid Offset: 0x8) Channel Interrupt Mask Register */
   __I  uint32_t XDMAC_CIS;     /**< \brief (XdmacChid Offset: 0xC) Channel Interrupt Status Register */
   __IO uint32_t XDMAC_CSA;     /**< \brief (XdmacChid Offset: 0x10) Channel Source Address Register */
   __IO uint32_t XDMAC_CDA;     /**< \brief (XdmacChid Offset: 0x14) Channel Destination Address Register */
@@ -73,8 +73,8 @@ typedef struct {
 /** \brief Xdmac hardware registers */
 #define XDMACCHID_NUMBER 24
 typedef struct {
-  __IO uint32_t  XDMAC_GTYPE;                  /**< \brief (Xdmac Offset: 0x00) Global Type Register */
-  __I  uint32_t  XDMAC_GCFG;                   /**< \brief (Xdmac Offset: 0x04) Global Configuration Register */
+  __I  uint32_t  XDMAC_GTYPE;                  /**< \brief (Xdmac Offset: 0x00) Global Type Register */
+  __IO uint32_t  XDMAC_GCFG;                   /**< \brief (Xdmac Offset: 0x04) Global Configuration Register */
   __IO uint32_t  XDMAC_GWAC;                   /**< \brief (Xdmac Offset: 0x08) Global Weighted Arbiter Configuration Register */
   __O  uint32_t  XDMAC_GIE;                    /**< \brief (Xdmac Offset: 0x0C) Global Interrupt Enable Register */
   __O  uint32_t  XDMAC_GID;                    /**< \brief (Xdmac Offset: 0x10) Global Interrupt Disable Register */
@@ -92,6 +92,8 @@ typedef struct {
   __O  uint32_t  XDMAC_GSWF;                   /**< \brief (Xdmac Offset: 0x40) Global Channel Software Flush Request Register */
   __I  uint32_t  Reserved1[3];
        XdmacChid XDMAC_CHID[XDMACCHID_NUMBER]; /**< \brief (Xdmac Offset: 0x50) chid = 0 .. 23 */
+  __I  uint32_t  Reserved2[619];
+  __IO uint32_t  XDMAC_VERSION;                /**< \brief (Xdmac Offset: 0xFFC) XDMAC Version Register */
 } Xdmac;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- XDMAC_GTYPE : (XDMAC Offset: 0x00) Global Type Register -------- */
@@ -601,8 +603,8 @@ typedef struct {
 #define   XDMAC_CC_DAM_UBS_AM (0x2u << 18) /**< \brief (XDMAC_CC) The microblock stride is added at the microblock boundary. */
 #define   XDMAC_CC_DAM_UBS_DS_AM (0x3u << 18) /**< \brief (XDMAC_CC) The microblock stride is added at the microblock boundary, the data stride is added at the data boundary. */
 #define XDMAC_CC_INITD (0x1u << 21) /**< \brief (XDMAC_CC) Channel Initialization Terminated (this bit is read-only) */
-#define   XDMAC_CC_INITD_TERMINATED (0x0u << 21) /**< \brief (XDMAC_CC) Channel initialization is in progress. */
-#define   XDMAC_CC_INITD_IN_PROGRESS (0x1u << 21) /**< \brief (XDMAC_CC) Channel initialization is completed. */
+#define   XDMAC_CC_INITD_IN_PROGRESS (0x0u << 21) /**< \brief (XDMAC_CC) Channel initialization is in progress. */
+#define   XDMAC_CC_INITD_TERMINATED (0x1u << 21) /**< \brief (XDMAC_CC) Channel initialization is completed. */
 #define XDMAC_CC_RDIP (0x1u << 22) /**< \brief (XDMAC_CC) Read in Progress (this bit is read-only) */
 #define   XDMAC_CC_RDIP_DONE (0x0u << 22) /**< \brief (XDMAC_CC) No Active read transaction on the bus. */
 #define   XDMAC_CC_RDIP_IN_PROGRESS (0x1u << 22) /**< \brief (XDMAC_CC) A read transaction is in progress. */
@@ -610,7 +612,7 @@ typedef struct {
 #define   XDMAC_CC_WRIP_DONE (0x0u << 23) /**< \brief (XDMAC_CC) No Active write transaction on the bus. */
 #define   XDMAC_CC_WRIP_IN_PROGRESS (0x1u << 23) /**< \brief (XDMAC_CC) A Write transaction is in progress. */
 #define XDMAC_CC_PERID_Pos 24
-#define XDMAC_CC_PERID_Msk (0x7fu << XDMAC_CC_PERID_Pos) /**< \brief (XDMAC_CC) Channel x Peripheral Identifier */
+#define XDMAC_CC_PERID_Msk (0x7fu << XDMAC_CC_PERID_Pos) /**< \brief (XDMAC_CC) Channel x Peripheral Hardware Request Line Identifier */
 #define XDMAC_CC_PERID(value) ((XDMAC_CC_PERID_Msk & ((value) << XDMAC_CC_PERID_Pos)))
 /* -------- XDMAC_CDS_MSP : (XDMAC Offset: N/A) Channel Data Stride Memory Set Pattern -------- */
 #define XDMAC_CDS_MSP_SDS_MSP_Pos 0
@@ -627,6 +629,13 @@ typedef struct {
 #define XDMAC_CDUS_DUBS_Pos 0
 #define XDMAC_CDUS_DUBS_Msk (0xffffffu << XDMAC_CDUS_DUBS_Pos) /**< \brief (XDMAC_CDUS) Channel x Destination Microblock Stride */
 #define XDMAC_CDUS_DUBS(value) ((XDMAC_CDUS_DUBS_Msk & ((value) << XDMAC_CDUS_DUBS_Pos)))
+/* -------- XDMAC_VERSION : (XDMAC Offset: 0xFFC) XDMAC Version Register -------- */
+#define XDMAC_VERSION_VERSION_Pos 0
+#define XDMAC_VERSION_VERSION_Msk (0xfffu << XDMAC_VERSION_VERSION_Pos) /**< \brief (XDMAC_VERSION) Version of the Hardware Module */
+#define XDMAC_VERSION_VERSION(value) ((XDMAC_VERSION_VERSION_Msk & ((value) << XDMAC_VERSION_VERSION_Pos)))
+#define XDMAC_VERSION_MFN_Pos 16
+#define XDMAC_VERSION_MFN_Msk (0x7u << XDMAC_VERSION_MFN_Pos) /**< \brief (XDMAC_VERSION) Metal Fix Number */
+#define XDMAC_VERSION_MFN(value) ((XDMAC_VERSION_MFN_Msk & ((value) << XDMAC_VERSION_MFN_Pos)))
 
 /*@}*/
 

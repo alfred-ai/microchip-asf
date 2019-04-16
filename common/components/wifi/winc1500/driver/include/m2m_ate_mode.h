@@ -50,6 +50,7 @@ INCLUDES
 #include "common/include/nm_common.h"
 #include "driver/include/m2m_types.h"
 
+
 /** \defgroup m2m_ate ATE
 */
 /**@defgroup  ATEDefine Defines
@@ -70,7 +71,7 @@ Maximum number of all rates (b,g and n)
 /*!< Minimum number of length for each frame
  */ 
 #define M2M_ATE_SUCCESS					(M2M_SUCCESS)
-/*!< No Error and operation has been completed successfully.
+/*!< No Error and operation completed successfully.
 */
 #define M2M_ATE_ERR_VALIDATE			(M2M_ERR_FAIL)	
 /*!< Error in parameters passed to functions.

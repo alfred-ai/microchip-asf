@@ -3,7 +3,7 @@
  *
  * \brief Serial Peripheral Interface (SPI) driver for SAM.
  *
- * Copyright (c) 2011-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -396,7 +396,7 @@ int16_t spi_set_baudrate_div(Spi *p_spi, uint32_t ul_pcs_ch,
 		uint8_t uc_baudrate_divider)
 {
     /* Programming the SCBR field to 0 is forbidden */
-    if (!uc_baudrate_divider)
+	if (!uc_baudrate_divider)
         return -1;
 
 	p_spi->SPI_CSR[ul_pcs_ch] &= (~SPI_CSR_SCBR_Msk);

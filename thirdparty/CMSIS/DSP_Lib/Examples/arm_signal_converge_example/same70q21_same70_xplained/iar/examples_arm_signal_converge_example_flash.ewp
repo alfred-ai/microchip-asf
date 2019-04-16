@@ -1989,7 +1989,7 @@
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/rtt.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/uart2.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/tc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/aes.h</name>
@@ -2010,6 +2010,9 @@
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/uart1.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/pioc.h</name>
 							</file>
 							<file>
@@ -2025,7 +2028,7 @@
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/usart1.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/tc1.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/uart2.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/pioe.h</name>
@@ -2044,6 +2047,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/pwm0.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/trng.h</name>
@@ -2125,6 +2131,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/component/tc.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/component/dacc.h</name>

@@ -44,7 +44,11 @@
 #include "common/include/nm_common.h"
 #include "extint.h"
 #include "port.h"
+#ifdef TICK_IF
+#include "tick_if.h"
+#else
 #include "delay.h"
+#endif
 #include "system_interrupt.h"
 #include "conf_winc.h"
 
@@ -87,6 +91,9 @@ sint8 nm_bsp_init(void)
 
 	/* Initialize chip IOs. */
 	init_chip_pins();
+#ifndef CONF_WINC_USE_SPI
+	nm_bsp_reset();
+#endif
 
     /* Make sure a 1ms Systick is configured. */
     if (!(SysTick->CTRL & SysTick_CTRL_ENABLE_Msk && SysTick->CTRL & SysTick_CTRL_TICKINT_Msk)) {

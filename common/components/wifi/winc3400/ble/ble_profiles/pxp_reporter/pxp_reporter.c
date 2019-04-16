@@ -215,6 +215,8 @@ at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect)
 {
 	linkloss_cb(linkloss_current_alert_level);
 	
+	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
+	
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	APP_PXP_FAST_ADV, APP_PXP_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS)
 	{
@@ -266,6 +268,8 @@ void pxp_reporter_adv(void)
 		DBG_LOG("Failed to set adv data");
 		#endif
 	}
+	
+	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
 	
 	/* Start of advertisement */
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY, APP_PXP_FAST_ADV, APP_PXP_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS)

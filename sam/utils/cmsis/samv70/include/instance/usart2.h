@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -58,6 +58,9 @@
   #define REG_USART2_BRGR                      (0x4002C020U) /**< \brief (USART2) Baud Rate Generator Register */
   #define REG_USART2_RTOR                      (0x4002C024U) /**< \brief (USART2) Receiver Time-out Register */
   #define REG_USART2_TTGR                      (0x4002C028U) /**< \brief (USART2) Transmitter Timeguard Register */
+  #define REG_USART2_FIDI                      (0x4002C040U) /**< \brief (USART2) FI DI Ratio Register */
+  #define REG_USART2_NER                       (0x4002C044U) /**< \brief (USART2) Number of Errors Register */
+  #define REG_USART2_IF                        (0x4002C04CU) /**< \brief (USART2) IrDA Filter Register */
   #define REG_USART2_MAN                       (0x4002C050U) /**< \brief (USART2) Manchester Configuration Register */
   #define REG_USART2_LINMR                     (0x4002C054U) /**< \brief (USART2) LIN Mode Register */
   #define REG_USART2_LINIR                     (0x4002C058U) /**< \brief (USART2) LIN Identifier Register */
@@ -88,6 +91,9 @@
   #define REG_USART2_BRGR     (*(__IO uint32_t*)0x4002C020U) /**< \brief (USART2) Baud Rate Generator Register */
   #define REG_USART2_RTOR     (*(__IO uint32_t*)0x4002C024U) /**< \brief (USART2) Receiver Time-out Register */
   #define REG_USART2_TTGR     (*(__IO uint32_t*)0x4002C028U) /**< \brief (USART2) Transmitter Timeguard Register */
+  #define REG_USART2_FIDI     (*(__IO uint32_t*)0x4002C040U) /**< \brief (USART2) FI DI Ratio Register */
+  #define REG_USART2_NER      (*(__I  uint32_t*)0x4002C044U) /**< \brief (USART2) Number of Errors Register */
+  #define REG_USART2_IF       (*(__IO uint32_t*)0x4002C04CU) /**< \brief (USART2) IrDA Filter Register */
   #define REG_USART2_MAN      (*(__IO uint32_t*)0x4002C050U) /**< \brief (USART2) Manchester Configuration Register */
   #define REG_USART2_LINMR    (*(__IO uint32_t*)0x4002C054U) /**< \brief (USART2) LIN Mode Register */
   #define REG_USART2_LINIR    (*(__IO uint32_t*)0x4002C058U) /**< \brief (USART2) LIN Identifier Register */

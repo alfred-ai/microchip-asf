@@ -3,7 +3,7 @@
  
   \brief Includes datatypes and signatures for event_handler
  
-  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Copyright (c) 2016-2017, Atmel Corporation. All rights reserved.
   Released under NDA
   Licensed under Atmel's Limited License Agreement.
  

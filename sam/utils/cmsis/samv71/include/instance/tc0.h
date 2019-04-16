@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -94,6 +94,7 @@
   #define REG_TC0_QISR                   (0x4000C0D4U) /**< \brief (TC0) QDEC Interrupt Status Register */
   #define REG_TC0_FMR                    (0x4000C0D8U) /**< \brief (TC0) Fault Mode Register */
   #define REG_TC0_WPMR                   (0x4000C0E4U) /**< \brief (TC0) Write Protection Mode Register */
+  #define REG_TC0_VER                    (0x4000C0FCU) /**< \brief (TC0) Version Register */
 #else
   #define REG_TC0_CCR0  (*(__O  uint32_t*)0x4000C000U) /**< \brief (TC0) Channel Control Register (channel = 0) */
   #define REG_TC0_CMR0  (*(__IO uint32_t*)0x4000C004U) /**< \brief (TC0) Channel Mode Register (channel = 0) */
@@ -142,6 +143,7 @@
   #define REG_TC0_QISR  (*(__I  uint32_t*)0x4000C0D4U) /**< \brief (TC0) QDEC Interrupt Status Register */
   #define REG_TC0_FMR   (*(__IO uint32_t*)0x4000C0D8U) /**< \brief (TC0) Fault Mode Register */
   #define REG_TC0_WPMR  (*(__IO uint32_t*)0x4000C0E4U) /**< \brief (TC0) Write Protection Mode Register */
+  #define REG_TC0_VER   (*(__I  uint32_t*)0x4000C0FCU) /**< \brief (TC0) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_TC0_INSTANCE_ */

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -94,6 +94,7 @@
   #define REG_TC2_QISR                   (0x400140D4U) /**< \brief (TC2) QDEC Interrupt Status Register */
   #define REG_TC2_FMR                    (0x400140D8U) /**< \brief (TC2) Fault Mode Register */
   #define REG_TC2_WPMR                   (0x400140E4U) /**< \brief (TC2) Write Protection Mode Register */
+  #define REG_TC2_VER                    (0x400140FCU) /**< \brief (TC2) Version Register */
 #else
   #define REG_TC2_CCR0  (*(__O  uint32_t*)0x40014000U) /**< \brief (TC2) Channel Control Register (channel = 0) */
   #define REG_TC2_CMR0  (*(__IO uint32_t*)0x40014004U) /**< \brief (TC2) Channel Mode Register (channel = 0) */
@@ -142,6 +143,7 @@
   #define REG_TC2_QISR  (*(__I  uint32_t*)0x400140D4U) /**< \brief (TC2) QDEC Interrupt Status Register */
   #define REG_TC2_FMR   (*(__IO uint32_t*)0x400140D8U) /**< \brief (TC2) Fault Mode Register */
   #define REG_TC2_WPMR  (*(__IO uint32_t*)0x400140E4U) /**< \brief (TC2) Write Protection Mode Register */
+  #define REG_TC2_VER   (*(__I  uint32_t*)0x400140FCU) /**< \brief (TC2) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMS70_TC2_INSTANCE_ */

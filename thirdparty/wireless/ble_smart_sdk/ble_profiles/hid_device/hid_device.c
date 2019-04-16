@@ -3,7 +3,7 @@
  *
  * \brief HID Device Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -60,39 +60,12 @@
 #include "hid.h"
 #include "device_info.h"
 
-static const ble_event_callback_t hid_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	hid_prf_disconnect_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t hid_gap_handle = {
+	.disconnected = hid_prf_disconnect_event_handler
 };
 
-static const ble_event_callback_t hid_gatt_server_handle[] = {
-	NULL,
-	NULL,
-	hid_prf_char_changed_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t hid_gatt_server_handle = {
+	.characteristic_changed = hid_prf_char_changed_handler
 };
 
 /* Notification callback function pointer */
@@ -155,10 +128,10 @@ void hid_prf_init(void *param)
 	hid_prf_dev_adv();
 	
 	/* Callback registering for BLE-GAP Role */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, hid_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, &hid_gap_handle);
 	
 	/* Callback registering for BLE-GATT-Server Role */
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, hid_gatt_server_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, &hid_gatt_server_handle);
 	
 	UNUSED(param);
 }
@@ -214,7 +187,7 @@ at_ble_status_t hid_prf_disconnect_event_handler(void *params)
 	}else{
 		DBG_LOG("Device Started Advertisement");
 	}
-
+	ALL_UNUSED(&params);
 	return AT_BLE_SUCCESS;
 }
 

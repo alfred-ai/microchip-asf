@@ -3,7 +3,7 @@
 *
 * \brief ALert Notification Service
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -52,31 +52,14 @@
 #include "alert_notification.h"
 #include "ble_manager.h"
 
-char bitmask0[8][15];
-char bitmask1[3][30];
+const char *bitmask0[] = {"Simple Alert","Email","News","Call","Missed Call","Sms/Mms",
+							"Voice Mail","Schedule"};
+const char *bitmask1[] = {"High Prioritized Alert","Instant Message",
+							"Reserved For feature"};
 
 /***********************************************************************************
  *									Implementation	                               *
  **********************************************************************************/
-
-void anp_alert_init(void)
-{
-	memset(bitmask0, 0, sizeof(char) * 8 * 15);
-	memset(bitmask1, 0, sizeof(char) * 3 * 30);
-
-	memcpy(bitmask0[0], "Simple Alert", strlen("Simple Alert"));
-	memcpy(bitmask0[1], "Email", strlen("Email"));
-	memcpy(bitmask0[2], "News", strlen("News"));
-	memcpy(bitmask0[3], "Call", strlen("Call"));
-	memcpy(bitmask0[4], "Missed Call", strlen("Missed Call"));
-	memcpy(bitmask0[5], "Sms/Mms", strlen("Sms/Mms"));
-	memcpy(bitmask0[6], "Voice Mail", strlen("Voice Mail"));
-	memcpy(bitmask0[7], "Schedule", strlen("Schedule"));
-
-	memcpy(bitmask1[0], "High Prioritized Alert", strlen("High Prioritized Alert"));
-	memcpy(bitmask1[1], "Instant Message", strlen("Instant Message"));
-	memcpy(bitmask1[2], "Reserved For feature", strlen("Reserved For feature"));
-}
 
 /**
  * @brief anp_alert_noti invoked by the profile for enabling or disabling notifications
@@ -87,7 +70,7 @@ void anp_alert_init(void)
  */
 at_ble_status_t anp_alert_noti(at_ble_handle_t conn_handle,at_ble_handle_t desc_handle, bool noti)
 {
-	uint8_t desc_value[2] = {0, };
+	uint8_t desc_value[2] ;
 	
 	if(desc_handle == ANP_INVALID_CHAR_HANDLE) {
 		return (AT_BLE_ATT_INVALID_HANDLE);

@@ -546,7 +546,7 @@ ERR:
 sint8 spi_flash_write(uint8* pu8Buf, uint32 u32Offset, uint32 u32Sz)
 {
 #ifdef PROFILING
-	uint32 t1 = 0;
+	unsigned long long t1 = 0;
 	uint32 percent =0;
 	uint32 tpercent =0;
 #endif
@@ -558,7 +558,7 @@ sint8 spi_flash_write(uint8* pu8Buf, uint32 u32Offset, uint32 u32Sz)
 	u32off = u32Offset % u32Blksz;
 #ifdef PROFILING
 	tpercent = (u32Sz/u32Blksz)+((u32Sz%u32Blksz)>0);
-	t1 = GetTickCount();
+	t1 = GetTickCount64();
 	M2M_PRINT(">Start programming...\r\n");
 #endif
 	if(u32Sz<=0)
@@ -602,7 +602,7 @@ sint8 spi_flash_write(uint8* pu8Buf, uint32 u32Offset, uint32 u32Sz)
 EXIT:
 #ifdef PROFILING
 	M2M_PRINT("\rDone\t\t\t\t\t\t");
-	M2M_PRINT("\n#Programming time = %f sec\n\r",(GetTickCount() - t1)/1000.0);
+	M2M_PRINT("\n#Programming time = %f sec\n\r",(GetTickCount64() - t1)/1000.0);
 #endif
 ERR:
 	return ret;
@@ -626,15 +626,15 @@ sint8 spi_flash_erase(uint32 u32Offset, uint32 u32Sz)
 	sint8 ret = M2M_SUCCESS;
 	uint8  tmp = 0;
 #ifdef PROFILING
-	uint32 t;
-	t = GetTickCount();
+	unsigned long long t;
+	t = GetTickCount64();
 #endif
-	M2M_PRINT("\r\n>Start erasing...\r\n");
+	M2M_DBG("\r\n>Start erasing...\r\n");
 	for(i = u32Offset; i < (u32Sz +u32Offset); i += (16*FLASH_PAGE_SZ))
 	{
 		ret += spi_flash_write_enable();
 		ret += spi_flash_read_status_reg(&tmp);
-		ret += spi_flash_sector_erase(i + 10);
+		ret += spi_flash_sector_erase(i);
 		ret += spi_flash_read_status_reg(&tmp);
 		do
 		{
@@ -643,9 +643,9 @@ sint8 spi_flash_erase(uint32 u32Offset, uint32 u32Sz)
 		}while(tmp & 0x01);
 		
 	}
-	M2M_PRINT("Done\r\n");
+	M2M_DBG("Done\r\n");
 #ifdef PROFILING
-	M2M_PRINT("#Erase time = %f sec\n", (GetTickCount()-t)/1000.0);
+	M2M_PRINT("#Erase time = %f sec\n", (GetTickCount64()-t)/1000.0);
 #endif
 ERR:
 	return ret;

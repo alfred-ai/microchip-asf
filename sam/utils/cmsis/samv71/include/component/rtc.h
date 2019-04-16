@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,18 +54,20 @@
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 /** \brief Rtc hardware registers */
 typedef struct {
-  __IO uint32_t RTC_CR;     /**< \brief (Rtc Offset: 0x00) Control Register */
-  __IO uint32_t RTC_MR;     /**< \brief (Rtc Offset: 0x04) Mode Register */
-  __IO uint32_t RTC_TIMR;   /**< \brief (Rtc Offset: 0x08) Time Register */
-  __IO uint32_t RTC_CALR;   /**< \brief (Rtc Offset: 0x0C) Calendar Register */
-  __IO uint32_t RTC_TIMALR; /**< \brief (Rtc Offset: 0x10) Time Alarm Register */
-  __IO uint32_t RTC_CALALR; /**< \brief (Rtc Offset: 0x14) Calendar Alarm Register */
-  __I  uint32_t RTC_SR;     /**< \brief (Rtc Offset: 0x18) Status Register */
-  __O  uint32_t RTC_SCCR;   /**< \brief (Rtc Offset: 0x1C) Status Clear Command Register */
-  __O  uint32_t RTC_IER;    /**< \brief (Rtc Offset: 0x20) Interrupt Enable Register */
-  __O  uint32_t RTC_IDR;    /**< \brief (Rtc Offset: 0x24) Interrupt Disable Register */
-  __I  uint32_t RTC_IMR;    /**< \brief (Rtc Offset: 0x28) Interrupt Mask Register */
-  __I  uint32_t RTC_VER;    /**< \brief (Rtc Offset: 0x2C) Valid Entry Register */
+  __IO uint32_t RTC_CR;        /**< \brief (Rtc Offset: 0x00) Control Register */
+  __IO uint32_t RTC_MR;        /**< \brief (Rtc Offset: 0x04) Mode Register */
+  __IO uint32_t RTC_TIMR;      /**< \brief (Rtc Offset: 0x08) Time Register */
+  __IO uint32_t RTC_CALR;      /**< \brief (Rtc Offset: 0x0C) Calendar Register */
+  __IO uint32_t RTC_TIMALR;    /**< \brief (Rtc Offset: 0x10) Time Alarm Register */
+  __IO uint32_t RTC_CALALR;    /**< \brief (Rtc Offset: 0x14) Calendar Alarm Register */
+  __I  uint32_t RTC_SR;        /**< \brief (Rtc Offset: 0x18) Status Register */
+  __O  uint32_t RTC_SCCR;      /**< \brief (Rtc Offset: 0x1C) Status Clear Command Register */
+  __O  uint32_t RTC_IER;       /**< \brief (Rtc Offset: 0x20) Interrupt Enable Register */
+  __O  uint32_t RTC_IDR;       /**< \brief (Rtc Offset: 0x24) Interrupt Disable Register */
+  __I  uint32_t RTC_IMR;       /**< \brief (Rtc Offset: 0x28) Interrupt Mask Register */
+  __I  uint32_t RTC_VER;       /**< \brief (Rtc Offset: 0x2C) Valid Entry Register */
+  __I  uint32_t Reserved1[51];
+  __I  uint32_t RTC_VERSION;   /**< \brief (Rtc Offset: 0xFC) Version Register */
 } Rtc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- RTC_CR : (RTC Offset: 0x00) Control Register -------- */
@@ -234,6 +236,11 @@ typedef struct {
 #define RTC_VER_NVCAL (0x1u << 1) /**< \brief (RTC_VER) Non-valid Calendar */
 #define RTC_VER_NVTIMALR (0x1u << 2) /**< \brief (RTC_VER) Non-valid Time Alarm */
 #define RTC_VER_NVCALALR (0x1u << 3) /**< \brief (RTC_VER) Non-valid Calendar Alarm */
+/* -------- RTC_VERSION : (RTC Offset: 0xFC) Version Register -------- */
+#define RTC_VERSION_VERSION_Pos 0
+#define RTC_VERSION_VERSION_Msk (0xfffu << RTC_VERSION_VERSION_Pos) /**< \brief (RTC_VERSION) Version of the Hardware Module */
+#define RTC_VERSION_MFN_Pos 16
+#define RTC_VERSION_MFN_Msk (0x7u << RTC_VERSION_MFN_Pos) /**< \brief (RTC_VERSION) Metal Fix Number */
 
 /*@}*/
 

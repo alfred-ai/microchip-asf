@@ -68,6 +68,7 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_hif.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ota.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_periph.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ssl.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_wifi.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmasic.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmbus.c \
@@ -203,6 +204,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BLE_DEVICE_ROLE=BLE_PERIPHERAL                  \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
+       -D CONF_PERIPH                                     \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D HEART_RATE_SERVICE                              \
        -D SPI_CALLBACK_MODE=true                          \

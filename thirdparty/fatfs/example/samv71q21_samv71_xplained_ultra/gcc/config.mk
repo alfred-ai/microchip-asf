@@ -169,7 +169,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM7=true                               \
        -D BOARD=SAMV71_XPLAINED_ULTRA                     \
        -D VIRTUAL_MEMORY_ENABLE                           \
-       -D __SAMV71Q21__                                   \
+       -D __SAMV71Q21B__                                  \
        -D printf=iprintf                                  \
        -D scanf=iscanf
 

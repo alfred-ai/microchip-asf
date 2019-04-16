@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -89,6 +89,8 @@ typedef struct {
   __I  uint32_t Reserved6[2];
   __IO uint32_t AFEC_WPMR;     /**< \brief (Afec Offset: 0xE4) AFEC Write Protection Mode Register */
   __I  uint32_t AFEC_WPSR;     /**< \brief (Afec Offset: 0xE8) AFEC Write Protection Status Register */
+  __I  uint32_t Reserved7[4];
+  __I  uint32_t AFEC_VERSION;  /**< \brief (Afec Offset: 0xFC) AFEC Version Register */
 } Afec;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- AFEC_CR : (AFEC Offset: 0x00) AFEC Control Register -------- */
@@ -491,6 +493,11 @@ typedef struct {
 #define AFEC_WPSR_WPVS (0x1u << 0) /**< \brief (AFEC_WPSR) Write Protect Violation Status */
 #define AFEC_WPSR_WPVSRC_Pos 8
 #define AFEC_WPSR_WPVSRC_Msk (0xffffu << AFEC_WPSR_WPVSRC_Pos) /**< \brief (AFEC_WPSR) Write Protect Violation Source */
+/* -------- AFEC_VERSION : (AFEC Offset: 0xFC) AFEC Version Register -------- */
+#define AFEC_VERSION_VERSION_Pos 0
+#define AFEC_VERSION_VERSION_Msk (0xfffu << AFEC_VERSION_VERSION_Pos) /**< \brief (AFEC_VERSION) Version of the Hardware Module */
+#define AFEC_VERSION_MFN_Pos 16
+#define AFEC_VERSION_MFN_Msk (0x7u << AFEC_VERSION_MFN_Pos) /**< \brief (AFEC_VERSION) Metal Fix Number */
 
 /*@}*/
 

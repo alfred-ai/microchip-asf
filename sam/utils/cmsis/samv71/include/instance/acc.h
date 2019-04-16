@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -56,6 +56,7 @@
   #define REG_ACC_ACR                   (0x40044094U) /**< \brief (ACC) Analog Control Register */
   #define REG_ACC_WPMR                  (0x400440E4U) /**< \brief (ACC) Write Protection Mode Register */
   #define REG_ACC_WPSR                  (0x400440E8U) /**< \brief (ACC) Write Protection Status Register */
+  #define REG_ACC_VER                   (0x400440FCU) /**< \brief (ACC) Version Register */
 #else
   #define REG_ACC_CR   (*(__O  uint32_t*)0x40044000U) /**< \brief (ACC) Control Register */
   #define REG_ACC_MR   (*(__IO uint32_t*)0x40044004U) /**< \brief (ACC) Mode Register */
@@ -66,6 +67,7 @@
   #define REG_ACC_ACR  (*(__IO uint32_t*)0x40044094U) /**< \brief (ACC) Analog Control Register */
   #define REG_ACC_WPMR (*(__IO uint32_t*)0x400440E4U) /**< \brief (ACC) Write Protection Mode Register */
   #define REG_ACC_WPSR (*(__I  uint32_t*)0x400440E8U) /**< \brief (ACC) Write Protection Status Register */
+  #define REG_ACC_VER  (*(__I  uint32_t*)0x400440FCU) /**< \brief (ACC) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_ACC_INSTANCE_ */

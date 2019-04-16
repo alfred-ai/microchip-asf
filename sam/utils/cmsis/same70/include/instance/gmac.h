@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,6 +93,7 @@
   #define REG_GMAC_EFRSH                      (0x400500ECU) /**< \brief (GMAC) PTP Event Frame Received Seconds High Register */
   #define REG_GMAC_PEFTSH                     (0x400500F0U) /**< \brief (GMAC) PTP Peer Event Frame Transmitted Seconds High Register */
   #define REG_GMAC_PEFRSH                     (0x400500F4U) /**< \brief (GMAC) PTP Peer Event Frame Received Seconds High Register */
+  #define REG_GMAC_MID                        (0x400500FCU) /**< \brief (GMAC) Module ID Register */
   #define REG_GMAC_OTLO                       (0x40050100U) /**< \brief (GMAC) Octets Transmitted Low Register */
   #define REG_GMAC_OTHI                       (0x40050104U) /**< \brief (GMAC) Octets Transmitted High Register */
   #define REG_GMAC_FT                         (0x40050108U) /**< \brief (GMAC) Frames Transmitted Register */
@@ -112,7 +113,7 @@
   #define REG_GMAC_EC                         (0x40050140U) /**< \brief (GMAC) Excessive Collisions Register */
   #define REG_GMAC_LC                         (0x40050144U) /**< \brief (GMAC) Late Collisions Register */
   #define REG_GMAC_DTF                        (0x40050148U) /**< \brief (GMAC) Deferred Transmission Frames Register */
-  #define REG_GMAC_CSE                        (0x4005014CU) /**< \brief (GMAC) Carrier Sense Errors Register Register */
+  #define REG_GMAC_CSE                        (0x4005014CU) /**< \brief (GMAC) Carrier Sense Errors Register */
   #define REG_GMAC_ORLO                       (0x40050150U) /**< \brief (GMAC) Octets Received Low Received Register */
   #define REG_GMAC_ORHI                       (0x40050154U) /**< \brief (GMAC) Octets Received High Received Register */
   #define REG_GMAC_FR                         (0x40050158U) /**< \brief (GMAC) Frames Received Register */
@@ -260,6 +261,7 @@
   #define REG_GMAC_EFRSH     (*(__I  uint32_t*)0x400500ECU) /**< \brief (GMAC) PTP Event Frame Received Seconds High Register */
   #define REG_GMAC_PEFTSH    (*(__I  uint32_t*)0x400500F0U) /**< \brief (GMAC) PTP Peer Event Frame Transmitted Seconds High Register */
   #define REG_GMAC_PEFRSH    (*(__I  uint32_t*)0x400500F4U) /**< \brief (GMAC) PTP Peer Event Frame Received Seconds High Register */
+  #define REG_GMAC_MID       (*(__I  uint32_t*)0x400500FCU) /**< \brief (GMAC) Module ID Register */
   #define REG_GMAC_OTLO      (*(__I  uint32_t*)0x40050100U) /**< \brief (GMAC) Octets Transmitted Low Register */
   #define REG_GMAC_OTHI      (*(__I  uint32_t*)0x40050104U) /**< \brief (GMAC) Octets Transmitted High Register */
   #define REG_GMAC_FT        (*(__I  uint32_t*)0x40050108U) /**< \brief (GMAC) Frames Transmitted Register */
@@ -279,7 +281,7 @@
   #define REG_GMAC_EC        (*(__I  uint32_t*)0x40050140U) /**< \brief (GMAC) Excessive Collisions Register */
   #define REG_GMAC_LC        (*(__I  uint32_t*)0x40050144U) /**< \brief (GMAC) Late Collisions Register */
   #define REG_GMAC_DTF       (*(__I  uint32_t*)0x40050148U) /**< \brief (GMAC) Deferred Transmission Frames Register */
-  #define REG_GMAC_CSE       (*(__I  uint32_t*)0x4005014CU) /**< \brief (GMAC) Carrier Sense Errors Register Register */
+  #define REG_GMAC_CSE       (*(__I  uint32_t*)0x4005014CU) /**< \brief (GMAC) Carrier Sense Errors Register */
   #define REG_GMAC_ORLO      (*(__I  uint32_t*)0x40050150U) /**< \brief (GMAC) Octets Received Low Received Register */
   #define REG_GMAC_ORHI      (*(__I  uint32_t*)0x40050154U) /**< \brief (GMAC) Octets Received High Received Register */
   #define REG_GMAC_FR        (*(__I  uint32_t*)0x40050158U) /**< \brief (GMAC) Frames Received Register */

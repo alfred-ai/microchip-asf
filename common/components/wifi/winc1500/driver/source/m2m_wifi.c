@@ -232,7 +232,7 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint32 u32Addr)
 		{
 			uint8 u8SetRxDone;
 			tstrM2mIpRsvdPkt strM2mRsvd;
-			if(hif_receive(u32Addr, &strM2mRsvd ,sizeof(tstrM2mIpRsvdPkt), 0) == M2M_SUCCESS)
+			if(hif_receive(u32Addr, (uint8 *)(&strM2mRsvd) ,sizeof(tstrM2mIpRsvdPkt), 0) == M2M_SUCCESS)
 			{
 				tstrM2mIpCtrlBuf  strM2mIpCtrlBuf;
 				uint16 u16Offset = strM2mRsvd.u16PktOffset;
@@ -465,7 +465,8 @@ sint8 m2m_wifi_init(tstrWifiInitParam * param)
 	gpfAppEthCb  	    = param->strEthInitParam.pfAppEthCb;
 	gau8ethRcvBuf       = param->strEthInitParam.au8ethRcvBuf;
 	gu16ethRcvBufSize	= param->strEthInitParam.u16ethRcvBufSize;
-	u8WifiMode = param->strEthInitParam.u8EthernetEnable;
+	if (param->strEthInitParam.u8EthernetEnable)		
+		u8WifiMode = M2M_WIFI_MODE_ETHERNET;
 #endif /* ETH_MODE */
 
 #ifdef CONF_MGMT
@@ -511,6 +512,11 @@ sint8  m2m_wifi_deinit(void * arg)
 	return M2M_SUCCESS;
 }
 
+
+void m2m_wifi_yield(void)
+{
+	hif_yield();
+}
 
 sint8 m2m_wifi_handle_events(void * arg)
 {
@@ -1360,6 +1366,33 @@ sint8 m2m_wifi_prng_get_random_bytes(uint8 * pu8PrngBuff,uint16 u16PrngSize)
 	}
 	return ret;
 }
+
+/*!
+@fn	\
+	 NMI_API sint8 m2m_wifi_conf_auto_rate(tstrConfAutoRate * pstrConfAutoRate)
+
+@brief
+	Allow the host MCU app to configure auto TX rate selection algorithm. The application can use this 
+	API to tweak the algorithm performance. Moreover, it allows the application to force a specific WLAN 
+	PHY rate for transmitted data packets to favor range vs. throughput needs.
+
+@param [in]	pstrConfAutoRate
+	The Auto rate configuration parameters as listed in tstrConfAutoRate.
+@sa
+	tstrConfAutoRate
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+
+NMI_API sint8 m2m_wifi_conf_auto_rate(tstrConfAutoRate * pstrConfAutoRate)
+{
+	sint8 s8ret = M2M_ERR_FAIL;
+	
+	s8ret = hif_send(M2M_REQ_GROUP_WIFI, M2M_WIFI_REQ_CONG_AUTO_RATE, (uint8 *)pstrConfAutoRate,sizeof(tstrConfAutoRate),NULL,0,0);
+
+	return s8ret;
+}
+
 #ifdef ETH_MODE
 /*!
 @fn	\

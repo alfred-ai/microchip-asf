@@ -3,7 +3,7 @@
  *
  * \brief MAIN configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,10 +49,6 @@ extern "C" {
 #define MAIN_WLAN_SSID               "DEMO_AP" /* < SSID */
 #define MAIN_WLAN_AUTH               M2M_WIFI_SEC_OPEN /* < Security manner */
 #define MAIN_WLAN_AP_CHANNEL         M2M_WIFI_CH_6 /* < AP Channel number */
-
-/** P2P mode Settings */
-#define MAIN_WLAN_DEVICE_NAME        "WINC1500_P2P" /* < P2P Device Name */
-#define MAIN_WLAN_P2P_CHANNEL        M2M_WIFI_CH_6 /* < P2P Channel number */
 
 #ifdef __cplusplus
 }

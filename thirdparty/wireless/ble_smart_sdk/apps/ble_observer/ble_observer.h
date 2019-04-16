@@ -1,12 +1,9 @@
-
-
-
 /**
 * \file
 *
 * \brief BLE Observer Application
 *
-* Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2014-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -66,5 +63,7 @@ at_ble_status_t ble_observer_scan_info_handler(void * param);
   * @return Status @refer at_ble_status_t
   */
 at_ble_status_t ble_observer_scan_data_handler(void *param);
+
+static at_ble_status_t ble_observer_platform_event(void *param);
 
 #endif /*__BLE_OBSERVER_H__*/

@@ -2137,6 +2137,9 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/hsmci.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/isi.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/pio.h</name>
 							</file>
 							<file>
@@ -2150,6 +2153,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/tc.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/usbhs.h</name>
@@ -2201,9 +2207,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/ssc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/isi.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/component/rtc.h</name>
@@ -2342,6 +2345,12 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/instance/tc0.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/instance/i2sc0.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/instance/i2sc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/same70/include/instance/twihs1.h</name>

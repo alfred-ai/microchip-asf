@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,16 +63,19 @@ typedef struct {
   __O  uint32_t SPI_IDR;       /**< \brief (Spi Offset: 0x18) Interrupt Disable Register */
   __I  uint32_t SPI_IMR;       /**< \brief (Spi Offset: 0x1C) Interrupt Mask Register */
   __I  uint32_t Reserved1[4];
-  __IO uint32_t SPI_CSR[4];    /**< \brief (Spi Offset: 0x30) Chip Select Register */
+  __IO uint32_t SPI_CSR[4];    /**< \brief (Spi Offset: 0x30) Chip Select Register (CS_number = 0) */
   __I  uint32_t Reserved2[41];
   __IO uint32_t SPI_WPMR;      /**< \brief (Spi Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t SPI_WPSR;      /**< \brief (Spi Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved3[4];
+  __I  uint32_t SPI_VERSION;   /**< \brief (Spi Offset: 0xFC) Version Register */
 } Spi;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- SPI_CR : (SPI Offset: 0x00) Control Register -------- */
 #define SPI_CR_SPIEN (0x1u << 0) /**< \brief (SPI_CR) SPI Enable */
 #define SPI_CR_SPIDIS (0x1u << 1) /**< \brief (SPI_CR) SPI Disable */
 #define SPI_CR_SWRST (0x1u << 7) /**< \brief (SPI_CR) SPI Software Reset */
+#define SPI_CR_REQCLR (0x1u << 12) /**< \brief (SPI_CR) Request to Clear the Comparison Trigger */
 #define SPI_CR_LASTXFER (0x1u << 24) /**< \brief (SPI_CR) Last Transfer */
 /* -------- SPI_MR : (SPI Offset: 0x04) Mode Register -------- */
 #define SPI_MR_MSTR (0x1u << 0) /**< \brief (SPI_MR) Master/Slave Mode */
@@ -133,7 +136,7 @@ typedef struct {
 #define SPI_IMR_NSSR (0x1u << 8) /**< \brief (SPI_IMR) NSS Rising Interrupt Mask */
 #define SPI_IMR_TXEMPTY (0x1u << 9) /**< \brief (SPI_IMR) Transmission Registers Empty Mask */
 #define SPI_IMR_UNDES (0x1u << 10) /**< \brief (SPI_IMR) Underrun Error Interrupt Mask */
-/* -------- SPI_CSR[4] : (SPI Offset: 0x30) Chip Select Register -------- */
+/* -------- SPI_CSR[4] : (SPI Offset: 0x30) Chip Select Register (CS_number = 0) -------- */
 #define SPI_CSR_CPOL (0x1u << 0) /**< \brief (SPI_CSR[4]) Clock Polarity */
 #define SPI_CSR_NCPHA (0x1u << 1) /**< \brief (SPI_CSR[4]) Clock Phase */
 #define SPI_CSR_CSNAAT (0x1u << 2) /**< \brief (SPI_CSR[4]) Chip Select Not Active After Transfer (Ignored if CSAAT = 1) */
@@ -169,6 +172,11 @@ typedef struct {
 #define SPI_WPSR_WPVS (0x1u << 0) /**< \brief (SPI_WPSR) Write Protection Violation Status */
 #define SPI_WPSR_WPVSRC_Pos 8
 #define SPI_WPSR_WPVSRC_Msk (0xffu << SPI_WPSR_WPVSRC_Pos) /**< \brief (SPI_WPSR) Write Protection Violation Source */
+/* -------- SPI_VERSION : (SPI Offset: 0xFC) Version Register -------- */
+#define SPI_VERSION_VERSION_Pos 0
+#define SPI_VERSION_VERSION_Msk (0xfffu << SPI_VERSION_VERSION_Pos) /**< \brief (SPI_VERSION) Version of the Hardware Module */
+#define SPI_VERSION_MFN_Pos 16
+#define SPI_VERSION_MFN_Msk (0x7u << SPI_VERSION_MFN_Pos) /**< \brief (SPI_VERSION) Metal Fix Number */
 
 /*@}*/
 

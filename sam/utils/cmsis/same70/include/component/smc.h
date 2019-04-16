@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -64,12 +64,14 @@ typedef struct {
 typedef struct {
        SmcCs_number SMC_CS_NUMBER[SMCCS_NUMBER_NUMBER]; /**< \brief (Smc Offset: 0x0) CS_number = 0 .. 3 */
   __I  uint32_t     Reserved1[16];
-  __IO uint32_t     SMC_OCMS;                           /**< \brief (Smc Offset: 0x80) SMC OCMS MODE Register */
-  __O  uint32_t     SMC_KEY1;                           /**< \brief (Smc Offset: 0x84) SMC OCMS KEY1 Register */
-  __O  uint32_t     SMC_KEY2;                           /**< \brief (Smc Offset: 0x88) SMC OCMS KEY2 Register */
+  __IO uint32_t     SMC_OCMS;                           /**< \brief (Smc Offset: 0x80) SMC Off-Chip Memory Scrambling Register */
+  __O  uint32_t     SMC_KEY1;                           /**< \brief (Smc Offset: 0x84) SMC Off-Chip Memory Scrambling KEY1 Register */
+  __O  uint32_t     SMC_KEY2;                           /**< \brief (Smc Offset: 0x88) SMC Off-Chip Memory Scrambling KEY2 Register */
   __I  uint32_t     Reserved2[22];
   __IO uint32_t     SMC_WPMR;                           /**< \brief (Smc Offset: 0xE4) SMC Write Protection Mode Register */
   __I  uint32_t     SMC_WPSR;                           /**< \brief (Smc Offset: 0xE8) SMC Write Protection Status Register */
+  __I  uint32_t     Reserved3[4];
+  __I  uint32_t     SMC_VERSION;                        /**< \brief (Smc Offset: 0xFC) SMC Version Register */
 } Smc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- SMC_SETUP : (SMC Offset: N/A) SMC Setup Register -------- */
@@ -111,9 +113,9 @@ typedef struct {
 #define SMC_MODE_EXNW_MODE_Pos 4
 #define SMC_MODE_EXNW_MODE_Msk (0x3u << SMC_MODE_EXNW_MODE_Pos) /**< \brief (SMC_MODE) NWAIT Mode */
 #define SMC_MODE_EXNW_MODE(value) ((SMC_MODE_EXNW_MODE_Msk & ((value) << SMC_MODE_EXNW_MODE_Pos)))
-#define   SMC_MODE_EXNW_MODE_DISABLED (0x0u << 4) /**< \brief (SMC_MODE) Disabled */
-#define   SMC_MODE_EXNW_MODE_FROZEN (0x2u << 4) /**< \brief (SMC_MODE) Frozen Mode */
-#define   SMC_MODE_EXNW_MODE_READY (0x3u << 4) /**< \brief (SMC_MODE) Ready Mode */
+#define   SMC_MODE_EXNW_MODE_DISABLED (0x0u << 4) /**< \brief (SMC_MODE) Disabled-The NWAIT input signal is ignored on the corresponding chip select. */
+#define   SMC_MODE_EXNW_MODE_FROZEN (0x2u << 4) /**< \brief (SMC_MODE) Frozen Mode-If asserted, the NWAIT signal freezes the current read or write cycle. After deassertion, the read/write cycle is resumed from the point where it was stopped. */
+#define   SMC_MODE_EXNW_MODE_READY (0x3u << 4) /**< \brief (SMC_MODE) Ready Mode-The NWAIT signal indicates the availability of the external device at the end of the pulse of the controlling read or write signal, to complete the access. If high, the access normally completes. If low, the access is extended until NWAIT returns high. */
 #define SMC_MODE_BAT (0x1u << 8) /**< \brief (SMC_MODE) Byte Access Type */
 #define   SMC_MODE_BAT_BYTE_SELECT (0x0u << 8) /**< \brief (SMC_MODE) Byte select access type:- Write operation is controlled using NCS, NWE, NBS0, NBS1.- Read operation is controlled using NCS, NRD, NBS0, NBS1. */
 #define   SMC_MODE_BAT_BYTE_WRITE (0x1u << 8) /**< \brief (SMC_MODE) Byte write access type:- Write operation is controlled using NCS, NWR0, NWR1.- Read operation is controlled using NCS and NRD. */
@@ -132,15 +134,19 @@ typedef struct {
 #define   SMC_MODE_PS_8_BYTE (0x1u << 28) /**< \brief (SMC_MODE) 8-byte page */
 #define   SMC_MODE_PS_16_BYTE (0x2u << 28) /**< \brief (SMC_MODE) 16-byte page */
 #define   SMC_MODE_PS_32_BYTE (0x3u << 28) /**< \brief (SMC_MODE) 32-byte page */
-/* -------- SMC_OCMS : (SMC Offset: 0x80) SMC OCMS MODE Register -------- */
+/* -------- SMC_OCMS : (SMC Offset: 0x80) SMC Off-Chip Memory Scrambling Register -------- */
 #define SMC_OCMS_SMSE (0x1u << 0) /**< \brief (SMC_OCMS) Static Memory Controller Scrambling Enable */
-/* -------- SMC_KEY1 : (SMC Offset: 0x84) SMC OCMS KEY1 Register -------- */
+#define SMC_OCMS_CS0SE (0x1u << 8) /**< \brief (SMC_OCMS) Chip Select (x = 0 to 3) Scrambling Enable */
+#define SMC_OCMS_CS1SE (0x1u << 9) /**< \brief (SMC_OCMS) Chip Select (x = 0 to 3) Scrambling Enable */
+#define SMC_OCMS_CS2SE (0x1u << 10) /**< \brief (SMC_OCMS) Chip Select (x = 0 to 3) Scrambling Enable */
+#define SMC_OCMS_CS3SE (0x1u << 11) /**< \brief (SMC_OCMS) Chip Select (x = 0 to 3) Scrambling Enable */
+/* -------- SMC_KEY1 : (SMC Offset: 0x84) SMC Off-Chip Memory Scrambling KEY1 Register -------- */
 #define SMC_KEY1_KEY1_Pos 0
-#define SMC_KEY1_KEY1_Msk (0xffffffffu << SMC_KEY1_KEY1_Pos) /**< \brief (SMC_KEY1) Off Chip Memory Scrambling (OCMS) Key Part 1 */
+#define SMC_KEY1_KEY1_Msk (0xffffffffu << SMC_KEY1_KEY1_Pos) /**< \brief (SMC_KEY1) Off-Chip Memory Scrambling (OCMS) Key Part 1 */
 #define SMC_KEY1_KEY1(value) ((SMC_KEY1_KEY1_Msk & ((value) << SMC_KEY1_KEY1_Pos)))
-/* -------- SMC_KEY2 : (SMC Offset: 0x88) SMC OCMS KEY2 Register -------- */
+/* -------- SMC_KEY2 : (SMC Offset: 0x88) SMC Off-Chip Memory Scrambling KEY2 Register -------- */
 #define SMC_KEY2_KEY2_Pos 0
-#define SMC_KEY2_KEY2_Msk (0xffffffffu << SMC_KEY2_KEY2_Pos) /**< \brief (SMC_KEY2) Off Chip Memory Scrambling (OCMS) Key Part 2 */
+#define SMC_KEY2_KEY2_Msk (0xffffffffu << SMC_KEY2_KEY2_Pos) /**< \brief (SMC_KEY2) Off-Chip Memory Scrambling (OCMS) Key Part 2 */
 #define SMC_KEY2_KEY2(value) ((SMC_KEY2_KEY2_Msk & ((value) << SMC_KEY2_KEY2_Pos)))
 /* -------- SMC_WPMR : (SMC Offset: 0xE4) SMC Write Protection Mode Register -------- */
 #define SMC_WPMR_WPEN (0x1u << 0) /**< \brief (SMC_WPMR) Write Protect Enable */
@@ -152,6 +158,11 @@ typedef struct {
 #define SMC_WPSR_WPVS (0x1u << 0) /**< \brief (SMC_WPSR) Write Protection Violation Status */
 #define SMC_WPSR_WPVSRC_Pos 8
 #define SMC_WPSR_WPVSRC_Msk (0xffffu << SMC_WPSR_WPVSRC_Pos) /**< \brief (SMC_WPSR) Write Protection Violation Source */
+/* -------- SMC_VERSION : (SMC Offset: 0xFC) SMC Version Register -------- */
+#define SMC_VERSION_VERSION_Pos 0
+#define SMC_VERSION_VERSION_Msk (0xfffu << SMC_VERSION_VERSION_Pos) /**< \brief (SMC_VERSION) Hardware Module Version */
+#define SMC_VERSION_MFN_Pos 16
+#define SMC_VERSION_MFN_Msk (0x7u << SMC_VERSION_MFN_Pos) /**< \brief (SMC_VERSION) Metal Fix Number */
 
 /*@}*/
 

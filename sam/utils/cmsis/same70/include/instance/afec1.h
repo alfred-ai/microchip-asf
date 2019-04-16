@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -76,6 +76,7 @@
   #define REG_AFEC1_CECR                     (0x400640D8U) /**< \brief (AFEC1) AFEC Channel Error Correction Register */
   #define REG_AFEC1_WPMR                     (0x400640E4U) /**< \brief (AFEC1) AFEC Write Protection Mode Register */
   #define REG_AFEC1_WPSR                     (0x400640E8U) /**< \brief (AFEC1) AFEC Write Protection Status Register */
+  #define REG_AFEC1_VERSION                  (0x400640FCU) /**< \brief (AFEC1) AFEC Version Register */
 #else
   #define REG_AFEC1_CR      (*(__O  uint32_t*)0x40064000U) /**< \brief (AFEC1) AFEC Control Register */
   #define REG_AFEC1_MR      (*(__IO uint32_t*)0x40064004U) /**< \brief (AFEC1) AFEC Mode Register */
@@ -106,6 +107,7 @@
   #define REG_AFEC1_CECR    (*(__IO uint32_t*)0x400640D8U) /**< \brief (AFEC1) AFEC Channel Error Correction Register */
   #define REG_AFEC1_WPMR    (*(__IO uint32_t*)0x400640E4U) /**< \brief (AFEC1) AFEC Write Protection Mode Register */
   #define REG_AFEC1_WPSR    (*(__I  uint32_t*)0x400640E8U) /**< \brief (AFEC1) AFEC Write Protection Status Register */
+  #define REG_AFEC1_VERSION (*(__I  uint32_t*)0x400640FCU) /**< \brief (AFEC1) AFEC Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAME70_AFEC1_INSTANCE_ */

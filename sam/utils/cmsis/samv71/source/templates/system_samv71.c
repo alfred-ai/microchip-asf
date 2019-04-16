@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -53,12 +53,12 @@ extern "C" {
 /* @endcond */
 
 /* %ATMEL_SYSTEM% */
-/* Clock Settings (600MHz PLL VDDIO 3.3V and VDDCORE 1.2V) */
-/* Clock Settings (300MHz HCLK, 150MHz MCK)=> PRESC = 2, MDIV = 2 */
+/* Clock Settings (300MHz PLL VDDIO 3.3V and VDDCORE 1.2V) => MULA = 24, DIVA = 1 */
+/* Clock Settings (300MHz HCLK, 150MHz MCK)=> PRESC = 1, MDIV = 2 */
 #define SYS_BOARD_OSCOUNT   (CKGR_MOR_MOSCXTST(0x8U))
-#define SYS_BOARD_PLLAR     (CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x31U) | \
+#define SYS_BOARD_PLLAR     (CKGR_PLLAR_ONE | CKGR_PLLAR_MULA(0x18U) | \
                             CKGR_PLLAR_PLLACOUNT(0x3fU) | CKGR_PLLAR_DIVA(0x1U))
-#define SYS_BOARD_MCKR      (PMC_MCKR_PRES_CLK_2 | PMC_MCKR_CSS_PLLA_CLK | (1<<8))
+#define SYS_BOARD_MCKR      ( PMC_MCKR_CSS_PLLA_CLK | (1<<8))
 
 uint32_t SystemCoreClock = CHIP_FREQ_MAINCK_RC_4MHZ;
 

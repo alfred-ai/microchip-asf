@@ -82,6 +82,8 @@
 #define rHAVE_LOGS_DISABLED_BIT		(NBIT6)
 #define rHAVE_ETHERNET_MODE_BIT		(NBIT7)
 #define rHAVE_RESERVED1_BIT     	(NBIT8)
+#define rHAVE_RESERVED2_BIT         (NBIT9)
+#define rHAVE_XO_XTALGM2_DIS_BIT    (NBIT10)
 
 typedef struct{
 	uint32 u32Mac_efuse_mib;

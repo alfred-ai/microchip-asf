@@ -143,7 +143,7 @@ MACROS
 #define M2M_HIF_MAJOR_VALUE								(1)
 /*!< Drv/Fw major compatibility check.
 */
-#define M2M_HIF_MINOR_VALUE								(2)
+#define M2M_HIF_MINOR_VALUE								(3)
 /*!< Drv/Fw minor compatibility check.
 */
 #define M2M_HIF_LEVEL	(													\
@@ -163,7 +163,7 @@ MACROS
 #define M2M_DRIVER_VERSION_MINOR_NO						(0)
 /*!< Driver Minor release version number.
 */
-#define M2M_DRIVER_VERSION_PATCH_NO						(7)
+#define M2M_DRIVER_VERSION_PATCH_NO						(8)
 /*!< Driver patch release version number.
 */
 
@@ -266,10 +266,16 @@ MACROS
 /*!< The default number of scan slots used by the WINC board.
 */
 #define M2M_SCAN_DEFAULT_SLOT_TIME							(20)
-/*!< The scan slot default duration in ms.
+/*!< The active scan slot default duration in ms.
+*/
+#define M2M_SCAN_DEFAULT_PASSIVE_SLOT_TIME					(300)
+/*!< The passive scan slot default duration in ms.
 */
 #define M2M_SCAN_DEFAULT_NUM_PROBE							(2)
 /*!< The default number of probes per slot.
+*/
+#define M2M_FASTCONNECT_DEFAULT_RSSI_THRESH					(-45)
+/*!< The default threshold RSSI for fast reconnection to an AP.
 */
 #define M2M_SCAN_FAIL									((uint8)1)
 /*!< Indicates the WINC board has failed to perform the scan operation.
@@ -609,6 +615,9 @@ typedef enum {
 	/*!< Request to use Gain table from Flash */
 	M2M_WIFI_RESP_SET_GAIN_TABLE,
 	/*!< Response to fail to use Gain table from Flash */
+	M2M_WIFI_REQ_PASSIVE_SCAN,
+	/*!< Request a passive scan.
+	*/
 	M2M_WIFI_MAX_CONFIG_ALL
 }tenuM2mConfigCmd;
 
@@ -941,22 +950,17 @@ typedef enum {
 	M2M_NO_PS,
 	/*!< Power save is disabled. */
 	M2M_PS_AUTOMATIC,
-	/*!< Power save is done automatically by the WINC.
-		This mode doesn't disable all of the WINC modules and 
-		uses higher amount of power than the H_AUTOMATIC and
-		the DEEP_AUTOMATIC modes.
+	/*!This powersave mode is not supported on WINC3400
 	*/
 	M2M_PS_H_AUTOMATIC,
-	/*!< Power save is done automatically by the WINC.
-		Achieves higher power save than the AUTOMATIC mode
-		by shutting down more parts of the WINC board.
+	/*!This powersave mode is not supported on WINC3400
 	*/
 	M2M_PS_DEEP_AUTOMATIC,
 	/*!< Power save is done automatically by the WINC.
 		Achieves the highest possible power save.
 	*/
 	M2M_PS_MANUAL
-	/*!< Power save is done manually by the user.
+	/*!This powersave mode is not supported on WINC3400
 	*/
 }tenuPowerSaveModes;
 
@@ -1255,28 +1259,45 @@ typedef struct{
 
 /*!
 @struct	\
-	tstrM2MScan
+	tstrM2MScanOption
 	
 @brief	
-	This struct contains the Wi-Fi Scan Request
+	This struct contains the configuration options for Wi-Fi scan.
 
-@sa 
-	tenuM2mScanCh
 */
 typedef struct {
 	uint8   u8NumOfSlot;
-	/*!< The min number of slots for every channel is 2.
-		 Every slot will send Probe Request on air and wait/listen for PROBE RESP/BEACONS during the u8SlotTime.
+	/*!< The number of scan slots per channel. Refers to both active and passive scan.
+		 Valid settings are in the range 0<Slots<=255.
+		 Default setting is @ref M2M_SCAN_DEFAULT_NUM_SLOTS.
 	*/
 	uint8   u8SlotTime;
-	/*!< The time to wait on every channel listening for the frames on air.
-		 Minimum slot time is 10 ms and maximum slot time is 250 ms.
+	/*!< The length of each scan slot in milliseconds. Refers to active scan only.
+		 The device listens for probe responses and beacons during this time.
+		 Valid settings are in the range 10<=SlotTime<=250.
+		 Default setting is @ref M2M_SCAN_DEFAULT_SLOT_TIME.
 	*/
-	uint8  u8ProbesPerSlot;
-	/*!< Number of probe requests to be sent per channel scan slot.	*/
+	uint8   u8ProbesPerSlot;
+	/*!< Number of probe requests to be sent each scan slot. Refers to active scan only.
+		 Valid settings are in the range 0<Probes<=2.
+		 Default setting is @ref M2M_SCAN_DEFAULT_NUM_PROBE.
+	*/
 	sint8   s8RssiThresh;
-	/*! < The RSSI threshold of the AP to be connected to.*/
-
+	/*!< The Received Signal Strength Indicator threshold required for (fast) reconnection to an AP without scanning all channels first.
+		 Refers to active scan as part of reconnection to a previously connected AP.
+		 The device connects to the target AP immediately if it receives a sufficiently strong probe response on the expected channel.
+		 Low thresholds facilitate fast reconnection. High thresholds facilitate connection to the strongest signal.
+		 Valid settings are in the range -128<=Thresh<0.
+		 Default setting is @ref M2M_FASTCONNECT_DEFAULT_RSSI_THRESH.
+	*/
+	uint16  u16PassiveScanTime;
+	/*!< The length of each scan slot in milliseconds. Refers to passive scan only.
+		 The device listens for beacons during this time.
+		 Valid settings are in the range 10<=PassiveScanTime<=1200.
+		 Default setting is @ref M2M_SCAN_DEFAULT_PASSIVE_SLOT_TIME.
+	*/
+	uint8	__PAD16__[2];
+	/*!< Padding bytes for forcing 4-byte alignment */
 }tstrM2MScanOption;
 
 /*!
@@ -1294,7 +1315,7 @@ typedef struct {
 	/*|< Specifies the number of channels allowed in the region (e.g. North America = 11 ... etc.).
 	*/
 	uint8 __PAD16__[2];
-
+	/*!< Padding bytes for forcing 4-byte alignment */
 }tstrM2MScanRegion;
 
 /*!
@@ -1312,7 +1333,6 @@ typedef struct {
 	/*!< The Wi-Fi RF channel number */
 	uint8	__PAD24__[3];
 	/*!< Padding bytes for forcing 4-byte alignment */
-
 }tstrM2MScan;
 
 
@@ -1762,7 +1782,7 @@ typedef struct{
 typedef struct {
 	uint16   u16Len;
 	/*!< Length of the message */
-	uint8    data[0];
+	uint8    data[];		//lint !e43
 	/*!< Payload of the message */
 }tstrM2mBleApiMsg;
 
@@ -1788,7 +1808,9 @@ typedef struct{
 	/*!< Seconds */
 	
 	#define __PADDING_tstrSystemTime_ (4 - (7 % 4))
+	/*!< Padding for @ref tstrSystemTime structure. */
 	uint8	__PAD__[__PADDING_tstrSystemTime_];
+	/*!< Structure padding. */
 }tstrSystemTime;
 
 /*!
@@ -1845,7 +1867,9 @@ typedef struct {
 */
 typedef struct{
 	uint16	u16NSz;
+	/*!< Modulus length. */
 	uint16	u16ESz;
+	/*!< Public exponent length. */
 }tstrRootCertRsaKeyInfo;
 /*!
 @struct	\
@@ -1856,7 +1880,9 @@ typedef struct{
 */
 typedef struct{
 	uint16	u16CurveID;
+	/*!< Elliptic curve ID. */
 	uint16	u16KeySz;
+	/*!< Elliptic curve coordinate length. */
 }tstrRootCertEcdsaKeyInfo;
 
 /*!
@@ -1868,10 +1894,14 @@ typedef struct{
 */
 typedef struct{
 	uint32	u32PubKeyType;
+	/*!< Public key type. @see tenuRootCertPubKeyType. */
 	union{
 		tstrRootCertRsaKeyInfo		strRsaKeyInfo;
+		/*!< Info about an RSA public key. */
 		tstrRootCertEcdsaKeyInfo	strEcsdaKeyInfo;
+		/*!< Info about an ECDSA public key. */
 	};
+	/*!< Union of RSA / ECDSA public key info structures. */
 }tstrRootCertPubKeyInfo;
 
 /*!
@@ -1883,9 +1913,27 @@ typedef struct{
 */
 typedef struct{
 	uint8					au8SHA1NameHash[20];
+	/*!< SHA1 digest of root certificate issuer name. Used as entry identifier. */
 	tstrSystemTime			strExpDate;
+	/*!< Expiry date of root certificate. */
 	tstrRootCertPubKeyInfo	strPubKey;
+	/*!< Info about root certificate public key. */
 }tstrRootCertEntryHeader;
+
+/*!
+@struct	\
+	tstrRootCertFlashHeader
+	
+@brief
+	Header of the root certificate flash storage area.
+*/
+typedef struct{
+	uint8	au8StartPattern[16];
+	/*!< Start pattern of root certificate flash store. */
+	uint32	u32nCerts;
+	/*!< Number of entries in root certificate flash store. */
+}tstrRootCertFlashHeader;
+
 
 /*!
 @struct	\

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -129,8 +129,9 @@ typedef enum IRQn
   ISI_IRQn             = 59, /**< 59 SAME70J21 Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAME70J21 Pulse Width Modulation 1 (PWM1) */
   RSWDT_IRQn           = 63, /**< 63 SAME70J21 Reinforced Secure Watchdog Timer (RSWDT) */
+  ARM_IRQn             = 68, /**< 68 SAME70J21 Floating Point Unit - IXC (ARM) */
 
-  PERIPH_COUNT_IRQn    = 64  /**< Number of peripheral IDs */
+  PERIPH_COUNT_IRQn    = 69  /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -220,6 +221,11 @@ typedef struct _DeviceVectors
   void* pvReserved61;
   void* pvReserved62;
   void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
+  void* pvReserved64;
+  void* pvReserved65;
+  void* pvReserved66;
+  void* pvReserved67;
+  void* pfnARM_Handler;    /* 68 Floating Point Unit - IXC */
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -239,6 +245,7 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
+void ARM_Handler        ( void );
 void EFC_Handler        ( void );
 void GMAC_Handler       ( void );
 void HSMCI_Handler      ( void );
@@ -454,8 +461,9 @@ void XDMAC_Handler      ( void );
 #define ID_ISI    (59) /**< \brief Camera Interface (ISI) */
 #define ID_PWM1   (60) /**< \brief Pulse Width Modulation 1 (PWM1) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
+#define ID_ARM    (68) /**< \brief Floating Point Unit - IXC (ARM) */
 
-#define ID_PERIPH_COUNT (64) /**< \brief Number of peripheral IDs */
+#define ID_PERIPH_COUNT (69) /**< \brief Number of peripheral IDs */
 /*@}*/
 
 /* ************************************************************************** */
@@ -576,7 +584,7 @@ void XDMAC_Handler      ( void );
 
 #define IFLASH_SIZE             (0x200000u)
 #define IFLASH_PAGE_SIZE        (512u)
-#define IFLASH_LOCK_REGION_SIZE (16384u)
+#define IFLASH_LOCK_REGION_SIZE (8192u)
 #define IFLASH_NB_OF_PAGES      (4096u)
 #define IFLASH_NB_OF_LOCK_BITS  (128u)
 #define IRAM_SIZE               (0x60000u)
@@ -615,7 +623,7 @@ void XDMAC_Handler      ( void );
 #define CHIP_FREQ_MAINCK_RC_4MHZ        (4000000UL)
 #define CHIP_FREQ_MAINCK_RC_8MHZ        (8000000UL)
 #define CHIP_FREQ_MAINCK_RC_12MHZ       (12000000UL)
-#define CHIP_FREQ_CPU_MAX               (300000000UL)
+#define CHIP_FREQ_CPU_MAX               (120000000UL)
 #define CHIP_FREQ_XTAL_32K              (32768UL)
 #define CHIP_FREQ_XTAL_12M              (12000000UL)
 

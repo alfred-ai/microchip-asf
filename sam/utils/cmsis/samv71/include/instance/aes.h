@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,6 +63,7 @@
   #define REG_AES_TAGR                     (0x4006C088U) /**< \brief (AES) GCM Authentication Tag Word Register */
   #define REG_AES_CTRR                     (0x4006C098U) /**< \brief (AES) GCM Encryption Counter Value Register */
   #define REG_AES_GCMHR                    (0x4006C09CU) /**< \brief (AES) GCM H Word Register */
+  #define REG_AES_VERSION                  (0x4006C0FCU) /**< \brief (AES) Version Register */
 #else
   #define REG_AES_CR      (*(__O  uint32_t*)0x4006C000U) /**< \brief (AES) Control Register */
   #define REG_AES_MR      (*(__IO uint32_t*)0x4006C004U) /**< \brief (AES) Mode Register */
@@ -80,6 +81,7 @@
   #define REG_AES_TAGR    (*(__I  uint32_t*)0x4006C088U) /**< \brief (AES) GCM Authentication Tag Word Register */
   #define REG_AES_CTRR    (*(__I  uint32_t*)0x4006C098U) /**< \brief (AES) GCM Encryption Counter Value Register */
   #define REG_AES_GCMHR   (*(__IO uint32_t*)0x4006C09CU) /**< \brief (AES) GCM H Word Register */
+  #define REG_AES_VERSION (*(__I  uint32_t*)0x4006C0FCU) /**< \brief (AES) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_AES_INSTANCE_ */

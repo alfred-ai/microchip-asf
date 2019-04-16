@@ -3,7 +3,7 @@
  *
  * \brief SAM SPI Flash Driver for SAMB11
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -129,6 +129,7 @@ static uint8_t spi_flash_read_status_reg(void)
 static void spi_flash_page_program(uint32_t flash_addr, uint32_t memory_addr, uint16_t size)
 {
 	unsigned char cmd[8];
+	volatile uint32_t opt_delay = 0;
 
 	spi_flash_write_enable();
 
@@ -157,10 +158,12 @@ static void spi_flash_page_program(uint32_t flash_addr, uint32_t memory_addr, ui
 	 */
 	for(uint16_t i = 0; i < 0xFFFF; i++) {
 		/* Waiting... */
+		opt_delay++;
 	}
 	//spi_flash_read_status_reg();
 	while(spi_flash_read_status_reg() & 0x01);
 	spi_flash_write_disable();
+	opt_delay = opt_delay; // This is to avoid compiler optimization
 }
 
 /**
@@ -172,7 +175,7 @@ void spi_flash_init(void)
 {
 	/* PINMUX init */
 	LPMCU_MISC_REGS0->PINMUX_SEL_3.reg = \
-							LPMCU_MISC_REGS_PINMUX_SEL_3_LP_SIP_0_SEL_SPI_FLASH0_SCK | \ 
+							LPMCU_MISC_REGS_PINMUX_SEL_3_LP_SIP_0_SEL_SPI_FLASH0_SCK | \
 							LPMCU_MISC_REGS_PINMUX_SEL_3_LP_SIP_1_SEL_SPI_FLASH0_TXD | \
 							LPMCU_MISC_REGS_PINMUX_SEL_3_LP_SIP_2_SEL_SPI_FLASH0_SSN | \
 							LPMCU_MISC_REGS_PINMUX_SEL_3_LP_SIP_3_SEL_SPI_FLASH0_RXD;
@@ -221,6 +224,7 @@ void spi_flash_read(uint8_t *read_buf, uint32_t flash_addr, uint32_t size)
 	uint32_t  memory_addr;
 	uint32_t  i=0;
 	uint8_t   *data = read_buf;
+	volatile uint32_t opt_delay = 0;
 
 	/* Get the destination buffer Address. */
 	if((flash_addr + size) > FLASH_MEMORY_SIZE) {
@@ -250,7 +254,9 @@ void spi_flash_read(uint8_t *read_buf, uint32_t flash_addr, uint32_t size)
 
 	for (i = 0; i < 0xFF; i++) {
 		/* Waiting...*/
+		opt_delay++;
 	}
+	opt_delay = opt_delay;
 	while ((SPI_FLASH0->IRQ_STATUS.bit.FLASH_TRANS_DONE != \
 			SPI_FLASH_IRQ_STATUS_FLASH_TRANS_DONE) && \
 			(spi_flash_read_status_reg() & 0x01)){
@@ -273,9 +279,11 @@ int8_t spi_flash_write(void *write_buf, uint32_t flash_addr, uint32_t size)
 	uint32_t    write_size;
 	uint32_t    offset;
 	uint32_t    memory_addr;
+	volatile uint32_t opt_delay = 0;
 
 	for (uint32_t i = 0; i < 0x1FFFF; i++) {
 		/* Waiting...*/
+		opt_delay++;
 	}
 	if((write_buf != NULL) && (size != 0)) {
 		/* Ensure the write size does not exceed the flash limit. */
@@ -309,6 +317,7 @@ int8_t spi_flash_write(void *write_buf, uint32_t flash_addr, uint32_t size)
 			ret = 0;
 		}
 	}
+	opt_delay = opt_delay;
 	EXIT:
 	return ret;
 }
@@ -323,6 +332,7 @@ void spi_flash_sector_erase(uint32_t flash_addr)
 {
 	uint8_t cmd[8] = {0,};
 	uint32_t  i=0;
+	volatile uint32_t opt_delay = 0;
 
 	cmd[0] = SPI_FLASH_CMD_SECTOR_ERASE;
 	cmd[1] = (char)(flash_addr >> 16);
@@ -343,6 +353,7 @@ void spi_flash_sector_erase(uint32_t flash_addr)
 
 	for (i = 0; i < 0xFF; i++) {
 		/* Waiting...*/
+		opt_delay++;
 	}
 
 	while ((SPI_FLASH0->IRQ_STATUS.bit.FLASH_TRANS_DONE != \
@@ -350,6 +361,7 @@ void spi_flash_sector_erase(uint32_t flash_addr)
 			(spi_flash_read_status_reg() & 0x01)){
 		/* Wait for current flash transaction done. */
 	}
+	opt_delay = opt_delay;
 }
 
 /**

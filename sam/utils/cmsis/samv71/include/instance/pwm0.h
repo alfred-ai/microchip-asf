@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -82,6 +82,7 @@
   #define REG_PWM0_FPV2                      (0x400200C0U) /**< \brief (PWM0) PWM Fault Protection Value 2 Register */
   #define REG_PWM0_WPCR                      (0x400200E4U) /**< \brief (PWM0) PWM Write Protection Control Register */
   #define REG_PWM0_WPSR                      (0x400200E8U) /**< \brief (PWM0) PWM Write Protection Status Register */
+  #define REG_PWM0_VERSION                   (0x400200FCU) /**< \brief (PWM0) Version Register */
   #define REG_PWM0_CMPV0                     (0x40020130U) /**< \brief (PWM0) PWM Comparison 0 Value Register */
   #define REG_PWM0_CMPVUPD0                  (0x40020134U) /**< \brief (PWM0) PWM Comparison 0 Value Update Register */
   #define REG_PWM0_CMPM0                     (0x40020138U) /**< \brief (PWM0) PWM Comparison 0 Mode Register */
@@ -194,6 +195,7 @@
   #define REG_PWM0_FPV2     (*(__IO uint32_t*)0x400200C0U) /**< \brief (PWM0) PWM Fault Protection Value 2 Register */
   #define REG_PWM0_WPCR     (*(__O  uint32_t*)0x400200E4U) /**< \brief (PWM0) PWM Write Protection Control Register */
   #define REG_PWM0_WPSR     (*(__I  uint32_t*)0x400200E8U) /**< \brief (PWM0) PWM Write Protection Status Register */
+  #define REG_PWM0_VERSION  (*(__I  uint32_t*)0x400200FCU) /**< \brief (PWM0) Version Register */
   #define REG_PWM0_CMPV0    (*(__IO uint32_t*)0x40020130U) /**< \brief (PWM0) PWM Comparison 0 Value Register */
   #define REG_PWM0_CMPVUPD0 (*(__O  uint32_t*)0x40020134U) /**< \brief (PWM0) PWM Comparison 0 Value Update Register */
   #define REG_PWM0_CMPM0    (*(__IO uint32_t*)0x40020138U) /**< \brief (PWM0) PWM Comparison 0 Mode Register */

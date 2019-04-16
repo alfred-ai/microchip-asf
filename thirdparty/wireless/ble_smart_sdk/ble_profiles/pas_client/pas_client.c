@@ -3,7 +3,7 @@
 *
 * \brief Phone Alert Status Profile
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -71,40 +71,23 @@ read_callback_t ringer_setting_read_cb;
 notification_callback_t alert_status_notification_cb;
 notification_callback_t ringer_setting_notification_cb;
 
-static const ble_event_callback_t pas_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	pas_client_service_discovery,
-	pas_client_disconnected_event_handler,
-	NULL,
-	NULL,
-	pas_client_write_notifications,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	pas_client_write_notifications,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t pas_gap_handle = {
+	.connected = pas_client_service_discovery,
+	.disconnected = pas_client_disconnected_event_handler,
+	.pair_done = pas_client_write_notifications,
+	.encryption_status_changed = pas_client_write_notifications
 };
 
-static const ble_event_callback_t pas_gatt_client_handle[] = {
-	pas_client_service_found_handler,
-	NULL,
-	pas_client_characteristic_found_handler,
-	pas_client_descriptor_found_handler,
-	pas_client_discovery_complete_handler,
-	pas_client_char_read_response_handler,
-	NULL,
-	pas_client_char_write_response_handler,
-	pas_client_notification_handler,
-	NULL
+static const ble_gatt_client_event_cb_t pas_gatt_client_handle = {
+	.primary_service_found = pas_client_service_found_handler,
+	.characteristic_found = pas_client_characteristic_found_handler,
+	.descriptor_found = pas_client_descriptor_found_handler,
+	.discovery_complete = pas_client_discovery_complete_handler,
+	.characteristic_read_by_uuid_response = pas_client_char_read_response_handler,
+	.characteristic_write_response = pas_client_char_write_response_handler,
+	.notification_recieved = pas_client_notification_handler
 };
+
 
 /***********************************************************************************
  *									Implementation	                               *
@@ -561,13 +544,15 @@ void pas_client_init( void *params)
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	pas_gap_handle);
+	&pas_gap_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_CLIENT_EVENT_TYPE,
-	pas_gatt_client_handle);
+	&pas_gatt_client_handle);
 	
 	status = ble_advertisement_data_set();
 	if (status != AT_BLE_SUCCESS) {
 		DBG_LOG("Advertisement data set failed reason %d",status);
 	}
+		
+	UNUSED(params);
 }

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -68,6 +68,8 @@ typedef struct {
   __IO uint32_t SDRAMC_OCMS;      /**< \brief (Sdramc Offset: 0x2C) SDRAMC OCMS Register */
   __O  uint32_t SDRAMC_OCMS_KEY1; /**< \brief (Sdramc Offset: 0x30) SDRAMC OCMS KEY1 Register */
   __O  uint32_t SDRAMC_OCMS_KEY2; /**< \brief (Sdramc Offset: 0x34) SDRAMC OCMS KEY2 Register */
+  __I  uint32_t Reserved2[49];
+  __I  uint32_t SDRAMC_VERSION;   /**< \brief (Sdramc Offset: 0xFC) SDRAMC Version Register */
 } Sdramc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- SDRAMC_MR : (SDRAMC Offset: 0x00) SDRAMC Mode Register -------- */
@@ -105,9 +107,9 @@ typedef struct {
 #define SDRAMC_CR_CAS_Pos 5
 #define SDRAMC_CR_CAS_Msk (0x3u << SDRAMC_CR_CAS_Pos) /**< \brief (SDRAMC_CR) CAS Latency */
 #define SDRAMC_CR_CAS(value) ((SDRAMC_CR_CAS_Msk & ((value) << SDRAMC_CR_CAS_Pos)))
-#define   SDRAMC_CR_CAS_LATENCY1 (0x0u << 5) /**< \brief (SDRAMC_CR) 1 cycle CAS latency */
-#define   SDRAMC_CR_CAS_LATENCY2 (0x1u << 5) /**< \brief (SDRAMC_CR) 2 cycle CAS latency */
-#define   SDRAMC_CR_CAS_LATENCY3 (0x2u << 5) /**< \brief (SDRAMC_CR) 3 cycle CAS latency */
+#define   SDRAMC_CR_CAS_LATENCY1 (0x1u << 5) /**< \brief (SDRAMC_CR) 1 cycle latency */
+#define   SDRAMC_CR_CAS_LATENCY2 (0x2u << 5) /**< \brief (SDRAMC_CR) 2 cycle latency */
+#define   SDRAMC_CR_CAS_LATENCY3 (0x3u << 5) /**< \brief (SDRAMC_CR) 3 cycle latency */
 #define SDRAMC_CR_DBW (0x1u << 7) /**< \brief (SDRAMC_CR) Data Bus Width */
 #define SDRAMC_CR_TWR_Pos 8
 #define SDRAMC_CR_TWR_Msk (0xfu << SDRAMC_CR_TWR_Pos) /**< \brief (SDRAMC_CR) Write Recovery Delay */
@@ -181,6 +183,11 @@ typedef struct {
 #define SDRAMC_OCMS_KEY2_KEY2_Pos 0
 #define SDRAMC_OCMS_KEY2_KEY2_Msk (0xffffffffu << SDRAMC_OCMS_KEY2_KEY2_Pos) /**< \brief (SDRAMC_OCMS_KEY2) Off-chip Memory Scrambling (OCMS) Key Part 2 */
 #define SDRAMC_OCMS_KEY2_KEY2(value) ((SDRAMC_OCMS_KEY2_KEY2_Msk & ((value) << SDRAMC_OCMS_KEY2_KEY2_Pos)))
+/* -------- SDRAMC_VERSION : (SDRAMC Offset: 0xFC) SDRAMC Version Register -------- */
+#define SDRAMC_VERSION_VERSION_Pos 0
+#define SDRAMC_VERSION_VERSION_Msk (0xfffu << SDRAMC_VERSION_VERSION_Pos) /**< \brief (SDRAMC_VERSION) Version of the Hardware Module */
+#define SDRAMC_VERSION_MFN_Pos 16
+#define SDRAMC_VERSION_MFN_Msk (0x7u << SDRAMC_VERSION_MFN_Pos) /**< \brief (SDRAMC_VERSION) Metal Fix Number */
 
 /*@}*/
 

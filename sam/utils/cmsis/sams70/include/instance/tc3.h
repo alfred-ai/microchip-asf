@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -94,6 +94,7 @@
   #define REG_TC3_QISR                   (0x400540D4U) /**< \brief (TC3) QDEC Interrupt Status Register */
   #define REG_TC3_FMR                    (0x400540D8U) /**< \brief (TC3) Fault Mode Register */
   #define REG_TC3_WPMR                   (0x400540E4U) /**< \brief (TC3) Write Protection Mode Register */
+  #define REG_TC3_VER                    (0x400540FCU) /**< \brief (TC3) Version Register */
 #else
   #define REG_TC3_CCR0  (*(__O  uint32_t*)0x40054000U) /**< \brief (TC3) Channel Control Register (channel = 0) */
   #define REG_TC3_CMR0  (*(__IO uint32_t*)0x40054004U) /**< \brief (TC3) Channel Mode Register (channel = 0) */
@@ -142,6 +143,7 @@
   #define REG_TC3_QISR  (*(__I  uint32_t*)0x400540D4U) /**< \brief (TC3) QDEC Interrupt Status Register */
   #define REG_TC3_FMR   (*(__IO uint32_t*)0x400540D8U) /**< \brief (TC3) Fault Mode Register */
   #define REG_TC3_WPMR  (*(__IO uint32_t*)0x400540E4U) /**< \brief (TC3) Write Protection Mode Register */
+  #define REG_TC3_VER   (*(__I  uint32_t*)0x400540FCU) /**< \brief (TC3) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMS70_TC3_INSTANCE_ */

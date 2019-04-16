@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -72,7 +72,8 @@ typedef struct {
   __I  uint32_t Reserved1[1];
   __IO uint32_t MATRIX_MCFG10;              /**< \brief (Matrix Offset: 0x0028) Master Configuration Register 10 */
   __IO uint32_t MATRIX_MCFG11;              /**< \brief (Matrix Offset: 0x002C) Master Configuration Register 11 */
-  __I  uint32_t Reserved2[4];
+  __IO uint32_t MATRIX_MCFG12;              /**< \brief (Matrix Offset: 0x0030) Master Configuration Register 12 */
+  __I  uint32_t Reserved2[3];
   __IO uint32_t MATRIX_SCFG[9];             /**< \brief (Matrix Offset: 0x0040) Slave Configuration Register */
   __I  uint32_t Reserved3[7];
        MatrixPr MATRIX_PR[MATRIXPR_NUMBER]; /**< \brief (Matrix Offset: 0x0080) 0 .. 8 */
@@ -81,7 +82,9 @@ typedef struct {
   __I  uint32_t Reserved5[3];
   __IO uint32_t CCFG_CAN0;                  /**< \brief (Matrix Offset: 0x0110) CAN0 Configuration Register */
   __IO uint32_t CCFG_SYSIO;                 /**< \brief (Matrix Offset: 0x0114) System I/O and CAN1 Configuration Register */
-  __I  uint32_t Reserved6[3];
+  __IO uint32_t CCFG_PCCR;                  /**< \brief (Matrix Offset: 0x0118) Peripheral Clock Configuration Register */
+  __IO uint32_t CCFG_DYNCFG;                /**< \brief (Matrix Offset: 0x011C) Dynamic Clock Gating Register */
+  __I  uint32_t Reserved6[1];
   __IO uint32_t CCFG_SMCNFCS;               /**< \brief (Matrix Offset: 0x0124) SMC NAND Flash Chip Select Configuration Register */
   __I  uint32_t Reserved7[47];
   __IO uint32_t MATRIX_WPMR;                /**< \brief (Matrix Offset: 0x01E4) Write Protection Mode Register */
@@ -222,6 +225,18 @@ typedef struct {
 #define   MATRIX_MCFG11_ULBT_32BEAT_BURST (0x5u << 0) /**< \brief (MATRIX_MCFG11) 32-beat Burst -The undefined length burst or bursts sequence is split into 32-beat bursts or less, allowing re-arbitration every 32 beats. */
 #define   MATRIX_MCFG11_ULBT_64BEAT_BURST (0x6u << 0) /**< \brief (MATRIX_MCFG11) 64-beat Burst-The undefined length burst or bursts sequence is split into 64-beat bursts or less, allowing re-arbitration every 64 beats. */
 #define   MATRIX_MCFG11_ULBT_128BEAT_BURST (0x7u << 0) /**< \brief (MATRIX_MCFG11) 128-beat Burst-The undefined length burst or bursts sequence is split into 128-beat bursts or less, allowing re-arbitration every 128 beats. */
+/* -------- MATRIX_MCFG12 : (MATRIX Offset: 0x0030) Master Configuration Register 12 -------- */
+#define MATRIX_MCFG12_ULBT_Pos 0
+#define MATRIX_MCFG12_ULBT_Msk (0x7u << MATRIX_MCFG12_ULBT_Pos) /**< \brief (MATRIX_MCFG12) Undefined Length Burst Type */
+#define MATRIX_MCFG12_ULBT(value) ((MATRIX_MCFG12_ULBT_Msk & ((value) << MATRIX_MCFG12_ULBT_Pos)))
+#define   MATRIX_MCFG12_ULBT_UNLTD_LENGTH (0x0u << 0) /**< \brief (MATRIX_MCFG12) Unlimited Length Burst-No predicted end of burst is generated, therefore INCR bursts coming from this master can only be broken if the Slave Slot Cycle Limit is reached. If the Slot Cycle Limit is not reached, the burst is normally completed by the master, at the latest, on the next AHB 1-Kbyte address boundary, allowing up to 256-beat word bursts or 128-beat double-word bursts.This value should not be used in the very particular case of a master capable of performing back-to-back undefined length bursts on a single slave, since this could indefinitely freeze the slave arbitration and thus prevent another master from accessing this slave. */
+#define   MATRIX_MCFG12_ULBT_SINGLE_ACCESS (0x1u << 0) /**< \brief (MATRIX_MCFG12) Single Access-The undefined length burst is treated as a succession of single accesses, allowing re-arbitration at each beat of the INCR burst or bursts sequence. */
+#define   MATRIX_MCFG12_ULBT_4BEAT_BURST (0x2u << 0) /**< \brief (MATRIX_MCFG12) 4-beat Burst-The undefined length burst or bursts sequence is split into 4-beat bursts or less, allowing re-arbitration every 4 beats. */
+#define   MATRIX_MCFG12_ULBT_8BEAT_BURST (0x3u << 0) /**< \brief (MATRIX_MCFG12) 8-beat Burst-The undefined length burst or bursts sequence is split into 8-beat bursts or less, allowing re-arbitration every 8 beats. */
+#define   MATRIX_MCFG12_ULBT_16BEAT_BURST (0x4u << 0) /**< \brief (MATRIX_MCFG12) 16-beat Burst-The undefined length burst or bursts sequence is split into 16-beat bursts or less, allowing re-arbitration every 16 beats. */
+#define   MATRIX_MCFG12_ULBT_32BEAT_BURST (0x5u << 0) /**< \brief (MATRIX_MCFG12) 32-beat Burst -The undefined length burst or bursts sequence is split into 32-beat bursts or less, allowing re-arbitration every 32 beats. */
+#define   MATRIX_MCFG12_ULBT_64BEAT_BURST (0x6u << 0) /**< \brief (MATRIX_MCFG12) 64-beat Burst-The undefined length burst or bursts sequence is split into 64-beat bursts or less, allowing re-arbitration every 64 beats. */
+#define   MATRIX_MCFG12_ULBT_128BEAT_BURST (0x7u << 0) /**< \brief (MATRIX_MCFG12) 128-beat Burst-The undefined length burst or bursts sequence is split into 128-beat bursts or less, allowing re-arbitration every 128 beats. */
 /* -------- MATRIX_SCFG[9] : (MATRIX Offset: 0x0040) Slave Configuration Register -------- */
 #define MATRIX_SCFG_SLOT_CYCLE_Pos 0
 #define MATRIX_SCFG_SLOT_CYCLE_Msk (0x1ffu << MATRIX_SCFG_SLOT_CYCLE_Pos) /**< \brief (MATRIX_SCFG[9]) Maximum Bus Grant Duration for Masters */
@@ -270,6 +285,9 @@ typedef struct {
 #define MATRIX_PRBS_M11PR_Pos 12
 #define MATRIX_PRBS_M11PR_Msk (0x3u << MATRIX_PRBS_M11PR_Pos) /**< \brief (MATRIX_PRBS) Master 11 Priority */
 #define MATRIX_PRBS_M11PR(value) ((MATRIX_PRBS_M11PR_Msk & ((value) << MATRIX_PRBS_M11PR_Pos)))
+#define MATRIX_PRBS_M12PR_Pos 16
+#define MATRIX_PRBS_M12PR_Msk (0x3u << MATRIX_PRBS_M12PR_Pos) /**< \brief (MATRIX_PRBS) Master 12 Priority */
+#define MATRIX_PRBS_M12PR(value) ((MATRIX_PRBS_M12PR_Msk & ((value) << MATRIX_PRBS_M12PR_Pos)))
 /* -------- MATRIX_MRCR : (MATRIX Offset: 0x0100) Master Remap Control Register -------- */
 #define MATRIX_MRCR_RCB0 (0x1u << 0) /**< \brief (MATRIX_MRCR) Remap Command Bit for Master 0 */
 #define MATRIX_MRCR_RCB1 (0x1u << 1) /**< \brief (MATRIX_MRCR) Remap Command Bit for Master 1 */
@@ -282,6 +300,7 @@ typedef struct {
 #define MATRIX_MRCR_RCB8 (0x1u << 8) /**< \brief (MATRIX_MRCR) Remap Command Bit for Master 8 */
 #define MATRIX_MRCR_RCB10 (0x1u << 10) /**< \brief (MATRIX_MRCR) Remap Command Bit for Master 10 */
 #define MATRIX_MRCR_RCB11 (0x1u << 11) /**< \brief (MATRIX_MRCR) Remap Command Bit for Master 11 */
+#define MATRIX_MRCR_RCB12 (0x1u << 12) /**< \brief (MATRIX_MRCR) Remap Command Bit for Master 12 */
 /* -------- CCFG_CAN0 : (MATRIX Offset: 0x0110) CAN0 Configuration Register -------- */
 #define CCFG_CAN0_CAN0DMABA_Pos 16
 #define CCFG_CAN0_CAN0DMABA_Msk (0xffffu << CCFG_CAN0_CAN0DMABA_Pos) /**< \brief (CCFG_CAN0) CAN0 DMA Base Address */
@@ -293,8 +312,12 @@ typedef struct {
 #define CCFG_SYSIO_SYSIO7 (0x1u << 7) /**< \brief (CCFG_SYSIO) PB7 or TCK/SWCLK Assignment */
 #define CCFG_SYSIO_SYSIO12 (0x1u << 12) /**< \brief (CCFG_SYSIO) PB12 or ERASE Assignment */
 #define CCFG_SYSIO_CAN1DMABA_Pos 16
-#define CCFG_SYSIO_CAN1DMABA_Msk (0xffffu << CCFG_SYSIO_CAN1DMABA_Pos) /**< \brief (CCFG_SYSIO) CAN0 DMA Base Address */
+#define CCFG_SYSIO_CAN1DMABA_Msk (0xffffu << CCFG_SYSIO_CAN1DMABA_Pos) /**< \brief (CCFG_SYSIO) CAN1 DMA Base Address */
 #define CCFG_SYSIO_CAN1DMABA(value) ((CCFG_SYSIO_CAN1DMABA_Msk & ((value) << CCFG_SYSIO_CAN1DMABA_Pos)))
+/* -------- CCFG_PCCR : (MATRIX Offset: 0x0118) Peripheral Clock Configuration Register -------- */
+#define CCFG_PCCR_TC0CC (0x1u << 20) /**< \brief (CCFG_PCCR) TC0 Clock Configuration */
+#define CCFG_PCCR_I2SC0CC (0x1u << 21) /**< \brief (CCFG_PCCR) I2SC0 Clock Configuration */
+#define CCFG_PCCR_I2SC1CC (0x1u << 22) /**< \brief (CCFG_PCCR) I2SC1 Clock Configuration */
 /* -------- CCFG_SMCNFCS : (MATRIX Offset: 0x0124) SMC NAND Flash Chip Select Configuration Register -------- */
 #define CCFG_SMCNFCS_SMC_NFCS0 (0x1u << 0) /**< \brief (CCFG_SMCNFCS) SMC NAND Flash Chip Select 0 Assignment */
 #define CCFG_SMCNFCS_SMC_NFCS1 (0x1u << 1) /**< \brief (CCFG_SMCNFCS) SMC NAND Flash Chip Select 1 Assignment */

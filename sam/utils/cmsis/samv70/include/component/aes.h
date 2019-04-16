@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -78,6 +78,7 @@ typedef struct {
 /* -------- AES_CR : (AES Offset: 0x00) Control Register -------- */
 #define AES_CR_START (0x1u << 0) /**< \brief (AES_CR) Start Processing */
 #define AES_CR_SWRST (0x1u << 8) /**< \brief (AES_CR) Software Reset */
+#define AES_CR_LOADSEED (0x1u << 16) /**< \brief (AES_CR) Random Number Generator Seed Loading */
 /* -------- AES_MR : (AES Offset: 0x04) Mode Register -------- */
 #define AES_MR_CIPHER (0x1u << 0) /**< \brief (AES_MR) Processing Mode */
 #define AES_MR_GTAGEN (0x1u << 1) /**< \brief (AES_MR) GCM Automatic Tag Generation Enable */
@@ -118,9 +119,27 @@ typedef struct {
 #define   AES_MR_CFBS_SIZE_16BIT (0x3u << 16) /**< \brief (AES_MR) 16-bit */
 #define   AES_MR_CFBS_SIZE_8BIT (0x4u << 16) /**< \brief (AES_MR) 8-bit */
 #define AES_MR_CKEY_Pos 20
-#define AES_MR_CKEY_Msk (0xfu << AES_MR_CKEY_Pos) /**< \brief (AES_MR) Key */
+#define AES_MR_CKEY_Msk (0xfu << AES_MR_CKEY_Pos) /**< \brief (AES_MR) Countermeasure Key */
 #define AES_MR_CKEY(value) ((AES_MR_CKEY_Msk & ((value) << AES_MR_CKEY_Pos)))
-#define   AES_MR_CKEY_PASSWD (0xEu << 20) /**< \brief (AES_MR) This field must be written with 0xE the first time that AES_MR is programmed. For subsequent programming of the AES_MR, any value can be written, including that of 0xE.Always reads as 0. */
+#define   AES_MR_CKEY_PASSWD (0xEu << 20) /**< \brief (AES_MR) This field must be written with 0xE to allow CMTYPx bit configuration changes. Any other values will abort the write operation in CMTYPx bits.Always reads as 0. */
+#define AES_MR_CMTYP1 (0x1u << 24) /**< \brief (AES_MR) Countermeasure Type 1 */
+#define   AES_MR_CMTYP1_NOPROT_EXTKEY (0x0u << 24) /**< \brief (AES_MR) Countermeasure type 1 is disabled. */
+#define   AES_MR_CMTYP1_PROT_EXTKEY (0x1u << 24) /**< \brief (AES_MR) Countermeasure type 1 is enabled. */
+#define AES_MR_CMTYP2 (0x1u << 25) /**< \brief (AES_MR) Countermeasure Type 2 */
+#define   AES_MR_CMTYP2_NO_PAUSE (0x0u << 25) /**< \brief (AES_MR) Countermeasure type 2 is disabled. */
+#define   AES_MR_CMTYP2_PAUSE (0x1u << 25) /**< \brief (AES_MR) Countermeasure type 2 is enabled. */
+#define AES_MR_CMTYP3 (0x1u << 26) /**< \brief (AES_MR) Countermeasure Type 3 */
+#define   AES_MR_CMTYP3_NO_DUMMY (0x0u << 26) /**< \brief (AES_MR) Countermeasure type 3 is disabled. */
+#define   AES_MR_CMTYP3_DUMMY (0x1u << 26) /**< \brief (AES_MR) Countermeasure type 3 is enabled. */
+#define AES_MR_CMTYP4 (0x1u << 27) /**< \brief (AES_MR) Countermeasure Type 4 */
+#define   AES_MR_CMTYP4_NO_RESTART (0x0u << 27) /**< \brief (AES_MR) Countermeasure type 4 is disabled. */
+#define   AES_MR_CMTYP4_RESTART (0x1u << 27) /**< \brief (AES_MR) Countermeasure type 4 is enabled. */
+#define AES_MR_CMTYP5 (0x1u << 28) /**< \brief (AES_MR) Countermeasure Type 5 */
+#define   AES_MR_CMTYP5_NO_ADDACCESS (0x0u << 28) /**< \brief (AES_MR) Countermeasure type 5 is disabled. */
+#define   AES_MR_CMTYP5_ADDACCESS (0x1u << 28) /**< \brief (AES_MR) Countermeasure type 5 is enabled. */
+#define AES_MR_CMTYP6 (0x1u << 29) /**< \brief (AES_MR) Countermeasure Type 6 */
+#define   AES_MR_CMTYP6_NO_IDLECURRENT (0x0u << 29) /**< \brief (AES_MR) Countermeasure type 6 is disabled. */
+#define   AES_MR_CMTYP6_IDLECURRENT (0x1u << 29) /**< \brief (AES_MR) Countermeasure type 6 is enabled. */
 /* -------- AES_IER : (AES Offset: 0x10) Interrupt Enable Register -------- */
 #define AES_IER_DATRDY (0x1u << 0) /**< \brief (AES_IER) Data Ready Interrupt Enable */
 #define AES_IER_URAD (0x1u << 8) /**< \brief (AES_IER) Unspecified Register Access Detection Interrupt Enable */

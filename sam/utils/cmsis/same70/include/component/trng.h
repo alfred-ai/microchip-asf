@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,6 +62,8 @@ typedef struct {
   __I uint32_t TRNG_ISR;      /**< \brief (Trng Offset: 0x1C) Interrupt Status Register */
   __I uint32_t Reserved2[12];
   __I uint32_t TRNG_ODATA;    /**< \brief (Trng Offset: 0x50) Output Data Register */
+  __I uint32_t Reserved3[42];
+  __I uint32_t TRNG_VERSION;  /**< \brief (Trng Offset: 0xFC) Version Register */
 } Trng;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- TRNG_CR : (TRNG Offset: 0x00) Control Register -------- */
@@ -81,6 +83,11 @@ typedef struct {
 /* -------- TRNG_ODATA : (TRNG Offset: 0x50) Output Data Register -------- */
 #define TRNG_ODATA_ODATA_Pos 0
 #define TRNG_ODATA_ODATA_Msk (0xffffffffu << TRNG_ODATA_ODATA_Pos) /**< \brief (TRNG_ODATA) Output Data */
+/* -------- TRNG_VERSION : (TRNG Offset: 0xFC) Version Register -------- */
+#define TRNG_VERSION_VERSION_Pos 0
+#define TRNG_VERSION_VERSION_Msk (0xfffu << TRNG_VERSION_VERSION_Pos) /**< \brief (TRNG_VERSION) Version of the Hardware Module */
+#define TRNG_VERSION_MFN_Pos 16
+#define TRNG_VERSION_MFN_Msk (0x7u << TRNG_VERSION_MFN_Pos) /**< \brief (TRNG_VERSION) Metal Fix Number */
 
 /*@}*/
 

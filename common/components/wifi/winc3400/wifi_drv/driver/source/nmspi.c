@@ -433,7 +433,7 @@ static sint8 spi_data_write(uint8 *b, uint16 sz)
 {
 	sint16 ix = 0;
 	uint16 nbytes;
-	sint8 result = 0;
+	sint8 result = N_OK;
 	uint8 cmd, order, crc[2] = {0};
 	//uint8 rsp;
 

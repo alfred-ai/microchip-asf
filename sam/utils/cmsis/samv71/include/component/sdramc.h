@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -68,6 +68,8 @@ typedef struct {
   __IO uint32_t SDRAMC_OCMS;      /**< \brief (Sdramc Offset: 0x2C) SDRAMC OCMS Register */
   __O  uint32_t SDRAMC_OCMS_KEY1; /**< \brief (Sdramc Offset: 0x30) SDRAMC OCMS KEY1 Register */
   __O  uint32_t SDRAMC_OCMS_KEY2; /**< \brief (Sdramc Offset: 0x34) SDRAMC OCMS KEY2 Register */
+  __I  uint32_t Reserved2[49];
+  __I  uint32_t SDRAMC_VERSION;   /**< \brief (Sdramc Offset: 0xFC) SDRAMC Version Register */
 } Sdramc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- SDRAMC_MR : (SDRAMC Offset: 0x00) SDRAMC Mode Register -------- */
@@ -151,11 +153,11 @@ typedef struct {
 #define   SDRAMC_LPR_TIMEOUT_LP_LAST_XFER_64 (0x1u << 12) /**< \brief (SDRAMC_LPR) The SDRAMC activates the SDRAM low-power mode 64 clock cycles after the end of the last transfer. */
 #define   SDRAMC_LPR_TIMEOUT_LP_LAST_XFER_128 (0x2u << 12) /**< \brief (SDRAMC_LPR) The SDRAMC activates the SDRAM low-power mode 128 clock cycles after the end of the last transfer. */
 /* -------- SDRAMC_IER : (SDRAMC Offset: 0x14) SDRAMC Interrupt Enable Register -------- */
-#define SDRAMC_IER_RES (0x1u << 0) /**< \brief (SDRAMC_IER) Refresh Error Status */
+#define SDRAMC_IER_RES (0x1u << 0) /**< \brief (SDRAMC_IER) Refresh Error Interrupt Enable */
 /* -------- SDRAMC_IDR : (SDRAMC Offset: 0x18) SDRAMC Interrupt Disable Register -------- */
-#define SDRAMC_IDR_RES (0x1u << 0) /**< \brief (SDRAMC_IDR) Refresh Error Status */
+#define SDRAMC_IDR_RES (0x1u << 0) /**< \brief (SDRAMC_IDR) Refresh Error Interrupt Disable */
 /* -------- SDRAMC_IMR : (SDRAMC Offset: 0x1C) SDRAMC Interrupt Mask Register -------- */
-#define SDRAMC_IMR_RES (0x1u << 0) /**< \brief (SDRAMC_IMR) Refresh Error Status */
+#define SDRAMC_IMR_RES (0x1u << 0) /**< \brief (SDRAMC_IMR) Refresh Error Interrupt Mask */
 /* -------- SDRAMC_ISR : (SDRAMC Offset: 0x20) SDRAMC Interrupt Status Register -------- */
 #define SDRAMC_ISR_RES (0x1u << 0) /**< \brief (SDRAMC_ISR) Refresh Error Status (cleared on read) */
 /* -------- SDRAMC_MDR : (SDRAMC Offset: 0x24) SDRAMC Memory Device Register -------- */
@@ -181,6 +183,11 @@ typedef struct {
 #define SDRAMC_OCMS_KEY2_KEY2_Pos 0
 #define SDRAMC_OCMS_KEY2_KEY2_Msk (0xffffffffu << SDRAMC_OCMS_KEY2_KEY2_Pos) /**< \brief (SDRAMC_OCMS_KEY2) Off-chip Memory Scrambling (OCMS) Key Part 2 */
 #define SDRAMC_OCMS_KEY2_KEY2(value) ((SDRAMC_OCMS_KEY2_KEY2_Msk & ((value) << SDRAMC_OCMS_KEY2_KEY2_Pos)))
+/* -------- SDRAMC_VERSION : (SDRAMC Offset: 0xFC) SDRAMC Version Register -------- */
+#define SDRAMC_VERSION_VERSION_Pos 0
+#define SDRAMC_VERSION_VERSION_Msk (0xfffu << SDRAMC_VERSION_VERSION_Pos) /**< \brief (SDRAMC_VERSION) Version of the Hardware Module */
+#define SDRAMC_VERSION_MFN_Pos 16
+#define SDRAMC_VERSION_MFN_Msk (0x7u << SDRAMC_VERSION_MFN_Pos) /**< \brief (SDRAMC_VERSION) Metal Fix Number */
 
 /*@}*/
 

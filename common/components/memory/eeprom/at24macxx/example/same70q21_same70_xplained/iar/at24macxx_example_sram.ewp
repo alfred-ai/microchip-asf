@@ -1991,7 +1991,13 @@
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/smc.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/piob.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/gpbr.h</name>
@@ -2007,6 +2013,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/isi.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/uart1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/piod.h</name>
@@ -2049,9 +2058,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/usart0.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/uart1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/instance/uart4.h</name>
@@ -2165,6 +2171,9 @@
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/pio.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/hsmci.h</name>
 							</file>
 							<file>
@@ -2190,6 +2199,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/gmac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/matrix.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/isi.h</name>
@@ -2235,9 +2247,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/acc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/matrix.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../sam/utils/cmsis/same70/include/component/uart.h</name>

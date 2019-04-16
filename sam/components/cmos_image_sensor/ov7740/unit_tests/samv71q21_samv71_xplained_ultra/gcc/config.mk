@@ -168,7 +168,7 @@ CPPFLAGS = \
        -D OV7740_TWIHS_SUPPORT=true                       \
        -D TEST_SUITE_DEFINE_ASSERT_MACRO                  \
        -D _ASSERT_ENABLE_                                 \
-       -D __SAMV71Q21__                                   \
+       -D __SAMV71Q21B__                                  \
        -D printf=iprintf                                  \
        -D scanf=iscanf
 

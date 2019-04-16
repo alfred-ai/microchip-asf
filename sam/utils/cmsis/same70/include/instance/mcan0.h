@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -47,6 +47,8 @@
 
 /* ========== Register definition for MCAN0 peripheral ========== */
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
+  #define REG_MCAN0_CREL                    (0x40030000U) /**< \brief (MCAN0) Core Release Register */
+  #define REG_MCAN0_ENDN                    (0x40030004U) /**< \brief (MCAN0) Endian Register */
   #define REG_MCAN0_CUST                    (0x40030008U) /**< \brief (MCAN0) Customer Register */
   #define REG_MCAN0_FBTP                    (0x4003000CU) /**< \brief (MCAN0) Fast Bit Timing and Prescaler Register */
   #define REG_MCAN0_TEST                    (0x40030010U) /**< \brief (MCAN0) Test Register */
@@ -92,6 +94,8 @@
   #define REG_MCAN0_TXEFS                   (0x400300F4U) /**< \brief (MCAN0) Transmit Event FIFO Status Register */
   #define REG_MCAN0_TXEFA                   (0x400300F8U) /**< \brief (MCAN0) Transmit Event FIFO Acknowledge Register */
 #else
+  #define REG_MCAN0_CREL   (*(__I  uint32_t*)0x40030000U) /**< \brief (MCAN0) Core Release Register */
+  #define REG_MCAN0_ENDN   (*(__I  uint32_t*)0x40030004U) /**< \brief (MCAN0) Endian Register */
   #define REG_MCAN0_CUST   (*(__IO uint32_t*)0x40030008U) /**< \brief (MCAN0) Customer Register */
   #define REG_MCAN0_FBTP   (*(__IO uint32_t*)0x4003000CU) /**< \brief (MCAN0) Fast Bit Timing and Prescaler Register */
   #define REG_MCAN0_TEST   (*(__IO uint32_t*)0x40030010U) /**< \brief (MCAN0) Test Register */

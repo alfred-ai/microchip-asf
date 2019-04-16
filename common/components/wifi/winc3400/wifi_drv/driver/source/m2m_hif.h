@@ -62,9 +62,6 @@ MACROS
 
 #define M2M_HIF_HDR_OFFSET (sizeof(tstrHifHdr) + 4)
 
-#define HIFCODE_ROOTCERT_ACCESS_V1	0xFF00
-/*!< Artificial Hif code value to assist checking validity of TLS root certificate operations.
-*/
 
 /**
 *	@struct		tstrHifHdr

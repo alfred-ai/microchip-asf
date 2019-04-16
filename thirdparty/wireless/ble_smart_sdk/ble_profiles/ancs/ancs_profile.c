@@ -3,7 +3,7 @@
 *
 * \brief ANCS Profile
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -63,40 +63,22 @@
  *									Globals			                               *
  **********************************************************************************/
 
-static const ble_event_callback_t ancs_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	anp_client_connected_state_handler,
-	anp_client_disconnected_event_handler,
-	NULL,
-	NULL,
-	anp_client_write_notification_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	anp_client_write_notification_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t ancs_gap_handle = {
+	.connected = anp_client_connected_state_handler,
+	.disconnected = anp_client_disconnected_event_handler,
+	.pair_done = anp_client_write_notification_handler,
+	.encryption_status_changed = anp_client_write_notification_handler
 };
 
-static const ble_event_callback_t ancs_gatt_client_handle[] = {
-	anp_client_service_found_handler,
-	NULL,
-	anp_client_characteristic_found_handler,
-	anp_client_descriptor_found_handler,
-	anp_client_discovery_complete_handler,
-	NULL,
-	NULL,
-	anp_client_write_response_handler,
-	anp_client_notification_handler,
-	NULL
+static const ble_gatt_client_event_cb_t ancs_gatt_client_handle = {
+	.primary_service_found = anp_client_service_found_handler,
+	.characteristic_found = anp_client_characteristic_found_handler,
+	.descriptor_found = anp_client_descriptor_found_handler,
+	.discovery_complete = anp_client_discovery_complete_handler,
+	.characteristic_write_response = anp_client_write_response_handler,
+	.notification_recieved = anp_client_notification_handler
 };
+
 
 /*Profile Information*/
 app_anp_data_t app_anp_info;
@@ -349,10 +331,10 @@ void anp_client_init( void *params)
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	ancs_gap_handle);
+	&ancs_gap_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_CLIENT_EVENT_TYPE,
-	ancs_gatt_client_handle);
+	&ancs_gatt_client_handle);
 	
 	status = ble_advertisement_data_set();
 	if (status != AT_BLE_SUCCESS) {

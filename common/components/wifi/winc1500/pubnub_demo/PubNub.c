@@ -3,7 +3,7 @@
  *
  * \brief PubNub Example.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -84,7 +84,7 @@ static void handle_start_connect(pubnub_t *pb)
 	assert(valid_ctx_prt(pb));
 	assert((pb->state == PS_IDLE) || (pb->state == PS_WAIT_DNS) || (pb->state == PS_WAIT_CONNECT));
 
-	if (pb->state == PS_IDLE && pb->tcp_socket <= 0) {
+	if (pb->state == PS_IDLE && pb->tcp_socket < 0) {
 		if ((pb->tcp_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 			CONF_WINC_PRINTF("failed to create TCP client socket error!\r\n");
 			return;
@@ -240,6 +240,7 @@ static void handle_tcpip_connect(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 		} else {
 			PUBNUB_PRINTF("handle_tcpip_connect : connect error!\r\n");
 			close(pb->tcp_socket);
+			pb->tcp_socket = -1;
 
 			pb->state = PS_IDLE;
 			pb->last_result = PNR_IO_ERROR;
@@ -262,6 +263,7 @@ static void handle_tcpip_recv(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 
 		if (pstrRecv->s16BufferSize <= 0) {
 			close(pb->tcp_socket);
+			pb->tcp_socket = -1;
 
 			pb->state = PS_IDLE;
 			pb->last_result = PNR_IO_ERROR;

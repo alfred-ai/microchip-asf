@@ -3,7 +3,7 @@
 *
 * \brief ANCS Service Declarations
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -111,7 +111,6 @@ typedef struct gatt_anp_handler
 	
 }gatt_anp_handler_t;
 
-void anp_alert_init(void);
 
 /**
  * @brief invoked by the profile for enabling or disabling notifications

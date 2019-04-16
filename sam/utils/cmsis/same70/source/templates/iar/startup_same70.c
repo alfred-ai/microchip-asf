@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -146,6 +146,13 @@ void Dummy_Handler(void);
 #pragma weak SDRAMC_Handler=Dummy_Handler
 #endif /* _SAME70_SDRAMC_INSTANCE_ */
 #pragma weak RSWDT_Handler=Dummy_Handler
+#pragma weak ARM_Handler=Dummy_Handler
+#ifdef _SAME70_I2SC0_INSTANCE_
+#pragma weak I2SC0_Handler=Dummy_Handler
+#endif /* _SAME70_I2SC0_INSTANCE_ */
+#ifdef _SAME70_I2SC1_INSTANCE_
+#pragma weak I2SC1_Handler=Dummy_Handler
+#endif /* _SAME70_I2SC1_INSTANCE_ */
 
 /* Exception Table */
 #pragma language = extended
@@ -241,9 +248,9 @@ const DeviceVectors __vector_table = {
         .pfnACC_Handler    = (void*) ACC_Handler,    /* 33 Analog Comparator */
         .pfnUSBHS_Handler  = (void*) USBHS_Handler,  /* 34 USB Host / Device Controller */
         .pfnMCAN0_Handler  = (void*) MCAN0_Handler,  /* 35 MCAN Controller 0 */
-        .pvReserved36      = (void*) (0UL),          /* 36 Reserved */
+        .pfnMCAN0_Handler  = (void*) MCAN0_Handler,  /* 36 MCAN 0 IRQ */
         .pfnMCAN1_Handler  = (void*) MCAN1_Handler,  /* 37 MCAN Controller 1 */
-        .pvReserved38      = (void*) (0UL),          /* 38 Reserved */
+        .pfnMCAN1_Handler  = (void*) MCAN1_Handler,  /* 38 MCAN 1 IRQ */
         .pfnGMAC_Handler   = (void*) GMAC_Handler,   /* 39 Ethernet MAC */
         .pfnAFEC1_Handler  = (void*) AFEC1_Handler,  /* 40 Analog Front End 1 */
 #ifdef _SAME70_TWIHS2_INSTANCE_
@@ -282,13 +289,28 @@ const DeviceVectors __vector_table = {
         .pfnXDMAC_Handler  = (void*) XDMAC_Handler,  /* 58 DMA */
         .pfnISI_Handler    = (void*) ISI_Handler,    /* 59 Camera Interface */
         .pfnPWM1_Handler   = (void*) PWM1_Handler,   /* 60 Pulse Width Modulation 1 */
-        .pvReserved61      = (void*) (0UL),          /* 61 Reserved */
+        .pfnARM_Handler    = (void*) ARM_Handler,    /* 61 Floating Point Unit */
 #ifdef _SAME70_SDRAMC_INSTANCE_
         .pfnSDRAMC_Handler = (void*) SDRAMC_Handler, /* 62 SDRAM Controller */
 #else
         .pvReserved62      = (void*) (0UL),          /* 62 Reserved */
 #endif /* _SAME70_SDRAMC_INSTANCE_ */
-        .pfnRSWDT_Handler  = (void*) RSWDT_Handler   /* 63 Reinforced Secure Watchdog Timer */
+        .pfnRSWDT_Handler  = (void*) RSWDT_Handler,  /* 63 Reinforced Secure Watchdog Timer */
+        .pfnARM_Handler    = (void*) ARM_Handler,    /* 64 ARM Cache ECC Warning */
+        .pfnARM_Handler    = (void*) ARM_Handler,    /* 65 ARM Cache ECC Fault */
+        .pfnGMAC_Handler   = (void*) GMAC_Handler,   /* 66 GMAC Queue 1 */
+        .pfnGMAC_Handler   = (void*) GMAC_Handler,   /* 67 GMAC Queue 2 */
+        .pfnARM_Handler    = (void*) ARM_Handler,    /* 68 Floating Point Unit - IXC */
+#ifdef _SAME70_I2SC0_INSTANCE_
+        .pfnI2SC0_Handler  = (void*) I2SC0_Handler,  /* 69 Inter-IC Sound controller */
+#else
+        .pvReserved69      = (void*) (0UL),          /* 69 Reserved */
+#endif /* _SAME70_I2SC0_INSTANCE_ */
+#ifdef _SAME70_I2SC1_INSTANCE_
+        .pfnI2SC1_Handler  = (void*) I2SC1_Handler   /* 70 Inter-IC Sound controller */
+#else
+        .pvReserved70      = (void*) (0UL)           /* 70 Reserved */
+#endif /* _SAME70_I2SC1_INSTANCE_ */
 };
 
 /**------------------------------------------------------------------------------

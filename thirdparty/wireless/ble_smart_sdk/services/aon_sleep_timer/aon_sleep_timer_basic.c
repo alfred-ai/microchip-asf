@@ -3,7 +3,7 @@
  *
  * \brief SAM AON Sleep Timer Driver basic for SAMB11
  *
- * Copyright (C) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *

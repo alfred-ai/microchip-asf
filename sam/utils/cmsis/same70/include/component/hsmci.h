@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -75,7 +75,9 @@ typedef struct {
   __I  uint32_t Reserved2[35];
   __IO uint32_t HSMCI_WPMR;      /**< \brief (Hsmci Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t HSMCI_WPSR;      /**< \brief (Hsmci Offset: 0xE8) Write Protection Status Register */
-  __I  uint32_t Reserved3[69];
+  __I  uint32_t Reserved3[4];
+  __I  uint32_t HSMCI_VERSION;   /**< \brief (Hsmci Offset: 0xFC) Version Register */
+  __I  uint32_t Reserved4[64];
   __IO uint32_t HSMCI_FIFO[256]; /**< \brief (Hsmci Offset: 0x200) FIFO Memory Aperture0 */
 } Hsmci;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
@@ -339,6 +341,11 @@ typedef struct {
 #define HSMCI_WPSR_WPVS (0x1u << 0) /**< \brief (HSMCI_WPSR) Write Protection Violation Status */
 #define HSMCI_WPSR_WPVSRC_Pos 8
 #define HSMCI_WPSR_WPVSRC_Msk (0xffffu << HSMCI_WPSR_WPVSRC_Pos) /**< \brief (HSMCI_WPSR) Write Protection Violation Source */
+/* -------- HSMCI_VERSION : (HSMCI Offset: 0xFC) Version Register -------- */
+#define HSMCI_VERSION_VERSION_Pos 0
+#define HSMCI_VERSION_VERSION_Msk (0xfffu << HSMCI_VERSION_VERSION_Pos) /**< \brief (HSMCI_VERSION) Hardware Module Version */
+#define HSMCI_VERSION_MFN_Pos 16
+#define HSMCI_VERSION_MFN_Msk (0x7u << HSMCI_VERSION_MFN_Pos) /**< \brief (HSMCI_VERSION) Metal Fix Number */
 /* -------- HSMCI_FIFO[256] : (HSMCI Offset: 0x200) FIFO Memory Aperture0 -------- */
 #define HSMCI_FIFO_DATA_Pos 0
 #define HSMCI_FIFO_DATA_Msk (0xffffffffu << HSMCI_FIFO_DATA_Pos) /**< \brief (HSMCI_FIFO[256]) Data to Read or Data to Write */

@@ -3,7 +3,7 @@
  *
  * \brief Health Thermometer Profile Application declarations
  *
- * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -57,7 +57,7 @@
 
 #define APP_HT_FAST_ADV 1600 //1000 ms
 
-#define APP_HT_ADV_TIMEOUT 655 // 10 mins
+#define APP_HT_ADV_TIMEOUT 655 // 100 Secs
 
 #define SCAN_RESP_LEN 10
 #define ADV_DATA_LEN 18

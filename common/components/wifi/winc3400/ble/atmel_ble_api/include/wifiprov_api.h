@@ -50,6 +50,8 @@
 #define MAX_WIPROVTASK_SSID_LENGTH    32
 #define MAX_WIPROVTASK_PASS_LENGTH    63
 
+#define MAX_LOCALNAME_LENGTH 11
+
 /*
  * msgs from APP to wifiprov
  *

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -78,6 +78,7 @@ typedef struct {
 #define ACC_MR_SELMINUS(value) ((ACC_MR_SELMINUS_Msk & ((value) << ACC_MR_SELMINUS_Pos)))
 #define   ACC_MR_SELMINUS_TS (0x0u << 0) /**< \brief (ACC_MR) Select TS */
 #define   ACC_MR_SELMINUS_ADVREFP (0x1u << 0) /**< \brief (ACC_MR) Select ADVREFP */
+#define   ACC_MR_SELMINUS_VREFP (0x1u << 0) /**< \brief (ACC_MR) Select VREFP */
 #define   ACC_MR_SELMINUS_DAC0 (0x2u << 0) /**< \brief (ACC_MR) Select DAC0 */
 #define   ACC_MR_SELMINUS_DAC1 (0x3u << 0) /**< \brief (ACC_MR) Select DAC1 */
 #define   ACC_MR_SELMINUS_AFE0_AD0 (0x4u << 0) /**< \brief (ACC_MR) Select AFE0_AD0 */

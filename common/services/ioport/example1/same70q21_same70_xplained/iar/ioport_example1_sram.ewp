@@ -1996,6 +1996,9 @@
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/smc.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/trng.h</name>
 							</file>
 							<file>
@@ -2009,6 +2012,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/uart1.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/usart1.h</name>
@@ -2258,6 +2264,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/rtt.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/dacc.h</name>

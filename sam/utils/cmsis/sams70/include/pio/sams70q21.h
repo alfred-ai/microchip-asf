@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -281,6 +281,18 @@
 #define PIO_PA31C_MCDA1           (1u << 31) /**< \brief Hsmci signal: MCDA1 */
 #define PIO_PA26C_MCDA2           (1u << 26) /**< \brief Hsmci signal: MCDA2 */
 #define PIO_PA27C_MCDA3           (1u << 27) /**< \brief Hsmci signal: MCDA3 */
+/* ========== Pio definition for I2SC0 peripheral ========== */
+#define PIO_PA1D_I2SC0_CK          (1u << 1)  /**< \brief I2sc0 signal: I2SC0_CK */
+#define PIO_PA16D_I2SC0_DI0        (1u << 16) /**< \brief I2sc0 signal: I2SC0_DI0 */
+#define PIO_PA30D_I2SC0_DO0        (1u << 30) /**< \brief I2sc0 signal: I2SC0_DO0 */
+#define PIO_PA0D_I2SC0_MCK         (1u << 0)  /**< \brief I2sc0 signal: I2SC0_MCK */
+#define PIO_PA15D_I2SC0_WS         (1u << 15) /**< \brief I2sc0 signal: I2SC0_WS */
+/* ========== Pio definition for I2SC1 peripheral ========== */
+#define PIO_PA20D_I2SC1_CK         (1u << 20) /**< \brief I2sc1 signal: I2SC1_CK */
+#define PIO_PE2C_I2SC1_DI0         (1u << 2)  /**< \brief I2sc1 signal: I2SC1_DI0 */
+#define PIO_PE1C_I2SC1_DO0         (1u << 1)  /**< \brief I2sc1 signal: I2SC1_DO0 */
+#define PIO_PA19D_I2SC1_MCK        (1u << 19) /**< \brief I2sc1 signal: I2SC1_MCK */
+#define PIO_PE0C_I2SC1_WS          (1u << 0)  /**< \brief I2sc1 signal: I2SC1_WS */
 /* ========== Pio definition for ISI peripheral ========== */
 #define PIO_PD22D_ISI_D0          (1u << 22) /**< \brief Isi signal: ISI_D0 */
 #define PIO_PD21D_ISI_D1          (1u << 21) /**< \brief Isi signal: ISI_D1 */
@@ -533,6 +545,18 @@
 #define PIO_PD15B_RXD2            (1u << 15) /**< \brief Usart2 signal: RXD2 */
 #define PIO_PD17B_SCK2            (1u << 17) /**< \brief Usart2 signal: SCK2 */
 #define PIO_PD16B_TXD2            (1u << 16) /**< \brief Usart2 signal: TXD2 */
+/* ========== Pio definition for UTMI peripheral ========== */
+#define PIO_PC12D_UTMI_CDRBISTEN   (1u << 12) /**< \brief Utmi signal: UTMI_CDRBISTEN */
+#define PIO_PC29D_UTMI_CDRCPDIVEN  (1u << 29) /**< \brief Utmi signal: UTMI_CDRCPDIVEN */
+#define PIO_PC31D_UTMI_CDRCPSEL0   (1u << 31) /**< \brief Utmi signal: UTMI_CDRCPSEL0 */
+#define PIO_PC30D_UTMI_CDRCPSEL1   (1u << 30) /**< \brief Utmi signal: UTMI_CDRCPSEL1 */
+#define PIO_PC15D_UTMI_CDRCPSELDIV (1u << 15) /**< \brief Utmi signal: UTMI_CDRCPSELDIV */
+#define PIO_PC0D_UTMI_HDIS         (1u << 0)  /**< \brief Utmi signal: UTMI_HDIS */
+#define PIO_PC27D_UTMI_LS0         (1u << 27) /**< \brief Utmi signal: UTMI_LS0 */
+#define PIO_PC26D_UTMI_LS1         (1u << 26) /**< \brief Utmi signal: UTMI_LS1 */
+#define PIO_PE3D_UTMI_RXACT        (1u << 3)  /**< \brief Utmi signal: UTMI_RXACT */
+#define PIO_PE2D_UTMI_RXERR        (1u << 2)  /**< \brief Utmi signal: UTMI_RXERR */
+#define PIO_PE1D_UTMI_RXVAL        (1u << 1)  /**< \brief Utmi signal: UTMI_RXVAL */
 /* ========== Pio indexes ========== */
 #define PIO_PA0_IDX               0
 #define PIO_PA1_IDX               1

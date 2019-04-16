@@ -145,13 +145,7 @@ static at_ble_event_parameter_t gu8BleParam __aligned(4);
 static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 {
 	tstrWifiInitParam param;
-	uint32 pinmask = (
-	M2M_PERIPH_PULLUP_DIS_HOST_WAKEUP|
-	M2M_PERIPH_PULLUP_DIS_SD_CMD_SPI_SCK|
-	M2M_PERIPH_PULLUP_DIS_SD_DAT0_SPI_TXD);
-
 	sint8 ret;
-
 	uint8 mac_addr[6];
 	uint8 u8IsMacAddrValid;
 	sint8 deviceName[] = M2M_DEVICE_NAME;
@@ -180,8 +174,6 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 		{
 		}
 	}
-	
-	m2m_periph_pullup_ctrl(pinmask, 0);
 	
 	m2m_wifi_get_otp_mac_address(mac_addr, &u8IsMacAddrValid);
 	if (!u8IsMacAddrValid) {
@@ -293,7 +285,7 @@ static void app_ble_wifi_provisioning(void)
 	// Initialize BLE stack on 3400.
 	m2m_ble_init();
 	m2m_wifi_req_unrestrict_ble();
-	ble_prov_init((uint8_t *)"WiFi Prov");
+	ble_prov_init((uint8_t *)"WiFi Prov1");
 
 	while (1)
 	{

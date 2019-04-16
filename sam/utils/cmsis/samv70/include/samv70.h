@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,7 +44,19 @@
 #ifndef _SAMV70_
 #define _SAMV70_
 
-#if defined (__SAMV70J19__)
+#if defined (__SAMV70J19B__)
+  #include "samv70j19b.h"
+#elif defined (__SAMV70J20B__)
+  #include "samv70j20b.h"
+#elif defined (__SAMV70N19B__)
+  #include "samv70n19b.h"
+#elif defined (__SAMV70N20B__)
+  #include "samv70n20b.h"
+#elif defined (__SAMV70Q19B__)
+  #include "samv70q19b.h"
+#elif defined (__SAMV70Q20B__)
+  #include "samv70q20b.h"
+#elif defined (__SAMV70J19__)
 #include "samv70j19.h"
 #elif defined (__SAMV70J20__)
 #include "samv70j20.h"

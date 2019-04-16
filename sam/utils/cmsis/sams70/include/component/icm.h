@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -67,6 +67,11 @@ typedef struct {
   __IO uint32_t ICM_DSCR;      /**< \brief (Icm Offset: 0x30) Region Descriptor Area Start Address Register */
   __IO uint32_t ICM_HASH;      /**< \brief (Icm Offset: 0x34) Region Hash Area Start Address Register */
   __O  uint32_t ICM_UIHVAL[8]; /**< \brief (Icm Offset: 0x38) User Initial Hash Value 0 Register */
+  __I  uint32_t Reserved3[37];
+  __I  uint32_t ICM_ADDRSIZE;  /**< \brief (Icm Offset: 0xEC) Address Size Register */
+  __I  uint32_t ICM_IPNAME[2]; /**< \brief (Icm Offset: 0xF0) IP Name 1 Register */
+  __I  uint32_t ICM_FEATURES;  /**< \brief (Icm Offset: 0xF8) Feature Register */
+  __I  uint32_t ICM_VERSION;   /**< \brief (Icm Offset: 0xFC) Version Register */
 } Icm;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- ICM_CFG : (ICM Offset: 0x00) Configuration Register -------- */
@@ -200,6 +205,33 @@ typedef struct {
 #define ICM_UIHVAL_VAL_Pos 0
 #define ICM_UIHVAL_VAL_Msk (0xffffffffu << ICM_UIHVAL_VAL_Pos) /**< \brief (ICM_UIHVAL[8]) Initial Hash Value */
 #define ICM_UIHVAL_VAL(value) ((ICM_UIHVAL_VAL_Msk & ((value) << ICM_UIHVAL_VAL_Pos)))
+/* -------- ICM_ADDRSIZE : (ICM Offset: 0xEC) Address Size Register -------- */
+#define ICM_ADDRSIZE_ADDRSIZE_Pos 0
+#define ICM_ADDRSIZE_ADDRSIZE_Msk (0xffffu << ICM_ADDRSIZE_ADDRSIZE_Pos) /**< \brief (ICM_ADDRSIZE) Peripheral Bus Address Area Size */
+/* -------- ICM_IPNAME[2] : (ICM Offset: 0xF0) IP Name 1 Register -------- */
+#define ICM_IPNAME_IPNAME_Pos 0
+#define ICM_IPNAME_IPNAME_Msk (0xffffffffu << ICM_IPNAME_IPNAME_Pos) /**< \brief (ICM_IPNAME[2]) IP Name in ASCII Format */
+/* -------- ICM_FEATURES : (ICM Offset: 0xF8) Feature Register -------- */
+#define ICM_FEATURES_CFGALGO (0x1u << 0) /**< \brief (ICM_FEATURES) Configurable Algorithms */
+#define ICM_FEATURES_RFU (0x1u << 1) /**< \brief (ICM_FEATURES) Reserved for Future Use */
+#define ICM_FEATURES_CFGPP (0x1u << 2) /**< \brief (ICM_FEATURES) Configurable Processing Period */
+#define ICM_FEATURES_HDPP (0x1u << 3) /**< \brief (ICM_FEATURES) Hardcoded Processing Period */
+#define ICM_FEATURES_PDC (0x1u << 4) /**< \brief (ICM_FEATURES) Peripheral DMA Logic */
+#define ICM_FEATURES_NAIS (0x1u << 5) /**< \brief (ICM_FEATURES) No Access to Intermediate State */
+#define ICM_FEATURES_EF (0x1u << 6) /**< \brief (ICM_FEATURES) Embedded LFSR */
+#define ICM_FEATURES_SI (0x1u << 7) /**< \brief (ICM_FEATURES) Scan Intrusion */
+#define ICM_FEATURES_BTYP (0x1u << 8) /**< \brief (ICM_FEATURES) Bridge Type */
+#define ICM_FEATURES_PDCOFF0C (0x1u << 9) /**< \brief (ICM_FEATURES) PDC Offset is 0x0C */
+#define ICM_FEATURES_HSHA1 (0x1u << 16) /**< \brief (ICM_FEATURES) SHA1 Hardcoded Mode */
+#define ICM_FEATURES_HSHA224 (0x1u << 17) /**< \brief (ICM_FEATURES) SHA224 Hardcoded Mode */
+#define ICM_FEATURES_HSHA256 (0x1u << 18) /**< \brief (ICM_FEATURES) SHA256 Hardcoded Mode */
+#define ICM_FEATURES_HSHA384 (0x1u << 19) /**< \brief (ICM_FEATURES) SHA384 Hardcoded Mode */
+#define ICM_FEATURES_HSHA512 (0x1u << 20) /**< \brief (ICM_FEATURES) SHA512 Hardcoded Mode */
+/* -------- ICM_VERSION : (ICM Offset: 0xFC) Version Register -------- */
+#define ICM_VERSION_VERSION_Pos 0
+#define ICM_VERSION_VERSION_Msk (0xfffu << ICM_VERSION_VERSION_Pos) /**< \brief (ICM_VERSION) Version of the Hardware Module */
+#define ICM_VERSION_MFN_Pos 16
+#define ICM_VERSION_MFN_Msk (0x7u << ICM_VERSION_MFN_Pos) /**< \brief (ICM_VERSION) Metal Fix Number */
 
 /*@}*/
 

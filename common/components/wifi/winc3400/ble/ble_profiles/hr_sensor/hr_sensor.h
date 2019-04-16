@@ -95,6 +95,9 @@
 #define ENERGY_EXP_RUNNING                                                   (40)
 #define ENERGY_EXP_FAST_RUNNING                                              (60)
 
+/**@brief Heart rate increment value*/
+#define HEART_RATE_INCREMENT_VALUE											(1)
+
 /**@brief Heart Rate maximum and minimum values for various activities*/
 #define HEART_RATE_MIN_NORM                                                 (50)
 #define HEART_RATE_MAX_NORM                                                 (70)

@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 UDP Client Example.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -254,10 +254,10 @@ int main(void)
 	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 
 	while (1) {
-		if (packetCnt == MAIN_WIFI_M2M_PACKET_COUNT) {
+		if (packetCnt == MAIN_WIFI_M2M_PACKET_COUNT){
 			close(tx_socket);
 			tx_socket = -1;
-			continue;
+			break;
 		}
 
 		m2m_wifi_handle_events(NULL);

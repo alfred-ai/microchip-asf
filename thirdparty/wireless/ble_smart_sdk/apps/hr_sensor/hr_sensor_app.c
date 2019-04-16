@@ -3,7 +3,7 @@
  *
  * \brief Heart Rate Sensor Application
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -40,12 +40,87 @@
  * \asf_license_stop
  *
  */
-
-/*
- * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel
- *Support</a>
+ /**
+ * \mainpage Heart Rate Application
+ * \section Introduction
+ * ******************************Introduction ***********************************
+ *
+ * The Heart Rate example application bring-up the Heart Rate profile defined by
+ * the Bluetooth SIG which would send the Heart Rate information to BLE enabled collector device.
+ * The Heart rate Profile enables the collector device (GATT Client) to connect 
+ * and interact with a Heart Rate Sensor (GATT Server) for use in fitness 
+ * applications. The Heart rate sensor sends the heart rate measurement in bpm,
+ * energy expended in kilojoules and R-R intervals in seconds. In addition to 
+ * the heart rate service the heart rate profile also implements the Device 
+ * Information Service, which provides the information about the Heart Rate Sensor Device.
+ * + Features -
+ *   + Device Discovery and Disconnection
+ *   + Pairing / Bonding
+ *   + Heart Rate Senor Measurements
+ *   + Console Display
+ * 
+ * - Running the demo -
+ *  + 1. Build and flash the binary into supported evaluation board.
+ *  + 2. Open the console using TeraTerm or any serial port monitor.
+ *  + 3. Press the Reset button.
+ *  + 4. Wait for around 10 seconds for the patches to be downloaded device will initialize and start-up.
+ *  + 5. The device is now in advertising mode.
+ *  + 6. On a BLE compatible iPhone®/Android phone, enable Bluetooth in the Settings
+ *       page. Start the 'Atmel Smart Connect Application' and scan for devices. ATMEL-HRP 
+ *       will be appear among the devices scanned. Click on **ATMEL-HRP** to connect
+ *       to supported platform.
+ *  + 7. Once connected, the client side will request for the pairing procedure.
+ *       The console log provides a guidance to the user to enter the pass-key.
+ *  + 8. Once the device is connected, the supported services of Heart Rate and Device Information will be displayed.
+ *  + 9. Once the notifications are enabled the HRM values are displayed as shown in the console and the corresponding mobile app. 
+ *  + 10. User can turn off notification by clicking on Stop Notify.
+ *
+ * \section Modules
+ * ***************************** MODULES ***************************************** 
+ * - BLE Manager - 
+ *  + The Event Manager is responsible for handling the following:
+ *    + Generic BLE Event Handling:-
+ *       + BLE Event Manager handles the events triggered by BLE stack and also responsible 
+ *  	 for invoking all registered callbacks for respective events. BLE Manager 
+ *  	 handles all GAP related functionality. In addition to that handles multiple connection 
+ *  	 instances, Pairing, Encryption, Scanning.
+ *    + Handling Multi-role/multi-connection:-
+ *  	  + BLE Event Manager is responsible for handling multiple connection instances 
+ *  	  and stores bonding information and Keys to retain the bonded device. 
+ *  	  BLE Manager is able to identify and remove the device information when pairing/encryption 
+ *		  gets failed. In case of multi-role, it handles the state/event handling of both central and peripheral in multiple contexts.
+ *    + Controlling the Advertisement data:-
+ *  	  + BLE Event Manager is responsible for generating the advertisement and scan response data
+ *  	  for BLE profiles/services that are attached with BLE Manager.
+ *
+ * - BLE Profile-
+ *  The Heart Rate service exposes heart rate and other data from a Heart Rate 
+ *  Sensor intended for fitness applications.
+ *  + Heart Rate service has three characteristics:
+ *    + Heart Rate Measurement -
+ *      + This characteristic is used to send a heart rate measurement.
+ *    + Body Sensor Location -
+ *      + The Body Sensor Location characteristic of the device is used to 
+ *        describe the intended location of the heart rate measurement for the device..
+ *    + Heart Rate Control Point -
+ *      + The Heart Rate Control Point characteristic is used to enable Client 
+ *        to write control points to a Server to control behaviour.
+ *  
+ * - BLE Platform Services -
+ *  +  Serial Console COM port settings -
+ *    + Baudrate 115200
+ *	  + Parity None, Stop Bit 1, Start Bit 1
+ *	  + No Hardware Handshake
+ *
+ * \section BluSDK Package
+ * ***************************** BluSDK Package *****************************************
+ * - Links for Docs -
+ *		+ http://www.microchip.com/wwwproducts/en/ATSAMB11
+ *		+ http://www.microchip.com/developmenttools/productdetails.aspx?partno=atsamb11-xpro
+ *- Support and FAQ - visit -
+ *		+ <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
-
+ 
 /****************************************************************************************
 *							        Includes	
 *                                       *
@@ -62,6 +137,7 @@
 #include "hr_sensor_app.h"
 #include "hr_sensor.h"
 #include "timer.h"
+#include "samb11_delay.h"
 
 /****************************************************************************************
 *							        Globals		
@@ -86,41 +162,18 @@ int8_t time_operator ;/*!< operator to change the seconds */
 uint8_t hr_min_value;/*!<the minimum heart rate value*/
 uint8_t hr_max_value;/*!<the maximum heart rate value*/
 uint8_t energy_inclusion = 0;/*!<To check for including the energy in hr measurement*/
+volatile bool app_init_done = false; 
+extern bool button_debounce;
 
-static const ble_event_callback_t app_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	app_connected_event_handler,
-	app_disconnected_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t app_gap_handle = {
+	.connected = app_connected_event_handler,
+	.disconnected = app_disconnected_event_handler
 };
 
-static const ble_event_callback_t app_gatt_server_handle[] = {
-	app_notification_cfm_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t app_gatt_server_handle = {
+	.notification_confirmed = app_notification_cfm_handler
 };
+
 
 /****************************************************************************************
 *							        Functions											*
@@ -258,23 +311,6 @@ static at_ble_status_t app_disconnected_event_handler(void *params)
 	return AT_BLE_SUCCESS;
 }
 
-/**
- * @brief Button Press Callback
- */
-static void button_cb(void)
-{
-	if (app_state) {
-		DBG_LOG_DEV("Going to disconnect ");
-		disconnect_flag = true;
-	} else if (app_state == false && advertisement_flag == false) {
-		/* To check if the device is in advertisement */
-		DBG_LOG_DEV("Going to advertisement");
-		start_advertisement = true;
-		advertisement_flag = true;	
-	}
-	send_plf_int_msg_ind(USER_TIMER_CALLBACK, TIMER_EXPIRED_CALLBACK_TYPE_DETECT, NULL, 0);
-}
-
 /** @brief hr_measurment_send sends the notifications after adding the hr values
  *	heart rate values starts @60bpm increments by 1 goes upto 255 bpm and
  *	restarts @60
@@ -355,23 +391,94 @@ static void hr_measurment_send(void)
 	hr_sensor_send_notification(hr_data, idx);
 }
 
+
+
+/* Callback registered for AT_PLATFORM_EVENT event from stack */
+static at_ble_status_t platform_interrupt_app_event(void *param)
+{
+	at_ble_status_t status = AT_BLE_SUCCESS;
+	platform_isr_event_t *plf_isr_event = (platform_isr_event_t *)param;
+	if((start_advertisement == true || disconnect_flag == true) && (plf_isr_event->event_type == ((PORTINT_CALLBACK_TYPE_DETECT << 8)  | RAM_ISR_TABLE_PORT0_COMB_INDEX)))
+		{/*delay_ms(350);*/}
+	
+	/* Flag to start notification */
+	if ((plf_isr_event->event_type == ((TIMER_EXPIRED_CALLBACK_TYPE_DETECT << 8)  | RAM_ISR_TABLE_TIMER0_INDEX)) && notification_flag )
+	{
+		LED_Toggle(LED0);
+		if (notification_sent) {
+			hr_measurment_send();
+			} else {
+			DBG_LOG("Previous notification not sent");
+			status = AT_BLE_FAILURE;
+		}
+		notification_flag = false;		
+	}
+	if((plf_isr_event->event_type == ((PORTINT_CALLBACK_TYPE_DETECT << 8)  | RAM_ISR_TABLE_PORT0_COMB_INDEX)) && start_advertisement )
+	{
+		hr_sensor_adv();
+		start_advertisement = false;
+	}
+	/* Flag to disconnect with the peer device */
+	if((plf_isr_event->event_type == ((PORTINT_CALLBACK_TYPE_DETECT << 8)  | RAM_ISR_TABLE_PORT0_COMB_INDEX)) && disconnect_flag )
+	{
+		hr_sensor_disconnect();
+		app_state = false;
+		disconnect_flag = false;
+	}
+	delay_ms(200);
+	button_debounce = true;
+	return status;		
+}
 /**
  * \brief Timer callback handler called on timer expiry
  */
 static void timer_callback_handler(void)
 {
-	if (second_counter == START_OF_FIRST_ACTIVITY) {
-		time_operator = 1;
-	} else if (second_counter == END_OF_LAST_ACTIVITY) {
-		time_operator = -1;
+	if(!app_init_done)
+	{
+		//do nothing
 	}
-	second_counter += (time_operator);
-	heart_rate_value_init();
-	notification_flag = true;
-	
-	send_plf_int_msg_ind(USER_TIMER_CALLBACK, TIMER_EXPIRED_CALLBACK_TYPE_DETECT, NULL, 0);
+	else
+	{
+		if (second_counter == START_OF_FIRST_ACTIVITY) 
+			time_operator = 1;
+		else if (second_counter == END_OF_LAST_ACTIVITY) 
+			time_operator = -1;
+		second_counter += (time_operator);
+		heart_rate_value_init();
+		notification_flag = true;
+		send_plf_int_msg_ind(RAM_ISR_TABLE_TIMER0_INDEX, TIMER_EXPIRED_CALLBACK_TYPE_DETECT, NULL, 0);
+	}
 }
 
+static void button_cb(void)
+{
+	if(!app_init_done)
+	{
+		//do nothing
+	}
+	else
+	{
+		if(app_state)
+		{
+			DBG_LOG_DEV("Going to disconnect ");
+			disconnect_flag = true;
+		} 
+		else if (app_state == false && advertisement_flag == false) 
+		{
+			/* To check if the device is in advertisement */
+			DBG_LOG_DEV("Going to advertisement");
+			start_advertisement = true;
+			advertisement_flag = true;
+		}
+		send_plf_int_msg_ind(RAM_ISR_TABLE_PORT0_COMB_INDEX, PORTINT_CALLBACK_TYPE_DETECT, NULL, 0);
+	}
+}
+
+/* Custom events like user defined event, platform event callback handlers for OTAU profile */
+static const ble_custom_event_cb_t hr_sensor_app_custom_event_handle = {
+	.platform_event_ready = platform_interrupt_app_event /* This event not handled in BLE Manager */
+};
 /* to make app executing continuously*/
 bool app_exec = true;
 /**
@@ -423,7 +530,8 @@ int main(void)
 
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
-	
+
+	app_init_done = true;	
 	/* Initialize the profile */
 	hr_sensor_init(NULL);
 	
@@ -438,45 +546,21 @@ int main(void)
 	/* Registering the call backs for events with the ble manager */
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	app_gap_handle);
+	&app_gap_handle);
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_SERVER_EVENT_TYPE,
-	app_gatt_server_handle);
+	&app_gatt_server_handle);
+	
+	/* Register callbacks for user defined custom events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_CUSTOM_EVENT_TYPE,
+	&hr_sensor_app_custom_event_handle);
 
 	/* Capturing the events  */
 	while (app_exec) {
-		ble_event_task(BLE_EVENT_TIMEOUT);
-
-		if (start_advertisement == true || disconnect_flag == true) {
-			/* button debounce delay*/
-			/*delay_ms(350);*/
-		}
-		
-		/* Flag to start advertisement */
-		if (start_advertisement) {
-			hr_sensor_adv();
-			start_advertisement = false;
-		}
-
-		/* Flag to start notification */
-		if (notification_flag) {
-			LED_Toggle(LED0);
-			if (notification_sent) {
-				hr_measurment_send();
-			} else {
-				DBG_LOG("Previous notification not sent");
-			}
-			
-			notification_flag = false;
-		}
-
-		/* Flag to disconnect with the peer device */
-		if (disconnect_flag) {
-			hr_sensor_disconnect();
-			app_state = false;
-			disconnect_flag = false;
-		}
+		/* BLE Event Task */
+		ble_event_task(0xFFFFFFFF);
 	}
 	return 0;
 }

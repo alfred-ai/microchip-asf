@@ -3,7 +3,7 @@
 *
 * \brief BLE Utils declarations
 *
-* Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2014-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -59,6 +59,9 @@
 #define   BLE_ROLE_PERIPHERAL  0x0A
     /// Device has all role, both peripheral and central
 #define   BLE_ROLE_ALL         0x0F
+/* Supported BLE Modules */
+#define SAMB11_MR		0x00
+#define SAMB11_ZR		0x01
 
 
 
@@ -112,5 +115,14 @@ static inline uint32_t convert_ieee754_ieee11073_float(float f_val)
 #define BLE_PACK_SET	COMPILER_PACK_SET(1)
 
 #define BLE_PACK_RESET	COMPILER_PACK_RESET()
+
+/// BluSDK version
+#define BLE_SDK_MAJOR_NO(version)	((version >> 28) & 0x0000000F)
+#define BLE_SDK_MINOR_NO(version)	((version >> 24) & 0x0000000F)
+#define BLE_SDK_BUILD_NO(version)	(version & 0x0000FFFF)
+
+#define BLUSMARTSDK_VER_6_1  (0x61000000)
+
+#define BLE_SDK_VERSION BLUSMARTSDK_VER_6_1
 
 #endif /*__BLE_UTILS_H__*/

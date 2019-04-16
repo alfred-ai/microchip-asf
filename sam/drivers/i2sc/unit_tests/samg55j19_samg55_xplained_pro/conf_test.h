@@ -3,7 +3,7 @@
  *
  * \brief Unit test configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -47,11 +47,10 @@
 #ifndef CONF_TEST_H
 #define CONF_TEST_H
 
-/** USART Interface */
-#define CONF_TEST_USART      CONSOLE_UART
-/** Baudrate setting */
-#define CONF_TEST_BAUDRATE   (115200UL)
-/** Parity setting */
-#define CONF_TEST_PARITY     US_MR_PAR_NO
+/* I2S instance */
+#define CONF_I2SC I2SC0
+
+/* Use PDC for test, comment to use no DMA/PDC */
+#define CONF_TEST_DMA 0
 
 #endif /* CONF_TEST_H_INCLUDED */

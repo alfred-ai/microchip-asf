@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,7 +61,7 @@
 #else
   #define REG_ICM_CFG    (*(__IO uint32_t*)0x40048000U) /**< \brief (ICM) Configuration Register */
   #define REG_ICM_CTRL   (*(__O  uint32_t*)0x40048004U) /**< \brief (ICM) Control Register */
-  #define REG_ICM_SR     (*(__O  uint32_t*)0x40048008U) /**< \brief (ICM) Status Register */
+  #define REG_ICM_SR     (*(__I  uint32_t*)0x40048008U) /**< \brief (ICM) Status Register */
   #define REG_ICM_IER    (*(__O  uint32_t*)0x40048010U) /**< \brief (ICM) Interrupt Enable Register */
   #define REG_ICM_IDR    (*(__O  uint32_t*)0x40048014U) /**< \brief (ICM) Interrupt Disable Register */
   #define REG_ICM_IMR    (*(__I  uint32_t*)0x40048018U) /**< \brief (ICM) Interrupt Mask Register */

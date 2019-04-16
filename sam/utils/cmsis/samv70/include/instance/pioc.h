@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -69,7 +69,7 @@
   #define REG_PIOC_PUDR                     (0x400E1260U) /**< \brief (PIOC) Pull-up Disable Register */
   #define REG_PIOC_PUER                     (0x400E1264U) /**< \brief (PIOC) Pull-up Enable Register */
   #define REG_PIOC_PUSR                     (0x400E1268U) /**< \brief (PIOC) Pad Pull-up Status Register */
-  #define REG_PIOC_ABCDSR                   (0x400E1270U) /**< \brief (PIOC) Peripheral Select Register */
+  #define REG_PIOC_ABCDSR                   (0x400E1270U) /**< \brief (PIOC) Peripheral ABCD Select Register */
   #define REG_PIOC_IFSCDR                   (0x400E1280U) /**< \brief (PIOC) Input Filter Slow Clock Disable Register */
   #define REG_PIOC_IFSCER                   (0x400E1284U) /**< \brief (PIOC) Input Filter Slow Clock Enable Register */
   #define REG_PIOC_IFSCSR                   (0x400E1288U) /**< \brief (PIOC) Input Filter Slow Clock Status Register */
@@ -134,7 +134,7 @@
   #define REG_PIOC_PUDR    (*(__O  uint32_t*)0x400E1260U) /**< \brief (PIOC) Pull-up Disable Register */
   #define REG_PIOC_PUER    (*(__O  uint32_t*)0x400E1264U) /**< \brief (PIOC) Pull-up Enable Register */
   #define REG_PIOC_PUSR    (*(__I  uint32_t*)0x400E1268U) /**< \brief (PIOC) Pad Pull-up Status Register */
-  #define REG_PIOC_ABCDSR  (*(__IO uint32_t*)0x400E1270U) /**< \brief (PIOC) Peripheral Select Register */
+  #define REG_PIOC_ABCDSR  (*(__IO uint32_t*)0x400E1270U) /**< \brief (PIOC) Peripheral ABCD Select Register */
   #define REG_PIOC_IFSCDR  (*(__O  uint32_t*)0x400E1280U) /**< \brief (PIOC) Input Filter Slow Clock Disable Register */
   #define REG_PIOC_IFSCER  (*(__O  uint32_t*)0x400E1284U) /**< \brief (PIOC) Input Filter Slow Clock Enable Register */
   #define REG_PIOC_IFSCSR  (*(__I  uint32_t*)0x400E1288U) /**< \brief (PIOC) Input Filter Slow Clock Status Register */

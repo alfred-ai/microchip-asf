@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,8 +61,10 @@
   #define REG_TWIHS2_SMBTR                  (0x40060038U) /**< \brief (TWIHS2) SMBus Timing Register */
   #define REG_TWIHS2_FILTR                  (0x40060044U) /**< \brief (TWIHS2) Filter Register */
   #define REG_TWIHS2_SWMR                   (0x4006004CU) /**< \brief (TWIHS2) SleepWalking Matching Register */
+  #define REG_TWIHS2_DR                     (0x400600D0U) /**< \brief (TWIHS2) Debug Register */
   #define REG_TWIHS2_WPMR                   (0x400600E4U) /**< \brief (TWIHS2) Write Protection Mode Register */
   #define REG_TWIHS2_WPSR                   (0x400600E8U) /**< \brief (TWIHS2) Write Protection Status Register */
+  #define REG_TWIHS2_VER                    (0x400600FCU) /**< \brief (TWIHS2) Version Register */
 #else
   #define REG_TWIHS2_CR    (*(__O  uint32_t*)0x40060000U) /**< \brief (TWIHS2) Control Register */
   #define REG_TWIHS2_MMR   (*(__IO uint32_t*)0x40060004U) /**< \brief (TWIHS2) Master Mode Register */
@@ -78,8 +80,10 @@
   #define REG_TWIHS2_SMBTR (*(__IO uint32_t*)0x40060038U) /**< \brief (TWIHS2) SMBus Timing Register */
   #define REG_TWIHS2_FILTR (*(__IO uint32_t*)0x40060044U) /**< \brief (TWIHS2) Filter Register */
   #define REG_TWIHS2_SWMR  (*(__IO uint32_t*)0x4006004CU) /**< \brief (TWIHS2) SleepWalking Matching Register */
+  #define REG_TWIHS2_DR    (*(__I  uint32_t*)0x400600D0U) /**< \brief (TWIHS2) Debug Register */
   #define REG_TWIHS2_WPMR  (*(__IO uint32_t*)0x400600E4U) /**< \brief (TWIHS2) Write Protection Mode Register */
   #define REG_TWIHS2_WPSR  (*(__I  uint32_t*)0x400600E8U) /**< \brief (TWIHS2) Write Protection Status Register */
+  #define REG_TWIHS2_VER   (*(__I  uint32_t*)0x400600FCU) /**< \brief (TWIHS2) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAME70_TWIHS2_INSTANCE_ */

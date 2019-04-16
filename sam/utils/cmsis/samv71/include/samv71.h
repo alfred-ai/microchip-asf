@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,6 +62,24 @@
 #include "samv71q20.h"
 #elif defined (__SAMV71Q21__)
 #include "samv71q21.h"
+#elif defined (__SAMV71J19B__)
+#include "samv71j19b.h"
+#elif defined (__SAMV71J20B__)
+#include "samv71j20b.h"
+#elif defined (__SAMV71J21B__)
+#include "samv71j21b.h"
+#elif defined (__SAMV71N19B__)
+#include "samv71n19b.h"
+#elif defined (__SAMV71N20B__)
+#include "samv71n20b.h"
+#elif defined (__SAMV71N21B__)
+#include "samv71n21b.h"
+#elif defined (__SAMV71Q19B__)
+#include "samv71q19b.h"
+#elif defined (__SAMV71Q20B__)
+#include "samv71q20b.h"
+#elif defined (__SAMV71Q21B__)
+#include "samv71q21b.h"
 #else
   #error Library does not support the specified device.
 #endif

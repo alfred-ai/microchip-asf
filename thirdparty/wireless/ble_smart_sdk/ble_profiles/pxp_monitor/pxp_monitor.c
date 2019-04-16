@@ -3,7 +3,7 @@
 *
 * \brief Proximity Monitor Profile
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -57,40 +57,19 @@
 #include "pxp_monitor.h"
 #include "console_serial.h"
 
-
-static const ble_event_callback_t pxp_gap_handle[] = {
-	NULL,
-	NULL,
-	pxp_monitor_scan_data_handler,
-	NULL,
-	NULL,
-	pxp_monitor_connected_state_handler,
-	pxp_disconnect_event_handler,
-	NULL,
-	NULL,
-	pxp_monitor_pair_done_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	pxp_monitor_encryption_change_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t pxp_gap_handle = {
+	.scan_report = pxp_monitor_scan_data_handler,
+	.connected = pxp_monitor_connected_state_handler,
+	.disconnected = pxp_disconnect_event_handler,
+	.pair_done = pxp_monitor_pair_done_handler,
+	.encryption_status_changed = pxp_monitor_encryption_change_handler,
 };
 
-static const ble_event_callback_t pxp_gatt_client_handle[] = {
-	pxp_monitor_service_found_handler,
-	NULL,
-	pxp_monitor_characteristic_found_handler,
-	NULL,
-	pxp_monitor_discovery_complete_handler,
-	pxp_monitor_characteristic_read_response,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_client_event_cb_t pxp_gatt_client_handle = {
+	.primary_service_found = pxp_monitor_service_found_handler,
+	.characteristic_found = pxp_monitor_characteristic_found_handler,
+	.discovery_complete = pxp_monitor_discovery_complete_handler,
+	.characteristic_read_by_uuid_response = pxp_monitor_characteristic_read_response
 };
 
 #if defined TX_POWER_SERVICE
@@ -114,6 +93,7 @@ uint8_t scan_index = 0;
 
 extern volatile uint8_t scan_response_count;
 extern at_ble_scan_info_t scan_info[MAX_SCAN_DEVICE];
+extern volatile ble_device_ll_state_t ble_device_current_state;
 
 volatile uint8_t pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
 
@@ -131,7 +111,7 @@ uint8_t lls_char_data[MAX_LLS_CHAR_SIZE];
 
 #if defined IMMEDIATE_ALERT_SERVICE
 gatt_ias_char_handler_t ias_handle =
-{0, 0, 0, AT_BLE_INVALID_PARAM, NULL};
+{0, 0, 0, AT_BLE_INVALID_PARAM, AT_BLE_INVALID_PARAM, NULL};
 uint8_t ias_char_data[MAX_IAS_CHAR_SIZE];
 #endif
 
@@ -153,8 +133,8 @@ void pxp_monitor_init(void *param)
 	DBG_LOG("Mild Alert RSSI range: %ddBm to %ddBm", PXP_LOW_ALERT_RANGE, PXP_HIGH_ALERT_RANGE);
 	DBG_LOG("No Alert RSSI range:   %ddBm and below", (PXP_LOW_ALERT_RANGE+1));
 	
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, pxp_gap_handle);
-	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_CLIENT_EVENT_TYPE, pxp_gatt_client_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, &pxp_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_CLIENT_EVENT_TYPE, &pxp_gatt_client_handle);
 }
 
 /**@brief Connect to a peer device
@@ -301,15 +281,34 @@ at_ble_status_t pxp_monitor_start_scan(void)
 			return AT_BLE_FAILURE;
 		}
 	}
-	
-	char index_value;
+	at_ble_scan_stop();
+	char index_value = 0xFF;
 	hw_timer_stop_func_cb();
-	do
+	DBG_LOG("Select [r] to Reconnect or [s] to Scan");
+	
+	do 
 	{
-		DBG_LOG("Select [r] to Reconnect or [s] Scan");
+		if(index_value != 0xFF)
+		{
+			DBG_LOG("Please give input either [r] to reconnect or [s] to scan ");
+		}
+		
+		if (peripheral_state_callback != NULL)
+		{
+			if (peripheral_state_callback() == PERIPHERAL_ADVERTISING_STATE)
+			{
+				break;
+			}
+		}
 		index_value = getchar_b11();
+		ble_event_task(BLE_EVENT_TIMEOUT);
+	} while ((index_value == 0xFF) ||
+	          ((index_value != 0xFF) && !((index_value == 'r') || (index_value == 's'))));
+		
+	if (index_value != 0xFF)
+	{
 		DBG_LOG("%c", index_value);
-	}	while (!((index_value == 'r') || (index_value == 's')));
+	}
 	
 	if(index_value == 'r') {
 		if (gap_dev_connect(&pxp_reporter_address) == AT_BLE_SUCCESS) {
@@ -343,35 +342,16 @@ at_ble_status_t pxp_disconnect_event_handler(void *params)
 {	
 	at_ble_disconnected_t *disconnect;
 	disconnect = (at_ble_disconnected_t *)params;
-	static ble_peripheral_state_t peripheral_state = PERIPHERAL_IDLE_STATE;
 	
-	if(!ble_check_disconnected_iscentral(disconnect->handle))
-	{
-		pxp_monitor_start_scan();
-		return AT_BLE_FAILURE;
-	}
-	else if(peripheral_state_callback != NULL)
-	{
-		peripheral_state = peripheral_state_callback();
-	}
-	
-	if(peripheral_state != PERIPHERAL_ADVERTISING_STATE)
-	{
-		if((ble_check_device_state(disconnect->handle, BLE_DEVICE_DISCONNECTED) == AT_BLE_SUCCESS) ||
-		(ble_check_device_state(disconnect->handle, BLE_DEVICE_DEFAULT_IDLE) == AT_BLE_SUCCESS))
-		{
-			if (disconnect->reason == AT_BLE_LL_COMMAND_DISALLOWED) {
-				return AT_BLE_SUCCESS;
-			} else
-				pxp_monitor_start_scan();
-		}
-	}
-	else
+	if(ble_check_disconnected_iscentral(disconnect->handle))
 	{
 		pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
-		DBG_LOG("Peripheral is already Advertising,Scan not permitted");
+		if((ble_device_current_state != CENTRAL_SCANNING_STATE) && (pxp_connect_request_flag == PXP_DEV_UNCONNECTED) && (ble_device_current_state != PERIPHERAL_ADVERTISING_STATE))
+		{
+			pxp_monitor_start_scan();
+		}
 	}
-
+	
 	return AT_BLE_FAILURE;
 }
 
@@ -400,43 +380,62 @@ at_ble_status_t pxp_monitor_service_discover(at_ble_handle_t handle)
 
 at_ble_status_t pxp_monitor_pair_done_handler(void *params)
 {
-	at_ble_status_t discovery_status = AT_BLE_FAILURE;
+	at_ble_status_t status = AT_BLE_FAILURE;
 	at_ble_pair_done_t *pair_done_val;
 	pair_done_val = (at_ble_pair_done_t *)params;		
-		
-	if(!ble_check_iscentral(pair_done_val->handle))
+
+	if(ble_check_ispheripheral(pair_done_val->handle))
 	{
-		return AT_BLE_FAILURE;
+		if((ble_device_current_state != CENTRAL_SCANNING_STATE) && (pxp_connect_request_flag == PXP_DEV_UNCONNECTED) && (ble_device_current_state != PERIPHERAL_ADVERTISING_STATE))
+		{
+			pxp_monitor_start_scan();
+			status = AT_BLE_SUCCESS;
+		}
 	}
-	
-	hw_timer_stop_func_cb();
-	
-	if (pair_done_val->status == AT_BLE_SUCCESS) {
-		discovery_status = pxp_monitor_service_discover(pair_done_val->handle);
-	} else {
-			return AT_BLE_FAILURE;
+
+	if(ble_check_iscentral(pair_done_val->handle))
+	{		
+		hw_timer_stop_func_cb();
+		if (pair_done_val->status == AT_BLE_SUCCESS) {
+			#if BLE_PAIR_ENABLE == true
+				pxp_connect_request_flag = PXP_DEV_CONNECTED;
+			#endif
+			status = pxp_monitor_service_discover(pair_done_val->handle);
+		} else {
+				pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
+				return AT_BLE_FAILURE;
+		}
 	}
-	
-	pxp_connect_request_flag = PXP_DEV_PAIRED;
-	
-	return discovery_status;
+	return status;
 }
 
 at_ble_status_t pxp_monitor_encryption_change_handler(void *params)
 {
-	at_ble_status_t discovery_status = AT_BLE_FAILURE;
+	at_ble_status_t status = AT_BLE_FAILURE;
 	at_ble_encryption_status_changed_t *encryption_status;
 	encryption_status = (at_ble_encryption_status_changed_t *)params;
-	
-	if(!ble_check_iscentral(encryption_status->handle))
+
+	if(ble_check_ispheripheral(encryption_status->handle))
 	{
-		return AT_BLE_FAILURE;
+		if((ble_device_current_state != CENTRAL_SCANNING_STATE) && (pxp_connect_request_flag == PXP_DEV_UNCONNECTED) && (ble_device_current_state != PERIPHERAL_ADVERTISING_STATE))
+		{
+			pxp_monitor_start_scan();
+			status = AT_BLE_SUCCESS;
+		}
 	}
-	hw_timer_stop_func_cb();
-	if (encryption_status->status == AT_BLE_SUCCESS) {
-		discovery_status = pxp_monitor_service_discover(encryption_status->handle);
+	if(ble_check_iscentral(encryption_status->handle))
+	{
+		hw_timer_stop_func_cb();
+		if (encryption_status->status == AT_BLE_SUCCESS) {
+			#if BLE_PAIR_ENABLE == true
+			pxp_connect_request_flag = PXP_DEV_CONNECTED;
+			#endif
+			status = pxp_monitor_service_discover(encryption_status->handle);
+			} else {
+			pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
+		}
 	}
-	return discovery_status;
+	return status;
 }
 
 /**@brief Connected event state handle after connection request to peer device
@@ -454,14 +453,13 @@ at_ble_status_t pxp_monitor_connected_state_handler(void *params)
 {
 	at_ble_connected_t *conn_params;
 	conn_params = (at_ble_connected_t *)params;	
-	
-	if(!ble_check_iscentral(conn_params->handle))
-	{
-		return AT_BLE_FAILURE;
-	}
 
-	pxp_connect_request_flag = PXP_DEV_CONNECTED;
-		
+#if BLE_PAIR_ENABLE == false
+	if (ble_check_iscentral(conn_params->handle)) {
+		pxp_connect_request_flag = PXP_DEV_CONNECTED;
+	}	
+#endif
+
 	return conn_params->conn_status;
 }
 
@@ -486,8 +484,6 @@ at_ble_status_t pxp_monitor_service_found_handler(void *params)
 	{
 		return AT_BLE_FAILURE;
 	}
-	
-	pxp_connect_request_flag = PXP_DEV_SERVICE_FOUND;
 	
 	pxp_service_uuid = &primary_service_params->service_uuid;
 	if (pxp_service_uuid->type == AT_BLE_UUID_16) {

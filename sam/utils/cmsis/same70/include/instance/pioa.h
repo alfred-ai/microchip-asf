@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,6 +93,7 @@
   #define REG_PIOA_LOCKSR                   (0x400E0EE0U) /**< \brief (PIOA) Lock Status */
   #define REG_PIOA_WPMR                     (0x400E0EE4U) /**< \brief (PIOA) Write Protection Mode Register */
   #define REG_PIOA_WPSR                     (0x400E0EE8U) /**< \brief (PIOA) Write Protection Status Register */
+  #define REG_PIOA_VERSION                  (0x400E0EFCU) /**< \brief (PIOA) Version Register */
   #define REG_PIOA_SCHMITT                  (0x400E0F00U) /**< \brief (PIOA) Schmitt Trigger Register */
   #define REG_PIOA_DRIVER                   (0x400E0F18U) /**< \brief (PIOA) PIO I/O Drive Register */
   #define REG_PIOA_KER                      (0x400E0F20U) /**< \brief (PIOA) Keypad Controller Enable Register */
@@ -157,6 +158,7 @@
   #define REG_PIOA_LOCKSR  (*(__I  uint32_t*)0x400E0EE0U) /**< \brief (PIOA) Lock Status */
   #define REG_PIOA_WPMR    (*(__IO uint32_t*)0x400E0EE4U) /**< \brief (PIOA) Write Protection Mode Register */
   #define REG_PIOA_WPSR    (*(__I  uint32_t*)0x400E0EE8U) /**< \brief (PIOA) Write Protection Status Register */
+  #define REG_PIOA_VERSION (*(__I  uint32_t*)0x400E0EFCU) /**< \brief (PIOA) Version Register */
   #define REG_PIOA_SCHMITT (*(__IO uint32_t*)0x400E0F00U) /**< \brief (PIOA) Schmitt Trigger Register */
   #define REG_PIOA_DRIVER  (*(__IO uint32_t*)0x400E0F18U) /**< \brief (PIOA) PIO I/O Drive Register */
   #define REG_PIOA_KER     (*(__IO uint32_t*)0x400E0F20U) /**< \brief (PIOA) Keypad Controller Enable Register */

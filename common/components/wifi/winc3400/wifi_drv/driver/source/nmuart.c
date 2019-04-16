@@ -67,53 +67,67 @@ static uint8 get_cs(uint8* b, uint8 sz){
 sint8 nm_uart_sync_cmd(void)
 {
 	tstrNmUartDefault strUart;
-	sint8 s8Ret = -1;
+	sint8 s8Ret = M2M_ERR_BUS_FAIL;
 	uint8 b [HDR_SZ+1];
-	uint8 rsz;
 	uint8 onchip = 0;
+	int escape = 3;
 
-	/*read reg*/
-	b[0] = 0x12;
-
-	rsz = 1;
-	strUart.pu8Buf = b;
-	strUart.u16Sz = 1;
-
-	if(M2M_SUCCESS == nm_bus_ioctl(NM_BUS_IOCTL_W, &strUart))
+	// send query char up to 3 times
+	while (escape-- && (s8Ret != M2M_SUCCESS))
 	{
-		strUart.u16Sz = rsz;
-		if(M2M_SUCCESS != nm_bus_ioctl(NM_BUS_IOCTL_R, &strUart))
+		b[0] = 0x12;
+		strUart.pu8Buf = b;
+		strUart.u16Sz = 1;
+
+		// then read back all chars in the buffer if any, is last char what we are looking for
+		s8Ret = nm_bus_ioctl(NM_BUS_IOCTL_W, &strUart);
+		if (M2M_SUCCESS == s8Ret)
 		{
-			s8Ret = M2M_ERR_BUS_FAIL;
+			uint8 lastchar;
+
+			// drain buffer
+			while (M2M_SUCCESS == s8Ret)
+			{
+				lastchar = b[0];
+				s8Ret = nm_bus_ioctl(NM_BUS_IOCTL_R, &strUart);
+			}
+
+			switch (lastchar)
+			{
+				case 0x5a:
+					onchip = 1;
+					M2M_INFO("Built-in WINCxx00 UART Found\n");
+					s8Ret = M2M_SUCCESS;
+					break;
+				case  0x5b:
+					onchip = 0;
+					M2M_INFO("WINCxx00 Serial Bridge Found\n");
+					s8Ret = M2M_SUCCESS;
+					break;
+				case 0x5c:
+					onchip = 2;
+					M2M_INFO("WINCxx00 Serial Bridge + AT CMD app Found\n");
+					s8Ret = M2M_SUCCESS;
+					break;
+				case 0x12:
+					M2M_INFO("failed to read Serial Bridge ID response\n");
+					s8Ret = M2M_ERR_BUS_FAIL;
+					break;
+				default:
+					M2M_INFO("Non Serial Bridge Found\n");
+					s8Ret = M2M_ERR_BUS_FAIL;
+					break;
+			}
+		}
+		else
+		{
+			M2M_ERR("failed to send Serial Bridge ID Query\n");
 		}
 	}
-	else
-	{
-		M2M_ERR("failed to send cfg bytes\n");
-		s8Ret = M2M_ERR_BUS_FAIL;
-	}
-	if (b[0] == 0x5a)
-	{
-		s8Ret = 0;
-		onchip = 1;
-		M2M_INFO("Built-in WINCxx00 UART Found\n");
-	}
-	else if(b[0] == 0x5b)
-	{
-		s8Ret = 0;
-		onchip = 0;
-		M2M_INFO("WINCxx00 Serial Bridge Found\n");
-	}
-	else if(b[0] == 0x5c)
-	{
-		s8Ret = 0;
-		onchip = 2;
-		M2M_INFO("WINCxx00 Serial Bridge + AT CMD app Found\n");
-	}
-	/*TODO: this should be the way we read the register since the cortus is little endian*/
-	/**pu32RetVal = b[0] | ((uint32)b[1] << 8) | ((uint32)b[2] << 16) | ((uint32)b[3] << 24);*/
+
 	if(s8Ret == M2M_SUCCESS)
 		s8Ret = (sint8)onchip;
+
 	return s8Ret;
 }
 
@@ -213,8 +227,6 @@ sint8 nm_uart_reboot_cmd(void)
 		M2M_ERR("failed to send cfg bytes\n");
 		s8Ret = M2M_ERR_BUS_FAIL;
 	}
-	/*TODO: this should be the way we read the register since the cortus is little endian*/
-	/**pu32RetVal = b[0] | ((uint32)b[1] << 8) | ((uint32)b[2] << 16) | ((uint32)b[3] << 24);*/
 
 	*pu32RetVal = ((uint32)b[0] << 24) | ((uint32)b[1] << 16) | ((uint32)b[2] << 8) | b[3];
 

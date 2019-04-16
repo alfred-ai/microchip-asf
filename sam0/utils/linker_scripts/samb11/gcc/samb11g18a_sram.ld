@@ -3,7 +3,7 @@
  *
  * \brief Linker script for running in internal SRAM on the SAMB11G18A
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,7 +49,7 @@ SEARCH_DIR(.)
 /* Memory Spaces Definitions */
 MEMORY
 {
-  ram    (rwx) : ORIGIN = 0x10008000, LENGTH = 0x00017800
+  ram    (rwx) : ORIGIN = 0x10009000, LENGTH = 0x00016800
   lram  (rwx) : ORIGIN = 0x1001F800, LENGTH = 0x00000800
 }
 

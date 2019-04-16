@@ -3,22 +3,24 @@
  *
  * \brief Component description for LINCTRL
  *
- * Copyright (c) 2016 Atmel Corporation,
+ * Copyright (c) 2016 - 2017 Atmel Corporation,
  *                    a wholly owned subsidiary of Microchip Technology Inc.
  *
  * \asf_license_start
  *
  * \page License
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
  * You may obtain a copy of the Licence at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
@@ -50,12 +52,12 @@ typedef union {
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #define LINCTRL_CTRL_OFFSET         0x0          /**< \brief (LINCTRL_CTRL offset) control register */
-#define LINCTRL_CTRL_RESETVALUE     _U(0x0000);  /**< \brief (LINCTRL_CTRL reset_value) control register */
+#define LINCTRL_CTRL_RESETVALUE     _U_(0x0000)  /**< \brief (LINCTRL_CTRL reset_value) control register */
 
 #define LINCTRL_CTRL_WOCFG_Pos      0            /**< \brief (LINCTRL_CTRL) wkout observation select */
-#define LINCTRL_CTRL_WOCFG_Msk      (_U(0x3) << LINCTRL_CTRL_WOCFG_Pos)
+#define LINCTRL_CTRL_WOCFG_Msk      (_U_(0x3) << LINCTRL_CTRL_WOCFG_Pos)
 #define LINCTRL_CTRL_WOCFG(value)   (LINCTRL_CTRL_WOCFG_Msk & ((value) << LINCTRL_CTRL_WOCFG_Pos))
-#define LINCTRL_CTRL_MASK           _U(0x0003)   /**< \brief (LINCTRL_CTRL) MASK Register */
+#define LINCTRL_CTRL_MASK           _U_(0x0003)  /**< \brief (LINCTRL_CTRL) MASK Register */
 
 /** \brief LINCTRL hardware registers */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))

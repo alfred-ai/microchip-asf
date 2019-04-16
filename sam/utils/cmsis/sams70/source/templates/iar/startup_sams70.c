@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -111,6 +111,9 @@ void Dummy_Handler(void);
 #pragma weak ICM_Handler=Dummy_Handler
 #pragma weak ACC_Handler=Dummy_Handler
 #pragma weak USBHS_Handler=Dummy_Handler
+#pragma weak MCAN0_Handler=Dummy_Handler
+#pragma weak MCAN1_Handler=Dummy_Handler
+#pragma weak GMAC_Handler=Dummy_Handler
 #pragma weak AFEC1_Handler=Dummy_Handler
 #ifdef _SAMS70_TWIHS2_INSTANCE_
 #pragma weak TWIHS2_Handler=Dummy_Handler
@@ -137,10 +140,17 @@ void Dummy_Handler(void);
 #pragma weak XDMAC_Handler=Dummy_Handler
 #pragma weak ISI_Handler=Dummy_Handler
 #pragma weak PWM1_Handler=Dummy_Handler
+#pragma weak ARM_Handler=Dummy_Handler
 #ifdef _SAMS70_SDRAMC_INSTANCE_
 #pragma weak SDRAMC_Handler=Dummy_Handler
 #endif /* _SAMS70_SDRAMC_INSTANCE_ */
 #pragma weak RSWDT_Handler=Dummy_Handler
+#ifdef _SAMS70_I2SC0_INSTANCE_
+#pragma weak I2SC0_Handler=Dummy_Handler
+#endif /* _SAMS70_I2SC0_INSTANCE_ */
+#ifdef _SAMS70_I2SC1_INSTANCE_
+#pragma weak I2SC1_Handler=Dummy_Handler
+#endif /* _SAMS70_I2SC1_INSTANCE_ */
 
 /* Exception Table */
 #pragma language = extended
@@ -279,7 +289,22 @@ const DeviceVectors __vector_table = {
 #else
         .pvReserved62      = (void*) (0UL),          /* 62 Reserved */
 #endif /* _SAMS70_SDRAMC_INSTANCE_ */
-        .pfnRSWDT_Handler  = (void*) RSWDT_Handler   /* 63 Reinforced Secure Watchdog Timer */
+        .pfnRSWDT_Handler  = (void*) RSWDT_Handler,  /* 63 Reinforced Secure Watchdog Timer */
+        .pvReserved64      = (void*) (0UL),          /* 64 Reserved */
+        .pvReserved65      = (void*) (0UL),          /* 65 Reserved */
+        .pvReserved66      = (void*) (0UL),          /* 66 Reserved */
+        .pvReserved67      = (void*) (0UL),          /* 67 Reserved */
+        .pfnARM_Handler    = (void*) ARM_Handler,    /* 68 Floating Point Unit - IXC */
+#ifdef _SAMS70_I2SC0_INSTANCE_
+        .pfnI2SC0_Handler  = (void*) I2SC0_Handler,  /* 69 Inter-IC Sound controller */
+#else
+        .pvReserved69      = (void*) (0UL),          /* 69 Reserved */
+#endif /* _SAMS70_I2SC0_INSTANCE_ */
+#ifdef _SAMS70_I2SC1_INSTANCE_
+        .pfnI2SC1_Handler  = (void*) I2SC1_Handler   /* 70 Inter-IC Sound controller */
+#else
+        .pvReserved70      = (void*) (0UL)           /* 70 Reserved */
+#endif /* _SAMS70_I2SC1_INSTANCE_ */
 };
 
 /**------------------------------------------------------------------------------

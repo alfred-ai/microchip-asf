@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -114,28 +114,30 @@ typedef struct {
   __I  uint32_t  Reserved5[8];
   __O  uint32_t  PWM_WPCR;                     /**< \brief (Pwm Offset: 0xE4) PWM Write Protection Control Register */
   __I  uint32_t  PWM_WPSR;                     /**< \brief (Pwm Offset: 0xE8) PWM Write Protection Status Register */
-  __I  uint32_t  Reserved6[17];
+  __I  uint32_t  Reserved6[4];
+  __I  uint32_t  PWM_VERSION;                  /**< \brief (Pwm Offset: 0xFC) Version Register */
+  __I  uint32_t  Reserved7[12];
        PwmCmp    PWM_CMP[PWMCMP_NUMBER];       /**< \brief (Pwm Offset: 0x130) 0 .. 7 */
-  __I  uint32_t  Reserved7[20];
+  __I  uint32_t  Reserved8[20];
        PwmCh_num PWM_CH_NUM[PWMCH_NUM_NUMBER]; /**< \brief (Pwm Offset: 0x200) ch_num = 0 .. 3 */
-  __I  uint32_t  Reserved8[96];
+  __I  uint32_t  Reserved9[96];
   __O  uint32_t  PWM_CMUPD0;                   /**< \brief (Pwm Offset: 0x400) PWM Channel Mode Update Register (ch_num = 0) */
-  __I  uint32_t  Reserved9[7];
+  __I  uint32_t  Reserved10[7];
   __O  uint32_t  PWM_CMUPD1;                   /**< \brief (Pwm Offset: 0x420) PWM Channel Mode Update Register (ch_num = 1) */
-  __I  uint32_t  Reserved10[2];
+  __I  uint32_t  Reserved11[2];
   __IO uint32_t  PWM_ETRG1;                    /**< \brief (Pwm Offset: 0x42C) PWM External Trigger Register (trg_num = 1) */
   __IO uint32_t  PWM_LEBR1;                    /**< \brief (Pwm Offset: 0x430) PWM Leading-Edge Blanking Register (trg_num = 1) */
-  __I  uint32_t  Reserved11[3];
+  __I  uint32_t  Reserved12[3];
   __O  uint32_t  PWM_CMUPD2;                   /**< \brief (Pwm Offset: 0x440) PWM Channel Mode Update Register (ch_num = 2) */
-  __I  uint32_t  Reserved12[2];
+  __I  uint32_t  Reserved13[2];
   __IO uint32_t  PWM_ETRG2;                    /**< \brief (Pwm Offset: 0x44C) PWM External Trigger Register (trg_num = 2) */
   __IO uint32_t  PWM_LEBR2;                    /**< \brief (Pwm Offset: 0x450) PWM Leading-Edge Blanking Register (trg_num = 2) */
-  __I  uint32_t  Reserved13[3];
+  __I  uint32_t  Reserved14[3];
   __O  uint32_t  PWM_CMUPD3;                   /**< \brief (Pwm Offset: 0x460) PWM Channel Mode Update Register (ch_num = 3) */
-  __I  uint32_t  Reserved14[2];
+  __I  uint32_t  Reserved15[2];
   __IO uint32_t  PWM_ETRG3;                    /**< \brief (Pwm Offset: 0x46C) PWM External Trigger Register (trg_num = 3) */
   __IO uint32_t  PWM_LEBR3;                    /**< \brief (Pwm Offset: 0x470) PWM Leading-Edge Blanking Register (trg_num = 3) */
-  __I  uint32_t  Reserved15[6];
+  __I  uint32_t  Reserved16[6];
   __IO uint32_t  PWM_ETRG4;                    /**< \brief (Pwm Offset: 0x48C) PWM External Trigger Register (trg_num = 4) */
   __IO uint32_t  PWM_LEBR4;                    /**< \brief (Pwm Offset: 0x490) PWM Leading-Edge Blanking Register (trg_num = 4) */
 } Pwm;
@@ -498,6 +500,11 @@ typedef struct {
 #define PWM_WPSR_WPHWS5 (0x1u << 13) /**< \brief (PWM_WPSR) Write Protect HW Status */
 #define PWM_WPSR_WPVSRC_Pos 16
 #define PWM_WPSR_WPVSRC_Msk (0xffffu << PWM_WPSR_WPVSRC_Pos) /**< \brief (PWM_WPSR) Write Protect Violation Source */
+/* -------- PWM_VERSION : (PWM Offset: 0xFC) Version Register -------- */
+#define PWM_VERSION_VERSION_Pos 0
+#define PWM_VERSION_VERSION_Msk (0xfffu << PWM_VERSION_VERSION_Pos) /**< \brief (PWM_VERSION) Version of the Hardware Module */
+#define PWM_VERSION_MFN_Pos 16
+#define PWM_VERSION_MFN_Msk (0x7u << PWM_VERSION_MFN_Pos) /**< \brief (PWM_VERSION) Metal Fix Number */
 /* -------- PWM_CMPV : (PWM Offset: N/A) PWM Comparison 0 Value Register -------- */
 #define PWM_CMPV_CV_Pos 0
 #define PWM_CMPV_CV_Msk (0xffffffu << PWM_CMPV_CV_Pos) /**< \brief (PWM_CMPV) Comparison x Value */

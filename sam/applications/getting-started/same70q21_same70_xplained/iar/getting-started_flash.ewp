@@ -2182,6 +2182,9 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/instance/rtt.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/instance/i2sc0.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/instance/uart4.h</name>
 							</file>
 							<file>
@@ -2204,6 +2207,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/instance/utmi.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/instance/i2sc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/instance/wdt.h</name>
@@ -2327,6 +2333,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/component/utmi.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/same70/include/component/isi.h</name>

@@ -235,6 +235,13 @@ NMI_API sint8 hif_Resp_handler(uint8 *pu8Buffer, uint16 u16BufferSize);
 #endif
 
 /**
+*	@fn		hif_yield(void)
+*	@brief
+			Yields control from interrupt event handler.
+*/
+NMI_API void hif_yield(void);
+
+/**
 *	@fn		hif_handle_isr(void)
 *	@brief
 			Handle interrupt received from NMC1500 firmware.

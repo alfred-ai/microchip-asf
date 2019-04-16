@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -55,7 +55,7 @@
   #define REG_SPI1_IER                      (0x40058014U) /**< \brief (SPI1) Interrupt Enable Register */
   #define REG_SPI1_IDR                      (0x40058018U) /**< \brief (SPI1) Interrupt Disable Register */
   #define REG_SPI1_IMR                      (0x4005801CU) /**< \brief (SPI1) Interrupt Mask Register */
-  #define REG_SPI1_CSR                      (0x40058030U) /**< \brief (SPI1) Chip Select Register */
+  #define REG_SPI1_CSR                      (0x40058030U) /**< \brief (SPI1) Chip Select Register (CS_number = 0) */
   #define REG_SPI1_WPMR                     (0x400580E4U) /**< \brief (SPI1) Write Protection Mode Register */
   #define REG_SPI1_WPSR                     (0x400580E8U) /**< \brief (SPI1) Write Protection Status Register */
   #define REG_SPI1_VERSION                  (0x400580FCU) /**< \brief (SPI1) Version Register */
@@ -68,7 +68,7 @@
   #define REG_SPI1_IER     (*(__O  uint32_t*)0x40058014U) /**< \brief (SPI1) Interrupt Enable Register */
   #define REG_SPI1_IDR     (*(__O  uint32_t*)0x40058018U) /**< \brief (SPI1) Interrupt Disable Register */
   #define REG_SPI1_IMR     (*(__I  uint32_t*)0x4005801CU) /**< \brief (SPI1) Interrupt Mask Register */
-  #define REG_SPI1_CSR     (*(__IO uint32_t*)0x40058030U) /**< \brief (SPI1) Chip Select Register */
+  #define REG_SPI1_CSR     (*(__IO uint32_t*)0x40058030U) /**< \brief (SPI1) Chip Select Register (CS_number = 0) */
   #define REG_SPI1_WPMR    (*(__IO uint32_t*)0x400580E4U) /**< \brief (SPI1) Write Protection Mode Register */
   #define REG_SPI1_WPSR    (*(__I  uint32_t*)0x400580E8U) /**< \brief (SPI1) Write Protection Status Register */
   #define REG_SPI1_VERSION (*(__I  uint32_t*)0x400580FCU) /**< \brief (SPI1) Version Register */

@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief WINC3400 Flash Interface.
+ * \brief WINC Flash Interface.
  *
  * Copyright (c) 2017 Atmel Corporation. All rights reserved.
  *
@@ -47,21 +47,27 @@ INCLUDES
 #include "driver/include/m2m_flash.h"
 #include "driver/source/nmflash.h"
 #include "spi_flash/include/spi_flash.h"
+#include "nmdrv.h"
+//#include "main.h"
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 GLOBALS
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
-tstrFlashAccess			gstrFlashAccess = {0};
-static uint8_t			gau8Buff[FA_SECTOR_SIZE];
-static uint32			gu32CurrentAddr = 0;
-static uint8			gu8Flags = 0;
+static uint32						gu32LocationId = MEM_ID_NONE;
+static uint8						*gpu8Location = NULL;
+
+uint16			gu16LastAccessId = 0;
+uint8			gu8Success = 0;
+uint8			gu8Changed = 0;
+uint8			gu8Init = 0;
+uint8			gu8Reset = 0;
 
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 FUNCTIONS
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
-static sint8 winc_flash_compare(uint8_t *pu8Buf, uint32_t u32Offset, uint32_t u32Size)
+static sint8 winc_flash_compare(uint8 *pu8Buf, uint32 u32Offset, uint32 u32Size)
 {
 	sint8 ret = M2M_SUCCESS;
 	uint8 buf[128];
@@ -83,6 +89,33 @@ static sint8 winc_flash_compare(uint8_t *pu8Buf, uint32_t u32Offset, uint32_t u3
 	return ret;
 }
 
+sint8 winc_flash_write_verify(uint8 *pu8Buf, uint32 u32Offset, uint32 u32Size)
+{
+	sint8	ret = M2M_ERR_FAIL;
+	uint8	count = 20;
+
+	while ((ret != M2M_SUCCESS) && (count-- > 0))
+	{
+		ret = spi_flash_write(pu8Buf, u32Offset, u32Size);
+		if (ret == M2M_SUCCESS)
+			ret = winc_flash_compare(pu8Buf, u32Offset, u32Size);
+	}
+	return ret;
+}
+static sint8 set_changed_flag(tstrFlashAccessPersistent *pstrPersistentInfo)
+{
+	sint8	ret = FLASH_RETURN_OK;
+	if (pstrPersistentInfo->u8ModeFlags & FLASH_MODE_FLAGS_UNCHANGED)
+	{
+		pstrPersistentInfo->u8ModeFlags &= ~FLASH_MODE_FLAGS_UNCHANGED;
+		if (winc_flash_write_verify((uint8*)pstrPersistentInfo, HOST_CONTROL_FLASH_OFFSET, sizeof(tstrFlashAccessPersistent)) == M2M_SUCCESS)
+			gu8Changed = 1;
+		else
+			ret = FLASH_ERR_WINC_ACCESS;
+	}
+	return ret;
+}
+
 static uint8 crc7(uint8 crc, const uint8 *buff, uint16 len)
 {
 	uint8 reg = crc;
@@ -98,6 +131,18 @@ static uint8 crc7(uint8 crc, const uint8 *buff, uint16 len)
 	}
 	return reg;
 }
+static sint8 read_control_sector(tstrOtaControlSec *pstrControlSec, uint32 u32Offset)
+{
+	sint8	s8Ret = spi_flash_read((uint8*)pstrControlSec, u32Offset, sizeof(tstrOtaControlSec));
+	if (s8Ret == M2M_SUCCESS)
+	{
+		if (pstrControlSec->u32OtaMagicValue != OTA_MAGIC_VALUE)
+			s8Ret = M2M_ERR_FAIL;
+		if (pstrControlSec->u32OtaControlSecCrc != crc7(0x7f, (uint8*)pstrControlSec, sizeof(tstrOtaControlSec) - 4))
+			s8Ret = M2M_ERR_FAIL;
+	}
+	return s8Ret;
+}
 static sint8 update_control_sector(tstrOtaControlSec *pstrControlSec)
 {
 	sint8 ret = M2M_ERR_FAIL;
@@ -107,21 +152,15 @@ static sint8 update_control_sector(tstrOtaControlSec *pstrControlSec)
 	{
 		pstrControlSec->u32OtaSequenceNumber++;
 		pstrControlSec->u32OtaControlSecCrc = crc7(0x7f, (uint8*)pstrControlSec, sizeof(tstrOtaControlSec) - 4);
-		ret = spi_flash_write((uint8*)pstrControlSec, M2M_BACKUP_FLASH_OFFSET, sizeof(tstrOtaControlSec));
+		ret = winc_flash_write_verify((uint8*)pstrControlSec, M2M_BACKUP_FLASH_OFFSET, sizeof(tstrOtaControlSec));
 		if (ret == M2M_SUCCESS)
 		{
-			ret = winc_flash_compare((uint8*)pstrControlSec, M2M_BACKUP_FLASH_OFFSET, sizeof(tstrOtaControlSec));
+			ret = spi_flash_erase(M2M_CONTROL_FLASH_OFFSET, M2M_CONTROL_FLASH_SZ);
 			if (ret == M2M_SUCCESS)
 			{
-				ret = spi_flash_erase(M2M_CONTROL_FLASH_OFFSET, M2M_CONTROL_FLASH_SZ);
-				if (ret == M2M_SUCCESS)
-				{
-					pstrControlSec->u32OtaSequenceNumber++;
-					pstrControlSec->u32OtaControlSecCrc = crc7(0x7f, (uint8*)pstrControlSec, sizeof(tstrOtaControlSec) - 4);
-					ret = spi_flash_write((uint8*)pstrControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
-					if (ret == M2M_SUCCESS)
-						ret = winc_flash_compare((uint8*)pstrControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
-				}
+				pstrControlSec->u32OtaSequenceNumber++;
+				pstrControlSec->u32OtaControlSecCrc = crc7(0x7f, (uint8*)pstrControlSec, sizeof(tstrOtaControlSec) - 4);
+				ret = winc_flash_write_verify((uint8*)pstrControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
 			}
 		}
 	}
@@ -143,26 +182,20 @@ static sint8 access_control_sector(tenuCSOp enuOp, uint32 *param)
 	switch (enuOp)
 	{
 	case CS_INITIALIZE:
-		s8Ret = spi_flash_read((uint8*)&strControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
-		if ((s8Ret != M2M_SUCCESS) || (strControlSec.u32OtaMagicValue != OTA_MAGIC_VALUE))
+		s8Ret = read_control_sector(&strControlSec, M2M_CONTROL_FLASH_OFFSET);
+		if (s8Ret != M2M_SUCCESS)
 		{
-			s8Ret = spi_flash_read((uint8*)&strControlSec, M2M_BACKUP_FLASH_OFFSET, sizeof(tstrOtaControlSec));
-			if ((s8Ret == M2M_SUCCESS) && (strControlSec.u32OtaMagicValue == OTA_MAGIC_VALUE))
+			s8Ret = read_control_sector(&strControlSec, M2M_BACKUP_FLASH_OFFSET);
+			if (s8Ret == M2M_SUCCESS)
 			{
 				/*
 				 *	Reinstate the control sector from backup.
 				 */
 				s8Ret = spi_flash_erase(M2M_CONTROL_FLASH_OFFSET, M2M_CONTROL_FLASH_SZ);
 				if (s8Ret == M2M_SUCCESS)
-				{
-					s8Ret = spi_flash_write((uint8*)&strControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
-					if (s8Ret == M2M_SUCCESS)
-						s8Ret = winc_flash_compare((uint8*)&strControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
-				}
+					s8Ret = winc_flash_write_verify((uint8*)&strControlSec, M2M_CONTROL_FLASH_OFFSET, sizeof(tstrOtaControlSec));
 			}
 		}
-		if (strControlSec.u32OtaMagicValue != OTA_MAGIC_VALUE)
-			s8Ret = M2M_ERR_FAIL;
 		break;
 	case CS_INVALIDATE_RB:
 		// Update trashes the backup sector, so we need to avoid unnecessary updates.
@@ -219,124 +252,269 @@ static sint8 access_control_sector(tenuCSOp enuOp, uint32 *param)
 	}
 	return s8Ret;
 }
-
-sint8 winc_flash_control(uint32 u32LocationId, uint32 u32TotalSize, uint8 u8Flags, tenuFlashAccessFnCtl enuCtl)
+static sint8 local_access_ptr(tenuFlashDataFnCtl enuCtl, void *pvStr)
 {
+	sint8			s8Ret = M2M_ERR_FAIL;
+	static uint8	*pu8Location = NULL;
+	static uint8	u8Flags = 0;
+
 	switch (enuCtl)
 	{
-	case FA_FN_CTL_INITIALIZE:
-		gu8Flags = u8Flags;
-		switch (u32LocationId)
+	case FLASH_DATA_FN_INITIALIZE:
 		{
-		case MEM_ID_WINC_FLASH:
-			gu32CurrentAddr = 0;
-			break;
-		case MEM_ID_WINC_ACTIVE:
-			if (access_control_sector(CS_GET_ACTIVE, &gu32CurrentAddr) != M2M_SUCCESS)
-				goto ERR;
-			break;
-		case MEM_ID_WINC_INACTIVE:
-			if (access_control_sector(CS_GET_INACTIVE, &gu32CurrentAddr) != M2M_SUCCESS)
-				goto ERR;
-			/*	If we're about to write to the inactive partition, mark it as invalid. */
-			if (access_control_sector(CS_INVALIDATE_RB, NULL) != M2M_SUCCESS)
-				goto ERR;
-			break;
-		case MEM_ID_WINC_APP_STORE:
-			gu32CurrentAddr = M2M_OTA_IMAGE2_OFFSET + OTA_IMAGE_SIZE;
-			break;
-		default:
-			gu32CurrentAddr = u32LocationId;
-			break;
+			tstrDataAccessInitParams *init_params = (tstrDataAccessInitParams*)pvStr;
+			u8Flags = init_params->u8Flags;
+			pu8Location = gpu8Location;
+			s8Ret = M2M_SUCCESS;
 		}
 		break;
-	case FA_FN_CTL_TERMINATE:
-	case FA_FN_CTL_COMPLETE:
-		gu8Flags = 0;
-		gu32CurrentAddr = 0;
-		break;
-	case FA_FN_CTL_CHECK_BACKUP:
+	case FLASH_DATA_FN_DATA:
+		if (pu8Location != NULL)
 		{
-			uint32					u32BackupAddr = FA_BACKUP_STORE_OFFSET;
-			tstrFlashAccessBackup	strFlashAccessBackup;
-			tenuFlashAccessStatus	enuStatus = FA_STATUS_DONE;
-
-			while (u32BackupAddr < FA_BACKUP_STORE_OFFSET + FA_BACKUP_STORE_SZ)
-			{
-				sint8 status = spi_flash_read((uint8*)&strFlashAccessBackup, u32BackupAddr, sizeof(tstrFlashAccessBackup));
-				if ((status == M2M_SUCCESS) && (strFlashAccessBackup.enuTransferStatus == FA_STATUS_ACTIVE))
-				{
-					status = spi_flash_read(gau8Buff, strFlashAccessBackup.u32SourceAddr, strFlashAccessBackup.u32Size);
-					if (status == M2M_SUCCESS)
-					{
-						status = spi_flash_erase(strFlashAccessBackup.u32DestinationAddr, strFlashAccessBackup.u32Size);
-						if (status == M2M_SUCCESS)
-						{
-							status =spi_flash_write(gau8Buff, strFlashAccessBackup.u32DestinationAddr, strFlashAccessBackup.u32Size);
-							if (status == M2M_SUCCESS)
-								status =spi_flash_write((uint8*)&enuStatus, u32BackupAddr, FA_BACKUP_STA_SZ);
-						}
-					}
-				}
-				if (status != M2M_SUCCESS)
-					goto ERR;
-				u32BackupAddr += sizeof(tstrFlashAccessBackup);
-			}
+			tstrDataAccessParams *params = (tstrDataAccessParams*)pvStr;
+			if (u8Flags & FLASH_FN_FLAGS_WRITE)
+				m2m_memcpy(pu8Location, params->pu8Buf + params->u32DataOffset, params->u32DataSize);
+			if (u8Flags & FLASH_FN_FLAGS_READ)
+				m2m_memcpy(params->pu8Buf + params->u32DataOffset, pu8Location, params->u32DataSize);
+			pu8Location += params->u32DataSize;
+			s8Ret = M2M_SUCCESS;
 		}
+		break;
+	case FLASH_DATA_FN_TERMINATE:
+	case FLASH_DATA_FN_COMPLETE:
+		u8Flags = 0;
+		pu8Location = NULL;
+		s8Ret = M2M_SUCCESS;
 		break;
 	}
-	return M2M_SUCCESS;
-ERR:
-	return M2M_ERR_FAIL;
+	return s8Ret;
 }
-sint8 winc_flash_access(uint8_t *pu8Buf, uint32_t u32BufSize, uint32_t u32DataOffset, uint32_t u32DataSize)
+static sint8 winc_flash_access(tenuFlashDataFnCtl enuCtl, void *pvStr)
 {
-	sint8 s8Ret = M2M_SUCCESS;
-	if (gu8Flags & FA_FN_FLAGS_COMPARE_BEFORE)
+	sint8			s8Ret = M2M_ERR_FAIL;
+	static uint32	u32CurrentAddr = 0;
+	static uint8	u8Flags = 0;
+
+	switch (enuCtl)
 	{
-		// If contents match already, return success
-		if (winc_flash_compare(pu8Buf + u32DataOffset, gu32CurrentAddr, u32DataSize) == 0)
-			goto END;
-	}
-	if (gu8Flags & FA_FN_FLAGS_READ_SURROUNDING)
-	{
-		// Not implemented yet. Not required by any currently supported mode.
-	}
-	if (gu8Flags & FA_FN_FLAGS_BACKUP)
-	{
-		// Not implemented yet. Not required by any currently supported mode.
-	}
-	if (gu8Flags & FA_FN_FLAGS_ERASE)
-	{
-		s8Ret = spi_flash_erase(gu32CurrentAddr, u32DataSize);
-		if (s8Ret != M2M_SUCCESS)
-			goto END;
-	}
-	if (gu8Flags & FA_FN_FLAGS_WRITE)
-	{
-		s8Ret = spi_flash_write(pu8Buf + u32DataOffset, gu32CurrentAddr, u32DataSize);
-		if (s8Ret != M2M_SUCCESS)
-			goto END;
-	}
-	if (gu8Flags & FA_FN_FLAGS_COMPARE_AFTER)
-	{
-		// If contents do not match, return failure
-		s8Ret = winc_flash_compare(pu8Buf + u32DataOffset, gu32CurrentAddr, u32DataSize);
-		if (s8Ret != M2M_SUCCESS)
-			goto END;
-	}
-	if (gu8Flags & FA_FN_FLAGS_READ)
-	{
-		s8Ret = spi_flash_read(pu8Buf + u32DataOffset, gu32CurrentAddr, u32DataSize);
-		if (s8Ret != M2M_SUCCESS)
-			goto END;
-	}
+	case FLASH_DATA_FN_INITIALIZE:
+		{
+			tstrDataAccessInitParams *init_params = (tstrDataAccessInitParams*)pvStr;
+			printf("FA Init: 0x%lx Fg 0x%02x Sz 0x%lx \n", gu32LocationId, init_params->u8Flags, init_params->u32TotalSize);
+			u8Flags = init_params->u8Flags;
+			switch (gu32LocationId)
+			{
+			case MEM_ID_WINC_FLASH:
+				u32CurrentAddr = 0;
+				break;
+			case MEM_ID_WINC_ACTIVE:
+				s8Ret = access_control_sector(CS_GET_ACTIVE, &u32CurrentAddr);
+				break;
+			case MEM_ID_WINC_INACTIVE:
+				s8Ret = access_control_sector(CS_GET_INACTIVE, &u32CurrentAddr);
+				/*	If we're about to write to the inactive partition, mark it as invalid. */
+				if ((s8Ret == M2M_SUCCESS) && (u8Flags & (FLASH_FN_FLAGS_WRITE | FLASH_FN_FLAGS_ERASE)))
+					s8Ret = access_control_sector(CS_INVALIDATE_RB, NULL);
+				break;
+			case MEM_ID_NONE:
+				s8Ret = M2M_ERR_FAIL;
+				break;
+			default:
+				u32CurrentAddr = gu32LocationId;
+				break;
+			}
+			if (u8Flags & FLASH_FN_FLAGS_READ_SURROUNDING)
+			{
+				init_params->u32AlignmentSize = FLASH_SECTOR_SZ;
+				init_params->u32StartAlignment = u32CurrentAddr & (FLASH_SECTOR_SZ - 1);
+			}
+			s8Ret = M2M_SUCCESS;
+		}
+		break;
+	case FLASH_DATA_FN_DATA:
+		{
+			tstrDataAccessParams *params = (tstrDataAccessParams*)pvStr;
+			if (u8Flags & FLASH_FN_FLAGS_COMPARE_BEFORE)
+			{
+				printf("c-");
+				// If contents match already, return success
+				s8Ret = winc_flash_compare(params->pu8Buf + params->u32DataOffset, u32CurrentAddr, params->u32DataSize);
+				if (s8Ret == M2M_SUCCESS)
+					goto END;
+			}
+			if (u8Flags & FLASH_FN_FLAGS_READ_SURROUNDING)
+			{
+				uint32 prefill_sz = params->u32DataOffset;
+				uint32 postfill_sz = params->u32BufSize - (params->u32DataOffset + params->u32DataSize);
+				if (prefill_sz > 0)
+				{
+					printf("r-");
+					s8Ret = spi_flash_read(params->pu8Buf, u32CurrentAddr - prefill_sz, prefill_sz);
+					if (s8Ret != M2M_SUCCESS)
+						goto END;
+				}
+				if (postfill_sz > 0)
+				{
+					printf("-r");
+					s8Ret = spi_flash_read(params->pu8Buf + params->u32BufSize - postfill_sz, u32CurrentAddr + params->u32DataSize, postfill_sz);
+					if (s8Ret != M2M_SUCCESS)
+						goto END;
+				}
+			}
+			if (u8Flags & FLASH_FN_FLAGS_BACKUP)
+			{
+				if (params->u32BufSize > params->u32DataSize)
+				{
+					printf("b");
+					s8Ret = winc_flash_write_verify(params->pu8Buf, M2M_BACKUP_FLASH_OFFSET, params->u32BufSize);
+					if (s8Ret == M2M_SUCCESS)
+						s8Ret = prepare_backup(u32CurrentAddr - params->u32DataOffset);
+					if (s8Ret != M2M_SUCCESS)
+						goto END;
+				}
+			}
+			if (u8Flags & FLASH_FN_FLAGS_ERASE)
+			{
+				printf("e");
+				s8Ret = spi_flash_erase(u32CurrentAddr, params->u32DataSize);
+				if (s8Ret != M2M_SUCCESS)
+					goto END;
+			}
+			if (u8Flags & FLASH_FN_FLAGS_WRITE)
+			{
+				printf("W");
+				if (u8Flags & FLASH_FN_FLAGS_READ_SURROUNDING)
+					s8Ret = spi_flash_write(params->pu8Buf, u32CurrentAddr - params->u32DataOffset, params->u32BufSize);
+				else
+					s8Ret = spi_flash_write(params->pu8Buf + params->u32DataOffset, u32CurrentAddr, params->u32DataSize);
+				if (s8Ret != M2M_SUCCESS)
+					goto END;
+			}
+			if (u8Flags & FLASH_FN_FLAGS_COMPARE_AFTER)
+			{
+				printf("-c");
+				// If contents do not match, return failure
+				if (u8Flags & FLASH_FN_FLAGS_READ_SURROUNDING)
+					s8Ret = winc_flash_compare(params->pu8Buf, u32CurrentAddr - params->u32DataOffset, params->u32BufSize);
+				else
+					s8Ret = winc_flash_compare(params->pu8Buf + params->u32DataOffset, u32CurrentAddr, params->u32DataSize);
+				if (s8Ret != M2M_SUCCESS)
+					goto END;
+			}
+			if (u8Flags & FLASH_FN_FLAGS_READ)
+			{
+				printf("R");
+				s8Ret = spi_flash_read(params->pu8Buf + params->u32DataOffset, u32CurrentAddr, params->u32DataSize);
+				if (s8Ret != M2M_SUCCESS)
+					goto END;
+			}
 END:
-	gu32CurrentAddr += u32DataSize;
+			u32CurrentAddr += params->u32DataSize;
+		}
+		break;
+	case FLASH_DATA_FN_TERMINATE:
+	case FLASH_DATA_FN_COMPLETE:
+		printf(" FA End 0x%lx\n", u32CurrentAddr);
+		u8Flags = 0;
+		u32CurrentAddr = 0;
+		s8Ret = M2M_SUCCESS;
+		break;
+	}
 	return s8Ret;
 }
 
-sint8 m2m_flash_access_image_get_target(uint8 *pu8Target)
+void set_internal_info_ptr(tpfDataAccessFn *ppfFn, uint8 *pu8Ptr)
+{
+	if (ppfFn != NULL)
+		*ppfFn = local_access_ptr;
+	gpu8Location = pu8Ptr;
+}
+void set_internal_info(tpfDataAccessFn *ppfFn, uint32 u32LocationId)
+{
+	if (ppfFn != NULL)
+		*ppfFn = winc_flash_access;
+	gu32LocationId = u32LocationId;
+}
+uint8 is_internal_info(tpfDataAccessFn pfFn)
+{
+	if (pfFn == winc_flash_access)
+		return true;
+	return false;
+}
+sint8 recover_backup(void)
+{
+	sint8				ret = FLASH_RETURN_OK;
+	uint32				u32BackupAddr = FLASH_BACKUP_STORE_OFFSET;
+	tstrBackup			strBackup;
+
+	while (u32BackupAddr < FLASH_BACKUP_STORE_OFFSET + FLASH_BACKUP_STORE_SZ)
+	{
+		sint8 status = spi_flash_read((uint8*)&strBackup, u32BackupAddr, sizeof(tstrBackup));
+		if ((status == M2M_SUCCESS) && (strBackup.enuTransferStatus == BACKUP_STATUS_ACTIVE))
+		{
+			uint8	*pu8Buff = malloc(strBackup.u32Size);
+			if (pu8Buff == NULL)
+			{
+				ret = FLASH_ERR_INTERNAL;
+				goto ERR;
+			}
+			status = spi_flash_read(pu8Buff, strBackup.u32SourceAddr, strBackup.u32Size);
+			if (status == M2M_SUCCESS)
+			{
+				status = spi_flash_erase(strBackup.u32DestinationAddr, strBackup.u32Size);
+				if (status == M2M_SUCCESS)
+				{
+					status = winc_flash_write_verify(pu8Buff, strBackup.u32DestinationAddr, strBackup.u32Size);
+					if (status == M2M_SUCCESS)
+					{
+						strBackup.enuTransferStatus = BACKUP_STATUS_DONE;
+						status = winc_flash_write_verify((uint8*)&strBackup.enuTransferStatus, u32BackupAddr, FLASH_BACKUP_STA_SZ);
+					}
+				}
+			}
+			free(pu8Buff);
+		}
+		if (status != M2M_SUCCESS)
+		{
+			ret = FLASH_ERR_WINC_ACCESS;
+			goto ERR;
+		}
+		u32BackupAddr += sizeof(tstrBackup);
+	}
+ERR:
+	return ret;
+}
+sint8 prepare_backup(uint32 u32Target)
+{
+	sint8				s8Ret = M2M_ERR_FAIL;
+	uint32				u32BackupAddr = FLASH_BACKUP_STORE_OFFSET;
+	tenuBackupStatus	enuStatus = BACKUP_STATUS_EMPTY;
+
+	s8Ret = spi_flash_read((uint8*)&enuStatus, u32BackupAddr, sizeof(enuStatus));
+	if ((s8Ret != M2M_SUCCESS) || (enuStatus != BACKUP_STATUS_EMPTY))
+	{
+		u32BackupAddr += sizeof(tstrBackup);
+		s8Ret = spi_flash_read((uint8*)&enuStatus, u32BackupAddr, sizeof(enuStatus));
+		if ((s8Ret == M2M_SUCCESS) && (enuStatus != BACKUP_STATUS_EMPTY))
+			s8Ret = M2M_ERR_FAIL;
+	}
+	if (s8Ret == M2M_SUCCESS)
+	{
+		tstrBackup	strBackup = {BACKUP_STATUS_NOT_ACTIVE, u32Target, M2M_BACKUP_FLASH_OFFSET, M2M_BACKUP_FLASH_SZ};
+		s8Ret = winc_flash_write_verify((uint8*)&strBackup.enuTransferStatus, u32BackupAddr, FLASH_BACKUP_STA_SZ);
+		if (s8Ret == M2M_SUCCESS)
+		{
+			s8Ret = winc_flash_write_verify((uint8*)&strBackup, u32BackupAddr, sizeof(strBackup));
+			if (s8Ret == M2M_SUCCESS)
+			{
+				strBackup.enuTransferStatus = BACKUP_STATUS_ACTIVE;
+				s8Ret = winc_flash_write_verify((uint8*)&strBackup.enuTransferStatus, u32BackupAddr, FLASH_BACKUP_STA_SZ);
+			}
+		}
+	}
+	return s8Ret;
+}
+sint8 image_get_target(uint8 *pu8Target)
 {
 	sint8	s8Ret = M2M_ERR_FAIL;
 	uint32	u32OffsetActive = 0;
@@ -356,7 +534,7 @@ sint8 m2m_flash_access_image_get_target(uint8 *pu8Target)
 	}
 	return s8Ret;
 }
-sint8 m2m_flash_access_rootcert_get_size(tstrRootCertEntryHeader *pstrHdr, uint16 *pu16Size)
+sint8 rootcert_get_size(tstrRootCertEntryHeader *pstrHdr, uint16 *pu16Size)
 {
 	sint8 s8Ret = M2M_ERR_FAIL;
 	if ((pstrHdr == NULL) || (pu16Size == NULL))
@@ -391,333 +569,292 @@ sint8 m2m_flash_access_rootcert_get_size(tstrRootCertEntryHeader *pstrHdr, uint1
 ERR:
 	return s8Ret;
 }
-FlashAccessErr_t m2m_flash_access_rootcert(tenuFlashAccessMode enuMode, void *pvCertBuf, uint32 *pu32BufLen, uint32 *pu32Offset)
+sint8 rootcert_access(tenuFlashAccessItemMode enuMode, tstrRootCertEntryHeader *pstrReferenceHdr, uint16 *pu16EntrySize, uint8 *pu8Buff, uint32 *pu32Offset)
 {
-	FlashAccessErr_t		ret = FA_RETURN_OK;
+	sint8					ret = FLASH_RETURN_OK;
 	sint8					status = M2M_SUCCESS;
 	uint8					au8RootCertSig[] = M2M_TLS_ROOTCER_FLASH_SIG;
 	tstrRootCertEntryHeader	strEntryHeader;
-	uint32					u32PruneOffset = M2M_BACKUP_FLASH_OFFSET;
-	uint8					u8ReadIdx = 0;
+	/* Previous version used 0-identifiers to indicate removed entries. Use last 20 bytes of pu8Buff to help us check for them. */
+	uint8					*pu8Zero = pu8Buff + M2M_TLS_ROOTCER_FLASH_SZ - sizeof(pstrReferenceHdr->au8SHA1NameHash);
+	uint32					u32StoreOffset = 0;
+	uint32					u32Entries = 0;
 
-	/* Sanity check input params. */
-	if ((pvCertBuf == NULL) || (pu32BufLen == NULL) || (pu32Offset == NULL))
-		goto ERR;
-	if (*pu32BufLen < sizeof(strEntryHeader.au8SHA1NameHash))
-		goto ERR;
-
-	/* Assume sizeof(strEntryHeader) >= sizeof(au8RootCertSig) and temporarily use it to read signature. */
-	status = spi_flash_read((uint8*)&strEntryHeader, M2M_TLS_ROOTCER_FLASH_OFFSET, sizeof(au8RootCertSig));
-	if ((status != M2M_SUCCESS) || m2m_memcmp((uint8*)&strEntryHeader, au8RootCertSig, sizeof(au8RootCertSig)))
+	m2m_memset(pu8Zero, 0, sizeof(pstrReferenceHdr->au8SHA1NameHash));
+	/* Use pu8SectionBuffer to read signature. */
+	status = spi_flash_read(pu8Buff, M2M_TLS_ROOTCER_FLASH_OFFSET, sizeof(au8RootCertSig));
+	if ((status != M2M_SUCCESS) || m2m_memcmp(pu8Buff, au8RootCertSig, sizeof(au8RootCertSig)))
 	{
 		/*
 		 *	Root certificate section is not initialized. We could try to initialize it
 		 *	here, but for now just fail.
 		 */
-		ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
+		ret = FLASH_ERR_WINC_ACCESS;
 		goto ERR;
 	}
-	if (enuMode == FA_PRUNE_ROOTCERT)
-	{
-		status = spi_flash_erase(M2M_BACKUP_FLASH_OFFSET, M2M_BACKUP_FLASH_SZ);
-		if (status == M2M_SUCCESS)
-			status = spi_flash_write((uint8*)&strEntryHeader, u32PruneOffset, ROOTCERT_SECTION_HEADER_SZ);
-		if (status != M2M_SUCCESS)
-		{
-			ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
-			goto ERR;
-		}
-		u32PruneOffset += ROOTCERT_SECTION_HEADER_SZ;
-	}
 
-	if (enuMode == FA_READIDX_ROOTCERT)
-		u8ReadIdx = *((uint8*)pvCertBuf + offsetof(tstrRootCertEntryHeader,strExpDate));
+	/*
+	 *	By default assume we'll get to the end of the flash store without finding what we need
+	 *	(matching entry or space to add new entry). If we break while loop before reaching end of
+	 *	store then we'll change ret accordingly. */
+	if (enuMode == FLASH_ITEM_ADD)
+		ret = FLASH_ERR_SIZE;
+	else
+		ret = FLASH_ERR_WINC_CONFLICT;
 
-	*pu32Offset = M2M_TLS_ROOTCER_FLASH_OFFSET + ROOTCERT_SECTION_HEADER_SZ;
-	while (*pu32Offset < M2M_TLS_ROOTCER_FLASH_OFFSET + M2M_TLS_ROOTCER_FLASH_SZ)
+	u32StoreOffset = *pu32Offset = sizeof(tstrRootCertFlashHeader);
+	while (u32StoreOffset + sizeof(tstrRootCertEntryHeader) < M2M_TLS_ROOTCER_FLASH_SZ)
 	{
 		uint16	u16EntrySize = 0;
-		status = spi_flash_read((uint8*)&strEntryHeader, *pu32Offset, sizeof(tstrRootCertEntryHeader));
+		status = spi_flash_read((uint8*)&strEntryHeader, M2M_TLS_ROOTCER_FLASH_OFFSET + u32StoreOffset, sizeof(tstrRootCertEntryHeader));
 		if (status != M2M_SUCCESS)
 		{
-			ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
-			goto ERR;
+			ret = FLASH_ERR_WINC_ACCESS;
+			break;
 		}
-		status = m2m_flash_access_rootcert_get_size(&strEntryHeader, &u16EntrySize);
+		status = rootcert_get_size(&strEntryHeader, &u16EntrySize);
 		if (status != M2M_SUCCESS)
 		{
-			// Found the end of the list.
-			if (enuMode == FA_ADD_ROOTCERT)
+			// Found the end of the list. We are done. If we are adding an entry, check the space here.
+			if ((enuMode == FLASH_ITEM_ADD) && ((*pu32Offset + *pu16EntrySize) <= M2M_TLS_ROOTCER_FLASH_SZ))
 			{
-				if (u16EntrySize == 0)
-				{
-					// End of the list is good. pu32Offset contains the address for adding a new entry.
-					if ((*pu32Offset + *pu32BufLen) > (M2M_TLS_ROOTCER_FLASH_OFFSET + M2M_TLS_ROOTCER_FLASH_SZ))
-					{
-						ret |= FA_RETURN_FLAG_ERR_WINC_SZ;
-						goto ERR;
-					}
-					/* Need to write PubKeyType first for safety. */
-					ret |= FA_RETURN_FLAG_INFO_CHANGED;
-					status = spi_flash_write((uint8*)&strEntryHeader.strPubKey.u32PubKeyType, *pu32Offset, sizeof(strEntryHeader.strPubKey.u32PubKeyType));
-					if (status != M2M_SUCCESS)
-					{
-						ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
-						goto ERR;
-					}
-				}
-				else
-				{
-					// End of the list is corrupt. We are effectively at the end of the flash section.
-					ret |= FA_RETURN_FLAG_ERR_WINC_SZ;
-					goto ERR;
-				}
+				u32Entries++;
+				ret = FLASH_RETURN_OK;
 			}
-			else if (enuMode == FA_PRUNE_ROOTCERT)
-				*pu32Offset = M2M_TLS_ROOTCER_FLASH_OFFSET;
-			else
-			{
-				// Reached the end of the list without finding the item we wanted (read or remove)
-				ret |= FA_RETURN_FLAG_ERR_WINC_ITEM;
-				goto ERR;
-			}
-			// We are done.
-			goto DONE;
+			break;
 		}
 
 		// If we are here we know that u32EntrySize is sane.
-
-		switch (enuMode)
+		if (m2m_memcmp(pu8Zero, (uint8*)pstrReferenceHdr, sizeof(strEntryHeader.au8SHA1NameHash)))
 		{
-		case FA_ADD_ROOTCERT:
-			if (!m2m_memcmp(strEntryHeader.au8SHA1NameHash, pvCertBuf, sizeof(strEntryHeader.au8SHA1NameHash)))
+			// Entry is not empty.
+			status = spi_flash_read(pu8Buff + *pu32Offset, M2M_TLS_ROOTCER_FLASH_OFFSET + u32StoreOffset, u16EntrySize);
+			if (status != M2M_SUCCESS)
 			{
-				// Found a match. Cannot add.
-				ret |= FA_RETURN_FLAG_ERR_WINC_ITEM;
-				goto ERR;
+				ret = FLASH_ERR_WINC_ACCESS;
+				break;
 			}
-			break;
-		case FA_READ_ROOTCERT:
-			if (!m2m_memcmp(strEntryHeader.au8SHA1NameHash, pvCertBuf, sizeof(strEntryHeader.au8SHA1NameHash)))
+			if (enuMode == FLASH_ITEM_READIDX)
 			{
-				// Found a match. Update contents of pu32BufLen with actual size.
-				if (u16EntrySize <= *pu32BufLen)
-					*pu32BufLen = u16EntrySize;
-				else
+				if (u32Entries == *(uint32*)pstrReferenceHdr)
 				{
-					ret |= FA_RETURN_FLAG_ERR_WINC_SZ;
-					goto ERR;
-				}
-				goto DONE;
-			}
-			break;
-		case FA_REMOVE_ROOTCERT:
-			if (!m2m_memcmp(strEntryHeader.au8SHA1NameHash, pvCertBuf, sizeof(strEntryHeader.au8SHA1NameHash)))
-			{
-				// Found a match. Remove it.
-				ret |= FA_RETURN_FLAG_INFO_CHANGED;
-				m2m_memset(strEntryHeader.au8SHA1NameHash, 0, sizeof(strEntryHeader.au8SHA1NameHash));
-				status = spi_flash_write(strEntryHeader.au8SHA1NameHash, *pu32Offset, sizeof(strEntryHeader.au8SHA1NameHash));
-				if (status != M2M_SUCCESS)
-				{
-					ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
-					goto ERR;
-				}
-				ret |= FA_RETURN_FLAG_COMPLETE;
-				goto DONE;
-			}
-			break;
-		case FA_READIDX_ROOTCERT:
-			if (m2m_memcmp(strEntryHeader.au8SHA1NameHash, pvCertBuf, sizeof(strEntryHeader.au8SHA1NameHash)))
-			{
-				// Entry is not empty. Decrement index. Done if we reach 0.
-				if (u8ReadIdx-- == 0)
-				{
-					// Update contents of pu32BufLen with actual size.
-					if (u16EntrySize <= *pu32BufLen)
-						*pu32BufLen = u16EntrySize;
-					else
-					{
-						ret |= FA_RETURN_FLAG_ERR_WINC_SZ;
-						goto ERR;
-					}
-					goto DONE;
+					// Found entry. pu16EntrySize is used to output size.
+					*pu16EntrySize = u16EntrySize;
+					ret = FLASH_RETURN_OK;
+					break;
 				}
 			}
-			break;
-		case FA_PRUNE_ROOTCERT:
-			if (m2m_memcmp(strEntryHeader.au8SHA1NameHash, pvCertBuf, sizeof(strEntryHeader.au8SHA1NameHash)))
+			else if (!m2m_memcmp(strEntryHeader.au8SHA1NameHash, (uint8*)pstrReferenceHdr, sizeof(strEntryHeader.au8SHA1NameHash)))
 			{
-				// Entry is not empty. Copy it to u32PruneOffset. Use gau8Buff.
-				status = spi_flash_read(gau8Buff, *pu32Offset, u16EntrySize);
-				if (status == M2M_SUCCESS)
-					spi_flash_write(gau8Buff, u32PruneOffset, u16EntrySize);
-				if (status != M2M_SUCCESS)
+				if (enuMode == FLASH_ITEM_ADD)
 				{
-					ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
-					goto ERR;
+					// Found a match. Cannot add.
+					ret = FLASH_ERR_WINC_CONFLICT;
+					break;
 				}
-				u32PruneOffset += u16EntrySize;
+				if (enuMode == FLASH_ITEM_READ)
+				{
+					// Found a match. pu16EntrySize is used to output size.
+					*pu16EntrySize = u16EntrySize;
+					ret = FLASH_RETURN_OK;
+					break;
+				}
+				if (enuMode == FLASH_ITEM_REMOVE)
+				{
+					// Found a match. Continue, to complete entry count.
+					ret = FLASH_RETURN_OK;
+					// Cancel out increment of u32BuffOffset.
+					*pu32Offset -= u16EntrySize;
+				}
 			}
-			break;
-		default:
-			// No other item modes supported.
-			goto ERR;
-			break;
+			*pu32Offset += u16EntrySize;
+			u32Entries++;
 		}
-		*pu32Offset += u16EntrySize;
+		u32StoreOffset += u16EntrySize;
 	}
-	// Reached the end of the flash section.
-	switch (enuMode)
-	{
-	case FA_ADD_ROOTCERT:
-		ret |= FA_RETURN_FLAG_ERR_WINC_SZ;
-		goto ERR;
-	case FA_READ_ROOTCERT:
-	case FA_READIDX_ROOTCERT:
-	case FA_REMOVE_ROOTCERT:
-		ret |= FA_RETURN_FLAG_ERR_WINC_ITEM;
-		goto ERR;
-	case FA_PRUNE_ROOTCERT:
-		*pu32Offset = M2M_TLS_ROOTCER_FLASH_OFFSET;
-		goto DONE;
-	default:
-		// No other item modes supported.
-		goto ERR;
-	}
+	if (ret == FLASH_RETURN_OK)
+		((tstrRootCertFlashHeader*)pu8Buff)->u32nCerts = u32Entries;
 ERR:
-	*pu32Offset = 0;
-	ret |= FA_RETURN_FLAG_ERR;
-DONE:
 	return ret;
 }
 
-FlashAccessErr_t m2m_flash_access_run(void)
+sint8 transfer_run(tstrFlashAccess *pstrFlashAccess)
 {
 	/*
 	 *	Errors before start of first transfer will be reported as parameter errors.
 	 *	This means the information is insufficient to allow us to begin.
 	 */
-	FlashAccessErr_t		ret = FA_RETURN_OK;
+	sint8					ret = FLASH_RETURN_OK;
 	sint8					status = M2M_ERR_FAIL;
 
-	tstrFlashAccessInfo		*pstrWriteInfo = &gstrFlashAccess.strDestinationInfo;
-	tstrFlashAccessInfo		*pstrReadInfo = &gstrFlashAccess.strSourceInfo;
-	uint32_t				u32BytesTransferred = 0;
-	uint32_t				u32BytesRemaining = gstrFlashAccess.u32Size;
-	uint8					u8WriteFnFlags = FA_FN_FLAGS_WRITE;
+	tpfDataAccessFn				pfWriteFn = pstrFlashAccess->pfDestinationFn;
+	tpfDataAccessFn				pfReadFn = pstrFlashAccess->pfSourceFn;
+	tstrDataAccessInitParams	read_init_params = {pstrFlashAccess->u32Size, FLASH_FN_FLAGS_READ, 0, 0};
+	tstrDataAccessInitParams	write_init_params = {pstrFlashAccess->u32Size, FLASH_FN_FLAGS_WRITE, 0, 0};
+	uint32						u32BytesTransferred = 0;
+	uint32						u32BytesRemaining = pstrFlashAccess->u32Size;
+	uint8						*pu8Buff = NULL;
 
-	if (gstrFlashAccess.u8AccessFlags & FA_ACCESS_OPTION_COMPARE_BEFORE)
-		u8WriteFnFlags |= FA_FN_FLAGS_COMPARE_BEFORE;
-	if (gstrFlashAccess.u8AccessFlags & FA_ACCESS_OPTION_ERASE_FIRST)
+	if (pstrFlashAccess->strPersistentInfo.u8AccessFlags & FLASH_ACCESS_OPTION_COMPARE_BEFORE)
+		write_init_params.u8Flags |= FLASH_FN_FLAGS_COMPARE_BEFORE;
+	if (pstrFlashAccess->strPersistentInfo.u8AccessFlags & FLASH_ACCESS_OPTION_ERASE_FIRST)
 	{
-		u8WriteFnFlags |= FA_FN_FLAGS_ERASE;
-		if (gstrFlashAccess.u8AccessFlags & FA_ACCESS_OPTION_KEEP_SURROUNDING)
+		write_init_params.u8Flags |= FLASH_FN_FLAGS_ERASE;
+		if (pstrFlashAccess->strPersistentInfo.u8AccessFlags & FLASH_ACCESS_OPTION_KEEP_SURROUNDING)
 		{
-			u8WriteFnFlags |= FA_FN_FLAGS_READ_SURROUNDING;
-			if (gstrFlashAccess.u8AccessFlags & FA_ACCESS_OPTION_USE_BACKUP)
-				u8WriteFnFlags |= FA_FN_FLAGS_BACKUP;
+			write_init_params.u8Flags |= FLASH_FN_FLAGS_READ_SURROUNDING;
+			if (pstrFlashAccess->strPersistentInfo.u8AccessFlags & FLASH_ACCESS_OPTION_USE_BACKUP)
+				write_init_params.u8Flags |= FLASH_FN_FLAGS_BACKUP;
 		}
 	}
-	if (gstrFlashAccess.u8AccessFlags & FA_ACCESS_OPTION_COMPARE_AFTER)
-		u8WriteFnFlags |= FA_FN_FLAGS_COMPARE_AFTER;
+	if (pstrFlashAccess->strPersistentInfo.u8AccessFlags & FLASH_ACCESS_OPTION_COMPARE_AFTER)
+		write_init_params.u8Flags |= FLASH_FN_FLAGS_COMPARE_AFTER;
 
-	if (gstrFlashAccess.u8ModeFlags & FA_MODE_FLAGS_CHECK_BACKUP)
+	if (pstrFlashAccess->strPersistentInfo.u8ModeFlags & FLASH_MODE_FLAGS_DATA_IN_BACKUP)
 	{
-		status = winc_flash_control(0,0,0,FA_FN_CTL_CHECK_BACKUP);
-		if (status != M2M_SUCCESS)
+		if (prepare_backup(gu32LocationId) != M2M_SUCCESS)
 		{
-			ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
+			ret = FLASH_ERR_WINC_ACCESS;
 			goto ERR;
 		}
+		set_changed_flag(&pstrFlashAccess->strPersistentInfo);
+		ret = recover_backup();
+		if (ret < 0)
+			goto ERR;
 	}
 	/*
 	 *	Initialize control sector. Even if we don't need to access it, this at
 	 *	least ensures that the control sector is not relying on the flash backup sector.
 	 */
 	status = access_control_sector(CS_INITIALIZE, NULL);
-	if (status != M2M_SUCCESS && (gstrFlashAccess.u8ModeFlags & FA_MODE_FLAGS_CS))
+	if (status != M2M_SUCCESS && (pstrFlashAccess->strPersistentInfo.u8ModeFlags & FLASH_MODE_FLAGS_CS))
 	{
-		ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
+		ret = FLASH_ERR_WINC_ACCESS;
 		goto ERR;
 	}
 
-	if (u32BytesRemaining > 0)
+	if (pfReadFn != NULL)
 	{
-		/* Prepare for read and write. */
-		status = pstrReadInfo->pfCtlFunction(pstrReadInfo->u32LocationId, u32BytesRemaining, FA_FN_FLAGS_READ, FA_FN_CTL_INITIALIZE);
-		if (status == M2M_SUCCESS)
-			status = pstrWriteInfo->pfCtlFunction(pstrWriteInfo->u32LocationId, u32BytesRemaining, u8WriteFnFlags, FA_FN_CTL_INITIALIZE);
+		/* Prepare for read. */
+
+		status = pfReadFn(FLASH_DATA_FN_INITIALIZE, &read_init_params);
 		if (status != M2M_SUCCESS)
 		{
-			ret |= FA_RETURN_FLAG_ERR_LOCAL_ACCESS;
+			if (is_internal_info(pfReadFn))
+				ret = FLASH_ERR_WINC_ACCESS;
+			else
+				ret = FLASH_ERR_LOCAL_ACCESS;
+			pfReadFn(FLASH_DATA_FN_TERMINATE, NULL);
 			goto ERR;
+		}
+	}
+	if (pfWriteFn != NULL)
+	{
+		/* Prepare for write. */
+		status = pfWriteFn(FLASH_DATA_FN_INITIALIZE, &write_init_params);
+		if (status != M2M_SUCCESS)
+		{
+			if (is_internal_info(pfWriteFn))
+				ret = FLASH_ERR_WINC_ACCESS;
+			else
+				ret = FLASH_ERR_LOCAL_ACCESS;
+			goto TERMINATE;
+		}
+	}
+	if (u32BytesRemaining > 0)
+	{
+		if (u32BytesRemaining > FLASH_SECTOR_SIZE)
+			pu8Buff = malloc(FLASH_SECTOR_SIZE);
+		else if (write_init_params.u32AlignmentSize > 1)
+			pu8Buff = malloc(write_init_params.u32AlignmentSize);
+		else
+			pu8Buff = malloc(u32BytesRemaining);
+		if (pu8Buff == NULL)
+		{
+			ret = FLASH_ERR_INTERNAL;
+			goto TERMINATE;
 		}
 	}
 
 	while (u32BytesRemaining > 0)
 	{
-		uint32	chunk_size = sizeof(gau8Buff);
-		uint32	before_chunk_size = 0;
+		tstrDataAccessParams	params = {pu8Buff, FLASH_SECTOR_SIZE, 0, FLASH_SECTOR_SIZE};
 
-		if ((u32BytesTransferred == 0) && (pstrWriteInfo->u32AlignmentSize > 0))
+		if (u32BytesTransferred > 0)
+			write_init_params.u32StartAlignment = 0;
+		if (write_init_params.u32AlignmentSize > 1)
 		{
-			before_chunk_size = pstrWriteInfo->u32StartAlignment & (pstrWriteInfo->u32AlignmentSize-1);
-			chunk_size = pstrWriteInfo->u32AlignmentSize - before_chunk_size;
+			params.u32DataOffset = write_init_params.u32StartAlignment & (write_init_params.u32AlignmentSize-1);
+			params.u32DataSize = write_init_params.u32AlignmentSize - params.u32DataOffset;
 		}
 
-		if (chunk_size > u32BytesRemaining)
-			chunk_size = u32BytesRemaining;
+		if (params.u32DataSize > u32BytesRemaining)
+			params.u32DataSize = u32BytesRemaining;
 
 		/* Read. */
-		status = pstrReadInfo->pfFunction(gau8Buff, sizeof(gau8Buff), before_chunk_size, chunk_size);
-		if (status != M2M_SUCCESS)
-			break;
-
-		if (gstrFlashAccess.u8ModeFlags & FA_MODE_FLAGS_UNCHANGED)
+		if (pfReadFn != NULL)
 		{
-			ret |= FA_RETURN_FLAG_INFO_CHANGED;
-			gstrFlashAccess.u8ModeFlags &= ~FA_MODE_FLAGS_UNCHANGED;
-			spi_flash_write((uint8*)&gstrFlashAccess, HOST_CONTROL_FLASH_OFFSET, FA_PERM_SZ);
+			status = pfReadFn(FLASH_DATA_FN_DATA, &params);
+			if (status != M2M_SUCCESS)
+			{
+				if (is_internal_info(pfReadFn))
+					ret = FLASH_ERR_WINC_ACCESS;
+				else
+					ret = FLASH_ERR_LOCAL_ACCESS;
+				break;
+			}
 		}
 
 		/* Write. */
-		status = pstrWriteInfo->pfFunction(gau8Buff, sizeof(gau8Buff), before_chunk_size, chunk_size);
-		if (status != M2M_SUCCESS)
-			break;
+		if (pfWriteFn != NULL)
+		{
+			if (is_internal_info(pfWriteFn))
+			{
+				ret = set_changed_flag(&pstrFlashAccess->strPersistentInfo);
+				if (ret < 0)
+					break;
+			}
+			status = pfWriteFn(FLASH_DATA_FN_DATA, &params);
+			if (status != M2M_SUCCESS)
+			{
+				if (is_internal_info(pfWriteFn))
+					ret = FLASH_ERR_WINC_ACCESS;
+				else
+					ret = FLASH_ERR_LOCAL_ACCESS;
+				break;
+			}
+		}
 
-		u32BytesTransferred += chunk_size;
-		u32BytesRemaining -= chunk_size;
+		u32BytesTransferred += params.u32DataSize;
+		u32BytesRemaining -= params.u32DataSize;
 	}
 
-	if (gstrFlashAccess.u32Size > 0)
+	if (u32BytesRemaining > 0)
 	{
-		if (u32BytesRemaining > 0)
-		{
-			pstrReadInfo->pfCtlFunction(pstrReadInfo->u32LocationId, 0, 0, FA_FN_CTL_TERMINATE);
-			pstrWriteInfo->pfCtlFunction(pstrWriteInfo->u32LocationId, 0, 0, FA_FN_CTL_TERMINATE);
-			ret |= FA_RETURN_FLAG_ERR_LOCAL_ACCESS;
-			goto ERR;
-		}
-		else
-		{
-			pstrReadInfo->pfCtlFunction(pstrReadInfo->u32LocationId, 0, 0, FA_FN_CTL_COMPLETE);
-			pstrWriteInfo->pfCtlFunction(pstrWriteInfo->u32LocationId, 0, 0, FA_FN_CTL_COMPLETE);
-		}
+TERMINATE:
+		if (pfReadFn != NULL)
+			pfReadFn(FLASH_DATA_FN_TERMINATE, NULL);
+		if (pfWriteFn != NULL)
+			pfWriteFn(FLASH_DATA_FN_TERMINATE, NULL);
+		goto ERR;
+	}
+	else
+	{
+		if (pfReadFn != NULL)
+			pfReadFn(FLASH_DATA_FN_COMPLETE, NULL);
+		if (pfWriteFn != NULL)
+			pfWriteFn(FLASH_DATA_FN_COMPLETE, NULL);
 	}
 
-	if (gstrFlashAccess.u8ModeFlags & (FA_MODE_FLAGS_CS_VALIDATE_IMAGE | FA_MODE_FLAGS_CS_SWITCH))
+	if (pstrFlashAccess->strPersistentInfo.u8ModeFlags & (FLASH_MODE_FLAGS_CS_VALIDATE_IMAGE | FLASH_MODE_FLAGS_CS_SWITCH))
 	{
 		tenuCSOp enuOp;
-		if (gstrFlashAccess.u8ModeFlags & FA_MODE_FLAGS_UNCHANGED)
+		ret = set_changed_flag(&pstrFlashAccess->strPersistentInfo);
+		if (ret < 0)
+			goto ERR;
+		if (pstrFlashAccess->strPersistentInfo.u8ModeFlags & FLASH_MODE_FLAGS_CS_VALIDATE_IMAGE)
 		{
-			ret |= FA_RETURN_FLAG_INFO_CHANGED;
-			gstrFlashAccess.u8ModeFlags &= ~FA_MODE_FLAGS_UNCHANGED;
-			spi_flash_write((uint8*)&gstrFlashAccess, HOST_CONTROL_FLASH_OFFSET, FA_PERM_SZ);
-		}
-		if (gstrFlashAccess.u8ModeFlags & FA_MODE_FLAGS_CS_VALIDATE_IMAGE)
-		{
-			if (gstrFlashAccess.u8ModeFlags & FA_MODE_FLAGS_CS_SWITCH)
+			if (pstrFlashAccess->strPersistentInfo.u8ModeFlags & FLASH_MODE_FLAGS_CS_SWITCH)
 				enuOp = CS_VALIDATE_SWITCH;
 			else
 				enuOp = CS_VALIDATE_RB;
@@ -727,18 +864,17 @@ FlashAccessErr_t m2m_flash_access_run(void)
 		status = access_control_sector(enuOp, NULL);
 		if (status != M2M_SUCCESS)
 		{
-			ret |= FA_RETURN_FLAG_ERR_WINC_ACCESS;
+			ret = FLASH_ERR_WINC_ACCESS;
 			goto ERR;
 		}
 	}
-	access_control_sector(CS_DEINITIALIZE, NULL);
 
-	ret |= FA_RETURN_FLAG_COMPLETE;
-	gstrFlashAccess.enuTransferStatus = FA_STATUS_DONE;
-	spi_flash_write((uint8*)&gstrFlashAccess, HOST_CONTROL_FLASH_OFFSET, FA_PERM_SZ);
-	return ret;
+	pstrFlashAccess->strPersistentInfo.enuTransferStatus = FLASH_STATUS_DONE;
+	status = winc_flash_write_verify((uint8*)pstrFlashAccess, HOST_CONTROL_FLASH_OFFSET, sizeof(tstrFlashAccessPersistent));
+	gu8Success = 1;
 ERR:
-	ret |= FA_RETURN_FLAG_ERR;
+	if (pu8Buff != NULL)
+		free(pu8Buff);
 	access_control_sector(CS_DEINITIALIZE, NULL);
 	return ret;
 }

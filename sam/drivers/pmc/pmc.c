@@ -3,7 +3,7 @@
  *
  * \brief Power Management Controller (PMC) driver for SAM.
  *
- * Copyright (c) 2011-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -691,6 +691,13 @@ uint32_t pmc_is_locked_upll(void)
  */
 uint32_t pmc_enable_periph_clk(uint32_t ul_id)
 {
+#if defined(REG_PMC_PCR) && !SAMG55
+	uint32_t pcr;
+	PMC->PMC_PCR = ul_id & 0x7F;
+	pcr = PMC->PMC_PCR | PMC_PCR_EN | PMC_PCR_CMD;
+	PMC->PMC_PCR = pcr;
+	return 0;
+#else
 	if (ul_id > MAX_PERIPH_ID) {
 		return 1;
 	}
@@ -709,6 +716,7 @@ uint32_t pmc_enable_periph_clk(uint32_t ul_id)
 	}
 
 	return 0;
+#endif /* defined(REG_PMC_PCR) && !SAMG55 */
 }
 
 /**
@@ -723,6 +731,13 @@ uint32_t pmc_enable_periph_clk(uint32_t ul_id)
  */
 uint32_t pmc_disable_periph_clk(uint32_t ul_id)
 {
+#if defined(REG_PMC_PCR) && !SAMG55
+	uint32_t pcr;
+	PMC->PMC_PCR = ul_id & 0x7F;
+	pcr = PMC->PMC_PCR | PMC_PCR_CMD;
+	PMC->PMC_PCR = pcr;
+	return 0;
+#else
 	if (ul_id > MAX_PERIPH_ID) {
 		return 1;
 	}
@@ -741,6 +756,7 @@ uint32_t pmc_disable_periph_clk(uint32_t ul_id)
 #endif
 	}
 	return 0;
+#endif /* defined(REG_PMC_PCR) && !SAMG55 */
 }
 
 /**
@@ -755,6 +771,12 @@ void pmc_enable_all_periph_clk(void)
 		|| SAMV70 || SAME70 || SAMS70)
 	PMC->PMC_PCER1 = PMC_MASK_STATUS1;
 	while ((PMC->PMC_PCSR1 & PMC_MASK_STATUS1) != PMC_MASK_STATUS1);
+#endif
+
+#if defined(REG_PMC_PCR) && !SAMG55
+	for (uint32_t id = 64; id <= 0x7F; id ++) {
+		pmc_enable_periph_clk(id);
+	}
 #endif
 }
 
@@ -771,6 +793,12 @@ void pmc_disable_all_periph_clk(void)
 	PMC->PMC_PCDR1 = PMC_MASK_STATUS1;
 	while ((PMC->PMC_PCSR1 & PMC_MASK_STATUS1) != 0);
 #endif
+
+#if defined(REG_PMC_PCR) && !SAMG55
+	for (uint32_t id = 64; id <= 0x7F; id ++) {
+		pmc_disable_periph_clk(id);
+	}
+#endif
 }
 
 /**
@@ -785,6 +813,10 @@ void pmc_disable_all_periph_clk(void)
  */
 uint32_t pmc_is_periph_clk_enabled(uint32_t ul_id)
 {
+#if defined(REG_PMC_PCR) && !SAMG55
+	PMC->PMC_PCR = ul_id & 0x7F;
+	return (PMC->PMC_PCR & PMC_PCR_EN) ? 1 : 0;
+#else
 	if (ul_id > MAX_PERIPH_ID) {
 		return 0;
 	}
@@ -809,6 +841,7 @@ uint32_t pmc_is_periph_clk_enabled(uint32_t ul_id)
 		}
 	}
 #endif
+#endif /* defined(REG_PMC_PCR) && !SAMG55 */
 }
 
 /**

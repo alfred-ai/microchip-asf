@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -58,6 +58,9 @@
   #define REG_USART1_BRGR                      (0x40028020U) /**< \brief (USART1) Baud Rate Generator Register */
   #define REG_USART1_RTOR                      (0x40028024U) /**< \brief (USART1) Receiver Time-out Register */
   #define REG_USART1_TTGR                      (0x40028028U) /**< \brief (USART1) Transmitter Timeguard Register */
+  #define REG_USART1_FIDI                      (0x40028040U) /**< \brief (USART1) FI DI Ratio Register */
+  #define REG_USART1_NER                       (0x40028044U) /**< \brief (USART1) Number of Errors Register */
+  #define REG_USART1_IF                        (0x4002804CU) /**< \brief (USART1) IrDA Filter Register */
   #define REG_USART1_MAN                       (0x40028050U) /**< \brief (USART1) Manchester Configuration Register */
   #define REG_USART1_LINMR                     (0x40028054U) /**< \brief (USART1) LIN Mode Register */
   #define REG_USART1_LINIR                     (0x40028058U) /**< \brief (USART1) LIN Identifier Register */
@@ -75,6 +78,7 @@
   #define REG_USART1_ICDIFF                    (0x40028088U) /**< \brief (USART1) IC DIFF Register */
   #define REG_USART1_WPMR                      (0x400280E4U) /**< \brief (USART1) Write Protection Mode Register */
   #define REG_USART1_WPSR                      (0x400280E8U) /**< \brief (USART1) Write Protection Status Register */
+  #define REG_USART1_VERSION                   (0x400280FCU) /**< \brief (USART1) Version Register */
 #else
   #define REG_USART1_CR       (*(__O  uint32_t*)0x40028000U) /**< \brief (USART1) Control Register */
   #define REG_USART1_MR       (*(__IO uint32_t*)0x40028004U) /**< \brief (USART1) Mode Register */
@@ -87,6 +91,9 @@
   #define REG_USART1_BRGR     (*(__IO uint32_t*)0x40028020U) /**< \brief (USART1) Baud Rate Generator Register */
   #define REG_USART1_RTOR     (*(__IO uint32_t*)0x40028024U) /**< \brief (USART1) Receiver Time-out Register */
   #define REG_USART1_TTGR     (*(__IO uint32_t*)0x40028028U) /**< \brief (USART1) Transmitter Timeguard Register */
+  #define REG_USART1_FIDI     (*(__IO uint32_t*)0x40028040U) /**< \brief (USART1) FI DI Ratio Register */
+  #define REG_USART1_NER      (*(__I  uint32_t*)0x40028044U) /**< \brief (USART1) Number of Errors Register */
+  #define REG_USART1_IF       (*(__IO uint32_t*)0x4002804CU) /**< \brief (USART1) IrDA Filter Register */
   #define REG_USART1_MAN      (*(__IO uint32_t*)0x40028050U) /**< \brief (USART1) Manchester Configuration Register */
   #define REG_USART1_LINMR    (*(__IO uint32_t*)0x40028054U) /**< \brief (USART1) LIN Mode Register */
   #define REG_USART1_LINIR    (*(__IO uint32_t*)0x40028058U) /**< \brief (USART1) LIN Identifier Register */
@@ -104,6 +111,7 @@
   #define REG_USART1_ICDIFF   (*(__IO uint32_t*)0x40028088U) /**< \brief (USART1) IC DIFF Register */
   #define REG_USART1_WPMR     (*(__IO uint32_t*)0x400280E4U) /**< \brief (USART1) Write Protection Mode Register */
   #define REG_USART1_WPSR     (*(__I  uint32_t*)0x400280E8U) /**< \brief (USART1) Write Protection Status Register */
+  #define REG_USART1_VERSION  (*(__I  uint32_t*)0x400280FCU) /**< \brief (USART1) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAME70_USART1_INSTANCE_ */

@@ -3,7 +3,7 @@
  *
  * \brief Custom Serial Chat Application declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,6 +62,12 @@
 /**@brief Enter button press to send data */
 #define ENTER_BUTTON_PRESS (13)
 
+
+/** @brief app_notification_cfm_handler called by ble manager 
+ *	to give the status of notification sent
+ *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
+ */	
+at_ble_status_t app_notification_cfm_handler(void *params);
 
 /**
 * @brief app_connected_state blemanager notifies the application about state

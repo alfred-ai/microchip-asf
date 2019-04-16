@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,9 +63,9 @@
   #define REG_SMC_PULSE3                   (0x40080034U) /**< \brief (SMC) SMC Pulse Register (CS_number = 3) */
   #define REG_SMC_CYCLE3                   (0x40080038U) /**< \brief (SMC) SMC Cycle Register (CS_number = 3) */
   #define REG_SMC_MODE3                    (0x4008003CU) /**< \brief (SMC) SMC MODE Register (CS_number = 3) */
-  #define REG_SMC_OCMS                     (0x40080080U) /**< \brief (SMC) SMC OCMS MODE Register */
-  #define REG_SMC_KEY1                     (0x40080084U) /**< \brief (SMC) SMC OCMS KEY1 Register */
-  #define REG_SMC_KEY2                     (0x40080088U) /**< \brief (SMC) SMC OCMS KEY2 Register */
+  #define REG_SMC_OCMS                     (0x40080080U) /**< \brief (SMC) SMC Off-Chip Memory Scrambling Register */
+  #define REG_SMC_KEY1                     (0x40080084U) /**< \brief (SMC) SMC Off-Chip Memory Scrambling KEY1 Register */
+  #define REG_SMC_KEY2                     (0x40080088U) /**< \brief (SMC) SMC Off-Chip Memory Scrambling KEY2 Register */
   #define REG_SMC_WPMR                     (0x400800E4U) /**< \brief (SMC) SMC Write Protection Mode Register */
   #define REG_SMC_WPSR                     (0x400800E8U) /**< \brief (SMC) SMC Write Protection Status Register */
   #define REG_SMC_VERSION                  (0x400800FCU) /**< \brief (SMC) SMC Version Register */
@@ -86,9 +86,9 @@
   #define REG_SMC_PULSE3  (*(__IO uint32_t*)0x40080034U) /**< \brief (SMC) SMC Pulse Register (CS_number = 3) */
   #define REG_SMC_CYCLE3  (*(__IO uint32_t*)0x40080038U) /**< \brief (SMC) SMC Cycle Register (CS_number = 3) */
   #define REG_SMC_MODE3   (*(__IO uint32_t*)0x4008003CU) /**< \brief (SMC) SMC MODE Register (CS_number = 3) */
-  #define REG_SMC_OCMS    (*(__IO uint32_t*)0x40080080U) /**< \brief (SMC) SMC OCMS MODE Register */
-  #define REG_SMC_KEY1    (*(__O  uint32_t*)0x40080084U) /**< \brief (SMC) SMC OCMS KEY1 Register */
-  #define REG_SMC_KEY2    (*(__O  uint32_t*)0x40080088U) /**< \brief (SMC) SMC OCMS KEY2 Register */
+  #define REG_SMC_OCMS    (*(__IO uint32_t*)0x40080080U) /**< \brief (SMC) SMC Off-Chip Memory Scrambling Register */
+  #define REG_SMC_KEY1    (*(__O  uint32_t*)0x40080084U) /**< \brief (SMC) SMC Off-Chip Memory Scrambling KEY1 Register */
+  #define REG_SMC_KEY2    (*(__O  uint32_t*)0x40080088U) /**< \brief (SMC) SMC Off-Chip Memory Scrambling KEY2 Register */
   #define REG_SMC_WPMR    (*(__IO uint32_t*)0x400800E4U) /**< \brief (SMC) SMC Write Protection Mode Register */
   #define REG_SMC_WPSR    (*(__I  uint32_t*)0x400800E8U) /**< \brief (SMC) SMC Write Protection Status Register */
   #define REG_SMC_VERSION (*(__I  uint32_t*)0x400800FCU) /**< \brief (SMC) SMC Version Register */

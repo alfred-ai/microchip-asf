@@ -128,7 +128,7 @@ MACROS
 
 #define MAX_SOCKET											(TCP_SOCK_MAX + UDP_SOCK_MAX)
 /*!<
-	Maximum number of Sockets.
+	Maximum number of simultaneous sockets.
 */
 
 #define SOL_SOCKET											1
@@ -495,7 +495,7 @@ Socket Errors
 #else
 
 #define _htonl(m)		\
-	(uint32)(((uint32)(m << 24)) | ((uint32)((m & 0x0000FF00) << 8)) | ((uint32)((m & 0x00FF0000) >> 8)) | ((uint32)(m >> 24)))
+	(uint32)(((uint32)(m << 24)) | ((uint32)((m & 0x0000FF00) << 8)) | ((uint32)((m & 0x00FF0000) >> 8)) | ((uint32)(((uint32)m) >> 24)))
 /*!<
 	Convert a 4-byte integer from the host representation to the Network byte order representation.
 */
@@ -693,7 +693,7 @@ typedef enum{
 @brief	Socket bind status.
 
 	An asynchronous call to the @ref bind socket operation, returns information through this structure in response.
-	This structure together with the event @ref SOCKET_MSG_BIND are passed in paramters to the callback function.
+	This structure together with the event @ref SOCKET_MSG_BIND are passed in parameters to the callback function.
 @see
      bind
 	

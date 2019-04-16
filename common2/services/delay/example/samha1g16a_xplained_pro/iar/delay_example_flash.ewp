@@ -1968,6 +1968,9 @@
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/component/eic.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/component/evsys.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/component/linctrl.h</name>
 							</file>
 							<file>
@@ -1978,9 +1981,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/component/adc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/component/evsys.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/component/sysctrl.h</name>
@@ -2136,17 +2136,35 @@
 						<group>
 							<name>pio</name>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/pio/samha1g14ab.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/pio/samha1g16a.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/pio/samha1g15a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/pio/samha1g16ab.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/pio/samha1g15ab.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/pio/samha1g14a.h</name>
 							</file>
 						</group>
 						<file>
+							<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/samha1g14ab.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/samha1g15ab.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/samha1g15a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/samha1g16ab.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../sam0/utils/cmsis/samha1/include/samha1g16a.h</name>

@@ -102,6 +102,7 @@ static uint8_t wifi_provision_get_state(void);
 static at_ble_status_t start_advertise(void)
 {
 	at_ble_status_t st = AT_BLE_SUCCESS;
+    at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	WIFI_PROVISION_FAST_ADV, WIFI_PROVISION_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS)
 	{

@@ -40,6 +40,7 @@
  */
 
 #include "bsp/include/nm_bsp.h"
+#include "bsp/include/nm_bsp_internal.h"
 #include "common/include/nm_common.h"
 #include "asf.h"
 #include "conf_winc.h"
@@ -88,9 +89,6 @@ sint8 nm_bsp_init(void)
     if (!(SysTick->CTRL & SysTick_CTRL_ENABLE_Msk && SysTick->CTRL & SysTick_CTRL_TICKINT_Msk)) {
 	    delay_init();
     }
-
-	/* Perform chip reset. */
-	nm_bsp_reset();
 
 	system_interrupt_enable_global();
 

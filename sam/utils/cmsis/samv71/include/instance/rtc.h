@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -59,6 +59,7 @@
   #define REG_RTC_IDR                     (0x400E1884U) /**< \brief (RTC) Interrupt Disable Register */
   #define REG_RTC_IMR                     (0x400E1888U) /**< \brief (RTC) Interrupt Mask Register */
   #define REG_RTC_VER                     (0x400E188CU) /**< \brief (RTC) Valid Entry Register */
+  #define REG_RTC_VERSION                  (0x400E195CU) /**< \brief (RTC) Version Register */
 #else
   #define REG_RTC_CR     (*(__IO uint32_t*)0x400E1860U) /**< \brief (RTC) Control Register */
   #define REG_RTC_MR     (*(__IO uint32_t*)0x400E1864U) /**< \brief (RTC) Mode Register */
@@ -72,6 +73,7 @@
   #define REG_RTC_IDR    (*(__O  uint32_t*)0x400E1884U) /**< \brief (RTC) Interrupt Disable Register */
   #define REG_RTC_IMR    (*(__I  uint32_t*)0x400E1888U) /**< \brief (RTC) Interrupt Mask Register */
   #define REG_RTC_VER    (*(__I  uint32_t*)0x400E188CU) /**< \brief (RTC) Valid Entry Register */
+  #define REG_RTC_VERSION (*(__I  uint32_t*)0x400E195CU) /**< \brief (RTC) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_RTC_INSTANCE_ */

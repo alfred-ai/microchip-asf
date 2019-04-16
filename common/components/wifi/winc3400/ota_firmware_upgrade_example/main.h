@@ -50,7 +50,7 @@ extern "C" {
 #define MAIN_WLAN_AUTH        M2M_WIFI_SEC_WPA_PSK /* < Security manner */
 #define MAIN_WLAN_PSK         "12345678" /* < Password for Destination SSID */
 
-#define MAIN_OTA_URL          "http://192.168.1.11/m2m_ota_3400.bin"
+#define MAIN_OTA_URL          "http://192.168.2.4/m2m_ota_3400.bin"
 
 #ifdef __cplusplus
 }

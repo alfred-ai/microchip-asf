@@ -3,7 +3,7 @@
 *
 * \brief BLE Manager
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -67,66 +67,77 @@ uint32_t att_db_data[BLE_ATT_DB_MEMORY_SIZE/4] = {0};
 #endif
 
 #define CHECK_PAIRING_KEY_TIME_OUT (30)		// 30 second
+/* Refer Bluetooth Core Specification-4.1, Volume-3, Part-H, Section-2.4.6 */
+bool volatile send_slave_security_flag = true;
+
 volatile uint8_t ble_device_count;
 
-ble_connected_dev_info_t ble_dev_info[BLE_MAX_DEVICE_CONNECTED];
+bool volatile resolve_addr_flag = false;
+
+ble_connected_dev_info_t ble_dev_info[BLE_MAX_DEVICE_CONNECTION];
 
 static at_ble_addr_t ble_peripheral_dev_address;
+
+volatile ble_device_ll_state_t ble_device_current_state = BLE_DEVICE_IDLE_STATE;
 
 at_ble_connected_t connected_state_info;
 
 volatile ble_ulp_mode_t ulp_status = BLE_ULP_MODE_CLEAR;
+at_ble_encryption_request_t temp_param[sizeof(at_ble_encryption_request_t)];
 
-const ble_event_callback_t *ble_mgr_gap_event_cb[MAX_GAP_EVENT_SUBSCRIBERS];
-const ble_event_callback_t *ble_mgr_gatt_client_event_cb[MAX_GATT_CLIENT_SUBSCRIBERS];
-const ble_event_callback_t *ble_mgr_gatt_server_event_cb[MAX_GATT_SERVER_SUBSCRIBERS];
-const ble_event_callback_t *ble_mgr_l2cap_event_cb[MAX_L2CAP_EVENT_SUBSCRIBERS];
-const ble_event_callback_t *ble_mgr_htpt_event_cb[MAX_HTPT_EVENT_SUBSCRIBERS];
-const ble_event_callback_t *ble_mgr_dtm_event_cb[MAX_DTM_EVENT_SUBSCRIBERS];
-const ble_event_callback_t *ble_mgr_custom_event_cb[MAX_CUSTOM_EVENT_SUBSCRIBERS];
+const ble_gap_event_cb_t *ble_mgr_gap_event_cb[MAX_GAP_EVENT_SUBSCRIBERS] = {NULL, };
+const ble_gatt_client_event_cb_t *ble_mgr_gatt_client_event_cb[MAX_GATT_CLIENT_SUBSCRIBERS] = {NULL, };
+const ble_gatt_server_event_cb_t *ble_mgr_gatt_server_event_cb[MAX_GATT_SERVER_SUBSCRIBERS] = {NULL, };
+const ble_l2cap_event_cb_t *ble_mgr_l2cap_event_cb[MAX_L2CAP_EVENT_SUBSCRIBERS] = {NULL, };
+const ble_htpt_event_cb_t *ble_mgr_htpt_event_cb[MAX_HTPT_EVENT_SUBSCRIBERS] = {NULL, };
+const ble_dtm_event_cb_t *ble_mgr_dtm_event_cb[MAX_DTM_EVENT_SUBSCRIBERS] = {NULL, };
+const ble_custom_event_cb_t *ble_mgr_custom_event_cb[MAX_CUSTOM_EVENT_SUBSCRIBERS] = {NULL, };
 
-ble_user_event_callback_t ble_user_event_cb = NULL;
-
-static const ble_event_callback_t ble_mgr_gap_handle[GAP_HANDLE_FUNC_MAX] = {
-	ble_undefined_event_handler,
-	ble_scan_info_handler,
-	ble_scan_report_handler,
-	NULL,
-	NULL,
-	ble_connected_state_handler,
-	ble_disconnected_state_handler,
-	ble_conn_param_update,
-	ble_conn_param_update_req,
-	ble_pair_done_handler,
-	ble_pair_request_handler,
-	ble_slave_security_request_handler,
-	ble_pair_key_request_handler,	
-	ble_encryption_request_handler,
-	ble_encryption_status_change_handler,
-	ble_resolv_rand_addr_handler,
-	NULL,
-	NULL,
-	NULL
+/* All BLE Manager GAP Event callback */
+static const ble_gap_event_cb_t ble_mgr_gap_handle = {
+	.undefined = ble_undefined_event_handler,
+	.scan_info = ble_scan_info_handler,
+	.scan_report = ble_scan_report_handler,
+	.advt_cmp = NULL,
+	.adv_report = NULL, /* This event not handled in BLE Manager */
+	.rand_addr_changed = NULL, /* This event not handled in BLE Manager */
+	.connected = ble_connected_state_handler,
+	.disconnected = ble_disconnected_state_handler,
+	.conn_parameter_update_done = ble_conn_param_update,
+	.conn_param_update_request = ble_conn_param_update_req,
+	.pair_done = ble_pair_done_handler,
+	.pair_request = ble_pair_request_handler,
+	.slave_sec_request = ble_slave_security_request_handler,
+	.pair_key_request = ble_pair_key_request_handler,
+	.encryption_request = ble_encryption_request_handler,
+	.encryption_status_changed = ble_encryption_status_change_handler,
+	.resolv_rand_addr_status = ble_resolv_rand_addr_handler,
+	.sign_counters_ind = NULL,  /* This event not handled in BLE Manager */
+	.peer_att_info_ind = NULL,  /* This event not handled in BLE Manager */
+	.con_channel_map_ind = NULL /* This event not handled in BLE Manager */
 };
 
-static const ble_event_callback_t ble_mgr_gatt_server_handle[GATT_SERVER_HANDLER_FUNC_MAX] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	ble_mtu_changed_indication_handler,
-	ble_mtu_changed_cmd_complete_handler,
-	ble_characteristic_write_cmd_complete_handler,
-	NULL
+/* All BLE Manager GATT Server Event callback */
+static const ble_gatt_server_event_cb_t ble_mgr_gatt_server_handle = {	
+	.notification_confirmed = NULL, /* This event not handled in BLE Manager */
+	.indication_confirmed = NULL, /* This event not handled in BLE Manager */
+	.characteristic_changed = NULL, /* This event not handled in BLE Manager */
+	.characteristic_configuration_changed = NULL, /* This event not handled in BLE Manager */
+	.service_changed_indication_sent = NULL, /* This event not handled in BLE Manager */
+	.write_authorize_request = NULL, /* This event not handled in BLE Manager */
+	.mtu_changed_indication = ble_mtu_changed_indication_handler,
+	.mtu_changed_cmd_complete = ble_mtu_changed_cmd_complete_handler,
+	.characteristic_write_cmd_cmp = ble_characteristic_write_cmd_complete_handler,
+	.read_authorize_request = NULL /* This event not handled in BLE Manager */
 };
 
-volatile uint8_t scan_response_count = 0;
+volatile uint32_t scan_response_count = 0;
 at_ble_scan_info_t scan_info[MAX_SCAN_DEVICE];
 
 at_ble_events_t event;
-uint8_t ble_event_params[BLE_EVENT_PARAM_MAX_SIZE];
+
+/* allocate in words to avoid alignment issues */
+uint32_t ble_event_params[BLE_EVENT_PARAM_MAX_SIZE/sizeof(uint32_t)];
 
 /** @brief initializes the platform */
 static void ble_init(at_ble_init_config_t * args);
@@ -141,8 +152,6 @@ static bool ble_scan_duplication_check(at_ble_scan_info_t * info);
 
 static void init_global_var(void)
 {
-	ble_user_event_cb = 0;
-	
 	memset(&ble_peripheral_dev_address, 0, sizeof(at_ble_addr_t));
 	memset(&connected_state_info, 0, sizeof(at_ble_connected_t));
 		
@@ -157,6 +166,43 @@ static void init_global_var(void)
 	memset(ble_event_params, 0, BLE_EVENT_PARAM_MAX_SIZE);
 }
 
+uint32_t ble_sdk_version(void)
+{
+	uint32_t fw_ver, rf_ver;
+	if(at_ble_firmware_version_get(&fw_ver) == AT_BLE_SUCCESS)
+	{
+		/* Check the SDK and Library version compatibility */
+		if ( (BLE_SDK_MAJOR_NO(fw_ver) == BLE_SDK_MAJOR_NO(BLE_SDK_VERSION)) && \
+		(BLE_SDK_MINOR_NO(fw_ver) == BLE_SDK_MINOR_NO(BLE_SDK_VERSION)) )
+		{
+			DBG_LOG("BluSmartSDK Firmware Version:%X.%X.%X", (uint8_t)BLE_SDK_MAJOR_NO(fw_ver), \
+			(uint8_t)BLE_SDK_MINOR_NO(fw_ver), (uint16_t)BLE_SDK_BUILD_NO(fw_ver));
+		}
+		else
+		{
+			DBG_LOG("Error:Library version doesn't match with SDK version. Please use %X.%X version of library", \
+			BLE_SDK_MAJOR_NO(BLE_SDK_VERSION), BLE_SDK_MINOR_NO(BLE_SDK_VERSION));
+			fw_ver = 0;
+		}
+		
+		if(at_ble_rf_version_get(&rf_ver) == AT_BLE_SUCCESS)
+		{
+			DBG_LOG("SAMB11 RF Version:0x%8X", (unsigned int)rf_ver);
+		}
+		else
+		{
+			DBG_LOG("Error: Failed to get SAMB11 RF Version");
+			rf_ver = 0;
+		}
+	}
+	else
+	{
+		DBG_LOG("Error: Failed to get BluSmartSDK Firmware Version");
+		fw_ver = 0;
+	}
+
+	return fw_ver;
+}
 at_ble_status_t ble_set_ulp_mode(ble_ulp_mode_t mode)
 {
 	at_ble_status_t status = AT_BLE_SUCCESS;
@@ -188,9 +234,10 @@ at_ble_status_t ble_event_task(uint32_t timeout)
     if (status == AT_BLE_SUCCESS) 
     {		
             ble_event_manager(event, ble_event_params);
+            return AT_BLE_SUCCESS;
     }
     
-    return status;
+    return AT_BLE_FAILURE;
 }
 
 at_ble_init_config_t pf_cfg;
@@ -215,6 +262,16 @@ void ble_device_init(at_ble_addr_t *addr)
 	pf_cfg.event_mem_pool.memSize            = sizeof(event_pool_memory);
 	pf_cfg.event_params_mem_pool.memStartAdd = (uint8_t *)event_params_memory;
 	pf_cfg.event_params_mem_pool.memSize     = sizeof(event_params_memory);
+#if (BLE_MODULE == SAMB11_ZR)
+	pf_cfg.samb11_module_version			 = AT_SAMB11_ZR;
+	DBG_LOG("SAMB11 XPro Module: SAMB11-ZR");
+#elif (BLE_MODULE == SAMB11_MR)
+	pf_cfg.samb11_module_version			 = AT_SAMB11_MR;
+	DBG_LOG("SAMB11 XPro Module:MR SAMB11-MR");
+#else
+	DBG_LOG("Error: Select a Valid SAMB11 XPro Module");
+	return;
+#endif
 
 	/* Initialize the BLE Event callbacks */
 	for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
@@ -253,12 +310,14 @@ void ble_device_init(at_ble_addr_t *addr)
 	}
         
     /* Set the BLE Device connection state */
-    for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+    for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
     {
         memset(&ble_dev_info[idx], 0, sizeof(ble_connected_dev_info_t));
 		ble_dev_info[idx].conn_state = BLE_DEVICE_DEFAULT_IDLE;
 		/* Set Invalid to Bonding information */
 		ble_dev_info[idx].bond_info.status = AT_BLE_GAP_INVALID_PARAM;
+		ble_dev_info[idx].dev_role = AT_BLE_ROLE_NONE;
+		ble_dev_info[idx].conn_info.handle = BLE_INVALID_CONNECTION_HANDLE;
     }
 	/* Need to reset the count to 0 for storing it only in SRAM */
 	ble_device_count = 0; 
@@ -277,10 +336,10 @@ void ble_device_init(at_ble_addr_t *addr)
 	/* Register it in first index of callback handler */
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, 
 									BLE_GAP_EVENT_TYPE, 
-									ble_mgr_gap_handle);
+									&ble_mgr_gap_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 									BLE_GATT_SERVER_EVENT_TYPE,
-									ble_mgr_gatt_server_handle);
+									&ble_mgr_gatt_server_handle);
 									
 	dev_name = (char *)BLE_DEVICE_NAME;
 	if (ble_set_device_name((uint8_t *)dev_name, strlen(dev_name)) != AT_BLE_SUCCESS)
@@ -288,7 +347,9 @@ void ble_device_init(at_ble_addr_t *addr)
 		DBG_LOG("Device name set failed");
 	}
 	
-	ble_set_dev_config(addr);	
+	ble_set_dev_config(addr);
+
+	ble_sdk_version();						
 }
 
 /** @brief set device name to BLE Device*/
@@ -313,6 +374,19 @@ static void ble_init(at_ble_init_config_t * args)
 		DBG_LOG("SAMB11 Initialization failed");
 		DBG_LOG("Please check the power and connection / hardware connector");	
 		while(1);
+	}
+	else
+	{
+		uint32_t chip_id = 0xFFFFFFFF;
+		if (at_ble_chip_id_get(&chip_id) == AT_BLE_SUCCESS)
+		{
+			DBG_LOG("SAMB11 Chip ID: 0x%6X", (unsigned int)chip_id);
+		}
+		else
+		{
+			DBG_LOG("SAMB11 Chip identification failed");
+			while(1);
+		}
 	}
 }
 
@@ -374,106 +448,273 @@ static void ble_set_dev_config(at_ble_addr_t *addr)
 	}
 }
 
+/**@ingroup ble_manager_group
+ * @brief The structure of BLE Event callback pointer will be registered or unregistered dynamically.
+ *
+ * The callback pointers are registered according to the group type of BLE Events
+ * request is received @ref AT_BLE_LECB_CONN_REQ
+ *
+ * @param[in] event_cb_type Register/Unregister the callback functions
+ * @param[in] event_type type of BLE event
+ * @param[in] ble_event_handler structure of function pointers for the event
+ *
+ * @return Upon successful completion the function shall return @ref true,
+ * Otherwise the function shall return @ref false
+ */
+///@cond IGNORE_DOXYGEN
+//BLU_SDK_API
+///@endcond
 bool ble_mgr_events_callback_handler(ble_mgr_event_cb_t event_cb_type, 
 									ble_mgr_event_t event_type,
-									const ble_event_callback_t *ble_event_handler)
+									const void *ble_event_handler)
 {
-	uint8_t idx;
-	uint8_t max_event_handler = 0;
-	bool status = true;
-	const ble_event_callback_t **ble_event_cb_ptr = NULL;
+	uint32_t idx;
+	bool status = false;
 	if (ble_event_handler != NULL)
 	{
 		switch(event_type)
 		{
 			case BLE_GAP_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_gap_event_cb;
-				max_event_handler = MAX_GAP_EVENT_SUBSCRIBERS;
+				ble_gap_event_cb_t *ble_gap_event_cb;
+				ble_gap_event_cb = (ble_gap_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_gap_event_cb[idx] == ble_gap_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_gap_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}												
+					else if((ble_mgr_gap_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_gap_event_cb[idx] = ble_gap_event_cb;
+						status = true;
+						break;
+					}
+				}
 			}
 			break;
-			
+			/* Callbacks for custom event type */
 			case BLE_GATT_CLIENT_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_gatt_client_event_cb;
-				max_event_handler = MAX_GATT_CLIENT_SUBSCRIBERS;
+				ble_gatt_client_event_cb_t *ble_gatt_client_event_cb;
+				ble_gatt_client_event_cb = (ble_gatt_client_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_GATT_CLIENT_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_gatt_client_event_cb[idx] == ble_gatt_client_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_gatt_client_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}
+					else if((ble_mgr_gatt_client_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_gatt_client_event_cb[idx] = ble_gatt_client_event_cb;
+						status = true;
+						break;
+					}
+				}
 			}
 			break;
-			
+			/* Callbacks for GATT Server event type */
 			case BLE_GATT_SERVER_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_gatt_server_event_cb;
-				max_event_handler = MAX_GATT_SERVER_SUBSCRIBERS;
+				ble_gatt_server_event_cb_t *ble_gatt_server_event_cb;
+				ble_gatt_server_event_cb = (ble_gatt_server_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_GATT_SERVER_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_gatt_server_event_cb[idx] == ble_gatt_server_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_gatt_server_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}
+					else if((ble_mgr_gatt_server_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_gatt_server_event_cb[idx] = ble_gatt_server_event_cb;
+						status = true;
+						break;
+					}
+				}
 			}
 			break;
-			
+			/* Callbacks for L2CAP event type */
 			case BLE_L2CAP_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_l2cap_event_cb;
-				max_event_handler = MAX_L2CAP_EVENT_SUBSCRIBERS;
+				ble_l2cap_event_cb_t *ble_l2cap_event_cb;
+				ble_l2cap_event_cb = (ble_l2cap_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_L2CAP_EVENT_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_l2cap_event_cb[idx] == ble_l2cap_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_l2cap_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}
+					else if((ble_mgr_l2cap_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_l2cap_event_cb[idx] = ble_l2cap_event_cb;
+						status = true;
+						break;
+					}
+				}
 			}
 			break;
-			
+			/* Callbacks for HTPT event type */
 			case BLE_GATT_HTPT_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_htpt_event_cb;
-				max_event_handler = MAX_HTPT_EVENT_SUBSCRIBERS;
+				ble_htpt_event_cb_t *ble_htpt_event_cb;
+				ble_htpt_event_cb = (ble_htpt_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_HTPT_EVENT_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_htpt_event_cb[idx] == ble_htpt_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_htpt_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}
+					else if((ble_mgr_htpt_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_htpt_event_cb[idx] = ble_htpt_event_cb;
+						status = true; 
+						break;
+					}
+				}
 			}
 			break;
-			
+			/* Callbacks for DTM event type */
 			case BLE_DTM_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_dtm_event_cb;
-				max_event_handler = MAX_DTM_EVENT_SUBSCRIBERS;
+				ble_dtm_event_cb_t *ble_dtm_event_cb;
+				ble_dtm_event_cb = (ble_dtm_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_DTM_EVENT_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_dtm_event_cb[idx] == ble_dtm_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_dtm_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}
+					else if((ble_mgr_dtm_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_dtm_event_cb[idx] = ble_dtm_event_cb;
+						status = true;
+						break;
+					}
+				}
 			}
 			break;
-			
+			/* Callbacks for custom event type */	
 			case BLE_CUSTOM_EVENT_TYPE:
 			{
-				ble_event_cb_ptr = ble_mgr_custom_event_cb;
-				max_event_handler = MAX_CUSTOM_EVENT_SUBSCRIBERS;
+				ble_custom_event_cb_t *ble_custom_event_cb;
+				ble_custom_event_cb = (ble_custom_event_cb_t *)ble_event_handler;
+				
+				for (idx = 0; idx < MAX_CUSTOM_EVENT_SUBSCRIBERS; idx++)
+				{
+					if (ble_mgr_custom_event_cb[idx] == ble_custom_event_cb)
+					{
+						if (event_cb_type == REGISTER_CALL_BACK)
+						{
+							/* Do not add duplicate entries into the table */
+							status = true;
+							break;
+						}
+						else if (event_cb_type == UNREGISTER_CALL_BACK)
+						{
+							/* remove callback from table */
+							ble_mgr_custom_event_cb[idx] = NULL;
+							status = true;
+							break;
+						}
+					}
+					else if((ble_mgr_custom_event_cb[idx] == NULL) && (event_cb_type == REGISTER_CALL_BACK))
+					{
+						/* add callback to table */
+						ble_mgr_custom_event_cb[idx] = ble_custom_event_cb;
+						status = true;
+						break;
+					}
+				}
 			}
 			break;
 			
-			default:
-			{
-				status = false; //Invalid Parameter
-			}			
+			default:			
 			break;
 		}
-		
-		if (status)
-		{
-			status = false; //Defaults to Failure[No Space to register, Not Found, Invalid Type]scenario
-			if (event_cb_type == REGISTER_CALL_BACK)
-			{
-				for (idx = 0; idx < max_event_handler; idx++)
-				{
-					if(ble_event_cb_ptr[idx] == NULL)
-					{
-						ble_event_cb_ptr[idx] = ble_event_handler;
-						status = true; //Successfully registered to table
-						break;
-					}
-				}
-			}
-			else if(event_cb_type == UNREGISTER_CALL_BACK)
-			{
-				for (idx = 0; idx < max_event_handler; idx++)
-				{
-					if(ble_event_cb_ptr[idx] == ble_event_handler)
-					{
-						ble_event_cb_ptr[idx] = NULL;
-						status = true;//Successfully unregistered from table
-						break;
-					}
-				}
-			}			
-		}
-	}
-	else
-	{
-		status = false; //Invalid parameter
 	}
 	return status;
 }
@@ -505,16 +746,20 @@ at_ble_status_t gap_dev_connect(at_ble_addr_t *dev_addr)
 /** @brief instructs device to start scanning */
 at_ble_status_t gap_dev_scan(void)
 {
+	at_ble_status_t status = AT_BLE_SUCCESS;
+	ble_device_current_state = CENTRAL_SCANNING_STATE;
 	/* Device Scan discover started*/
 	DBG_LOG("Scanning...Please wait...");
 	/* make service discover counter to zero*/
 	scan_response_count = 0;
 	memset(scan_info, 0, sizeof(scan_info));
+
 	#ifdef USE_SCAN_SOFT_FILTER
-	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,false)) ;	
+	status = at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false, false) ;
 	#else
-	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,true)) ;	
+	status = at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_OBSERVER_MODE, false,false) ;
 	#endif
+	return status;
 }
 
 #ifdef USE_SCAN_SOFT_FILTER
@@ -553,10 +798,10 @@ at_ble_status_t ble_scan_info_handler(void *params)
 {
 	at_ble_scan_info_t *scan_param;
 	scan_param = (at_ble_scan_info_t *)params;
-	if(scan_response_count < MAX_SCAN_DEVICE)
-	{
-		memcpy((uint8_t *)&scan_info[scan_response_count], scan_param, sizeof(at_ble_scan_info_t));
-		DBG_LOG_DEV("Info:Device found address [%d]  0x%02X%02X%02X%02X%02X%02X ",
+	#if BLE_DEVICE_ROLE == BLE_ROLE_OBSERVER
+		// store the advertising report data into scan_info[]
+		memcpy((uint8_t *)scan_info, scan_param, sizeof(at_ble_scan_info_t));
+		DBG_LOG_DEV("Info:Device found address [%ld]  0x%02X%02X%02X%02X%02X%02X ",
 		scan_response_count,
 		scan_param->dev_addr.addr[5],
 		scan_param->dev_addr.addr[4],
@@ -566,42 +811,40 @@ at_ble_status_t ble_scan_info_handler(void *params)
 		scan_param->dev_addr.addr[0]);
 		scan_response_count++;
 		return AT_BLE_SUCCESS;
-	}
-	else
-	{
-		DBG_LOG("Info:maximum no.of scan device reached...Stopping Scan");
-		if(at_ble_scan_stop() != AT_BLE_SUCCESS)
+	#else
+		if(scan_response_count < MAX_SCAN_DEVICE)
 		{
-			DBG_LOG("Failed to stop scanning");
+			// store the advertising report data into scan_info[]
+			memcpy((uint8_t *)&scan_info[scan_response_count], scan_param, sizeof(at_ble_scan_info_t));
+			DBG_LOG_DEV("Info:Device found address [%d]  0x%02X%02X%02X%02X%02X%02X ",
+			scan_response_count,
+			scan_param->dev_addr.addr[5],
+			scan_param->dev_addr.addr[4],
+			scan_param->dev_addr.addr[3],
+			scan_param->dev_addr.addr[2],
+			scan_param->dev_addr.addr[1],
+			scan_param->dev_addr.addr[0]);
+			scan_response_count++;
+			return AT_BLE_SUCCESS;
 		}
-		#ifdef USE_SCAN_SOFT_FILTER
-		uint32_t idx = 0;
-		at_ble_scan_report_t result = {0,};
-			
-		//ble_scan_filter();				
-		result.status = AT_BLE_SUCCESS;				
-				
-		for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
+		else
 		{
-			if (ble_mgr_gap_event_cb[idx] != NULL)
+			DBG_LOG("Info:maximum no.of scan device reached...Stopping Scan");
+			if(at_ble_scan_stop() != AT_BLE_SUCCESS)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_gap_event_cb[idx];
-				if(event_cb_fn[AT_BLE_SCAN_REPORT] != NULL)
-				{
-					event_cb_fn[AT_BLE_SCAN_REPORT](&result);
-				}
+				DBG_LOG("Failed to stop scanning");
 			}
+		
+			return AT_BLE_FAILURE;
 		}
-	
-		#endif
-		return AT_BLE_FAILURE;
-	}
+	#endif
 }
 
 /** @brief function handles scan report */
 at_ble_status_t ble_scan_report_handler(void *params)
 {
 	at_ble_scan_report_t *scan_report;
+	ble_device_current_state = BLE_DEVICE_IDLE_STATE;
 	scan_report = (at_ble_scan_report_t *)params;
 	if (scan_report->status == AT_BLE_SUCCESS)
 	{
@@ -616,7 +859,7 @@ at_ble_status_t ble_scan_report_handler(void *params)
 }
 
 /* Parse the received advertising data for service and local name */
-uint8_t scan_info_parse(at_ble_scan_info_t *scan_info_data,
+at_ble_status_t scan_info_parse(at_ble_scan_info_t *scan_info_data,
 				at_ble_uuid_t *ble_service_uuid, uint8_t adv_type)
 {
 	if (scan_info_data->adv_data_len) {
@@ -700,6 +943,7 @@ at_ble_status_t ble_send_slave_sec_request(at_ble_handle_t conn_handle)
 			DBG_LOG("Slave security request failed");
 		}
 	#endif
+        ALL_UNUSED(conn_handle);
 	return AT_BLE_FAILURE;
 }
 
@@ -745,11 +989,25 @@ bool ble_check_disconnected_iscentral(at_ble_handle_t handle)
 	return false;
 }
 
+bool ble_check_disconnected_isperipheral(at_ble_handle_t handle)
+{
+	at_ble_dev_role_t dev_role;
+	
+	if(ble_disconnected_device_role(handle, &dev_role) == AT_BLE_SUCCESS)
+	{
+		if (dev_role == AT_BLE_ROLE_PERIPHERAL)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 at_ble_status_t ble_connected_device_role(at_ble_handle_t conn_handle, at_ble_dev_role_t *dev_role)
 {
 	uint8_t idx;
 	at_ble_status_t status = AT_BLE_FAILURE;
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_state != BLE_DEVICE_DEFAULT_IDLE) && 
 		  (ble_dev_info[idx].conn_state != BLE_DEVICE_DISCONNECTED) &&
@@ -767,7 +1025,8 @@ at_ble_status_t ble_disconnected_device_role(at_ble_handle_t conn_handle, at_ble
 {
 	uint8_t idx;
 	at_ble_status_t status = AT_BLE_FAILURE;
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	*dev_role = AT_BLE_ROLE_NONE;
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if(((ble_dev_info[idx].conn_state == BLE_DEVICE_DEFAULT_IDLE) ||
 		(ble_dev_info[idx].conn_state == BLE_DEVICE_DISCONNECTED))&&
@@ -785,7 +1044,7 @@ at_ble_status_t ble_check_device_state(at_ble_handle_t conn_handle, ble_device_s
 {
 	uint8_t idx;
 	at_ble_status_t status = AT_BLE_FAILURE;
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_state == state) &&
 		  (ble_dev_info[idx].conn_info.handle == conn_handle))
@@ -804,6 +1063,7 @@ at_ble_status_t ble_connected_state_handler(void *params)
 	uint8_t idx = 0;
 	conn_params = (at_ble_connected_t *)params;
 	bool peripheral_device_added = false;
+	bool conn_exists = false;
 	
 	if (conn_params->conn_status == AT_BLE_SUCCESS)
 	{
@@ -818,51 +1078,15 @@ at_ble_status_t ble_connected_state_handler(void *params)
 		DBG_LOG("Connection Handle %d", conn_params->handle);
 		
 		memcpy((uint8_t *)&connected_state_info, (uint8_t *)conn_params, sizeof(at_ble_connected_t));	
-		if(memcmp((uint8_t *)&ble_peripheral_dev_address, (uint8_t *)&conn_params->peer_addr, sizeof(at_ble_addr_t)))
+		
+		if (conn_params->peer_addr.type == AT_BLE_ADDRESS_PUBLIC)
 		{
-			/* Peripheral Device */
-			if (conn_params->peer_addr.type == AT_BLE_ADDRESS_RANDOM_PRIVATE_RESOLVABLE) 
-			{
-				uint8_t idx1, idx2;
-				uint16_t key_len = 0;
-				uint8_t nb_keys = BLE_MAX_DEVICE_CONNECTED;
-				uint8_t irk_key[BLE_MAX_DEVICE_CONNECTED * AT_BLE_MAX_KEY_LEN] = {0, };
-				for (idx1 = 0; idx1 < BLE_MAX_DEVICE_CONNECTED; idx1++)
-				{
-					for (idx2 = 0; idx2 < AT_BLE_MAX_KEY_LEN; idx2++)
-					{
-						irk_key[key_len++] = ble_dev_info[idx1].bond_info.peer_irk.key[idx2];
-					}
-					
-				}
-				if (nb_keys)
-				{
-					if(at_ble_random_address_resolve(BLE_MAX_DEVICE_CONNECTED, &conn_params->peer_addr, irk_key) == AT_BLE_SUCCESS)
-					{
-						DBG_LOG_DEV("Resolving Random address success**");
-						return AT_BLE_SUCCESS;
-					}
-					else
-					{
-						DBG_LOG("Resolving Random address failed**");
-						return AT_BLE_FAILURE;
-					}					
-				}
-				else
-				{
-					DBG_LOG_DEV("New Connection");
-				}				
-			}
-		}
-			
-		if (ble_device_count < BLE_MAX_DEVICE_CONNECTED)
-		{
-			bool conn_exists = false;
-			for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+			for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 			{
 				if(!memcmp((uint8_t *)&ble_dev_info[idx].conn_info.peer_addr, (uint8_t *)&conn_params->peer_addr, sizeof(at_ble_addr_t)))
 				{
 					ble_dev_info[idx].conn_state = BLE_DEVICE_CONNECTED;
+					memcpy(&ble_dev_info[idx].conn_info, (uint8_t *)&connected_state_info, sizeof(at_ble_connected_t));
 					conn_exists = true;
 					break;
 				}
@@ -870,11 +1094,16 @@ at_ble_status_t ble_connected_state_handler(void *params)
 			
 			if (!conn_exists)
 			{
-				for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+				if (ble_device_count == BLE_MAX_DEVICE_CONNECTION)
+				{
+					DBG_LOG("Max number of connection reached: %d ===>Disconnecting...", ble_device_count);
+					at_ble_disconnect(conn_params->handle, AT_BLE_TERMINATED_BY_USER);
+					return AT_BLE_FAILURE;
+				}
+				for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 				{
 					if(ble_dev_info[idx].conn_state == BLE_DEVICE_DEFAULT_IDLE)
 					{
-						/* @Todo Need to Handle Random Address */
 						memcpy(&ble_dev_info[idx].conn_info, (uint8_t *)conn_params, sizeof(at_ble_connected_t));
 						ble_device_count++;
 						ble_dev_info[idx].conn_state = BLE_DEVICE_CONNECTED;
@@ -889,18 +1118,41 @@ at_ble_status_t ble_connected_state_handler(void *params)
 			}
 			else
 			{
+				ble_device_current_state = PERIPHERAL_CONNECTED_STATE;
 				ble_dev_info[idx].dev_role = AT_BLE_ROLE_PERIPHERAL;
 				peripheral_device_added = true;
 			}
-			/* Reset the ble_peripheral_dev_address to identify the initiator */
-			memset((uint8_t *)&ble_peripheral_dev_address, 0, sizeof(at_ble_addr_t));
-					
 		}
-		else
+		else if((conn_params->peer_addr.type == AT_BLE_ADDRESS_RANDOM_PRIVATE_RESOLVABLE) && 
+				(memcmp((uint8_t *)&ble_peripheral_dev_address, (uint8_t *)&conn_params->peer_addr, sizeof(at_ble_addr_t))))
 		{
-			DBG_LOG("Max number of connection reached: %d ===>Disconnecting...", ble_device_count);
-			at_ble_disconnect(conn_params->handle, AT_BLE_TERMINATED_BY_USER);
+			uint8_t idx1, idx2;
+			uint16_t key_len = 0;
+			uint8_t irk_key[BLE_MAX_DEVICE_CONNECTION * AT_BLE_MAX_KEY_LEN] = {0, };
+			for (idx1 = 0; idx1 < BLE_MAX_DEVICE_CONNECTION; idx1++)
+			{
+				for (idx2 = 0; idx2 < AT_BLE_MAX_KEY_LEN; idx2++)
+				{
+					irk_key[key_len++] = ble_dev_info[idx1].bond_info.peer_irk.key[idx2];
+				}
+			}
+			
+			if(at_ble_random_address_resolve(BLE_MAX_DEVICE_CONNECTION, &conn_params->peer_addr, irk_key) == AT_BLE_SUCCESS)
+			{
+				resolve_addr_flag = true;
+				DBG_LOG_DEV("Resolving Random address success**");
+				return AT_BLE_SUCCESS;
+			}
+			else
+			{
+				DBG_LOG("Resolving Random address failed**");
+				resolve_addr_flag = false;
+				return AT_BLE_FAILURE;
+			}
 		}		
+
+		/* Reset the ble_peripheral_dev_address to identify the initiator */
+		memset((uint8_t *)&ble_peripheral_dev_address, 0, sizeof(at_ble_addr_t));
 		
 #if ((BLE_DEVICE_ROLE == BLE_ROLE_PERIPHERAL) || (BLE_DEVICE_ROLE == BLE_ROLE_ALL))
 		
@@ -928,7 +1180,7 @@ at_ble_status_t ble_resolv_rand_addr_handler(void *params)
 	
 	if(ble_resolv_rand_addr_status->status == AT_BLE_SUCCESS)
 	{		
-		for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+		for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 		{
 			/* Check the Resolved Address */
 			if (!memcmp((uint8_t *)ble_resolv_rand_addr_status->irk, (uint8_t *)ble_dev_info[idx].bond_info.peer_irk.key, AT_BLE_MAX_KEY_LEN))
@@ -943,15 +1195,24 @@ at_ble_status_t ble_resolv_rand_addr_handler(void *params)
 	if (device_found)
 	{
 		DBG_LOG_DEV("##########Device Found");
-		ble_dev_info[idx].conn_state = BLE_DEVICE_CONNECTED;
+		if((ble_dev_info[idx].conn_state == BLE_DEVICE_DEFAULT_IDLE) || (ble_dev_info[idx].conn_state == BLE_DEVICE_DISCONNECTED))
+		{
+			ble_dev_info[idx].conn_state = BLE_DEVICE_CONNECTED;	
+		}
 		ble_dev_info[idx].dev_role = AT_BLE_ROLE_PERIPHERAL;
 		memcpy((uint8_t *)&ble_dev_info[idx].conn_info, (uint8_t *)&connected_state_info, sizeof(at_ble_connected_t));
-		peripheral_device_added = true;
+		peripheral_device_added = true;		
 	}
 	else
 	{
 		DBG_LOG_DEV("##########Device Not Found");
-		for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+		if (ble_device_count == BLE_MAX_DEVICE_CONNECTION)
+		{
+			DBG_LOG("Max number of connection reached: %d ===>Disconnecting...", ble_device_count);
+			at_ble_disconnect(connected_state_info.handle, AT_BLE_TERMINATED_BY_USER);
+			return AT_BLE_FAILURE;
+		}
+		for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 		{
 			if(ble_dev_info[idx].conn_state == BLE_DEVICE_DEFAULT_IDLE)
 			{
@@ -964,11 +1225,25 @@ at_ble_status_t ble_resolv_rand_addr_handler(void *params)
 			}
 		}
 	}
+	if(!resolve_addr_flag)
+	{
+		send_slave_security_flag = false;
+		ble_encryption_request_handler((void *)temp_param);
+		
+	}
+	else
+	{
+		resolve_addr_flag = false;
+	}
 	DBG_LOG_DEV("Device idx:%d",idx);
 	#if ((BLE_DEVICE_ROLE == BLE_ROLE_PERIPHERAL) || (BLE_DEVICE_ROLE == BLE_ROLE_ALL))
 	if((ble_dev_info[idx].dev_role == AT_BLE_ROLE_PERIPHERAL) && (peripheral_device_added))
 	{
-		ble_send_slave_sec_request(connected_state_info.handle);
+		if(send_slave_security_flag)
+		{
+			ble_send_slave_sec_request(connected_state_info.handle);
+		}
+		
 	}
 	#endif
 	ALL_UNUSED(peripheral_device_added);
@@ -1035,12 +1310,23 @@ at_ble_status_t ble_disconnected_state_handler(void *params)
 	uint8_t idx;
 	disconnect = (at_ble_disconnected_t *)params;
 	
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == disconnect->handle) && 
 		((ble_dev_info[idx].conn_state == BLE_DEVICE_PAIRED) || (ble_dev_info[idx].conn_state == BLE_DEVICE_ENCRYPTION_COMPLETED)))
 		{
-			ble_dev_info[idx].conn_state = BLE_DEVICE_DISCONNECTED;
+			if(ble_dev_info[idx].bond_info.auth == AT_BLE_AUTH_NO_MITM_NO_BOND)
+			{
+				ble_dev_info[idx].conn_state = BLE_DEVICE_DEFAULT_IDLE;
+				memset((uint8_t *)&(ble_dev_info[idx].bond_info), 0, sizeof(at_ble_pair_done_t));
+				memset((uint8_t *)&(ble_dev_info[idx].conn_info), 0, sizeof(at_ble_connected_t));
+				ble_dev_info[idx].dev_role = AT_BLE_ROLE_NONE;
+				ble_dev_info[idx].bond_info.status = AT_BLE_GAP_INVALID_PARAM;
+			}
+			else
+			{
+				ble_dev_info[idx].conn_state = BLE_DEVICE_DISCONNECTED;
+			}			
 		}		
 		else if(ble_dev_info[idx].conn_info.handle == disconnect->handle)
 		{
@@ -1053,7 +1339,14 @@ at_ble_status_t ble_disconnected_state_handler(void *params)
 				case BLE_DEVICE_ENCRYPTION_FAILED:
 				{
 					/* Device is not paired so remove the device information */
+					if ((disconnect->reason == AT_BLE_ATT_INSUFF_AUTHEN) || (ble_dev_info[idx].conn_state == BLE_DEVICE_ENCRYPTION_FAILED))
+					{
+						memset((uint8_t *)&(ble_dev_info[idx].bond_info), 0, sizeof(at_ble_pair_done_t));
+						ble_dev_info[idx].bond_info.status = AT_BLE_GAP_INVALID_PARAM;
+					}
+					
 					ble_dev_info[idx].conn_state = BLE_DEVICE_DEFAULT_IDLE;
+					
 					if (ble_device_count > 0)
 					{
 						ble_device_count--;
@@ -1071,7 +1364,7 @@ at_ble_status_t ble_disconnected_state_handler(void *params)
 			}
 		} 
 	}
-	
+	send_slave_security_flag = true;
 	DBG_LOG("Device disconnected Reason:0x%02x Handle=0x%x", disconnect->reason, disconnect->handle);
 	return AT_BLE_SUCCESS;
 }
@@ -1081,7 +1374,20 @@ at_ble_status_t ble_conn_param_update(void *params)
 {
 	at_ble_conn_param_update_done_t * conn_param_update;
 	conn_param_update = (at_ble_conn_param_update_done_t *)params;
-	DBG_LOG_DEV("AT_BLE_CONN_PARAM_UPDATE ");
+	if (conn_param_update->status == AT_BLE_SUCCESS)
+	{
+		DBG_LOG("Connection parameter update done success");
+		DBG_LOG("Connection Interval:%d, Connection latency:%d, Hdl:%d, Supervision Timeout:%d ",
+		conn_param_update->con_intv,
+		conn_param_update->con_latency,
+		conn_param_update->handle,
+		conn_param_update->superv_to);
+		
+	}
+	else
+	{
+		DBG_LOG("Connection parameter update done-Failed status:%d", conn_param_update->status);
+	}
 	ALL_UNUSED(conn_param_update);  //To avoid compiler warning
 	return AT_BLE_SUCCESS;
 }
@@ -1090,7 +1396,15 @@ at_ble_status_t ble_conn_param_update_req(void *params)
 {
 	at_ble_conn_param_update_request_t * conn_param_req;
 	conn_param_req = (at_ble_conn_param_update_request_t *)params;
-	at_ble_conn_update_reply(conn_param_req->handle, true, 1, 120);
+	
+	DBG_LOG("Connection Param Update Request---Hdl:%d, Conn.Latency:%d, Conn.Interval Max:%d, Conn.Interval Min:%d, Conn.Supervision:%d", \
+	conn_param_req->handle, \
+	conn_param_req->con_latency, \
+	conn_param_req->con_intv_max,\
+	conn_param_req->con_intv_min,\
+	conn_param_req->superv_to);
+	
+	at_ble_conn_update_reply(conn_param_req->handle, true, 0, 0);
 	return AT_BLE_SUCCESS;
 }
 
@@ -1102,7 +1416,7 @@ at_ble_status_t ble_slave_security_request_handler(void* params)
 	bool device_found = false;
 	
 	slave_sec_req = (at_ble_slave_sec_request_t*)params;	
-	memset(&features, 0x00, sizeof(at_ble_pair_features_t));
+	
 	//if (slave_sec_req->status != AT_BLE_SUCCESS)
 	//{
 		//at_ble_disconnect(slave_sec_req->handle, AT_BLE_AUTH_FAILURE);		
@@ -1110,7 +1424,7 @@ at_ble_status_t ble_slave_security_request_handler(void* params)
 		//@Todo Status is not handled in the Library
 	//}
 
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == slave_sec_req->handle) && (ble_dev_info[idx].conn_state == BLE_DEVICE_CONNECTED))
 		{
@@ -1140,7 +1454,7 @@ at_ble_status_t ble_slave_security_request_handler(void* params)
 		}
 	}
 	
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == slave_sec_req->handle) && (ble_dev_info[idx].conn_state == BLE_DEVICE_CONNECTED))
 		{
@@ -1214,7 +1528,7 @@ at_ble_status_t ble_pair_request_handler(void *params)
 	at_ble_pair_request_t* pair_req;
 	pair_req = (at_ble_pair_request_t*)params;
 	
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == pair_req->handle) && (ble_dev_info[idx].conn_state == BLE_DEVICE_CONNECTED))
 		{
@@ -1304,24 +1618,23 @@ at_ble_status_t ble_pair_key_request_handler (void *params)
 	memcpy((uint8_t *)&pair_key_request, pair_key, sizeof(at_ble_pair_key_request_t));
 	
 	if (pair_key_request.passkey_type == AT_BLE_PAIR_PASSKEY_ENTRY) {
-		DBG_LOG("Enter the Passkey(6-Digit) in Terminal:");
-		for (idx = 0; idx < 6;) {          
-			pin = getchar_b11_timeout(CHECK_PAIRING_KEY_TIME_OUT);
+	  DBG_LOG("Enter the Passkey(6-Digit) in Terminal:");
+	  for (idx = 0; idx < 6;) {           
+			pin = getchar_timeout(CHECK_PAIRING_KEY_TIME_OUT);
 
 			if (!pin) {
 			DBG_LOG("Pin Timeout");
-				DBG_LOG("Disconnecting ...");
-				if (!(at_ble_disconnect(pair_key->handle,
-							AT_BLE_TERMINATED_BY_USER) == AT_BLE_SUCCESS)) {
-					DBG_LOG("Disconnect Request Failed");
-				}
-				return AT_BLE_FAILURE;
+			DBG_LOG("Disconnecting ...");
+			if (!(at_ble_disconnect(pair_key->handle,
+						AT_BLE_TERMINATED_BY_USER) == AT_BLE_SUCCESS)) {
+				DBG_LOG("Disconnect Request Failed");
 			}
-			
-			if ((pin >= '0') && ( pin <= '9')) {
-			  passkey[idx++] = pin;
-			  DBG_LOG_CONT("%c", pin);
-			} 
+			return AT_BLE_FAILURE;
+		}
+		if ((pin >= '0') && ( pin <= '9')) {
+		  passkey[idx++] = pin;
+		  DBG_LOG_CONT("%c", pin);
+		} 
 	  }
 	}	
 	
@@ -1368,10 +1681,11 @@ at_ble_status_t ble_pair_done_handler(void *params)
 	bool device_found = false;
 	pairing_params = (at_ble_pair_done_t *)params;
 	
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == pairing_params->handle) && (ble_dev_info[idx].conn_state == BLE_DEVICE_PAIRING))
 		{
+			ble_dev_info[idx].conn_state = BLE_DEVICE_PAIRED;
 			device_found = true;
 			break;
 		}
@@ -1384,11 +1698,10 @@ at_ble_status_t ble_pair_done_handler(void *params)
 		{
 			ble_dev_info[idx].bond_info.auth = pairing_params->auth;
 			ble_dev_info[idx].bond_info.status = pairing_params->status;
-			ble_dev_info[idx].conn_state = BLE_DEVICE_PAIRED;
-			
 			memcpy((uint8_t *)&ble_dev_info[idx].bond_info.peer_csrk, (uint8_t *)&pairing_params->peer_csrk, sizeof(at_ble_CSRK_t));
 			memcpy((uint8_t *)&ble_dev_info[idx].bond_info.peer_irk, (uint8_t *)&pairing_params->peer_irk, sizeof(at_ble_IRK_t));
 			memcpy((uint8_t *)&ble_dev_info[idx].bond_info.peer_ltk, (uint8_t *)&pairing_params->peer_ltk, sizeof(at_ble_LTK_t));
+			ble_dev_info->conn_state = BLE_DEVICE_PAIRED;
 			
 			DBG_LOG_DEV("LTK: ");
 			for (idx = 0; idx < 16; idx++)
@@ -1417,13 +1730,15 @@ at_ble_status_t ble_pair_done_handler(void *params)
 	}
 	else
 	{
-		if(ble_dev_info[idx].conn_state != BLE_DEVICE_DEFAULT_IDLE && ble_dev_info[idx].conn_state != BLE_DEVICE_DISCONNECTED) {
-			DBG_LOG("Pairing failed...Disconnecting");
+		ble_dev_info[idx].conn_state = BLE_DEVICE_PAIRING_FAILED;
+		DBG_LOG("Pairing failed...status %d",pairing_params->status);
+		if (ble_check_ispheripheral(pairing_params->handle)) {
+			DBG_LOG("Disconnecting ....");
 			if(!(at_ble_disconnect(pairing_params->handle, AT_BLE_TERMINATED_BY_USER) == AT_BLE_SUCCESS))
 			{
-				DBG_LOG("Disconnect Request Failed");
-				return AT_BLE_FAILURE;
-			}
+			DBG_LOG("Disconnect Request Failed");
+			return AT_BLE_FAILURE;
+			}		
 		}
 	}
 	return AT_BLE_SUCCESS;
@@ -1438,7 +1753,7 @@ at_ble_status_t ble_encryption_status_change_handler(void *params)
 	
 	enc_status = (at_ble_encryption_status_changed_t *)params;
 	
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == enc_status->handle) && (ble_dev_info[idx].conn_state == BLE_DEVICE_ENCRYPTION_STATE))
 		{
@@ -1449,6 +1764,7 @@ at_ble_status_t ble_encryption_status_change_handler(void *params)
 	
 	if(enc_status->status == AT_BLE_SUCCESS)
 	{
+		
 		DBG_LOG("Encryption completed successfully");
 		if (device_found)
 		{
@@ -1469,19 +1785,30 @@ at_ble_status_t ble_encryption_status_change_handler(void *params)
 		DBG_LOG("Encryption failed");
 		return AT_BLE_FAILURE;
 	}
+	send_slave_security_flag = true;
 	return AT_BLE_SUCCESS;
 }
+
 
 /** @brief function handles encryption requests */
 at_ble_status_t ble_encryption_request_handler(void *params)
 {
+	
+	/*Encryption request comes before random resolve address request, 
+	  hence copy the buffer and recall this function after resolving the address*/
+	if(resolve_addr_flag)
+	{
+		memcpy(temp_param,params,sizeof(at_ble_encryption_request_t));
+		resolve_addr_flag = false;
+		return AT_BLE_SUCCESS;		
+	}
 	at_ble_encryption_request_t *enc_req;
 	bool key_found = false;
 	bool device_found = false;
 	uint8_t idx;
 	enc_req = (at_ble_encryption_request_t *)params;
 
-	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTED; idx++)
+	for (idx = 0; idx < BLE_MAX_DEVICE_CONNECTION; idx++)
 	{
 		if((ble_dev_info[idx].conn_info.handle == enc_req->handle) && (ble_dev_info[idx].conn_state != BLE_DEVICE_DISCONNECTED) &&
 		(ble_dev_info[idx].conn_state != BLE_DEVICE_DEFAULT_IDLE))
@@ -1532,7 +1859,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 	DBG_LOG_DEV("BLE-Event:%d", events);
 	switch(events)
 	{		
-	 /* GAP events */
+	 /* BLE GAP events */
 	case AT_BLE_UNDEFINED_EVENT:
 	case AT_BLE_SCAN_INFO:
 	case AT_BLE_SCAN_REPORT:
@@ -1556,7 +1883,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		uint8_t idx;
 		
 		#ifdef USE_SCAN_SOFT_FILTER
-		if( events == AT_BLE_SCAN_INFO )
+	   	if( events == AT_BLE_SCAN_INFO )
 		{
 			if( ble_scan_duplication_check((at_ble_scan_info_t*)event_params) )
 				return;
@@ -1567,16 +1894,19 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		{
 			if (ble_mgr_gap_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_gap_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_gap_event_cb[idx];
+				
 				if(event_cb_fn[events] != NULL)
 				{
-					event_cb_fn[events](event_params);		
+					event_cb_fn[events](event_params);
 				}
 			}
 		}
 	}
 	break;
 	
+	
+	/* BLE GATT Client Events */
 	case AT_BLE_PRIMARY_SERVICE_FOUND:
 	case AT_BLE_INCLUDED_SERVICE_FOUND:
 	case AT_BLE_CHARACTERISTIC_FOUND:
@@ -1594,7 +1924,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		{
 			if (ble_mgr_gatt_client_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_gatt_client_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_gatt_client_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
 					event_cb_fn[events](event_params);
@@ -1603,7 +1933,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		}
 	}
 	break;
-	
+	/* BLE GATT Server events */
 	case AT_BLE_NOTIFICATION_CONFIRMED:
 	case AT_BLE_INDICATION_CONFIRMED:
 	case AT_BLE_CHARACTERISTIC_CHANGED:
@@ -1622,7 +1952,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		{
 			if (ble_mgr_gatt_server_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_gatt_server_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_gatt_server_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
 					event_cb_fn[events](event_params);
@@ -1631,7 +1961,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		}
 	}
 	break;
-	
+	/* BLE L2CAP Events */
 	case AT_BLE_LECB_CONN_REQ:
 	case AT_BLE_LECB_CONNECTED:
 	case AT_BLE_LECB_DISCONNECTED:
@@ -1645,7 +1975,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		{
 			if (ble_mgr_l2cap_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_l2cap_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_l2cap_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
 					event_cb_fn[events](event_params);
@@ -1654,7 +1984,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		}
 	}
 	break;
-	
+	/* BLE HTPT Events */
 	case AT_BLE_HTPT_CREATE_DB_CFM:
 	case AT_BLE_HTPT_ERROR_IND:
 	case AT_BLE_HTPT_DISABLE_IND:
@@ -1671,7 +2001,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		{
 			if (ble_mgr_htpt_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_htpt_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_htpt_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
 					event_cb_fn[events](event_params);
@@ -1680,7 +2010,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		}
 	}
 	break;
-	
+	/* BLE DTM Events */
 	case AT_BLE_LE_TEST_STATUS:
 	case AT_BLE_LE_PACKET_REPORT:
 	{
@@ -1690,7 +2020,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		{
 			if (ble_mgr_dtm_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_dtm_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_dtm_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
 					event_cb_fn[events](event_params);
@@ -1699,42 +2029,55 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 		}
 	}
 	break;
-	
+	/* BLE custom events */
 	case AT_BLE_CUSTOM_EVENT:
 	case AT_BLE_DEVICE_READY:
+	case AT_PLATFORM_EVENT:
 	case AT_BLE_EVENT_MAX:
 	{
 		uint8_t idx;
+		plf_drv_status plf_status = STATUS_FAILURE;
+		at_ble_events_t cevent = events;
+		platform_isr_event_t plf_isr_event;
+		if (events == AT_PLATFORM_EVENT)
+		{				
+			memset((uint8_t *)&plf_isr_event, 0, sizeof(platform_isr_event_t));
+			plf_isr_event.event_data_len = sizeof(plf_isr_event.event_data);
+			plf_status = platform_event_get(&plf_isr_event.event_type, plf_isr_event.event_data, &plf_isr_event.event_data_len);
+		}
 		events -= (AT_BLE_LE_PACKET_REPORT + 1);
 		for (idx = 0; idx < MAX_CUSTOM_EVENT_SUBSCRIBERS; idx++)
 		{
 			if (ble_mgr_custom_event_cb[idx] != NULL)
 			{
-				const ble_event_callback_t *event_cb_fn = ble_mgr_custom_event_cb[idx];
+				const ble_event_callback_t *event_cb_fn = (ble_event_callback_t *)ble_mgr_custom_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
-					event_cb_fn[events](event_params);
+					if (cevent == AT_PLATFORM_EVENT)
+					{
+						if (plf_status != STATUS_FAILURE)
+						{
+							event_cb_fn[events]((void *)&plf_isr_event);
+						}						
+					}
+					else
+					{
+						event_cb_fn[events](event_params);
+					}
+					
 				}
 			}
 		}
 	}
 	break;
-
-	case AT_PLATFORM_EVENT:
-	{
-		if (ble_user_event_cb) {
-			ble_user_event_cb();
-		}
-	}
-	break;
-
+	/* Unknown BLE event */
 	default:
 	{
-		DBG_LOG_DEV("BLE-Manager:Unknown Event=0x%X", events);
+		DBG_LOG("BLE-Manager:Unknown Event=0x%X", events);
 		DBG_LOG("\r\n");
 	}
 	break;		
-	}
+  }
 }
 
 /* Advertisement Data will be set based on the advertisement configuration */
@@ -2463,9 +2806,5 @@ at_ble_status_t ble_advertisement_data_set(void)
 	}
 }
 
-/** @brief function to register callback to be called when AT_BLE_PLATFORM_EVENT event triggered from stack */
-void register_ble_user_event_cb(ble_user_event_callback_t cb_fn)
-{
-	ble_user_event_cb = cb_fn;
-}
+
 

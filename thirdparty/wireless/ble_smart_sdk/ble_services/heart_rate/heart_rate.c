@@ -3,7 +3,7 @@
  *
  * \brief Heart Rate Service
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -79,10 +79,6 @@ uint8_t hr_control_point_value = 0;
  */
 void hr_init_service(hr_gatt_service_handler_t *heart_rate_serv)
 {
-	hr_measurement_value = 0;
-	body_sensor_location_value = CHEST;
-	hr_control_point_value = 0;
-
 	heart_rate_serv->serv_handle = 0;
 	heart_rate_serv->serv_uuid.type = AT_BLE_UUID_16;
 	heart_rate_serv->serv_uuid.uuid[0] = (uint8_t)HEART_RATE_SERVICE_UUID;

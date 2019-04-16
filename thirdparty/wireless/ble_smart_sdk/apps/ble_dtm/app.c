@@ -3,7 +3,7 @@
  *
  * \brief DTM Application
  *
- * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -55,9 +55,6 @@
 #include "at_ble_api.h"
 #include "platform.h"
 
-#define APP_STACK_SIZE	(1024)
-volatile unsigned char app_stack_patch[APP_STACK_SIZE];
-
 int main(void)
 {
 	uint16_t plf_event_type;
@@ -70,12 +67,15 @@ int main(void)
 	clk_enables = *((volatile unsigned int *)0x4000b00c);
 	clk_enables |= 0x1E000;
 	*((volatile unsigned int *)0x4000b00c) = clk_enables;
-	release_sleep_lock();
-	while(platform_event_get(&plf_event_type,plf_event_data,&plf_event_data_len))// for WFI(wait for Interrupt)
+	acquire_sleep_lock();
+	while(1)
 	{
-		//This is  added just not to optimize it out.
-		sleep_count++;
-		sleep_count--;
+		while(platform_event_get(&plf_event_type,plf_event_data,&plf_event_data_len))// for WFI(wait for Interrupt)
+		{
+			//This is  added just not to optimize it out.
+			sleep_count++;
+			sleep_count--;
+		}
 	}
 	
 	return status;

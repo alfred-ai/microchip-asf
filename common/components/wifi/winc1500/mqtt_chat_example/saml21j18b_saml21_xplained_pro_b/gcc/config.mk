@@ -68,8 +68,6 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/nmi2c.c \
        common/components/wifi/winc1500/driver/source/nmspi.c \
        common/components/wifi/winc1500/driver/source/nmuart.c \
-       common/components/wifi/winc1500/mqtt_chat_example/iot/stream_writer.c \
-       common/components/wifi/winc1500/mqtt_chat_example/iot/sw_timer.c \
        common/components/wifi/winc1500/mqtt_chat_example/main21.c \
        common/components/wifi/winc1500/socket/source/socket.c \
        common/components/wifi/winc1500/spi_flash/source/spi_flash.c \
@@ -96,7 +94,20 @@ CSRCS = \
        sam0/utils/cmsis/saml21/source/system_saml21.c     \
        sam0/utils/stdio/read.c                            \
        sam0/utils/stdio/write.c                           \
-       sam0/utils/syscalls/gcc/syscalls.c
+       sam0/utils/syscalls/gcc/syscalls.c                 \
+       thirdparty/pahomqtt/MQTTClient/MQTTClient.c        \
+       thirdparty/pahomqtt/MQTTClient/Platforms/MCHP_ATWx.c \
+       thirdparty/pahomqtt/MQTTClient/Wrapper/mqtt.c      \
+       thirdparty/pahomqtt/MQTTPacket/MQTTConnectClient.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTConnectServer.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTDeserializePublish.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTFormat.c        \
+       thirdparty/pahomqtt/MQTTPacket/MQTTPacket.c        \
+       thirdparty/pahomqtt/MQTTPacket/MQTTSerializePublish.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTSubscribeClient.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTSubscribeServer.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTUnsubscribeClient.c \
+       thirdparty/pahomqtt/MQTTPacket/MQTTUnsubscribeServer.c
 
 # List of assembler source files.
 ASSRCS = 
@@ -106,8 +117,6 @@ INC_PATH = \
        common/boards                                      \
        common/components/wifi/winc1500                    \
        common/components/wifi/winc1500/mqtt_chat_example  \
-       common/components/wifi/winc1500/mqtt_chat_example/iot \
-       common/components/wifi/winc1500/mqtt_chat_example/iot/mqtt \
        common/components/wifi/winc1500/mqtt_chat_example/saml21j18b_saml21_xplained_pro_b \
        common/services/serial                             \
        common/utils                                       \
@@ -139,17 +148,16 @@ INC_PATH = \
        sam0/utils/preprocessor                            \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
-       thirdparty/CMSIS/Lib/GCC \
+       thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/pahomqtt \
        common/components/wifi/winc1500/mqtt_chat_example/saml21j18b_saml21_xplained_pro_b/gcc
 
 # Additional search paths for libraries.
 LIB_PATH =  \
-       common/components/wifi/winc1500/mqtt_chat_example/iot/mqtt \
        thirdparty/CMSIS/Lib/GCC                          
 
 # List of libraries to use during linking.
 LIBS =  \
-       MQTT                                               \
        arm_cortexM0l_math                                
 
 # Path relative to top level directory pointing to a linker script.
@@ -193,6 +201,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D MQTT_PLATFORM_WINC15x0                          \
        -D SPI_CALLBACK_MODE=true                          \
        -D SYSTICK_MODE                                    \
        -D TCC_ASYNC=true                                  \

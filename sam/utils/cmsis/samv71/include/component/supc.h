@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,12 +54,14 @@
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 /** \brief Supc hardware registers */
 typedef struct {
-  __O  uint32_t SUPC_CR;   /**< \brief (Supc Offset: 0x00) Supply Controller Control Register */
-  __IO uint32_t SUPC_SMMR; /**< \brief (Supc Offset: 0x04) Supply Controller Supply Monitor Mode Register */
-  __IO uint32_t SUPC_MR;   /**< \brief (Supc Offset: 0x08) Supply Controller Mode Register */
-  __IO uint32_t SUPC_WUMR; /**< \brief (Supc Offset: 0x0C) Supply Controller Wake-up Mode Register */
-  __IO uint32_t SUPC_WUIR; /**< \brief (Supc Offset: 0x10) Supply Controller Wake-up Inputs Register */
-  __I  uint32_t SUPC_SR;   /**< \brief (Supc Offset: 0x14) Supply Controller Status Register */
+  __O  uint32_t SUPC_CR;       /**< \brief (Supc Offset: 0x00) Supply Controller Control Register */
+  __IO uint32_t SUPC_SMMR;     /**< \brief (Supc Offset: 0x04) Supply Controller Supply Monitor Mode Register */
+  __IO uint32_t SUPC_MR;       /**< \brief (Supc Offset: 0x08) Supply Controller Mode Register */
+  __IO uint32_t SUPC_WUMR;     /**< \brief (Supc Offset: 0x0C) Supply Controller Wakeup Mode Register */
+  __IO uint32_t SUPC_WUIR;     /**< \brief (Supc Offset: 0x10) Supply Controller Wakeup Inputs Register */
+  __I  uint32_t SUPC_SR;       /**< \brief (Supc Offset: 0x14) Supply Controller Status Register */
+  __I  uint32_t Reserved1[57];
+  __I  uint32_t SYSC_VERSION;  /**< \brief (Supc Offset: 0xFC) Version Register */
 } Supc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- SUPC_CR : (SUPC Offset: 0x00) Supply Controller Control Register -------- */
@@ -303,6 +305,11 @@ typedef struct {
 #define SUPC_SR_WKUPIS13 (0x1u << 29) /**< \brief (SUPC_SR) WKUPx Input Status (cleared on read) */
 #define   SUPC_SR_WKUPIS13_DIS (0x0u << 29) /**< \brief (SUPC_SR) The corresponding wake-up input is disabled, or was inactive at the time the debouncer triggered a wake-up event. */
 #define   SUPC_SR_WKUPIS13_EN (0x1u << 29) /**< \brief (SUPC_SR) The corresponding wake-up input was active at the time the debouncer triggered a wake-up event since the last read of SUPC_SR. */
+/* -------- SYSC_VERSION : (SUPC Offset: 0xFC) Version Register -------- */
+#define SYSC_VERSION_VERSION_Pos 0
+#define SYSC_VERSION_VERSION_Msk (0xfffu << SYSC_VERSION_VERSION_Pos) /**< \brief (SYSC_VERSION) Version of the Hardware Module */
+#define SYSC_VERSION_MFN_Pos 16
+#define SYSC_VERSION_MFN_Msk (0x7u << SYSC_VERSION_MFN_Pos) /**< \brief (SYSC_VERSION) Metal Fix Number */
 
 /*@}*/
 

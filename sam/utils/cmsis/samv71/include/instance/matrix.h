@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -70,9 +70,12 @@
   #define REG_MATRIX_MRCR                   (0x40088100U) /**< \brief (MATRIX) Master Remap Control Register */
   #define REG_CCFG_CAN0                     (0x40088110U) /**< \brief (MATRIX) CAN0 Configuration Register */
   #define REG_CCFG_SYSIO                    (0x40088114U) /**< \brief (MATRIX) System I/O and CAN1 Configuration Register */
+  #define REG_CCFG_PCCR                       (0x40088118U) /**< \brief (MATRIX) Peripheral Clock Configuration Register */
+  #define REG_CCFG_DYNCFG                     (0x4008811CU) /**< \brief (MATRIX) Dynamic Clock Gating Register */
   #define REG_CCFG_SMCNFCS                  (0x40088124U) /**< \brief (MATRIX) SMC NAND Flash Chip Select Configuration Register */
   #define REG_MATRIX_WPMR                   (0x400881E4U) /**< \brief (MATRIX) Write Protection Mode Register */
   #define REG_MATRIX_WPSR                   (0x400881E8U) /**< \brief (MATRIX) Write Protection Status Register */
+  #define REG_MATRIX_VERSION                  (0x400881FCU) /**< \brief (MATRIX) Version Register */
 #else
   #define REG_MATRIX_MCFG  (*(__IO uint32_t*)0x40088000U) /**< \brief (MATRIX) Master Configuration Register */
   #define REG_MATRIX_SCFG  (*(__IO uint32_t*)0x40088040U) /**< \brief (MATRIX) Slave Configuration Register */
@@ -97,9 +100,12 @@
   #define REG_MATRIX_MRCR  (*(__IO uint32_t*)0x40088100U) /**< \brief (MATRIX) Master Remap Control Register */
   #define REG_CCFG_CAN0    (*(__IO uint32_t*)0x40088110U) /**< \brief (MATRIX) CAN0 Configuration Register */
   #define REG_CCFG_SYSIO   (*(__IO uint32_t*)0x40088114U) /**< \brief (MATRIX) System I/O and CAN1 Configuration Register */
+  #define REG_CCFG_PCCR      (*(__IO uint32_t*)0x40088118U) /**< \brief (MATRIX) Peripheral Clock Configuration Register */
+  #define REG_CCFG_DYNCFG    (*(__IO uint32_t*)0x4008811CU) /**< \brief (MATRIX) Dynamic Clock Gating Register */
   #define REG_CCFG_SMCNFCS (*(__IO uint32_t*)0x40088124U) /**< \brief (MATRIX) SMC NAND Flash Chip Select Configuration Register */
   #define REG_MATRIX_WPMR  (*(__IO uint32_t*)0x400881E4U) /**< \brief (MATRIX) Write Protection Mode Register */
   #define REG_MATRIX_WPSR  (*(__I  uint32_t*)0x400881E8U) /**< \brief (MATRIX) Write Protection Status Register */
+  #define REG_MATRIX_VERSION (*(__I  uint32_t*)0x400881FCU) /**< \brief (MATRIX) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_MATRIX_INSTANCE_ */

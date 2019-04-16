@@ -172,7 +172,7 @@ CPPFLAGS = \
        -D TEST_SUITE_DEFINE_ASSERT_MACRO                  \
        -D UDD_ENABLE                                      \
        -D _ASSERT_ENABLE_                                 \
-       -D __SAMV71Q21__                                   \
+       -D __SAMV71Q21B__                                  \
        -D printf=iprintf                                  \
        -D scanf=iscanf
 

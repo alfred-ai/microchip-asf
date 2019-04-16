@@ -880,9 +880,6 @@ void uhd_ep_free(usb_add_t add, usb_ep_t endp)
 				continue; // Mismatch
 			}
 		}
-		// Unalloc pipe
-		uhd_disable_pipe(pipe);
-		uhd_unallocate_memory(pipe);
 
 		// Stop transfer on this pipe
 #ifndef USB_HOST_HUB_SUPPORT
@@ -2113,6 +2110,15 @@ static void uhd_pipe_interrupt(uint8_t pipe)
 static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 {
 	// Stop transfer
+#ifdef UHD_PIPE_DMA_SUPPORTED
+	if (Is_uhd_pipe_dma_supported(pipe)) {
+		uhd_pipe_job_t *ptr_job = &uhd_pipe_job[pipe - 1];
+		uhd_freeze_pipe(pipe);
+		ptr_job->nb_trans =
+				uhd_pipe_dma_get_addr(pipe) - (uint32_t)ptr_job->buf;
+		uhd_pipe_dma_set_control(pipe, 0);
+	}
+#endif
 	uhd_reset_pipe(pipe);
 
 	// Autoswitch bank and interrupts has been reseted, then re-enable it
@@ -2120,14 +2126,7 @@ static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 	uhd_enable_stall_interrupt(pipe);
 	uhd_enable_pipe_error_interrupt(pipe);
 	uhd_disable_out_ready_interrupt(pipe);
-#ifdef UHD_PIPE_DMA_SUPPORTED
-	if (Is_uhd_pipe_dma_supported(pipe)) {
-		uhd_pipe_job_t *ptr_job = &uhd_pipe_job[pipe - 1];
-		ptr_job->nb_trans =
-				uhd_pipe_dma_get_addr(pipe) - (uint32_t)ptr_job->buf;
-		uhd_pipe_dma_set_control(pipe, 0);
-	}
-#endif
+
 	uhd_pipe_finish_job(pipe, status);
 }
 
@@ -2141,6 +2140,14 @@ static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 static void uhd_pipe_finish_job(uint8_t pipe, uhd_trans_status_t status)
 {
 	uhd_pipe_job_t *ptr_job;
+	uint32_t dev_addr = uhd_get_configured_address(pipe);
+	uint32_t dev_ep = uhd_get_pipe_endpoint_address(pipe);
+
+	if (status == UHD_TRANS_DISCONNECT) {
+		// Unalloc pipe
+		uhd_disable_pipe(pipe);
+		uhd_unallocate_memory(pipe);
+	}
 
 	// Get job corresponding at endpoint
 	ptr_job = &uhd_pipe_job[pipe - 1];
@@ -2151,8 +2158,6 @@ static void uhd_pipe_finish_job(uint8_t pipe, uhd_trans_status_t status)
 	if (NULL == ptr_job->call_end) {
 		return; // No callback linked to job
 	}
-	uint32_t dev_addr = uhd_get_configured_address(pipe);
-	uint32_t dev_ep = uhd_get_pipe_endpoint_address(pipe);
 	ptr_job->call_end(dev_addr, dev_ep, status, ptr_job->nb_trans);
 }
 

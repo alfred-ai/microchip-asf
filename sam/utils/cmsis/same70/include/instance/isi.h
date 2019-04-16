@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -72,6 +72,7 @@
   #define REG_ISI_DMA_C_DSCR                  (0x4004C058U) /**< \brief (ISI) DMA Codec Descriptor Address Register */
   #define REG_ISI_WPMR                        (0x4004C0E4U) /**< \brief (ISI) Write Protection Mode Register */
   #define REG_ISI_WPSR                        (0x4004C0E8U) /**< \brief (ISI) Write Protection Status Register */
+  #define REG_ISI_VERSION                     (0x4004C0FCU) /**< \brief (ISI) Version Register */
 #else
   #define REG_ISI_CFG1       (*(__IO uint32_t*)0x4004C000U) /**< \brief (ISI) ISI Configuration 1 Register */
   #define REG_ISI_CFG2       (*(__IO uint32_t*)0x4004C004U) /**< \brief (ISI) ISI Configuration 2 Register */
@@ -98,6 +99,7 @@
   #define REG_ISI_DMA_C_DSCR (*(__IO uint32_t*)0x4004C058U) /**< \brief (ISI) DMA Codec Descriptor Address Register */
   #define REG_ISI_WPMR       (*(__IO uint32_t*)0x4004C0E4U) /**< \brief (ISI) Write Protection Mode Register */
   #define REG_ISI_WPSR       (*(__I  uint32_t*)0x4004C0E8U) /**< \brief (ISI) Write Protection Status Register */
+  #define REG_ISI_VERSION    (*(__I  uint32_t*)0x4004C0FCU) /**< \brief (ISI) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAME70_ISI_INSTANCE_ */

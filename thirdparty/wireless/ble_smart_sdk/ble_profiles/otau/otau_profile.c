@@ -3,7 +3,7 @@
  *
  * \brief OTAU Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -69,6 +69,8 @@ otau_gatt_service_handler_t otau_gatt_service;
 
 otau_profile_config_t *otau_profile_instance = NULL;
 
+user_custom_event_t otau_custom_event;
+
 extern ofid_flash_info_t *flash_inst;
 
 /** Initialize the OTAU Process structure members */
@@ -82,52 +84,24 @@ otau_process_t otau_process_status = {
 };
 
 /* BLE GAP event callback handlers for OTAU profile */
-static /*const*/ ble_event_callback_t otau_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	otau_connected_state_handler,
-	otau_disconnect_event_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t otau_gap_handle = {
+	.connected = otau_connected_state_handler,
+	.disconnected = otau_disconnect_event_handler
 };
 
 
 /* BLE GATT Server event callback handlers for OTAU profile */
-static /*const*/ ble_event_callback_t otau_gatt_server_handle[] = {
-	NULL,
-	otau_indication_confirmation_handler,
-	otau_char_changed_handler,
-	NULL,
-	NULL,
-	NULL,
-	otau_mtu_changed_indication,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t otau_gatt_server_handle = {
+	.indication_confirmed = otau_indication_confirmation_handler,
+	.characteristic_changed = otau_char_changed_handler,
+	.mtu_changed_indication = otau_mtu_changed_indication
 };
 
 
 /* BLE Custom event callback handlers for OTAU profile */
-static /*const*/ ble_event_callback_t otau_custom_event_handle[] = {
+static const ble_custom_event_cb_t otau_custom_event_handle = {
 	/* BLE custom event post callback handler */
-	otau_custom_event_handler,
-	/* BLE device ready internal event callback handler */
-	NULL,
-	/* BLE device max event reached callback handler */
-	NULL
+	.custom_event = otau_custom_event_handler
 };
 
 /**	OTAU Flash layout information - 
@@ -185,7 +159,11 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state);
  */
 at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 {
-	at_ble_status_t status = AT_BLE_SUCCESS;
+	otau_process_status.cstate = OTAU_ABORT_STATE;
+	if (otau_process_status.status != AT_OTAU_CMD_SUCCESS)
+	{
+		return AT_BLE_FAILURE;
+	}
 
 	DBG_OTAU("[OTAU] CState:%d, NState:%d Status:%d", otau_process_status.cstate, next_state, otau_process_status.status);
 	switch(otau_process_status.cstate)
@@ -194,14 +172,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		case OTAU_IDLE_STATE:
 		{
 			/* Idle state to next State */
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_INIT_STATE))
+			if (next_state == OTAU_INIT_STATE)
 			{
 				otau_process_status.cstate = OTAU_INIT_STATE;				
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -209,14 +182,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine is in initialization state, during OTAU initialization */
 		case OTAU_INIT_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_OFD_INIT_STATE))
+			if (next_state == OTAU_OFD_INIT_STATE)
 			{
 				otau_process_status.cstate = OTAU_OFD_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -224,14 +192,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU OFD Initialization state */
 		case OTAU_OFD_INIT_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_NOTIFICATION_STATE))
+			if (next_state == OTAU_IMAGE_NOTIFICATION_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_NOTIFICATION_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -239,18 +202,13 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU Image notification state */
 		case OTAU_IMAGE_NOTIFICATION_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_INFO_WAIT_STATE))
+			if (next_state == OTAU_IMAGE_INFO_WAIT_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_INFO_WAIT_STATE;
 			}
-			else if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_NOTIFICATION_STATE))
+			else if (next_state == OTAU_IMAGE_NOTIFICATION_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_NOTIFICATION_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -258,22 +216,17 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU Image information wait state */
 		case OTAU_IMAGE_INFO_WAIT_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_PAGE_DOWNLOAD_START_STATE))
+			if (next_state == OTAU_PAGE_DOWNLOAD_START_STATE)
 			{
 				otau_process_status.cstate = OTAU_PAGE_DOWNLOAD_START_STATE;
 			}
-			else if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_BLOCK_DOWNLOAD_STATE))
+			else if (next_state == OTAU_BLOCK_DOWNLOAD_STATE)
 			{
 				otau_process_status.cstate = OTAU_BLOCK_DOWNLOAD_STATE;
 			}
-			else if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_NOTIFICATION_STATE))
+			else if (next_state == OTAU_IMAGE_NOTIFICATION_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_NOTIFICATION_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -281,32 +234,22 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine will set to page downstate during page mode */
 		case OTAU_PAGE_DOWNLOAD_START_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_PAGE_DOWNLOADING_STATE))
+			if (next_state == OTAU_PAGE_DOWNLOADING_STATE)
 			{
 				otau_process_status.cstate = OTAU_PAGE_DOWNLOADING_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
 		
 		case OTAU_PAGE_DOWNLOADING_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_PAGE_DOWNLOADING_STATE))
+			if (next_state == OTAU_PAGE_DOWNLOADING_STATE)
 			{
 				otau_process_status.cstate = OTAU_PAGE_DOWNLOADING_STATE;
 			}
-			else if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_SECTION_END_STATE))
+			else if (next_state == OTAU_SECTION_END_STATE)
 			{
 				otau_process_status.cstate = OTAU_SECTION_END_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -314,14 +257,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine will set to section end state if it receives the complete section */
 		case OTAU_SECTION_END_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_SECTION_END_CONFIRM_STATE))
+			if (next_state == OTAU_SECTION_END_CONFIRM_STATE)
 			{
 				otau_process_status.cstate = OTAU_SECTION_END_CONFIRM_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -329,22 +267,17 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine will set to section end confirm state, if it sends the complete section */
 		case OTAU_SECTION_END_CONFIRM_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_PAGE_DOWNLOAD_START_STATE))
+			if (next_state == OTAU_PAGE_DOWNLOAD_START_STATE)
 			{
 				otau_process_status.cstate = OTAU_PAGE_DOWNLOAD_START_STATE;
 			}
-			else if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_PAGE_DOWNLOADING_STATE))
+			else if (next_state == OTAU_PAGE_DOWNLOADING_STATE)
 			{
 				otau_process_status.cstate = OTAU_PAGE_DOWNLOADING_STATE;
 			}
-			else if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_END_STATE))
+			else if (next_state == OTAU_IMAGE_END_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_END_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -352,14 +285,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine will set to image end state, when target device receives the complete image */
 		case OTAU_IMAGE_END_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_END_CONFIRM_STATE))
+			if (next_state == OTAU_IMAGE_END_CONFIRM_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_END_CONFIRM_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -367,14 +295,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine will set to image end confirm state, when target device receives the complete image and respond back */
 		case OTAU_IMAGE_END_CONFIRM_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_SWITCH_STATE))
+			if (next_state == OTAU_IMAGE_SWITCH_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_SWITCH_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -382,14 +305,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU state machine will be set to image switch state once the image end confirm received */
 		case OTAU_IMAGE_SWITCH_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_SWITCH_CONFIRM_STATE))
+			if (next_state == OTAU_IMAGE_SWITCH_CONFIRM_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_SWITCH_CONFIRM_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -397,29 +315,16 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU image switch confirm received from application */
 		case OTAU_IMAGE_SWITCH_CONFIRM_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU manager or application is requested to pause the OTAU process */
 		case OTAU_PAUSE_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_RESUME_STATE))
+			if (next_state == OTAU_IMAGE_RESUME_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_RESUME_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
 			}
 		}
 		break;
@@ -427,18 +332,13 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU image might be interrupted due to various reasons, but again it needs to resume from where it left off */
 		case OTAU_IMAGE_RESUME_STATE:
 		{
-			if ((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_NOTIFICATION_STATE))
+			if (next_state == OTAU_IMAGE_NOTIFICATION_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_NOTIFICATION_STATE;
 			}
-			else if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
 			else
 			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
+				otau_process_status.cstate = OTAU_INIT_STATE;
 			}
 		}
 		break;
@@ -446,123 +346,62 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		/* OTAU image confirmation received from the right source */
 		case OTAU_IMAGE_RESUME_CONFIRM_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU state machine will set to block download state during block mode */
 		case OTAU_BLOCK_DOWNLOAD_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU state machine will be in section download state during beginning of one section or end of section */
 		case OTAU_SECTION_DOWNLOAD_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU state machine will set to page end state if it receives the complete page */
 		case OTAU_PAGE_END_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU page end confirmed state */
 		case OTAU_PAGE_END_CONFIRM_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;		
 				
 		/* OTAU state machine is in abort state, in case of any OTAU abort send by OTAU manager */
 		case OTAU_ABORT_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU state machine is in stopped state, in case the device is disconnected or error */
 		case OTAU_STOPPED_STATE:
 		{
-			if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
-			else
-			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
-			}
+			otau_process_status.cstate = OTAU_INIT_STATE;
 		}
 		break;
 		
 		/* OTAU Disconnected state */
 		case OTAU_DISCONNECTED_STATE:
 		{
-			if((otau_process_status.status == AT_OTAU_CMD_SUCCESS) && (next_state == OTAU_IMAGE_NOTIFICATION_STATE))
+			if (next_state == OTAU_IMAGE_NOTIFICATION_STATE)
 			{
 				otau_process_status.cstate = OTAU_IMAGE_NOTIFICATION_STATE;
 			}
-			else if (otau_process_status.status == AT_OTAU_CMD_SUCCESS)
-			{
-				otau_process_status.cstate = OTAU_INIT_STATE;
-			}
 			else
 			{
-				otau_process_status.cstate = OTAU_ABORT_STATE;
-				status = AT_BLE_FAILURE;
+				otau_process_status.cstate = OTAU_INIT_STATE;
 			}
 		}
 		break;
@@ -574,9 +413,9 @@ at_ble_status_t otau_state_machine_controller(otau_state_t next_state)
 		}
 		break;
 		
-		otau_process_status.status = AT_OTAU_CMD_FAILED;		
+		otau_process_status.status = AT_OTAU_CMD_FAILED;
 	}
-	return status;
+	return ((otau_process_status.cstate == OTAU_ABORT_STATE) ? AT_BLE_FAILURE:AT_BLE_SUCCESS);
 }
 
 /** @brief otau_profile_init function initialize and defines the service of the OTAU profile
@@ -600,6 +439,9 @@ at_ble_status_t otau_profile_init(void *params)
 
 	otau_process_status.status = AT_OTAU_CMD_SUCCESS;	
 	status = otau_state_machine_controller(OTAU_INIT_STATE);
+	
+	otau_custom_event.id = OTAU_SYSTEM_RESET_ID;
+	otau_custom_event.bptr = NULL;
 		
 	OTAU_CHECK_ERROR(status);
 		
@@ -618,65 +460,30 @@ at_ble_status_t otau_profile_init(void *params)
 	OTAU_CHECK_ERROR(status);
 		
 	/* Register OTAU service into GATT Server database */
-	status = otau_service_define((void *)&otau_config->service_config);
-		
+	status = otau_service_define((void *)&otau_config->service_config);		
 	OTAU_CHECK_ERROR(status);
 	
 	status = AT_BLE_FAILURE;
-	
-	otau_gap_handle[0] = NULL;
-	otau_gap_handle[1] = NULL;
-	otau_gap_handle[2] = NULL;
-	otau_gap_handle[3] = NULL;
-	otau_gap_handle[4] = NULL;
-	otau_gap_handle[5] = otau_connected_state_handler;
-	otau_gap_handle[6] = otau_disconnect_event_handler;
-	otau_gap_handle[7] = NULL;
-	otau_gap_handle[8] = NULL;
-	otau_gap_handle[9] = NULL;
-	otau_gap_handle[10] = NULL;
-	otau_gap_handle[11] = NULL;
-	otau_gap_handle[12] = NULL;
-	otau_gap_handle[13] = NULL;
-	otau_gap_handle[14] = NULL;
-	otau_gap_handle[15] = NULL;
-	otau_gap_handle[16] = NULL;
-	otau_gap_handle[17] = NULL;
-	otau_gap_handle[18] = NULL;
-	
-	otau_gatt_server_handle[0] = NULL;
-	otau_gatt_server_handle[1] = otau_indication_confirmation_handler;
-	otau_gatt_server_handle[2] = otau_char_changed_handler;
-	otau_gatt_server_handle[3] = NULL;
-	otau_gatt_server_handle[4] = NULL;
-	otau_gatt_server_handle[5] = NULL;
-	otau_gatt_server_handle[6] = otau_mtu_changed_indication;
-	otau_gatt_server_handle[7] = NULL;
-	otau_gatt_server_handle[8] = NULL;
-	otau_gatt_server_handle[9] = NULL;
-	
-	otau_custom_event_handle[0] = otau_custom_event_handler;
-	otau_custom_event_handle[1] = NULL;
-	otau_custom_event_handle[2] = NULL;
-		
+			
 	/* Register for BLE GAP event callbacks */
 	if(ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	otau_gap_handle))
+	&otau_gap_handle))
 	{
 		/* Register for BLE GATT Server event callbacks */
 		if(ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 		BLE_GATT_SERVER_EVENT_TYPE,
-		otau_gatt_server_handle))
+		&otau_gatt_server_handle))
 		{
 			/* Register for BLE custom event callbacks */
 			if (ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 			BLE_CUSTOM_EVENT_TYPE,
-			otau_custom_event_handle))
+			&otau_custom_event_handle))
 			{	
 				/* All OTAU Events are successfully registered */			
 				otau_process_status.status = AT_OTAU_CMD_SUCCESS;					
 				DBG_OTAU("OTAU Service Initialization completed");
+				status = AT_BLE_SUCCESS;
 			}
 		}
 	}	
@@ -789,19 +596,13 @@ at_ble_status_t otau_disconnect_event_handler(void *params)
 at_ble_status_t otau_custom_event_handler(void *params)
 {
 	at_ble_status_t status = AT_BLE_FAILURE;
-	
-	otau_device_reset_request_t	*device_reset_req = NULL;
-	
 	OTAU_CHECK_NULL(params);
-	
-	device_reset_req = (otau_device_reset_request_t *)params;
-	//if ((device_reset_req->req.length == (sizeof(otau_device_reset_request_t) -2)) &&
-		//(device_reset_req->req.cmd == AT_OTAU_RESET_DEVICE))
-	//{
+	user_custom_event_t **otau_profile_custom_event = (user_custom_event_t **)params;
+    if (((*otau_profile_custom_event)->id) == OTAU_SYSTEM_RESET_ID)
+    {
 		otau_device_reset();
 		status = AT_BLE_SUCCESS;
-	//}
-	ALL_UNUSED(device_reset_req);
+    }
 	return status;
 }
 
@@ -2048,7 +1849,7 @@ at_ble_status_t otau_image_switch_request_handler(void *params)
 						device_reset_req.fw_version.build_number = image_switch_notify_req->fw_version.build_number;		
 						/* Post custom event to BLE Manager */	
 						otau_process_status.status = AT_OTAU_CMD_SUCCESS;					
-						if(at_ble_event_user_defined_post((void *)&device_reset_req) ==  AT_BLE_SUCCESS)
+						if(at_ble_event_user_defined_post(&otau_custom_event) ==  AT_BLE_SUCCESS)
 						{
 							DBG_OTAU("Requesting to reboot the device...!!!");
 							DBG_OTAU("Switching to New Firmware version");

@@ -3,7 +3,7 @@
  *
  * \brief PubNub Example.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -452,6 +452,7 @@ int main(void)
 						port_pin_get_output_level(LED0_PIN) ? "0" : "1");
 				printf("main: publish event: {%s}\r\n", buf);
 				close(pPubNubCfg->tcp_socket);
+				pPubNubCfg->tcp_socket = -1;
 				pPubNubCfg->state = PS_IDLE;
 				pPubNubCfg->last_result = PNR_IO_ERROR;
 				pubnub_publish(pPubNubCfg, PubNubChannel, buf);

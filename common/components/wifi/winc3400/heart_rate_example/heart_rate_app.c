@@ -165,8 +165,11 @@ static void ble_heart_rate_process(void)
 	    }
 	    idx += 1;			
 	    DBG_LOG("Heart Rate: %d bpm", heart_rate_value);
-	    heart_rate_value += (inc_changer);
-
+		if(inc_changer == HEART_RATE_INCREMENT_VALUE)
+			heart_rate_value += HEART_RATE_INCREMENT_VALUE;
+		else	
+			heart_rate_value -= HEART_RATE_INCREMENT_VALUE;
+		
 	    /* Heart Rate Value 8bit*/
 	    hr_data[idx++] = (uint8_t)heart_rate_value ;
 	    if (hr_data[0] & ENERGY_EXPENDED_FIELD_PRESENT) {

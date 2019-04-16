@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,6 +93,7 @@
   #define REG_PIOB_LOCKSR                   (0x400E10E0U) /**< \brief (PIOB) Lock Status */
   #define REG_PIOB_WPMR                     (0x400E10E4U) /**< \brief (PIOB) Write Protection Mode Register */
   #define REG_PIOB_WPSR                     (0x400E10E8U) /**< \brief (PIOB) Write Protection Status Register */
+  #define REG_PIOB_VERSION                  (0x400E10FCU) /**< \brief (PIOB) Version Register */
   #define REG_PIOB_SCHMITT                  (0x400E1100U) /**< \brief (PIOB) Schmitt Trigger Register */
   #define REG_PIOB_DRIVER                   (0x400E1118U) /**< \brief (PIOB) PIO I/O Drive Register */
   #define REG_PIOB_KER                      (0x400E1120U) /**< \brief (PIOB) Keypad Controller Enable Register */
@@ -157,6 +158,7 @@
   #define REG_PIOB_LOCKSR  (*(__I  uint32_t*)0x400E10E0U) /**< \brief (PIOB) Lock Status */
   #define REG_PIOB_WPMR    (*(__IO uint32_t*)0x400E10E4U) /**< \brief (PIOB) Write Protection Mode Register */
   #define REG_PIOB_WPSR    (*(__I  uint32_t*)0x400E10E8U) /**< \brief (PIOB) Write Protection Status Register */
+  #define REG_PIOB_VERSION (*(__I  uint32_t*)0x400E10FCU) /**< \brief (PIOB) Version Register */
   #define REG_PIOB_SCHMITT (*(__IO uint32_t*)0x400E1100U) /**< \brief (PIOB) Schmitt Trigger Register */
   #define REG_PIOB_DRIVER  (*(__IO uint32_t*)0x400E1118U) /**< \brief (PIOB) PIO I/O Drive Register */
   #define REG_PIOB_KER     (*(__IO uint32_t*)0x400E1120U) /**< \brief (PIOB) Keypad Controller Enable Register */

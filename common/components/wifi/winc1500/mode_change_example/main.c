@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 Mode Change Example.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -41,16 +41,16 @@
 
 /** \mainpage
  * \section intro Introduction
- * This example demonstrates the use of the WINC1500 with the SAM Xplained Pro
- * board to bring up as a station, an AP or a P2P mode.<br>
+ * This example demonstrates the use of the WINC1500 with the SAMD21 Xplained Pro
+ * board to bring up as a station and then switch to an AP.<br>
  * It uses the following hardware:
  * - the SAM Xplained Pro.
  * - the WINC1500 on EXT1.
  *
  * \section files Main Files
  * - main.c : Initialize the WINC1500. For the first time, the device act as
- * station mode. Then switch to AP mode and also P2P mode. For the details in each
- * mode, refer to the MODE_STA, MODE_AP and MODE_P2P example.
+ * station mode. Then switch to AP mode. For the details in each
+ * mode, refer to the MODE_STA and MODE_AP example.
  *
  * \section usage Usage
  * -# Configure below code in the main.h for AP information.
@@ -58,11 +58,6 @@
  *    #define MAIN_WLAN_SSID              "DEMO_AP"
  *    #define MAIN_WLAN_AUTH              M2M_WIFI_SEC_OPEN
  *    #define MAIN_WLAN_AP_CHANNEL        (6)
- * \endcode
- * -# Configure below code in the main.h for P2P information.
- * \code
- *    #define MAIN_WLAN_DEVICE_NAME       "WINC1500_P2P"
- *    #define MAIN_WLAN_P2P_CHANNEL       (6)
  * \endcode
  * -# Build the program and download it into the board.
  * -# On the computer, open and configure a terminal application as the follows.
@@ -81,8 +76,6 @@
  *    -- Compiled: xxx xx xxxx xx:xx:xx --
  *    AP mode, start
  *    AP mode, end
- *    P2P mode, start
- *    P2P mode, end
  * \endcode
  *
  * \section compinfo Compilation Information
@@ -169,43 +162,6 @@ static int8_t enable_disable_ap_mode(void)
 }
 
 /**
- * \brief P2P mode
- *
- * Initializes the P2P mode for a while and terminate.
- */
-static int8_t enable_disable_p2p_mode(void)
-{
-	int8_t ret;
-
-	printf("P2P mode, start\r\n");
-
-	/* Set device name. */
-	ret = m2m_wifi_set_device_name((uint8_t *)MAIN_WLAN_DEVICE_NAME, strlen(MAIN_WLAN_DEVICE_NAME));
-	if (M2M_SUCCESS != ret) {
-		return ret;
-	}
-
-	/* Start P2P with channel number. */
-	ret = m2m_wifi_p2p(MAIN_WLAN_P2P_CHANNEL);
-	if (M2M_SUCCESS != ret) {
-		return ret;
-	}
-
-	/* Keep in P2P mode for a while. */
-	nm_bsp_sleep(HOLD_TIME_IN_MODE);
-
-	/* Stop P2P mode. */
-	ret = m2m_wifi_p2p_disconnect();
-	if (M2M_SUCCESS != ret) {
-		return ret;
-	}
-
-	printf("P2P mode, end\r\n");
-
-	return ret;
-}
-
-/**
  * \brief Main application function.
  *
  * Application entry point.
@@ -258,17 +214,6 @@ int main(void)
 	}
 
 	nm_bsp_sleep(DELAY_FOR_MODE_CHANGE);
-
-	/**
-	 * P2P mode.
-	 * Turn On and off P2P mode.
-	 */
-	ret = enable_disable_p2p_mode();
-	if (M2M_SUCCESS != ret) {
-		printf("main: enable_disable_p2p_mode call error!\r\n");
-		while (1) {
-		}
-	}
 
 	return 0;
 }

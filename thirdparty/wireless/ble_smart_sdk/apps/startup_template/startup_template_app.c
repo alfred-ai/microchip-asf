@@ -3,7 +3,7 @@
  *
  * \brief BLE Startup Template
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,6 +62,7 @@
 #include "button.h"
 #include "startup_template_app.h"
 
+void platform_resume_cb(void);
 
 /* timer callback function */
 static void timer_callback_fn(void)
@@ -73,7 +74,11 @@ static void button_cb(void)
 {
 	/* Add button callback functionality here */
 }
-
+void platform_resume_cb(void)
+{
+	init_port_list();
+	serial_console_init();
+}
 int main(void)
 {
 	platform_driver_init();
@@ -97,6 +102,7 @@ int main(void)
 	/* initialize the BLE chip  and Set the Device Address */
 	ble_device_init(NULL);
 	
+	register_resume_callback(platform_resume_cb);
 	/* Set ULP mode */
 	ble_set_ulp_mode(BLE_ULP_MODE_SET);
 	
@@ -108,6 +114,5 @@ int main(void)
 		
 		/* Write application task */
 	}
-
 }
 

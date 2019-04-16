@@ -1978,13 +1978,13 @@
 					</file>
 				</group>
 				<file>
-					<name>$PROJ_DIR$/../../../../events/events_common.h</name>
-				</file>
-				<file>
 					<name>$PROJ_DIR$/../../../../events/events_hooks.h</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../events/events.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../events/events_common.h</name>
 				</file>
 			</group>
 			<group>
@@ -2342,13 +2342,25 @@
 							</file>
 						</group>
 						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g15ab.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g14a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1.h</name>
 						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g14ab.h</name>
+						</file>
 						<group>
 							<name>pio</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g16ab.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g15ab.h</name>
+							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g16a.h</name>
 							</file>
@@ -2358,7 +2370,13 @@
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g15a.h</name>
 							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g14ab.h</name>
+							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g16ab.h</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g15a.h</name>
 						</file>

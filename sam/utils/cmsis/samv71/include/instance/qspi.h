@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,6 +63,7 @@
   #define REG_QSPI_SKR                   (0x4007C044U) /**< \brief (QSPI) Scrambling Key Register */
   #define REG_QSPI_WPMR                  (0x4007C0E4U) /**< \brief (QSPI) Write Protection Mode Register */
   #define REG_QSPI_WPSR                  (0x4007C0E8U) /**< \brief (QSPI) Write Protection Status Register */
+  #define REG_QSPI_VERSION                  (0x4007C0FCU) /**< \brief (QSPI) Version Register */
 #else
   #define REG_QSPI_CR   (*(__O  uint32_t*)0x4007C000U) /**< \brief (QSPI) Control Register */
   #define REG_QSPI_MR   (*(__IO uint32_t*)0x4007C004U) /**< \brief (QSPI) Mode Register */
@@ -80,6 +81,7 @@
   #define REG_QSPI_SKR  (*(__O  uint32_t*)0x4007C044U) /**< \brief (QSPI) Scrambling Key Register */
   #define REG_QSPI_WPMR (*(__IO uint32_t*)0x4007C0E4U) /**< \brief (QSPI) Write Protection Mode Register */
   #define REG_QSPI_WPSR (*(__I  uint32_t*)0x4007C0E8U) /**< \brief (QSPI) Write Protection Status Register */
+  #define REG_QSPI_VERSION (*(__I  uint32_t*)0x4007C0FCU) /**< \brief (QSPI) Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_QSPI_INSTANCE_ */

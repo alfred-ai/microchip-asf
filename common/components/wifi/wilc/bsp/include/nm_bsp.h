@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 BSP APIs declarations.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -347,7 +347,7 @@ void nm_bsp_free(void* pvMemBuffer);
 #include "bsp/include/nm_bsp_sam4s.h"
 #define __M2M_DMA_BUF_ATT__		__attribute__((aligned(32)))
 #endif
-#if (defined __SAMV71Q21__) || (defined __SAMS70N21__)
+#if (defined __SAMV71Q21__) || (defined __SAMS70N21__) || (defined __SAMV71Q21B__)
 #include "bsp/include/nm_bsp_samv71.h"
 #define __M2M_DMA_BUF_ATT__		COMPILER_ALIGNED(32)
 #endif

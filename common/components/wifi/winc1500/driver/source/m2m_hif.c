@@ -71,6 +71,7 @@ typedef struct {
  	uint8 u8ChipSleep;
  	uint8 u8HifRXDone;
  	uint8 u8Interrupt;
+	uint8 u8Yield;
  	uint32 u32RxAddr;
  	uint32 u32RxSize;
 	tpfHifCallBack pfWifiCb;
@@ -84,11 +85,18 @@ typedef struct {
 
 volatile tstrHifContext gstrHifCxt;
 
+#ifdef ETH_MODE
+extern void os_hook_isr(void);
+#endif
+
 static void isr(void)
 {
 	gstrHifCxt.u8Interrupt++;
 #ifdef NM_LEVEL_INTERRUPT
 	nm_bsp_interrupt_ctrl(0);
+#endif
+#ifdef ETH_MODE
+	os_hook_isr();
 #endif
 }
 static sint8 hif_set_rx_done(void)
@@ -563,6 +571,16 @@ ERR1:
 }
 
 /**
+*	@fn		hif_yield(void)
+*	@brief
+			Yields control from interrupt event handler.
+*/
+void hif_yield(void)
+{
+	gstrHifCxt.u8Yield = 1;
+}
+
+/**
 *	@fn		hif_handle_isr(void)
 *	@brief	Handle interrupt received from NMC1500 firmware.
 *   @return     The function SHALL return 0 for success and a negative value otherwise.
@@ -571,7 +589,9 @@ ERR1:
 sint8 hif_handle_isr(void)
 {
 	sint8 ret = M2M_SUCCESS;	
-	while (gstrHifCxt.u8Interrupt) {
+	
+	gstrHifCxt.u8Yield = 0;
+	while (gstrHifCxt.u8Interrupt && !gstrHifCxt.u8Yield) {
 		/*must be at that place because of the race of interrupt increment and that decrement*/
 		/*when the interrupt enabled*/
 		gstrHifCxt.u8Interrupt--;

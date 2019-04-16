@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -86,6 +86,8 @@ typedef struct {
   __I  uint32_t Reserved7[47];
   __IO uint32_t MATRIX_WPMR;                /**< \brief (Matrix Offset: 0x01E4) Write Protection Mode Register */
   __I  uint32_t MATRIX_WPSR;                /**< \brief (Matrix Offset: 0x01E8) Write Protection Status Register */
+  __I  uint32_t Reserved8[4];
+  __I  uint32_t MATRIX_VERSION;             /**< \brief (Matrix Offset: 0x01FC) Version Register */
 } Matrix;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- MATRIX_MCFG0 : (MATRIX Offset: 0x0000) Master Configuration Register 0 -------- */
@@ -309,6 +311,11 @@ typedef struct {
 #define MATRIX_WPSR_WPVS (0x1u << 0) /**< \brief (MATRIX_WPSR) Write Protection Violation Status */
 #define MATRIX_WPSR_WPVSRC_Pos 8
 #define MATRIX_WPSR_WPVSRC_Msk (0xffffu << MATRIX_WPSR_WPVSRC_Pos) /**< \brief (MATRIX_WPSR) Write Protection Violation Source */
+/* -------- MATRIX_VERSION : (MATRIX Offset: 0x01FC) Version Register -------- */
+#define MATRIX_VERSION_VERSION_Pos 0
+#define MATRIX_VERSION_VERSION_Msk (0xfffu << MATRIX_VERSION_VERSION_Pos) /**< \brief (MATRIX_VERSION) Version of the Hardware Module */
+#define MATRIX_VERSION_MFN_Pos 16
+#define MATRIX_VERSION_MFN_Msk (0x7u << MATRIX_VERSION_MFN_Pos) /**< \brief (MATRIX_VERSION) Metal Fix Number */
 
 /*@}*/
 

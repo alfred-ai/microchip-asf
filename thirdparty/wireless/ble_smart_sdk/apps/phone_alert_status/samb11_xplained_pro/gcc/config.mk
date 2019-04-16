@@ -68,13 +68,13 @@ CSRCS = \
        thirdparty/wireless/ble_smart_sdk/ble_profiles/pas_client/pas_client.c \
        thirdparty/wireless/ble_smart_sdk/ble_services/ble_mgr/ble_manager.c \
        thirdparty/wireless/ble_smart_sdk/ble_services/phone_alert_status/pas_service.c \
+       thirdparty/wireless/ble_smart_sdk/services/delay/samb11_delay.c \
        thirdparty/wireless/ble_smart_sdk/services/dualtimer/timer_hw.c \
        thirdparty/wireless/ble_smart_sdk/services/gpio/button.c \
        thirdparty/wireless/ble_smart_sdk/services/gpio/led.c \
        thirdparty/wireless/ble_smart_sdk/services/uart/console_serial.c \
        thirdparty/wireless/ble_smart_sdk/src/event_handler.c \
-       thirdparty/wireless/ble_smart_sdk/src/platform_drv.c \
-       thirdparty/wireless/ble_smart_sdk/src/port_from_sdk.c
+       thirdparty/wireless/ble_smart_sdk/src/platform_drv.c
 
 # List of assembler source files.
 ASSRCS = 
@@ -105,6 +105,7 @@ INC_PATH = \
        thirdparty/wireless/ble_smart_sdk/ble_services/ble_mgr \
        thirdparty/wireless/ble_smart_sdk/ble_services/phone_alert_status \
        thirdparty/wireless/ble_smart_sdk/inc              \
+       thirdparty/wireless/ble_smart_sdk/services/delay   \
        thirdparty/wireless/ble_smart_sdk/services/dualtimer \
        thirdparty/wireless/ble_smart_sdk/services/gpio    \
        thirdparty/wireless/ble_smart_sdk/services/uart    \
@@ -161,6 +162,7 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
+       -D BLE_MODULE=SAMB11_MR                            \
        -D BOARD=SAMB11_XPLAINED_PRO                       \
        -D CHIPVERSION_B0                                  \
        -D NENABLE_PTS                                     \

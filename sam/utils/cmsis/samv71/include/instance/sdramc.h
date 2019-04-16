@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -60,6 +60,7 @@
   #define REG_SDRAMC_OCMS                       (0x4008402CU) /**< \brief (SDRAMC) SDRAMC OCMS Register */
   #define REG_SDRAMC_OCMS_KEY1                  (0x40084030U) /**< \brief (SDRAMC) SDRAMC OCMS KEY1 Register */
   #define REG_SDRAMC_OCMS_KEY2                  (0x40084034U) /**< \brief (SDRAMC) SDRAMC OCMS KEY2 Register */
+  #define REG_SDRAMC_VERSION                    (0x400840FCU) /**< \brief (SDRAMC) SDRAMC Version Register */
 #else
   #define REG_SDRAMC_MR        (*(__IO uint32_t*)0x40084000U) /**< \brief (SDRAMC) SDRAMC Mode Register */
   #define REG_SDRAMC_TR        (*(__IO uint32_t*)0x40084004U) /**< \brief (SDRAMC) SDRAMC Refresh Timer Register */
@@ -74,6 +75,7 @@
   #define REG_SDRAMC_OCMS      (*(__IO uint32_t*)0x4008402CU) /**< \brief (SDRAMC) SDRAMC OCMS Register */
   #define REG_SDRAMC_OCMS_KEY1 (*(__O  uint32_t*)0x40084030U) /**< \brief (SDRAMC) SDRAMC OCMS KEY1 Register */
   #define REG_SDRAMC_OCMS_KEY2 (*(__O  uint32_t*)0x40084034U) /**< \brief (SDRAMC) SDRAMC OCMS KEY2 Register */
+  #define REG_SDRAMC_VERSION   (*(__I  uint32_t*)0x400840FCU) /**< \brief (SDRAMC) SDRAMC Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_SDRAMC_INSTANCE_ */

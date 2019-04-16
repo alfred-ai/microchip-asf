@@ -72,7 +72,7 @@ MACROS
 #define SSL_FLAGS_ACTIVE					NBIT0
 #define SSL_FLAGS_BYPASS_X509				NBIT1
 #define SSL_FLAGS_CACHE_SESSION				NBIT4
-#define SSL_FLAGS_CHECK_SNI					NBIT6
+#define SSL_FLAGS_CHECK_CERTNAME			NBIT6
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 PRIVATE DATA TYPES
@@ -320,6 +320,8 @@ static void m2m_ip_cb(uint8 u8OpCode, uint16 u16BufferSize,uint32 u32Address)
 				}
 				else
 				{
+					/* Don't tidy up here. Application must call close().
+					*/
 					strRecvMsg.s16BufferSize	= s16RecvStatus;
 					strRecvMsg.pu8Buffer		= NULL;
 					if(gpfAppSocketCb)
@@ -893,10 +895,7 @@ sint8 close(SOCKET sock)
 		tstrCloseCmd strclose;
 		strclose.sock = sock; 
 		strclose.u16SessionID		= gastrSockets[sock].u16SessionID;
-		
-		gastrSockets[sock].bIsUsed = 0;
-		gastrSockets[sock].u16SessionID =0;
-		
+
 		if(gastrSockets[sock].u8SSLFlags & SSL_FLAGS_ACTIVE)
 		{
 			u8Cmd = SOCKET_CMD_SSL_CLOSE;
@@ -1078,7 +1077,7 @@ Version
 Date
 		9 September 2014
 *********************************************************************/
-sint8 sslSetSockOpt(SOCKET sock, uint8  u8Opt, const void *pvOptVal, uint16 u16OptLen)
+static sint8 sslSetSockOpt(SOCKET sock, uint8  u8Opt, const void *pvOptVal, uint16 u16OptLen)
 {
 	sint8	s8Ret = SOCK_ERR_INVALID_ARG;
 	if(sock < TCP_SOCK_MAX)
@@ -1111,16 +1110,16 @@ sint8 sslSetSockOpt(SOCKET sock, uint8  u8Opt, const void *pvOptVal, uint16 u16O
 				}
 				s8Ret = SOCK_ERR_NO_ERROR;
 			}
-			else if(u8Opt == SO_SSL_ENABLE_SNI_VALIDATION)
+			else if(u8Opt == SO_SSL_ENABLE_CERTNAME_VALIDATION)
 			{
 				int	optVal = *((int*)pvOptVal);
 				if(optVal)
 				{
-					gastrSockets[sock].u8SSLFlags |= SSL_FLAGS_CHECK_SNI;
+					gastrSockets[sock].u8SSLFlags |= SSL_FLAGS_CHECK_CERTNAME;
 				}
 				else
 				{
-					gastrSockets[sock].u8SSLFlags &= ~SSL_FLAGS_CHECK_SNI;
+					gastrSockets[sock].u8SSLFlags &= ~SSL_FLAGS_CHECK_CERTNAME;
 				}
 				s8Ret = SOCK_ERR_NO_ERROR;
 			}
@@ -1188,21 +1187,27 @@ sint8 setsockopt(SOCKET sock, uint8  u8Level, uint8  option_name,
 	{
 		if(u8Level == SOL_SSL_SOCKET)
 		{
-			s8Ret = sslSetSockOpt(sock, option_name, option_value, u16OptionLen);
+			if((option_name == SO_SSL_SNI) || (u16OptionLen == sizeof(int)))
+			{
+				s8Ret = sslSetSockOpt(sock, option_name, option_value, u16OptionLen);
+			}
 		}
 		else
 		{
-			uint8	u8Cmd = SOCKET_CMD_SET_SOCKET_OPTION;
-			tstrSetSocketOptCmd strSetSockOpt;
-			strSetSockOpt.u8Option=option_name;
-			strSetSockOpt.sock = sock; 
-			strSetSockOpt.u32OptionValue = *(uint32*)option_value;
-			strSetSockOpt.u16SessionID		= gastrSockets[sock].u16SessionID;
-
-			s8Ret = SOCKET_REQUEST(u8Cmd, (uint8*)&strSetSockOpt, sizeof(tstrSetSocketOptCmd), NULL,0, 0);
-			if(s8Ret != SOCK_ERR_NO_ERROR)
+			if(u16OptionLen == sizeof(uint32))
 			{
-				s8Ret = SOCK_ERR_INVALID;
+				uint8	u8Cmd = SOCKET_CMD_SET_SOCKET_OPTION;
+				tstrSetSocketOptCmd strSetSockOpt;
+				strSetSockOpt.u8Option=option_name;
+				strSetSockOpt.sock = sock; 
+				strSetSockOpt.u32OptionValue = *(uint32*)option_value;
+				strSetSockOpt.u16SessionID		= gastrSockets[sock].u16SessionID;
+
+				s8Ret = SOCKET_REQUEST(u8Cmd, (uint8*)&strSetSockOpt, sizeof(tstrSetSocketOptCmd), NULL,0, 0);
+				if(s8Ret != SOCK_ERR_NO_ERROR)
+				{
+					s8Ret = SOCK_ERR_INVALID;
+				}
 			}
 		}
 	}
@@ -1228,8 +1233,8 @@ Date
 *********************************************************************/
 sint8 getsockopt(SOCKET sock, uint8 u8Level, uint8 u8OptName, const void *pvOptValue, uint8* pu8OptLen)
 {
-	/* TBD */
-	return M2M_SUCCESS;
+	// This is not implemented so return a value that will cause failure should this be used.
+	return SOCK_ERR_INVALID_ARG;	
 }
 /*********************************************************************
 Function

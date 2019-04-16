@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -66,6 +66,8 @@ typedef struct {
   __IO uint32_t UART_CMPR;     /**< \brief (Uart Offset: 0x0024) Comparison Register */
   __I  uint32_t Reserved1[47];
   __IO uint32_t UART_WPMR;     /**< \brief (Uart Offset: 0x00E4) Write Protection Mode Register */
+  __I  uint32_t Reserved2[5];
+  __I  uint32_t UART_VERSION;  /**< \brief (Uart Offset: 0x00FC) Version Register */
 } Uart;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- UART_CR : (UART Offset: 0x0000) Control Register -------- */
@@ -77,6 +79,7 @@ typedef struct {
 #define UART_CR_TXDIS (0x1u << 7) /**< \brief (UART_CR) Transmitter Disable */
 #define UART_CR_RSTSTA (0x1u << 8) /**< \brief (UART_CR) Reset Status */
 #define UART_CR_REQCLR (0x1u << 12) /**< \brief (UART_CR) Request Clear */
+#define UART_CR_DBGE (0x1u << 15) /**< \brief (UART_CR) Debug Enable */
 /* -------- UART_MR : (UART Offset: 0x0004) Mode Register -------- */
 #define UART_MR_FILTER (0x1u << 4) /**< \brief (UART_MR) Receiver Digital Filter */
 #define   UART_MR_FILTER_DISABLED (0x0u << 4) /**< \brief (UART_MR) UART does not filter the receive line. */
@@ -131,6 +134,9 @@ typedef struct {
 #define UART_SR_PARE (0x1u << 7) /**< \brief (UART_SR) Parity Error */
 #define UART_SR_TXEMPTY (0x1u << 9) /**< \brief (UART_SR) Transmitter Empty */
 #define UART_SR_CMP (0x1u << 15) /**< \brief (UART_SR) Comparison Match */
+#define UART_SR_SWES (0x1u << 21) /**< \brief (UART_SR) SleepWalking Enable Status */
+#define UART_SR_CLKREQ (0x1u << 22) /**< \brief (UART_SR) Clock Request */
+#define UART_SR_WKUPREQ (0x1u << 23) /**< \brief (UART_SR) Wake-Up Request */
 /* -------- UART_RHR : (UART Offset: 0x0018) Receive Holding Register -------- */
 #define UART_RHR_RXCHR_Pos 0
 #define UART_RHR_RXCHR_Msk (0xffu << UART_RHR_RXCHR_Pos) /**< \brief (UART_RHR) Received Character */
@@ -159,6 +165,11 @@ typedef struct {
 #define UART_WPMR_WPKEY_Msk (0xffffffu << UART_WPMR_WPKEY_Pos) /**< \brief (UART_WPMR) Write Protection Key */
 #define UART_WPMR_WPKEY(value) ((UART_WPMR_WPKEY_Msk & ((value) << UART_WPMR_WPKEY_Pos)))
 #define   UART_WPMR_WPKEY_PASSWD (0x554152u << 8) /**< \brief (UART_WPMR) Writing any other value in this field aborts the write operation.Always reads as 0. */
+/* -------- UART_VERSION : (UART Offset: 0x00FC) Version Register -------- */
+#define UART_VERSION_VERSION_Pos 0
+#define UART_VERSION_VERSION_Msk (0xfffu << UART_VERSION_VERSION_Pos) /**< \brief (UART_VERSION) Hardware Module Version */
+#define UART_VERSION_MFN_Pos 16
+#define UART_VERSION_MFN_Msk (0x7u << UART_VERSION_MFN_Pos) /**< \brief (UART_VERSION) Metal Fix Number */
 
 /*@}*/
 

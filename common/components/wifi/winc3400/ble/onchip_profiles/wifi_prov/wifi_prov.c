@@ -178,7 +178,7 @@ uint8_t ble_prov_start(void)
 {
 	// Set bonding PIN and start provisioning
 	uint8_t pin[6] = CONF_BLE_PIN;
-	M2M_INFO("BLE provisioning started\n");
+	M2M_INFO("BLE provisioning started\r\n");
 	if(AT_BLE_SUCCESS != wifiprov_start(pin, 6))
 	{
 		M2M_ERR("Failed to start BLE provisioning\n");

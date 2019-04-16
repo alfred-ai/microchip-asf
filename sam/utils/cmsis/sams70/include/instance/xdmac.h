@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -400,10 +400,11 @@
   #define REG_XDMAC_CDS_MSP23                  (0x4007863CU) /**< \brief (XDMAC) Channel Data Stride Memory Set Pattern (chid = 23) */
   #define REG_XDMAC_CSUS23                     (0x40078640U) /**< \brief (XDMAC) Channel Source Microblock Stride (chid = 23) */
   #define REG_XDMAC_CDUS23                     (0x40078644U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 23) */
+  #define REG_XDMAC_VERSION                    (0x40078FFCU) /**< \brief (XDMAC) XDMAC Version Register */
 #else
-  #define REG_XDMAC_GTYPE     (*(__IO uint32_t*)0x40078000U) /**< \brief (XDMAC) Global Type Register */
+  #define REG_XDMAC_GTYPE     (*(__I  uint32_t*)0x40078000U) /**< \brief (XDMAC) Global Type Register */
   #define REG_XDMAC_GCFG      (*(__I  uint32_t*)0x40078004U) /**< \brief (XDMAC) Global Configuration Register */
-  #define REG_XDMAC_GWAC      (*(__IO uint32_t*)0x40078008U) /**< \brief (XDMAC) Global Weighted Arbiter Configuration Register */
+  #define REG_XDMAC_GWAC      (*(__I  uint32_t*)0x40078008U) /**< \brief (XDMAC) Global Weighted Arbiter Configuration Register */
   #define REG_XDMAC_GIE       (*(__O  uint32_t*)0x4007800CU) /**< \brief (XDMAC) Global Interrupt Enable Register */
   #define REG_XDMAC_GID       (*(__O  uint32_t*)0x40078010U) /**< \brief (XDMAC) Global Interrupt Disable Register */
   #define REG_XDMAC_GIM       (*(__I  uint32_t*)0x40078014U) /**< \brief (XDMAC) Global Interrupt Mask Register */
@@ -420,7 +421,7 @@
   #define REG_XDMAC_GSWF      (*(__O  uint32_t*)0x40078040U) /**< \brief (XDMAC) Global Channel Software Flush Request Register */
   #define REG_XDMAC_CIE0      (*(__O  uint32_t*)0x40078050U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 0) */
   #define REG_XDMAC_CID0      (*(__O  uint32_t*)0x40078054U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 0) */
-  #define REG_XDMAC_CIM0      (*(__O  uint32_t*)0x40078058U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 0) */
+  #define REG_XDMAC_CIM0      (*(__I  uint32_t*)0x40078058U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 0) */
   #define REG_XDMAC_CIS0      (*(__I  uint32_t*)0x4007805CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 0) */
   #define REG_XDMAC_CSA0      (*(__IO uint32_t*)0x40078060U) /**< \brief (XDMAC) Channel Source Address Register (chid = 0) */
   #define REG_XDMAC_CDA0      (*(__IO uint32_t*)0x40078064U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 0) */
@@ -434,7 +435,7 @@
   #define REG_XDMAC_CDUS0     (*(__IO uint32_t*)0x40078084U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 0) */
   #define REG_XDMAC_CIE1      (*(__O  uint32_t*)0x40078090U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 1) */
   #define REG_XDMAC_CID1      (*(__O  uint32_t*)0x40078094U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 1) */
-  #define REG_XDMAC_CIM1      (*(__O  uint32_t*)0x40078098U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 1) */
+  #define REG_XDMAC_CIM1      (*(__I  uint32_t*)0x40078098U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 1) */
   #define REG_XDMAC_CIS1      (*(__I  uint32_t*)0x4007809CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 1) */
   #define REG_XDMAC_CSA1      (*(__IO uint32_t*)0x400780A0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 1) */
   #define REG_XDMAC_CDA1      (*(__IO uint32_t*)0x400780A4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 1) */
@@ -448,7 +449,7 @@
   #define REG_XDMAC_CDUS1     (*(__IO uint32_t*)0x400780C4U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 1) */
   #define REG_XDMAC_CIE2      (*(__O  uint32_t*)0x400780D0U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 2) */
   #define REG_XDMAC_CID2      (*(__O  uint32_t*)0x400780D4U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 2) */
-  #define REG_XDMAC_CIM2      (*(__O  uint32_t*)0x400780D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 2) */
+  #define REG_XDMAC_CIM2      (*(__I  uint32_t*)0x400780D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 2) */
   #define REG_XDMAC_CIS2      (*(__I  uint32_t*)0x400780DCU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 2) */
   #define REG_XDMAC_CSA2      (*(__IO uint32_t*)0x400780E0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 2) */
   #define REG_XDMAC_CDA2      (*(__IO uint32_t*)0x400780E4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 2) */
@@ -462,7 +463,7 @@
   #define REG_XDMAC_CDUS2     (*(__IO uint32_t*)0x40078104U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 2) */
   #define REG_XDMAC_CIE3      (*(__O  uint32_t*)0x40078110U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 3) */
   #define REG_XDMAC_CID3      (*(__O  uint32_t*)0x40078114U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 3) */
-  #define REG_XDMAC_CIM3      (*(__O  uint32_t*)0x40078118U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 3) */
+  #define REG_XDMAC_CIM3      (*(__I  uint32_t*)0x40078118U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 3) */
   #define REG_XDMAC_CIS3      (*(__I  uint32_t*)0x4007811CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 3) */
   #define REG_XDMAC_CSA3      (*(__IO uint32_t*)0x40078120U) /**< \brief (XDMAC) Channel Source Address Register (chid = 3) */
   #define REG_XDMAC_CDA3      (*(__IO uint32_t*)0x40078124U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 3) */
@@ -476,7 +477,7 @@
   #define REG_XDMAC_CDUS3     (*(__IO uint32_t*)0x40078144U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 3) */
   #define REG_XDMAC_CIE4      (*(__O  uint32_t*)0x40078150U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 4) */
   #define REG_XDMAC_CID4      (*(__O  uint32_t*)0x40078154U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 4) */
-  #define REG_XDMAC_CIM4      (*(__O  uint32_t*)0x40078158U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 4) */
+  #define REG_XDMAC_CIM4      (*(__I  uint32_t*)0x40078158U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 4) */
   #define REG_XDMAC_CIS4      (*(__I  uint32_t*)0x4007815CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 4) */
   #define REG_XDMAC_CSA4      (*(__IO uint32_t*)0x40078160U) /**< \brief (XDMAC) Channel Source Address Register (chid = 4) */
   #define REG_XDMAC_CDA4      (*(__IO uint32_t*)0x40078164U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 4) */
@@ -490,7 +491,7 @@
   #define REG_XDMAC_CDUS4     (*(__IO uint32_t*)0x40078184U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 4) */
   #define REG_XDMAC_CIE5      (*(__O  uint32_t*)0x40078190U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 5) */
   #define REG_XDMAC_CID5      (*(__O  uint32_t*)0x40078194U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 5) */
-  #define REG_XDMAC_CIM5      (*(__O  uint32_t*)0x40078198U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 5) */
+  #define REG_XDMAC_CIM5      (*(__I  uint32_t*)0x40078198U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 5) */
   #define REG_XDMAC_CIS5      (*(__I  uint32_t*)0x4007819CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 5) */
   #define REG_XDMAC_CSA5      (*(__IO uint32_t*)0x400781A0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 5) */
   #define REG_XDMAC_CDA5      (*(__IO uint32_t*)0x400781A4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 5) */
@@ -504,7 +505,7 @@
   #define REG_XDMAC_CDUS5     (*(__IO uint32_t*)0x400781C4U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 5) */
   #define REG_XDMAC_CIE6      (*(__O  uint32_t*)0x400781D0U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 6) */
   #define REG_XDMAC_CID6      (*(__O  uint32_t*)0x400781D4U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 6) */
-  #define REG_XDMAC_CIM6      (*(__O  uint32_t*)0x400781D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 6) */
+  #define REG_XDMAC_CIM6      (*(__I  uint32_t*)0x400781D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 6) */
   #define REG_XDMAC_CIS6      (*(__I  uint32_t*)0x400781DCU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 6) */
   #define REG_XDMAC_CSA6      (*(__IO uint32_t*)0x400781E0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 6) */
   #define REG_XDMAC_CDA6      (*(__IO uint32_t*)0x400781E4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 6) */
@@ -518,7 +519,7 @@
   #define REG_XDMAC_CDUS6     (*(__IO uint32_t*)0x40078204U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 6) */
   #define REG_XDMAC_CIE7      (*(__O  uint32_t*)0x40078210U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 7) */
   #define REG_XDMAC_CID7      (*(__O  uint32_t*)0x40078214U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 7) */
-  #define REG_XDMAC_CIM7      (*(__O  uint32_t*)0x40078218U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 7) */
+  #define REG_XDMAC_CIM7      (*(__I  uint32_t*)0x40078218U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 7) */
   #define REG_XDMAC_CIS7      (*(__I  uint32_t*)0x4007821CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 7) */
   #define REG_XDMAC_CSA7      (*(__IO uint32_t*)0x40078220U) /**< \brief (XDMAC) Channel Source Address Register (chid = 7) */
   #define REG_XDMAC_CDA7      (*(__IO uint32_t*)0x40078224U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 7) */
@@ -532,7 +533,7 @@
   #define REG_XDMAC_CDUS7     (*(__IO uint32_t*)0x40078244U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 7) */
   #define REG_XDMAC_CIE8      (*(__O  uint32_t*)0x40078250U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 8) */
   #define REG_XDMAC_CID8      (*(__O  uint32_t*)0x40078254U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 8) */
-  #define REG_XDMAC_CIM8      (*(__O  uint32_t*)0x40078258U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 8) */
+  #define REG_XDMAC_CIM8      (*(__I  uint32_t*)0x40078258U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 8) */
   #define REG_XDMAC_CIS8      (*(__I  uint32_t*)0x4007825CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 8) */
   #define REG_XDMAC_CSA8      (*(__IO uint32_t*)0x40078260U) /**< \brief (XDMAC) Channel Source Address Register (chid = 8) */
   #define REG_XDMAC_CDA8      (*(__IO uint32_t*)0x40078264U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 8) */
@@ -546,7 +547,7 @@
   #define REG_XDMAC_CDUS8     (*(__IO uint32_t*)0x40078284U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 8) */
   #define REG_XDMAC_CIE9      (*(__O  uint32_t*)0x40078290U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 9) */
   #define REG_XDMAC_CID9      (*(__O  uint32_t*)0x40078294U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 9) */
-  #define REG_XDMAC_CIM9      (*(__O  uint32_t*)0x40078298U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 9) */
+  #define REG_XDMAC_CIM9      (*(__I  uint32_t*)0x40078298U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 9) */
   #define REG_XDMAC_CIS9      (*(__I  uint32_t*)0x4007829CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 9) */
   #define REG_XDMAC_CSA9      (*(__IO uint32_t*)0x400782A0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 9) */
   #define REG_XDMAC_CDA9      (*(__IO uint32_t*)0x400782A4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 9) */
@@ -560,7 +561,7 @@
   #define REG_XDMAC_CDUS9     (*(__IO uint32_t*)0x400782C4U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 9) */
   #define REG_XDMAC_CIE10     (*(__O  uint32_t*)0x400782D0U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 10) */
   #define REG_XDMAC_CID10     (*(__O  uint32_t*)0x400782D4U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 10) */
-  #define REG_XDMAC_CIM10     (*(__O  uint32_t*)0x400782D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 10) */
+  #define REG_XDMAC_CIM10     (*(__I  uint32_t*)0x400782D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 10) */
   #define REG_XDMAC_CIS10     (*(__I  uint32_t*)0x400782DCU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 10) */
   #define REG_XDMAC_CSA10     (*(__IO uint32_t*)0x400782E0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 10) */
   #define REG_XDMAC_CDA10     (*(__IO uint32_t*)0x400782E4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 10) */
@@ -574,7 +575,7 @@
   #define REG_XDMAC_CDUS10    (*(__IO uint32_t*)0x40078304U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 10) */
   #define REG_XDMAC_CIE11     (*(__O  uint32_t*)0x40078310U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 11) */
   #define REG_XDMAC_CID11     (*(__O  uint32_t*)0x40078314U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 11) */
-  #define REG_XDMAC_CIM11     (*(__O  uint32_t*)0x40078318U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 11) */
+  #define REG_XDMAC_CIM11     (*(__I  uint32_t*)0x40078318U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 11) */
   #define REG_XDMAC_CIS11     (*(__I  uint32_t*)0x4007831CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 11) */
   #define REG_XDMAC_CSA11     (*(__IO uint32_t*)0x40078320U) /**< \brief (XDMAC) Channel Source Address Register (chid = 11) */
   #define REG_XDMAC_CDA11     (*(__IO uint32_t*)0x40078324U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 11) */
@@ -588,7 +589,7 @@
   #define REG_XDMAC_CDUS11    (*(__IO uint32_t*)0x40078344U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 11) */
   #define REG_XDMAC_CIE12     (*(__O  uint32_t*)0x40078350U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 12) */
   #define REG_XDMAC_CID12     (*(__O  uint32_t*)0x40078354U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 12) */
-  #define REG_XDMAC_CIM12     (*(__O  uint32_t*)0x40078358U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 12) */
+  #define REG_XDMAC_CIM12     (*(__I  uint32_t*)0x40078358U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 12) */
   #define REG_XDMAC_CIS12     (*(__I  uint32_t*)0x4007835CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 12) */
   #define REG_XDMAC_CSA12     (*(__IO uint32_t*)0x40078360U) /**< \brief (XDMAC) Channel Source Address Register (chid = 12) */
   #define REG_XDMAC_CDA12     (*(__IO uint32_t*)0x40078364U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 12) */
@@ -602,7 +603,7 @@
   #define REG_XDMAC_CDUS12    (*(__IO uint32_t*)0x40078384U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 12) */
   #define REG_XDMAC_CIE13     (*(__O  uint32_t*)0x40078390U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 13) */
   #define REG_XDMAC_CID13     (*(__O  uint32_t*)0x40078394U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 13) */
-  #define REG_XDMAC_CIM13     (*(__O  uint32_t*)0x40078398U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 13) */
+  #define REG_XDMAC_CIM13     (*(__I  uint32_t*)0x40078398U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 13) */
   #define REG_XDMAC_CIS13     (*(__I  uint32_t*)0x4007839CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 13) */
   #define REG_XDMAC_CSA13     (*(__IO uint32_t*)0x400783A0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 13) */
   #define REG_XDMAC_CDA13     (*(__IO uint32_t*)0x400783A4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 13) */
@@ -616,7 +617,7 @@
   #define REG_XDMAC_CDUS13    (*(__IO uint32_t*)0x400783C4U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 13) */
   #define REG_XDMAC_CIE14     (*(__O  uint32_t*)0x400783D0U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 14) */
   #define REG_XDMAC_CID14     (*(__O  uint32_t*)0x400783D4U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 14) */
-  #define REG_XDMAC_CIM14     (*(__O  uint32_t*)0x400783D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 14) */
+  #define REG_XDMAC_CIM14     (*(__I  uint32_t*)0x400783D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 14) */
   #define REG_XDMAC_CIS14     (*(__I  uint32_t*)0x400783DCU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 14) */
   #define REG_XDMAC_CSA14     (*(__IO uint32_t*)0x400783E0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 14) */
   #define REG_XDMAC_CDA14     (*(__IO uint32_t*)0x400783E4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 14) */
@@ -630,7 +631,7 @@
   #define REG_XDMAC_CDUS14    (*(__IO uint32_t*)0x40078404U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 14) */
   #define REG_XDMAC_CIE15     (*(__O  uint32_t*)0x40078410U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 15) */
   #define REG_XDMAC_CID15     (*(__O  uint32_t*)0x40078414U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 15) */
-  #define REG_XDMAC_CIM15     (*(__O  uint32_t*)0x40078418U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 15) */
+  #define REG_XDMAC_CIM15     (*(__I  uint32_t*)0x40078418U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 15) */
   #define REG_XDMAC_CIS15     (*(__I  uint32_t*)0x4007841CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 15) */
   #define REG_XDMAC_CSA15     (*(__IO uint32_t*)0x40078420U) /**< \brief (XDMAC) Channel Source Address Register (chid = 15) */
   #define REG_XDMAC_CDA15     (*(__IO uint32_t*)0x40078424U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 15) */
@@ -644,7 +645,7 @@
   #define REG_XDMAC_CDUS15    (*(__IO uint32_t*)0x40078444U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 15) */
   #define REG_XDMAC_CIE16     (*(__O  uint32_t*)0x40078450U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 16) */
   #define REG_XDMAC_CID16     (*(__O  uint32_t*)0x40078454U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 16) */
-  #define REG_XDMAC_CIM16     (*(__O  uint32_t*)0x40078458U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 16) */
+  #define REG_XDMAC_CIM16     (*(__I  uint32_t*)0x40078458U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 16) */
   #define REG_XDMAC_CIS16     (*(__I  uint32_t*)0x4007845CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 16) */
   #define REG_XDMAC_CSA16     (*(__IO uint32_t*)0x40078460U) /**< \brief (XDMAC) Channel Source Address Register (chid = 16) */
   #define REG_XDMAC_CDA16     (*(__IO uint32_t*)0x40078464U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 16) */
@@ -658,7 +659,7 @@
   #define REG_XDMAC_CDUS16    (*(__IO uint32_t*)0x40078484U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 16) */
   #define REG_XDMAC_CIE17     (*(__O  uint32_t*)0x40078490U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 17) */
   #define REG_XDMAC_CID17     (*(__O  uint32_t*)0x40078494U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 17) */
-  #define REG_XDMAC_CIM17     (*(__O  uint32_t*)0x40078498U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 17) */
+  #define REG_XDMAC_CIM17     (*(__I  uint32_t*)0x40078498U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 17) */
   #define REG_XDMAC_CIS17     (*(__I  uint32_t*)0x4007849CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 17) */
   #define REG_XDMAC_CSA17     (*(__IO uint32_t*)0x400784A0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 17) */
   #define REG_XDMAC_CDA17     (*(__IO uint32_t*)0x400784A4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 17) */
@@ -672,7 +673,7 @@
   #define REG_XDMAC_CDUS17    (*(__IO uint32_t*)0x400784C4U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 17) */
   #define REG_XDMAC_CIE18     (*(__O  uint32_t*)0x400784D0U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 18) */
   #define REG_XDMAC_CID18     (*(__O  uint32_t*)0x400784D4U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 18) */
-  #define REG_XDMAC_CIM18     (*(__O  uint32_t*)0x400784D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 18) */
+  #define REG_XDMAC_CIM18     (*(__I  uint32_t*)0x400784D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 18) */
   #define REG_XDMAC_CIS18     (*(__I  uint32_t*)0x400784DCU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 18) */
   #define REG_XDMAC_CSA18     (*(__IO uint32_t*)0x400784E0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 18) */
   #define REG_XDMAC_CDA18     (*(__IO uint32_t*)0x400784E4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 18) */
@@ -686,7 +687,7 @@
   #define REG_XDMAC_CDUS18    (*(__IO uint32_t*)0x40078504U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 18) */
   #define REG_XDMAC_CIE19     (*(__O  uint32_t*)0x40078510U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 19) */
   #define REG_XDMAC_CID19     (*(__O  uint32_t*)0x40078514U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 19) */
-  #define REG_XDMAC_CIM19     (*(__O  uint32_t*)0x40078518U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 19) */
+  #define REG_XDMAC_CIM19     (*(__I  uint32_t*)0x40078518U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 19) */
   #define REG_XDMAC_CIS19     (*(__I  uint32_t*)0x4007851CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 19) */
   #define REG_XDMAC_CSA19     (*(__IO uint32_t*)0x40078520U) /**< \brief (XDMAC) Channel Source Address Register (chid = 19) */
   #define REG_XDMAC_CDA19     (*(__IO uint32_t*)0x40078524U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 19) */
@@ -700,7 +701,7 @@
   #define REG_XDMAC_CDUS19    (*(__IO uint32_t*)0x40078544U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 19) */
   #define REG_XDMAC_CIE20     (*(__O  uint32_t*)0x40078550U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 20) */
   #define REG_XDMAC_CID20     (*(__O  uint32_t*)0x40078554U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 20) */
-  #define REG_XDMAC_CIM20     (*(__O  uint32_t*)0x40078558U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 20) */
+  #define REG_XDMAC_CIM20     (*(__I  uint32_t*)0x40078558U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 20) */
   #define REG_XDMAC_CIS20     (*(__I  uint32_t*)0x4007855CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 20) */
   #define REG_XDMAC_CSA20     (*(__IO uint32_t*)0x40078560U) /**< \brief (XDMAC) Channel Source Address Register (chid = 20) */
   #define REG_XDMAC_CDA20     (*(__IO uint32_t*)0x40078564U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 20) */
@@ -714,7 +715,7 @@
   #define REG_XDMAC_CDUS20    (*(__IO uint32_t*)0x40078584U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 20) */
   #define REG_XDMAC_CIE21     (*(__O  uint32_t*)0x40078590U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 21) */
   #define REG_XDMAC_CID21     (*(__O  uint32_t*)0x40078594U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 21) */
-  #define REG_XDMAC_CIM21     (*(__O  uint32_t*)0x40078598U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 21) */
+  #define REG_XDMAC_CIM21     (*(__I  uint32_t*)0x40078598U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 21) */
   #define REG_XDMAC_CIS21     (*(__I  uint32_t*)0x4007859CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 21) */
   #define REG_XDMAC_CSA21     (*(__IO uint32_t*)0x400785A0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 21) */
   #define REG_XDMAC_CDA21     (*(__IO uint32_t*)0x400785A4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 21) */
@@ -728,7 +729,7 @@
   #define REG_XDMAC_CDUS21    (*(__IO uint32_t*)0x400785C4U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 21) */
   #define REG_XDMAC_CIE22     (*(__O  uint32_t*)0x400785D0U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 22) */
   #define REG_XDMAC_CID22     (*(__O  uint32_t*)0x400785D4U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 22) */
-  #define REG_XDMAC_CIM22     (*(__O  uint32_t*)0x400785D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 22) */
+  #define REG_XDMAC_CIM22     (*(__I  uint32_t*)0x400785D8U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 22) */
   #define REG_XDMAC_CIS22     (*(__I  uint32_t*)0x400785DCU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 22) */
   #define REG_XDMAC_CSA22     (*(__IO uint32_t*)0x400785E0U) /**< \brief (XDMAC) Channel Source Address Register (chid = 22) */
   #define REG_XDMAC_CDA22     (*(__IO uint32_t*)0x400785E4U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 22) */
@@ -742,7 +743,7 @@
   #define REG_XDMAC_CDUS22    (*(__IO uint32_t*)0x40078604U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 22) */
   #define REG_XDMAC_CIE23     (*(__O  uint32_t*)0x40078610U) /**< \brief (XDMAC) Channel Interrupt Enable Register (chid = 23) */
   #define REG_XDMAC_CID23     (*(__O  uint32_t*)0x40078614U) /**< \brief (XDMAC) Channel Interrupt Disable Register (chid = 23) */
-  #define REG_XDMAC_CIM23     (*(__O  uint32_t*)0x40078618U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 23) */
+  #define REG_XDMAC_CIM23     (*(__I  uint32_t*)0x40078618U) /**< \brief (XDMAC) Channel Interrupt Mask Register (chid = 23) */
   #define REG_XDMAC_CIS23     (*(__I  uint32_t*)0x4007861CU) /**< \brief (XDMAC) Channel Interrupt Status Register (chid = 23) */
   #define REG_XDMAC_CSA23     (*(__IO uint32_t*)0x40078620U) /**< \brief (XDMAC) Channel Source Address Register (chid = 23) */
   #define REG_XDMAC_CDA23     (*(__IO uint32_t*)0x40078624U) /**< \brief (XDMAC) Channel Destination Address Register (chid = 23) */
@@ -754,6 +755,7 @@
   #define REG_XDMAC_CDS_MSP23 (*(__IO uint32_t*)0x4007863CU) /**< \brief (XDMAC) Channel Data Stride Memory Set Pattern (chid = 23) */
   #define REG_XDMAC_CSUS23    (*(__IO uint32_t*)0x40078640U) /**< \brief (XDMAC) Channel Source Microblock Stride (chid = 23) */
   #define REG_XDMAC_CDUS23    (*(__IO uint32_t*)0x40078644U) /**< \brief (XDMAC) Channel Destination Microblock Stride (chid = 23) */
+  #define REG_XDMAC_VERSION   (*(__IO uint32_t*)0x40078FFCU) /**< \brief (XDMAC) XDMAC Version Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMS70_XDMAC_INSTANCE_ */

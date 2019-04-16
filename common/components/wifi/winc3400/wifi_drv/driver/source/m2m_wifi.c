@@ -44,7 +44,6 @@
 #include "driver/source/nmasic.h"
 
 static volatile uint8 gu8ChNum;
-static volatile uint8 gu8scanInProgress = 0;
 static tpfAppWifiCb gpfAppWifiCb = NULL;
 
 
@@ -157,7 +156,6 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint32 u32Addr)
 	else if (u8OpCode == M2M_WIFI_RESP_SCAN_DONE)
 	{
 		tstrM2mScanDone strState;
-		gu8scanInProgress = 0;
 		if(hif_receive(u32Addr, (uint8*)&strState, sizeof(tstrM2mScanDone), 0) == M2M_SUCCESS)
 		{
 			gu8ChNum = strState.u8NumofCh;
@@ -426,25 +424,25 @@ static sint8 m2m_validate_scan_options(tstrM2MScanOption* ptstrM2MScanOption)
 	else
 	{
 		/* Check for valid No of slots */
-		 if(ptstrM2MScanOption->u8NumOfSlot < 1)
+		 if(ptstrM2MScanOption->u8NumOfSlot == 0)
 		{
 			M2M_ERR("INVALID No of scan slots!\n");
 			s8Ret = M2M_ERR_FAIL;
 		}	
 		/* Check for valid time of slots */
-		 if(ptstrM2MScanOption->u8SlotTime < 1)
+		 if((ptstrM2MScanOption->u8SlotTime < 10) || (ptstrM2MScanOption->u8SlotTime > 250))
 		{
 			M2M_ERR("INVALID scan slot time!\n");
 			s8Ret = M2M_ERR_FAIL;
 		}	
 		/* Check for valid No of probe requests per slot */
-		 if((ptstrM2MScanOption->u8ProbesPerSlot < 0)||(ptstrM2MScanOption->u8ProbesPerSlot > M2M_SCAN_DEFAULT_NUM_PROBE))
+		 if((ptstrM2MScanOption->u8ProbesPerSlot == 0) || (ptstrM2MScanOption->u8ProbesPerSlot > M2M_SCAN_DEFAULT_NUM_PROBE))
 		{
 			M2M_ERR("INVALID No of probe requests per scan slot\n");
 			s8Ret = M2M_ERR_FAIL;
 		}	
 		/* Check for valid RSSI threshold */
-		 if((ptstrM2MScanOption->s8RssiThresh  < -99) || (ptstrM2MScanOption->s8RssiThresh >= 0))
+		 if(ptstrM2MScanOption->s8RssiThresh >= 0)
 		{
 			M2M_ERR("INVALID RSSI threshold %d \n",ptstrM2MScanOption->s8RssiThresh);
 			s8Ret = M2M_ERR_FAIL;
@@ -495,7 +493,6 @@ sint8 m2m_wifi_init_start(tstrWifiInitParam * param)
 #ifdef CONF_MGMT
 	gpfAppMonCb  = param->pfAppMonCb;
 #endif
-	gu8scanInProgress = 0;
 
 	/* Apply device specific initialization. */
 	ret = nm_drv_init_start(NULL);
@@ -630,7 +627,6 @@ sint8 m2m_wifi_connect_sc(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, void *
 			goto ERR1;
 		}
 	}
-
 
 	m2m_memcpy(strConnect.au8SSID, (uint8*)pcSsid, u8SsidLen);
 	strConnect.au8SSID[u8SsidLen]	= 0;
@@ -783,26 +779,33 @@ sint8 m2m_wifi_request_scan(uint8 ch)
 {
 	sint8	s8Ret = M2M_SUCCESS;
 
-	if(!gu8scanInProgress)
+	if(((ch >= M2M_WIFI_CH_1) && (ch <= M2M_WIFI_CH_14)) || (ch == M2M_WIFI_CH_ALL))
 	{
-		if(((ch >= M2M_WIFI_CH_1) && (ch <= M2M_WIFI_CH_14)) || (ch == M2M_WIFI_CH_ALL))
-		{
-			tstrM2MScan strtmp;
-			strtmp.u8ChNum = ch;
-			s8Ret = hif_send(M2M_REQ_GROUP_WIFI, M2M_WIFI_REQ_SCAN, (uint8*)&strtmp, sizeof(tstrM2MScan),NULL, 0,0);
-			if(s8Ret == M2M_SUCCESS)
-			{
-				gu8scanInProgress = 1;
-			}
-		}
-		else
-		{
-			s8Ret = M2M_ERR_INVALID_ARG;
-		}
+		tstrM2MScan strtmp;
+		strtmp.u8ChNum = ch;
+		s8Ret = hif_send(M2M_REQ_GROUP_WIFI, M2M_WIFI_REQ_SCAN, (uint8*)&strtmp, sizeof(tstrM2MScan),NULL, 0,0);
 	}
 	else
 	{
-		s8Ret = M2M_ERR_SCAN_IN_PROGRESS;
+		s8Ret = M2M_ERR_INVALID_ARG;
+	}
+	return s8Ret;
+}
+
+sint8 m2m_wifi_request_scan_passive(uint8 ch)
+{
+	sint8	s8Ret = M2M_SUCCESS;
+
+	if(((ch >= M2M_WIFI_CH_1) && (ch <= M2M_WIFI_CH_14)) || (ch == M2M_WIFI_CH_ALL))
+	{
+		tstrM2MScan strtmp;
+		strtmp.u8ChNum = ch;
+
+		s8Ret = hif_send(M2M_REQ_GROUP_WIFI, M2M_WIFI_REQ_PASSIVE_SCAN, (uint8*)&strtmp, sizeof(tstrM2MScan),NULL, 0,0);
+	}
+	else
+	{
+		s8Ret = M2M_ERR_INVALID_ARG;
 	}
 	return s8Ret;
 }
@@ -810,9 +813,6 @@ sint8 m2m_wifi_wps(uint8 u8TriggerType,const char  *pcPinNumber)
 {
 	tstrM2MWPSConnect strtmp;
 
-	/* Stop Scan if it is ongoing.
-	*/
-	gu8scanInProgress = 0;
 	strtmp.u8TriggerType = u8TriggerType;
 	/*If WPS is using PIN METHOD*/
 	if (u8TriggerType == WPS_PIN_TRIGGER)
@@ -1043,13 +1043,13 @@ uint8 m2m_wifi_get_sleep_mode(void)
 }
 /*!
 @fn			NMI_API sint8 m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn);
-@brief      Set the power saving mode for the WINC1500. 
+@brief      Set the power saving mode for the WINC3400. 
 @param [in]	PsTyp
 			Desired power saving mode. Supported types are defined in tenuPowerSaveModes.
 @param [in]	BcastEn
 			Broadcast reception enable flag. 
-			If it is 1, the WINC1500 must be awake each DTIM Beacon for receiving Broadcast traffic.
-			If it is 0, the WINC1500 will not wakeup at the DTIM Beacon, but its wakeup depends only 
+			If it is 1, the WINC3400 must be awake each DTIM Beacon for receiving Broadcast traffic.
+			If it is 0, the WINC3400 will not wakeup at the DTIM Beacon, but its wakeup depends only 
 			on the the configured Listen Interval. 
 @return     The function SHALL return 0 for success and a negative value otherwise.
 @sa			tenuPowerSaveModes
@@ -1068,12 +1068,12 @@ sint8 m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn)
 }
 /*!
 @fn	        NMI_API sint8 m2m_wifi_request_sleep(void)
-@brief	    Request from WINC1500 device to Sleep for specific time in the M2M_PS_MANUAL Power save mode (only).
+@brief	    Request from WINC3400 device to Sleep for specific time in the M2M_PS_MANUAL Power save mode (only).
 @param [in]	u32SlpReqTime
 			Request Sleep in ms 
 @return     The function SHALL return M2M_SUCCESS for success and a negative value otherwise.
 @sa         tenuPowerSaveModes , m2m_wifi_set_sleep_mode
-@warning	the Function should be called in M2M_PS_MANUAL power save only 
+@warning	This API is currently unsupported on the WINC3400
 */
 sint8 m2m_wifi_request_sleep(uint32 u32SlpReqTime)
 {
@@ -1090,7 +1090,7 @@ sint8 m2m_wifi_request_sleep(uint32 u32SlpReqTime)
 }
 /*!
 @fn			NMI_API sint8 m2m_wifi_set_device_name(uint8 *pu8DeviceName, uint8 u8DeviceNameLength);
-@brief		Set the WINC1500 device name which is used as P2P device name.
+@brief		Set the WINC3400 device name which is used as P2P device name.
 @param [in]	pu8DeviceName
 			Buffer holding the device name.
 @param [in]	u8DeviceNameLength
@@ -1250,10 +1250,7 @@ sint8 m2m_wifi_start_provision_mode(tstrM2MAPConfig *pstrAPConfig, char *pcHttpS
 			}
 			m2m_memcpy((uint8*)strProvConfig.acHttpServerDomainName, (uint8*)pcHttpServerDomainName, 64);
 			strProvConfig.u8EnableRedirect = bEnableHttpRedirect;
-		
-			/* Stop Scan if it is ongoing.
-			*/
-			gu8scanInProgress = 0;
+
 			s8Ret = hif_send(M2M_REQ_GROUP_WIFI, M2M_WIFI_REQ_START_PROVISION_MODE | M2M_REQ_DATA_PKT, 
 						(uint8*)&strProvConfig, sizeof(tstrM2MProvisionModeConfig), NULL, 0, 0);
 		}

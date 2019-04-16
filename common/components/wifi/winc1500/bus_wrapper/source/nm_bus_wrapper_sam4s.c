@@ -278,6 +278,7 @@ sint8 nm_bus_init(void *pvinit)
 	pdc_disable_transfer(g_p_spim_pdc, PERIPH_PTCR_RXTDIS | PERIPH_PTCR_TXTDIS);
 
 	nm_bsp_reset();
+	nm_bsp_sleep(1);
 	SPI_DEASSERT_CS();
 #endif
 	return result;

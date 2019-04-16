@@ -83,16 +83,17 @@ static volatile uint8 gu8Yield = 0;
 /*
 	Special codes for managing HIF restriction to OTA rollback/switch only
 */
-#define HIF_OTA_RB_ONLY	0xFFFF
-#define HIFCODE_OTA_RB	((M2M_REQ_GROUP_OTA << 8) | M2M_OTA_REQ_ROLLBACK)
-#define HIFCODE_OTA_SW	((M2M_REQ_GROUP_OTA << 8) | M2M_OTA_REQ_SWITCH_FIRMWARE)
-#define HIFCODE_SSL_WRITECERT	((M2M_REQ_GROUP_SSL << 8) | M2M_SSL_REQ_WRITE_OWN_CERTS)
+#define HIF_OTA_RB_ONLY				0xFFFF
+#define HIFCODE_OTA_RB				((M2M_REQ_GROUP_OTA << 8) | M2M_OTA_REQ_ROLLBACK)
+#define HIFCODE_OTA_SW				((M2M_REQ_GROUP_OTA << 8) | M2M_OTA_REQ_SWITCH_FIRMWARE)
+#define HIFCODE_SSL_WRITECERT		((M2M_REQ_GROUP_SSL << 8) | M2M_SSL_REQ_WRITE_OWN_CERTS)
+#define HIFCODE_WIFI_PASSIVESCAN	((M2M_REQ_GROUP_WIFI << 8) | M2M_WIFI_REQ_PASSIVE_SCAN)
 /*
 	List of new HIF messages (since last HIF major increase)
 	Each entry is formed of ((GroupId << 8) | OpCode)
 	Additionally, entry 0 used to indicate OTA RB/SW only.
 */
-#define NEW_HIF_LIST HIF_OTA_RB_ONLY, HIFCODE_SSL_WRITECERT, HIFCODE_ROOTCERT_ACCESS_V1
+#define NEW_HIF_LIST HIF_OTA_RB_ONLY, HIFCODE_SSL_WRITECERT, HIFCODE_WIFI_PASSIVESCAN
 /*
 	Array of HIF messages which are not supported by Firmware.
 	During hif_init() this array is rebased using an offset determined by Firmware HIF level.
@@ -366,6 +367,9 @@ sint8 hif_enable_access(void)
 					gu8HifBlOffset = 2;
 				break;
 				case 2:
+					gu8HifBlOffset = 2;
+				break;
+				case 3:
 					gu8HifBlOffset = 3;
 				break;
 				// Additional case to be added each time hif minor increments.
@@ -438,7 +442,7 @@ sint8 hif_check_code(uint8 u8Gid, uint8 u8OpCode)
 				Packet buffer size (including the HIF header).
 *    @return		The function shall return ZERO for successful operation and a negative value otherwise. 
 */
-extern uint32_t ms_ticks;
+
 sint8 hif_send(uint8 u8Gid,uint8 u8Opcode,uint8 *pu8CtrlBuf,uint16 u16CtrlBufSize,
 			   uint8 *pu8DataBuf,uint16 u16DataSize, uint16 u16DataOffset)
 {
@@ -457,13 +461,11 @@ sint8 hif_send(uint8 u8Gid,uint8 u8Opcode,uint8 *pu8CtrlBuf,uint16 u16CtrlBufSiz
 		strHif.u16Length += u16CtrlBufSize;
 	}
 
-#if defined(DEBUG)
 	ret = hif_check_code(strHif.u8Gid, strHif.u8Opcode);
 	if(ret != M2M_SUCCESS)
 	{
 		goto ERR1;
 	}
-#endif
 
 	ret = hif_chip_wake();
 	if(ret == M2M_SUCCESS)
@@ -697,6 +699,10 @@ static sint8 hif_isr(void)
 #endif
 			}
 		}
+		else
+		{
+			M2M_ERR("(hif) Fail to Read interrupt reg\n");
+		}
 	}
 
 ERR1:
@@ -720,25 +726,28 @@ sint8 hif_handle_isr(void)
 	
 	if (gu8Interrupt) {
 		ret = hif_chip_wake();
-		gu8Yield = 0;
-		while (gu8Interrupt && !gu8Yield) {
-			/*must be at that place because of the race of interrupt increment and that decrement*/
-			/*when the interrupt enabled*/
-			gu8Interrupt--;
-			while(1)
-			{
-				ret = hif_isr(); 
-				if(ret == M2M_SUCCESS) {
-					/*we will try forever until we get that interrupt*/
-					/*Fail return errors here due to bus errors (reading expected values)*/
-					break;
-				} else {
-					M2M_ERR("(HIF) Fail to handle interrupt %d try Again..\n",ret);
-				}	
-			}		
+		if(ret == M2M_SUCCESS)
+		{
+			gu8Yield = 0;
+			while (gu8Interrupt && !gu8Yield) {
+				/*must be at that place because of the race of interrupt increment and that decrement*/
+				/*when the interrupt enabled*/
+				gu8Interrupt--;
+				while(1)
+				{
+					ret = hif_isr(); 
+					if(ret == M2M_SUCCESS) {
+						/*we will try forever until we get that interrupt*/
+						/*Fail return errors here due to bus errors (reading expected values)*/
+						break;
+					} else {
+						M2M_ERR("(HIF) Fail to handle interrupt %d try Again..\n",ret);
+					}
+				}
+			}
+			ret = hif_chip_sleep();
 		}
-		ret = hif_chip_sleep();
-		if(ret != M2M_SUCCESS) {
+		else {
 			M2M_ERR("(hif) FAIL to wakeup the chip\n");
 		}
 	}

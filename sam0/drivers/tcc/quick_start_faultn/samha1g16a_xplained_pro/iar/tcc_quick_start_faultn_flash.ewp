@@ -2008,10 +2008,10 @@
 							<name>$PROJ_DIR$/../conf_quick_start_faultn.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
+							<name>$PROJ_DIR$/../conf_extint.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../conf_extint.h</name>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
 						</file>
 					</group>
 					<file>
@@ -2022,6 +2022,12 @@
 					<name>quick_start_callback</name>
 					<file>
 						<name>$PROJ_DIR$/../../../quick_start_callback/qs_tcc_callback.h</name>
+					</file>
+				</group>
+				<group>
+					<name>quick_start_faultx</name>
+					<file>
+						<name>$PROJ_DIR$/../../../quick_start_faultx/qs_tcc_faultx.h</name>
 					</file>
 				</group>
 				<group>
@@ -2043,12 +2049,6 @@
 					<name>quick_start_timer</name>
 					<file>
 						<name>$PROJ_DIR$/../../../quick_start_timer/qs_tcc_timer.h</name>
-					</file>
-				</group>
-				<group>
-					<name>quick_start_faultx</name>
-					<file>
-						<name>$PROJ_DIR$/../../../quick_start_faultx/qs_tcc_faultx.h</name>
 					</file>
 				</group>
 				<group>
@@ -2374,13 +2374,22 @@
 							</file>
 						</group>
 						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g14a.h</name>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g15ab.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1.h</name>
 						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g14ab.h</name>
+						</file>
 						<group>
 							<name>pio</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g16ab.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g15ab.h</name>
+							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g16a.h</name>
 							</file>
@@ -2390,7 +2399,16 @@
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g15a.h</name>
 							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/pio/samha1g14ab.h</name>
+							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g16ab.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g14a.h</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/samha1/include/samha1g15a.h</name>
 						</file>

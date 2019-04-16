@@ -177,7 +177,7 @@ CPPFLAGS = \
        -D UDD_ENABLE                                      \
        -D VIRTUAL_MEMORY_ENABLE                           \
        -D _ASSERT_ENABLE_                                 \
-       -D __SAMV71Q21__                                   \
+       -D __SAMV71Q21B__                                  \
        -D printf=iprintf                                  \
        -D scanf=iscanf
 

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -73,6 +73,8 @@ typedef struct {
   __I  uint32_t Reserved3[39];
   __IO uint32_t QSPI_WPMR;     /**< \brief (Qspi Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t QSPI_WPSR;     /**< \brief (Qspi Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved4[4];
+  __I  uint32_t QSPI_VERSION;  /**< \brief (Qspi Offset: 0x00FC) Version Register */
 } Qspi;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- QSPI_CR : (QSPI Offset: 0x00) Control Register -------- */
@@ -122,13 +124,13 @@ typedef struct {
 #define QSPI_TDR_TD_Msk (0xffffu << QSPI_TDR_TD_Pos) /**< \brief (QSPI_TDR) Transmit Data */
 #define QSPI_TDR_TD(value) ((QSPI_TDR_TD_Msk & ((value) << QSPI_TDR_TD_Pos)))
 /* -------- QSPI_SR : (QSPI Offset: 0x10) Status Register -------- */
-#define QSPI_SR_RDRF (0x1u << 0) /**< \brief (QSPI_SR) Receive Data Register Full */
-#define QSPI_SR_TDRE (0x1u << 1) /**< \brief (QSPI_SR) Transmit Data Register Empty */
-#define QSPI_SR_TXEMPTY (0x1u << 2) /**< \brief (QSPI_SR) Transmission Registers Empty */
-#define QSPI_SR_OVRES (0x1u << 3) /**< \brief (QSPI_SR) Overrun Error Status */
-#define QSPI_SR_CSR (0x1u << 8) /**< \brief (QSPI_SR) Chip Select Rise */
+#define QSPI_SR_RDRF (0x1u << 0) /**< \brief (QSPI_SR) Receive Data Register Full (cleared by reading SPI_RDR) */
+#define QSPI_SR_TDRE (0x1u << 1) /**< \brief (QSPI_SR) Transmit Data Register Empty (cleared by writing SPI_TDR) */
+#define QSPI_SR_TXEMPTY (0x1u << 2) /**< \brief (QSPI_SR) Transmission Registers Empty (cleared by writing SPI_TDR) */
+#define QSPI_SR_OVRES (0x1u << 3) /**< \brief (QSPI_SR) Overrun Error Status (cleared on read) */
+#define QSPI_SR_CSR (0x1u << 8) /**< \brief (QSPI_SR) Chip Select Rise (cleared on read) */
 #define QSPI_SR_CSS (0x1u << 9) /**< \brief (QSPI_SR) Chip Select Status */
-#define QSPI_SR_INSTRE (0x1u << 10) /**< \brief (QSPI_SR) Instruction End Status */
+#define QSPI_SR_INSTRE (0x1u << 10) /**< \brief (QSPI_SR) Instruction End Status (cleared on read) */
 #define QSPI_SR_QSPIENS (0x1u << 24) /**< \brief (QSPI_SR) QSPI Enable Status */
 /* -------- QSPI_IER : (QSPI Offset: 0x14) Interrupt Enable Register -------- */
 #define QSPI_IER_RDRF (0x1u << 0) /**< \brief (QSPI_IER) Receive Data Register Full Interrupt Enable */
@@ -219,7 +221,7 @@ typedef struct {
 #define QSPI_SMR_RVDIS (0x1u << 1) /**< \brief (QSPI_SMR) Scrambling/Unscrambling Random Value Disable */
 /* -------- QSPI_SKR : (QSPI Offset: 0x44) Scrambling Key Register -------- */
 #define QSPI_SKR_USRK_Pos 0
-#define QSPI_SKR_USRK_Msk (0xffffffffu << QSPI_SKR_USRK_Pos) /**< \brief (QSPI_SKR) Scrambling User Key */
+#define QSPI_SKR_USRK_Msk (0xffffffffu << QSPI_SKR_USRK_Pos) /**< \brief (QSPI_SKR) User Scrambling Key */
 #define QSPI_SKR_USRK(value) ((QSPI_SKR_USRK_Msk & ((value) << QSPI_SKR_USRK_Pos)))
 /* -------- QSPI_WPMR : (QSPI Offset: 0xE4) Write Protection Mode Register -------- */
 #define QSPI_WPMR_WPEN (0x1u << 0) /**< \brief (QSPI_WPMR) Write Protection Enable */
@@ -231,6 +233,11 @@ typedef struct {
 #define QSPI_WPSR_WPVS (0x1u << 0) /**< \brief (QSPI_WPSR) Write Protection Violation Status */
 #define QSPI_WPSR_WPVSRC_Pos 8
 #define QSPI_WPSR_WPVSRC_Msk (0xffu << QSPI_WPSR_WPVSRC_Pos) /**< \brief (QSPI_WPSR) Write Protection Violation Source */
+/* -------- QSPI_VERSION : (QSPI Offset: 0x00FC) Version Register -------- */
+#define QSPI_VERSION_VERSION_Pos 0
+#define QSPI_VERSION_VERSION_Msk (0xfffu << QSPI_VERSION_VERSION_Pos) /**< \brief (QSPI_VERSION) Hardware Module Version */
+#define QSPI_VERSION_MFN_Pos 16
+#define QSPI_VERSION_MFN_Msk (0x7u << QSPI_VERSION_MFN_Pos) /**< \brief (QSPI_VERSION) Metal Fix Number */
 
 /*@}*/
 

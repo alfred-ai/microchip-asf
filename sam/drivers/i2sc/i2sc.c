@@ -6,7 +6,7 @@
  *
  * This file defines a useful set of functions for the I2S on SAM devices.
  *
- * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -237,6 +237,7 @@ void i2s_enable_interrupt(struct i2s_dev_inst *const dev_inst,
 	case I2S_INTERRUPT_TXUR:
 		dev_inst->hw_dev->I2SC_IER = I2SC_IER_TXUR;
 		break;
+#if defined(PDC_I2SC) || defined(PDC_I2SC0) || defined(PDC_I2SC1)
 	case I2S_INTERRUPT_ENDRX:
 		dev_inst->hw_dev->I2SC_IER = I2SC_IER_ENDRX;
 		break;
@@ -249,6 +250,7 @@ void i2s_enable_interrupt(struct i2s_dev_inst *const dev_inst,
 	case I2S_INTERRUPT_TXBUFE:
 		dev_inst->hw_dev->I2SC_IER = I2SC_IER_TXEMPTY;
 		break;
+#endif
 	default:
 		break;
 	}
@@ -279,6 +281,7 @@ void i2s_disable_interrupt(struct i2s_dev_inst *const dev_inst,
 	case I2S_INTERRUPT_TXUR:
 		dev_inst->hw_dev->I2SC_IDR = I2SC_IDR_TXUR;
 		break;
+#if defined(PDC_I2SC) || defined(PDC_I2SC0) || defined(PDC_I2SC1)
 	case I2S_INTERRUPT_ENDRX:
 		dev_inst->hw_dev->I2SC_IDR = I2SC_IDR_ENDRX;
 		break;
@@ -291,6 +294,7 @@ void i2s_disable_interrupt(struct i2s_dev_inst *const dev_inst,
 	case I2S_INTERRUPT_TXBUFE:
 		dev_inst->hw_dev->I2SC_IDR = I2SC_IDR_TXEMPTY;
 		break;
+#endif
 	default:
 		break;
 	}
@@ -396,7 +400,7 @@ static void i2s_interrupt_handler(I2sc *i2sc)
 		row_num = 1;
 	}
 #endif
-	
+
 #if defined(ID_I2SC0)
 	if (i2sc == I2SC0) {
 		row_num = 0;
@@ -418,7 +422,7 @@ static void i2s_interrupt_handler(I2sc *i2sc)
 	if ((status & I2SC_SR_TXUR) && (mask & I2SC_IMR_TXUR)) {
 		i2s_callback_pointer[row_num][I2S_INTERRUPT_TXUR]();
 	}
-
+#if defined(PDC_I2SC) || defined(PDC_I2SC0) || defined(PDC_I2SC1)
 	if ((status & I2SC_SR_RXRDY) && (mask & I2SC_IMR_ENDRX)) {
 		i2s_callback_pointer[row_num][I2S_INTERRUPT_ENDRX]();
 	}
@@ -434,7 +438,7 @@ static void i2s_interrupt_handler(I2sc *i2sc)
 	if ((status & I2SC_SR_TXUR) && (mask & I2SC_IMR_TXEMPTY)) {
 		i2s_callback_pointer[row_num][I2S_INTERRUPT_TXBUFE]();
 	}
-
+#endif
 }
 
 #if defined(ID_I2SC0)
@@ -457,6 +461,7 @@ void I2SC1_Handler(void)
 }
 #endif
 
+#if defined(PDC_I2SC) || defined(PDC_I2SC0) || defined(PDC_I2SC1)
 /**
  * \brief Get I2SC PDC base address.
  *
@@ -485,4 +490,4 @@ Pdc *i2s_get_pdc_base(struct i2s_dev_inst *const dev_inst)
 
 	return p_pdc_base;
 }
-
+#endif /* defined(PDC_I2SC) || defined(PDC_I2SC0) || defined(PDC_I2SC1) */

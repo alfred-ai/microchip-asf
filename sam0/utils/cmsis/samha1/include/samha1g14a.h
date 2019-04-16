@@ -10,15 +10,17 @@
  *
  * \page License
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
  * You may obtain a copy of the Licence at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
@@ -61,18 +63,24 @@ typedef volatile       uint8_t  WoReg8;  /**< Write only  8-bit register (volati
 typedef volatile       uint32_t RwReg;   /**< Read-Write 32-bit register (volatile unsigned int) */
 typedef volatile       uint16_t RwReg16; /**< Read-Write 16-bit register (volatile unsigned int) */
 typedef volatile       uint8_t  RwReg8;  /**< Read-Write  8-bit register (volatile unsigned int) */
-#if !defined(_UL)
-#define _U(x)          x ## U            /**< C code: Unsigned integer literal constant value */
-#define _L(x)          x ## L            /**< C code: Long integer literal constant value */
-#define _UL(x)         x ## UL           /**< C code: Unsigned Long integer literal constant value */
 #endif
-#else
-#if !defined(_UL)
-#define _U(x)          x                 /**< Assembler: Unsigned integer literal constant value */
-#define _L(x)          x                 /**< Assembler: Long integer literal constant value */
-#define _UL(x)         x                 /**< Assembler: Unsigned Long integer literal constant value */
+
+#if !defined(SKIP_INTEGER_LITERALS)
+#if defined(_U_) || defined(_L_) || defined(_UL_)
+  #error "Integer Literals macros already defined elsewhere"
 #endif
-#endif
+
+#if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
+/* Macros that deal with adding suffixes to integer literal constants for C/C++ */
+#define _U_(x)         x ## U            /**< C code: Unsigned integer literal constant value */
+#define _L_(x)         x ## L            /**< C code: Long integer literal constant value */
+#define _UL_(x)        x ## UL           /**< C code: Unsigned Long integer literal constant value */
+#else /* Assembler */
+#define _U_(x)         x                 /**< Assembler: Unsigned integer literal constant value */
+#define _L_(x)         x                 /**< Assembler: Long integer literal constant value */
+#define _UL_(x)        x                 /**< Assembler: Unsigned Long integer literal constant value */
+#endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
+#endif /* SKIP_INTEGER_LITERALS */
 
 /* ************************************************************************** */
 /**  CMSIS DEFINITIONS FOR SAMHA1G14A */
@@ -386,6 +394,7 @@ void PTC_Handler                 ( void );
 #define PM                            (0x40000400) /**< \brief (PM) APB Base Address */
 #define PORT                          (0x41004400) /**< \brief (PORT) APB Base Address */
 #define PORT_IOBUS                    (0x60000000) /**< \brief (PORT) IOBUS Base Address */
+#define PTC                           (0x42004C00) /**< \brief (PTC) APB Base Address */
 #define RTC                           (0x40001400) /**< \brief (RTC) APB Base Address */
 #define SERCOM0                       (0x42000800) /**< \brief (SERCOM0) APB Base Address */
 #define SERCOM1                       (0x42000C00) /**< \brief (SERCOM1) APB Base Address */
@@ -477,6 +486,7 @@ void PTC_Handler                 ( void );
 #define PORT_IOBUS_INST_NUM 1                          /**< \brief (PORT) Number of instances */
 #define PORT_IOBUS_INSTS  { PORT_IOBUS }             /**< \brief (PORT) Instances List */
 
+#define PTC               ((void     *)0x42004C00UL) /**< \brief (PTC) APB Base Address */
 #define PTC_GCLK_ID       34
 #define PTC_INST_NUM      1                          /**< \brief (PTC) Number of instances */
 #define PTC_INSTS         { PTC }                    /**< \brief (PTC) Instances List */
@@ -532,23 +542,23 @@ void PTC_Handler                 ( void );
 /**  MEMORY MAPPING DEFINITIONS FOR SAMHA1G14A */
 /* ************************************************************************** */
 
-#define FLASH_SIZE            _UL(0x00004000) /* 16 kB */
+#define FLASH_SIZE            _UL_(0x00004000) /* 16 kB */
 #define FLASH_PAGE_SIZE       64
 #define FLASH_NB_OF_PAGES     256
 #define FLASH_USER_PAGE_SIZE  64
-#define HMCRAMC0_SIZE         _UL(0x00001000) /* 4 kB */
+#define HMCRAMC0_SIZE         _UL_(0x00001000) /* 4 kB */
 
-#define FLASH_ADDR            _UL(0x00000000) /**< FLASH base address */
-#define FLASH_USER_PAGE_ADDR  _UL(0x00800000) /**< FLASH_USER_PAGE base address */
-#define HMCRAMC0_ADDR         _UL(0x20000000) /**< HMCRAMC0 base address */
-#define HPB0_ADDR             _UL(0x40000000) /**< HPB0 base address */
-#define HPB1_ADDR             _UL(0x41000000) /**< HPB1 base address */
-#define HPB2_ADDR             _UL(0x42000000) /**< HPB2 base address */
-#define PPB_ADDR              _UL(0xE0000000) /**< PPB base address */
+#define FLASH_ADDR            _UL_(0x00000000) /**< FLASH base address */
+#define FLASH_USER_PAGE_ADDR  _UL_(0x00800000) /**< FLASH_USER_PAGE base address */
+#define HMCRAMC0_ADDR         _UL_(0x20000000) /**< HMCRAMC0 base address */
+#define HPB0_ADDR             _UL_(0x40000000) /**< HPB0 base address */
+#define HPB1_ADDR             _UL_(0x41000000) /**< HPB1 base address */
+#define HPB2_ADDR             _UL_(0x42000000) /**< HPB2 base address */
+#define PPB_ADDR              _UL_(0xE0000000) /**< PPB base address */
 
-#define DSU_DID_RESETVALUE    _UL(0x10011434)
+#define DSU_DID_RESETVALUE    _UL_(0x10011434)
 #define EIC_EXTINT_NUM        16
-#define NVMCTRL_RWW_EEPROM_SIZE _UL(0x00000200) /* 0.5 kB */
+#define NVMCTRL_RWW_EEPROM_SIZE _UL_(0x00000200) /* 0.5 kB */
 #define PORT_GROUPS           2
 #define SIP_CONFIG            ATA663231
 #define USB_HOST              0

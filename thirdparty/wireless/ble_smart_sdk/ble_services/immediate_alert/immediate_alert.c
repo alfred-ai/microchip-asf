@@ -3,7 +3,7 @@
  *
  * \brief Immediate Alert service
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -96,10 +96,10 @@ void init_immediate_alert_service(gatt_service_handler_t *immediate_alert_serv )
 		
 		/* permissions */
 		#if BLE_PAIR_ENABLE
-			immediate_alert_serv->serv_chars.value_permissions =  AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR;
+		immediate_alert_serv->serv_chars.value_permissions = AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR;   /* permissions */
 		#else
-			immediate_alert_serv->serv_chars.value_permissions =  AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR;
-		#endif
+		immediate_alert_serv->serv_chars.value_permissions = AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR;   /* permissions */
+		#endif   
 		
 		/* user defined name */
 		immediate_alert_serv->serv_chars.user_desc = NULL;           

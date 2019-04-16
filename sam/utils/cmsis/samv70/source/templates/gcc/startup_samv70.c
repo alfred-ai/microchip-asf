@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -155,6 +155,12 @@ void PWM1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void SDRAMC_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV70_SDRAMC_INSTANCE_ */
 void RSWDT_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#ifdef _SAMV70_I2SC0_INSTANCE_
+void I2SC0_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV70_I2SC0_INSTANCE_ */
+#ifdef _SAMV70_I2SC1_INSTANCE_
+void I2SC1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV70_I2SC1_INSTANCE_ */
 
 /* Exception Table */
 __attribute__ ((section(".vectors")))
@@ -287,7 +293,22 @@ const DeviceVectors exception_table = {
 #else
         .pvReserved62      = (void*) (0UL),          /* 62 Reserved */
 #endif /* _SAMV70_SDRAMC_INSTANCE_ */
-        .pfnRSWDT_Handler  = (void*) RSWDT_Handler   /* 63 Reinforced Secure Watchdog Timer */
+        .pfnRSWDT_Handler  = (void*) RSWDT_Handler,  /* 63 Reinforced Secure Watchdog Timer */
+        .pvReserved64      = (void*) (0UL),          /* 64 Reserved */
+        .pvReserved65      = (void*) (0UL),          /* 65 Reserved */
+        .pvReserved66      = (void*) (0UL),          /* 66 Reserved */
+        .pvReserved67      = (void*) (0UL),          /* 67 Reserved */
+        .pvReserved68      = (void*) (0UL),          /* 68 Reserved */
+#ifdef _SAMV70_I2SC0_INSTANCE_
+        .pfnI2SC0_Handler  = (void*) I2SC0_Handler,  /* 69 Inter-IC Sound controller */
+#else
+        .pvReserved69      = (void*) (0UL),          /* 69 Reserved */
+#endif /* _SAMV70_I2SC0_INSTANCE_ */
+#ifdef _SAMV70_I2SC1_INSTANCE_
+        .pfnI2SC1_Handler  = (void*) I2SC1_Handler   /* 70 Inter-IC Sound controller */
+#else
+        .pvReserved70      = (void*) (0UL)           /* 70 Reserved */
+#endif /* _SAMV70_I2SC1_INSTANCE_ */
 };
 
 /**

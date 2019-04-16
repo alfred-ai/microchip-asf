@@ -2300,6 +2300,9 @@
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/component/mcan.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/component/matrix.h</name>
 							</file>
 							<file>
@@ -2349,6 +2352,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/aes.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/icm.h</name>
@@ -2430,6 +2436,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/afec1.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/tc2.h</name>

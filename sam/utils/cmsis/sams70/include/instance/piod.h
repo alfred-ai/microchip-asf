@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,6 +93,7 @@
   #define REG_PIOD_LOCKSR                   (0x400E14E0U) /**< \brief (PIOD) Lock Status */
   #define REG_PIOD_WPMR                     (0x400E14E4U) /**< \brief (PIOD) Write Protection Mode Register */
   #define REG_PIOD_WPSR                     (0x400E14E8U) /**< \brief (PIOD) Write Protection Status Register */
+  #define REG_PIOD_VERSION                  (0x400E14FCU) /**< \brief (PIOD) Version Register */
   #define REG_PIOD_SCHMITT                  (0x400E1500U) /**< \brief (PIOD) Schmitt Trigger Register */
   #define REG_PIOD_DRIVER                   (0x400E1518U) /**< \brief (PIOD) PIO I/O Drive Register */
   #define REG_PIOD_KER                      (0x400E1520U) /**< \brief (PIOD) Keypad Controller Enable Register */
@@ -157,6 +158,7 @@
   #define REG_PIOD_LOCKSR  (*(__I  uint32_t*)0x400E14E0U) /**< \brief (PIOD) Lock Status */
   #define REG_PIOD_WPMR    (*(__IO uint32_t*)0x400E14E4U) /**< \brief (PIOD) Write Protection Mode Register */
   #define REG_PIOD_WPSR    (*(__I  uint32_t*)0x400E14E8U) /**< \brief (PIOD) Write Protection Status Register */
+  #define REG_PIOD_VERSION (*(__I  uint32_t*)0x400E14FCU) /**< \brief (PIOD) Version Register */
   #define REG_PIOD_SCHMITT (*(__IO uint32_t*)0x400E1500U) /**< \brief (PIOD) Schmitt Trigger Register */
   #define REG_PIOD_DRIVER  (*(__IO uint32_t*)0x400E1518U) /**< \brief (PIOD) PIO I/O Drive Register */
   #define REG_PIOD_KER     (*(__IO uint32_t*)0x400E1520U) /**< \brief (PIOD) Keypad Controller Enable Register */

@@ -100,8 +100,7 @@ sint8 nm_drv_init_download_mode(uint32 req_serial_number);
 *	@fn		nm_drv_init
 *	@brief	Initialize NMC1000 driver
 *	@return	M2M_SUCCESS in case of success and Negative error code in case of failure
-*	@param [in]	arg
-*				Generic argument TBD
+*	@param [in]	arg - Generic argument passed on to nm_drv_init_start
 *	@param [in]	req_serial_number
 *	@return	ZERO in case of success and Negative error code in case of failure
 */
@@ -133,8 +132,7 @@ sint8 nm_drv_init_start(void * arg);
 *	@fn		nm_drv_deinit
 *	@brief	Deinitialize NMC1000 driver
 *	@author	M. Abdelmawla
-*   @param [in]	arg
-*				Generic argument TBD
+*   @param [in]	arg - Generic argument unused.
 *	@return	ZERO in case of success and Negative error code in case of failure
 */
 sint8 nm_drv_deinit(void * arg);

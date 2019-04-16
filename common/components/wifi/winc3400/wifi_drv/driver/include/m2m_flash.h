@@ -55,151 +55,38 @@ INCLUDES
  * @ingroup FLASHAPI
  * @{*/
 
-/*!	Size of internal buffer: 4096 bytes. */
-#define FA_SECTOR_SIZE						FLASH_SECTOR_SZ
 
-/*!	Bit 0 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Compare buffer against existing data, to avoid unnecessary operation. */
-#define FA_FN_FLAGS_COMPARE_BEFORE			NBIT0
-/*!	Bit 1 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Fill uninitialized portion of buffer with existing data to avoid losing it in subsequent erase.
- *	Can be ignored when the buffer received is entirely initialized.
- *	Typically not set unless FA_FN_FLAGS_ERASE is set. */
-#define FA_FN_FLAGS_READ_SURROUNDING		NBIT1
-/*!	Bit 2 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Save buffer to a backup persistent location in case of power loss after subsequent erase.
- *	A (persistent) record of the backup status must also be kept.
- *	Can be ignored when the buffer received is entirely initialized.
- *	Typically not set unless FA_FN_FLAGS_READ_SURROUNDING and FA_FN_FLAGS_ERASE are both set. */
-#define FA_FN_FLAGS_BACKUP					NBIT2
-/*!	Bit 3 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Erase existing data before writing. */
-#define FA_FN_FLAGS_ERASE					NBIT3
-/*!	Bit 4 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Write buffer. */
-#define FA_FN_FLAGS_WRITE					NBIT4
-/*!	Bit 5 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Compare buffer against written data, to provide verification.
- *	Typically not set unless FA_FN_FLAGS_WRITE is set. */
-#define FA_FN_FLAGS_COMPARE_AFTER			NBIT5
-/*!	Bit 6 of u8Flags parameter of @ref tpfFlashAccessCtlFn.\n
- *	Read data to buffer. Typically this would be the only flag set, meaning read the existing data.
- *	However, if other flags are set, the read should be performed at the end. */
-#define FA_FN_FLAGS_READ					NBIT6
-
-/*!	Bit 0 of u8AccessOptions parameter of @ref m2m_flash_access_item and
- *	@ref m2m_flash_access_image.\n
- *	Request to erase existing data before writing.\n
- *	Only applies when module is providing data to the MCU application.\n
- *	@ref FA_FN_FLAGS_ERASE will be set in subsequent call to function of type
- *	@ref tpfFlashAccessCtlFn. */
-#define FA_ACCESS_OPTION_ERASE_FIRST		NBIT0
-/*!	Bit 1 of u8AccessOptions parameter of @ref m2m_flash_access_item and
- *	@ref m2m_flash_access_image.\n
- *	When set with @ref FA_ACCESS_OPTION_ERASE_FIRST, this is a request to do
- *	read-modify-erase-write (eg if MCU application is storing received data in flash).\n
- *	Only applies when module is providing data to the MCU application.\n
- *	@ref FA_FN_FLAGS_READ_SURROUNDING will be set in subsequent call to function of type
- *	@ref tpfFlashAccessCtlFn. */
-#define FA_ACCESS_OPTION_KEEP_SURROUNDING	NBIT1
-/*!	Bit 2 of u8AccessOptions parameter of @ref m2m_flash_access_item and
- *	@ref m2m_flash_access_image.\n
- *	When set with @ref FA_ACCESS_OPTION_ERASE_FIRST and @ref FA_ACCESS_OPTION_KEEP_SURROUNDING,
- *	this is a request to keep a persistent backup of modified contents during read-modify-erase-write.\n
- *	Only applies when module is providing data to the MCU application.\n
- *	@ref FA_FN_FLAGS_BACKUP will be set in subsequent call to function of type
- *	@ref tpfFlashAccessCtlFn. */
-#define FA_ACCESS_OPTION_USE_BACKUP			NBIT2
-/*!	Bit 3 of u8AccessOptions parameter of @ref m2m_flash_access_item and
- *	@ref m2m_flash_access_image.\n
- *	Request to compare new data against existing data before erasing/writing, to avoid unnecessary operations.\n
- *	Applies to data transfer in either direction.\n
- *	@ref FA_FN_FLAGS_COMPARE_BEFORE will be set in subsequent call to function of type
- *	@ref tpfFlashAccessCtlFn. */
-#define FA_ACCESS_OPTION_COMPARE_BEFORE		NBIT3
-/*!	Bit 4 of u8AccessOptions parameter of @ref m2m_flash_access_item and
- *	@ref m2m_flash_access_image.\n
- *	Request for byte-wise verification of write.\n
- *	Applies to data transfer in either direction.\n
- *	@ref FA_FN_FLAGS_COMPARE_AFTER will be set in subsequent call to function of type
- *	@ref tpfFlashAccessCtlFn. */
-#define FA_ACCESS_OPTION_COMPARE_AFTER		NBIT4
-/*!	When modifying WINC flash contents, the module determines most options internally. Only two
- *	options are taken from the u8AccessOptions parameter.\n
- *	When providing data to the MCU application, the module takes all options from the
- *	u8AccessOptions parameter. */
-#define FA_ACCESS_WINC_MASK					(FA_ACCESS_OPTION_COMPARE_BEFORE | FA_ACCESS_OPTION_COMPARE_AFTER)
-
-/*!	Bit 0 of u8ModeOptions parameter of @ref m2m_flash_access_image.\n
+/*!	Bit 0 of u8Options parameter of @ref m2m_flash_updateimage.\n
  *	Request to write new firmware image to WINC inactive partition. */
-#define FA_UPDATEIMAGE_OPTION_UPDATE		NBIT0
-/*!	Bit 1 of u8ModeOptions parameter of @ref m2m_flash_access_image.\n
+#define FLASH_UPDATEIMAGE_OPTION_UPDATE		NBIT0
+/*!	Bit 1 of u8Options parameter of @ref m2m_flash_updateimage.\n
  *	Request to mark image in WINC inactive partition as valid. If set along with
- *	@ref FA_UPDATEIMAGE_OPTION_UPDATE, the image is not marked valid if the writing fails. */
-#define FA_UPDATEIMAGE_OPTION_VALIDATE		NBIT1
-/*!	Bit 2 of u8ModeOptions parameter of @ref m2m_flash_access_image.\n
+ *	@ref FLASH_UPDATEIMAGE_OPTION_UPDATE, the image is not marked valid if the writing fails. */
+#define FLASH_UPDATEIMAGE_OPTION_VALIDATE	NBIT1
+/*!	Bit 2 of u8Options parameter of @ref m2m_flash_updateimage.\n
  *	Request to switch the WINC active/inactive partitions. Use this to switch to a new image or to
  *	revert to an old one. The switch only succeeds if the image has been marked valid. */
-#define FA_UPDATEIMAGE_OPTION_SWITCH		NBIT2
+#define FLASH_UPDATEIMAGE_OPTION_SWITCH		NBIT2
 
-/*!	Unused. */
-#define FA_RETURN_IDLE						0
-/*!	Only used internally. */
-#define FA_RETURN_OK						0
-
-/*!	Bit 15 of @ref FlashAccessErr_t return code.\n
- *	Indicates that the attempted module operation did not succeed.\n
- *	Bits 1-14 may give further indication of the cause of failure and the resulting state. */
-#define FA_RETURN_FLAG_ERR					NBIT15
-/*!	Bit 14 of @ref FlashAccessErr_t return code.\n
- *	The parameters provided by the MCU application failed sanity checks. */
-#define FA_RETURN_FLAG_ERR_PARAM			NBIT14
-/*!	Bit 13 of @ref FlashAccessErr_t return code.\n
- *	A function of type @ref tpfFlashAccessCtlFn or @ref tpfFlashAccessFn returned failure. */
-#define FA_RETURN_FLAG_ERR_LOCAL_ACCESS		NBIT13
-/*!	Bit 12 of @ref FlashAccessErr_t return code.\n
- *	There was an error while accessing WINC flash, or contents of WINC flash were not as expected. */
-#define FA_RETURN_FLAG_ERR_WINC_ACCESS		NBIT12
-/*!	Bit 11 of @ref FlashAccessErr_t return code.\n
- *	The transfer destination location was too small for the size of data to be transferred. */
-#define FA_RETURN_FLAG_ERR_WINC_SZ			NBIT11
-/*!	Bit 10 of @ref FlashAccessErr_t return code.\n
- *	The TLS root certificate identifier provided by the MCU application caused a failure. Either:\n
- *	- A certificate could not be added to the WINC flash store because the identifier matched an existing certificate.\n
- *	- A certificate could not be read or removed from the WINC flash store because the identifier did not match an existing certificate. */
-#define FA_RETURN_FLAG_ERR_WINC_ITEM		NBIT10
-/*!	Bit 9 of @ref FlashAccessErr_t return code.\n
- *	The MCU restarted during an attempted transfer, so the transfer is incomplete. This bit would
- *	be seen in the return code parameter of @ref m2m_flash_access_init. */
-#define FA_RETURN_FLAG_ERR_INTERRUPTED		NBIT9
-/*!	Bit 4 of @ref FlashAccessErr_t return code.\n
- *	Indicates that the MCU application should check the status of the backup store which may have
- *	been used by a function of type @ref tpfFlashAccessFn.\n
- *	This bit would be seen in the return code parameter of @ref m2m_flash_access_init if there was
- *	a transfer in progress with @ref FA_ACCESS_OPTION_USE_BACKUP. */
-#define FA_RETURN_FLAG_INFO_CHECK_BACKUP	NBIT4
-/*!	Bit 3 of @ref FlashAccessErr_t return code.\n
- *	Indicates that the WINC has been reset since the start of the transfer. If set, the MCU
- *	application may call APIs in this module, but should not call other WINC APIs until it has run
- *	all WINC initialization code, or a system reset.\n
- *	This bit is always set when @ref m2m_flash_access_init or @ref m2m_flash_access_retry is
- *	called. Otherwise it is only set if the most recent transfer caused reset of WINC.
- *	Applies to both complete and failed transfers. */
-#define FA_RETURN_FLAG_INFO_WINC_RESET		NBIT3
-/*!	Bit 2 of @ref FlashAccessErr_t return code.\n
- *	Indicates that the transfer parameters have been saved within the module. Hence the MCU
- *	application may call @ref m2m_flash_access_retry to retry a failed transfer.\n
- *	Applies to both complete and failed transfers, but @ref m2m_flash_access_retry cannot be used
- *	after a completed transfer. */
-#define FA_RETURN_FLAG_INFO_SAVED			NBIT2
-/*!	Bit 1 of @ref FlashAccessErr_t return code.\n
- *	Indicates that the transfer destination contents have changed.\n
- *	Applies to both complete and failed transfers. */
-#define FA_RETURN_FLAG_INFO_CHANGED			NBIT1
-/*!	Bit 0 of @ref FlashAccessErr_t return code.\n
- *	Indicates that the transfer has completed.\n
- *	Bits 1-3 may give further indication of the resulting state. */
-#define FA_RETURN_FLAG_COMPLETE				NBIT0
+/*!	Return success, transfer succeeded. */
+#define FLASH_SUCCESS				0
+/*!	Return error. The parameters provided by the MCU application failed sanity checks. */
+#define FLASH_ERR_PARAM				(-1)
+/*!	Return error. An MCU application function of type @ref tpfDataAccessFn returned failure. */
+#define FLASH_ERR_LOCAL_ACCESS		(-2)
+/*!	Return error. There was an error while accessing WINC flash, or contents of WINC flash were not as expected. */
+#define FLASH_ERR_WINC_ACCESS		(-3)
+/*!	Return error. The transfer destination location was too small for the size of data to be transferred. */
+#define FLASH_ERR_SIZE				(-4)
+/*!	Return error. The data provided by the MCU application caused a failure. For example:\n
+ *	- An item could not be added to a WINC flash store because the identifier matched an existing item.
+ *	- An item could not be read or removed from a WINC flash store because the identifier did not match an existing item.
+ *	- A firmware image could not be written to WINC flash because it did not match the format of WINC firmware images. */
+#define FLASH_ERR_WINC_CONFLICT		(-5)
+/*!	Return error. The MCU application did not call @ref m2m_flash_init during Wi-Fi initialization. */
+#define FLASH_ERR_UNINIT			(-6)
+/*!	Return error. The module hit an internal error, such as insufficient heap memory. */
+#define FLASH_ERR_INTERNAL			(-7)
 
  /**@}
  */
@@ -208,190 +95,195 @@ INCLUDES
  * @{*/
 
 /*!
-@brief	Return code for module operations. It should be interpreted as a bitfield. If cast as a @ref sint16, negative values indicate errors.
+@enum	tenuFlashDataFnCtl
 
-@see	@ref FA_RETURN_FLAG_ERR
-@see	@ref FA_RETURN_FLAG_ERR_PARAM
-@see	@ref FA_RETURN_FLAG_ERR_LOCAL_ACCESS
-@see	@ref FA_RETURN_FLAG_ERR_WINC_ACCESS
-@see	@ref FA_RETURN_FLAG_ERR_WINC_SZ
-@see	@ref FA_RETURN_FLAG_ERR_WINC_ITEM
-@see	@ref FA_RETURN_FLAG_ERR_INTERRUPTED
-@see	@ref FA_RETURN_FLAG_INFO_CHECK_BACKUP
-@see	@ref FA_RETURN_FLAG_INFO_WINC_RESET
-@see	@ref FA_RETURN_FLAG_INFO_SAVED
-@see	@ref FA_RETURN_FLAG_INFO_CHANGED
-@see	@ref FA_RETURN_FLAG_COMPLETE
- */
-typedef uint16 FlashAccessErr_t;
-
-/*!
-@enum	tenuFlashAccessFnCtl
-
-@brief	Control parameter for @ref tpfFlashAccessCtlFn.
+@brief	Control parameter for @ref tpfDataAccessFn.
  */
 typedef enum {
-	/*!	Data access about to start. Check and save parameters as required, ready for sequential
+	/*!	Data access about to start. Check and save parameters as required, ready for subsequent
 	 *	data accesses. */
-	FA_FN_CTL_INITIALIZE,
+	FLASH_DATA_FN_INITIALIZE,
+	/*!	Sequential data access, using parameters previously provided by FLASH_DATA_FN_INITIALIZE. */
+	FLASH_DATA_FN_DATA,
 	/*!	Data access aborted. Did not complete and will not be continued. */
-	FA_FN_CTL_TERMINATE,
+	FLASH_DATA_FN_TERMINATE,
 	/*!	Data access complete. */
-	FA_FN_CTL_COMPLETE,
-	/*!	Check record of backup status and restore the backed-up data if appropriate. */
-	FA_FN_CTL_CHECK_BACKUP
-}tenuFlashAccessFnCtl;
+	FLASH_DATA_FN_COMPLETE
+}tenuFlashDataFnCtl;
 
 /*!
-@enum	tenuFlashAccessMode
+@enum	tenuDataFnRW
 
-@brief	Transfer modes available.
-@note	In addition to these modes, writing/validating/switching WINC firmware image is available
-		via @ref m2m_flash_access_image.
-@see	m2m_flash_access_image
-@see	m2m_flash_access_item
-@see	m2m_flash_access_item_remove
+@brief	Indicates whether data is to be read or written
  */
 typedef enum {
-	/*!	Unused. */
-	FA_NONE,
-	/*!	Unused. */
-	FA_WRITE_IMAGE_UPDATE,
-	/*!	Unused. */
-	FA_WRITE_IMAGE_OVERWRITE,
-	/*!	Recover space in the TLS root certificate flash store.\n
-	 *	Certificate removal results in dead space. This mode recovers the dead space. */
-	FA_PRUNE_ROOTCERT,
-	/*!	Unused. */
-	FA_PRUNE_LOCALCERT,
-	/*!	Add an entry to the TLS root certificate flash store. */
-	FA_ADD_ROOTCERT,
-	/*!	Unused. */
-	FA_ADD_LOCALCERT,
-	/*!	Remove an entry from the TLS root certificate flash store.
-	 *	@warning	This mode fails when used with @ref m2m_flash_access_item. Use dedicated API
-	 *	@ref m2m_flash_access_item_remove instead. */
-	FA_REMOVE_ROOTCERT,
-	/*!	Unused. */
-	FA_REMOVE_LOCALCERT,
-	/*!	Unused. */
-	FA_READ_IMAGE_UPDATE,
-	/*!	Read an entry from the TLS root certificate flash store, using an identifier. */
-	FA_READ_ROOTCERT,
-	/*!	Unused. */
-	FA_READ_LOCALCERT,
-	/*!	Read an entry from the TLS root certificate flash store, using an index. */
-	FA_READIDX_ROOTCERT,
-	/*!	Unused. */
-	FA_READIDX_LOCALCERT
-}tenuFlashAccessMode;
+	/*!	Read data from application memory. */
+	FLASH_DATA_FN_READ,
+	/*!	Write data to application memory. */
+	FLASH_DATA_FN_WRITE
+}tenuDataFnRW;
+
+/*!
+@enum	tenuImageId
+
+@brief	Indicates which image to access in WINC flash
+ */
+typedef enum {
+	/*!	Access the image in the inactive partition. */
+	FLASH_IMAGE_INACTIVE,
+	/*!	Access the image in the active partition. */
+	FLASH_IMAGE_ACTIVE
+}tenuImageId;
+
 
 /*!
 @typedef \
-	tpfFlashAccessCtlFn
+	tpfDataAccessFn
 
 @brief
-	A function of this type is used to control local data access (read, erase or write).
+	A function of this type is used for local data access. It can be implemented to handle simple
+	RAM access with pointer/length, or it can be implemented to handle access to external memory.
+	Functions of this type are provided to the module via various function APIs.
+@see	m2m_flash_rootcert_add
+@see	m2m_flash_rootcert_read
+@see	m2m_flash_rootcert_readidx
+@see	m2m_flash_updateimage
+@see	m2m_flash_readimage
 
-@param [in]		u32LocationId
-					Identifier for data location.\n
-					Parameter is ignored if enuCtl is @ref FA_FN_CTL_CHECK_BACKUP.
-@param [in]		u32TotalSize
-					Total size of data to be accessed in subsequent data access.\n
-					Parameter is valid only if enuCtl is @ref FA_FN_CTL_INITIALIZE.
-@param [in]		u8Flags
-					Flags indicating type of subsequent data access.\n
-					Parameter is valid only if enuCtl is @ref FA_FN_CTL_INITIALIZE.
 @param [in]		enuCtl
 					Control parameter.
+@param [in]		pvStr
+					Generic pointer to structure. The structure type depends on enuCtl:
+					- @ref tstrDataAccessInitParamsApp if enuCtl is @ref FLASH_DATA_FN_INITIALIZE.
+					- @ref tstrDataAccessParamsApp if enuCtl is @ref FLASH_DATA_FN_DATA.
+					- @ref NULL if enuCtl is @ref FLASH_DATA_FN_TERMINATE or @ref FLASH_DATA_FN_COMPLETE.
 
-@see	tpfFlashAccessFn
-@see	tstrFlashAccessInfo
-@see	tenuFlashAccessFnCtl
-@see	FA_FN_FLAGS_COMPARE_BEFORE
-@see	FA_FN_FLAGS_READ_SURROUNDING
-@see	FA_FN_FLAGS_BACKUP
-@see	FA_FN_FLAGS_ERASE
-@see	FA_FN_FLAGS_WRITE
-@see	FA_FN_FLAGS_COMPARE_AFTER
-@see	FA_FN_FLAGS_READ
+@note	The function is typically called by the module multiple times during a data transfer:
+		Once with @ref FLASH_DATA_FN_INITIALIZE, then multiple times with @ref FLASH_DATA_FN_DATA, then
+		once with @ref FLASH_DATA_FN_COMPLETE.
 
 @return			Zero for success. Non-zero otherwise.
+
+\section FlashExample1 Example
+This example illustrates an implementation of a function of type @ref tpfDataAccessFn. \n
+This example assumes the application's data buffer is in RAM, so we can use memcpy. Alternatively
+memcpy can be replaced by dedicated functions which read/write the application buffer.
+
+gpu8DataLocation is a pointer to the data buffer in RAM, set by the application. \n
+gu32DataSize is the size of the data buffer, set by the application.
+
+@code{.c}
+sint8 data_access_ptr(tenuFlashDataFnCtl enuCtl, void *pvStr)
+{
+	// Return value.
+	sint8			s8Ret = -1;
+	// Fixed variables, set in case FLASH_DATA_FN_INITIALIZE, reset in case FLASH_DATA_FN_COMPLETE.
+	static tenuDataFnRW	enuRW;
+	static uint8		*pu8Location = NULL;
+	static uint32		u32BytesRemaining = 0;
+
+	switch (enuCtl)
+	{
+	case FLASH_DATA_FN_INITIALIZE:
+		if (pvStr != NULL)
+		{
+			tstrDataAccessInitParamsApp *init_params = (tstrDataAccessInitParamsApp*)pvStr;
+			if (init_params->u32TotalSize > gu32DataSize)
+				break;
+			// Set fixed variables.
+			enuRW = init_params->enuRW;
+			pu8Location = gpu8DataLocation;
+			u32BytesRemaining = init_params->u32TotalSize;
+			s8Ret = 0;
+		}
+		break;
+	case FLASH_DATA_FN_DATA:
+		if ((pvStr != NULL) && (pu8Location != NULL))
+		{
+			tstrDataAccessParamsApp *params = (tstrDataAccessParamsApp*)pvStr;
+			// Some sanity checks which should never fail.
+			if (u32BytesRemaining < params->u32DataSize)
+				break;
+			if (params->pu8Data == NULL)
+				break;
+			switch (enuRW)
+			{
+			case FLASH_DATA_FN_WRITE:
+				memcpy(pu8Location, params->pu8Data, params->u32DataSize);
+				s8Ret = 0;
+				break;
+			case FLASH_DATA_FN_READ:
+				memcpy(params->pu8Data, pu8Location, params->u32DataSize);
+				s8Ret = 0;
+				break;
+			}
+			// Update fixed variables for sequential access.
+			pu8Location += params->u32DataSize;
+			u32BytesRemaining -= params->u32DataSize;
+		}
+		break;
+	case FLASH_DATA_FN_TERMINATE:
+	case FLASH_DATA_FN_COMPLETE:
+		// Reset fixed variables.
+		pu8Location = NULL;
+		u32BytesRemaining = 0;
+		s8Ret = 0;
+		break;
+	}
+	return s8Ret;
+}
+@endcode
 */
-typedef sint8 (*tpfFlashAccessCtlFn) (uint32 u32LocationId, uint32 u32TotalSize, uint8 u8Flags, tenuFlashAccessFnCtl enuCtl);
-/*!
-@typedef \
-	tpfFlashAccessFn
-
-@brief
-	A function of this type is used to access local data (read, erase or write), according to the
-	parameters contained in most recent call to the corresponding function of type
-	@ref tpfFlashAccessCtlFn.\n
-	Multiple calls to this function access data sequentially, until there is another call to the
-	corresponding function of type @ref tpfFlashAccessCtlFn.
-
-@note
-	Correspondence between instances of @ref tpfFlashAccessCtlFn and @ref tpfFlashAccessFn can be
-	tracked via an instance of @ref tstrFlashAccessInfo.
-
-@param [in]		pu8Buf
-					Buffer to be written to or read from.
-@param [in]		u32BufSize
-					Total size of the buffer.
-@param [in]		u32DataOffset
-					Offset of data within the buffer.
-@param [in]		u32DataSize
-					Size of data to be written or read.
-
-@warning
-	The data write/read does not necessarily coincide with pu8Buf. Refer to u32DataOffset.
-
-@see	tpfFlashAccessCtlFn
-@see	tstrFlashAccessInfo
-
-@return			Zero for success. Non-zero otherwise.
-*/
-typedef sint8 (*tpfFlashAccessFn) (uint8_t *pu8Buf, uint32_t u32BufSize, uint32_t u32DataOffset, uint32_t u32DataSize);
+typedef sint8 (*tpfDataAccessFn) (tenuFlashDataFnCtl enuCtl, void *pvStr);
 
 /*!
 @struct	\
-	tstrFlashAccessInfo
+	tstrDataAccessInitParamsApp
 @brief
-	This structure contains information required for data access (read, erase or write).
-	It is passed to the module via @ref m2m_flash_access_item or @ref m2m_flash_access_image.
-@see	m2m_flash_access_item
-@see	m2m_flash_access_image
+	This structure contains parameters for initializing a local data access (read or write).
+
+@see	tpfDataAccessFn.
  */
 typedef struct {
-	/*!	Function to indicate beginning or end of data access. May be NULL only if u32LocationSize is 0. */
-	tpfFlashAccessCtlFn		pfCtlFunction;
-	/*!	Function to carry data. May be NULL only if u32LocationSize is 0. */
-	tpfFlashAccessFn		pfFunction;
-	/*!	Data location identifier. This will be used in calls to pfCtlFunction. */
-	uint32					u32LocationId;
-	/*!	Data size available. The actual size accessed may be smaller. */
-	uint32					u32LocationSize;
-	/*!	Block size, to assist with alignment. Typically set this to:\n
-	 *	- @ref FA_SECTOR_SIZE if accessing flash memory with erase block size <= @ref FA_SECTOR_SIZE.\n
-	 *	- 0 if accessing normal memory. */
-	uint32					u32AlignmentSize;
-	/*!	Offset of start, relative to u32AlignmentSize. Field is ignored if u32AlignmentSize < 2. */
-	uint32					u32StartAlignment;
-}tstrFlashAccessInfo;
+	/*!	Total size of data to be accessed in data location. */
+	uint32			u32TotalSize;
+	/*!	Flags indicating type of data access (read or write). */
+	tenuDataFnRW	enuRW;
+}tstrDataAccessInitParamsApp;
 
 /*!
 @struct	\
-	tstrFlashAccessReturn
+	tstrDataAccessParamsApp
+@brief
+	This structure contains data for local data access (read or write).
+@see	tpfDataAccessFn.
+ */
+typedef struct {
+	/*!	Buffer to be written from or read to. */
+	uint8	*pu8Data;
+	/*! Size of data to be written or read. */
+	uint32	u32DataSize;
+}tstrDataAccessParamsApp;
+
+/*!
+@struct	\
+	tstrFlashState
 @brief
 	This structure contains information about an attempted transfer.
-@see	m2m_flash_access_init
+@see	m2m_flash_init
  */
 typedef struct {
-	/*!	Return code of type @ref FlashAccessErr_t. */
-	uint16	u16Ret;
-	/*!	Transfer identifier provided by MCU application. */
-	uint16	u16AppId;
-}tstrFlashAccessReturn;
+	/*!	Last access attempt. Identifier provided by MCU application. 0 if info not available. */
+	uint16				u16LastAccessId;
+	/*!	Was the last access attempt successful? */
+	uint8				u8Success;
+	/*!	Did the last access attempt result in modified WINC flash? */
+	uint8				u8Changed;
+	/*!	Has the module been initialized? */
+	uint8				u8Init;
+	/*!	Has the module been initialized more recently than the module last reset the WINC? */
+	uint8				u8Reset;
+}tstrFlashState;
 
 /**@}
 */
@@ -406,111 +298,179 @@ FUNCTION PROTOTYPES
 /**@{*/
 /*!
 @fn	\
-	FlashAccessErr_t m2m_flash_access_image(uint8 u8ModeOptions, uint8 u8AccessOptions, uint16 u16Id, tstrFlashAccessInfo *pstrSourceInfo);
+	sint8 m2m_flash_updateimage(uint8 u8Options, uint16 u16Id, tpfDataAccessFn pfSourceFn, uint32 u32SourceSize);
 
 @brief	Write/validate/switch a WINC firmware image.
 
-@param [in]		u8ModeOptions
-					Bitfield indicates the required combination of write / validate / switch.
-@param [in]		u8AccessOptions
-					Bitfield indicates whether the module should check each sector of the WINC flash image:\n
-					- before erasing (in order to reduce unnecessary erase operations).\n
-					- after writing (in order to verify successful write).\n
-					Checking after writing is recommended.
+@param [in]		u8Options
+					Flags indicating the required combination of write / validate / switch.
 @param [in]		u16Id
 					Transfer identifier, not interpreted by this module.
-@param [in]		pstrSourceInfo
-					Information required by the module for obtaining the image from the MCU application.
+@param [in]		pfSourceFn
+					Function for the module to call to obtain the image from the MCU application.
+@param [in]		u32SourceSize
+					Size of the image being provided by the MCU application.
 
-@see	FA_UPDATEIMAGE_OPTION_UPDATE
-@see	FA_UPDATEIMAGE_OPTION_VALIDATE
-@see	FA_UPDATEIMAGE_OPTION_SWITCH
-@see	FA_ACCESS_OPTION_COMPARE_BEFORE
-@see	FA_ACCESS_OPTION_COMPARE_AFTER
-@see	tstrFlashAccessInfo
+@see	FLASH_UPDATEIMAGE_OPTION_UPDATE
+@see	FLASH_UPDATEIMAGE_OPTION_VALIDATE
+@see	FLASH_UPDATEIMAGE_OPTION_SWITCH
 
-@return			Bitfield. Bit 15 indicates failure. Bit 0 indicates success. See @ref FlashAccessErr_t for further interpretation.
+@return		Zero indicates success.
+			Negative values indicate failure.
 */
-FlashAccessErr_t m2m_flash_access_image(uint8 u8ModeOptions, uint8 u8AccessOptions, uint16 u16Id, tstrFlashAccessInfo *pstrSourceInfo);
+sint8 m2m_flash_updateimage(uint8 u8Options, uint16 u16Id, tpfDataAccessFn pfSourceFn, uint32 u32SourceSize);
 /*!
 @fn	\
-	FlashAccessErr_t m2m_flash_access_item(tenuFlashAccessMode enuMode, uint8 u8ModeOptions, uint8 u8AccessOptions, uint16 u16Id, tstrFlashAccessInfo *pstrInfo);
+	sint8 m2m_flash_readimage(tenuImageId enuImageId, uint16 u16Id, tpfDataAccessFn pfDestFn, uint32 u32DestSize);
 
-@brief	Add, read or remove an entry from the WINC TLS root certificate store.
+@brief	Read a WINC firmware image.
 
-@param [in]		enuMode
-					Required mode:\n
-					@ref	FA_PRUNE_ROOTCERT\n
-					@ref	FA_ADD_ROOTCERT\n
-					@ref	FA_REMOVE_ROOTCERT\n
-					@ref	FA_READ_ROOTCERT\n
-					@ref	FA_READIDX_ROOTCERT
-@param [in]		u8ModeOptions
-					In mode @ref FA_READIDX_ROOTCERT, this is the (0-based) index of the entry to read.\n
-					Ignored in all other modes.
-@param [in]		u8AccessOptions
-					Bitfield indicating data access options to be used in the transfer.
+@param [in]		enuImageId
+					Which partition to read image from.
 @param [in]		u16Id
 					Transfer identifier, not interpreted by this module.
-@param [in]		pstrInfo
-					Information required by the module for transferring the entry to/from the MCU application.\n
-					Ignored in mode @ref FA_PRUNE_ROOTCERT\n
+@param [in]		pfDestFn
+					Function for the module to call to send the image to the MCU application.
+@param [in]		u32DestSize
+					Size of the memory available to the MCU application for storing the image.
 
-@note		Mode @ref FA_ADD_ROOTCERT requires that the data location pstrInfo->u32LocationId
-			contains the entry to be added. The format of a TLS root certificate entry is
-			@ref tstrRootCertEntryHeader followed by the certificate public key.
-@note		Mode @ref FA_READ_ROOTCERT requires that the data location pstrInfo->u32LocationId
-			already contains the entry identifier (i.e. the 20-byte SHA1 digest of certificate
-			issuer). The module will read this identifier before searching for the required
-			entry in WINC flash. If the entry identifier is not known, consider using
-			@ref FA_READIDX_ROOTCERT instead.
-@warning	Mode @ref FA_REMOVE_ROOTCERT fails when this function is used. Use dedicated API
-			@ref m2m_flash_access_item_remove instead.
-
-@see	tenuFlashAccessMode
-@see	FA_ACCESS_OPTION_ERASE_FIRST
-@see	FA_ACCESS_OPTION_KEEP_SURROUNDING
-@see	FA_ACCESS_OPTION_USE_BACKUP
-@see	FA_ACCESS_OPTION_COMPARE_BEFORE
-@see	FA_ACCESS_OPTION_COMPARE_AFTER
-
-@return			Bitfield. Bit 15 indicates failure. Bit 0 indicates success. See @ref FlashAccessErr_t for further interpretation.
+@return		Zero indicates success.
+			Negative values indicate failure.
 */
-FlashAccessErr_t m2m_flash_access_item(tenuFlashAccessMode enuMode, uint8 u8ModeOptions, uint8 u8AccessOptions, uint16 u16Id, tstrFlashAccessInfo *pstrInfo);
+sint8 m2m_flash_readimage(tenuImageId enuImageId, uint16 u16Id, tpfDataAccessFn pfDestFn, uint32 u32DestSize);
 /*!
 @fn	\
-	FlashAccessErr_t m2m_flash_access_item_remove(uint16 u16Id, void* pvItem, uint32 u32ItemLen);
+sint8 m2m_flash_rootcert_add(uint16 u16Id, tpfDataAccessFn pfSourceFn, uint32 u32SourceSize);
+
+@brief	Add an entry to the WINC TLS root certificate store.
+
+@param [in]		u16Id
+					Transfer identifier, not interpreted by this module.
+@param [in]		pfSourceFn
+					Function for the module to call to obtain the certificate entry from the MCU application.
+@param [in]		u32SourceSize
+					Size of the certificate entry being provided by the MCU application.
+
+@note		The data location to be accessed via pfSourceFn
+			contains the entry to be added. The format of a TLS root certificate entry is:
+			@code{.c}
+			Name		Offset			Length		Contents
+			Header		0				36			tstrRootCertEntryHeader
+			Key			36				KeyLength	Public key and padding
+			Padding		36+KeyLength	PadLength	0xFF
+			@endcode
+			For RSA public keys, the format of Key is:
+			@code{.c}
+			Name		Offset			Length
+			Modulus		36				ModLength	RSA modulus, with leading 0s stripped off
+			Exponent	36+ModLength	ExpLength	Public exponent, with leading 0s stripped off
+			@endcode
+			In this case PadLength is the amount of padding that would be required for 4-byte alignment of Modulus
+			plus the amount of padding that would be required for 4-byte alignment of Exponent.\n
+			For ECDSA public keys, the format of Key is:
+			@code{.c}
+			Name		Offset			Length
+			X Coord		36				CoordLength	Public key X-coordinate
+			Y Coord		36+CoordLength	CoordLength	Public key Y-coordinate
+			@endcode
+			In this case PadLength is the amount of padding that would be required for 4-byte alignment of X Coord
+			plus the amount of padding that would be required for 4-byte alignment of Y Coord.
+
+@return		Zero indicates success.
+			Negative values indicate failure.
+*/
+sint8 m2m_flash_rootcert_add(uint16 u16Id, tpfDataAccessFn pfFn, uint32 u32Size);
+
+/*!
+@fn	\
+sint8 m2m_flash_rootcert_remove(uint16 u16Id, uint8 *pu8Identifier, uint32 u32IdentifierSz);
 
 @brief	Remove an entry from the WINC TLS root certificate store.
 
 @param [in]		u16Id
 					Transfer identifier, not interpreted by this module.
-@param [in]		pvItem
-					Pointer to buffer containing entry identifier (i.e. the 20-byte SHA1 digest of certificate issuer).
-@param [in]		u32ItemLen
-					Length of buffer in bytes.
+@param [in]		pu8Identifier
+					Identifier for the entry to be removed. This is the SHA1 digest of the certificate issuer name.
+@param [in]		u32IdentifierSz
+					Size of the identifier (20).
 
-@return			Bitfield. Bit 15 indicates failure. Bit 0 indicates success. See @ref FlashAccessErr_t for further interpretation.
+@return		Zero indicates success.
+			Negative values indicate failure.
 */
-FlashAccessErr_t m2m_flash_access_item_remove(uint16 u16Id, void* pvItem, uint32 u32ItemLen);
+sint8 m2m_flash_rootcert_remove(uint16 u16Id, uint8 *pu8Identifier, uint32 u32IdentifierSz);
+/*!
+@fn	\
+	sint8 m2m_flash_rootcert_read(uint16 u16Id, tpfDataAccessFn pfDestFn, uint32 u32DestSize, uint8 *pu8Identifier, uint32 u32IdentifierSz);
+
+@brief	Read an entry from the WINC TLS root certificate store, referenced by entry identifier.
+
+@param [in]		u16Id
+					Transfer identifier, not interpreted by this module.
+@param [in]		pfDestFn
+					Function for the module to call to send the certificate entry to the MCU application.
+@param [in]		u32DestSize
+					Size of the memory available to the MCU application for storing the entry.
+@param [in]		pu8Identifier
+					Identifier for the entry to be read. This is the SHA1 digest of the certificate issuer name.
+@param [in]		u32IdentifierSz
+					Size of the identifier (20).
+
+@return		Zero indicates success.
+			Negative values indicate failure.
+*/
+sint8 m2m_flash_rootcert_read(uint16 u16Id, tpfDataAccessFn pfDestFn, uint32 u32DestSize, uint8 *pu8Identifier, uint32 u32IdentifierSz);
+/*!
+@fn	\
+	sint8 m2m_flash_rootcert_readidx(uint16 u16Id, tpfDataAccessFn pfDestFn, uint32 u32DestSize, uint8 u8Index);
+
+@brief	Read an entry from the WINC TLS root certificate store, referenced by entry index.
+
+@param [in]		u16Id
+					Transfer identifier, not interpreted by this module.
+@param [in]		pfDestFn
+					Function for the module to call to send the certificate entry to the MCU application.
+@param [in]		u32DestSize
+					Size of the memory available to the MCU application for storing the entry.
+@param [in]		u8Index
+					Zero-based index of the entry to be read.
+
+@return		Zero indicates success.
+			Negative values indicate failure.
+*/
+sint8 m2m_flash_rootcert_readidx(uint16 u16Id, tpfDataAccessFn pfDestFn, uint32 u32DestSize, uint8 u8Index);
 
 /*!
 @fn	\
-	sint8 m2m_flash_access_init(tstrFlashAccessReturn *pstrRet);
+	void m2m_flash_get_state(tstrFlashState *pstrState);
+
+@brief	Get information about the module current state and about the most recent access attempt.
+
+@param [out]	pstrState
+					Module state and most recent access attempt info.
+
+@return	None.
+*/
+void m2m_flash_get_state(tstrFlashState *pstrState);
+
+
+/*!
+@fn	\
+	sint8 m2m_flash_init(void);
 
 @brief	Initialize the module.
 
-@param [out]	pstrRet
-					Information about the most recent transfer (whether complete or failed).
-
 @warning	This API must be called at a particular point during MCU application initialization.
 
-\section FlashAccessExample1 Example
-This example demonstrates how to add @ref m2m_flash_access_init and @ref m2m_flash_access_reset
+@see	m2m_wifi_init
+@see	m2m_wifi_init_hold
+@see	m2m_wifi_init_start
+
+\section FlashExample2 Example
+This example demonstrates how to add @ref m2m_flash_init and @ref m2m_flash_get_state
 to MCU application initialization code.
 
 Original code:
-@code
+@code{.c}
 {
 	tstrWifiInitParam param = {...}
 	sint8 status = 0;
@@ -523,7 +483,7 @@ Original code:
 }
 @endcode
 New code:
-@code
+@code{.c}
 {
 	tstrWifiInitParam param = {...}
 	sint8 status = 0;
@@ -531,19 +491,16 @@ New code:
 	status = m2m_wifi_init_hold();
 	if (status == 0)
 	{
-		tstrFlashAccessReturn	strFlashAccessReturn;
+		tstrFlashState	strFlashState;
 
-		m2m_flash_access_init(&strFlashAccessReturn);
-		printf("FlashAccess:%d:%x\n", strFlashAccessReturn.u16Ret, strFlashAccessReturn.u16AppId);
+		m2m_flash_get_state(&strFlashState);
+		printf("FlashAccess:%x:%d%d\n", strFlashState.u16LastAccessId, strFlashState.u8Success, strFlashState.u8Changed);
 
-		if (strFlashAccessReturn.u16Ret & FA_RETURN_FLAG_ERR)
+		switch (strFlashState.u16LastAccessId)
 		{
-			switch (strFlashAccessReturn.u16AppId)
-			{
-				// Application code dependent on meaning of u16AppId.
-			}
-			m2m_flash_access_reset();
+			// Application code dependent on meaning of u16LastAccessId.
 		}
+		m2m_flash_init();
 		status = m2m_wifi_init_start(param);
 	}
 	if (status != 0)
@@ -555,33 +512,7 @@ New code:
 
 @return		Zero for successful initialization of module. Negative value otherwise.
 */
-sint8 m2m_flash_access_init(tstrFlashAccessReturn *pstrRet);
-/*!
-@fn	\
-	sint8 m2m_flash_access_reset(void);
-
-@brief	Reset the module, clearing history of previous transfer attempt.
-
-@warning	This API must only be called at a time when the WINC has been reset. This could be
-			during MCU initialization sequence (see @ref FlashAccessExample1). Or it could be after
-			an attempted transfer in which @ref FA_RETURN_FLAG_INFO_WINC_RESET has been set.
-
-@return		Zero for successful initialization of module. Negative value otherwise.
-*/
-sint8 m2m_flash_access_reset(void);
-/*!
-@fn	\
-	FlashAccessErr_t m2m_flash_access_retry(void);
-
-@brief	Retry the previous transfer attempt, if it failed to complete.
-
-@warning	This API must only be called after an attempted transfer in which
-			@ref FA_RETURN_FLAG_ERR, @ref FA_RETURN_FLAG_INFO_WINC_RESET and
-			@ref FA_RETURN_FLAG_INFO_SAVED are all set.
-
-@return		Bitfield. Bit 15 indicates failure. Bit 0 indicates success. See @ref FlashAccessErr_t for further interpretation.
-*/
-FlashAccessErr_t m2m_flash_access_retry(void);
+sint8 m2m_flash_init(void);
 
  /**@}*/
 #endif /* __M2M_FLASH_H__ */

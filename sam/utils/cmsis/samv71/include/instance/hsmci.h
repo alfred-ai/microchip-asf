@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -66,6 +66,7 @@
   #define REG_HSMCI_CFG                    (0x40000054U) /**< \brief (HSMCI) Configuration Register */
   #define REG_HSMCI_WPMR                   (0x400000E4U) /**< \brief (HSMCI) Write Protection Mode Register */
   #define REG_HSMCI_WPSR                   (0x400000E8U) /**< \brief (HSMCI) Write Protection Status Register */
+  #define REG_HSMCI_VERSION                  (0x400000FCU) /**< \brief (HSMCI) Version Register */
   #define REG_HSMCI_FIFO                   (0x40000200U) /**< \brief (HSMCI) FIFO Memory Aperture0 */
 #else
   #define REG_HSMCI_CR    (*(__O  uint32_t*)0x40000000U) /**< \brief (HSMCI) Control Register */
@@ -87,6 +88,7 @@
   #define REG_HSMCI_CFG   (*(__IO uint32_t*)0x40000054U) /**< \brief (HSMCI) Configuration Register */
   #define REG_HSMCI_WPMR  (*(__IO uint32_t*)0x400000E4U) /**< \brief (HSMCI) Write Protection Mode Register */
   #define REG_HSMCI_WPSR  (*(__I  uint32_t*)0x400000E8U) /**< \brief (HSMCI) Write Protection Status Register */
+  #define REG_HSMCI_VERSION (*(__I  uint32_t*)0x400000FCU) /**< \brief (HSMCI) Version Register */
   #define REG_HSMCI_FIFO  (*(__IO uint32_t*)0x40000200U) /**< \brief (HSMCI) FIFO Memory Aperture0 */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 

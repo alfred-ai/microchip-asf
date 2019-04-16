@@ -3,7 +3,7 @@
  *
  * \brief USB Host Controller (UHC)
  *
- * Copyright (C) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -289,6 +289,7 @@ static void uhc_connection_tree(bool b_plug, uhc_device_t* dev)
 		// Free USB configuration descriptor buffer
 		if (dev->conf_desc != NULL) {
 			free(dev->conf_desc);
+			dev->conf_desc = NULL;
 		}
 #ifdef USB_HOST_HUB_SUPPORT
 		uhc_power_running -= dev->power;
@@ -1292,6 +1293,24 @@ bool uhc_dev_is_high_speed_support(uhc_device_t* dev)
 		return uhc_setup_request_finish_status;
 	}
 	return false; // Low speed device
+}
+
+void uhc_dev_reset(uhc_device_t *dev)
+{
+	int i;
+
+	uhc_enum_try = 1;
+#ifdef USB_HOST_HUB_SUPPORT
+	uhc_dev_enum = dev;
+#endif
+	for (i = 0; i < UHC_NB_UHI; i++) {
+		uhc_uhis[i].uninstall(uhc_dev_enum);
+	}
+	if (uhc_dev_enum->conf_desc) {
+		free(uhc_dev_enum->conf_desc);
+		uhc_dev_enum->conf_desc = NULL;
+	}
+	uhc_enumeration_step3();
 }
 
 //! @}

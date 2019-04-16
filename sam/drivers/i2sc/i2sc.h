@@ -6,7 +6,7 @@
  *
  * This file defines a useful set of functions for the I2S on SAM devices.
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,14 +93,14 @@ enum i2s_fs_rate {
 
 /** Data format */
 enum i2s_data_format {
-	I2S_DATE_32BIT = 0,
-	I2S_DATE_24BIT,
-	I2S_DATE_20BIT,
-	I2S_DATE_18BIT,
-	I2S_DATE_16BIT,
-	I2S_DATE_16BIT_COMPACT,
-	I2S_DATE_8BIT,
-	I2S_DATE_8BIT_COMPACT,
+	I2S_DATA_32BIT = 0,
+	I2S_DATA_24BIT,
+	I2S_DATA_20BIT,
+	I2S_DATA_18BIT,
+	I2S_DATA_16BIT,
+	I2S_DATA_16BIT_COMPACT,
+	I2S_DATA_8BIT,
+	I2S_DATA_8BIT_COMPACT,
 };
 
 /** DMA channel usage for I2S transfer */
@@ -141,10 +141,10 @@ struct i2s_config {
 
 	/* 1 for master clock generated, 0 for no master clock. */
 	bool master_clock_enable;
-	
+
 	/**
-	 * I2SMCK Master clock output frequency is Selected Clock 
-	 * divided by (IMCKDIV + 1), and master_clock_divide should not be 0. 
+	 * I2SMCK Master clock output frequency is Selected Clock
+	 * divided by (IMCKDIV + 1), and master_clock_divide should not be 0.
 	 */
 	uint8_t master_clock_divide;
 
@@ -186,7 +186,7 @@ static inline void i2s_get_config_defaults(struct i2s_config *const cfg)
 	/* Sanity check arguments */
 	Assert(cfg);
 
-	cfg->data_format = I2S_DATE_32BIT;
+	cfg->data_format = I2S_DATA_32BIT;
 	cfg->fs_ratio = I2S_FS_RATE_1024;
 	cfg->tx_channels = I2S_CHANNEL_STEREO;
 	cfg->rx_channels = I2S_CHANNEL_STEREO;
@@ -195,6 +195,7 @@ static inline void i2s_get_config_defaults(struct i2s_config *const cfg)
 	cfg->loopback = false;
 	cfg->master_mode = true;
 	cfg->master_clock_enable = true;
+	cfg->master_clock_divide = 1;
 	cfg->transmit_mode_underrun= true;
 	cfg->slot_length_24 = false;
 }
@@ -326,9 +327,9 @@ void i2s_disable(struct i2s_dev_inst *const dev_inst);
 
 enum status_code i2s_write(struct i2s_dev_inst *dev_inst, uint32_t data);
 enum status_code i2s_read(struct i2s_dev_inst *dev_inst, uint32_t *data);
-
+#if defined(PDC_I2SC) || defined(PDC_I2SC0) || defined(PDC_I2SC1)
 Pdc *i2s_get_pdc_base(struct i2s_dev_inst *const dev_inst);
-
+#endif
 /**
  * \}
  */

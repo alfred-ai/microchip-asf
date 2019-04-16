@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -80,12 +80,15 @@ typedef struct {
   __I  uint32_t Reserved1[34];
   __IO uint32_t ISI_WPMR;       /**< \brief (Isi Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t ISI_WPSR;       /**< \brief (Isi Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved2[4];
+  __I  uint32_t ISI_VERSION;    /**< \brief (Isi Offset: 0xFC) Version Register */
 } Isi;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- ISI_CFG1 : (ISI Offset: 0x00) ISI Configuration 1 Register -------- */
 #define ISI_CFG1_HSYNC_POL (0x1u << 2) /**< \brief (ISI_CFG1) Horizontal Synchronization Polarity */
 #define ISI_CFG1_VSYNC_POL (0x1u << 3) /**< \brief (ISI_CFG1) Vertical Synchronization Polarity */
 #define ISI_CFG1_PIXCLK_POL (0x1u << 4) /**< \brief (ISI_CFG1) Pixel Clock Polarity */
+#define ISI_CFG1_GRAYLE (0x1u << 5) /**< \brief (ISI_CFG1) Grayscale Little Endian */
 #define ISI_CFG1_EMB_SYNC (0x1u << 6) /**< \brief (ISI_CFG1) Embedded Synchronization */
 #define ISI_CFG1_CRC_SYNC (0x1u << 7) /**< \brief (ISI_CFG1) Embedded Synchronization Correction */
 #define ISI_CFG1_FRATE_Pos 8
@@ -288,6 +291,11 @@ typedef struct {
 #define ISI_WPSR_WPVS (0x1u << 0) /**< \brief (ISI_WPSR) Write Protection Violation Status */
 #define ISI_WPSR_WPVSRC_Pos 8
 #define ISI_WPSR_WPVSRC_Msk (0xffffu << ISI_WPSR_WPVSRC_Pos) /**< \brief (ISI_WPSR) Write Protection Violation Source */
+/* -------- ISI_VERSION : (ISI Offset: 0xFC) Version Register -------- */
+#define ISI_VERSION_VERSION_Pos 0
+#define ISI_VERSION_VERSION_Msk (0xfffu << ISI_VERSION_VERSION_Pos) /**< \brief (ISI_VERSION) Version of the Hardware Module */
+#define ISI_VERSION_MFN_Pos 16
+#define ISI_VERSION_MFN_Msk (0x7u << ISI_VERSION_MFN_Pos) /**< \brief (ISI_VERSION) Metal Fix Number */
 
 /*@}*/
 

@@ -120,6 +120,8 @@ void csc_prf_dev_adv(void)
 		DBG_LOG("Failed to set advertisement data");
 	}
 	
+	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
+	
 	/* Start of advertisement */
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY, APP_CSC_FAST_ADV, APP_CSC_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS){
 		DBG_LOG("Device Started Advertisement");
@@ -245,6 +247,8 @@ void csc_prf_write_notification_handler(void *param)
 
 at_ble_status_t csc_prf_disconnect_event_handler(at_ble_disconnected_t *disconnect)
 {
+	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
+	
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	APP_CSC_FAST_ADV, APP_CSC_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS){
 		DBG_LOG("Device Advertisement Failed");

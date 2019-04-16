@@ -679,6 +679,35 @@ NMI_API sint8  m2m_wifi_init(tstrWifiInitParam * pWifiInitParam);
 */
 NMI_API sint8  m2m_wifi_deinit(void * arg);
 
+/*!
+@fn	\
+    NMI_API void m2m_wifi_yield(void);
+
+@brief
+    Yield from processing more synchronous M2M events
+
+@details 
+    This function causes the synchronous M2M event handler function to yield from processing further
+    events and return control to the caller.
+
+@param [in]	arg
+        Opaque argument, not used in current implementation.
+
+@return		
+    The function returns @ref M2M_SUCCESS for successful interrupt handling and a negative value 
+	otherwise.
+
+@pre
+    Prior to receiving  Wi-Fi interrupts, the WINC driver should have been successfully initialized 
+	by calling the @ref m2m_wifi_init function.
+     
+@warning
+    Failure to successfully complete this function indicates bus errors and hence a fatal error that will prevent the application from proceeding.
+*/
+
+NMI_API void m2m_wifi_yield(void);
+
+
  /**@}*/
 /** @defgroup WifiHandleEventsFn m2m_wifi_handle_events
 *  @ingroup WLANAPI
@@ -886,7 +915,7 @@ NMI_API sint8 m2m_wifi_connect(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, v
 @return	The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
 	
 */
- NMI_API sint8 m2m_wifi_connect_sc(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, void *pvAuthInfo, uint16 u16Ch, uint8 u8SaveCred);
+ NMI_API sint8 m2m_wifi_connect_sc(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, void *pvAuthInfo, uint16 u16Ch, uint8 u8NoSaveCred);
  /**@}*/
 /** @defgroup WifiDisconnectFn m2m_wifi_disconnect
  *   @ingroup WLANAPI
@@ -2875,6 +2904,33 @@ NMI_API sint8 m2m_wifi_set_receive_buffer(void* pvBuffer,uint16 u16BufferLen);
  */
 sint8 m2m_wifi_prng_get_random_bytes(uint8 * pu8PrngBuff,uint16 u16PrngSize);
 /**@}*/
+
+/** @defgroup WifiConfAutRate m2m_wifi_conf_auto_rate
+*	@ingroup WLANAPI
+*  Configures WLAN automatic TX rate adaptation algorithm.
+*/
+/**@{*/
+/*!
+@fn	\
+	 NMI_API sint8 m2m_wifi_conf_auto_rate(tstrConfAutoRate * pstrConfAutoRate)
+
+@brief
+	Allow the host MCU app to configure auto TX rate selection algorithm. The application can use this 
+	API to tweak the algorithm performance. Moreover, it allows the application to force a specific WLAN 
+	PHY rate for transmitted data packets to favor range vs. throughput needs.
+
+@param [in]	pstrConfAutoRate
+	The Auto rate configuration parameters as listed in tstrConfAutoRate.
+@sa
+	tstrConfAutoRate
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+
+NMI_API sint8 m2m_wifi_conf_auto_rate(tstrConfAutoRate * pstrConfAutoRate);
+/**@}*/
+
+
 #ifdef __cplusplus
 }
 #endif

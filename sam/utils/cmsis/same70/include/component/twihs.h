@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -71,9 +71,13 @@ typedef struct {
   __IO uint32_t TWIHS_FILTR;   /**< \brief (Twihs Offset: 0x44) Filter Register */
   __I  uint32_t Reserved3[1];
   __IO uint32_t TWIHS_SWMR;    /**< \brief (Twihs Offset: 0x4C) SleepWalking Matching Register */
-  __I  uint32_t Reserved4[37];
+  __I  uint32_t Reserved4[32];
+  __I  uint32_t TWIHS_DR;      /**< \brief (Twihs Offset: 0xD0) Debug Register */
+  __I  uint32_t Reserved5[4];
   __IO uint32_t TWIHS_WPMR;    /**< \brief (Twihs Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t TWIHS_WPSR;    /**< \brief (Twihs Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved6[4];
+  __I  uint32_t TWIHS_VER;     /**< \brief (Twihs Offset: 0xFC) Version Register */
 } Twihs;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- TWIHS_CR : (TWIHS Offset: 0x00) Control Register -------- */
@@ -93,6 +97,12 @@ typedef struct {
 #define TWIHS_CR_PECDIS (0x1u << 13) /**< \brief (TWIHS_CR) Packet Error Checking Disable */
 #define TWIHS_CR_PECRQ (0x1u << 14) /**< \brief (TWIHS_CR) PEC Request */
 #define TWIHS_CR_CLEAR (0x1u << 15) /**< \brief (TWIHS_CR) Bus CLEAR Command */
+#define TWIHS_CR_ACMEN (0x1u << 16) /**< \brief (TWIHS_CR) Alternative Command Mode Enable */
+#define TWIHS_CR_ACMDIS (0x1u << 17) /**< \brief (TWIHS_CR) Alternative Command Mode Disable */
+#define TWIHS_CR_THRCLR (0x1u << 24) /**< \brief (TWIHS_CR) Transmit Holding Register Clear */
+#define TWIHS_CR_LOCKCLR (0x1u << 26) /**< \brief (TWIHS_CR) Lock Clear */
+#define TWIHS_CR_FIFOEN (0x1u << 28) /**< \brief (TWIHS_CR) FIFO Enable */
+#define TWIHS_CR_FIFODIS (0x1u << 29) /**< \brief (TWIHS_CR) FIFO Disable */
 /* -------- TWIHS_MMR : (TWIHS Offset: 0x04) Master Mode Register -------- */
 #define TWIHS_MMR_IADRSZ_Pos 8
 #define TWIHS_MMR_IADRSZ_Msk (0x3u << TWIHS_MMR_IADRSZ_Pos) /**< \brief (TWIHS_MMR) Internal Device Address Size */
@@ -134,6 +144,9 @@ typedef struct {
 #define TWIHS_CWGR_CKDIV_Pos 16
 #define TWIHS_CWGR_CKDIV_Msk (0x7u << TWIHS_CWGR_CKDIV_Pos) /**< \brief (TWIHS_CWGR) Clock Divider */
 #define TWIHS_CWGR_CKDIV(value) ((TWIHS_CWGR_CKDIV_Msk & ((value) << TWIHS_CWGR_CKDIV_Pos)))
+#define TWIHS_CWGR_CKSRC (0x1u << 20) /**< \brief (TWIHS_CWGR) Transfer Rate Clock Source */
+#define   TWIHS_CWGR_CKSRC_PERIPH_CK (0x0u << 20) /**< \brief (TWIHS_CWGR) Peripheral clock is used to generate the TWIHS baud rate. */
+#define   TWIHS_CWGR_CKSRC_PMC_PCK (0x1u << 20) /**< \brief (TWIHS_CWGR) PMC_PCKx is used to generate the TWIHS baud rate. */
 #define TWIHS_CWGR_HOLD_Pos 24
 #define TWIHS_CWGR_HOLD_Msk (0x1fu << TWIHS_CWGR_HOLD_Pos) /**< \brief (TWIHS_CWGR) TWD Hold Time Versus TWCK Falling */
 #define TWIHS_CWGR_HOLD(value) ((TWIHS_CWGR_HOLD_Msk & ((value) << TWIHS_CWGR_HOLD_Pos)))
@@ -248,6 +261,11 @@ typedef struct {
 #define TWIHS_SWMR_DATAM_Pos 24
 #define TWIHS_SWMR_DATAM_Msk (0xffu << TWIHS_SWMR_DATAM_Pos) /**< \brief (TWIHS_SWMR) Data Match */
 #define TWIHS_SWMR_DATAM(value) ((TWIHS_SWMR_DATAM_Msk & ((value) << TWIHS_SWMR_DATAM_Pos)))
+/* -------- TWIHS_DR : (TWIHS Offset: 0xD0) Debug Register -------- */
+#define TWIHS_DR_SWEN (0x1u << 0) /**< \brief (TWIHS_DR) SleepWalking Enable */
+#define TWIHS_DR_CLKRQ (0x1u << 1) /**< \brief (TWIHS_DR) Clock Request */
+#define TWIHS_DR_SWMATCH (0x1u << 2) /**< \brief (TWIHS_DR) SleepWalking Match */
+#define TWIHS_DR_TRP (0x1u << 3) /**< \brief (TWIHS_DR) Transfer Pending */
 /* -------- TWIHS_WPMR : (TWIHS Offset: 0xE4) Write Protection Mode Register -------- */
 #define TWIHS_WPMR_WPEN (0x1u << 0) /**< \brief (TWIHS_WPMR) Write Protection Enable */
 #define TWIHS_WPMR_WPKEY_Pos 8
@@ -258,6 +276,11 @@ typedef struct {
 #define TWIHS_WPSR_WPVS (0x1u << 0) /**< \brief (TWIHS_WPSR) Write Protection Violation Status */
 #define TWIHS_WPSR_WPVSRC_Pos 8
 #define TWIHS_WPSR_WPVSRC_Msk (0xffffffu << TWIHS_WPSR_WPVSRC_Pos) /**< \brief (TWIHS_WPSR) Write Protection Violation Source */
+/* -------- TWIHS_VER : (TWIHS Offset: 0xFC) Version Register -------- */
+#define TWIHS_VER_VERSION_Pos 0
+#define TWIHS_VER_VERSION_Msk (0xfffu << TWIHS_VER_VERSION_Pos) /**< \brief (TWIHS_VER) Version of the Hardware Module */
+#define TWIHS_VER_MFN_Pos 16
+#define TWIHS_VER_MFN_Msk (0x7u << TWIHS_VER_MFN_Pos) /**< \brief (TWIHS_VER) Metal Fix Number */
 
 /*@}*/
 

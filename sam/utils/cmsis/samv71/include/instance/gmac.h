@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,6 +93,7 @@
   #define REG_GMAC_EFRSH                      (0x400500ECU) /**< \brief (GMAC) PTP Event Frame Received Seconds High Register */
   #define REG_GMAC_PEFTSH                     (0x400500F0U) /**< \brief (GMAC) PTP Peer Event Frame Transmitted Seconds High Register */
   #define REG_GMAC_PEFRSH                     (0x400500F4U) /**< \brief (GMAC) PTP Peer Event Frame Received Seconds High Register */
+  #define REG_GMAC_MID                        (0x400500FCU) /**< \brief (GMAC) Module ID Register */
   #define REG_GMAC_OTLO                       (0x40050100U) /**< \brief (GMAC) Octets Transmitted Low Register */
   #define REG_GMAC_OTHI                       (0x40050104U) /**< \brief (GMAC) Octets Transmitted High Register */
   #define REG_GMAC_FT                         (0x40050108U) /**< \brief (GMAC) Frames Transmitted Register */
@@ -152,6 +153,10 @@
   #define REG_GMAC_PEFTN                      (0x400501F4U) /**< \brief (GMAC) PTP Peer Event Frame Transmitted Nanoseconds Register */
   #define REG_GMAC_PEFRSL                     (0x400501F8U) /**< \brief (GMAC) PTP Peer Event Frame Received Seconds Low Register */
   #define REG_GMAC_PEFRN                      (0x400501FCU) /**< \brief (GMAC) PTP Peer Event Frame Received Nanoseconds Register */
+  #define REG_GMAC_RXLPI                      (0x40050270U) /**< \brief (GMAC) Received LPI Transitions */
+  #define REG_GMAC_RXLPITIME                  (0x40050274U) /**< \brief (GMAC) Received LPI Time */
+  #define REG_GMAC_TXLPI                      (0x40050278U) /**< \brief (GMAC) Transmit LPI Transitions */
+  #define REG_GMAC_TXLPITIME                  (0x4005027CU) /**< \brief (GMAC) Transmit LPI Time */
   #define REG_GMAC_ISRPQ                      (0x40050400U) /**< \brief (GMAC) Interrupt Status Register Priority Queue (index = 1) */
   #define REG_GMAC_TBQBAPQ                    (0x40050440U) /**< \brief (GMAC) Transmit Buffer Queue Base Address Register Priority Queue (index = 1) */
   #define REG_GMAC_RBQBAPQ                    (0x40050480U) /**< \brief (GMAC) Receive Buffer Queue Base Address Register Priority Queue (index = 1) */
@@ -260,6 +265,7 @@
   #define REG_GMAC_EFRSH     (*(__I  uint32_t*)0x400500ECU) /**< \brief (GMAC) PTP Event Frame Received Seconds High Register */
   #define REG_GMAC_PEFTSH    (*(__I  uint32_t*)0x400500F0U) /**< \brief (GMAC) PTP Peer Event Frame Transmitted Seconds High Register */
   #define REG_GMAC_PEFRSH    (*(__I  uint32_t*)0x400500F4U) /**< \brief (GMAC) PTP Peer Event Frame Received Seconds High Register */
+  #define REG_GMAC_MID       (*(__I  uint32_t*)0x400500FCU) /**< \brief (GMAC) Module ID Register */
   #define REG_GMAC_OTLO      (*(__I  uint32_t*)0x40050100U) /**< \brief (GMAC) Octets Transmitted Low Register */
   #define REG_GMAC_OTHI      (*(__I  uint32_t*)0x40050104U) /**< \brief (GMAC) Octets Transmitted High Register */
   #define REG_GMAC_FT        (*(__I  uint32_t*)0x40050108U) /**< \brief (GMAC) Frames Transmitted Register */
@@ -319,6 +325,10 @@
   #define REG_GMAC_PEFTN     (*(__I  uint32_t*)0x400501F4U) /**< \brief (GMAC) PTP Peer Event Frame Transmitted Nanoseconds Register */
   #define REG_GMAC_PEFRSL    (*(__I  uint32_t*)0x400501F8U) /**< \brief (GMAC) PTP Peer Event Frame Received Seconds Low Register */
   #define REG_GMAC_PEFRN     (*(__I  uint32_t*)0x400501FCU) /**< \brief (GMAC) PTP Peer Event Frame Received Nanoseconds Register */
+  #define REG_GMAC_RXLPI     (*(__I  uint32_t*)0x40050270U) /**< \brief (GMAC) Received LPI Transitions */
+  #define REG_GMAC_RXLPITIME (*(__I  uint32_t*)0x40050274U) /**< \brief (GMAC) Received LPI Time */
+  #define REG_GMAC_TXLPI     (*(__I  uint32_t*)0x40050278U) /**< \brief (GMAC) Transmit LPI Transitions */
+  #define REG_GMAC_TXLPITIME (*(__I  uint32_t*)0x4005027CU) /**< \brief (GMAC) Transmit LPI Time */
   #define REG_GMAC_ISRPQ     (*(__I  uint32_t*)0x40050400U) /**< \brief (GMAC) Interrupt Status Register Priority Queue (index = 1) */
   #define REG_GMAC_TBQBAPQ   (*(__IO uint32_t*)0x40050440U) /**< \brief (GMAC) Transmit Buffer Queue Base Address Register Priority Queue (index = 1) */
   #define REG_GMAC_RBQBAPQ   (*(__IO uint32_t*)0x40050480U) /**< \brief (GMAC) Receive Buffer Queue Base Address Register Priority Queue (index = 1) */

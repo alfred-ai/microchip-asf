@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -107,9 +107,9 @@ typedef struct {
 #define SDRAMC_CR_CAS_Pos 5
 #define SDRAMC_CR_CAS_Msk (0x3u << SDRAMC_CR_CAS_Pos) /**< \brief (SDRAMC_CR) CAS Latency */
 #define SDRAMC_CR_CAS(value) ((SDRAMC_CR_CAS_Msk & ((value) << SDRAMC_CR_CAS_Pos)))
-#define   SDRAMC_CR_CAS_LATENCY1 (0x0u << 5) /**< \brief (SDRAMC_CR) 1 cycle CAS latency */
-#define   SDRAMC_CR_CAS_LATENCY2 (0x1u << 5) /**< \brief (SDRAMC_CR) 2 cycle CAS latency */
-#define   SDRAMC_CR_CAS_LATENCY3 (0x2u << 5) /**< \brief (SDRAMC_CR) 3 cycle CAS latency */
+#define   SDRAMC_CR_CAS_LATENCY1 (0x1u << 5) /**< \brief (SDRAMC_CR) 1 cycle latency */
+#define   SDRAMC_CR_CAS_LATENCY2 (0x2u << 5) /**< \brief (SDRAMC_CR) 2 cycle latency */
+#define   SDRAMC_CR_CAS_LATENCY3 (0x3u << 5) /**< \brief (SDRAMC_CR) 3 cycle latency */
 #define SDRAMC_CR_DBW (0x1u << 7) /**< \brief (SDRAMC_CR) Data Bus Width */
 #define SDRAMC_CR_TWR_Pos 8
 #define SDRAMC_CR_TWR_Msk (0xfu << SDRAMC_CR_TWR_Pos) /**< \brief (SDRAMC_CR) Write Recovery Delay */
@@ -153,11 +153,11 @@ typedef struct {
 #define   SDRAMC_LPR_TIMEOUT_LP_LAST_XFER_64 (0x1u << 12) /**< \brief (SDRAMC_LPR) The SDRAMC activates the SDRAM low-power mode 64 clock cycles after the end of the last transfer. */
 #define   SDRAMC_LPR_TIMEOUT_LP_LAST_XFER_128 (0x2u << 12) /**< \brief (SDRAMC_LPR) The SDRAMC activates the SDRAM low-power mode 128 clock cycles after the end of the last transfer. */
 /* -------- SDRAMC_IER : (SDRAMC Offset: 0x14) SDRAMC Interrupt Enable Register -------- */
-#define SDRAMC_IER_RES (0x1u << 0) /**< \brief (SDRAMC_IER) Refresh Error Status */
+#define SDRAMC_IER_RES (0x1u << 0) /**< \brief (SDRAMC_IER) Refresh Error Interrupt Enable */
 /* -------- SDRAMC_IDR : (SDRAMC Offset: 0x18) SDRAMC Interrupt Disable Register -------- */
-#define SDRAMC_IDR_RES (0x1u << 0) /**< \brief (SDRAMC_IDR) Refresh Error Status */
+#define SDRAMC_IDR_RES (0x1u << 0) /**< \brief (SDRAMC_IDR) Refresh Error Interrupt Disable */
 /* -------- SDRAMC_IMR : (SDRAMC Offset: 0x1C) SDRAMC Interrupt Mask Register -------- */
-#define SDRAMC_IMR_RES (0x1u << 0) /**< \brief (SDRAMC_IMR) Refresh Error Status */
+#define SDRAMC_IMR_RES (0x1u << 0) /**< \brief (SDRAMC_IMR) Refresh Error Interrupt Mask */
 /* -------- SDRAMC_ISR : (SDRAMC Offset: 0x20) SDRAMC Interrupt Status Register -------- */
 #define SDRAMC_ISR_RES (0x1u << 0) /**< \brief (SDRAMC_ISR) Refresh Error Status (cleared on read) */
 /* -------- SDRAMC_MDR : (SDRAMC Offset: 0x24) SDRAMC Memory Device Register -------- */

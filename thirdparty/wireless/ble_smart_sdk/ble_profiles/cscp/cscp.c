@@ -3,7 +3,7 @@
  *
  * \brief Custom Serial Chat Profile
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,55 +63,25 @@
 ///* Scan response data */
 //uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09,0xff, 0x00, 0x06, 0xd6, 0xb2, 0xf0, 0x05, 0xf0, 0xf8};
 	
-static const ble_event_callback_t csc_gap_handle[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	csc_prf_connected_state_handler,
-	csc_prf_disconnect_event_handler,
-	NULL,
-	NULL,
-	csc_prf_write_notification_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	csc_prf_write_notification_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gap_event_cb_t csc_gap_handle = {
+	.connected = csc_prf_connected_state_handler,
+	.disconnected = csc_prf_disconnect_event_handler,
+	.pair_done = csc_prf_write_notification_handler,
+	.encryption_status_changed = csc_prf_write_notification_handler
 };
 
-static const ble_event_callback_t csc_gatt_client_handle[] = {
-	csc_prf_service_found_handler,
-	NULL,
-	csc_prf_characteristic_found_handler,
-	csc_prf_descriptor_found_handler,
-	csc_prf_discovery_complete_handler,
-	NULL,
-	NULL,
-	NULL,
-	csc_prf_notification_handler,
-	NULL
+static const ble_gatt_client_event_cb_t csc_gatt_client_handle = {
+	.primary_service_found = csc_prf_service_found_handler,
+	.characteristic_found = csc_prf_characteristic_found_handler,
+	.descriptor_found = csc_prf_descriptor_found_handler,
+	.discovery_complete = csc_prf_discovery_complete_handler,
+	.notification_recieved = csc_prf_notification_handler
 };
 
-
-static const ble_event_callback_t csc_gatt_server_handle[] = {
-	csc_notification_confirmation_handler,
-	NULL,
-	csc_prf_char_changed_handler,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static const ble_gatt_server_event_cb_t csc_gatt_server_handle = {
+	.notification_confirmed = csc_notification_confirmation_handler,
+	.characteristic_changed = csc_prf_char_changed_handler
 };
-
 	
 /*Profile Information*/
 app_csc_data_t app_csc_info;	
@@ -138,18 +108,19 @@ void csc_prf_init(void *param)
 	
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GAP_EVENT_TYPE,
-	csc_gap_handle);
+	&csc_gap_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_CLIENT_EVENT_TYPE,
-	csc_gatt_client_handle);
+	&csc_gatt_client_handle);
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
 	BLE_GATT_SERVER_EVENT_TYPE,
-	csc_gatt_server_handle);
+	&csc_gatt_server_handle);
 	
 	status = ble_advertisement_data_set();
 	if (status != AT_BLE_SUCCESS) {
 		DBG_LOG("Advertisement data set failed reason %d",status);
 	}
+    ALL_UNUSED(param);
 }
 
 /**
@@ -281,7 +252,7 @@ at_ble_status_t csc_prf_write_notification_handler(void *params)
 	if(at_ble_characteristic_write(app_csc_info.csc_desc.conn_handle, app_csc_info.csc_desc.desc_handle, 0, 2, data, false, true) == AT_BLE_FAILURE){
 		DBG_LOG("\r\nFailed to send characteristic Write Request");
 	}
-
+	UNUSED(params);
 	return AT_BLE_SUCCESS;
 }
 
@@ -292,7 +263,7 @@ at_ble_status_t csc_prf_write_notification_handler(void *params)
 at_ble_status_t csc_prf_disconnect_event_handler(void *params)
 {
 	app_csc_info.devicedb = false;
-
+    ALL_UNUSED(params);
 	return AT_BLE_SUCCESS;
 }
 

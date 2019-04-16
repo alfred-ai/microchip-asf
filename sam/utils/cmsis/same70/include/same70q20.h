@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -140,8 +140,11 @@ typedef enum IRQn
   PWM1_IRQn            = 60, /**< 60 SAME70Q20 Pulse Width Modulation 1 (PWM1) */
   SDRAMC_IRQn          = 62, /**< 62 SAME70Q20 SDRAM Controller (SDRAMC) */
   RSWDT_IRQn           = 63, /**< 63 SAME70Q20 Reinforced Secure Watchdog Timer (RSWDT) */
+  ARM_IRQn             = 68, /**< 68 SAME70Q20 Floating Point Unit - IXC (ARM) */
+  I2SC0_IRQn           = 69, /**< 69 SAME70Q20 Inter-IC Sound controller (I2SC0) */
+  I2SC1_IRQn           = 70, /**< 70 SAME70Q20 Inter-IC Sound controller (I2SC1) */
 
-  PERIPH_COUNT_IRQn    = 64  /**< Number of peripheral IDs */
+  PERIPH_COUNT_IRQn    = 71  /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -231,6 +234,13 @@ typedef struct _DeviceVectors
   void* pvReserved61;
   void* pfnSDRAMC_Handler; /* 62 SDRAM Controller */
   void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
+  void* pvReserved64;
+  void* pvReserved65;
+  void* pvReserved66;
+  void* pvReserved67;
+  void* pfnARM_Handler;    /* 68 Floating Point Unit - IXC */
+  void* pfnI2SC0_Handler;  /* 69 Inter-IC Sound controller */
+  void* pfnI2SC1_Handler;  /* 70 Inter-IC Sound controller */
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -250,12 +260,15 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
+void ARM_Handler        ( void );
 void DACC_Handler       ( void );
 void EFC_Handler        ( void );
 void GMAC_Handler       ( void );
 void HSMCI_Handler      ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
+void I2SC0_Handler      ( void );
+void I2SC1_Handler      ( void );
 void MCAN0_Handler      ( void );
 void MCAN1_Handler      ( void );
 void PIOA_Handler       ( void );
@@ -345,6 +358,7 @@ void XDMAC_Handler      ( void );
 #include "component/gmac.h"
 #include "component/gpbr.h"
 #include "component/hsmci.h"
+#include "component/i2sc.h"
 #include "component/icm.h"
 #include "component/isi.h"
 #include "component/matrix.h"
@@ -412,6 +426,8 @@ void XDMAC_Handler      ( void );
 #include "instance/smc.h"
 #include "instance/sdramc.h"
 #include "instance/matrix.h"
+#include "instance/i2sc0.h"
+#include "instance/i2sc1.h"
 #include "instance/utmi.h"
 #include "instance/pmc.h"
 #include "instance/uart0.h"
@@ -499,8 +515,11 @@ void XDMAC_Handler      ( void );
 #define ID_PWM1   (60) /**< \brief Pulse Width Modulation 1 (PWM1) */
 #define ID_SDRAMC (62) /**< \brief SDRAM Controller (SDRAMC) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
+#define ID_ARM    (68) /**< \brief Floating Point Unit - IXC (ARM) */
+#define ID_I2SC0  (69) /**< \brief Inter-IC Sound controller (I2SC0) */
+#define ID_I2SC1  (70) /**< \brief Inter-IC Sound controller (I2SC1) */
 
-#define ID_PERIPH_COUNT (64) /**< \brief Number of peripheral IDs */
+#define ID_PERIPH_COUNT (71) /**< \brief Number of peripheral IDs */
 /*@}*/
 
 /* ************************************************************************** */
@@ -543,6 +562,8 @@ void XDMAC_Handler      ( void );
 #define SMC    (0x40080000U) /**< \brief (SMC   ) Base Address */
 #define SDRAMC (0x40084000U) /**< \brief (SDRAMC) Base Address */
 #define MATRIX (0x40088000U) /**< \brief (MATRIX) Base Address */
+#define I2SC0  (0x4008C000U) /**< \brief (I2SC0 ) Base Address */
+#define I2SC1  (0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   (0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    (0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  (0x400E0800U) /**< \brief (UART0 ) Base Address */
@@ -598,6 +619,8 @@ void XDMAC_Handler      ( void );
 #define SMC    ((Smc    *)0x40080000U) /**< \brief (SMC   ) Base Address */
 #define SDRAMC ((Sdramc *)0x40084000U) /**< \brief (SDRAMC) Base Address */
 #define MATRIX ((Matrix *)0x40088000U) /**< \brief (MATRIX) Base Address */
+#define I2SC0  ((I2sc   *)0x4008C000U) /**< \brief (I2SC0 ) Base Address */
+#define I2SC1  ((I2sc   *)0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   ((Utmi   *)0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    ((Pmc    *)0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  ((Uart   *)0x400E0800U) /**< \brief (UART0 ) Base Address */
@@ -637,7 +660,7 @@ void XDMAC_Handler      ( void );
 
 #define IFLASH_SIZE             (0x100000u)
 #define IFLASH_PAGE_SIZE        (512u)
-#define IFLASH_LOCK_REGION_SIZE (16384u)
+#define IFLASH_LOCK_REGION_SIZE (8192u)
 #define IFLASH_NB_OF_PAGES      (2048u)
 #define IFLASH_NB_OF_LOCK_BITS  (64u)
 #define IRAM_SIZE               (0x60000u)
@@ -676,7 +699,7 @@ void XDMAC_Handler      ( void );
 #define CHIP_FREQ_MAINCK_RC_4MHZ        (4000000UL)
 #define CHIP_FREQ_MAINCK_RC_8MHZ        (8000000UL)
 #define CHIP_FREQ_MAINCK_RC_12MHZ       (12000000UL)
-#define CHIP_FREQ_CPU_MAX               (300000000UL)
+#define CHIP_FREQ_CPU_MAX               (120000000UL)
 #define CHIP_FREQ_XTAL_32K              (32768UL)
 #define CHIP_FREQ_XTAL_12M              (12000000UL)
 

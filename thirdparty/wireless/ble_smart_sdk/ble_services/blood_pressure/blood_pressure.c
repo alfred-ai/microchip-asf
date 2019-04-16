@@ -3,7 +3,7 @@
  *
  * \brief Blood Pressure Service
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -79,10 +79,6 @@ uint16_t blood_pressure_feature_value = 0x001f;
  */
 void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 {
-	blp_measurement_value = DEFAULT_VALUE;
-	intermediate_cuff_pressure_value = DEFAULT_VALUE;
-	blood_pressure_feature_value = 0x001f;
-
 	blood_pressure_serv->serv_handle = 0;
 	blood_pressure_serv->serv_uuid.type = AT_BLE_UUID_16;
 	blood_pressure_serv->serv_uuid.uuid[0] = (uint8_t)BLOOD_PRESSURE_SERVICE_UUID;

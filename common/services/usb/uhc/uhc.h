@@ -3,7 +3,7 @@
  *
  * \brief Interface of the USB Host Controller (UHC)
  *
- * Copyright (C) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -344,6 +344,12 @@ uhd_speed_t uhc_dev_get_speed(uhc_device_t* dev);
  * \return True, if high speed is supported
  */
 bool uhc_dev_is_high_speed_support(uhc_device_t* dev);
+
+/**
+ * \brief Reset to re-enumerate
+ * \param dev    Device to request
+ */
+void uhc_dev_reset(uhc_device_t *dev);
 
 //@}
 

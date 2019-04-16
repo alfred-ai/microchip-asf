@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -87,6 +87,7 @@ typedef struct {
 #define DACC_MR_WORD (0x1u << 4) /**< \brief (DACC_MR) Word Transfer Mode */
 #define   DACC_MR_WORD_DISABLED (0x0u << 4) /**< \brief (DACC_MR) One data to convert is written to the FIFO per access to DACC */
 #define   DACC_MR_WORD_ENABLED (0x1u << 4) /**< \brief (DACC_MR) Two data to convert are written to the FIFO per access to DACC (reduces number of requests to DMA and the number of system bus accesses) */
+#define DACC_MR_ZERO (0x1u << 5) /**< \brief (DACC_MR) Must always be written to 0. */
 #define DACC_MR_REFRESH_Pos 8
 #define DACC_MR_REFRESH_Msk (0xffu << DACC_MR_REFRESH_Pos) /**< \brief (DACC_MR) Refresh Period */
 #define DACC_MR_REFRESH(value) ((DACC_MR_REFRESH_Msk & ((value) << DACC_MR_REFRESH_Pos)))
@@ -106,23 +107,25 @@ typedef struct {
 #define DACC_TRIGR_TRGSEL0_Pos 4
 #define DACC_TRIGR_TRGSEL0_Msk (0x7u << DACC_TRIGR_TRGSEL0_Pos) /**< \brief (DACC_TRIGR) Trigger Selection of Channel 0 */
 #define DACC_TRIGR_TRGSEL0(value) ((DACC_TRIGR_TRGSEL0_Msk & ((value) << DACC_TRIGR_TRGSEL0_Pos)))
-#define   DACC_TRIGR_TRGSEL0_TRGSEL0 (0x0u << 4) /**< \brief (DACC_TRIGR) TC0 output */
-#define   DACC_TRIGR_TRGSEL0_TRGSEL1 (0x1u << 4) /**< \brief (DACC_TRIGR) TC1 output */
-#define   DACC_TRIGR_TRGSEL0_TRGSEL2 (0x2u << 4) /**< \brief (DACC_TRIGR) TC2 output */
-#define   DACC_TRIGR_TRGSEL0_TRGSEL3 (0x3u << 4) /**< \brief (DACC_TRIGR) PWM0 event 0 */
-#define   DACC_TRIGR_TRGSEL0_TRGSEL4 (0x4u << 4) /**< \brief (DACC_TRIGR) PWM0 event 1 */
-#define   DACC_TRIGR_TRGSEL0_TRGSEL5 (0x5u << 4) /**< \brief (DACC_TRIGR) PWM1 event 0 */
-#define   DACC_TRIGR_TRGSEL0_TRGSEL6 (0x6u << 4) /**< \brief (DACC_TRIGR) PWM1 event 1 */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL0 (0x0u << 4) /**< \brief (DACC_TRIGR) DATRG */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL1 (0x1u << 4) /**< \brief (DACC_TRIGR) TC0 output */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL2 (0x2u << 4) /**< \brief (DACC_TRIGR) TC1 output */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL3 (0x3u << 4) /**< \brief (DACC_TRIGR) TC2 output */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL4 (0x4u << 4) /**< \brief (DACC_TRIGR) PWM0 event 0 */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL5 (0x5u << 4) /**< \brief (DACC_TRIGR) PWM0 event 1 */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL6 (0x6u << 4) /**< \brief (DACC_TRIGR) PWM1 event 0 */
+#define   DACC_TRIGR_TRGSEL0_TRGSEL7 (0x7u << 4) /**< \brief (DACC_TRIGR) PWM1 event 1 */
 #define DACC_TRIGR_TRGSEL1_Pos 8
 #define DACC_TRIGR_TRGSEL1_Msk (0x7u << DACC_TRIGR_TRGSEL1_Pos) /**< \brief (DACC_TRIGR) Trigger Selection of Channel 1 */
 #define DACC_TRIGR_TRGSEL1(value) ((DACC_TRIGR_TRGSEL1_Msk & ((value) << DACC_TRIGR_TRGSEL1_Pos)))
-#define   DACC_TRIGR_TRGSEL1_TRGSEL0 (0x0u << 8) /**< \brief (DACC_TRIGR) TC0 output */
-#define   DACC_TRIGR_TRGSEL1_TRGSEL1 (0x1u << 8) /**< \brief (DACC_TRIGR) TC1 output */
-#define   DACC_TRIGR_TRGSEL1_TRGSEL2 (0x2u << 8) /**< \brief (DACC_TRIGR) TC2 output */
-#define   DACC_TRIGR_TRGSEL1_TRGSEL3 (0x3u << 8) /**< \brief (DACC_TRIGR) PWM0 event 0 */
-#define   DACC_TRIGR_TRGSEL1_TRGSEL4 (0x4u << 8) /**< \brief (DACC_TRIGR) PWM0 event 1 */
-#define   DACC_TRIGR_TRGSEL1_TRGSEL5 (0x5u << 8) /**< \brief (DACC_TRIGR) PWM1 event 0 */
-#define   DACC_TRIGR_TRGSEL1_TRGSEL6 (0x6u << 8) /**< \brief (DACC_TRIGR) PWM1 event 1 */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL0 (0x0u << 8) /**< \brief (DACC_TRIGR) DATRG */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL1 (0x1u << 8) /**< \brief (DACC_TRIGR) TC0 output */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL2 (0x2u << 8) /**< \brief (DACC_TRIGR) TC1 output */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL3 (0x3u << 8) /**< \brief (DACC_TRIGR) TC2 output */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL4 (0x4u << 8) /**< \brief (DACC_TRIGR) PWM0 event 0 */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL5 (0x5u << 8) /**< \brief (DACC_TRIGR) PWM0 event 1 */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL6 (0x6u << 8) /**< \brief (DACC_TRIGR) PWM1 event 0 */
+#define   DACC_TRIGR_TRGSEL1_TRGSEL7 (0x7u << 8) /**< \brief (DACC_TRIGR) PWM1 event 1 */
 #define DACC_TRIGR_OSR0_Pos 16
 #define DACC_TRIGR_OSR0_Msk (0x7u << DACC_TRIGR_OSR0_Pos) /**< \brief (DACC_TRIGR) Over Sampling Ratio of Channel 0 */
 #define DACC_TRIGR_OSR0(value) ((DACC_TRIGR_OSR0_Msk & ((value) << DACC_TRIGR_OSR0_Pos)))

@@ -3,7 +3,7 @@
 *
 * \brief Phone Alert Status Service
 *
-* Copyright (c) 2016 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -94,7 +94,8 @@ at_ble_status_t pas_read_ringer_setting_char(at_ble_handle_t conn_handle,at_ble_
 at_ble_status_t pas_char_write_notification(at_ble_handle_t conn_handle,at_ble_handle_t char_handle,bool enable)
 {
 	uint16_t data = enable;
-	return (at_ble_characteristic_write(conn_handle, char_handle, 0, CLIENT_CONF_CHAR_DESCRIPTOR_LEN, (uint8_t *)&data, false, false));
+	return (at_ble_characteristic_write(conn_handle,char_handle,0,CLIENT_CONF_CHAR_DESCRIPTOR_LEN
+	,(uint8_t *)&data,false,true));
 }
 
 /**
@@ -108,6 +109,7 @@ at_ble_status_t pas_char_write_notification(at_ble_handle_t conn_handle,at_ble_h
 at_ble_status_t pas_char_set_ringer_control_point(at_ble_handle_t conn_handle,at_ble_handle_t char_handle,uint8_t data)
 {
 	uint8_t ringer_data = data;
-	return (at_ble_characteristic_write(conn_handle, char_handle, 0, RINGER_SETTING_CHAR_LEN, &ringer_data, false, false));
+	return (at_ble_characteristic_write(conn_handle,char_handle,0,RINGER_SETTING_CHAR_LEN
+	,&ringer_data,false,false));
 }
 

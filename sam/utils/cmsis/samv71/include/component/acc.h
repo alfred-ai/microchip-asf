@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -66,6 +66,8 @@ typedef struct {
   __I  uint32_t Reserved3[19];
   __IO uint32_t ACC_WPMR;      /**< \brief (Acc Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t ACC_WPSR;      /**< \brief (Acc Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved4[4];
+  __I  uint32_t ACC_VER;       /**< \brief (Acc Offset: 0xFC) Version Register */
 } Acc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- ACC_CR : (ACC Offset: 0x00) Control Register -------- */
@@ -76,6 +78,7 @@ typedef struct {
 #define ACC_MR_SELMINUS(value) ((ACC_MR_SELMINUS_Msk & ((value) << ACC_MR_SELMINUS_Pos)))
 #define   ACC_MR_SELMINUS_TS (0x0u << 0) /**< \brief (ACC_MR) Select TS */
 #define   ACC_MR_SELMINUS_ADVREFP (0x1u << 0) /**< \brief (ACC_MR) Select ADVREFP */
+#define   ACC_MR_SELMINUS_VREFP (0x1u << 0) /**< \brief (ACC_MR) Select VREFP */
 #define   ACC_MR_SELMINUS_DAC0 (0x2u << 0) /**< \brief (ACC_MR) Select DAC0 */
 #define   ACC_MR_SELMINUS_DAC1 (0x3u << 0) /**< \brief (ACC_MR) Select DAC1 */
 #define   ACC_MR_SELMINUS_AFE0_AD0 (0x4u << 0) /**< \brief (ACC_MR) Select AFE0_AD0 */
@@ -136,6 +139,11 @@ typedef struct {
 #define   ACC_WPMR_WPKEY_PASSWD (0x414343u << 8) /**< \brief (ACC_WPMR) Writing any other value in this field aborts the write operation of the WPEN bit.Always reads as 0. */
 /* -------- ACC_WPSR : (ACC Offset: 0xE8) Write Protection Status Register -------- */
 #define ACC_WPSR_WPVS (0x1u << 0) /**< \brief (ACC_WPSR) Write Protection Violation Status */
+/* -------- ACC_VER : (ACC Offset: 0xFC) Version Register -------- */
+#define ACC_VER_VERSION_Pos 0
+#define ACC_VER_VERSION_Msk (0xfffu << ACC_VER_VERSION_Pos) /**< \brief (ACC_VER) Version of the Hardware Module */
+#define ACC_VER_MFN_Pos 16
+#define ACC_VER_MFN_Msk (0x7u << ACC_VER_MFN_Pos) /**< \brief (ACC_VER) Metal Fix Number */
 
 /*@}*/
 

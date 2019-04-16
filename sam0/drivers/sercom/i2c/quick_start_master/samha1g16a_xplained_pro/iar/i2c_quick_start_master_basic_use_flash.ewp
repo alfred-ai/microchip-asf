@@ -2153,6 +2153,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/linctrl.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/tc4.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/mtb.h</name>
 							</file>
 							<file>
@@ -2162,13 +2165,13 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/sercom4.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/tc4.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/tc7.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/pac2.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/dmac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/sercom2.h</name>
@@ -2219,9 +2222,6 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/tcc1.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/dmac.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/instance/port.h</name>
 							</file>
 							<file>
@@ -2237,7 +2237,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/evsys.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/sercom.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/adc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/linctrl.h</name>
@@ -2258,10 +2258,10 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/eic.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/dsu.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/pm.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/pm.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/dsu.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/gclk.h</name>
@@ -2273,7 +2273,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/tcc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/adc.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/sercom.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/component/tc.h</name>
@@ -2305,12 +2305,30 @@
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/pio/samha1g14a.h</name>
 							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/pio/samha1g15ab.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/pio/samha1g14ab.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/pio/samha1g16ab.h</name>
+							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1.h</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1g14a.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1.h</name>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1g16ab.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1g14ab.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1g15ab.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samha1/include/samha1g15a.h</name>
@@ -2321,9 +2339,6 @@
 					</group>
 				</group>
 			</group>
-			<file>
-				<name>$PROJ_DIR$/../../../../../../utils/compiler.h</name>
-			</file>
 			<group>
 				<name>preprocessor</name>
 				<file>
@@ -2342,6 +2357,9 @@
 					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/mrepeat.h</name>
 				</file>
 			</group>
+			<file>
+				<name>$PROJ_DIR$/../../../../../../utils/compiler.h</name>
+			</file>
 			<group>
 				<name>header_files</name>
 				<file>

@@ -74,12 +74,16 @@
 #define USB_REQ_AOA_SEND_HID_EVENT    57
 
 /** Google Vendor ID */
-#define GOOGLE_VID              0x18D1
+#define GOOGLE_VID                  0x18D1
 /** Google Product ID which indicates it supports Android Accessory Device */
-#define AOA_PID                 0x2D00
+#define AOA_ACCESSORY_PID           0x2D00
 /** Google Product ID which indicates it supports
  * Android Accessory Device which supports ADB */
-#define AOA_ADB_PID             0x2D01
+#define AOA_ACCESSORY_ADB_PID       0x2D01
+#define AOA_AUDIO_PID               0x0202
+#define AOA_AUDIO_ADB_PID           0x0203
+#define AOA_ACCESSORY_AUDIO_PID     0x0204
+#define AOA_ACCESSORY_AUDIO_ADB_PID 0x0205
 
 /** Index of manufacturer */
 #define AOA_STRING_INDEX_MANUFACTURER  0

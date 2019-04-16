@@ -3,7 +3,7 @@
  *
  * \brief lwIP abstraction layer for SAM.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -42,6 +42,10 @@
 #define CC_H_INCLUDED
 
 #include "osprintf.h"
+
+#ifdef BYTE_ORDER
+#undef BYTE_ORDER
+#endif
 
 /* Define platform endianness */
 #define BYTE_ORDER LITTLE_ENDIAN

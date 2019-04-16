@@ -3,7 +3,7 @@
  *
  * \brief Scan Parameters Service Declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,6 +61,8 @@
 * \Timer callback handler called on timer expiry
 */
 void timer_callback_handler(void);
+
+static at_ble_status_t platform_interrupt_app_event(void *param);
 
 #endif /* __SCAN_PARAMETER_APP_H__ */
 

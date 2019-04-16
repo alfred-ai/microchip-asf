@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -901,6 +901,7 @@ typedef struct {
 #define USBHS_HSTDMASTATUS_BUFF_COUNT(value) ((USBHS_HSTDMASTATUS_BUFF_COUNT_Msk & ((value) << USBHS_HSTDMASTATUS_BUFF_COUNT_Pos)))
 /* -------- USBHS_CTRL : (USBHS Offset: 0x0800) General Control Register -------- */
 #define USBHS_CTRL_RDERRE (0x1u << 4) /**< \brief (USBHS_CTRL) Remote Device Connection Error Interrupt Enable */
+#define USBHS_CTRL_VBUSHWC (0x1u << 8) /**< \brief (USBHS_CTRL) VBUS Hardware Control */
 #define USBHS_CTRL_FRZCLK (0x1u << 14) /**< \brief (USBHS_CTRL) Freeze USB Clock */
 #define USBHS_CTRL_USBE (0x1u << 15) /**< \brief (USBHS_CTRL) USBHS Enable */
 #define USBHS_CTRL_UIMOD (0x1u << 25) /**< \brief (USBHS_CTRL) USBHS Mode */

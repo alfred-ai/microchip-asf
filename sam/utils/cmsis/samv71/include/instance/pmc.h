@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -69,6 +69,7 @@
   #define REG_PMC_FOCR                        (0x400E0678U) /**< \brief (PMC) Fault Output Clear Register */
   #define REG_PMC_WPMR                        (0x400E06E4U) /**< \brief (PMC) Write Protection Mode Register */
   #define REG_PMC_WPSR                        (0x400E06E8U) /**< \brief (PMC) Write Protection Status Register */
+  #define REG_PMC_VERSION                     (0x400E06FCU) /**< \brief (PMC) Version Register */
   #define REG_PMC_PCER1                       (0x400E0700U) /**< \brief (PMC) Peripheral Clock Enable Register 1 */
   #define REG_PMC_PCDR1                       (0x400E0704U) /**< \brief (PMC) Peripheral Clock Disable Register 1 */
   #define REG_PMC_PCSR1                       (0x400E0708U) /**< \brief (PMC) Peripheral Clock Status Register 1 */
@@ -78,11 +79,14 @@
   #define REG_PMC_SLPWK_DR0                   (0x400E0718U) /**< \brief (PMC) SleepWalking Disable Register 0 */
   #define REG_PMC_SLPWK_SR0                   (0x400E071CU) /**< \brief (PMC) SleepWalking Status Register 0 */
   #define REG_PMC_SLPWK_ASR0                  (0x400E0720U) /**< \brief (PMC) SleepWalking Activity Status Register 0 */
+  #define REG_PMC_PMMR                        (0x400E0730U) /**< \brief (PMC) PLL Maximum Multiplier Value Register */
   #define REG_PMC_SLPWK_ER1                   (0x400E0734U) /**< \brief (PMC) SleepWalking Enable Register 1 */
   #define REG_PMC_SLPWK_DR1                   (0x400E0738U) /**< \brief (PMC) SleepWalking Disable Register 1 */
   #define REG_PMC_SLPWK_SR1                   (0x400E073CU) /**< \brief (PMC) SleepWalking Status Register 1 */
   #define REG_PMC_SLPWK_ASR1                  (0x400E0740U) /**< \brief (PMC) SleepWalking Activity Status Register 1 */
   #define REG_PMC_SLPWK_AIPR                  (0x400E0744U) /**< \brief (PMC) SleepWalking Activity In Progress Register */
+  #define REG_PMC_APLLACR                     (0x400E0758U) /**< \brief (PMC) Audio PLL Analog Configuration Register */
+  #define REG_PMC_WMST                        (0x400E075CU) /**< \brief (PMC) Wait Mode Startup Time Register */
 #else
   #define REG_PMC_SCER       (*(__O  uint32_t*)0x400E0600U) /**< \brief (PMC) System Clock Enable Register */
   #define REG_PMC_SCDR       (*(__O  uint32_t*)0x400E0604U) /**< \brief (PMC) System Clock Disable Register */
@@ -106,6 +110,7 @@
   #define REG_PMC_FOCR       (*(__O  uint32_t*)0x400E0678U) /**< \brief (PMC) Fault Output Clear Register */
   #define REG_PMC_WPMR       (*(__IO uint32_t*)0x400E06E4U) /**< \brief (PMC) Write Protection Mode Register */
   #define REG_PMC_WPSR       (*(__I  uint32_t*)0x400E06E8U) /**< \brief (PMC) Write Protection Status Register */
+  #define REG_PMC_VERSION    (*(__I  uint32_t*)0x400E06FCU) /**< \brief (PMC) Version Register */
   #define REG_PMC_PCER1      (*(__O  uint32_t*)0x400E0700U) /**< \brief (PMC) Peripheral Clock Enable Register 1 */
   #define REG_PMC_PCDR1      (*(__O  uint32_t*)0x400E0704U) /**< \brief (PMC) Peripheral Clock Disable Register 1 */
   #define REG_PMC_PCSR1      (*(__I  uint32_t*)0x400E0708U) /**< \brief (PMC) Peripheral Clock Status Register 1 */
@@ -115,11 +120,14 @@
   #define REG_PMC_SLPWK_DR0  (*(__O  uint32_t*)0x400E0718U) /**< \brief (PMC) SleepWalking Disable Register 0 */
   #define REG_PMC_SLPWK_SR0  (*(__I  uint32_t*)0x400E071CU) /**< \brief (PMC) SleepWalking Status Register 0 */
   #define REG_PMC_SLPWK_ASR0 (*(__I  uint32_t*)0x400E0720U) /**< \brief (PMC) SleepWalking Activity Status Register 0 */
+  #define REG_PMC_PMMR       (*(__IO uint32_t*)0x400E0730U) /**< \brief (PMC) PLL Maximum Multiplier Value Register */
   #define REG_PMC_SLPWK_ER1  (*(__O  uint32_t*)0x400E0734U) /**< \brief (PMC) SleepWalking Enable Register 1 */
   #define REG_PMC_SLPWK_DR1  (*(__O  uint32_t*)0x400E0738U) /**< \brief (PMC) SleepWalking Disable Register 1 */
   #define REG_PMC_SLPWK_SR1  (*(__I  uint32_t*)0x400E073CU) /**< \brief (PMC) SleepWalking Status Register 1 */
   #define REG_PMC_SLPWK_ASR1 (*(__I  uint32_t*)0x400E0740U) /**< \brief (PMC) SleepWalking Activity Status Register 1 */
   #define REG_PMC_SLPWK_AIPR (*(__I  uint32_t*)0x400E0744U) /**< \brief (PMC) SleepWalking Activity In Progress Register */
+  #define REG_PMC_APLLACR    (*(__IO uint32_t*)0x400E0758U) /**< \brief (PMC) Audio PLL Analog Configuration Register */
+  #define REG_PMC_WMST       (*(__IO uint32_t*)0x400E075CU) /**< \brief (PMC) Wait Mode Startup Time Register */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAMV71_PMC_INSTANCE_ */

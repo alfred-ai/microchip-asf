@@ -528,6 +528,10 @@ sint8 m2m_wifi_init_hold(void);
 
 @brief
     Second part of m2m_wifi_init, continuing from where m2m_wifi_init_hold left off.
+
+@param [in]	param 
+	Structure containing configration details
+
 @see
     m2m_wifi_init
 */
@@ -1566,10 +1570,10 @@ NMI_API sint8 m2m_wifi_set_scan_region(uint16  ScanRegion);
     NMI_API sint8 m2m_wifi_request_scan(uint8 ch);
 
 @brief
-    Asynchronous API to request the WINC IC perform a scan for networks.
+	Asynchronous API to request the WINC IC perform a scan for networks.
 
 @details
-    Scan statii are delivered to the application via the Wi-Fi event callback (@ref tpfAppWifiCb) in 
+	Scan statuses are delivered to the application via the Wi-Fi event callback (@ref tpfAppWifiCb) in 
 	three stages. The first step involves the event @ref M2M_WIFI_RESP_SCAN_DONE which, if successful, 
 	provides the number of detected networks (access points). The application must then read the list 
 	of access points via multiple calls to the asynchronous @ref m2m_wifi_req_scan_result API. For 
@@ -1577,34 +1581,33 @@ NMI_API sint8 m2m_wifi_set_scan_region(uint16  ScanRegion);
 	@ref M2M_WIFI_RESP_SCAN_RESULT.
 
 @param [in]	ch
-              RF Channel ID for SCAN operation. It should be set according to tenuM2mScanCh. 
-              With a value of M2M_WIFI_CH_ALL(255)), means to scan all channels.
+				RF Channel ID for SCAN operation. It should be set according to tenuM2mScanCh, with a 
+				value of @ref M2M_WIFI_CH_ALL to scan all channels.
 
 @return
-    The function returns @ref M2M_SUCCESS if the command has been successfully queued to the WINC, 
+	The function returns @ref M2M_SUCCESS if the command has been successfully queued to the WINC, 
 	and a negative value otherwise.
 
 @warning
-    This API is valid only for STA mode, it may be called regardless of connection state (connected
+	This API is valid only for STA mode, it may be called regardless of connection state (connected
 	or disconnected).
 
 @pre
-    - A Wi-Fi notification callback of type @ref tpfAppWifiCb MUST be implemented and registered at 
+	- A Wi-Fi notification callback of type @ref tpfAppWifiCb MUST be implemented and registered at 
 	  initialization. Registration of the callback is done via @ref m2m_wifi_init.
-    - The events @ref M2M_WIFI_RESP_SCAN_DONE and @ref M2M_WIFI_RESP_SCAN_RESULT must be handled in 
+	- The events @ref M2M_WIFI_RESP_SCAN_DONE and @ref M2M_WIFI_RESP_SCAN_RESULT must be handled in 
 	  the (tpfAppWifiCb) callback.
-    - The @ref m2m_wifi_handle_events function must be called to receive the responses in the 
+	- The @ref m2m_wifi_handle_events function must be called to receive the responses in the 
 	  callback.
 
-@see
-    M2M_WIFI_RESP_SCAN_DONE
-    M2M_WIFI_RESP_SCAN_RESULT
-    tpfAppWifiCb
-    tstrM2mWifiscanResult
-    tenuM2mScanCh
-    m2m_wifi_init
-    m2m_wifi_handle_events
-    m2m_wifi_req_scan_result
+@see	M2M_WIFI_RESP_SCAN_DONE
+@see	M2M_WIFI_RESP_SCAN_RESULT
+@see	tpfAppWifiCb
+@see	tstrM2mWifiscanResult
+@see	tenuM2mScanCh
+@see	m2m_wifi_init
+@see	m2m_wifi_handle_events
+@see	m2m_wifi_req_scan_result
 
 \section WIFIExample6 Example
   The code snippet demonstrates an example of how the scan request is called from the application's main function and the handling of
@@ -1692,6 +1695,40 @@ NMI_API sint8 m2m_wifi_set_scan_region(uint16  ScanRegion);
 @endcode
 */
 NMI_API sint8 m2m_wifi_request_scan(uint8 ch);
+
+/*!
+@fn	\
+	sint8 m2m_wifi_request_scan_passive(uint8 ch);
+
+@param [in]	ch
+				RF Channel ID for SCAN operation. It should be set according to tenuM2mScanCh, with a 
+				value of @ref M2M_WIFI_CH_ALL to scan all channels.
+
+@warning
+	This function is not allowed in P2P or AP modes. It works only for STA mode (both connected or disconnected states).
+
+@pre
+	- A Wi-Fi notification callback of type @ref tpfAppWifiCb MUST be implemented and registered at initialization. Registering the callback
+	  is done through passing it to the @ref m2m_wifi_init.
+	- The events @ref M2M_WIFI_RESP_SCAN_DONE and @ref M2M_WIFI_RESP_SCAN_RESULT.
+	  must be handled in the callback.
+	- The @ref m2m_wifi_handle_events function MUST be called to receive the responses in the callback.
+
+@see	m2m_wifi_request_scan
+@see	M2M_WIFI_RESP_SCAN_DONE
+@see	M2M_WIFI_RESP_SCAN_RESULT
+@see	tpfAppWifiCb
+@see	tstrM2MScanOption
+@see	tstrM2mWifiscanResult
+@see	tenuM2mScanCh
+@see	m2m_wifi_init
+@see	m2m_wifi_handle_events
+@see	m2m_wifi_req_scan_result
+
+@return
+	The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
+*/
+sint8 m2m_wifi_request_scan_passive(uint8 ch);
 
 /*!
 @fn        NMI_API uint8 m2m_wifi_get_num_ap_found(void);
@@ -2001,7 +2038,8 @@ NMI_API sint8 m2m_wifi_req_curr_rssi(void);
 @fn          NMI_API sint8 m2m_wifi_req_restrict_ble(void);
 
 @brief
-    Asynchronous API to request restricting of ble.
+    Asynchronous API to request restricting of BLE functionality by placing the BLE processor in a low power state.
+    It is recommended to do this if it is know that BLE functionality will not be used for any significant length of time.
 
 @return
     The function returns @ref M2M_SUCCESS if the command has been successfully queued to the WINC, 
@@ -2019,7 +2057,7 @@ NMI_API sint8 m2m_wifi_req_restrict_ble(void);
 @fn          NMI_API sint8 m2m_wifi_req_unrestrict_ble(void);
 
 @brief
-    Asynchronous API to request un-restricting of ble.
+    Asynchronous API to request un-restricting of BLE functionality by reverting the BLE processor to full power mode. 
 
 @return
     The function returns @ref M2M_SUCCESS if the command has been successfully queued to the WINC, 
@@ -2126,7 +2164,7 @@ NMI_API sint8 m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn);
     The function returns @ref M2M_SUCCESS for successful operation and a negative value otherwise.
 
 @warning
-    - This API is valid only when the WINC IC is operating in M2M_PS_MANUAL power save mode.
+    - This API is currently unsupported on the WINC3400
 
 @see
     tenuPowerSaveModes 

@@ -3,7 +3,7 @@
  
   \brief Includes dAtmel BLE Host Error Codes
  
-  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Copyright (c) 2016-2017, Atmel Corporation. All rights reserved.
   Released under NDA
   Licensed under Atmel's Limited License Agreement.
  
@@ -378,6 +378,8 @@ typedef enum
     AT_BLE_BUS_FAILURE = 0XE1,
     ///Generic Failure
     AT_BLE_FAILURE  = 0xE2,
+    ///AES-CCM MIC checking error
+    AT_BLE_AES_CCM_ERR = 0xFC,
     ///Client characteristic configuration improperly configured
     AT_BLE_PRF_CCCD_IMPR_CONFIGURED  = 0xFD,
     ///Procedure already in progress

@@ -144,6 +144,7 @@ if /I "a%5a" == "aa" (
 
 if /I "a%2a" == "aD21a" goto goodlayout
 if /I "a%2a" == "aSAMD21a" goto goodlayout
+if /I "a%2a" == "aSAMW25a" goto goodlayout
 if /I "a%2a" == "aSAM4Sa" goto goodlayout
 goto usage
 :goodlayout
@@ -156,7 +157,7 @@ if /I "%3" == "2B0"   Goto chip2B0
 if /I "%3" == "3A0"   Goto chip3A0
 
 :USAGE
-echo Usage %0 (I2C-UART-OTA) (D21-SAMD21-SAMW25) (3400-2B0-3A0) (aardvark_serial_number or 0) (comport or 0) (test or dev) (rsa key or none) (rsa cert or none if key is none) (ecdsa cert or none)
+echo Usage %0 (I2C-UART-OTA) (D21-SAMD21-SAMW25-SAM4S) (3400-2B0-3A0) (aardvark_serial_number or 0) (comport or 0) (test or dev) (rsa key or none) (rsa cert or none if key is none) (ecdsa cert or none)
 @ECHO %CMDCMDLINE% | FIND /I /C "/C" > NUL && PAUSE
 exit /b 2
 
@@ -205,9 +206,9 @@ IF %FMode%==debug_ota (
 		-ota_img  %OTA_3400% ^
 		-fw_path ../../../firmware/wifi_v111/ASIC_3400/wifi_firmware.bin ^
 		-op_path %FIRMWARE_3400_PATH% ^
-		-bf_bin  ../../../boot_firmware/release/boot_firmware.bin ^
-		-pf_bin  ../../../programmer_firmware/release/programmer_firmware.bin ^
-		-df_bin  ../../../downloader_firmware/release/downloader_firmware.bin ^
+		-bf_bin  ../../../boot_firmware/release3400/boot_firmware.bin ^
+		-pf_bin  ../../../programmer_firmware/release3400/programmer_firmware.bin ^
+		-df_bin  ../../../downloader_firmware/release3400/downloader_firmware.bin ^
 		-bt_img ../../../ble/bt_firmware/fw.bin 
 	IF ERRORLEVEL 1 goto FAILED
 
@@ -221,9 +222,9 @@ echo Downloading Image... (pod %AARDVARK%) (comport %COMPORT%)
 image_downloader.exe ^
 	-no_wait ^
 	-aardvark %AARDVARK% %COMPORT% ^
-	-bf_bin  ../../../boot_firmware/release/boot_firmware.bin ^
-	-pf_bin  ../../../programmer_firmware/release/programmer_firmware.bin ^
-	-df_bin  ../../../downloader_firmware/release/downloader_firmware.bin ^
+	-bf_bin  ../../../boot_firmware/release%VARIANT%/boot_firmware.bin ^
+	-pf_bin  ../../../programmer_firmware/release%VARIANT%/programmer_firmware.bin ^
+	-df_bin  ../../../downloader_firmware/release%VARIANT%/downloader_firmware.bin ^
 	-fw2b0_path %FIRMWARE_2B0_PATH% ^
 	-fw3a0_path %FIRMWARE_3A0_PATH% ^
 	-fw3400_path %FIRMWARE_3400_PATH%
@@ -242,9 +243,9 @@ if /I "%2" == "SAMW25" (
 gain_builder.exe ^
 	%GAIN_FILE% ^
 	-aardvark %AARDVARK% %COMPORT% ^
-	-bf_bin  ../../../boot_firmware/release/boot_firmware.bin ^
-	-pf_bin  ../../../programmer_firmware/release/programmer_firmware.bin ^
-	-df_bin  ../../../downloader_firmware/release/downloader_firmware.bin ^
+	-bf_bin  ../../../boot_firmware/release%VARIANT%/boot_firmware.bin ^
+	-pf_bin  ../../../programmer_firmware/release%VARIANT%/programmer_firmware.bin ^
+	-df_bin  ../../../downloader_firmware/release%VARIANT%/downloader_firmware.bin ^
 	-no_wait
 IF ERRORLEVEL 1 goto FAILED
 popd
@@ -260,7 +261,7 @@ IF "%TLS_CLIENT_CRT_RSA%"=="" (
 	tls_cert_flash_tool.exe ^
 		WRITE ^
 		-aardvark %AARDVARK% %COMPORT% ^
-		-pf_bin  ../../../programmer_firmware/release/programmer_firmware.bin ^
+		-pf_bin  ../../../programmer_firmware/release%VARIANT%/programmer_firmware.bin ^
 		-key  %TLS_CLIENT_KEY_RSA% ^
 		-cert %TLS_CLIENT_CRT_RSA% ^
 		-cadir %CA_DIR% ^
@@ -278,7 +279,7 @@ IF "%TLS_CLIENT_CRT_ECDSA%"=="" (
 	tls_cert_flash_tool.exe ^
 		WRITE ^
 		-aardvark %AARDVARK% %COMPORT% ^
-		-pf_bin  ../../../programmer_firmware/release/programmer_firmware.bin ^
+		-pf_bin  ../../../programmer_firmware/release%VARIANT%/programmer_firmware.bin ^
 		-nokey ^
 		-cert %TLS_CLIENT_CRT_ECDSA% ^
 		-cadir %CA_DIR% ^
@@ -293,7 +294,7 @@ pushd Tools\root_certificate_downloader\%FMode%
 echo Downloading root certificates...
 set /a c = 0
 set seq=
-for %%X in (..\crt\*.cer) do (
+for %%X in (..\binary\*.cer) do (
 	set /a c+=1
 	@set seq=!seq! %%X
 )
@@ -301,9 +302,9 @@ root_certificate_downloader.exe ^
 	-n %c% %seq% ^
 	-no_wait ^
 	-aardvark %AARDVARK% %COMPORT% ^
-	-bf_bin  ../../../boot_firmware/release/boot_firmware.bin ^
-	-pf_bin  ../../../programmer_firmware/release/programmer_firmware.bin ^
-	-df_bin  ../../../downloader_firmware/release/downloader_firmware.bin ^
+	-bf_bin  ../../../boot_firmware/release%VARIANT%/boot_firmware.bin ^
+	-pf_bin  ../../../programmer_firmware/release%VARIANT%/programmer_firmware.bin ^
+	-df_bin  ../../../downloader_firmware/release%VARIANT%/downloader_firmware.bin ^
 	-e
 IF ERRORLEVEL 1 goto FAILED
 popd

@@ -3,7 +3,7 @@
  *
  * \brief USB Device Driver for USBHS. Compliant with common UDD driver.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -110,6 +110,94 @@
 // for debug text
 //#define dbg_print printf
 #define dbg_print(...)
+
+#ifdef UDD_EP_DMA_SUPPORTED
+// for DCache
+/**
+ * \brief Flush content in DCache to physical memory
+ * \param addr The memory address to flush
+ * \param dsize The size of the memory
+ */
+static void _dcache_flush(void *addr, uint32_t dsize)
+{
+#ifdef CONF_BOARD_ENABLE_CACHE_AT_INIT
+	int32_t op_size = dsize;
+	uint32_t op_addr = (uint32_t) addr;
+	int32_t linesize = 32U;                // in Cortex-M7 size of cache line is fixed to 8 words (32 bytes)
+	if (op_addr & (linesize - 1)) {
+		op_size += op_addr & (linesize - 1);
+		op_addr &= ~(linesize - 1);
+	}
+	__ISB();
+	__DSB();
+
+	while (op_size > 0) {
+		SCB->DCCMVAC = op_addr;
+		op_addr += linesize;
+		op_size -= linesize;
+	}
+
+	__DSB();
+	__ISB();
+#endif
+}
+
+/**
+ * \brief Preparation for unaligned buffer invalidation
+ * \param addr The memory address to invalidate
+ * \param dsize The size of the memory
+ */
+static void _dcache_invalidate_prepare(void *addr, uint32_t dsize)
+{
+#ifdef CONF_BOARD_ENABLE_CACHE_AT_INIT
+	int32_t op_size = dsize;
+	uint32_t op_addr = (uint32_t) addr;
+	int32_t linesize = 32U;                // in Cortex-M7 size of cache line is fixed to 8 words (32 bytes)
+	uint32_t addr1 = op_addr;
+	uint32_t addr2 = op_addr + op_size;
+	if (addr1 & (linesize - 1) || addr2 & (linesize - 1)) {
+		addr1 &= ~(linesize - 1);
+		addr2 &= ~(linesize - 1);
+		__ISB();
+		__DSB();
+		SCB->DCCIMVAC = addr1;
+		SCB->DCCIMVAC = addr2;
+		__DSB();
+		__ISB();
+	}
+#endif
+}
+
+/**
+ * \brief Invalidate DCache of physical memory
+ * \param addr The memory address to invalidate
+ * \param dsize The size of the memory
+ */
+static void _dcache_invalidate(void *addr, uint32_t dsize)
+{
+#ifdef CONF_BOARD_ENABLE_CACHE_AT_INIT
+	int32_t op_size = dsize;
+	uint32_t op_addr = (uint32_t)addr;
+	int32_t linesize = 32U;                // in Cortex-M7 size of cache line is fixed to 8 words (32 bytes)
+	if (op_addr & (linesize - 1)) {
+		op_size += op_addr & (linesize - 1);
+		op_addr &= ~(linesize - 1);
+	}
+	__ISB();
+	__DSB();
+
+	while (op_size > 0) {
+		/* D-Cache Invalidate by MVA to PoC */
+		*(volatile uint32_t *)(0xE000EF5C) = op_addr;
+		op_addr += linesize;
+		op_size -= linesize;
+	}
+
+	__DSB();
+	__ISB();
+#endif
+}
+#endif
 
 /**
  * \ingroup udd_group
@@ -1146,9 +1234,7 @@ bool udd_ep_run(udd_ep_id_t ep, bool b_shortpacket,
 		uint8_t * buf, iram_size_t buf_size,
 		udd_callback_trans_t callback)
 {
-#ifdef UDD_EP_FIFO_SUPPORTED
 	bool b_dir_in = Is_udd_endpoint_in(ep & USB_EP_ADDR_MASK);
-#endif
 	udd_ep_job_t *ptr_job;
 	irqflags_t flags;
 
@@ -1203,6 +1289,13 @@ bool udd_ep_run(udd_ep_id_t ep, bool b_shortpacket,
 #ifdef UDD_EP_DMA_SUPPORTED
 	// Request first DMA transfer
 	dbg_print("(exDMA%x) ", ep);
+	if (buf && buf_size) {
+		if (!b_dir_in) {
+			_dcache_invalidate_prepare(buf, buf_size);
+		} else {
+			_dcache_flush(buf, buf_size);
+		}
+	}
 	udd_ep_trans_done(ep);
 	return true;
 #endif
@@ -1228,6 +1321,8 @@ void udd_ep_abort(udd_ep_id_t ep)
 	}
 	udd_disable_endpoint_interrupt(ep_index);
 	// Kill IN banks
+	__DSB();
+	__ISB();
 	if (ep & USB_EP_DIR_IN) {
 		while(udd_nb_busy_bank(ep_index)) {
 			udd_kill_last_in_bank(ep_index);
@@ -1528,6 +1623,8 @@ static void udd_ctrl_in_sent(void)
 	udd_ctrl_payload_buf_cnt += nb_remain;
 
 	// Validate and send the data available in the control endpoint buffer
+	__DSB();
+	__ISB();
 	udd_ack_in_send(0);
 	udd_enable_in_send_interrupt(0);
 	// In case of abort of DATA IN phase, no need to enable nak OUT interrupt
@@ -1902,6 +1999,8 @@ static void udd_ep_trans_done(udd_ep_id_t ep)
 			udd_enable_endpoint_interrupt(ep);
 			return;
 		}
+	} else {
+		_dcache_invalidate(ptr_job->buf, ptr_job->buf_size);
 	}
 	dbg_print("dmaE ");
 	// Call callback to signal end of transfer
@@ -1948,6 +2047,8 @@ static void udd_ep_in_sent(udd_ep_id_t ep)
 			*ptr_dst++ = *ptr_src++;
 		}
 		// Switch to next bank
+		__DSB();
+		__ISB();
 		udd_ack_fifocon(ep);
 		// ZLP?
 		if (nb_data < pkt_size) {
@@ -1989,6 +2090,8 @@ static void udd_ep_out_received(udd_ep_id_t ep)
 		for (i = 0; i < nb_data; i++) {
 			*ptr_dst++ = *ptr_src++;
 		}
+		__DSB();
+		__ISB();
 	}
 	// Clear FIFO Status
 	udd_ack_fifocon(ep);

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -75,6 +75,8 @@ typedef struct {
   __I  uint32_t Reserved3[37];
   __IO uint32_t SSC_WPMR;      /**< \brief (Ssc Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t SSC_WPSR;      /**< \brief (Ssc Offset: 0xE8) Write Protection Status Register */
+  __I  uint32_t Reserved4[4];
+  __I  uint32_t SSC_VERSION;   /**< \brief (Ssc Offset: 0xFC) Version Register */
 } Ssc;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- SSC_CR : (SSC Offset: 0x0) Control Register -------- */
@@ -288,6 +290,11 @@ typedef struct {
 #define SSC_WPSR_WPVS (0x1u << 0) /**< \brief (SSC_WPSR) Write Protection Violation Status */
 #define SSC_WPSR_WPVSRC_Pos 8
 #define SSC_WPSR_WPVSRC_Msk (0xffffu << SSC_WPSR_WPVSRC_Pos) /**< \brief (SSC_WPSR) Write Protect Violation Source */
+/* -------- SSC_VERSION : (SSC Offset: 0xFC) Version Register -------- */
+#define SSC_VERSION_VERSION_Pos 0
+#define SSC_VERSION_VERSION_Msk (0xffffu << SSC_VERSION_VERSION_Pos) /**< \brief (SSC_VERSION) Version of the Hardware Module */
+#define SSC_VERSION_MFN_Pos 16
+#define SSC_VERSION_MFN_Msk (0x7u << SSC_VERSION_MFN_Pos) /**< \brief (SSC_VERSION) Metal Fix Number */
 
 /*@}*/
 

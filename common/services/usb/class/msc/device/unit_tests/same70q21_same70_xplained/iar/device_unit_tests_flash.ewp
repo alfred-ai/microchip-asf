@@ -2022,6 +2022,9 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/instance/mcan0.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/instance/pioc.h</name>
 							</file>
 							<file>
@@ -2071,6 +2074,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/instance/wdt.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/instance/dacc.h</name>
@@ -2263,6 +2269,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/component/afec.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam/utils/cmsis/same70/include/component/tc.h</name>

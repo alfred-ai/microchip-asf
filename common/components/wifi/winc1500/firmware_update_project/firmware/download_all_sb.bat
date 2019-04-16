@@ -6,6 +6,48 @@ set IMAGE_FILE=%3
 set IMAGE_FILE_FULL_PATH=%CD%\%3
 set MCU_ALIAS=%4
 set varPath=%PROGRAMFILES%
+
+set TGTCHIP=xx
+if /I a%5a==a2B0a (
+  set TGTCHIP=2B0
+)
+if /I a%5a==a3A0a (
+  set TGTCHIP=3A0
+)
+if /I a%5a==a3400a (
+  set TGTCHIP=3400
+)
+if /I %TGTCHIP%==xx (
+  echo Need to specify target chip 2B0, 3A0 or 3400
+  goto failout
+)
+
+if a%6a==aa (
+  set D21SN=0
+) else (
+  set D21SN=%6
+)
+if a%7a==aa (
+  set AARDVARKSN=0
+) else (
+  set AARDVARKSN=%7
+)
+if /I %TOOL%==edbg (
+  set TOOLSN=-s %D21SN%
+) else (
+  set TOOLSN=-s %AARDVARKSN%
+)
+
+if /I "%TOOLSN%"=="-s 0" (
+  set TOOLSN=
+)
+
+if a%8a==aa (
+  set PRGPORTNUM=0
+) else (
+  set PRGPORTNUM=%8
+)
+
 :CheckOS
 IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO RUN)
 :64BIT
@@ -85,37 +127,37 @@ pause
 exit
 )
 
-echo Please wait...
-ping 192.0.0.1 -w 1000 > NUL
+ping 192.0.0.1 -w 500 > NUL
 
-download_all.bat UART %MCU_ALIAS%  0
+echo download_all.bat UART %MCU_ALIAS% %TGTCHIP% %AARDVARKSN% %PRGPORTNUM%
+download_all.bat UART %MCU_ALIAS% %TGTCHIP% %AARDVARKSN% %PRGPORTNUM%
 IF %ERRORLEVEL% NEQ 0 ( echo Fail
 echo     #######################################################################
 echo     ##                                                                   ##
-echo     ##                  ########    ###     ####  ##                     ##
-echo     ##                  ##         ## ##     ##   ##                     ##
-echo     ##                  ##        ##   ##    ##   ##                     ##
-echo     ##                  ######   ##     ##   ##   ##                     ##
-echo     ##                  ##       #########   ##   ##                     ##
-echo     ##                  ##       ##     ##   ##   ##                     ##
-echo     ##                  ##       ##     ##  ####  ########               ##
+echo     ##                    ########    ###     ####  ##                   ##
+echo     ##                    ##         ## ##     ##   ##                   ##
+echo     ##                    ##        ##   ##    ##   ##                   ##
+echo     ##                    ######   ##     ##   ##   ##                   ##
+echo     ##                    ##       #########   ##   ##                   ##
+echo     ##                    ##       ##     ##   ##   ##                   ##
+echo     ##                    ##       ##     ##  ####  ########             ##
 echo     ##                                                                   ##
 echo     #######################################################################
-pause
-exit
+pause  
+exit /b 1
 )
 
-echo OK.
+echo OK
 echo     #######################################################################
 echo     ##                                                                   ##
-echo     ##               ########     ###     ######   ######                ##
-echo     ##               ##     ##   ## ##   ##    ## ##    ##               ##
-echo     ##               ##     ##  ##   ##  ##       ##                     ##
-echo     ##               ########  ##     ##  ######   ######                ##
-echo     ##               ##        #########       ##       ##               ##
-echo     ##               ##        ##     ## ##    ## ##    ##               ##
-echo     ##               ##        ##     ##  ######   ######                ##
+echo     ##                 ########     ###     ######   ######              ##
+echo     ##                 ##     ##   ## ##   ##    ## ##    ##             ##
+echo     ##                 ##     ##  ##   ##  ##       ##                   ##
+echo     ##                 ########  ##     ##  ######   ######              ##
+echo     ##                 ##        #########       ##       ##             ##
+echo     ##                 ##        ##     ## ##    ## ##    ##             ##
+echo     ##                 ##        ##     ##  ######   ######              ##
 echo     ##                                                                   ##
 echo     #######################################################################
-echo Programming ends successfully
+echo Programming ends sucessfully
 pause

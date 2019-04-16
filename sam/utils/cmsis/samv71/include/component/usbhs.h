@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -300,6 +300,7 @@ typedef struct {
 #define USBHS_DEVEPT_EPEN6 (0x1u << 6) /**< \brief (USBHS_DEVEPT) Endpoint 6 Enable */
 #define USBHS_DEVEPT_EPEN7 (0x1u << 7) /**< \brief (USBHS_DEVEPT) Endpoint 7 Enable */
 #define USBHS_DEVEPT_EPEN8 (0x1u << 8) /**< \brief (USBHS_DEVEPT) Endpoint 8 Enable */
+#define USBHS_DEVEPT_EPEN9 (0x1u << 9) /**< \brief (USBHS_DEVEPT) Endpoint 9 Enable */
 #define USBHS_DEVEPT_EPRST0 (0x1u << 16) /**< \brief (USBHS_DEVEPT) Endpoint 0 Reset */
 #define USBHS_DEVEPT_EPRST1 (0x1u << 17) /**< \brief (USBHS_DEVEPT) Endpoint 1 Reset */
 #define USBHS_DEVEPT_EPRST2 (0x1u << 18) /**< \brief (USBHS_DEVEPT) Endpoint 2 Reset */
@@ -309,6 +310,7 @@ typedef struct {
 #define USBHS_DEVEPT_EPRST6 (0x1u << 22) /**< \brief (USBHS_DEVEPT) Endpoint 6 Reset */
 #define USBHS_DEVEPT_EPRST7 (0x1u << 23) /**< \brief (USBHS_DEVEPT) Endpoint 7 Reset */
 #define USBHS_DEVEPT_EPRST8 (0x1u << 24) /**< \brief (USBHS_DEVEPT) Endpoint 8 Reset */
+#define USBHS_DEVEPT_EPRST9 (0x1u << 25) /**< \brief (USBHS_DEVEPT) Endpoint 9 Reset */
 /* -------- USBHS_DEVFNUM : (USBHS Offset: 0x0020) Device Frame Number Register -------- */
 #define USBHS_DEVFNUM_MFNUM_Pos 0
 #define USBHS_DEVFNUM_MFNUM_Msk (0x7u << USBHS_DEVFNUM_MFNUM_Pos) /**< \brief (USBHS_DEVFNUM) Micro Frame Number */
@@ -901,8 +903,10 @@ typedef struct {
 #define USBHS_HSTDMASTATUS_BUFF_COUNT(value) ((USBHS_HSTDMASTATUS_BUFF_COUNT_Msk & ((value) << USBHS_HSTDMASTATUS_BUFF_COUNT_Pos)))
 /* -------- USBHS_CTRL : (USBHS Offset: 0x0800) General Control Register -------- */
 #define USBHS_CTRL_RDERRE (0x1u << 4) /**< \brief (USBHS_CTRL) Remote Device Connection Error Interrupt Enable */
+#define USBHS_CTRL_VBUSHWC (0x1u << 8) /**< \brief (USBHS_CTRL) VBUS Hardware Control */
 #define USBHS_CTRL_FRZCLK (0x1u << 14) /**< \brief (USBHS_CTRL) Freeze USB Clock */
 #define USBHS_CTRL_USBE (0x1u << 15) /**< \brief (USBHS_CTRL) USBHS Enable */
+#define USBHS_CTRL_UID (0x1u << 24) /**< \brief (USBHS_CTRL) UID Pin Enable */
 #define USBHS_CTRL_UIMOD (0x1u << 25) /**< \brief (USBHS_CTRL) USBHS Mode */
 #define   USBHS_CTRL_UIMOD_HOST (0x0u << 25) /**< \brief (USBHS_CTRL) The module is in USB Host mode. */
 #define   USBHS_CTRL_UIMOD_DEVICE (0x1u << 25) /**< \brief (USBHS_CTRL) The module is in USB Device mode. */

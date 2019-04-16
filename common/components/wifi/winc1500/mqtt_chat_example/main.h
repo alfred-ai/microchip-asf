@@ -49,13 +49,13 @@ extern "C" {
 #define MAIN_CHAT_BUFFER_SIZE 64
 
 /* Max size of MQTT buffer. */
-#define MAIN_MQTT_BUFFER_SIZE 128
+#define MAIN_MQTT_BUFFER_SIZE 512
 
 /* Limitation of user name. */
 #define MAIN_CHAT_USER_NAME_SIZE 64
 
 /* Chat MQTT topic. */
-#define MAIN_CHAT_TOPIC "atmel/sample/chat_demo/"
+#define MAIN_CHAT_TOPIC "/atmel/sample/chat_demo/"
 
 /*
  * A MQTT broker server which was connected.
@@ -64,9 +64,9 @@ extern "C" {
 static const char main_mqtt_broker[] = "m2m.eclipse.org";
 
 /** Wi-Fi Settings */
-#define MAIN_WLAN_SSID        "DEMO_AP" /* < Destination SSID */
+#define MAIN_WLAN_SSID        "Niranjan's iPhone" /* < Destination SSID */
 #define MAIN_WLAN_AUTH        M2M_WIFI_SEC_WPA_PSK /* < Security manner */
-#define MAIN_WLAN_PSK         "12345678" /* < Password for Destination SSID */
+#define MAIN_WLAN_PSK         "password" /* < Password for Destination SSID */
 
 #ifdef __cplusplus
 }

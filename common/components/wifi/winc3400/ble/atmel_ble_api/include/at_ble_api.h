@@ -195,6 +195,24 @@ typedef enum
 	AT_BLE_GAP_CONN_PAUSE_PERIPHERAL      //!< Minimum time upon connection establishment before the peripheral starts a connection update procedure. In seconds (default 5 seconds)
 }at_ble_parameters_t;
 
+/****************** GAP Role **********************/
+typedef enum
+{
+    /// No role set yet
+    AT_BLE_GAP_NO_ROLE    = 0x00,
+
+    /// Observer role
+    AT_BLE_GAP_OBSERVER_SCA    = 0x01,
+
+    /// Broadcaster role
+    AT_BLE_GAP_BROADCASTER_ADV = 0x02,
+
+    /// Master/Central role
+    AT_BLE_GAP_CENTRAL_MST     = (0x04 | AT_BLE_GAP_OBSERVER_SCA),
+
+    /// Peripheral/Slave role
+    AT_BLE_GAP_PERIPHERAL_SLV  = (0x08 | AT_BLE_GAP_BROADCASTER_ADV)
+} at_ble_gap_role;
 
 /// GAP Advertising types
 typedef enum{
@@ -389,6 +407,15 @@ typedef enum{
 	 */
 	AT_BLE_MAX_PA_GAIN_VALUE,
 
+    /** MTU changed complete */
+    AT_BLE_MTU_CHANGED_CMD_COMPLETE,
+
+    /** Characteristic write complete */
+    AT_BLE_CHARACTERISTIC_WRITE_CMD_CMP,
+    
+    /** Notification confirmed */
+    AT_BLE_NOTIFICATION_CONFIRMED
+
 }at_ble_events_t; 
 
 
@@ -403,6 +430,8 @@ typedef enum{
 	AT_BLE_ADDRESS_RANDOM_PRIVATE_RESOLVABLE,
 	/** non-resolvable private random address */ 
 	AT_BLE_ADDRESS_RANDOM_PRIVATE_NON_RESOLVABLE ,
+    /** Invalid address */
+    AT_BLE_ADDRESS_INVALID,
 	
 }at_ble_addr_type_t;
 
@@ -473,6 +502,8 @@ typedef enum{
 	AT_BLE_UUID_32,
 	/**  128 Bit UUID */
 	AT_BLE_UUID_128,
+    /**  Invalid UUID */
+    AT_BLE_UUID_INVALID,
 }at_ble_uuid_type_t;
 
  /**@brief Characteristic properties
@@ -1404,10 +1435,20 @@ typedef union
 at_ble_status_t at_ble_init(void* args);
 
 
-/** @brief Set GAP attribute data base (Appearance , slave preferred connection parameters , 
+/** @brief Set GAP attribute data base in BLE API (Appearance , slave preferred connection parameters , 
   * device name write permissions)
   *
   * @param[in] gap_deviceinfo gap device information 
+  *
+  * @return @ref AT_BLE_SUCCESS operation completed successfully
+  * @return @ref AT_BLE_INVALID_PARAM Invalid pointer supplied
+  * @return @ref AT_BLE_FAILURE Generic error.
+  */
+at_ble_status_t at_ble_set_gap_deviceinfo(at_ble_gap_deviceinfo_t*  gap_deviceinfo);
+
+/** @brief Set GAP attribute data base into BLE chip
+  *
+  * @param[in] role BLE role to set
   *
   * @pre Must be called before @ref at_ble_adv_start
   *
@@ -1415,7 +1456,7 @@ at_ble_status_t at_ble_init(void* args);
   * @return @ref AT_BLE_INVALID_PARAM Invalid pointer supplied
   * @return @ref AT_BLE_FAILURE Generic error.
   */
-at_ble_status_t at_ble_set_gap_deviceinfo(at_ble_gap_deviceinfo_t*  gap_deviceinfo);
+at_ble_status_t at_ble_set_dev_config(at_ble_gap_role role);
 
  /** @brief Set device name
   *
@@ -1613,8 +1654,8 @@ at_ble_status_t at_ble_adv_start(at_ble_adv_type_t type,at_ble_adv_mode_t mode ,
 at_ble_status_t at_ble_adv_stop(void);
 
  /**@brief Set the Advertising transmission power
-  *
-  * @param[in] power    new TX power in dBm (accepted range -20 to 4 dBm)
+  * NOT IMPLEMENTED
+  * @param[in] power    new TX power in dB (attenuation 0..18 db in 3dB steps)
   *
   * @return @ref AT_BLE_SUCCESS TX value changed successfully.
   * @return @ref AT_BLE_INVALID_PARAM TX value is out of range.
@@ -1636,7 +1677,9 @@ at_ble_status_t at_ble_adv_set_tx_power(int8_t power);
   * @param[in] mode     Either General, Limited or Observer only, @ref at_ble_scan_mode_t for more details
   * @param[in] filter_whitelist		If true, get scan results only from white-listed devices added by @ref at_ble_whitelist_add 
   *									otherwise scan results will be got from any advertising device.
-  * @param[in] filter_dublicates   If true, scan event will be generated only once per device, if false multiple events will be issued
+  * @param[in] filter_duplicates   If true, scan event will be generated only once per device. If false, multiple events per
+  *                                device may be generated. Note that if more than 10 devices are found, filtering only applies
+  *                                to the first 10 found; multiple scan events may be generated for 11th and subsequent devices.
   *
   * @warning Scan time-out feature are not supported in release version 0.1
   *
@@ -1646,7 +1689,7 @@ at_ble_status_t at_ble_adv_set_tx_power(int8_t power);
   */
 at_ble_status_t at_ble_scan_start(uint16_t interval, uint16_t window, 
 	uint16_t timeout, at_ble_scan_type_t type ,at_ble_scan_mode_t mode,
-	bool filter_whitelist, bool filter_dublicates);
+	bool filter_whitelist, bool filter_duplicates);
 
  /**@brief Stops an ongoing scan operation
   *
@@ -1825,7 +1868,7 @@ at_ble_status_t at_ble_random_address_resolve(uint8_t nb_key ,at_ble_addr_t* ran
  /**@brief Sets TX power of a given connection
   *
   * @param[in] conn_handle handle of the connection 
-  * @param[in] powerdBm TX power value in dBm (accepted range -20 to 4 dBm)
+  * @param[in] powerdBm TX power value in dBm (attenuation 0..18 db in 3dB steps)
   *
   * @return @ref AT_BLE_SUCCESS operation completed successfully .
   * @return @ref AT_BLE_FAILURE Generic error.
@@ -2373,6 +2416,14 @@ at_ble_status_t at_ble_htpt_temp_send(	uint32_t temp,
   */
 at_ble_status_t at_ble_htpt_meas_intv_update(uint16_t meas_intv);
 
+ /**@brief This message is used by the application to initiate the MTU exchange.
+  *
+  * @param[in] conn_handle handle of the connection
+  *
+  * @return @ref AT_BLE_SUCCESS operation completed successfully
+  * @return @ref AT_BLE_FAILURE Generic error.
+  */
+at_ble_status_t at_ble_exchange_mtu(at_ble_handle_t conn_handle);
 
 /** @}*/
 

@@ -2022,6 +2022,9 @@
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/smc.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/mcan1.h</name>
 							</file>
 							<file>
@@ -2035,6 +2038,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/uart1.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/usart1.h</name>
@@ -2056,9 +2062,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/piob.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/hsmci.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/usart2.h</name>
@@ -2098,6 +2101,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/chipid.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/hsmci.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/instance/afec0.h</name>
@@ -2232,6 +2238,9 @@
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/chipid.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/aes.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/isi.h</name>
 							</file>
 							<file>
@@ -2265,9 +2274,6 @@
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/xdmac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/aes.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/efc.h</name>
 							</file>
 							<file>
@@ -2281,6 +2287,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/rtt.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../sam/utils/cmsis/same70/include/component/dacc.h</name>

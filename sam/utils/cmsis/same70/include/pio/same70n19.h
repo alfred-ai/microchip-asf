@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -193,6 +193,18 @@
 #define PIO_PA31C_MCDA1           (1u << 31) /**< \brief Hsmci signal: MCDA1 */
 #define PIO_PA26C_MCDA2           (1u << 26) /**< \brief Hsmci signal: MCDA2 */
 #define PIO_PA27C_MCDA3           (1u << 27) /**< \brief Hsmci signal: MCDA3 */
+/* ========== Pio definition for I2SC0 peripheral ========== */
+#define PIO_PA1D_I2SC0_CK         (1u << 1)  /**< \brief I2sc0 signal: I2SC0_CK */
+#define PIO_PA16D_I2SC0_DI0       (1u << 16) /**< \brief I2sc0 signal: I2SC0_DI0 */
+#define PIO_PA30D_I2SC0_DO0       (1u << 30) /**< \brief I2sc0 signal: I2SC0_DO0 */
+#define PIO_PA0D_I2SC0_MCK        (1u << 0)  /**< \brief I2sc0 signal: I2SC0_MCK */
+#define PIO_PA15D_I2SC0_WS        (1u << 15) /**< \brief I2sc0 signal: I2SC0_WS */
+/* ========== Pio definition for I2SC1 peripheral ========== */
+#define PIO_PA20D_I2SC1_CK        (1u << 20) /**< \brief I2sc1 signal: I2SC1_CK */
+#define PIO_PE2C_I2SC1_DI0        (1u << 2)  /**< \brief I2sc1 signal: I2SC1_DI0 */
+#define PIO_PE1C_I2SC1_DO0        (1u << 1)  /**< \brief I2sc1 signal: I2SC1_DO0 */
+#define PIO_PA19D_I2SC1_MCK       (1u << 19) /**< \brief I2sc1 signal: I2SC1_MCK */
+#define PIO_PE0C_I2SC1_WS         (1u << 0)  /**< \brief I2sc1 signal: I2SC1_WS */
 /* ========== Pio definition for ISI peripheral ========== */
 #define PIO_PD22D_ISI_D0          (1u << 22) /**< \brief Isi signal: ISI_D0 */
 #define PIO_PD21D_ISI_D1          (1u << 21) /**< \brief Isi signal: ISI_D1 */

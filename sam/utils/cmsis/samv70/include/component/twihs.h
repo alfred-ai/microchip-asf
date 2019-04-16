@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -97,6 +97,12 @@ typedef struct {
 #define TWIHS_CR_PECDIS (0x1u << 13) /**< \brief (TWIHS_CR) Packet Error Checking Disable */
 #define TWIHS_CR_PECRQ (0x1u << 14) /**< \brief (TWIHS_CR) PEC Request */
 #define TWIHS_CR_CLEAR (0x1u << 15) /**< \brief (TWIHS_CR) Bus CLEAR Command */
+#define TWIHS_CR_ACMEN (0x1u << 16) /**< \brief (TWIHS_CR) Alternative Command Mode Enable */
+#define TWIHS_CR_ACMDIS (0x1u << 17) /**< \brief (TWIHS_CR) Alternative Command Mode Disable */
+#define TWIHS_CR_THRCLR (0x1u << 24) /**< \brief (TWIHS_CR) Transmit Holding Register Clear */
+#define TWIHS_CR_LOCKCLR (0x1u << 26) /**< \brief (TWIHS_CR) Lock Clear */
+#define TWIHS_CR_FIFOEN (0x1u << 28) /**< \brief (TWIHS_CR) FIFO Enable */
+#define TWIHS_CR_FIFODIS (0x1u << 29) /**< \brief (TWIHS_CR) FIFO Disable */
 /* -------- TWIHS_MMR : (TWIHS Offset: 0x04) Master Mode Register -------- */
 #define TWIHS_MMR_IADRSZ_Pos 8
 #define TWIHS_MMR_IADRSZ_Msk (0x3u << TWIHS_MMR_IADRSZ_Pos) /**< \brief (TWIHS_MMR) Internal Device Address Size */
@@ -139,7 +145,7 @@ typedef struct {
 #define TWIHS_CWGR_CKDIV_Msk (0x7u << TWIHS_CWGR_CKDIV_Pos) /**< \brief (TWIHS_CWGR) Clock Divider */
 #define TWIHS_CWGR_CKDIV(value) ((TWIHS_CWGR_CKDIV_Msk & ((value) << TWIHS_CWGR_CKDIV_Pos)))
 #define TWIHS_CWGR_HOLD_Pos 24
-#define TWIHS_CWGR_HOLD_Msk (0x1fu << TWIHS_CWGR_HOLD_Pos) /**< \brief (TWIHS_CWGR) TWD Hold Time Versus TWCK Falling */
+#define TWIHS_CWGR_HOLD_Msk (0x3fu << TWIHS_CWGR_HOLD_Pos) /**< \brief (TWIHS_CWGR) TWD Hold Time Versus TWCK Falling */
 #define TWIHS_CWGR_HOLD(value) ((TWIHS_CWGR_HOLD_Msk & ((value) << TWIHS_CWGR_HOLD_Pos)))
 /* -------- TWIHS_SR : (TWIHS Offset: 0x20) Status Register -------- */
 #define TWIHS_SR_TXCOMP (0x1u << 0) /**< \brief (TWIHS_SR) Transmission Completed (cleared by writing TWIHS_THR) */

@@ -2131,6 +2131,9 @@
 								<name>$PROJ_DIR$/../../../lwip-1.4.1/src/include/lwip/timers.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../lwip-1.4.1/src/include/lwip/sio.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../lwip-1.4.1/src/include/lwip/udp.h</name>
 							</file>
 							<file>
@@ -2150,9 +2153,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../lwip-1.4.1/src/include/lwip/pbuf.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../lwip-1.4.1/src/include/lwip/sio.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../lwip-1.4.1/src/include/lwip/memp.h</name>
@@ -2361,10 +2361,10 @@
 						<name>$PROJ_DIR$/../../../../../common/services/clock/same70/sysclk.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../../common/services/clock/same70/osc.h</name>
+						<name>$PROJ_DIR$/../../../../../common/services/clock/same70/pll.h</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../../common/services/clock/same70/pll.h</name>
+						<name>$PROJ_DIR$/../../../../../common/services/clock/same70/osc.h</name>
 					</file>
 					<file>
 						<name>$PROJ_DIR$/../../../../../common/services/clock/same70/genclk.h</name>
@@ -2584,6 +2584,9 @@
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/spi0.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/uart2.h</name>
 							</file>
 							<file>
@@ -2657,6 +2660,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/afec1.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/instance/tc2.h</name>
@@ -2759,6 +2765,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/component/rstc.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam/utils/cmsis/same70/include/component/gmac.h</name>

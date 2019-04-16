@@ -3,7 +3,7 @@
  *
  * \brief OTAU Profile declarations
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -56,10 +56,15 @@ extern "C" {
 
 #include "ble_utils.h"
 
+#if 0 //Set-1 to Enable the Debug Log
+#define DBG_OTAU		DBG_LOG
+#define DBG_OTAU_CONT	DBG_LOG_CONT
+#define OTAU_LOG		DBG_LOG
+#else
 #define DBG_OTAU		ALL_UNUSED //DBG_LOG
 #define DBG_OTAU_CONT	ALL_UNUSED //DBG_LOG_CONT
 #define OTAU_LOG		DBG_LOG
-
+#endif
 /****************************************************************************************
 *							        Macro                                               *
 ****************************************************************************************/
@@ -72,6 +77,10 @@ extern "C" {
  /* 8-bit OTAU module major number */
 #define OTAU_MINOR_VERSION		(0) /* 8-bit OTAU module minor number */
 #define OTAU_BUILD_NUMBER		(0x0000) /* 16-bit OTAU module build number */
+
+/* This custom event used to reset the system when complete OTAU image is 
+    received and image switch is required */
+#define OTAU_SYSTEM_RESET_ID	(0x80)
 
 typedef struct otau_service_config
 {

@@ -202,6 +202,8 @@ static at_ble_status_t ble_trans_service_advertise(void)
         {
             DBG_LOG("Failed to set adv data\r\n");
         }
+		
+		at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
         
         /* Start of advertisement */
         if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL,

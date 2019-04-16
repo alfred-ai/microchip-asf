@@ -205,6 +205,8 @@ static at_ble_status_t ble_bat_start_advertise(void)
 		return AT_BLE_FAILURE;
 	}
 	
+	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
+	
 	/* Start of advertisement */
 	if (at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL,
 			AT_BLE_ADV_FP_ANY, APP_BAS_FAST_ADV, APP_BAS_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS)

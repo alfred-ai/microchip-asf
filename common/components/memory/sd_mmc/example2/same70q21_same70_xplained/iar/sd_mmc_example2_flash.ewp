@@ -2090,10 +2090,10 @@
 								<name>$PROJ_DIR$/../conf_uart_serial.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_clock.h</name>
+								<name>$PROJ_DIR$/../conf_board.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
+								<name>$PROJ_DIR$/../conf_clock.h</name>
 							</file>
 							<group>
 								<name>iar</name>
@@ -2333,6 +2333,9 @@
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/usbhs.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/pioc.h</name>
 							</file>
 							<file>
@@ -2367,6 +2370,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/pwm0.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/instance/trng.h</name>
@@ -2457,6 +2463,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/component/uart.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/same70/include/component/smc.h</name>

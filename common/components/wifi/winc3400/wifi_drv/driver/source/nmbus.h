@@ -55,7 +55,7 @@ extern "C"{
 *	@brief	Initialize bus interface
 *	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
 */
-sint8 nm_bus_iface_init(uint8 *, uint32 req_serial_number);
+sint8 nm_bus_iface_init(uint8 *pvInitVal, uint32 req_serial_number);
 
 
 /**

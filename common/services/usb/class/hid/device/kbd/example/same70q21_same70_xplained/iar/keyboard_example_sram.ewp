@@ -2264,6 +2264,9 @@
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/rtc.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/gmac.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/pmc.h</name>
 							</file>
 							<file>
@@ -2324,13 +2327,16 @@
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/hsmci.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/gmac.h</name>
+								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/rstc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/icm.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/i2sc1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/instance/spi0.h</name>
@@ -2502,6 +2508,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/component/xdmac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/component/i2sc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../../sam/utils/cmsis/same70/include/component/pio.h</name>
