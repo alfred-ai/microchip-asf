@@ -88,6 +88,7 @@ INC_PATH = \
        sam/drivers/gpbr                                   \
        sam/drivers/pmc                                    \
        sam/drivers/rstc                                   \
+       sam/drivers/rstc/example1                          \
        sam/drivers/rstc/unit_tests                        \
        sam/drivers/rstc/unit_tests/sam4cms16c_sam4cms_db  \
        sam/drivers/uart                                   \

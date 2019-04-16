@@ -3,7 +3,7 @@
  *
  * \brief QSPI flash memory driver for S25FL1XX.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -256,7 +256,6 @@ static void s25fl1xx_memory_access(struct qspid_t *qspid, uint8_t instr, uint32_
 		mem->inst_frame.bm.b_tfr_type = (QSPI_IFR_TFRTYP_TRSFR_WRITE_MEMORY >> QSPI_IFR_TFRTYP_Pos);
 		qspid->qspi_buffer.tx_data_size = size;
 	} else {
-		mem->addr += 1;
 		mem->inst_frame.bm.b_tfr_type = (QSPI_IFR_TFRTYP_TRSFR_READ_MEMORY >> QSPI_IFR_TFRTYP_Pos);
 		qspid->qspi_buffer.rx_data_size = size;
 	}
@@ -803,17 +802,10 @@ uint8_t s25fl1xx_erase_64k_block(struct qspid_t *qspid, uint32_t address)
  */
  uint8_t s25fl1xx_read(struct qspid_t *qspid, uint32_t *data,  uint32_t size, uint32_t address)
 {
-	/** 1 DummyRead is 8 dummy cycles of SPI */
-	const uint8_t dummy_read = 1;
-	uint8_t *data_rx;
 	uint8_t secure = 0;
+	mem->inst_frame.bm.b_dummy_cycles = 8;
+	s25fl1xx_memory_access(qspid, S25FL1XX_READ_ARRAY , address, 0, data, QSPI_READ_ACCESS, size, secure);
 
-	data_rx = malloc(size);
-	s25fl1xx_memory_access(qspid, S25FL1XX_READ_ARRAY , address, 0, (uint32_t *)data_rx, QSPI_READ_ACCESS, (size + dummy_read), secure);
-	memcpy(data, data_rx , size);
-
-	data_rx = NULL;
-	free(data_rx);
 	return 0;
 }
 

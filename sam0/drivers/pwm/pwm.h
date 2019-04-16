@@ -3,7 +3,7 @@
  *
  * \brief SAM PWM Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -104,22 +104,22 @@
  *  <tr>
  *    <td>26 MHz</td>
  *    <td>406.25 KHz</td>
- *    <td>6.347 KHz</td>
+ *    <td>1.586 KHz</td>
  *  </tr>
  *  <tr>
  *    <td>13 MHz</td>
  *    <td>203.125 KHz</td>
- *    <td>3.173 KHz</td>
+ *    <td>793.45 Hz</td>
  *  </tr>
   *  <tr>
  *    <td>6.5 MHz</td>
  *    <td>101.562 KHz</td>
- *    <td>1.586 KHz</td>
+ *    <td>396.72 Hz</td>
  *  </tr>
   *  <tr>
  *    <td>3.25 MHz</td>
  *    <td>50.781 KHz</td>
- *    <td>793.25 KHz</td>
+ *    <td>198.36 Hz</td>
  *  </tr>
  * </table>
  *

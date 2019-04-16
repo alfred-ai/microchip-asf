@@ -482,24 +482,16 @@ int main(void)
 {	
 	uint8_t status;
 	
-	#if SAMG55
-	/* Initialize the SAM system. */
-	sysclk_init();
-	board_init();
-	#elif SAM0
-	system_init();
-	#endif
-
-	//button_init();
-	
 	platform_driver_init();
 	acquire_sleep_lock();
-	
+
 	/* Initialize serial console */
 	serial_console_init();
 
-	/* Initialize button */
-	button_init(button_cb);
+	/* Initialize button*/
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
 
 	/* Initialize the hardware timer */
 	hw_timer_init();
@@ -561,7 +553,10 @@ int main(void)
 			}
 			if (connected_to_central == false)
 			{
-				at_ble_scan_stop();
+				if(peripheral_state == PERIPHERAL_ADVERTISING_STATE) {
+					peripheral_state = PERIPHERAL_IDLE_STATE;
+					at_ble_scan_stop();
+				}
 				pxp_monitor_start_scan();
 			}
 			button_pressed = false;

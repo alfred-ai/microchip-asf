@@ -1,3 +1,29 @@
+/**************************************************************************//**
+  \file lpmcu_cortex_misc_regs_c.h
+ 
+  \brief Includes datatypes and signatures for lpmcu_cortex_misc_regs_c
+ 
+  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Released under NDA
+  Licensed under Atmel's Limited License Agreement.
+ 
+ 
+  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+  EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+ 
+  Atmel Corporation: http://www.atmel.com
+ 
+******************************************************************************/
+
 /* **************************** */
 #define LPMCU_CORTEX_MISC_REGS_LPMCU_CHIP_ID                                                            (LPMCU_CORTEX_MISC_REGS_BASE + 0x0)
 #define LPMCU_CORTEX_MISC_REGS_LPMCU_CHIP_ID_DEFAULT                                                    0x2000B0

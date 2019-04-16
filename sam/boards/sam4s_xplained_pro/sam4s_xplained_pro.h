@@ -3,7 +3,7 @@
  *
  * \brief SAM4S Xplained Pro board definition and driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -573,7 +573,7 @@
 #define AT86RFX_CPS 	             EXT1_PIN_8
 
 
-void at86rfx_isr(void);
+void at86rfx_isr(uint32_t, uint32_t);
 
 #define AT86RFX_INTC_INIT()         ioport_set_pin_dir(AT86RFX_IRQ_PIN, IOPORT_DIR_INPUT);\
 									ioport_set_pin_sense_mode(AT86RFX_IRQ_PIN, IOPORT_SENSE_RISING);\
@@ -583,7 +583,7 @@ void at86rfx_isr(void);
 									NVIC_EnableIRQ((IRQn_Type) ID_PIOA);\
 									pio_enable_interrupt(PIOA, PIO_PA1);									
 
-#define AT86RFX_ISR()               void at86rfx_isr(void)
+#define AT86RFX_ISR()               void at86rfx_isr(uint32_t arg1, uint32_t arg2)
 
 /** Enables the transceiver main interrupt. */
 #define ENABLE_TRX_IRQ()            pio_enable_pin_interrupt(AT86RFX_IRQ_PIN)

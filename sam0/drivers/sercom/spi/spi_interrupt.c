@@ -3,7 +3,7 @@
  *
  * \brief SAM Serial Peripheral Interface Driver
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -614,7 +614,7 @@ void _spi_interrupt_handler(
 			uint16_t flush = spi_hw->DATA.reg;
 			UNUSED(flush);
 			/* Clear overflow flag */
-			spi_hw->STATUS.reg |= SERCOM_SPI_STATUS_BUFOVF;
+			spi_hw->STATUS.reg = SERCOM_SPI_STATUS_BUFOVF;
 		} else {
 			if (module->dir == SPI_DIRECTION_WRITE) {
 				/* Flush receive buffer when writing */

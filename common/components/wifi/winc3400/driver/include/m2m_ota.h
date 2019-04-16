@@ -4,7 +4,7 @@
  *
  * \brief NMC3400 IoT OTA Interface.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -268,6 +268,18 @@ NMI_API sint8 m2m_ota_start_update(uint8 * u8DownloadUrl);
 NMI_API sint8 m2m_ota_rollback(void);
 /*!
 @fn	\
+	NMI_API sint8 m2m_ota_abort(void);
+	Abort an ota in progress (eg if server has stalled) and clean up
+@sa 
+	m2m_ota_init
+	m2m_ota_start_update	
+
+@return		
+	The function returns @ref M2M_SUCCESS for successful operations  and a negative value otherwise.
+*/
+NMI_API sint8 m2m_ota_abort(void);
+/*!
+@fn	\
 	NMI_API sint8 m2m_ota_switch_firmware(void);
 * Switch to the upgraded Firmware, that API will update the control structure working image to the upgraded image
   take effect will be on the next system restart
@@ -284,8 +296,9 @@ NMI_API sint8 m2m_ota_rollback(void);
 */
 NMI_API sint8 m2m_ota_switch_firmware(void);
 
+#if 0
 NMI_API sint8 m2m_ota_test(void);
-
+#endif
  /**@}*/
 #ifdef __cplusplus
 }

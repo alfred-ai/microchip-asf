@@ -3,7 +3,7 @@
  *
  * \brief API driver for ILI9488 TFT display component.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -454,7 +454,7 @@ static void ili9488_write_register(uint8_t uc_reg, const ili9488_color_t *us_dat
 		/* Transfer data */
 		pio_set_pin_high(LCD_SPI_CDS_PIO);
 		spi_write_packet(BOARD_ILI9488_SPI, us_data, size);
-		for(i = 0; i < 0x3F; i++);
+		for(i = 0; i < 0x5F; i++);
 	}
 }
 
@@ -1222,8 +1222,8 @@ void ili9488_draw_pixmap(uint32_t ul_x, uint32_t ul_y, uint32_t ul_width,
 	uint32_t dwX1, dwY1, dwX2, dwY2;
 	dwX1 = ul_x;
 	dwY1 = ul_y;
-	dwX2 = ul_x + ul_width;
-	dwY2 = ul_y + ul_height;
+	dwX2 = ul_x + ul_width - 1;
+	dwY2 = ul_y + ul_height - 1;
 
 	/* Swap coordinates if necessary */
 	ili9488_check_box_coordinates(&dwX1, &dwY1, &dwX2, &dwY2);

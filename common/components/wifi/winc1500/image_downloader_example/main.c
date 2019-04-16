@@ -4,7 +4,7 @@
  *
  * \brief Image Downloader Example.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -64,31 +64,34 @@
  * -# In the terminal window, the following text should appear:<br>
  *
  * \code
- *    -- HTTP file downloader example --
+ *    -- Image downloader example --
  *    -- SAMXXX_XPLAINED_PRO --
  *    -- Compiled: xxx xx xxxx xx:xx:xx --
- *
- *    This example requires the AP to have internet access.
- *
- *    init_storage: please plug an SD/MMC card in slot...
- *    init_storage: mounting SD card...
- *    init_storage: SD card mount OK.
- *    main: connecting to WiFi AP DEMO_AP...
- *    wifi_cb: M2M_WIFI_CONNECTED
- *    wifi_cb: IP address is 192.168.1.107
- *    start_download: sending HTTP request...
- *    resolve_cb: www.atmel.com IP address is 72.246.56.186
- *
- *    http_client_callback: HTTP client socket connected.
- *    http_client_callback: request completed.
- *    http_client_callback: received response 200 data size 1147097
- *    store_file_packet: creating file [0:45093A-SmartConnectWINC1500_E_US_101014_web.pdf]
- *    store_file_packet: received[xxx], file size[1147097]
- *    ...
- *    store_file_packet: received[1147097], file size[1147097]
- *    store_file_packet: file downloaded successfully.
- *    main: please unplug the SD/MMC card.
+ *    
+ *    (APP)(INFO)Chip ID xxxxxx
+ *    Flash ID xxxxxxxx
+ *    (APP)(INFO)Flash Size x Mb
+ *    
+ *    >Start erasing...
+ *    Done
+ *    main: programming firmware...
+ *    main: verifying firmware image from flash...
  *    main: done.
+ *    main: programming certificates...
+ *    
+ *    ...
+ *    
+ *    >Root certificate verified OK.
+ *    
+ *    >Start erasing...
+ *    Done
+ *    >Writing the certificate to SPI flash...
+ *    Done
+ *    main: reading certificates from flash...
+ *    main: done.
+ *    
+ *    
+ *    All task completed successfully.
  * \endcode
  *
  * \section compinfo Compilation Information

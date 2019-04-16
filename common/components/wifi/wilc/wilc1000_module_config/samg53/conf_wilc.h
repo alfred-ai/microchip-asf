@@ -4,7 +4,7 @@
  *
  * \brief WiFi Settings.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -66,7 +66,7 @@ extern "C" {
 */
 
 #define CONF_WILC_PIN_RESET				IOPORT_CREATE_PIN(PIOB, 3)
-#define CONF_WILC_PIN_CHIP_ENABLE		IOPORT_CREATE_PIN(PIOA, 17)
+#define CONF_WILC_PIN_CHIP_ENABLE		IOPORT_CREATE_PIN(PIOA, 20)
 #define CONF_WILC_PIN_WAKE				IOPORT_CREATE_PIN(PIOB, 9)
 
 /*

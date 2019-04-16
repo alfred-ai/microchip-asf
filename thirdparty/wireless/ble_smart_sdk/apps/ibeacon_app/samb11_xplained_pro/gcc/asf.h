@@ -56,22 +56,11 @@
 #include <compiler.h>
 #include <status_codes.h>
 
-// From module: DUALTIMER - Dualtimer for SAMB
-#include <dualtimer.h>
-
-// From module: EEPROM AT30TSE75X
-#include <at30tse75x.h>
-
 // From module: GPIO - GPIO Pin Control for SAMB (Callback APIs)
 #include <gpio.h>
 
 // From module: Generic board support
 #include <board.h>
-
-// From module: I2C - Inter-Integrated Circuit for SAMB
-#include <i2c_common.h>
-#include <i2c_master.h>
-#include <i2c_master_interrupt.h>
 
 // From module: Interrupt management - SAM implementation
 #include <interrupt.h>
@@ -79,14 +68,14 @@
 // From module: Part identification macros
 #include <parts.h>
 
+// From module: SPI flash Control for SAMB
+#include <spi_flash.h>
+
 // From module: SYSTEM - Core System Driver for SAMB
 #include <system_sam_b.h>
 
 // From module: Standard serial I/O (stdio)
 #include <stdio_serial.h>
-
-// From module: TIMER - Timer for SAMB
-#include <timer.h>
 
 // From module: UART - Universal Asynchronous Receiver/Transmitter interface for SAMB
 #include <uart.h>

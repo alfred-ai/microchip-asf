@@ -3,7 +3,7 @@
  *
  * \brief SAME70-XPLD Board Definition.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -350,9 +350,12 @@
 
 /** Board configuration of the AT24MAC EEPROM */
 #define BOARD_AT24MAC_TWIHS               TWIHS0
-#define BOARD_AT24MAC_ADDRESS             (0xBE >> 1)
+//#define BOARD_AT24MAC_ADDRESS             (0xBE >> 1)
 #define BOARD_AT24MAC_TWIHS_CLK           (400000UL)
 #define BOARD_AT24MAC_PAGE_SIZE           16
+#define BOARD_AT24MAC_TWIHS_INSTANCE      TWIHS0
+#define BOARD_AT24MAC_ADDRESS             (0xAE >> 1)
+#define BOARD_CLK_TWIHS_EEPROM            PIO_PA4
 
 /** HSMCI pins definition. */
 /*! Number of slot connected on HSMCI interface */

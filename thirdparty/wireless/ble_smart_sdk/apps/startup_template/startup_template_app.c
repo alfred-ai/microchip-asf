@@ -174,7 +174,9 @@ int main(void)
 	hw_timer_init();
 	
 	/* button initialization */
-	button_init(button_cb);
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
 	
 	hw_timer_register_callback(timer_callback_fn);
 

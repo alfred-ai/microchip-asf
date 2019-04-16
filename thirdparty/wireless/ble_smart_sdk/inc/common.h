@@ -1,3 +1,29 @@
+/**************************************************************************//**
+  \file common.h
+ 
+  \brief Includes datatypes and signatures for common
+ 
+  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Released under NDA
+  Licensed under Atmel's Limited License Agreement.
+ 
+ 
+  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+  EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+ 
+  Atmel Corporation: http://www.atmel.com
+ 
+******************************************************************************/
+
 #ifndef __COMMON_H
 #define __COMMON_H
 #include <stdint.h>
@@ -61,7 +87,6 @@ enum dbg_msg_id
     DBG_WLAN_COEX_REQ,
 
     DBG_RD_MEM_INFO_REQ,
-    DBG_KE_TIMER_REQ,
     
     DBG_MSG_ID_EVT_FIRST,
 
@@ -97,9 +122,22 @@ enum dbg_msg_id
     DBG_WLAN_COEX_CMP_EVT,
 
     DBG_RD_MEM_INFO_CMP_EVT,
-	DBG_KE_TIMER_RESP,
 	
-    DBG_MSG_ID_EVT_LAST
+    DBG_MSG_ID_EVT_LAST_FIRST
+};
+
+enum 
+{
+	//CMDs
+	DBG_MSG_ID_CMD_SECOND = DBG_MSG_ID_EVT_LAST_FIRST,
+	DBG_KE_TIMER_REQ = DBG_MSG_ID_CMD_SECOND,
+	
+	//EVTs
+	DBG_MSG_ID_EVT_SECOND,
+	DBG_KE_TIMER_RESP = DBG_MSG_ID_EVT_SECOND,
+	
+	//EndOfDbgEnum
+	DBG_MSG_ID_EVT_LAST
 };
 
 typedef struct _tstrOsTask{
@@ -174,6 +212,7 @@ extern uint8_t (*platform_register_isr)(uint8_t isr_index,void *fp);
  */
 extern uint8_t (*platform_unregister_isr)(uint8_t isr_index);
 extern uint32_t *actualfreq;
+extern uint32_t *wakeup_event_pending;
 //#ifdef CHIPVERSION_B0
 extern void (*handle_ext_wakeup_isr)(void);
 void PORT1_COMB_Handler(void);

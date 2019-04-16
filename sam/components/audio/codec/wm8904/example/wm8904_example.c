@@ -3,6 +3,8 @@
  *
  * \brief WM8904 example for SAM.
  *
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ *
  * \asf_license_start
  *
  * \page License
@@ -96,8 +98,8 @@ extern "C" {
 /// @endcond
 
 #define STRING_EOL    "\r"
-#define STRING_HEADER "-- WM8904 Example --\r" \
-"-- "BOARD_NAME" --\r" \
+#define STRING_HEADER "-- WM8904 Example --\r\n" \
+"-- "BOARD_NAME" --\r\n" \
 "-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL
 
 /** Wav feature. */
@@ -368,7 +370,7 @@ int main(void)
 
 	/* Initialize the console UART. */
 	configure_console();
-	printf(STRING_HEADER);
+	puts(STRING_HEADER);
 
 	/* Initialize WM8904 TWI interface*/
 	if (wm8904_twi_init() != TWIHS_SUCCESS) {

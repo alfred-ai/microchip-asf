@@ -107,9 +107,6 @@ int main(void)
 	platform_driver_init();
 	acquire_sleep_lock();
 
-	/* Initialize the button */
-	/* button_init(); */
-
 	/* Initialize serial console */
 	serial_console_init();
 

@@ -49,7 +49,7 @@
  * \internal
  * Internal driver device instance struct.
  */
-struct gpio_module _gpio_instances[2];
+struct gpio_module _gpio_instances[3];
 static void (*aon_handle_ext_wakeup_isr)(void) = (void (*)(void))0x1bc51;
 
 /**
@@ -93,7 +93,6 @@ void gpio_get_config_defaults(struct gpio_config *const config)
  *  \retval STATUS_ERR_INVALID_ARG          Invalid gpio number, Certain gpios
  *                                          are used by FW and not allowed to change.
  *  \retval STATUS_RESOURCE_NOT_AVAILABLE   Requested gpio is already in use.
- *  \retval STATUS_ERR_INVALID_ARG          Invalid pull-up/pull-down configuration.
  *
  */
 enum status_code gpio_pin_set_config(const uint8_t gpio_pin,
@@ -102,12 +101,10 @@ enum status_code gpio_pin_set_config(const uint8_t gpio_pin,
 	enum status_code status = STATUS_OK;
 
 	/* Following GPIO's should never be modified by user.
-	* GPIO_0 & GPIO_1 are used for SWD
-	* GPIO_14 is used by firmware for coex.
+	* GPIO_0 & GPIO_1 are used for SWD.
 	*/
 	if ((gpio_pin == PIN_LP_GPIO_0) || \
-		(gpio_pin == PIN_LP_GPIO_1) || \
-		(gpio_pin == PIN_LP_GPIO_14))
+		(gpio_pin == PIN_LP_GPIO_1))
 	{
 		status = STATUS_ERR_INVALID_ARG;
 	} else {
@@ -117,6 +114,9 @@ enum status_code gpio_pin_set_config(const uint8_t gpio_pin,
 			LPMCU_MISC_REGS0->PINMUX_SEL_1.reg &= ~(7 << ((gpio_pin % 8) * 4));
 		} else if (gpio_pin <= 23) {
 			LPMCU_MISC_REGS0->PINMUX_SEL_2.reg &= ~(7 << ((gpio_pin % 8) * 4));
+		} else if (44 <= gpio_pin  && gpio_pin < 48) {
+			/* Set GPIO_MSx as digital mode */
+			AON_GP_REGS0->MS_GPIO_MODE.vec.ANALOG_ENABLE_ &= ~(1 << (gpio_pin - PIN_GPIO_MS4));
 		}
 		
 		if ((gpio_pin == PIN_AO_GPIO_0) || (gpio_pin == PIN_AO_GPIO_1) ||
@@ -137,32 +137,38 @@ enum status_code gpio_pin_set_config(const uint8_t gpio_pin,
 			if(config->direction == GPIO_PIN_DIR_INPUT) {
 				if(gpio_pin < 16) {
 					GPIO0->OUTENCLR.reg = (1 << gpio_pin);
-				} else {
+				} else if (gpio_pin < 32){
 					GPIO1->OUTENCLR.reg = (1 << (gpio_pin % 16));
+				} else {
+					GPIO2->OUTENCLR.reg = (1 << (gpio_pin % 16));
 				}
 				/* pull_enable. */
-				switch(config->input_pull) {
-					case GPIO_PIN_PULL_NONE:
-						LPMCU_MISC_REGS0->PULL_ENABLE.reg |= (1 << gpio_pin);
-						break;
-					case GPIO_PIN_PULL_UP:
-						LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
-						break;
-					case GPIO_PIN_PULL_DOWN:
-						/* Set R-Type */
-						LPMCU_MISC_REGS0->RTYPE_PAD_0.reg |= (1 << gpio_pin);
-						/* Set REN */
-						LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
-						break;
-					default:
-						status = STATUS_ERR_INVALID_ARG;
-						break;
+				if (gpio_pin < 32) {
+					switch(config->input_pull) {
+						case GPIO_PIN_PULL_NONE:
+							LPMCU_MISC_REGS0->PULL_ENABLE.reg |= (1 << gpio_pin);
+							break;
+						case GPIO_PIN_PULL_UP:
+							LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
+							break;
+						case GPIO_PIN_PULL_DOWN:
+							/* Set R-Type */
+							LPMCU_MISC_REGS0->RTYPE_PAD_0.reg |= (1 << gpio_pin);
+							/* Set REN */
+							LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
+							break;
+						default:
+							status = STATUS_ERR_INVALID_ARG;
+							break;
+					}
 				}
 			} else if(config->direction == GPIO_PIN_DIR_OUTPUT) {
 				if (gpio_pin < 16) {
-					GPIO0->OUTENSET.reg |= (1 << gpio_pin);
+					GPIO0->OUTENSET.reg = (1 << gpio_pin);
+				} else if (gpio_pin < 32) {
+					GPIO1->OUTENSET.reg = (1 << (gpio_pin % 16));
 				} else {
-					GPIO1->OUTENSET.reg |= (1 << (gpio_pin % 16));
+					GPIO2->OUTENSET.reg = (1 << (gpio_pin % 16));
 				}
 			}
 		}
@@ -187,8 +193,11 @@ bool gpio_pin_get_input_level(const uint8_t gpio_pin)
 	if (gpio_pin < 16) {
 		regval = GPIO0->DATA.reg;
 		regval &= (1 << gpio_pin);
-	} else {
+	} else if (gpio_pin < 32) {
 		regval = GPIO1->DATA.reg;
+		regval &= (1 << (gpio_pin % 16));
+	} else {
+		regval = GPIO2->DATA.reg;
 		regval &= (1 << (gpio_pin % 16));
 	}
 
@@ -212,8 +221,11 @@ bool gpio_pin_get_output_level(const uint8_t gpio_pin)
 	if (gpio_pin < 16) {
 		regval = GPIO0->DATAOUT.reg;
 		regval &= (1 << gpio_pin);
-	} else {
+	} else if (gpio_pin < 32) {
 		regval = GPIO1->DATAOUT.reg;
+		regval &= (1 << (gpio_pin % 16));
+	} else {
+		regval = GPIO2->DATAOUT.reg;
 		regval &= (1 << (gpio_pin % 16));
 	}
 
@@ -230,17 +242,23 @@ bool gpio_pin_get_output_level(const uint8_t gpio_pin)
  */
 void gpio_pin_set_output_level(const uint8_t gpio_pin, const bool level)
 {
-	if(gpio_pin < 16) {
+	if (gpio_pin < 16) {
 		if(level) {
 			GPIO0->DATAOUT.reg |= (1 << gpio_pin);
 		} else {
 			GPIO0->DATAOUT.reg &= ~(1 << gpio_pin);
 		}
-	} else {
+	} else if (gpio_pin < 32) {
 		if(level) {
 			GPIO1->DATAOUT.reg |= (1 << (gpio_pin % 16));
 		} else {
 			GPIO1->DATAOUT.reg &= ~(1 << (gpio_pin % 16));
+		}
+	} else {
+		if(level) {
+			GPIO2->DATAOUT.reg |= (1 << (gpio_pin % 16));
+		} else {
+			GPIO2->DATAOUT.reg &= ~(1 << (gpio_pin % 16));
 		}
 	}
 }
@@ -256,8 +274,10 @@ void gpio_pin_toggle_output_level(const uint8_t gpio_pin)
 {
 	if (gpio_pin < 16) {
 		GPIO0->DATAOUT.reg ^= (1 << gpio_pin);
-	} else {
+	} else if (gpio_pin < 32) {
 		GPIO1->DATAOUT.reg ^= (1 << (gpio_pin % 16));
+	} else {
+		GPIO2->DATAOUT.reg ^= (1 << (gpio_pin % 16));
 	}
 }
 
@@ -334,38 +354,40 @@ void gpio_register_callback(uint8_t gpio_pin, gpio_callback_t callback_func,
 {
 	/* Sanity check arguments */
 	Assert(callback_func);
-	Assert(gpio_pin < 32);
+	Assert(gpio_pin < 48);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else {
+	} else if (gpio_pin < 32) {
 		gpio_port = 1;
+	} else {
+		gpio_port = 2;
 	}
 	switch (callback_type) {
-		case GPIO_CALLBACK_LOW:
-			_gpio_instances[gpio_port].hw->INTTYPECLR.reg |= 1 << (gpio_pin % 16);
-			_gpio_instances[gpio_port].hw->INTPOLCLR.reg |= 1 << (gpio_pin % 16);
-			break;
+	case GPIO_CALLBACK_LOW:
+		_gpio_instances[gpio_port].hw->INTTYPECLR.reg = 1 << (gpio_pin % 16);
+		_gpio_instances[gpio_port].hw->INTPOLCLR.reg = 1 << (gpio_pin % 16);
+		break;
 
-		case GPIO_CALLBACK_HIGH:
-			_gpio_instances[gpio_port].hw->INTTYPECLR.reg |= 1 << (gpio_pin % 16);
-			_gpio_instances[gpio_port].hw->INTPOLSET.reg |= 1 << (gpio_pin % 16);
-			break;
+	case GPIO_CALLBACK_HIGH:
+		_gpio_instances[gpio_port].hw->INTTYPECLR.reg = 1 << (gpio_pin % 16);
+		_gpio_instances[gpio_port].hw->INTPOLSET.reg = 1 << (gpio_pin % 16);
+		break;
 
-		case GPIO_CALLBACK_RISING:
-			_gpio_instances[gpio_port].hw->INTTYPESET.reg |= 1 << (gpio_pin % 16);
-			_gpio_instances[gpio_port].hw->INTPOLSET.reg |= 1 << (gpio_pin % 16);
-			break;
+	case GPIO_CALLBACK_RISING:
+		_gpio_instances[gpio_port].hw->INTTYPESET.reg = 1 << (gpio_pin % 16);
+		_gpio_instances[gpio_port].hw->INTPOLSET.reg = 1 << (gpio_pin % 16);
+		break;
 
-		case GPIO_CALLBACK_FALLING:
-			_gpio_instances[gpio_port].hw->INTTYPESET.reg |= 1 << (gpio_pin % 16);
-			_gpio_instances[gpio_port].hw->INTPOLCLR.reg |= (1 << (gpio_pin % 16));
-			break;
+	case GPIO_CALLBACK_FALLING:
+		_gpio_instances[gpio_port].hw->INTTYPESET.reg = 1 << (gpio_pin % 16);
+		_gpio_instances[gpio_port].hw->INTPOLCLR.reg = (1 << (gpio_pin % 16));
+		break;
 
-		case GPIO_CALLBACK_N:
-			break;
+	case GPIO_CALLBACK_N:
+		break;
 	}
 	/* Register callback function */
 	_gpio_instances[gpio_port].callback[gpio_pin % 16] = callback_func;
@@ -388,14 +410,16 @@ void gpio_unregister_callback(uint8_t gpio_pin,
 {
 	/* Sanity check arguments */
 	Assert(callback_func);
-	Assert(gpio_pin < 32);
+	Assert(gpio_pin < 48);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else {
+	} else if (gpio_pin < 32) {
 		gpio_port = 1;
+	} else {
+		gpio_port = 2;
 	}
 
 	/* Unregister callback function */
@@ -415,19 +439,24 @@ void gpio_unregister_callback(uint8_t gpio_pin,
  */
 void gpio_enable_callback(uint8_t gpio_pin)
 {
-	Assert(gpio_pin < 32);
+	Assert(gpio_pin < 48);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else {
+		NVIC_EnableIRQ(GPIO0_IRQn);
+	} else if (gpio_pin < 32) {
 		gpio_port = 1;
+		NVIC_EnableIRQ(GPIO1_IRQn);
+	} else {
+		gpio_port = 2;
+		NVIC_EnableIRQ(GPIO2_IRQn);
 	}
 
 	/* Enable callback */
 	_gpio_instances[gpio_port].callback_enable_mask |= (1 << (gpio_pin % 16));
-	_gpio_instances[gpio_port].hw->INTENSET.reg |= (1 << (gpio_pin % 16));
+	_gpio_instances[gpio_port].hw->INTENSET.reg = (1 << (gpio_pin % 16));
 }
 
 /**
@@ -440,19 +469,21 @@ void gpio_enable_callback(uint8_t gpio_pin)
  */
 void gpio_disable_callback(uint8_t gpio_pin)
 {
-	Assert(gpio_pin < 32);
+	Assert(gpio_pin < 48);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else {
+	} else if (gpio_pin < 32) {
 		gpio_port = 1;
+	} else {
+		gpio_port = 2;
 	}
 
 	/* Enable callback */
 	_gpio_instances[gpio_port].callback_enable_mask &= ~(1 << (gpio_pin % 16));
-	_gpio_instances[gpio_port].hw->INTENCLR.reg |= (1 << (gpio_pin % 16));
+	_gpio_instances[gpio_port].hw->INTENCLR.reg = (1 << (gpio_pin % 16));
 }
 
 /**
@@ -468,10 +499,10 @@ static void gpio_port0_isr_handler(void)
 	for (uint8_t i = 0; i < 16; i++){
 		if (flag & (1 << i)) {
 			/* Clear interrupt flag */
-			_gpio_instances[0].hw->INTSTATUSCLEAR.reg |= (1 << i);
+			_gpio_instances[0].hw->INTSTATUSCLEAR.reg = (1 << i);
 			if ((_gpio_instances[0].callback_enable_mask & (1 << i)) && \
-			(_gpio_instances[0].callback_reg_mask & (1 << i)))
-			_gpio_instances[0].callback[i]();
+                    (_gpio_instances[0].callback_reg_mask & (1 << i)))
+                _gpio_instances[0].callback[i]();
 			break;
 		}
 	}
@@ -496,7 +527,7 @@ static void gpio_port1_isr_handler(void)
 
 		if (flag & (1 << i)) {
 			/* Clear interrupt flag */
-			_gpio_instances[1].hw->INTSTATUSCLEAR.reg |= (1 << i);
+			_gpio_instances[1].hw->INTSTATUSCLEAR.reg = (1 << i);
 			if ((_gpio_instances[1].callback_enable_mask & (1 << i)) && \
 			(_gpio_instances[1].callback_reg_mask & (1 << i))) {
 				_gpio_instances[1].callback[i]();
@@ -505,6 +536,29 @@ static void gpio_port1_isr_handler(void)
 		}
 	}
 	NVIC_ClearPendingIRQ(GPIO1_IRQn);
+}
+
+/**
+ * \internal GPIO port2 isr handler.
+ *
+ * This function will enter interrupt.
+ *
+ */
+static void gpio_port2_isr_handler(void)
+{
+	uint32_t flag = _gpio_instances[2].hw->INTSTATUSCLEAR.reg;
+
+	for (uint8_t i = 12; i < 16; i++){
+		if (flag & (1 << i)) {
+			/* Clear interrupt flag */
+			_gpio_instances[2].hw->INTSTATUSCLEAR.reg = (1 << i);
+			if ((_gpio_instances[2].callback_enable_mask & (1 << i)) && \
+                    (_gpio_instances[2].callback_reg_mask & (1 << i)))
+                _gpio_instances[2].callback[i]();
+			break;
+		}
+	}
+	NVIC_ClearPendingIRQ(GPIO2_IRQn);
 }
 
 /**
@@ -517,7 +571,7 @@ void gpio_init(void)
 {
 	uint8_t i, j;
 
-	for(i = 0; i < 2; i++) {
+	for(i = 0; i < 3; i++) {
 		for(j = 0; j < 16; j++) {
 			_gpio_instances[i].callback[j] = NULL;
 		}
@@ -526,7 +580,9 @@ void gpio_init(void)
 	}
 	_gpio_instances[0].hw = (void *)GPIO0;
 	_gpio_instances[1].hw = (void *)GPIO1;
+	_gpio_instances[2].hw = (void *)GPIO2;
 	system_register_isr(RAM_ISR_TABLE_PORT0_COMB_INDEX, (uint32_t)gpio_port0_isr_handler);
 	system_register_isr(RAM_ISR_TABLE_PORT1_COMB_INDEX, (uint32_t)gpio_port1_isr_handler);
+	system_register_isr(RAM_ISR_TABLE_PORT2_COMB_INDEX, (uint32_t)gpio_port2_isr_handler);
 }
 

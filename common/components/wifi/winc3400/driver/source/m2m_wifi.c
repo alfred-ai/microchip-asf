@@ -4,7 +4,7 @@
  *
  * \brief This module contains M2M Wi-Fi APIs implementation.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -433,6 +433,7 @@ static sint8 m2m_validate_scan_options(tstrM2MScanOption* ptstrM2MScanOption)
 
 sint8 m2m_wifi_init(tstrWifiInitParam * param)
 {
+	tstrM2mRev strtmp;
 	sint8 ret = M2M_SUCCESS;
 	
 	if(param == NULL) {
@@ -461,6 +462,16 @@ sint8 m2m_wifi_init(tstrWifiInitParam * param)
 
 	hif_register_cb(M2M_REQ_GRP_WIFI,m2m_wifi_cb);
 
+	//M2M_INFO("Curr driver ver: %u.%u.%u\n", M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
+	//M2M_INFO("Curr driver HIF Level: %u\n", M2M_HIF_LEVEL);
+	ret = m2m_wifi_get_firmware_version(&strtmp);
+
+	if(M2M_ERR_FW_VER_MISMATCH == ret)
+	{
+		M2M_ERR("Firmware version mismatch!\n");
+	}
+
+	m2m_ota_get_firmware_version(&strtmp);
 	goto _EXIT0;
 
 _EXIT1:
@@ -468,21 +479,6 @@ _EXIT1:
 _EXIT0:
 	return ret;
 }
-
-sint8 m2m_wifi_print_fw_version(void)
-{
-	sint8 ret = M2M_SUCCESS;
-	
-	ret = hif_chip_wake();
-	
-	if(ret == M2M_SUCCESS)
-	{
-		ret = nm_print_firmware_info();
-	}
-	
-	return ret;	
-}
-
 
 
 sint8  m2m_wifi_deinit(void * arg)
@@ -532,7 +528,7 @@ sint8 m2m_wifi_connect_sc(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, void *
 		goto ERR1;
 	}
 
-	if(u16Ch>M2M_WIFI_CH_14)
+	if(u16Ch < M2M_WIFI_CH_1 || u16Ch > M2M_WIFI_CH_14)
 	{
 		if(u16Ch!=M2M_WIFI_CH_ALL)
 		{
@@ -737,17 +733,11 @@ sint8 m2m_wifi_wps_disable(void)
 	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_DISABLE_WPS, NULL,0, NULL, 0, 0);
 	return ret;
 }
-/*!
-@fn			NMI_API sint8 m2m_wifi_req_client_ctrl(uint8 cmd);
-@brief		Send a command to the PS Client (An WINC1500 board running the ps_firmware), 
-			if the PS client send any commands it will be received in wifi_cb M2M_WIFI_RESP_CLIENT_INFO
-@param [in]	cmd
-			Control command sent from PS Server to PS Client (command values defined by the application)
-@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
-@sa			m2m_wifi_req_server_init, M2M_WIFI_RESP_CLIENT_INFO
-@pre		m2m_wifi_req_server_init should be called first
-@warning	
-*/
+
+/*
+ * These two functions m2m_wifi_req_client_ctrl and m2m_wifi_req_server_init are for a mode in which two WINC ICs
+ * communicate with each other via probe request and probe response frames. This mode is not supported in WINC fw.
+ */
 sint8 m2m_wifi_req_client_ctrl(uint8 u8Cmd)
 {
 
@@ -761,16 +751,6 @@ sint8 m2m_wifi_req_client_ctrl(uint8 u8Cmd)
 #endif
 	return ret;
 }
-/*!
-@fn			NMI_API sint8 m2m_wifi_req_server_init(uint8 ch);
-@brief		Initialize the PS Server, The WINC1500 support Non secure communication with another WINC1500, 
-			(SERVER/CLIENT) through one byte command (probe request and probe response) without any connection setup
-@param [in]	ch
-			Server listening channel
-@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise
-@sa			m2m_wifi_req_client_ctrl
-@warning	The server mode can't be used with any other modes (STA/P2P/AP)
-*/
 sint8 m2m_wifi_req_server_init(uint8 ch)
 {
 	sint8 ret = M2M_SUCCESS;
@@ -783,6 +763,7 @@ sint8 m2m_wifi_req_server_init(uint8 ch)
 #endif
 	return ret;
 }
+
 sint8 m2m_wifi_p2p(uint8 u8Channel)
 {
 	sint8 ret = M2M_SUCCESS;
@@ -907,7 +888,7 @@ sint8 m2m_wifi_get_mac_address(uint8 *pu8MacAddr)
 @param [in]  index 
 			 Index for the requested result, the index range start from 0 till number of AP's found 
 @sa          tstrM2mWifiscanResult,m2m_wifi_get_num_ap_found,m2m_wifi_request_scan             
-@return      The function shall return M2M_SUCCESE for success and a negative value otherwise
+@return      The function shall return @ref M2M_SUCCESS for success and a negative value otherwise
 @pre         m2m_wifi_request_scan need to be called first, then m2m_wifi_get_num_ap_found 
 			 to get the number of AP's found
 @warning     Function used only in STA mode only. the scan result updated only if scan request called,
@@ -1020,6 +1001,48 @@ sint8 m2m_wifi_set_device_name(uint8 *pu8DeviceName, uint8 u8DeviceNameLength)
 	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_DEVICE_NAME,
 		(uint8*)&strDeviceName, sizeof(tstrM2MDeviceNameConfig), NULL, 0,0);
 }
+/*!
+@fn	\
+	NMI_API sint8 m2m_wifi_get_firmware_version(tstrM2mRev * pstrRev);
+
+@brief
+	Get the current Firmware version.
+
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+sint8 m2m_wifi_get_firmware_version(tstrM2mRev *pstrRev)
+{
+	sint8 ret = M2M_SUCCESS;
+	ret = hif_chip_wake();
+	if(ret == M2M_SUCCESS)
+	{
+		ret = nm_get_firmware_full_info(pstrRev);
+		hif_chip_sleep();
+	}
+	return ret;
+}
+/*!
+@fn	\
+	NMI_API sint8 m2m_ota_get_firmware_version(tstrM2mRev * pstrRev);
+
+@brief
+	Get the OTA Firmware version.
+
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+NMI_API sint8 m2m_ota_get_firmware_version(tstrM2mRev * pstrRev)
+{
+	sint8 ret = M2M_SUCCESS;
+	ret = hif_chip_wake();
+	if(ret == M2M_SUCCESS)
+	{
+		ret = nm_get_ota_firmware_info(pstrRev);
+		hif_chip_sleep();
+	}
+	return ret;
+}
 #ifdef CONF_MGMT
 sint8 m2m_wifi_enable_monitoring_mode(tstrM2MWifiMonitorModeCtrl *pstrMtrCtrl, uint8 *pu8PayloadBuffer,
 								   uint16 u16BufferSize, uint16 u16DataOffset)
@@ -1034,10 +1057,6 @@ sint8 m2m_wifi_enable_monitoring_mode(tstrM2MWifiMonitorModeCtrl *pstrMtrCtrl, u
 			(uint8*)pstrMtrCtrl, sizeof(tstrM2MWifiMonitorModeCtrl), NULL, 0,0);
 	}
 	return s8Ret;
-}
-sint8 m2m_wifi_get_firmware_version(tstrM2mRev *M2mRev)
-{
-    return nm_get_firmware_info(M2mRev);
 }
 sint8 m2m_wifi_disable_monitoring_mode(void)
 {

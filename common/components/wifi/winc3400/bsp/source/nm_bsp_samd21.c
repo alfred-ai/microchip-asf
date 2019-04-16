@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAMD21 BSP APIs implementation.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -40,6 +40,7 @@
  */
 
 #include "bsp/include/nm_bsp.h"
+#include "bsp/include/nm_bsp_internal.h"
 #include "common/include/nm_common.h"
 #include "extint.h"
 #include "port.h"
@@ -71,7 +72,6 @@ static void init_chip_pins(void)
 	port_pin_set_config(CONF_WINC_PIN_RESET, &pin_conf);
 	port_pin_set_config(CONF_WINC_PIN_CHIP_ENABLE, &pin_conf);
 	port_pin_set_config(CONF_WINC_PIN_WAKE, &pin_conf);
-	//port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
 	port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
 }
 
@@ -91,7 +91,9 @@ sint8 nm_bsp_init(void)
     if (!(SysTick->CTRL & SysTick_CTRL_ENABLE_Msk && SysTick->CTRL & SysTick_CTRL_TICKINT_Msk)) {
 	    delay_init();
     }
+
 	nm_bsp_reset();
+
 #if 0
 	/*For uart debug only*/
 	/* Perform chip reset. */

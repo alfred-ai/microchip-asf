@@ -3,7 +3,7 @@
  *
  * \brief SAM C21 Clock configuration
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -180,7 +180,7 @@
 /* Configure GCLK generator 8 */
 #  define CONF_CLOCK_GCLK_8_ENABLE                true
 #  define CONF_CLOCK_GCLK_8_RUN_IN_STANDBY        false
-#  define CONF_CLOCK_GCLK_8_CLOCK_SOURCE          SYSTEM_CLOCK_SOURCE_OSC48M
+#  define CONF_CLOCK_GCLK_8_CLOCK_SOURCE          SYSTEM_CLOCK_SOURCE_DPLL
 #  define CONF_CLOCK_GCLK_8_PRESCALER             1
 #  define CONF_CLOCK_GCLK_8_OUTPUT_ENABLE         false
 #endif /* CONF_CLOCKS_H_INCLUDED */

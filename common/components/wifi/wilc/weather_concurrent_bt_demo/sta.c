@@ -4,7 +4,7 @@
  *
  * \brief STA Task.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -220,7 +220,7 @@ static void parse_response(char *buffer, uint32_t len)
 		pcIndxPtr = pcIndxPtr + strlen("temperature value") + 2;
 		pcEndPtr = strstr(pcIndxPtr, "\"");
 		pcEndPtr2 = strstr(pcIndxPtr, ".");
-		if (pcEndPtr2 < pcEndPtr) {
+		if (pcEndPtr2 && pcEndPtr2 < pcEndPtr) {
 			pcEndPtr = pcEndPtr2;
 		}
 		if (NULL != pcEndPtr) {
@@ -334,7 +334,7 @@ void sta_task(void *argument)
 				tmp += len;
 				tot_len += len;
 			} 
-			while(netbuf_next(rx_buf) >= 0);
+			while(netbuf_next(rx_buf) >= 0 && tot_len < 2048);
 			parse_response(server_response, tot_len);
 
 			netbuf_delete(rx_buf);

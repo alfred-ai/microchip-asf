@@ -3,7 +3,7 @@
  *
  * \brief Handles Serial I/O  Functionalities For the Host Device
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -123,8 +123,12 @@ uint8_t sio2host_tx(uint8_t *data, uint8_t length)
 		status
 			= usart_serial_write_packet(&host_uart_module,
 				(const uint8_t *)data, length);
+#elif SAM4S || SAM4E
+        status = usart_serial_write_packet((Usart *)USART_HOST,
+				(const uint8_t *)data,
+				length);
 #else
-		status = usart_serial_write_packet(USART_HOST,
+	    status = usart_serial_write_packet(USART_HOST,
 				(const uint8_t *)data,
 				length);
 #endif
@@ -237,8 +241,10 @@ USART_HOST_ISR_VECT()
 	uint8_t temp;
 #if SAMD || SAMR21 || SAML21
 	usart_serial_read_packet(&host_uart_module, &temp, 1);
+#elif SAM4E || SAM4S
+	usart_serial_read_packet((Usart *)USART_HOST, &temp, 1);
 #else
-	usart_serial_read_packet(USART_HOST, &temp, 1);
+    usart_serial_read_packet(USART_HOST, &temp, 1);
 #endif
 
 	/* Introducing critical section to avoid buffer corruption. */

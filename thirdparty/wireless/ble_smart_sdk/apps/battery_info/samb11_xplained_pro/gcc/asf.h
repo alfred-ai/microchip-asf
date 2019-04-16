@@ -52,6 +52,9 @@
  * running the ASF driver selector tool. Any changes will be discarded.
  */
 
+// From module: Aon Sleep Timer - Always-on Sleep Timer for SAMB
+#include <aon_sleep_timer.h>
+
 // From module: Common SAM0 compiler driver
 #include <compiler.h>
 #include <status_codes.h>
@@ -59,19 +62,11 @@
 // From module: DUALTIMER - Dualtimer for SAMB
 #include <dualtimer.h>
 
-// From module: EEPROM AT30TSE75X
-#include <at30tse75x.h>
-
 // From module: GPIO - GPIO Pin Control for SAMB (Callback APIs)
 #include <gpio.h>
 
 // From module: Generic board support
 #include <board.h>
-
-// From module: I2C - Inter-Integrated Circuit for SAMB
-#include <i2c_common.h>
-#include <i2c_master.h>
-#include <i2c_master_interrupt.h>
 
 // From module: Interrupt management - SAM implementation
 #include <interrupt.h>

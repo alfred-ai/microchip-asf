@@ -3,7 +3,7 @@
  *
  * \brief Two-Wire Interface (TWIHS) driver for SAM.
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -80,7 +80,7 @@ extern "C" {
 
 #define I2C_FAST_MODE_SPEED    400000
 #define TWIHS_CLK_DIVIDER      2
-#define TWIHS_CLK_CALC_ARGU    4
+#define TWIHS_CLK_CALC_ARGU    3
 #define TWIHS_CLK_DIV_MAX      0xFF
 #define TWIHS_CLK_DIV_MIN      7
 

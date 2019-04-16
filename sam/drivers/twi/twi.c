@@ -3,7 +3,7 @@
  *
  * \brief Two-Wire Interface (TWI) driver for SAM.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -79,7 +79,11 @@ extern "C" {
 
 #define I2C_FAST_MODE_SPEED  400000
 #define TWI_CLK_DIVIDER      2
+#if SAMG55
+#define TWI_CLK_CALC_ARGU    3
+#else
 #define TWI_CLK_CALC_ARGU    4
+#endif	
 #define TWI_CLK_DIV_MAX      0xFF
 #define TWI_CLK_DIV_MIN      7
 
@@ -222,7 +226,7 @@ uint32_t twi_probe(Twi *p_twi, uint8_t uc_slave_addr)
  *
  * Please see the device datasheet for details on this.
  */
-static uint32_t twi_mk_addr(const uint8_t *addr, int len)
+uint32_t twi_mk_addr(const uint8_t *addr, int len)
 {
 	uint32_t val;
 

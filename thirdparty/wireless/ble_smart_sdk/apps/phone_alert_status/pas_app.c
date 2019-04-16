@@ -240,6 +240,11 @@ int main(void)
 
 	DBG_LOG("Initializing Phone Alert Status Profile Application");
 
+	/* Initialize the button*/
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
+
 	/* Initializing the hardware timer */
 	hw_timer_init();
 
@@ -249,8 +254,6 @@ int main(void)
 	/* initialize the ble chip	and Set the device mac address */
 	ble_device_init(NULL);
 
-	button_init(button_cb);
-		
 	/* Initializing the profile */
 	pas_client_init(NULL);
 	

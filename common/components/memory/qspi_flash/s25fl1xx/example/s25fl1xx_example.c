@@ -3,7 +3,7 @@
  *
  * \brief S25FL1xx QSPI flash example for SAMV71.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -176,11 +176,11 @@ int main(void)
 
 	printf("\rExample code written 0x%x bytes to Memory\r\n", WRITE_SIZE);
 
-	puts("Verifying \r\n");
 	s25fl1xx_read(&g_qspid, buffer, sizeof(buffer), 0);
 	/* Start continuous read mode to enter in XIP mode*/
 	s25fl1xx_enter_continous_read_mode(&g_qspid);
 
+	puts("Verifying \r\n");
 	for (idx = 0; idx < WRITE_SIZE; idx++) {
 		if(*(memory) == buffercode[idx]) {
 			memory++;

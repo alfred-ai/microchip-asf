@@ -4,7 +4,7 @@
  *
  * \brief BSD compatible socket interface.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -161,9 +161,9 @@ MACROS
 /*!<
 	Allow an opened SSL socket to bypass the X509 certificate 
 	verification process.
-	It is highly required NOT to use this socket option in production
-	software applications. It is supported for debugging and testing 
-	purposes.
+	It is highly recommended NOT to use this socket option in production
+	software applications. It is intended for debugging and testing 
+	purposes only.
 	The option value should be casted to int type and it is handled
 	as a boolean flag.
 */
@@ -175,6 +175,40 @@ MACROS
 	SNI is a NULL terminated string containing the server name
 	assocated with the connection. It must not exceed the size
 	of HOSTNAME_MAX_SIZE.
+*/
+
+#ifdef _NM_BSP_BIG_END
+#define _htonl(m)				(m)
+/*!<
+	Convert a 4-byte integer from the Host representation to Network byte order (Host is BE).
+*/
+#define _htons(A)				(A)
+/*!<
+	Convert a 2-byte integer (short) from Host representation to Network byte order (Host is BE).
+*/
+#else
+#define _htonl(m)		\
+	(uint32)(((uint32)(m << 24)) | ((uint32)((m & 0x0000FF00) << 8)) | ((uint32)((m & 0x00FF0000) >> 8)) | ((uint32)(m >> 24)))
+/*!<
+	Convert a 4-byte integer from Host representation to Network byte order (Host is LE).
+*/
+
+#define _htons(A)   	(uint16)((((uint16) (A)) << 8) | (((uint16) (A)) >> 8))
+/*!<
+	Convert a 2-byte integer (short) from Host representation to Network byte order (Host is LE).
+*/
+#endif
+
+
+#define _ntohl      		_htonl
+/*!<
+	Convert a 4-byte integer from Network byte order to Host representation.
+*/
+
+
+#define _ntohs      		_htons
+/*!<
+	Convert a 2-byte integer from Network byte order to Host representation.
 */
  //@}
 		
@@ -195,16 +229,15 @@ Socket Errors
 
 #define SOCK_ERR_INVALID_ADDRESS							-1
 /*!<
-	Socket address is invalid. The socket operation cannot be completed successfully without specifying a specific address 
+	Socket address is invalid. The socket operation cannot be completed successfully without specifying a valid address 
 	For example: bind is called without specifying a port number
 */
 
 
 #define SOCK_ERR_ADDR_ALREADY_IN_USE						-2
 /*!<
-	Socket operation cannot bind on the given address. With socket operations, only one IP address per socket is permitted. 
-	Any attempt for a new socket to bind with an IP address already bound to another open socket, 
-	will return the following error code. States that bind operation failed. 
+	Socket operation cannot bind on the given address. Only one IP address per socket, and one socket per IP address is permitted -
+	any attempt for a new socket to bind with an IP address already bound to another open socket will return the following error code.
 */
 
 
@@ -224,21 +257,20 @@ Socket Errors
 
 #define SOCK_ERR_INVALID_ARG								-6
 /*!<
-	An invalid arguement is passed to a function.
+	An invalid argument is passed to a socket function. Identifies that @ref socket operation failed
 */
 
 
 #define SOCK_ERR_MAX_LISTEN_SOCK							-7
 /*!<
 	Exceeded the maximum number of TCP passive listening sockets.
-	Identifies Identifies that @ref listen operation failed. 
+	Identifies that @ref listen operation failed. 
 */
 
 
 #define SOCK_ERR_INVALID									-9
 /*!<
-	The requested socket operation is not valid in the
-	current socket state. 
+	The requested socket operation is not valid in the current socket state. 
 	For example: @ref accept is called on a TCP socket before @ref bind or @ref listen.
 */
 
@@ -246,20 +278,19 @@ Socket Errors
 #define SOCK_ERR_ADDR_IS_REQUIRED							-11
 /*!<
 	Destination address is required. Failure to provide the socket address required for the socket operation to be completed.
-	It is generated as an error to the @ref sendto function when the address required to send the data to is not known. 
+	The @ref sendto function requires a destination address to send data. 
 */
 
 
 #define SOCK_ERR_CONN_ABORTED								-12
 /*!<
-	The socket is closed by the peer. The local socket is
-	closed also.
+	The socket is closed by the peer. The local socket is closed also.
 */
 
 
 #define SOCK_ERR_TIMEOUT									-13
 /*!<
-	The socket pending operation has  timedout. 
+	The socket pending operation has timedout. 
 */
 
 
@@ -268,39 +299,6 @@ Socket Errors
 	No buffer space available to be used for the requested socket operation.
 */
 
-#ifdef _NM_BSP_BIG_END
-
-#define _htonl(m)				(m)
-#define _htons(A)				(A)
-
-#else
-
-#define _htonl(m)		\
-	(uint32)(((uint32)(m << 24)) | ((uint32)((m & 0x0000FF00) << 8)) | ((uint32)((m & 0x00FF0000) >> 8)) | ((uint32)(m >> 24)))
-/*!<
-	Convert a 4-byte integer from the host representation to the Network byte order representation.
-*/
-
-
-#define _htons(A)   	(uint16)((((uint16) (A)) << 8) | (((uint16) (A)) >> 8))
-/*!<
-	Convert a 2-byte integer (short) from the host representation to the Network byte order representation.
-*/
-
-
-#endif
-
-
-#define _ntohl      		_htonl
-/*!<
-	Convert a 4-byte integer from the Network byte order representation to the host representation .
-*/
-
-
-#define _ntohs      		_htons
-/*!<
-	Convert a 2-byte integer from the Network byte order representation to the host representation .
-*/
  //@}
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
@@ -309,7 +307,7 @@ DATA TYPES
 
 /** @defgroup  SocketEnums Enumeration/Typedefs
  * @ingroup SOCKETAPI
- * Specific Enumuration-typdefs used for socket operations
+ * Specific Enumuration-typedefs used for socket operations
  * @{ */
 /*!
 @typedef	\
@@ -318,7 +316,7 @@ DATA TYPES
 @brief
 	Definition for socket handler data type.
 	Socket ID,used with all socket operations to uniquely identify the socket handler.
-	Such an ID is uniquely assigned at socket creation when calling @ref socket operation.
+	The ID is uniquely assigned at socket creation when calling @ref socket operation.
 */
 typedef sint8  SOCKET;
  //@}

@@ -4,7 +4,7 @@
  *
  * \brief AP Task.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -119,7 +119,7 @@ static void http_request(struct netconn *conn)
 			strcat(webpage, "<br>Nb STA Connected = ");
 			strcat(webpage, cwebpage_hit);	
 			strcat(webpage, "<p><pre><br>Task          State  Priority  Stack	#<br>************************************************<br>");
-			vTaskList((signed char *)webpage + strlen((char *)webpage));
+			vTaskList((void *)((char *)webpage + strlen((char *)webpage)));
 			strcat(webpage, "<p><pre><p><pre><br><br>Weather Bulletin (via AP ");
 			strcat(webpage, STA_WLAN_SSID);
 			strcat(webpage, ")<br>************************************************<br>");
@@ -147,6 +147,9 @@ void ap_task(void *argument)
 
 	/* Just to avoid compiler warnings. */
 	UNUSED(argument);
+	
+	/* Give time for other thread to initialize lwIP. */
+	vTaskDelay(1000);
 
 	/* Create a new TCP connection handle */
 	conn = netconn_new(NETCONN_TCP);

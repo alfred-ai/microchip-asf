@@ -3,7 +3,7 @@
  *
  * \brief USB Device wrapper layer for compliance with common driver UDD
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -99,6 +99,8 @@ struct usb_module usb_device;
 #ifndef UDD_CLOCK_GEN
 #if (SAML21) || (SAML22)
 #  define UDD_CLOCK_GEN      GCLK_GENERATOR_3
+#elif (SAMDA1)
+#  define UDD_CLOCK_GEN      GCLK_GENERATOR_1
 #else
 #  define UDD_CLOCK_GEN      GCLK_GENERATOR_0
 #endif

@@ -53,14 +53,10 @@ TARGET_SRAM = ibeacon_app_samb11_xplained_pro_sram.elf
 # List of C source files.
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
-       common2/components/memory/eeprom/at30tse75x/at30tse75x.c \
        sam0/boards/samb11_xplained_pro/board_init.c       \
-       sam0/drivers/dualtimer/dualtimer.c                 \
        sam0/drivers/gpio/gpio.c                           \
-       sam0/drivers/i2c/i2c_master.c                      \
-       sam0/drivers/i2c/i2c_master_interrupt.c            \
+       sam0/drivers/spi_flash/spi_flash.c                 \
        sam0/drivers/system/system_sam_b.c                 \
-       sam0/drivers/timer/timer.c                         \
        sam0/drivers/uart/uart.c                           \
        sam0/utils/cmsis/samb11/source/gcc/startup_samb11.c \
        sam0/utils/cmsis/samb11/source/system_samb11.c     \
@@ -68,10 +64,9 @@ CSRCS = \
        sam0/utils/stdio/write.c                           \
        sam0/utils/syscalls/gcc/syscalls.c                 \
        thirdparty/wireless/ble_smart_sdk/apps/ibeacon_app/app.c \
-       thirdparty/wireless/ble_smart_sdk/services/button.c \
-       thirdparty/wireless/ble_smart_sdk/services/console_serial.c \
-       thirdparty/wireless/ble_smart_sdk/services/led.c   \
-       thirdparty/wireless/ble_smart_sdk/services/timer_hw.c \
+       thirdparty/wireless/ble_smart_sdk/services/gpio/button.c \
+       thirdparty/wireless/ble_smart_sdk/services/gpio/led.c \
+       thirdparty/wireless/ble_smart_sdk/services/uart/console_serial.c \
        thirdparty/wireless/ble_smart_sdk/src/event_handler.c \
        thirdparty/wireless/ble_smart_sdk/src/platform_drv.c \
        thirdparty/wireless/ble_smart_sdk/src/port_from_sdk.c
@@ -84,14 +79,11 @@ INC_PATH = \
        common/boards                                      \
        common/services/serial                             \
        common/utils                                       \
-       common2/components/memory/eeprom/at30tse75x        \
        sam0/boards                                        \
        sam0/boards/samb11_xplained_pro                    \
-       sam0/drivers/dualtimer                             \
        sam0/drivers/gpio                                  \
-       sam0/drivers/i2c                                   \
+       sam0/drivers/spi_flash                             \
        sam0/drivers/system                                \
-       sam0/drivers/timer                                 \
        sam0/drivers/uart                                  \
        sam0/utils                                         \
        sam0/utils/cmsis/samb11/include                    \
@@ -101,10 +93,11 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_smart_sdk/apps/config/samb11 \
        thirdparty/wireless/ble_smart_sdk/apps/ibeacon_app \
-       thirdparty/wireless/ble_smart_sdk/apps/ibeacon_app/samb11_xplained_pro \
        thirdparty/wireless/ble_smart_sdk/inc              \
-       thirdparty/wireless/ble_smart_sdk/services \
+       thirdparty/wireless/ble_smart_sdk/services/gpio    \
+       thirdparty/wireless/ble_smart_sdk/services/uart \
        thirdparty/wireless/ble_smart_sdk/apps/ibeacon_app/samb11_xplained_pro/gcc
 
 # Additional search paths for libraries.
@@ -158,7 +151,6 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BOARD=SAMB11_XPLAINED_PRO                       \
        -D CHIPVERSION_B0                                  \
-       -D I2C_MASTER_CALLBACK_MODE=true                   \
        -D __SAMB11G18A__
 
 # Extra flags to use when linking

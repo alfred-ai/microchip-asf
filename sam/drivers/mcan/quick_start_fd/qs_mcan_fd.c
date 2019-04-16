@@ -3,7 +3,7 @@
  *
  * \brief SAM MCAN Quick Start for FD modue
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -164,6 +164,7 @@ static void configure_mcan(void)
 	/* Initialize the module. */
 	struct mcan_config config_mcan;
 	mcan_get_config_defaults(&config_mcan);
+	config_mcan.delay_compensation_offset = 3;
 	mcan_init(&mcan_instance, MCAN_MODULE, &config_mcan);
 
 	mcan_enable_fd_mode(&mcan_instance);

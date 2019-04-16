@@ -3,7 +3,7 @@
  *
  * \brief Reinforced Safety Watchdog Timer (RSWDT) example for SAM.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -217,7 +217,7 @@ int main(void)
 {
 	uint32_t rswdt_mode, timeout_value;
 
-	/* Initilize the system */
+	/* Initialize the system */
 	sysclk_init();
 	board_init();
 

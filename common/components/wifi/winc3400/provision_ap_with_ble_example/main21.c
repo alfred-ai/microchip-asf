@@ -3,7 +3,7 @@
  *
  * \brief Provision AP with BLE example.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -45,19 +45,22 @@
  * It uses the following hardware:
  * - SAM Xplained Pro.
  * - the WIN3400 module on EXT1.
+ * - thirdparty Android device.
  *
  * \section files Main Files
  * - main21.c : Initialize the SAM board and perform BLE provisioning.
  *
  * \section usage Usage
  * -# To connect the SAM board to the internet Access Point over Wi-Fi, the user must
- * -# provide credentials (SSID and passphrase) over BLE. To do so, the user needs 
- * -# to power up the SAM board and use the Atmel_BLE_prov.apk Android app available
- * -# in the doc folder: perform a scan, select an SSID and enter the passphrase.
+ * -# provide credentials (SSID and passphrase) over BLE. As a first step, it is required
+ * -# that the user install the Atmel BLE provision application available in the doc folder
+ * -# (Atmel_BLE_prov.apk) on an Android device.
+ * -# Then, power up the SAM board and run the Android application: perform a scan, select
+ * -# an SSID and enter the passphrase.
  * -# Finally, press connect and enter the PIN code defined in main.h file.
  * -# If connection to AP is successful, WINC3400 BLE will start beaconing.
  * -# Tracking the beacon can be easily done using the Atmel_Beacon_Radar.apk Android
- * -# app also provided in the doc folder.
+ * -# application also provided in the doc folder.
  *
  * -# Build the program and download it into the board.
  * -# On the computer, open and configure a terminal application as the follows.
@@ -86,9 +89,10 @@
  *    main: started BLE provisioning.
  *    AT_BLE_WIFIPROV_SCAN_MODE_CHANGE_IND
  *    wifi_cb: M2M_WIFI_RESP_SCAN_DONE
- *    wifi_cb: M2M_WIFI_RESP_SCAN_RESULT
+ *    wifi_cb: M2M_WIFI_RESP_SCAN_RESULT: found SSID "XXXXXX"
  *    ...
- *    wifi_cb: wifiprov_scan_list_ind_send
+ *    Please open Android application to provision Wi-Fi over BLE...
+ *
  *    AT_BLE_WIFIPROV_COMPLETE_IND
  *    Provisioning Successful
  *    Sec type   : 2
@@ -355,11 +359,11 @@ static void wifi_cb(uint8 u8MsgType, void *pvMsg)
 	case M2M_WIFI_RESP_SCAN_RESULT:
 	{
 		uint8 u8NumFoundAPs = m2m_wifi_get_num_ap_found();
-		printf("wifi_cb: M2M_WIFI_RESP_SCAN_RESULT\n");
+		tstrM2mWifiscanResult *pstrScanResult = (tstrM2mWifiscanResult *)pvMsg;
+		printf("wifi_cb: M2M_WIFI_RESP_SCAN_RESULT: found SSID \"%s\"\n", pstrScanResult->au8SSID);
 		if (gu8IsWiFiConnected == M2M_WIFI_DISCONNECTED) {
 			if (gu8Index < u8NumFoundAPs) {
 				if (gu8Index < MAX_WIPROVTASK_AP_NUM) {
-					tstrM2mWifiscanResult *pstrScanResult = (tstrM2mWifiscanResult *)pvMsg;
 					ble_scan_list.scandetails[gu8Index].rssi = pstrScanResult->s8rssi;
 					ble_scan_list.scandetails[gu8Index].sec_type = pstrScanResult->u8AuthType;
 					memcpy(ble_scan_list.scandetails[gu8Index].ssid, pstrScanResult->au8SSID, sizeof(ble_scan_list.scandetails[gu8Index].ssid));
@@ -369,8 +373,8 @@ static void wifi_cb(uint8 u8MsgType, void *pvMsg)
 				gu8Index++;
 			} else {
 				if (ble_wifi_scan_mode == 1) {
-					printf("wifi_cb: wifiprov_scan_list_ind_send\n");
 					wifiprov_scan_list_ind_send(&ble_scan_list);
+					printf("\nPlease open Android application to provision Wi-Fi over BLE...\n\n");
 				}
 			}
 		}

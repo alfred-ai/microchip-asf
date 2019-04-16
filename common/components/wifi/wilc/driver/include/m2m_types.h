@@ -4,7 +4,7 @@
  *
  * \brief NMC1500 IoT Application Interface Internal Types.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -73,7 +73,7 @@ MACROS
 */
 
 
-#define M2M_FIRMWARE_VERSION_MINOR_NO					(4)
+#define M2M_FIRMWARE_VERSION_MINOR_NO					(5)
 /*!< Firmware Minor release version number.
 */
 
@@ -94,7 +94,7 @@ MACROS
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO						(13)
+#define M2M_DRIVER_VERSION_PATCH_NO						(14)
 /*!< Driver patch release version number.
 */
 

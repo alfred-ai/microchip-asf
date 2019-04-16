@@ -3,7 +3,7 @@
  *
  * \brief FreeRTOS Peripheral Control API For the TWI
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -56,6 +56,14 @@
 #include "twi_master.h"
 #include "freertos_peripheral_control.h"
 
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**INDENT-ON**/
+/// @endcond
+	
 #if XMEGA
 # error Unsupported chip type
 #elif UC3
@@ -689,5 +697,13 @@ status_code_t freertos_twi_read_packet_async(freertos_twi_if p_twi,
 	  }
 \endcode
  */
+
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+}
+#endif
+/**INDENT-ON**/
+/// @endcond
 
 #endif /* FREERTOS_TWI_MASTER_INCLUDED */

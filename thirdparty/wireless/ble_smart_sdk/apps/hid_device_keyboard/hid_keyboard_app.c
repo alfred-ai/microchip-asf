@@ -291,6 +291,34 @@ static void hid_keyboard_app_init(void)
 	}
 }
 
+#ifdef ENABLE_ULP
+static void resume_cb(void)
+{
+	init_port_list();
+	serial_console_init();
+	button_init();
+}
+
+static void aon_gpio_0_callback(void)
+{
+	if(gpio_pin_get_input_level(PIN_AO_GPIO_0))
+	{
+		DBG_LOG("ULP is suspended.");
+		button_register_callback(button_cb);
+	}
+	else
+	{
+		DBG_LOG("ULP is activated.");
+	}
+}
+
+static void configure_aon_gpio_callbacks(void)
+{
+	gpio_register_callback(PIN_AO_GPIO_0, aon_gpio_0_callback, GPIO_CALLBACK_RISING);
+	gpio_enable_callback(PIN_AO_GPIO_0);
+}
+#endif
+
 int main(void )
 {
 	platform_driver_init();
@@ -300,6 +328,11 @@ int main(void )
 	serial_console_init();
 
 	DBG_LOG("Initializing HID Keyboard Application");
+
+	/* Initialize button*/
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
 	
 	/* Initialize the profile based on user input */
 	hid_keyboard_app_init();
@@ -307,8 +340,6 @@ int main(void )
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 
-	/* Initialize button*/
-	button_init(button_cb);
 	hid_prf_init(NULL);
 	
 	/* Register the notification handler */
@@ -322,12 +353,23 @@ int main(void )
 	
 	/* Callback registering for BLE-GATT-Server Role */
 	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, hid_app_gatt_server_handle);
-	
+
+#ifdef ENABLE_ULP
+	register_resume_callback(resume_cb);
+	configure_aon_gpio_callbacks();
+#endif
+
 	/* Capturing the events  */
 	while(app_exec)
 	{
+#ifdef ENABLE_ULP
+		release_sleep_lock();
 		ble_event_task(BLE_EVENT_TIMEOUT);
-				
+		acquire_sleep_lock();
+#else
+		ble_event_task(BLE_EVENT_TIMEOUT);
+#endif
+
 		/* Check for key status */
 		if(key_status && conn_status){
 			DBG_LOG("Key Pressed...");

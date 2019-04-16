@@ -4,7 +4,7 @@
  *
  * \brief Wireless Link Controller Driver.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -128,6 +128,10 @@ sint8 os_m2m_wifi_init(tstrWifiInitParam *param)
     /* Initialize the netif thread. */
 	os_hook_init();
 	os_hook_send_start(os_m2m_wifi_init_imp, &params.dispatch, &params);
+	
+	/* Give enough time to ensure FW is ready. */
+	vTaskDelay(50);
+	
 	return params.dispatch.retval;
 }
 
@@ -760,18 +764,6 @@ sint8 os_m2m_wifi_send_ethernet_pkt(uint8* pu8Packet, uint16 u16PacketSize)
 	OS_WIFI_DISPATCH_WAIT(os_m2m_wifi_send_ethernet_pkt_imp, &params);
 	return params.dispatch.retval;
 }
-
-
-sint8 os_m2m_wifi_enable_sntp(uint8 bEnable)
-{
-	struct uint_params params;
-	params.dispatch.retval = M2M_ERR_TIME_OUT;
-	params.arg = bEnable;
-	params.fn = m2m_wifi_enable_sntp;
-	OS_WIFI_DISPATCH_WAIT(func_uint_imp, &params);
-	return params.dispatch.retval;
-}
-
 
 struct wifi_set_sytem_time_params {
 	struct params_dispatch dispatch;

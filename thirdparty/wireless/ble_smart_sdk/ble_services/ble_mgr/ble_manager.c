@@ -123,7 +123,6 @@ static const ble_event_callback_t ble_mgr_gatt_server_handle[GATT_SERVER_HANDLER
 volatile uint8_t scan_response_count = 0;
 at_ble_scan_info_t scan_info[MAX_SCAN_DEVICE];
 
-
 at_ble_events_t event;
 uint8_t ble_event_params[BLE_EVENT_PARAM_MAX_SIZE];
 
@@ -132,6 +131,11 @@ static void ble_init(at_ble_init_config_t * args);
 
 /** @brief Set BLE Address, If address is NULL then it will use BD public address */
 static void ble_set_dev_config(at_ble_addr_t *addr);
+
+#ifdef USE_SCAN_SOFT_FILTER
+/** filter function for avoiding duplicated scan data.*/
+static bool ble_scan_duplication_check(at_ble_scan_info_t * info);
+#endif
 
 static void init_global_var(void)
 {
@@ -166,6 +170,10 @@ at_ble_status_t ble_event_task(uint32_t timeout)
 
 at_ble_init_config_t pf_cfg;
 
+volatile uint32_t 	event_pool_memory[256] 		= {0};
+volatile uint32_t 	event_params_memory[1024] 	= {0};
+
+
 /** @brief BLE device initialization */
 void ble_device_init(at_ble_addr_t *addr)
 {
@@ -173,7 +181,15 @@ void ble_device_init(at_ble_addr_t *addr)
 	char *dev_name = NULL;
 	init_global_var();
 
+	memset((uint8_t *)event_pool_memory, 0, sizeof(event_pool_memory));
+	memset((uint8_t *)event_params_memory, 0, sizeof(event_params_memory));
+
 	memset(&pf_cfg, 0, sizeof(pf_cfg));
+
+	pf_cfg.event_mem_pool.memStartAdd        = (uint8_t *)event_pool_memory;
+	pf_cfg.event_mem_pool.memSize            = sizeof(event_pool_memory);
+	pf_cfg.event_params_mem_pool.memStartAdd = (uint8_t *)event_params_memory;
+	pf_cfg.event_params_mem_pool.memSize     = sizeof(event_params_memory);
 
 	/* Initialize the BLE Event callbacks */
 	for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
@@ -225,7 +241,7 @@ void ble_device_init(at_ble_addr_t *addr)
 	
 #if defined ATT_DB_MEMORY
 	pf_cfg.memPool.memSize = BLE_ATT_DB_MEMORY_SIZE;
-	pf_cfg.memPool.memStartAdd = (uint8_t *)&att_db_data;
+	pf_cfg.memPool.memStartAdd = (uint8_t *)att_db_data;
 #else
 	pf_cfg.memPool.memSize = 0;
 	pf_cfg.memPool.memStartAdd = NULL;
@@ -468,9 +484,45 @@ at_ble_status_t gap_dev_scan(void)
 	DBG_LOG("Scanning...Please wait...");
 	/* make service discover counter to zero*/
 	scan_response_count = 0;
-	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,true)) ;
+	memset(scan_info, 0, sizeof(scan_info));
+	#ifdef USE_SCAN_SOFT_FILTER
+	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,false)) ;	
+	#else
+	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,true)) ;	
+	#endif
 }
 
+#ifdef USE_SCAN_SOFT_FILTER
+static bool ble_scan_duplication_check(at_ble_scan_info_t * info)
+{
+	uint32_t i = 0;
+	uint32_t ret = 0;
+	bool found = false;
+	/*
+	if( //if need to add or remove filter type
+	scan_info[i].type != AT_BLE_ADV_TYPE_DIRECTED &&
+	scan_info[i].type != AT_BLE_ADV_TYPE_UNDIRECTED &&
+	scan_info[i].type != AT_BLE_ADV_TYPE_SCAN_RESPONSE
+	//&& scan_info[i].type != AT_BLE_ADV_TYPE_SCANNABLE_UNDIRECTED
+	//&& scan_info[i].type != AT_BLE_ADV_TYPE_NONCONN_UNDIRECTED
+	//&& scan_info[i].type != AT_BLE_ADV_TYPE_DIRECTED_LDC
+	)
+		return true;
+	*/
+	for(i=0 ; i<scan_response_count ; i++)
+	{
+		ret = memcmp(scan_info[i].dev_addr.addr, info->dev_addr.addr, sizeof(uint8_t)*6);
+		ret |= (scan_info[i].type != info->type) ? 1 : 0;
+		if( !ret ) 
+		{
+			found = true;
+			break;
+		}
+	}
+	
+	return found;
+}
+#endif
 /** @brief function handling scaned information */
 at_ble_status_t ble_scan_info_handler(void *params)
 {
@@ -478,7 +530,6 @@ at_ble_status_t ble_scan_info_handler(void *params)
 	scan_param = (at_ble_scan_info_t *)params;
 	if(scan_response_count < MAX_SCAN_DEVICE)
 	{
-		// store the advertising report data into scan_info[]
 		memcpy((uint8_t *)&scan_info[scan_response_count], scan_param, sizeof(at_ble_scan_info_t));
 		DBG_LOG_DEV("Info:Device found address [%d]  0x%02X%02X%02X%02X%02X%02X ",
 		scan_response_count,
@@ -498,7 +549,26 @@ at_ble_status_t ble_scan_info_handler(void *params)
 		{
 			DBG_LOG("Failed to stop scanning");
 		}
-		
+		#ifdef USE_SCAN_SOFT_FILTER
+		uint32_t idx = 0;
+		at_ble_scan_report_t result = {0,};
+			
+		//ble_scan_filter();				
+		result.status = AT_BLE_SUCCESS;				
+				
+		for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
+		{
+			if (ble_mgr_gap_event_cb[idx] != NULL)
+			{
+				const ble_event_callback_t *event_cb_fn = ble_mgr_gap_event_cb[idx];
+				if(event_cb_fn[AT_BLE_SCAN_REPORT] != NULL)
+				{
+					event_cb_fn[AT_BLE_SCAN_REPORT](&result);
+				}
+			}
+		}
+	
+		#endif
 		return AT_BLE_FAILURE;
 	}
 }
@@ -1459,6 +1529,15 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 	case AT_BLE_CON_CHANNEL_MAP_IND:
 	{
 		uint8_t idx;
+		
+		#ifdef USE_SCAN_SOFT_FILTER
+		if( events == AT_BLE_SCAN_INFO )
+		{
+			if( ble_scan_duplication_check((at_ble_scan_info_t*)event_params) )
+				return;
+		}
+		#endif			
+		
 		for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
 		{
 			if (ble_mgr_gap_event_cb[idx] != NULL)
@@ -1466,7 +1545,7 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 				const ble_event_callback_t *event_cb_fn = ble_mgr_gap_event_cb[idx];
 				if(event_cb_fn[events] != NULL)
 				{
-					event_cb_fn[events](event_params);
+					event_cb_fn[events](event_params);		
 				}
 			}
 		}

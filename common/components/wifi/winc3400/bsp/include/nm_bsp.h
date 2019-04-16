@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 BSP APIs declarations.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,20 +51,6 @@
 */
 #define CONST const
 
-/*!< 
-*     Used for code portability.
-*/
-
-/*!
- * @typedef      void (*tpfNmBspIsr) (void);
- * @brief           Pointer to function.\n
- *                     Used as a data type of ISR function registered by \ref nm_bsp_register_isr
- * @return         None
- */
-typedef void (*tpfNmBspIsr)(void);
-
-
-
 #ifndef NULL
 #define NULL ((void*)0)
 #endif
@@ -80,11 +66,23 @@ typedef void (*tpfNmBspIsr)(void);
 
  //@}
 
-/**@defgroup  DataT  DataTypes
+/**@defgroup  DataT  Enumeration/Typedefs
  * @ingroup nm_bsp
  * @{
  */
  
+ /*!
+*     Used for code portability.
+*/
+
+/*!
+ * @typedef      void (*tpfNmBspIsr) (void);
+ * @brief           Pointer to function.\n
+ *                     Used as a data type of ISR function registered by \ref nm_bsp_register_isr
+ * @return         None
+ */
+typedef void (*tpfNmBspIsr)(void);
+
   /*!
  * @ingroup DataTypes
  * @typedef      unsigned char	uint8;

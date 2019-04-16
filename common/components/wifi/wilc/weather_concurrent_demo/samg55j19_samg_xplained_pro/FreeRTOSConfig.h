@@ -5,7 +5,7 @@
  * \brief FreeRTOS Settings.
  *
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -99,7 +99,7 @@ to exclude the API function. */
 #define INCLUDE_uxTaskPriorityGet		1
 #define INCLUDE_vTaskDelete				1
 #define INCLUDE_vTaskCleanUpResources	1
-#define INCLUDE_vTaskSuspend			1
+#define INCLUDE_vTaskSuspend			0
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
 

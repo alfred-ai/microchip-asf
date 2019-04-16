@@ -111,9 +111,11 @@ int main(void)
 
 	/* Initialize serial console */
 	serial_console_init();
-	
+
 	/* Initializing the button */
-	button_init(button_cb);
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
 	
 	/* Initializing the hardware timer */
 	hw_timer_init();

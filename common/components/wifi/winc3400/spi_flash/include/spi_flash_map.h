@@ -4,7 +4,7 @@
  *
  * \brief SPI Flash.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -136,14 +136,19 @@
 
 /* LUT for PLL and TX Gain settings:
  * starting Address L: 12 K |
- * Size				S:  4 K |
+ * Size				S:  8 K |
  *
  */
 #define M2M_PLL_FLASH_OFFSET				(M2M_CONTROL_FLASH_OFFSET + M2M_CONTROL_FLASH_TOTAL_SZ)
-#define M2M_PLL_FLASH_SZ					(1024 * 1)
+#define M2M_PLL_MAGIC_NUMBER_FLASH_SZ		(2*4)		// 2 32bit values
+#define M2M_PLL_WIFI_CHAN_FLASH_OFFSET		(M2M_PLL_FLASH_OFFSET + M2M_PLL_MAGIC_NUMBER_FLASH_SZ)
+#define M2M_PLL_WIFI_CHAN_FLASH_SZ			(14*8*4)	// Wifi Channels 1 to 14 inclusive, 8 32bit values for each channel.
+#define M2M_PLL_FREQ_FLASH_OFFSET			(M2M_PLL_WIFI_CHAN_FLASH_OFFSET + M2M_PLL_WIFI_CHAN_FLASH_SZ)
+#define M2M_PLL_FREQ_FLASH_SZ				((1+84)*4)	// Frequencies 2401 to 2484MHz inclusive, also 1920 used for cpll compensate.
+#define M2M_PLL_FLASH_SZ					(1024 * 2)
 #define M2M_GAIN_FLASH_OFFSET				(M2M_PLL_FLASH_OFFSET + M2M_PLL_FLASH_SZ)
 #define M2M_GAIN_FLASH_SZ					(M2M_CONFIG_SECT_TOTAL_SZ - M2M_PLL_FLASH_SZ)
-#define M2M_CONFIG_SECT_TOTAL_SZ			(FLASH_SECTOR_SZ)
+#define M2M_CONFIG_SECT_TOTAL_SZ			(FLASH_SECTOR_SZ * 2)
 
 /* Certificate:
  * starting Address		L: 16 K |
@@ -261,12 +266,16 @@
 #define M2M_BT_FIRMWARE_FLASH_SZ				(0)
 #endif
 
+#define M2M_TRANSPORTER_FLASH_OFFSET			(M2M_BT_FIRMWARE_FLASH_OFFSET + M2M_BT_FIRMWARE_FLASH_SZ)
+#define M2M_TRANSPORTER_FLASH_SZ				(10*1024UL)
+
+
 /**
  *
  * OTA image Size
  */
 #define OTA_IMAGE_SIZE						(M2M_CACHED_CONNS_FLASH_SZ + M2M_HTTP_MEM_FLASH_SZ + M2M_FIRMWARE_FLASH_SZ \
-											+ M2M_BT_FIRMWARE_FLASH_SZ)
+											+ M2M_BT_FIRMWARE_FLASH_SZ + M2M_TRANSPORTER_FLASH_SZ)
 
 
 // MERGEBUG: This definition does not work for 3400

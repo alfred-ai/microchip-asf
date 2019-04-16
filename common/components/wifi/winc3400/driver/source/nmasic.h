@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 ASIC specific internal APIs.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -81,6 +81,10 @@
 #define rHAVE_LEGACY_RF_SETTINGS    (NBIT5)
 #define rHAVE_LOGS_DISABLED_BIT		(NBIT6)
 
+typedef struct{
+	uint32 u32Mac_efuse_mib;
+	uint32 u32Firmware_Ota_rev;
+}tstrGpRegs;
 
 #ifdef __cplusplus
      extern "C" {

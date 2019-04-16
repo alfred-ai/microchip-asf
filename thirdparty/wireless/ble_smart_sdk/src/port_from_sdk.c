@@ -3,29 +3,33 @@
 
 #include "common.h"
 
-/* ************************ start ****************************************** // */
-/* chris.choi : should ask china's driver team that it can be used like this */
-/* this code is come from keil driver version code */
-/* ************************ start ****************************************** // */
+/* from port.h */
+/** Type definition for an GPIO/PORT pin interrupt module callback function. */
+typedef void (*portint_callback_t)(void);
 
-/*
- * #ifdef CHIPVERSION_B0
- * #define UART1_RX_VECTOR_TABLE_INDEX		16
- * #define UART1_TX_VECTOR_TABLE_INDEX		17
- * #define UART2_RX_VECTOR_TABLE_INDEX		18
- * #define UART2_TX_VECTOR_TABLE_INDEX		19
- * #else
- * #define UART1_RX_VECTOR_TABLE_INDEX		16
- * #define UART1_TX_VECTOR_TABLE_INDEX		17
- * #define UART2_RX_VECTOR_TABLE_INDEX		18
- * #define UART2_TX_VECTOR_TABLE_INDEX		19
- * #endif	//CHIPVERSION_B0
- */
+enum port_status_code {
+	PORT_STATUS_OK = 0,
+	PORT_STATUS_RESOURCE_NOT_AVAILABLE,
+	PORT_STATUS_ERR_NOT_INITIALIZED,
+	PORT_STATUS_ERR_INVALID_ARG,
+};
 
-//extern void (*handle_ext_wakeup_isr)(void);
-//handle_ext_wakeup_isrvoid gpio1_combined_isr_handler(void);
+enum port_wakeup_source {
+	/** External Wakeup source AON_GPIO_0 */
+	PORT_WAKEUP_SOURCE_AON_GPIO_0    = 0,
+	/** External Wakeup source AON_GPIO_1 */
+	PORT_WAKEUP_SOURCE_AON_GPIO_1,
+	/** External Wakeup source AON_GPIO_2 */
+	PORT_WAKEUP_SOURCE_AON_GPIO_2,
+	PORT_WAKEUP_SOURCE_MAX_VAL
+};
+/* from port.h */
 
-/* chris.choi : jeffy's code 150908, so it's better code i think so use this */
+portint_callback_t  wakeup_source_callback[PORT_WAKEUP_SOURCE_MAX_VAL];
+
+enum port_status_code wakeup_int_unregister_callback(enum port_wakeup_source wakeup_source);
+void wakeup_active_event_callback(uint32_t wakeup_source);
+
 void gpio1_combined_isr_handler(void)
 {
 	uint8_t index = 0;
@@ -139,3 +143,48 @@ void PORT1_COMB_Handler(void)
 
 #endif  /* CHIPVERSION_B0 */
 
+enum port_status_code wakeup_int_unregister_callback(enum port_wakeup_source wakeup_source)
+{
+	enum port_status_code status = PORT_STATUS_OK;
+	if(	(wakeup_source == PORT_WAKEUP_SOURCE_AON_GPIO_0) || 
+		(wakeup_source == PORT_WAKEUP_SOURCE_AON_GPIO_1) || 
+		(wakeup_source == PORT_WAKEUP_SOURCE_AON_GPIO_2) ) 
+	{
+		wakeup_source_callback[wakeup_source] = 0;
+	}
+	else 
+	{
+		status = PORT_STATUS_ERR_INVALID_ARG;
+	}
+	return status;
+}
+
+void wakeup_active_event_callback(uint32_t wakeup_source)
+{
+	portint_callback_t callback;
+	uint32_t *pu32WakeSource = (uint32_t *)wakeup_source;
+	if((*pu32WakeSource & 0xFF) == 1)
+	{
+		if(wakeup_source_callback[0] != NULL) {
+			callback = wakeup_source_callback[0];
+			callback();
+		}
+		*pu32WakeSource &= ~(0xFF);
+	}
+	if(((*pu32WakeSource >> 8) & 0xFF) == 1)
+	{
+		if(wakeup_source_callback[1] != NULL) {
+			callback = wakeup_source_callback[1];
+			callback();
+		}
+		*pu32WakeSource &= ~(0xFF << 8);
+	}
+	if(((*pu32WakeSource >> 16) & 0xFF) == 1)
+	{
+		if(wakeup_source_callback[2] != NULL) {
+			callback = wakeup_source_callback[2];
+			callback();
+		}
+		*pu32WakeSource &= ~(0xFF << 16);
+	}
+}

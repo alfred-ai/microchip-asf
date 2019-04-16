@@ -3,7 +3,7 @@
  *
  * \brief SAMB Peripheral Analog-to-Digital Converter Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -121,8 +121,6 @@ void adc_init(struct adc_config *config)
 	/* Sanity check arguments */
 	Assert(config);
 
-	uint32_t reg_value = 0;
-
 	if (config->invert_clock) {
 		LPMCU_MISC_REGS0->SENS_ADC_CLK_CTRL.reg = LPMCU_MISC_REGS_SENS_ADC_CLK_CTRL_INVERT;
 	} else {
@@ -140,12 +138,15 @@ void adc_init(struct adc_config *config)
 		(config->reference == ADC_REFERENCE_GPIO_MS4)) {
 		_adc_gpio_ms_enable(config->reference - ADC_REFERENCE_GPIO_MS1);
 	}
-	reg_value |= AON_GP_REGS_RF_PMU_REGS_1_SADC_REF_SEL(config->reference) | \
-				AON_GP_REGS_RF_PMU_REGS_1_SADC_BIAS_RES_CTRL(config->internal_vref);
+
+	AON_GP_REGS0->RF_PMU_REGS_1.bit.SADC_REF_SEL = config->reference;
+	AON_GP_REGS0->RF_PMU_REGS_1.bit.SADC_BIAS_RES_CTRL = config->internal_vref;
 
 	if (config->channel_mode == ADC_CH_MODE_ASSIGN) {
-		reg_value |= AON_GP_REGS_RF_PMU_REGS_1_SADC_CHN_CTRL_1 | \
-					AON_GP_REGS_RF_PMU_REGS_1_SADC_CHN_SEL(config->input_channel);
+		AON_GP_REGS0->RF_PMU_REGS_1.bit.SADC_CHN_CTRL = \
+				AON_GP_REGS_RF_PMU_REGS_1_SADC_CHN_CTRL_1_Val;
+		AON_GP_REGS0->RF_PMU_REGS_1.bit.SADC_CHN_SEL = config->input_channel;
+		
 		if (config->input_channel <= ADC_INPUT_CH_GPIO_MS4) {
 			/* Enable GPIO_MS pin */
 			_adc_gpio_ms_enable(config->input_channel);
@@ -156,14 +157,11 @@ void adc_init(struct adc_config *config)
 		AON_GP_REGS0->MS_GPIO_MODE.reg = AON_GP_REGS_MS_GPIO_MODE_MASK;
 	} else if (config->channel_mode == ADC_CH_MODE_CH4_TO_CH7) {
 		/* Input channels time multiplexing is between channel 4 to channel 7 */
-		reg_value |= AON_GP_REGS_RF_PMU_REGS_1_SADC_CHN_SEL(0x4);
+		AON_GP_REGS0->RF_PMU_REGS_1.bit.SADC_CHN_SEL = 0x4;
 	}
 
-	reg_value |= AON_GP_REGS_RF_PMU_REGS_1_CODE_IN(config->input_dynamic_range) | \
-				AON_GP_REGS_RF_PMU_REGS_1_SADC_LP_CTRL(config->bias_current);
-
-	/* Here need to modify the register name */
-	AON_GP_REGS0->RF_PMU_REGS_1.reg = reg_value;
+	AON_GP_REGS0->RF_PMU_REGS_1.bit.CODE_IN = config->input_dynamic_range;
+	AON_GP_REGS0->RF_PMU_REGS_1.bit.SADC_LP_CTRL = config->bias_current;
 }
 
 /**

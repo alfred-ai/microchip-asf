@@ -4,7 +4,7 @@
  *
  * \brief AP Task.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -147,6 +147,9 @@ void ap_task(void *argument)
 
 	/* Just to avoid compiler warnings. */
 	UNUSED(argument);
+	
+	/* Give time for other thread to initialize lwIP. */
+	vTaskDelay(1000);
 
 	/* Create a new TCP connection handle */
 	conn = netconn_new(NETCONN_TCP);

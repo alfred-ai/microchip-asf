@@ -1012,15 +1012,15 @@ uint32_t pio_get_pin_group_id(uint32_t ul_pin)
 		ul_id = ID_PIOA + (ul_pin >> 5);
 	}
 #elif (SAMV70 || SAMV71 || SAME70 || SAMS70)
-	if (ul_pin > PIO_PC31_IDX) {
-		if(ul_pin > PIO_PD31_IDX){
-			ul_id = ID_PIOE;
-			} else {
-			ul_id = ID_PIOD;
-		}
-	} else {
-		ul_id = ID_PIOA + (ul_pin >> 5);
-	}
+	ul_id = ID_PIOA + (ul_pin >> 5);
+
+	#ifdef ID_PIOD 
+	if (ul_pin >= PIO_PD0_IDX) ul_id = ID_PIOD; 
+	#endif
+	
+	#ifdef ID_PIOE 
+	if (ul_pin >= PIO_PE0_IDX) ul_id = ID_PIOE; 
+	#endif 
 #else
 	ul_id = ID_PIOA + (ul_pin >> 5);
 #endif

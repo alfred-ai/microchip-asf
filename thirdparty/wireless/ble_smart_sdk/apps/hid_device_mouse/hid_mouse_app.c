@@ -321,15 +321,17 @@ int main(void )
 	
 	DBG_LOG("Initializing HID Mouse Application1111");
 
+	/* Initialize button*/
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
+
 	/* Initialize the profile based on user input */
 	hid_mouse_app_init();
 	
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 	
-	/* Initialize button*/
-	button_init(button_cb);
-
 	hid_prf_init(NULL);
 	
 	/* Register the notification handler */

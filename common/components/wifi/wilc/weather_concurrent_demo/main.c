@@ -4,7 +4,7 @@
  *
  * \brief Weather concurrent demo.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -139,8 +139,6 @@ void vApplicationMallocFailedHook(void)
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName);
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 {
-	TRACE("ERROR: STACK OVERFLOW");
-	TRACE(pcTaskName);
 	for (;;) {
 	}
 }

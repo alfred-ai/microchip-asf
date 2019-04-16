@@ -4,7 +4,7 @@
  *
  * \brief
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -86,7 +86,6 @@ sint8 m2m_wifi_disable_ap_ex(void);
 #define m2m_wifi_disable_monitoring_mode_ex	m2m_wifi_disable_monitoring_mode
 #define m2m_wifi_send_wlan_pkt_ex			m2m_wifi_send_wlan_pkt
 #define m2m_wifi_send_ethernet_pkt_ex		m2m_wifi_send_ethernet_pkt
-#define m2m_wifi_enable_sntp_ex				m2m_wifi_enable_sntp
 #define m2m_wifi_set_sytem_time_ex			m2m_wifi_set_sytem_time
 #define m2m_wifi_set_cust_InfoElement_ex	m2m_wifi_set_cust_InfoElement
 #define m2m_wifi_enable_mac_mcast_ex		m2m_wifi_enable_mac_mcast
@@ -127,7 +126,6 @@ sint8 os_m2m_wifi_enable_monitoring_mode(tstrM2MWifiMonitorModeCtrl* pstrMtrCtrl
 sint8 os_m2m_wifi_disable_monitoring_mode(void);
 sint8 os_m2m_wifi_send_wlan_pkt(uint8* pu8WlanPacket, uint16 u16WlanHeaderLength, uint16 u16WlanPktSize);
 sint8 os_m2m_wifi_send_ethernet_pkt(uint8* pu8Packet, uint16 u16PacketSize);
-sint8 os_m2m_wifi_enable_sntp(uint8 bEnable);
 sint8 os_m2m_wifi_set_sytem_time(uint32 u32UTCSeconds);
 sint8 os_m2m_wifi_set_cust_InfoElement(uint8* pau8M2mCustInfoElement);
 sint8 os_m2m_wifi_enable_mac_mcast(uint8* pu8MulticastMacAddress, uint8 u8AddRemove);

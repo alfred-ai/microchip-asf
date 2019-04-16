@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs declarations.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -197,7 +197,7 @@ sint8 nm_bus_deinit(void);
 *					re-init configuration data
 *	@return		ZERO in case of success and M2M_ERR_BUS_FAIL in case of failure
 */
-sint8 nm_bus_reinit(void *);
+sint8 nm_bus_reinit(void *config);
 /*
 *	@fn			nm_bus_get_chip_type
 *	@brief		get chip type

@@ -1,16 +1,29 @@
+/**************************************************************************//**
+  \file event_handler.c
+ 
+  \brief Includes implementation for event_handler
+ 
+  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Released under NDA
+  Licensed under Atmel's Limited License Agreement.
+ 
+ 
+  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+  EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+ 
+  Atmel Corporation: http://www.atmel.com
+ 
+******************************************************************************/
 
-//#include "platform.h"
-//#include "at_ble_api.h"
-
-//#include "gapm_task.h"
-//#include "at_ble_api.h"
-//#include "gapc_task.h"
-//#include "gattc_task.h"
-//#include "gattm_task.h"
-//#include "htpt_task.h"
-//#include "device.h"
-
-//#include "interface.h"
 #include <string.h>
 #include "platform.h"
 #include "event_handler.h"
@@ -28,7 +41,7 @@ static struct platform_event platform_event_pool[PLATFORM_EVENT_POOL_DEPTH];
 
 static struct platform_event *platform_event_free_list = NULL;
 static struct platform_event* platform_event_pending_list = NULL;
-void platform_event_free(struct platform_event *event);
+void platform_event_free(struct platform_event* event);
 //struct str_watched_event watched_event;
 
 void platform_event_free(struct platform_event* event)

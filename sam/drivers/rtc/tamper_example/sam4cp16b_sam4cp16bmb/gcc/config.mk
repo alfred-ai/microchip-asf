@@ -90,6 +90,7 @@ INC_PATH = \
        sam/drivers/gpbr                                   \
        sam/drivers/pmc                                    \
        sam/drivers/rstc                                   \
+       sam/drivers/rstc/example1                          \
        sam/drivers/rtc                                    \
        sam/drivers/rtc/tamper_example/sam4cp16b_sam4cp16bmb \
        sam/drivers/supc                                   \

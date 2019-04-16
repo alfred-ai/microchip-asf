@@ -3,7 +3,7 @@
  *
  * \brief SAM Brown Out Detector Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -52,7 +52,7 @@ extern "C" {
 #endif
 
 /**
- * \defgroup asfdoc_sam0_bod_group SAM Brown Out Detector Driver (BOD)
+ * \defgroup asfdoc_sam0_bod_group SAM Brown Out Detector (BOD) Driver
  *
  * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the device's Brown Out Detector (BOD) modules, to detect
@@ -309,7 +309,7 @@ static inline bool bodvdd_is_detected(void)
  */
 static inline void bodvdd_clear_detected(void)
 {
-	SUPC->INTFLAG.reg |= SUPC_INTFLAG_BODVDDDET;
+	SUPC->INTFLAG.reg = SUPC_INTFLAG_BODVDDDET;
 	return;
 }
 
@@ -371,7 +371,7 @@ static inline void bodvdd_clear_detected(void)
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_bod_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_bod_basic_use_case
@@ -397,9 +397,9 @@ static inline void bodvdd_clear_detected(void)
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>06/2015</td>
- *		<td>Initial release</td>
+ *		<td>42701A</td>
+ *		<td>03/2016</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

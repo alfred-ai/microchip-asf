@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Driver (Count Mode)
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -410,7 +410,7 @@ enum rtc_clock_sel {
 	RTC_CLOCK_SELECTION_OSC1K = OSC32KCTRL_RTCCTRL_RTCSEL_OSC1K_Val,
 	/** 32.768KHz from 32KHz internal oscillator */
 	RTC_CLOCK_SELECTION_OSC32K = OSC32KCTRL_RTCCTRL_RTCSEL_OSC32K_Val,
-	/** 1.024KHz from 32KHz internal oscillator */
+	/** 1.024KHz from 32KHz external oscillator */
 	RTC_CLOCK_SELECTION_XOSC1K = OSC32KCTRL_RTCCTRL_RTCSEL_XOSC1K_Val,
 	/** 32.768KHz from 32.768KHz external crystal oscillator */
 	RTC_CLOCK_SELECTION_XOSC32K = OSC32KCTRL_RTCCTRL_RTCSEL_XOSC32K_Val,
@@ -728,7 +728,7 @@ struct rtc_count_config {
 	 *  needed for reading */
 	bool continuously_update;
 #endif
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21)
 	/** Enable count read synchronization. The COUNT value requires
 	 * synchronization when reading. Disabling the synchronization
 	 * will prevent the COUNT value from displaying the current value. */
@@ -778,7 +778,7 @@ static inline void rtc_count_get_config_defaults(
 #ifdef FEATURE_RTC_CONTINUOUSLY_UPDATED
 	config->continuously_update = false;
 #endif
-#if (SAML22)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21)
 	config->enable_read_sync    = true;
 #endif
 

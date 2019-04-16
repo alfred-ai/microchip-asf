@@ -3,7 +3,7 @@
  *
  * \brief FreeRTOS Peripheral Control API For the UART
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,6 +54,14 @@
 /* ASF includes. */
 #include "freertos_peripheral_control.h"
 #include "uart.h"
+ 
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**INDENT-ON**/
+/// @endcond
 
 #if XMEGA
 # error Unsupported chip type
@@ -143,6 +151,14 @@ uint32_t freertos_uart_serial_read_packet(freertos_uart_if p_uart,
  *     PDC was successfully configured to perform the UART write operation.
  */
 #define freertos_uart_write_packet(p_uart, data, len, block_time_ticks) freertos_uart_write_packet_async((p_uart), (data), (len), (block_time_ticks), (NULL))
+
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+}
+#endif
+/**INDENT-ON**/
+/// @endcond
 
 #endif  /* FREERTOS_uart_SERIAL_INCLUDED */
 

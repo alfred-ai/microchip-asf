@@ -3,7 +3,7 @@
  *
  * \brief SAME70 Xplained board configuration
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -39,6 +39,9 @@
 
 #ifndef CONF_BOARD_H_INCLUDED
 #define CONF_BOARD_H_INCLUDED
+
+/* Enable ICache and DCache */
+#define CONF_BOARD_ENABLE_CACHE
 
 #define CONF_BOARD_UART_CONSOLE
 

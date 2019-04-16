@@ -95,7 +95,11 @@ void init_immediate_alert_service(gatt_service_handler_t *immediate_alert_serv )
 		immediate_alert_serv->serv_chars.value_max_len = sizeof(int8_t);
 		
 		/* permissions */
-		immediate_alert_serv->serv_chars.value_permissions =  AT_BLE_ATTR_NO_PERMISSIONS;   
+		#if BLE_PAIR_ENABLE
+			immediate_alert_serv->serv_chars.value_permissions =  AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR;
+		#else
+			immediate_alert_serv->serv_chars.value_permissions =  AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR;
+		#endif
 		
 		/* user defined name */
 		immediate_alert_serv->serv_chars.user_desc = NULL;           

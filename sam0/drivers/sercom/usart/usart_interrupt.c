@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM USART Asynchronous Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -554,28 +554,28 @@ void _usart_interrupt_handler(
 				if (error_code & SERCOM_USART_STATUS_FERR) {
 					/* Store the error code and clear flag by writing 1 to it */
 					module->rx_status = STATUS_ERR_BAD_FORMAT;
-					usart_hw->STATUS.reg |= SERCOM_USART_STATUS_FERR;
+					usart_hw->STATUS.reg = SERCOM_USART_STATUS_FERR;
 				} else if (error_code & SERCOM_USART_STATUS_BUFOVF) {
 					/* Store the error code and clear flag by writing 1 to it */
 					module->rx_status = STATUS_ERR_OVERFLOW;
-					usart_hw->STATUS.reg |= SERCOM_USART_STATUS_BUFOVF;
+					usart_hw->STATUS.reg = SERCOM_USART_STATUS_BUFOVF;
 				} else if (error_code & SERCOM_USART_STATUS_PERR) {
 					/* Store the error code and clear flag by writing 1 to it */
 					module->rx_status = STATUS_ERR_BAD_DATA;
-					usart_hw->STATUS.reg |= SERCOM_USART_STATUS_PERR;
+					usart_hw->STATUS.reg = SERCOM_USART_STATUS_PERR;
 				}
 #ifdef FEATURE_USART_LIN_SLAVE
 				else if (error_code & SERCOM_USART_STATUS_ISF) {
 					/* Store the error code and clear flag by writing 1 to it */
 					module->rx_status = STATUS_ERR_PROTOCOL;
-					usart_hw->STATUS.reg |= SERCOM_USART_STATUS_ISF;
+					usart_hw->STATUS.reg = SERCOM_USART_STATUS_ISF;
 				}
 #endif
 #ifdef FEATURE_USART_COLLISION_DECTION
 				else if (error_code & SERCOM_USART_STATUS_COLL) {
 					/* Store the error code and clear flag by writing 1 to it */
 					module->rx_status = STATUS_ERR_PACKET_COLLISION;
-					usart_hw->STATUS.reg |= SERCOM_USART_STATUS_COLL;
+					usart_hw->STATUS.reg = SERCOM_USART_STATUS_COLL;
 				}
 #endif
 

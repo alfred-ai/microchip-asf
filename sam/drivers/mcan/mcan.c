@@ -3,7 +3,7 @@
  *
  * \brief SAM Control Area Network (MCAN) Low Level Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -318,10 +318,10 @@ void mcan_enable_fd_mode(struct mcan_module *const module_inst)
 	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CCE;
 
 	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CME(2);
-	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CMR(MCAN_CCCR_CMR_FD_BITRATE_SWITCH);
+	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CMR(2);
 }
 
-/**
+/** 
  * \brief disable fd mode of mcan module.
  *
  * \param module_inst  MCAN instance

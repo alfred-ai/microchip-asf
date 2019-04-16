@@ -204,7 +204,9 @@ int main(void)
 	led_init();
 	
 	/* Initialize button */
-	button_init(button_cb);
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
 
 	/* Initialize the hardware timer */
 	hw_timer_init();

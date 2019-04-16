@@ -53,12 +53,9 @@ TARGET_SRAM = ancs_samb11_xplained_pro_sram.elf
 # List of C source files.
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
-       common2/components/memory/eeprom/at30tse75x/at30tse75x.c \
        sam0/boards/samb11_xplained_pro/board_init.c       \
        sam0/drivers/dualtimer/dualtimer.c                 \
        sam0/drivers/gpio/gpio.c                           \
-       sam0/drivers/i2c/i2c_master.c                      \
-       sam0/drivers/i2c/i2c_master_interrupt.c            \
        sam0/drivers/system/system_sam_b.c                 \
        sam0/drivers/timer/timer.c                         \
        sam0/drivers/uart/uart.c                           \
@@ -71,10 +68,10 @@ CSRCS = \
        thirdparty/wireless/ble_smart_sdk/ble_profiles/ancs/ancs_profile.c \
        thirdparty/wireless/ble_smart_sdk/ble_services/ancs/ancs.c \
        thirdparty/wireless/ble_smart_sdk/ble_services/ble_mgr/ble_manager.c \
-       thirdparty/wireless/ble_smart_sdk/services/button.c \
-       thirdparty/wireless/ble_smart_sdk/services/console_serial.c \
-       thirdparty/wireless/ble_smart_sdk/services/led.c   \
-       thirdparty/wireless/ble_smart_sdk/services/timer_hw.c \
+       thirdparty/wireless/ble_smart_sdk/services/dualtimer/timer_hw.c \
+       thirdparty/wireless/ble_smart_sdk/services/gpio/button.c \
+       thirdparty/wireless/ble_smart_sdk/services/gpio/led.c \
+       thirdparty/wireless/ble_smart_sdk/services/uart/console_serial.c \
        thirdparty/wireless/ble_smart_sdk/src/event_handler.c \
        thirdparty/wireless/ble_smart_sdk/src/platform_drv.c \
        thirdparty/wireless/ble_smart_sdk/src/port_from_sdk.c
@@ -87,12 +84,10 @@ INC_PATH = \
        common/boards                                      \
        common/services/serial                             \
        common/utils                                       \
-       common2/components/memory/eeprom/at30tse75x        \
        sam0/boards                                        \
        sam0/boards/samb11_xplained_pro                    \
        sam0/drivers/dualtimer                             \
        sam0/drivers/gpio                                  \
-       sam0/drivers/i2c                                   \
        sam0/drivers/system                                \
        sam0/drivers/timer                                 \
        sam0/drivers/uart                                  \
@@ -105,12 +100,14 @@ INC_PATH = \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
        thirdparty/wireless/ble_smart_sdk/apps/ancs        \
-       thirdparty/wireless/ble_smart_sdk/apps/ancs/samb11_xplained_pro \
+       thirdparty/wireless/ble_smart_sdk/apps/config/samb11 \
        thirdparty/wireless/ble_smart_sdk/ble_profiles/ancs \
        thirdparty/wireless/ble_smart_sdk/ble_services/ancs \
        thirdparty/wireless/ble_smart_sdk/ble_services/ble_mgr \
        thirdparty/wireless/ble_smart_sdk/inc              \
-       thirdparty/wireless/ble_smart_sdk/services         \
+       thirdparty/wireless/ble_smart_sdk/services/dualtimer \
+       thirdparty/wireless/ble_smart_sdk/services/gpio    \
+       thirdparty/wireless/ble_smart_sdk/services/uart    \
        thirdparty/wireless/ble_smart_sdk/utils \
        thirdparty/wireless/ble_smart_sdk/apps/ancs/samb11_xplained_pro/gcc
 
@@ -166,11 +163,9 @@ CPPFLAGS = \
        -D ANP_CLIENT                                      \
        -D ANP_GATT_CLIENT                                 \
        -D ARM_MATH_CM0PLUS=true                           \
-       -D ATT_DB_MEMORY                                   \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMB11_XPLAINED_PRO                       \
        -D CHIPVERSION_B0                                  \
-       -D I2C_MASTER_CALLBACK_MODE=true                   \
        -D NENABLE_PTS=false                               \
        -D __SAMB11G18A__
 

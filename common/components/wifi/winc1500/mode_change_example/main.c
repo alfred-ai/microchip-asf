@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 Mode Change Example.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -143,6 +143,10 @@ static int8_t enable_disable_ap_mode(void)
 	strcpy((char *)&strM2MAPConfig.au8SSID, MAIN_WLAN_SSID);
 	strM2MAPConfig.u8ListenChannel = MAIN_WLAN_AP_CHANNEL;
 	strM2MAPConfig.u8SecType = MAIN_WLAN_AUTH;
+	strM2MAPConfig.au8DHCPServerIP[0] = 0xC0; /* 192 */
+	strM2MAPConfig.au8DHCPServerIP[1] = 0xA8; /* 168 */
+	strM2MAPConfig.au8DHCPServerIP[2] = 0x01; /* 1 */
+	strM2MAPConfig.au8DHCPServerIP[3] = 0x01; /* 1 */
 
 	/* Start AP mode. */
 	ret = m2m_wifi_enable_ap(&strM2MAPConfig);

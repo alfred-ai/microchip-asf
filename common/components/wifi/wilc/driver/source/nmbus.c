@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus APIs implementation.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -41,8 +41,12 @@
 #ifndef CORTUS_APP
 
 #include "nmbus.h"
+#if defined (CONF_WILC_USE_SPI)
 #include "nmspi.h"
-//#include "nmsdio.h"
+#endif
+#if defined (CONF_WILC_USE_SDIO)
+#include "nmsdio.h"
+#endif
 
 #define MAX_TRX_CFG_SZ		8
 
@@ -72,7 +76,7 @@ sint8 nm_bus_iface_init(void *pvInitVal)
 */ 
 sint8 nm_bus_iface_deinit(void)
 {
-	sint8 ret = M2M_SUCCESS;
+	sint8 ret;
 	ret = nm_bus_deinit();
 
 	return ret;
@@ -89,6 +93,9 @@ sint8 nm_bus_iface_deinit(void)
 sint8 nm_bus_iface_reconfigure(void *ptr)
 {
 	sint8 ret = M2M_SUCCESS;
+#ifdef CONF_WILC_USE_UART
+	ret = nm_uart_reconfigure(ptr);
+#endif
 	return ret;
 }
 /*
@@ -103,8 +110,12 @@ sint8 nm_bus_iface_reconfigure(void *ptr)
 */ 
 uint32 nm_read_reg(uint32 u32Addr)
 {
-#ifdef CONF_WILC_USE_SPI
+#ifdef CONF_WILC_USE_UART
+	return nm_uart_read_reg(u32Addr);
+#elif defined (CONF_WILC_USE_SPI)
 	return nm_spi_read_reg(u32Addr);
+#elif defined (CONF_WILC_USE_I2C)
+	return nm_i2c_read_reg(u32Addr);
 #elif defined (CONF_WILC_USE_SDIO)
 	return nm_sdio_read_reg(u32Addr);
 #else
@@ -127,12 +138,16 @@ uint32 nm_read_reg(uint32 u32Addr)
 */ 
 sint8 nm_read_reg_with_ret(uint32 u32Addr, uint32* pu32RetVal)
 {
-#ifdef CONF_WILC_USE_SPI
+#ifdef CONF_WILC_USE_UART
+	return nm_uart_read_reg_with_ret(u32Addr,pu32RetVal);
+#elif defined (CONF_WILC_USE_SPI)
 	return nm_spi_read_reg_with_ret(u32Addr,pu32RetVal);
+#elif defined (CONF_WILC_USE_I2C)
+	return nm_i2c_read_reg_with_ret(u32Addr,pu32RetVal);
 #elif defined (CONF_WILC_USE_SDIO)
 	return nm_sdio_read_reg_with_ret(u32Addr,pu32RetVal);
 #else
-#error "Plesae define bus usage"
+#error "Please define bus usage"
 #endif
 }
 
@@ -150,23 +165,31 @@ sint8 nm_read_reg_with_ret(uint32 u32Addr, uint32* pu32RetVal)
 */ 
 sint8 nm_write_reg(uint32 u32Addr, uint32 u32Val)
 {
-#ifdef CONF_WILC_USE_SPI
+#ifdef CONF_WILC_USE_UART
+	return nm_uart_write_reg(u32Addr,u32Val);
+#elif defined (CONF_WILC_USE_SPI)
 	return nm_spi_write_reg(u32Addr,u32Val);
+#elif defined (CONF_WILC_USE_I2C)
+	return nm_i2c_write_reg(u32Addr,u32Val);
 #elif defined (CONF_WILC_USE_SDIO)
 	return nm_sdio_write_reg(u32Addr,u32Val);
 #else
-#error "Plesae define bus usage"
+#error "Please define bus usage"
 #endif
 }
 
 static sint8 p_nm_read_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 {
-#ifdef CONF_WILC_USE_SPI
+#ifdef CONF_WILC_USE_UART
+	return nm_uart_read_block(u32Addr,puBuf,u16Sz);
+#elif defined (CONF_WILC_USE_SPI)
 	return nm_spi_read_block(u32Addr,puBuf,u16Sz);
+#elif defined (CONF_WILC_USE_I2C)
+	return nm_i2c_read_block(u32Addr,puBuf,u16Sz);
 #elif defined (CONF_WILC_USE_SDIO)
 	return nm_sdio_read_block(u32Addr,puBuf,u16Sz);
 #else
-#error "Plesae define bus usage"
+#error "Please define bus usage"
 #endif
 
 }
@@ -212,12 +235,16 @@ sint8 nm_read_block(uint32 u32Addr, uint8 *puBuf, uint32 u32Sz)
 
 static sint8 p_nm_write_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 {
-#ifdef CONF_WILC_USE_SPI
+#ifdef CONF_WILC_USE_UART
+	return nm_uart_write_block(u32Addr,puBuf,u16Sz);
+#elif defined (CONF_WILC_USE_SPI)
 	return nm_spi_write_block(u32Addr,puBuf,u16Sz);
+#elif defined (CONF_WILC_USE_I2C)
+	return nm_i2c_write_block(u32Addr,puBuf,u16Sz);
 #elif defined (CONF_WILC_USE_SDIO)
 	return nm_sdio_write_block(u32Addr,puBuf,u16Sz);
 #else
-#error "Plesae define bus usage"
+#error "Please define bus usage"
 #endif
 
 }

@@ -113,7 +113,7 @@
 /** @brief User should set the default software revision before calling dis_init_service API */
 //  <s.20>Software Revision
 //  <i>String Descriptor describing Software Revision.
-//	<id> default_hardware_revision
+//	<id> default_software_revision
 #define DEFAULT_SOFTWARE_REVISION					("SW_BETA")
 
 /** @brief User should set the length based on  DEFAULT_SOFTWARE_REVISION*/

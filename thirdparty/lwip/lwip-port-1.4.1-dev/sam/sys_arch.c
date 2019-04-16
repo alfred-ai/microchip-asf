@@ -4,7 +4,7 @@
  *
  * \brief lwIP system architecture layer for SAM.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -464,7 +464,7 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread, void *arg,
 	portBASE_TYPE result;
 	SYS_ARCH_DECL_PROTECT(protectionLevel);
 
-	result = xTaskCreate( thread, (signed portCHAR *)name, stacksize, arg,
+	result = xTaskCreate( thread, (const void *)name, stacksize, arg,
 			prio, &newthread );
 
 	/* Need to protect this -- preemption here could be a problem! */

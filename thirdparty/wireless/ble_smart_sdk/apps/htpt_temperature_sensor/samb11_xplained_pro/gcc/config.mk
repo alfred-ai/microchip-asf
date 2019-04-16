@@ -70,10 +70,10 @@ CSRCS = \
        thirdparty/wireless/ble_smart_sdk/apps/htpt_temperature_sensor/htpt_app.c \
        thirdparty/wireless/ble_smart_sdk/ble_services/ble_mgr/ble_manager.c \
        thirdparty/wireless/ble_smart_sdk/ble_services/device_infomation/device_info.c \
-       thirdparty/wireless/ble_smart_sdk/services/button.c \
-       thirdparty/wireless/ble_smart_sdk/services/console_serial.c \
-       thirdparty/wireless/ble_smart_sdk/services/led.c   \
-       thirdparty/wireless/ble_smart_sdk/services/timer_hw.c \
+       thirdparty/wireless/ble_smart_sdk/services/dualtimer/timer_hw.c \
+       thirdparty/wireless/ble_smart_sdk/services/gpio/button.c \
+       thirdparty/wireless/ble_smart_sdk/services/gpio/led.c \
+       thirdparty/wireless/ble_smart_sdk/services/uart/console_serial.c \
        thirdparty/wireless/ble_smart_sdk/src/event_handler.c \
        thirdparty/wireless/ble_smart_sdk/src/platform_drv.c \
        thirdparty/wireless/ble_smart_sdk/src/port_from_sdk.c
@@ -103,12 +103,15 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_smart_sdk/apps/config/samb11 \
        thirdparty/wireless/ble_smart_sdk/apps/htpt_temperature_sensor \
        thirdparty/wireless/ble_smart_sdk/apps/htpt_temperature_sensor/samb11_xplained_pro \
        thirdparty/wireless/ble_smart_sdk/ble_services/ble_mgr \
        thirdparty/wireless/ble_smart_sdk/ble_services/device_infomation \
        thirdparty/wireless/ble_smart_sdk/inc              \
-       thirdparty/wireless/ble_smart_sdk/services         \
+       thirdparty/wireless/ble_smart_sdk/services/dualtimer \
+       thirdparty/wireless/ble_smart_sdk/services/gpio    \
+       thirdparty/wireless/ble_smart_sdk/services/uart    \
        thirdparty/wireless/ble_smart_sdk/utils \
        thirdparty/wireless/ble_smart_sdk/apps/htpt_temperature_sensor/samb11_xplained_pro/gcc
 

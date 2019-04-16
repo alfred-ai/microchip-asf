@@ -186,8 +186,12 @@ int main (void)
 	/* Initializing the console  */
 	serial_console_init();
 	
-	/* initialize the button & LED */
-	button_init(button_cb);
+	/* Initialize the button */
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
+
+ 	/* Initialize the LED */
 	led_init();
 	
 	/* Initializing the hardware timer */

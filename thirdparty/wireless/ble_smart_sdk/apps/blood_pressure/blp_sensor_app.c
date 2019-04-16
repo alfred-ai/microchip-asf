@@ -707,6 +707,11 @@ int main(void)
 	platform_driver_init();
 	acquire_sleep_lock();
 
+	/* Initialize the button */
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
+
 	/* Initialize serial console */
 	serial_console_init();
 
@@ -745,9 +750,6 @@ int main(void)
 
 	/** Start the timer */
 	hw_timer_start(TIMER_INTERVAL);
-
-	/* Initialize the button */
-	button_init(button_cb);
 
 	/* Capturing the events  */
 	while (app_exec) {

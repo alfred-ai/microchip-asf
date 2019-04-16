@@ -3,7 +3,7 @@
  *
  * \brief SAM Non-Volatile Memory driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -818,7 +818,7 @@ static inline enum nvm_error nvm_get_error(void)
 	ret_val = (enum nvm_error)(nvm_module->STATUS.reg & NVM_ERRORS_MASK);
 
 	/* Clear error flags */
-	nvm_module->STATUS.reg &= ~NVMCTRL_STATUS_MASK;
+	nvm_module->STATUS.reg = NVM_ERRORS_MASK;
 
 	/* Return error code from the NVM controller */
 	return ret_val;

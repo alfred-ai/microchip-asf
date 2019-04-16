@@ -3,7 +3,7 @@
  *
  * \brief SAM AON Sleep Timer Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -45,7 +45,7 @@
  */
 #include "aon_sleep_timer.h"
 
-static aon_sleep_timer_callback_t aon_sleep_timer_callback;
+static aon_sleep_timer_callback_t aon_sleep_timer_callback = NULL;
 
 static void delay_cycle(uint32_t cycles)
 {
@@ -89,9 +89,7 @@ void aon_sleep_timer_disable(void)
 	regval &= ~AON_SLEEP_TIMER_CONTROL_SINGLE_COUNT_ENABLE;
 	AON_SLEEP_TIMER0->CONTROL.reg = regval;
 
-	while ((AON_SLEEP_TIMER0->CONTROL.reg &
-			AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Msk)
-			!= AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Msk) {
+	while (AON_SLEEP_TIMER0->CONTROL.reg & (1 << 14)) {
 	}
 }
 
@@ -216,6 +214,5 @@ void aon_sleep_timer_init(const struct aon_sleep_timer_config *config)
 		AON_SLEEP_TIMER0->CONTROL.reg = 0;
 	}
 
-	aon_sleep_timer_callback = NULL;
 	system_register_isr(RAM_ISR_TABLE_AON_SLEEP_TIMER_INDEX, (uint32_t)aon_sleep_timer_isr_handler);
 }

@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 UART protocol bus APIs implementation.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -89,20 +89,18 @@ sint8 nm_uart_sync_cmd(void)
 	}
 	else
 	{
-		M2M_ERR("failed to send cfg bytes\n");
+		M2M_ERR("Failed to send cfg bytes!\n");
 		s8Ret = M2M_ERR_BUS_FAIL;
 	}
 	if (b[0] == 0x5a)
 	{
 		s8Ret = 0;
 		onchip = 1;
-		M2M_INFO("Built-in WINC1500 UART Found\n");
 	}
 	else if(b[0] == 0x5b)
 	{
 		s8Ret = 0;
 		onchip = 0;
-		M2M_INFO("WINC1500 Serial Bridge Found\n");
 	}
 	/*TODO: this should be the way we read the register since the cortus is little endian*/
 	/**pu32RetVal = b[0] | ((uint32)b[1] << 8) | ((uint32)b[2] << 16) | ((uint32)b[3] << 24);*/

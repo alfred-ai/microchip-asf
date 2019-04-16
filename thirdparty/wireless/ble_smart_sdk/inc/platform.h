@@ -1,41 +1,29 @@
-/**
- ****************************************************************************************
- *
- * @file platform.h
- *
- * @brief SAMB11 Platform Drivers Generic API for Applications
- *
- * This module contains the public API and the necessary enumerations and structures that are  
- * required for SAMB11 Application Developers for using platform driver like GPIO,SPI,I2C etc.
- *
- *
- *  Copyright (c) 2016 Atmel Corporation. All rights reserved.
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1. Redistributions of source code must retain the above copyright notice, this
- *  list of conditions and the following disclaimer.
- *
- *  2. Redistributions in binary form must reproduce the above copyright notice,
- *  this list of conditions and the following disclaimer in the documentation
- *  and/or other materials provided with the distribution.
- *
- *  3. The name of Atmel may not be used to endorse or promote products derived from this software 
- *  without specific prior written permission.
- *
- *  4. This software may only be redistributed and used in connection with an Atmel microcontroller product.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
-  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
- *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
- *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
- *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
- *  OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
- *  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
- *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
- *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ****************************************************************************************
- */
+/**************************************************************************//**
+  \file platform.h
+ 
+  \brief Includes datatypes and signatures for platform
+ 
+  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Released under NDA
+  Licensed under Atmel's Limited License Agreement.
+ 
+ 
+  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+  EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+ 
+  Atmel Corporation: http://www.atmel.com
+ 
+******************************************************************************/
+
 
 #ifndef PLATFORM_DRV_H_INCLUDED
 #define PLATFORM_DRV_H_INCLUDED
@@ -54,7 +42,9 @@ typedef void (*platform_interface_callback) (uint8_t *, uint32_t );
 /** callback function type for handling resume from sleep */
 typedef void (*resume_callback) (void);
 	
+#define MSG_PREVENT_SLEEP	(0x4000)
 #define APP_PREVENT_SLEEP	(0x8000)
+
 /** enumerated status values for this platform driver */
 typedef enum PLATFORM_STATUS
 {
@@ -222,6 +212,7 @@ plf_drv_status acquire_sleep_lock(void);
  *
  */
 plf_drv_status release_sleep_lock(void);
+plf_drv_status release_message_lock(void);
 
 /**
  * \brief API to register a callback function when system resumes from sleep(ULP).
@@ -246,6 +237,14 @@ plf_drv_status register_resume_callback(resume_callback cb);
  *
  */
 void init_port_list(void);
+
+/** @ingroup platform-drv
+  * @brief Reset BLE Chip.
+  * @note This function will reset whole SoC, All running tasks including current will be terminated 
+  * @warning This function should be called in BLE Context [event get loop] ONLY. 
+  *          If you want to post is as separate event, use @ref at_ble_event_user_defined_post.
+  */
+void platform_chip_reset(void);
 /** @} */
 
 /** @} */

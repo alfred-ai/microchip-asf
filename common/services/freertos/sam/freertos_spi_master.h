@@ -3,7 +3,7 @@
  *
  * \brief FreeRTOS Peripheral Control API For the SPI
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -55,6 +55,14 @@
 /* ASF includes. */
 #include "spi_master.h"
 #include "freertos_peripheral_control.h"
+
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**INDENT-ON**/
+/// @endcond
 
 #if XMEGA
 # error Unsupported chip type
@@ -653,5 +661,13 @@ status_code_t freertos_spi_full_duplex_packet_async(freertos_spi_if p_spi,
 	  }
 \endcode
  */
+
+/// @cond 0
+/**INDENT-OFF**/
+#ifdef __cplusplus
+}
+#endif
+/**INDENT-ON**/
+/// @endcond
 
  #endif /* FREERTOS_SPI_MASTER_INCLUDED */

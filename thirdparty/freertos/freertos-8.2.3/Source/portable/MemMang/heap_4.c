@@ -147,6 +147,7 @@ space. */
 static size_t xBlockAllocatedBit = 0;
 
 /*-----------------------------------------------------------*/
+extern void vApplicationMallocFailedHook( void );
 
 void *pvPortMalloc( size_t xWantedSize )
 {
@@ -283,7 +284,6 @@ void *pvReturn = NULL;
 	{
 		if( pvReturn == NULL )
 		{
-			extern void vApplicationMallocFailedHook( void );
 			vApplicationMallocFailedHook();
 		}
 		else

@@ -4,7 +4,7 @@
  *
  * \brief Tiny DHCP Server.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -561,7 +561,9 @@ static void lwip_dhcp_server_fn(void *arg, struct udp_pcb * dhcp_pcb_recv, struc
 	}
 
 free1_and_return:
-	pbuf_free(pbuf_out);
+	if (pbuf_out) {
+		pbuf_free(pbuf_out);
+	}
 	pbuf_free(pbuf_in);
 }
 

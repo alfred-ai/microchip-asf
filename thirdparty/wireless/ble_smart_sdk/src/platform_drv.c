@@ -1,49 +1,30 @@
-/**
- * \file
- *
- * \brief SAMB11 Platform Driver
- *
- * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
- *
- * \asf_license_start
- *
- * \page License
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. The name of Atmel may not be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * 4. This software may only be redistributed and used in connection with an
- *    Atmel microcontroller product.
- *
- * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
- * EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * \asf_license_stop
- *
- */
+/**************************************************************************//**
+  \file platform_drv.c
+ 
+  \brief Includes implementation for SAMB11 Platform Driver
+ 
+  Copyright (c) 2016, Atmel Corporation. All rights reserved.
+  Released under NDA
+  Licensed under Atmel's Limited License Agreement.
+ 
+ 
+  THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+  EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+ 
+  Atmel Corporation: http://www.atmel.com
+ 
+******************************************************************************/
 
-/*
- * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
- */
+
 #include <stdint.h>
 #include <string.h>
 
@@ -66,11 +47,18 @@ uint8_t (*platform_register_isr)(uint8_t isr_index,void *fp);
 uint8_t (*platform_unregister_isr)(uint8_t isr_index);
 uint32_t  *apps_resume_cb;
 uint32_t 	*actualfreq;
+uint32_t 	*wakeup_event_pending;
+uint32_t	*wakeup_source_active_cb;
 void (*volatile updateuartbr_fp)(void);
 void (*rwip_prevent_sleep_set)(uint16_t prv_slp_bit);
 void (*rwip_prevent_sleep_clear)(uint16_t prv_slp_bit);
 //#ifdef CHIPVERSION_B0
 void (*handle_ext_wakeup_isr)(void);
+/** callback function type for handling wakeup source active callback */
+typedef void (*wakeup_source_active_callback) (uint32_t);
+extern void wakeup_active_event_callback(uint32_t wakeup_source);
+extern uint8_t wakeup_int_unregister_callback(uint8_t wakeup_source);
+
 //#endif	//CHIPVERSION_B0
 resume_callback samb11_app_resume_cb;
 #ifdef CHIPVERSION_A4
@@ -131,7 +119,7 @@ void init_port_list(void)
 	port_list[0].bit.available = 0;
 	port_list[1].bit.available = 0;
 	//GPIO 14 is used for Coex and controlled by Firmware
-	port_list[14].bit.available = 0;
+	//port_list[14].bit.available = 0;
 }
 
 void init_clock(void)
@@ -204,6 +192,8 @@ plf_drv_status platform_driver_init()
 		apps_resume_cb = (uint32_t *)0x1004003c;
 		actualfreq = (uint32_t *)0x10041FC0; /* set to NULL for now as clock calibration is disabled for the time being */  /*(uint32_t *)0x10006bd8;*/
 		updateuartbr_fp = (void (*)())0x10041FC4;
+		wakeup_source_active_cb = (uint32_t *)0x10041FD4;
+		wakeup_event_pending = (uint32_t *)0x10041FD8;
 		/* power APIs */
 		pwr_enable_arm_wakeup = (void (*)(uint32_t wakeup_domain))0x0001cbe9;
 		pwr_disable_arm_wakeup = (void (*)(uint32_t wakeup_domain))0x0001cd8f;
@@ -274,6 +264,10 @@ plf_drv_status platform_driver_init()
 #endif
 		samb11_app_resume_cb = NULL;
 		*apps_resume_cb = (uint32_t)((resume_callback)samb11_plf_resume_callback);
+		*wakeup_source_active_cb = (uint32_t)((wakeup_source_active_callback)wakeup_active_event_callback);
+		wakeup_int_unregister_callback(0);
+		wakeup_int_unregister_callback(1);
+		wakeup_int_unregister_callback(2);
 		platform_initialized = 1;
 		status = STATUS_SUCCESS;
 	}
@@ -330,25 +324,30 @@ plf_drv_status platform_register_ble_msg_handler(platform_interface_callback fp)
 
 static void at_ke_msg_send(void const * param_ptr)
 {
+	struct ke_msg *kemsg;
 	uint8_t osc_en = REG_PL_RD(0x4000B1EC)&0x01;
 	ke_msg_send(param_ptr);
-	if(osc_en == 0)
-	{
-		/* BLE Core is off, issue a wakeup request*/
-		/* First, make sure PD4 is powered up and out of reset */
-		pwr_enable_arm_wakeup(1<<1);
-		pwr_arm_wakeup_req();
-		while (pwr_wait_BLE_out_of_reset(3));
-		pwr_disable_arm_wakeup(1<<1);
-		REG_PL_WR(0x4000B020, 1);
-		#ifndef CHIPVERSION_B0
-		while(REG_PL_RD(0x4000B020));
-		#endif	//CHIPVERSION_B0
-	}
-	else
-	{
-		/*  */
-		os_sem_up(gstrFwSem);
+	kemsg = ke_param2msg(param_ptr);
+
+	if((kemsg != NULL) && (kemsg->dest_id != TASK_INTERNAL_APP)) {
+		if(osc_en == 0)
+		{
+			/* BLE Core is off, issue a wakeup request*/
+			/* First, make sure PD4 is powered up and out of reset */
+			pwr_enable_arm_wakeup(1<<1);
+			pwr_arm_wakeup_req();
+			while (pwr_wait_BLE_out_of_reset(3));
+			pwr_disable_arm_wakeup(1<<1);
+			REG_PL_WR(0x4000B020, 1);
+#ifndef CHIPVERSION_B0
+			while(REG_PL_RD(0x4000B020));
+#endif	//CHIPVERSION_B0
+		}
+		else
+		{
+			/*  */
+			os_sem_up(gstrFwSem);
+		}
 	}
 }
 
@@ -388,7 +387,7 @@ void send_plf_int_msg_ind(uint8_t intr_index, uint8_t callback_id, void *data, u
 {
 	void* params;
 //#if (CHIPVERSION_A4)	
-	os_sem_up(gstrFwSem);
+	//os_sem_up(gstrFwSem);
 //#endif
 	// Allocate the kernel message
 	params = ke_msg_alloc(PERIPHERAL_INTERRUPT_EVENT, TASK_INTERNAL_APP, BUILD_INTR_SRCID(callback_id,intr_index), data_len);
@@ -467,10 +466,6 @@ static int NMI_MsgQueueDestroyOnKeID(NMI_MsgQueueHandle* pHandle, ke_msg_id_t u1
 	return num_of_freed;
 }
 
-//Waits on InternalAppMsgQHandle Queue
-// This function won't busy wait if nothing on queue but will down the semaphore and go to a blocking state
-// The OS then will move control to other higher priority tasks and will only return if these tasks finish processing AND the queue has received 
-//a msg
 static void platform_start_event_timeout(uint32_t timeout)
 {
 	uint8_t msg[8+5] = {0};
@@ -519,6 +514,10 @@ static void platform_stop_event_timeout(void)
 	platform_interface_send(msg, u16TxLen);
 }
 
+//Waits on InternalAppMsgQHandle Queue
+// This function won't busy wait if nothing on queue but will down the semaphore and go to a blocking state
+// The OS then will move control to other higher priority tasks and will only return if these tasks finish processing AND the queue has received 
+//a msg
 plf_drv_status platform_event_wait(uint32_t timeout)
 {
 	static struct ke_msg* rcv_msg;
@@ -610,9 +609,10 @@ plf_drv_status platform_event_wait(uint32_t timeout)
 plf_drv_status acquire_sleep_lock()
 {
 	plf_drv_status status = STATUS_RESOURCE_BUSY;
-	uint8_t osc_en = REG_PL_RD(0x4000B1EC)&0x01;
+	//uint8_t osc_en = REG_PL_RD(0x4000B1EC)&0x01;
 	
 	rwip_prevent_sleep_set(APP_PREVENT_SLEEP);
+#if 0
 	if(osc_en == 0)
 	{
 		/* BLE Core is off, issue a wakeup request*/
@@ -629,14 +629,23 @@ plf_drv_status acquire_sleep_lock()
 	else
 	{
 		/*  */
-		 os_sem_up(gstrFwSem);
+		os_sem_up(gstrFwSem);
 	}
+#endif	//0
+	return status;
+}
+
+plf_drv_status release_message_lock()
+{
+	plf_drv_status status = STATUS_SUCCESS;
+	rwip_prevent_sleep_clear(MSG_PREVENT_SLEEP);
 	return status;
 }
 
 plf_drv_status release_sleep_lock()
 {
 	plf_drv_status status = STATUS_SUCCESS;
+	rwip_prevent_sleep_clear(MSG_PREVENT_SLEEP);
 	rwip_prevent_sleep_clear(APP_PREVENT_SLEEP);
 	return status;
 }
@@ -665,4 +674,33 @@ plf_drv_status register_resume_callback(resume_callback cb)
 		//*apps_resume_cb = (uint32_t)cb;
 	}
 	return status;
+}
+
+void platform_chip_reset(void)
+{
+	volatile uint32_t loop=0;
+#ifdef SAMB11
+	//Coldboot registers
+	*((uint32_t *)0x4000F040) = 0x00;
+	*((uint32_t *)0x4000F044) = 0x78;
+	//Make sure to reset all peripherals
+	//lpmcu_global_reset_1
+	*((uint32_t *)0x4000B008) = 0x00;
+	//lpmcu_wakeup_ctrl; open PD7
+	*((uint32_t *)0x4000E010) = 0x0200;
+	//arm_sleep_wakeup_ctrl[16] //by Mohamed AbdelMoneem, includes 543210 delay below them
+	*((uint32_t *)0x4000B190) = (*((uint32_t *)0x4000B190) & ~(0x00010000));
+	*((uint32_t *)0x4000B190) = (*((uint32_t *)0x4000B190) |  (0x00010000));
+	*((uint32_t *)0x4000B190) = (*((uint32_t *)0x4000B190) & ~(0x00010000));
+	//dummy loop
+	for(loop=0; loop<543210;loop++);
+	//efuse_global_reset
+	*((uint32_t *)0x4000A000) = 0x0;
+	//dummy loop
+	for(loop=0; loop<43210;loop++);
+	//AOn_global_reset
+	*((uint32_t *)0x4000F010) = 0x00;
+#else
+#endif
+	return;
 }

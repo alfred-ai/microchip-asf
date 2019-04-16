@@ -619,8 +619,12 @@ int main (void)
 	platform_driver_init();
 	acquire_sleep_lock();
 
-	/* Initialize the button & LED */
-	button_init(button_cb);
+	/* Initialize the button */
+	gpio_init();
+	button_init();
+	button_register_callback(button_cb);
+
+	/* Initialize the LED */
 	led_init();
 
 	/* Initialize serial console */

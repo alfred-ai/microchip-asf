@@ -132,7 +132,6 @@ CFLAGS =
 #   BOARD      Target board in use, see boards/board.h for a list.
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
-       -D ADC_CALLBACK_MODE=false                         \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BOARD=SAMB11_XPLAINED_PRO                       \
        -D __SAMB11G18A__

@@ -3,7 +3,7 @@
  *
  * \brief SAM Serial Peripheral Interface Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -1305,7 +1305,7 @@ static inline enum status_code spi_read(
 	if (spi_module->STATUS.reg & SERCOM_SPI_STATUS_BUFOVF) {
 		retval = STATUS_ERR_OVERFLOW;
 		/* Clear overflow flag */
-		spi_module->STATUS.reg |= SERCOM_SPI_STATUS_BUFOVF;
+		spi_module->STATUS.reg = SERCOM_SPI_STATUS_BUFOVF;
 	}
 
 	/* Read the character from the DATA register */

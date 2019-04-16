@@ -3,7 +3,7 @@
  *
  * \brief SAM Brown Out Detector Driver
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -338,7 +338,7 @@ static inline void bod_clear_detected(
 {
 	switch (bod_id) {
 		case BOD_BOD33:
-			SYSCTRL->INTFLAG.reg |= SYSCTRL_INTFLAG_BOD33DET;
+			SYSCTRL->INTFLAG.reg = SYSCTRL_INTFLAG_BOD33DET;
 			return;
 		default:
 			Assert(false);

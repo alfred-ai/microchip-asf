@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 BSP APIs declarations.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -304,6 +304,10 @@ void nm_bsp_interrupt_ctrl(uint8 u8Enable);
 
 #ifdef __SAMG55J19__
 #include "bsp/include/nm_bsp_samg55.h"
+#endif
+
+#ifdef __SAMV71Q21__
+#include "bsp/include/nm_bsp_samv71.h"
 #endif
 
 #ifdef CORTUS_APP

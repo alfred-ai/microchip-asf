@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 ASIC specific internal APIs.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -575,7 +575,11 @@ void* linux_wlan_malloc(uint32_t sz);
 #include "driver/include/wifi_firmware_1000b.h"
 #elif defined CONF_WILC_USE_3000_REV_A
 #include "driver/include/wifi_firmware_3000.h"
+#ifdef CONF_WILC_USE_BLE_ONLY
 #include "driver/include/ble_firmware_3000.h"
+#else
+#include "driver/include/bt_firmware_3000.h"
+#endif
 #endif
 
 sint8 firmware_download(void)
@@ -630,8 +634,14 @@ sint8 firmware_download_bt(void)
 	nm_write_reg(0x3b0090, 1);
 	nm_write_reg(0x4f0000, 0x71);
 
+#ifdef CONF_WILC_USE_BLE_ONLY
 	pu8FirmwareBuffer = (uint8_t *)firmware_ble;
 	u32SecSize = sizeof(firmware_ble);
+#else
+	pu8FirmwareBuffer = (uint8_t *)firmware_bt;
+	u32SecSize = sizeof(firmware_bt);
+#endif
+	
 	M2M_DBG("BT firmware size = %d\n", u32SecSize);
 	ChunkSize = 32;
 	u32SecAddress = 0x400000;
@@ -888,128 +898,129 @@ _EXIT_ERR:
 
 sint8 nmi_coex_init(void)
 {
-	 	uint32_t u32Val, u32NULLDuration = 1000;
+	uint32_t ret = M2M_SUCCESS;
+	uint32_t u32Val, u32NULLDuration = 1000;
 
-		/* Configure Coexistance */
-		u32Val = nm_read_reg(rCOE_TOP_CTL);
-		u32Val &= ~(NBIT0 | NBIT1);
-		u32Val |= NBIT2 | NBIT1;	// Force the Coexistence clock on with 40Mhz
-		nm_write_reg(rCOE_TOP_CTL, u32Val);
+	/* Configure Coexistance */
+	u32Val = nm_read_reg(rCOE_TOP_CTL);
+	u32Val &= ~(NBIT0 | NBIT1);
+	u32Val |= NBIT2 | NBIT1;	// Force the Coexistence clock on with 40Mhz
+	nm_write_reg(rCOE_TOP_CTL, u32Val);
 
-		/*	[0]		Enable counting the idle time before active BT to qualify the 1st slot of the BT burst lumped as one transaction  
-			[15]	Idle time before the the 1st slot of the BT burst lumped as one transaction = 1
-			[16]	Limit of the idle time between of the BT bursts to be considered as one transaction (default 450us). 
-					This is also introduce a delay of the exiting BT at the last BT slot.   = 1
-			[31]	Enable counting the idle time between the active slots to determine whether to consider them as single transaction 
-		*/
-		u32Val = nm_read_reg(rBT_SLOT_LUMP_CTL1);
-		u32Val = NBIT0 | NBIT15 | NBIT16 | NBIT31;
-		nm_write_reg(rBT_SLOT_LUMP_CTL1, u32Val);
+	/*	[0]		Enable counting the idle time before active BT to qualify the 1st slot of the BT burst lumped as one transaction  
+		[15]	Idle time before the the 1st slot of the BT burst lumped as one transaction = 1
+		[16]	Limit of the idle time between of the BT bursts to be considered as one transaction (default 450us). 
+				This is also introduce a delay of the exiting BT at the last BT slot.   = 1
+		[31]	Enable counting the idle time between the active slots to determine whether to consider them as single transaction 
+	*/
+	u32Val = nm_read_reg(rBT_SLOT_LUMP_CTL1);
+	u32Val = NBIT0 | NBIT15 | NBIT16 | NBIT31;
+	nm_write_reg(rBT_SLOT_LUMP_CTL1, u32Val);
 
-		/* 	[7:0]	Counts to generate 1 microsecond ticks from system clock  
-			[15]	The duration of wlan_active in high when blocking the BT request 0: Only use the programmable time "blocking_bt_duration" if it is activated; 1: Keep WLAN_ACTIVE high till BT_ACTIVE going low or block till time specified in "block_bt_duration" whichever comes first (works only in 3-wire mode) 
-			[27:16]	Duration of wlan_active is raised to block the bt_active of the current slot; The unit is 8us; Default to 150x8 = 1200 us (slightly less than one slot pair) 
-		*/
-		u32Val = nm_read_reg(rCOEXIST_TIMER);
-		u32Val &= ~(0xff |0xffff0000);
-		u32Val |= (COUNT_TO_ONE_US) | NBIT15 | ( 60  << 16);
-		nm_write_reg(rCOEXIST_TIMER, u32Val);
+	/* 	[7:0]	Counts to generate 1 microsecond ticks from system clock  
+		[15]	The duration of wlan_active in high when blocking the BT request 0: Only use the programmable time "blocking_bt_duration" if it is activated; 1: Keep WLAN_ACTIVE high till BT_ACTIVE going low or block till time specified in "block_bt_duration" whichever comes first (works only in 3-wire mode) 
+		[27:16]	Duration of wlan_active is raised to block the bt_active of the current slot; The unit is 8us; Default to 150x8 = 1200 us (slightly less than one slot pair) 
+	*/
+	u32Val = nm_read_reg(rCOEXIST_TIMER);
+	u32Val &= ~(0xff |0xffff0000);
+	u32Val |= (COUNT_TO_ONE_US) | NBIT15 | ( 60  << 16);
+	nm_write_reg(rCOEXIST_TIMER, u32Val);
 
-		/*	[6:0]	microseconds to sample BT priority after rising edge of BT_ACTIVE wire In 0.5us in 1-wire mode 
-		*/
-		u32Val = nm_read_reg(rBT_WIRE_SAMPLE_TIME);
-		u32Val &= ~(0x7f);
-		u32Val |= NBIT3;
-		nm_write_reg(rBT_WIRE_SAMPLE_TIME, u32Val);
+	/*	[6:0]	microseconds to sample BT priority after rising edge of BT_ACTIVE wire In 0.5us in 1-wire mode 
+	*/
+	u32Val = nm_read_reg(rBT_WIRE_SAMPLE_TIME);
+	u32Val &= ~(0x7f);
+	u32Val |= NBIT3;
+	nm_write_reg(rBT_WIRE_SAMPLE_TIME, u32Val);
 
-		/* 	[8:6]	WL-BT(ACL) arbitration mode;
-						0: no mux 
-						1: timer mux 
-						2: dual counters mux 
-						3: rejection counter threshold mux 
-		*/
-		u32Val = nm_read_reg(rCOEXIST_CTL);
-		u32Val &= ~(NBIT6|NBIT7|NBIT8);
-		u32Val |= NBIT6;
-		nm_write_reg(rCOEXIST_CTL, u32Val);
+	/* 	[8:6]	WL-BT(ACL) arbitration mode;
+					0: no mux 
+					1: timer mux 
+					2: dual counters mux 
+					3: rejection counter threshold mux 
+	*/
+	u32Val = nm_read_reg(rCOEXIST_CTL);
+	u32Val &= ~(NBIT6|NBIT7|NBIT8);
+	u32Val |= NBIT6;
+	nm_write_reg(rCOEXIST_CTL, u32Val);
 
-		/*	[11:0]	BT rejection timer in arb_mode=1 
-			[15:12]	BT rejection / acceptance timer time base ( 2^[15:12] us ) 
-			[27:16]	BT acceptance timer in arb_mode=1 
-		*/
-		u32Val = BT_REJECTION_TIMER | (BT_REJ_ACPT_TIMER_TIME_BASE<<12) |
-					(BT_ACCEPTANCE_TIMER<<16);
-		nm_write_reg(rBT_CNT_THR, u32Val);
+	/*	[11:0]	BT rejection timer in arb_mode=1 
+		[15:12]	BT rejection / acceptance timer time base ( 2^[15:12] us ) 
+		[27:16]	BT acceptance timer in arb_mode=1 
+	*/
+	u32Val = BT_REJECTION_TIMER | (BT_REJ_ACPT_TIMER_TIME_BASE<<12) |
+				(BT_ACCEPTANCE_TIMER<<16);
+	nm_write_reg(rBT_CNT_THR, u32Val);
 
-		/* 	[12:0]	Interrupt will be generated when rej/acc arb counter reach this value for BT rejection timer. 
-					Null packet will be sent
-			[28:16]	Interrupt will be generated when rej/acc arb counter reach this value for BT rejection timer
-		*/
-		u32Val = BT_REG_TIMER_NULL_THRE | (BT_ACPT_TIMER_THRE << 16);
-		nm_write_reg(rBT_CNT_INT, u32Val);
+	/* 	[12:0]	Interrupt will be generated when rej/acc arb counter reach this value for BT rejection timer. 
+				Null packet will be sent
+		[28:16]	Interrupt will be generated when rej/acc arb counter reach this value for BT rejection timer
+	*/
+	u32Val = BT_REG_TIMER_NULL_THRE | (BT_ACPT_TIMER_THRE << 16);
+	nm_write_reg(rBT_CNT_INT, u32Val);
 
-		/* [30]		Disable auto HW NULL pkt with PS-ON header upon Coe_bt_rej_exp timer; 
-					To send out NULL pkt to hold AP from sending us wifi pkts during ACL BT bursts  
-		*/
-		u32Val = nm_read_reg(rCOE_AUTO_PS_ON_NULL_PKT);
-		u32Val &= ~NBIT30;
-		nm_write_reg(rCOE_AUTO_PS_ON_NULL_PKT, u32Val);
+	/* [30]		Disable auto HW NULL pkt with PS-ON header upon Coe_bt_rej_exp timer; 
+				To send out NULL pkt to hold AP from sending us wifi pkts during ACL BT bursts  
+	*/
+	u32Val = nm_read_reg(rCOE_AUTO_PS_ON_NULL_PKT);
+	u32Val &= ~NBIT30;
+	nm_write_reg(rCOE_AUTO_PS_ON_NULL_PKT, u32Val);
 
-		/* 	[30]		Disable auto HW NULL pkt with PS-OFF header upon Coe_bt_rej_exp timer; 
-					To send out NULL pkt to tell AP resume sending us the wifi packets 
-		*/
-		u32Val = nm_read_reg(rCOE_AUTO_PS_OFF_NULL_PKT);
-		u32Val &= ~NBIT30;
-		u32Val |= 0x99;//time out of txabort
-		nm_write_reg(rCOE_AUTO_PS_OFF_NULL_PKT, u32Val);
-		/*	[15:0]	Value to be inserted into the Duration/ID field in the Null frame used for TX abort. This is expressed in microseconds. 
-			[31:16]	The timeout period for the transmission of the Null frame after the TX abort request is asserted. This is expressed in microseconds. 
-		*/
-		u32Val = ( 0xfff0000 | u32NULLDuration );
-		nm_write_reg(rTX_ABORT_NULL_FRM_DURATION_TIMEOUT_VALUE, u32Val);
+	/* 	[30]		Disable auto HW NULL pkt with PS-OFF header upon Coe_bt_rej_exp timer; 
+				To send out NULL pkt to tell AP resume sending us the wifi packets 
+	*/
+	u32Val = nm_read_reg(rCOE_AUTO_PS_OFF_NULL_PKT);
+	u32Val &= ~NBIT30;
+	u32Val |= 0x99;//time out of txabort
+	nm_write_reg(rCOE_AUTO_PS_OFF_NULL_PKT, u32Val);
+	/*	[15:0]	Value to be inserted into the Duration/ID field in the Null frame used for TX abort. This is expressed in microseconds. 
+		[31:16]	The timeout period for the transmission of the Null frame after the TX abort request is asserted. This is expressed in microseconds. 
+	*/
+	u32Val = ( 0xfff0000 | u32NULLDuration );
+	nm_write_reg(rTX_ABORT_NULL_FRM_DURATION_TIMEOUT_VALUE, u32Val);
 
-		/*	[7:0]	Data rate to be used for the TX abort Null frame. 
-			[15:8]	Power level at which the TX abort Null frame should be transmitted.
-		*/
-		u32Val = TX_RATE_24_MBPS;
-		nm_write_reg(rTX_ABORT_NULL_FRM_RATE_POWER_LEVEL, u32Val);
+	/*	[7:0]	Data rate to be used for the TX abort Null frame. 
+		[15:8]	Power level at which the TX abort Null frame should be transmitted.
+	*/
+	u32Val = TX_RATE_24_MBPS;
+	nm_write_reg(rTX_ABORT_NULL_FRM_RATE_POWER_LEVEL, u32Val);
 		
-		u32Val = PHY_MODE_24_MBPS;
-		nm_write_reg(rTX_ABORT_NULL_FRM_PHY_TX_MODE_SETTING, u32Val);
+	u32Val = PHY_MODE_24_MBPS;
+	nm_write_reg(rTX_ABORT_NULL_FRM_PHY_TX_MODE_SETTING, u32Val);
 
-		/*	[16]	Enable self-CTS upon SCO timer from coexist 
-			[29]	Enable auto HW CTS pkt upon granted any BT slot request 
-			[30]	Enable auto HW CTS pkt upon granted HP BT slot request 
-		*/
-		u32Val = nm_read_reg(rCOE_AUTO_CTS_PKT);
-		u32Val &= ~( NBIT16| NBIT29| NBIT30); 
-		nm_write_reg(rCOE_AUTO_CTS_PKT, u32Val);
+	/*	[16]	Enable self-CTS upon SCO timer from coexist 
+		[29]	Enable auto HW CTS pkt upon granted any BT slot request 
+		[30]	Enable auto HW CTS pkt upon granted HP BT slot request 
+	*/
+	u32Val = nm_read_reg(rCOE_AUTO_CTS_PKT);
+	u32Val &= ~( NBIT16| NBIT29| NBIT30); 
+	nm_write_reg(rCOE_AUTO_CTS_PKT, u32Val);
 
-		/*	
-			[28]	Transmission will be aborted and PA will enter aborted state in 
-					which no transmission will happen. Any transmission which is in
-					progress will stop abruptly.
-			[29]	1 _ PA will transmit self-CTS with in PIFS after a TX abort 
-			[30]	1 _ TX abort can be initiated only by H/W 
-		*/
-		u32Val = nm_read_reg(rPA_CONTROL);
-		u32Val &= ~NBIT29;
-		u32Val |= NBIT28|NBIT30;
-		nm_write_reg(rPA_CONTROL, u32Val);
+	/*	
+		[28]	Transmission will be aborted and PA will enter aborted state in 
+				which no transmission will happen. Any transmission which is in
+				progress will stop abruptly.
+		[29]	1 _ PA will transmit self-CTS with in PIFS after a TX abort 
+		[30]	1 _ TX abort can be initiated only by H/W 
+	*/
+	u32Val = nm_read_reg(rPA_CONTROL);
+	u32Val &= ~NBIT29;
+	u32Val |= NBIT28|NBIT30;
+	nm_write_reg(rPA_CONTROL, u32Val);
 
-		/*
-			[15:12] ctl_combo_pti_thrd,Threshold of the 4-bit BT priority value above which are considered as high-priority BT packets 
-		*/
-		u32Val = nm_read_reg(rCOEXIST_CTL);
-		u32Val &= ~(NBIT14);
-		u32Val |= (NBIT12|NBIT13|NBIT15);
-		return nm_write_reg(rCOEXIST_CTL, u32Val);
+	/*
+		[15:12] ctl_combo_pti_thrd,Threshold of the 4-bit BT priority value above which are considered as high-priority BT packets 
+	*/
+	u32Val = nm_read_reg(rCOEXIST_CTL);
+	u32Val &= ~(NBIT14);
+	u32Val |= (NBIT12|NBIT13|NBIT15);
+	nm_write_reg(rCOEXIST_CTL, u32Val);
+	return ret;
 }
-
 
 sint8 nmi_coex_set_mode(tenuNmiCoexMode enuCoexMode)
 {
-	sint8 ret = M2M_ERR_FAIL;
+	sint8 ret = M2M_SUCCESS;
 	uint32 u32Val;
 	
 	M2M_DBG("Coex mode %d\n", enuCoexMode);

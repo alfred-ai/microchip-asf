@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Driver (Calendar Mode)
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -763,7 +763,7 @@ struct rtc_calendar_config {
 	bool clock_24h;
 	/** Initial year for counter value 0 */
 	uint16_t year_init_value;
-#if (SAML22)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21)
 	/** Enable count read synchronization. The CLOCK value requires
 	 * synchronization when reading. Disabling the synchronization
 	 * will prevent the CLOCK value from displaying the current value. */
@@ -837,7 +837,7 @@ static inline void rtc_calendar_get_config_defaults(
 #endif
 	config->clock_24h           = false;
 	config->year_init_value     = 2000;
-#if (SAML22)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) 
 	config->enable_read_sync    = true;
 #endif
 	for (uint8_t i = 0; i < RTC_NUM_OF_ALARMS; i++) {

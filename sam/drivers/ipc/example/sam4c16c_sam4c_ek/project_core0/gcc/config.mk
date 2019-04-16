@@ -93,6 +93,7 @@ INC_PATH = \
        sam/drivers/ipc/example/src_core0                  \
        sam/drivers/pmc                                    \
        sam/drivers/rstc                                   \
+       sam/drivers/rstc/example1                          \
        sam/drivers/uart                                   \
        sam/drivers/usart                                  \
        sam/utils                                          \

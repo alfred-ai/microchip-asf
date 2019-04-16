@@ -75,7 +75,6 @@ uint16_t send_length = 0;
 
 /* Buffer data to be send over the air */
 uint8_t send_data[APP_TX_BUF_SIZE];
-uint8_t buff;
 
 
 static const ble_event_callback_t app_gap_handle[] = {
@@ -100,24 +99,26 @@ static const ble_event_callback_t app_gap_handle[] = {
 	NULL
 };
 
-static void uart_rx_callback(void)
+static void uart_rx_callback(uint8_t input)
 {
-	if(buff == '\r') {
+	if(input == '\r') {
 		if(send_length) {
 			send_plf_int_msg_ind(UART_RX_COMPLETE, UART_RX_INTERRUPT_MASK_RX_FIFO_NOT_EMPTY_MASK, send_data, send_length);
+			memset(send_data, 0, APP_TX_BUF_SIZE);
+			send_length = 0;
 			DBG_LOG(" ");
 		}
 	}
 	else {
-		send_data[send_length++] = buff;
-		DBG_LOG_CONT("%c", buff);
+		send_data[send_length++] = input;
+		DBG_LOG_CONT("%c", input);
 		
 		if(send_length >= APP_TX_BUF_SIZE) {
 			send_plf_int_msg_ind(UART_RX_COMPLETE, UART_RX_INTERRUPT_MASK_RX_FIFO_NOT_EMPTY_MASK, send_data, send_length);
+			memset(send_data, 0, APP_TX_BUF_SIZE);
+			send_length = 0;
 		}
 	}
-	
-	getchar_aysnc((uart_callback_t)uart_rx_callback, &buff);
 }
 
 /**
@@ -170,10 +171,9 @@ static void csc_app_send_buf(void)
 	platform_event_get(&plf_event_type, plf_event_data, &plf_event_data_len);
 	
 	if(plf_event_type == ((UART_RX_INTERRUPT_MASK_RX_FIFO_NOT_EMPTY_MASK << 8) | UART_RX_COMPLETE)) {
-		csc_prf_send_data(send_data, send_length);
-		memset(send_data, 0, APP_TX_BUF_SIZE);
-		send_length = 0;
+		csc_prf_send_data(plf_event_data, plf_event_data_len);
 	}
+
 }
 
 bool app_exec = true;
@@ -209,7 +209,7 @@ int main(void )
 	/* Register the user event handler */
 	register_ble_user_event_cb(csc_app_send_buf);
 	
-	getchar_aysnc((uart_callback_t)uart_rx_callback, &buff);
+	register_uart_callback(uart_rx_callback);
 	
 	/* Capturing the events  */
 	while(app_exec){

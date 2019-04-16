@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 M2M driver APIs implementation.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,43 +51,171 @@
 #endif
 
 /**
-*	@fn		nm_get_firmware_info(tstrM2mRev* M2mRev)
+*	@fn		nm_get_firmware_full_info(tstrM2mRev* M2mRev)
+*	@brief	Get Firmware version info
+*	@param [out]	M2mRev
+*				pointer holds address of structure "tstrM2mRev" that contains the firmware version parameters
+*	@version	1.0
+*/
+
+sint8 nm_get_firmware_full_info(tstrM2mRev* pstrRev)
+{
+	uint16  drv_hif_level, fw_hif_level;
+	uint32	reg = 0;
+	sint8	ret = M2M_SUCCESS;
+	tstrGpRegs strgp = {0};
+
+	m2m_memset((uint8*)pstrRev,0,sizeof(tstrM2mRev));
+	ret = nm_read_reg_with_ret(NMI_REV_REG, &reg);
+	reg &= 0x0000FFFF;
+	if (reg == 0)
+	{
+		ret = M2M_ERR_FAIL;
+		goto EXIT;
+	}
+	fw_hif_level = M2M_GET_HIF_LEVEL(reg);
+
+	// Check we're not talking to legacy fw
+	if (fw_hif_level == 0)
+	{
+		ret = M2M_ERR_FW_VER_MISMATCH;
+		M2M_ERR("Firmware HIF Level unknown\n");
+		goto EXIT;
+	}
+	//M2M_INFO("Firmware HIF Level : %u\n", fw_hif_level);
+	drv_hif_level = M2M_HIF_LEVEL;
+	/*
+	 * Check HIF Levels are sufficiently compatible before parsing fw version number
+	 * This check may be relaxed in future.
+	 */
+	if (drv_hif_level != fw_hif_level)
+	{
+		ret = M2M_ERR_FW_VER_MISMATCH;
+		goto EXIT;
+	}
+
+	ret = nm_read_reg_with_ret(rNMI_GP_REG_0, &reg);
+	if(ret == M2M_SUCCESS)
+	{
+		if(reg != 0)
+		{
+			ret = nm_read_block(reg|0x30000,(uint8*)&strgp,sizeof(tstrGpRegs));
+			if(ret == M2M_SUCCESS)
+			{
+				reg = strgp.u32Firmware_Ota_rev;
+				reg &= 0x0000ffff;
+				if(reg != 0)
+				{
+					ret = nm_read_block(reg|0x30000,(uint8*)pstrRev,sizeof(tstrM2mRev));
+					if(ret == M2M_SUCCESS)
+					{
+						if(fw_hif_level != M2M_GET_HIF_LEVEL(pstrRev->u16FirmwareHifInfo))
+						{
+							ret = M2M_ERR_FAIL;
+							goto EXIT;
+						}
+						M2M_INFO("Firmware ver   : %u.%u.%u\n", pstrRev->u8FirmwareMajor, M2M_GET_MINOR(pstrRev->u8FirmwareMinor), M2M_GET_PATCH(pstrRev->u8FirmwareMinor));
+						//M2M_INFO("Firmware Build %s Time %s\n",pstrRev->BuildDate,pstrRev->BuildTime);
+						// This check is currently redundant, but would be needed if above hif level check is relaxed in future
+						if (drv_hif_level != M2M_GET_HIF_LEVEL(pstrRev->u16FirmwareHifInfo))
+						{
+							ret = M2M_ERR_FW_VER_MISMATCH;
+							goto EXIT;
+						}
+					}
+				}else {
+					ret = M2M_ERR_FAIL;
+				}
+			}
+		}else{
+			ret = M2M_ERR_FAIL;
+		}
+	}
+EXIT:
+	return ret;
+}
+/**
+*	@fn		nm_get_ota_firmware_info(tstrM2mRev* pstrRev)
 *	@brief	Get Firmware version info
 *	@param [out]	M2mRev
 *			    pointer holds address of structure "tstrM2mRev" that contains the firmware version parameters
-				
-*   @author		Ahmad.Mohammad.Yahya
-*   @date		27 MARCH 2013
+			
 *	@version	1.0
 */
-sint8 nm_get_firmware_info(tstrM2mRev* M2mRev)
+sint8 nm_get_ota_firmware_info(tstrM2mRev* pstrRev)
 {
-	uint16  curr_drv_ver, min_req_drv_ver; //, curr_firm_ver;
+	uint16  drv_hif_level, ota_hif_level;
 	uint32	reg = 0;
 	sint8	ret = M2M_SUCCESS;
+	tstrGpRegs strgp = {0};
 
+	m2m_memset((uint8*)pstrRev,0,sizeof(tstrM2mRev));
 	ret = nm_read_reg_with_ret(NMI_REV_REG, &reg);
 
-	M2mRev->u8DriverMajor	= M2M_GET_DRV_MAJOR(reg);
-	M2mRev->u8DriverMinor   = M2M_GET_DRV_MINOR(reg);
-	M2mRev->u8DriverPatch	= M2M_GET_DRV_PATCH(reg);
-	M2mRev->u8FirmwareMajor	= M2M_GET_FW_MAJOR(reg);
-	M2mRev->u8FirmwareMinor = M2M_GET_FW_MINOR(reg);
-	M2mRev->u8FirmwarePatch = M2M_GET_FW_PATCH(reg);
-	M2mRev->u32Chipid	= nmi_get_chipid();
-	
-//	curr_firm_ver   = M2M_MAKE_VERSION(M2mRev->u8FirmwareMajor, M2mRev->u8FirmwareMinor,M2mRev->u8FirmwarePatch);
-	curr_drv_ver    = M2M_MAKE_VERSION(M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
-	min_req_drv_ver = M2M_MAKE_VERSION(M2mRev->u8DriverMajor, M2mRev->u8DriverMinor,M2mRev->u8DriverPatch);
-	if(curr_drv_ver <  min_req_drv_ver) {
-		/*The current driver version should be larger or equal 
-		than the min driver that the current firmware support  */
-		ret = M2M_ERR_FW_VER_MISMATCH;
+	reg >>= 16;
+	if (reg == 0)
+	{
+		ret = M2M_ERR_FAIL;
+		goto EXIT;
 	}
-//	if(curr_drv_ver >  curr_firm_ver) {
-//		/*The current driver should be equal or less than the firmware version*/
-//		ret = M2M_ERR_FW_VER_MISMATCH;
-//	}
+	ota_hif_level = M2M_GET_HIF_LEVEL(reg);
+	// Check if ota image is legacy fw
+	if (ota_hif_level == 0)
+	{
+		ret = M2M_ERR_FW_VER_MISMATCH;
+		M2M_ERR("OTA HIF Level unknown\n");
+		goto EXIT;
+	}
+	//M2M_INFO("OTA HIF Level : %u\n", ota_hif_level);
+	drv_hif_level = M2M_HIF_LEVEL;
+	/*
+	 * Check HIF Levels are sufficiently compatible before parsing ota version number
+	 * This check may be relaxed in future.
+	 */
+	if (drv_hif_level != ota_hif_level)
+	{
+		ret = M2M_ERR_FW_VER_MISMATCH;
+		goto EXIT;
+	}
+
+	ret = nm_read_reg_with_ret(rNMI_GP_REG_0, &reg);
+	if(ret == M2M_SUCCESS)
+	{
+		if(reg != 0)
+		{
+			ret = nm_read_block(reg|0x30000,(uint8*)&strgp,sizeof(tstrGpRegs));
+			if(ret == M2M_SUCCESS)
+			{
+				reg = strgp.u32Firmware_Ota_rev;
+				reg >>= 16;
+				if(reg != 0)
+				{
+					ret = nm_read_block(reg|0x30000,(uint8*)pstrRev,sizeof(tstrM2mRev));
+					if(ret == M2M_SUCCESS)
+					{
+						if(ota_hif_level != M2M_GET_HIF_LEVEL(pstrRev->u16FirmwareHifInfo))
+						{
+							ret = M2M_ERR_FAIL;
+							goto EXIT;
+						}
+						//M2M_INFO("OTA ver   : %u.%u.%u\n", pstrRev->u8FirmwareMajor, M2M_GET_MINOR(pstrRev->u8FirmwareMinor), M2M_GET_PATCH(pstrRev->u8FirmwareMinor));
+						//M2M_INFO("OTA Build %s Time %s\n",pstrRev->BuildDate,pstrRev->BuildTime);
+						// This check is currently redundant, but would be needed if above hif level check is relaxed in future
+						if (drv_hif_level != M2M_GET_HIF_LEVEL(pstrRev->u16FirmwareHifInfo))
+						{
+							ret = M2M_ERR_FW_VER_MISMATCH;
+							goto EXIT;
+						}
+					}
+				}else {
+					ret = M2M_ERR_FAIL;
+				}
+			}
+		}else{
+			ret = M2M_ERR_FAIL;
+		}
+	}
+EXIT:
 	return ret;
 }
 
@@ -138,7 +266,6 @@ ERR1:
 */
 sint8 nm_drv_init(void * arg)
 {
-	tstrM2mRev strtmp;
 	sint8 ret = M2M_SUCCESS;
 	uint8 u8Mode = M2M_WIFI_MODE_NORMAL;
 	
@@ -162,8 +289,6 @@ sint8 nm_drv_init(void * arg)
 	return;
 #endif
 	
-	
-#ifdef NO_HW_CHIP_EN
 	ret = chip_wake();
 	nm_bsp_sleep(10);
 	if (M2M_SUCCESS != ret) {
@@ -177,13 +302,11 @@ sint8 nm_drv_init(void * arg)
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#endif
 	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
-#ifdef USE_SPI
+#ifdef CONF_WINC_USE_SPI
 	/* Must do this after global reset to set SPI data packet size. */
 	nm_spi_init();
 #endif
-#ifdef NO_HW_CHIP_EN
 	/*return power save to default value*/
 	chip_idle();
 
@@ -191,7 +314,6 @@ sint8 nm_drv_init(void * arg)
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#endif
 	ret = wait_for_bootrom(u8Mode);
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
@@ -214,17 +336,6 @@ sint8 nm_drv_init(void * arg)
 		goto ERR2;
 	}
 	
-	ret = nm_get_firmware_info(&strtmp);
-
-	M2M_INFO("Firmware ver   : %u.%u.%u\n", strtmp.u8FirmwareMajor, strtmp.u8FirmwareMinor, strtmp.u8FirmwarePatch);
-	M2M_INFO("Min driver ver : %u.%u.%u\n", strtmp.u8DriverMajor, strtmp.u8DriverMinor, strtmp.u8DriverPatch);
-	M2M_INFO("Curr driver ver: %u.%u.%u\n", M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
-	
-	if(M2M_ERR_FW_VER_MISMATCH == ret)
-	{
-		ret = M2M_ERR_FW_VER_MISMATCH;
-		M2M_ERR("Mismatch Firmawre Version\n");
-	}
 	return ret;
 ERR2:
 	nm_bus_iface_deinit();
@@ -260,35 +371,5 @@ sint8 nm_drv_deinit(void * arg)
 #endif
 
 ERR1:
-	return ret;
-}
-
-/**
-*	@fn		nm_print_firmware_info(tstrM2mRev* M2mRev)
-*	@brief	Print Firmware version info	
-*   @author		Monica.Salicru.Cortes
-*   @date		03 JUNE 2015
-*	@version	1.0
-*/
-
-sint8 nm_print_firmware_info(void)
-{
-	tstrM2mRev M2mRev;
-	uint32	reg = 0;
-	sint8	ret = M2M_SUCCESS;
-
-	ret = nm_read_reg_with_ret(NMI_REV_REG, &reg);
-
-	M2mRev.u8DriverMajor	= (uint8)(reg >> 24)&0xff;
-	M2mRev.u8DriverMinor   = (uint8)(reg >> 20)&0x0f;
-	M2mRev.u8DriverPatch	= (uint8)(reg >> 16)&0x0f;
-	M2mRev.u8FirmwareMajor	= (uint8)(reg >> 8)&0xff;
-	M2mRev.u8FirmwareMinor = (uint8)(reg >> 4)&0x0f;
-	M2mRev.u8FirmwarePatch = (uint8)(reg)&0x0f;
-
-	M2M_INFO("Firmware ver   : %u.%u.%u\n", M2mRev.u8FirmwareMajor, M2mRev.u8FirmwareMinor, M2mRev.u8FirmwarePatch);
-	M2M_INFO("Min driver ver : %u.%u.%u\n", M2mRev.u8DriverMajor, M2mRev.u8DriverMinor, M2mRev.u8DriverPatch);
-	M2M_INFO("Curr driver ver: %u.%u.%u\n", M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
-	
 	return ret;
 }

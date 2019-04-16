@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 SDIO protocol bus APIs implementation.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -687,15 +687,13 @@ sint8 nm_sdio_write_reg(uint32 u32Addr, uint32 u32Val)
 sint8 nm_sdio_read_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 {
 	sint8 s8Ret;
-	uint32 i;
-	sint8 rem = 4 - (u32Addr %4);
-	if (rem== 4){
-		s8Ret = sdio_read(u32Addr, puBuf, u16Sz);
+	sint8 rem = 4 - (((uint32)puBuf) %4);
+	if(rem == 4){
+		s8Ret = sdio_read(u32Addr, puBuf, u16Sz);	
 	}
-	else{
-		sint32 reg = u32Addr & (~0x3);
-		uint32 u32AlignedSize = (u16Sz+3) & (~0x3);
-		if(gu32AlignedBufSize < u32AlignedSize){
+	else{	
+		if(gu32AlignedBufSize < u16Sz){
+			uint32 u32AlignedSize = (u16Sz+3) & (~0x3);
 			nm_bsp_free(gpu8AlignedBuf);
 			gpu8AlignedBuf = nm_bsp_malloc(u32AlignedSize);
 			if(gpu8AlignedBuf == NULL){
@@ -704,16 +702,10 @@ sint8 nm_sdio_read_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 				return M2M_ERR_MEM_ALLOC;
 			}
 			gu32AlignedBufSize = u32AlignedSize;
-		} 		
-		reg = nm_sdio_read_reg(u32Addr & (~0x3));
-		for(i=0; i<rem; i++){
-			
-			puBuf[i] = (reg >> (8*(4-rem+i))) &0xff;
 		}
-		s8Ret = sdio_read(u32Addr+rem, gpu8AlignedBuf, ((u16Sz-rem+3)&(~0x3)));
-		m2m_memcpy(puBuf+rem, gpu8AlignedBuf, u16Sz-rem);
+		s8Ret = sdio_read(u32Addr, gpu8AlignedBuf, u16Sz);
+		m2m_memcpy(puBuf, gpu8AlignedBuf, u16Sz);
 	}
-
 	return s8Ret;
 }
 
