@@ -60,10 +60,10 @@ CSRCS = \
        sam0/drivers/dac/dac_sam_l/dac_callback.c          \
        sam0/drivers/dac/unit_test/unit_test.c             \
        sam0/drivers/events/events_hooks.c                 \
-       sam0/drivers/events/events_sam_l/events.c          \
+       sam0/drivers/events/events_sam_l_c/events.c        \
        sam0/drivers/port/port.c                           \
-       sam0/drivers/rtc/rtc_sam_l/rtc_count.c             \
-       sam0/drivers/rtc/rtc_sam_l/rtc_count_interrupt.c   \
+       sam0/drivers/rtc/rtc_sam_l_c/rtc_count.c           \
+       sam0/drivers/rtc/rtc_sam_l_c/rtc_count_interrupt.c \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
        sam0/drivers/sercom/usart/usart.c                  \
@@ -96,10 +96,10 @@ INC_PATH = \
        sam0/drivers/dac/unit_test                         \
        sam0/drivers/dac/unit_test/saml21j18a_saml21_xplained_pro \
        sam0/drivers/events                                \
-       sam0/drivers/events/events_sam_l                   \
+       sam0/drivers/events/events_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/rtc                                   \
-       sam0/drivers/rtc/rtc_sam_l                         \
+       sam0/drivers/rtc/rtc_sam_l_c                       \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \
        sam0/drivers/system                                \

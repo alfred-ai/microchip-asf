@@ -126,7 +126,11 @@ Invalid argument
 #if (defined __APP_APS3_CORTUS__)
 #define M2M_LOG_LEVEL									M2M_LOG_ERROR
 #else
+#ifdef TIME_PROFILE
+#define M2M_LOG_LEVEL									M2M_LOG_NONE
+#else
 #define M2M_LOG_LEVEL									M2M_LOG_REQ
+#endif
 #endif
 
 /**/

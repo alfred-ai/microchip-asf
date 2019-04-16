@@ -51,12 +51,12 @@ extern "C" {
 #endif
 
 /**
- * \defgroup asfdoc_sam0_system_clock_group SAM System Clock Management Driver (SYSTEM CLOCK)
+ * \defgroup asfdoc_sam0_system_clock_group SAM System Clock Management (SYSTEM CLOCK) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the device's clocking related functions. This includes
- * the various clock sources, bus clocks and generic clocks within the device,
- * with functions to manage the enabling, disabling, source selection and
+ * the various clock sources, bus clocks, and generic clocks within the device,
+ * with functions to manage the enabling, disabling, source selection, and
  * prescaling of clocks to various internal peripherals.
  *
  * The following peripherals are used by this module:
@@ -92,7 +92,7 @@ extern "C" {
  * particular application.
  *
  * This driver provides a set of functions for the configuration and management
- * of the various clock related functionality within the device.
+ * of the various clock related functionalities within the device.
  *
  *
  * \subsection asfdoc_sam0_system_clock_module_overview_clock_sources Clock Sources
@@ -111,13 +111,11 @@ extern "C" {
  *
  * There are three clock domains:
  *
- * CPU Clock Domain.
+ * - CPU Clock Domain
+ * - Low Power Clock Domain(LP Clock Domain)
+ * - Backup Clock Domain(BUP Clock Domain)
  *
- * Low Power Clock Domain(LP Clock Domain).
- *
- * Backup Clock Domain(BUP Clock Domain).
- *
- * Each clock domain (CPU, LP, BUP) can be changed on the fly.To ensure
+ * Each clock domain (CPU, LP, BUP) can be changed on the fly. To ensure
  * correct operation, frequencies must be selected so that BUPDIV ≥ LPDIV ≥ HSDIV.
  * Also, frequencies must never exceed the specified maximum frequency for each clock domain.
  * A module may be connected to several clock domains (for instance, AHB and APB).
@@ -155,7 +153,7 @@ extern "C" {
  *
  * \subsection asfdoc_sam0_system_clock_module_overview_clock_masking Clock Masking
  * To save power, the input clock to one or more peripherals on the AHB and APBx
- * buses can be masked away - when masked, no clock is passed into the module.
+ * buses can be masked away. When masked, no clock is passed into the module.
  * Disabling of clocks of unused modules will prevent all access to the masked
  * module, but will reduce the overall device power consumption.
  *
@@ -227,7 +225,7 @@ extern "C" {
  * from one of the provided Source Clocks, and prescale the output for one or
  * more Generic Clock Channels in a one-to-many relationship. The generators
  * thus allow for several clocks to be generated of different frequencies,
- * power usages and accuracies, which can be turned on and off individually to
+ * power usages, and accuracies, which can be turned on and off individually to
  * disable the clocks to multiple peripherals as a group.
  *
  * \subsubsection asfdoc_sam0_system_clock_module_overview_gclk_channels Generic Clock Channels
@@ -274,19 +272,19 @@ extern "C" {
  * clock cycles.
  */
 enum system_xosc32k_startup {
-	/** Wait 2048 clock cycles until the clock source is considered stable. */
+	/** Wait 2048 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_2048,
-	/** Wait 4096 clock cycles until the clock source is considered stable. */
+	/** Wait 4096 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_4096,
-	/** Wait 16384 clock cycles until the clock source is considered stable. */
+	/** Wait 16384 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_16384,
-	/** Wait 32768 clock cycles until the clock source is considered stable. */
+	/** Wait 32768 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_32768,
-	/** Wait 65536 clock cycles until the clock source is considered stable. */
+	/** Wait 65536 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_65536,
-	/** Wait 131072 clock cycles until the clock source is considered stable. */
+	/** Wait 131072 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_131072,
-	/** Wait 262144 clock cycles until the clock source is considered stable. */
+	/** Wait 262144 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC32K_STARTUP_262144,
 };
 
@@ -297,37 +295,37 @@ enum system_xosc32k_startup {
  * cycles.
  */
 enum system_xosc_startup {
-	/** Wait one clock cycle until the clock source is considered stable. */
+	/** Wait one clock cycle until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_1,
-	/** Wait two clock cycles until the clock source is considered stable. */
+	/** Wait two clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_2,
-	/** Wait four clock cycles until the clock source is considered stable. */
+	/** Wait four clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_4,
-	/** Wait eight clock cycles until the clock source is considered stable. */
+	/** Wait eight clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_8,
-	/** Wait 16 clock cycles until the clock source is considered stable. */
+	/** Wait 16 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_16,
-	/** Wait 32 clock cycles until the clock source is considered stable. */
+	/** Wait 32 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_32,
-	/** Wait 64 clock cycles until the clock source is considered stable. */
+	/** Wait 64 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_64,
-	/** Wait 128 clock cycles until the clock source is considered stable. */
+	/** Wait 128 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_128,
-	/** Wait 256 clock cycles until the clock source is considered stable. */
+	/** Wait 256 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_256,
-	/** Wait 512 clock cycles until the clock source is considered stable. */
+	/** Wait 512 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_512,
-	/** Wait 1024 clock cycles until the clock source is considered stable. */
+	/** Wait 1024 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_1024,
-	/** Wait 2048 clock cycles until the clock source is considered stable. */
+	/** Wait 2048 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_2048,
-	/** Wait 4096 clock cycles until the clock source is considered stable. */
+	/** Wait 4096 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_4096,
-	/** Wait 8192 clock cycles until the clock source is considered stable. */
+	/** Wait 8192 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_8192,
-	/** Wait 16384 clock cycles until the clock source is considered stable. */
+	/** Wait 16384 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_16384,
-	/** Wait 32768 clock cycles until the clock source is considered stable. */
+	/** Wait 32768 clock cycles until the clock source is considered stable */
 	SYSTEM_XOSC_STARTUP_32768,
 };
 
@@ -338,21 +336,21 @@ enum system_xosc_startup {
  * OSC32K clock cycles.
  */
 enum system_osc32k_startup {
-	/** Wait three clock cycles until the clock source is considered stable. */
+	/** Wait three clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_3,
-	/** Wait four clock cycles until the clock source is considered stable. */
+	/** Wait four clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_4,
-	/** Wait six clock cycles until the clock source is considered stable. */
+	/** Wait six clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_6,
-	/** Wait ten clock cycles until the clock source is considered stable. */
+	/** Wait ten clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_10,
-	/** Wait 18 clock cycles until the clock source is considered stable. */
+	/** Wait 18 clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_18,
 	/** Wait 34 clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_34,
-	/** Wait 66 clock cycles until the clock source is considered stable. */
+	/** Wait 66 clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_66,
-	/** Wait 130 clock cycles until the clock source is considered stable. */
+	/** Wait 130 clock cycles until the clock source is considered stable */
 	SYSTEM_OSC32K_STARTUP_130,
 };
 
@@ -362,13 +360,13 @@ enum system_osc32k_startup {
  * Available frequency selection for the internal 16MHz (nominal) system clock.
  */
 enum system_osc16m_fsel {
-	/** Frequency Selection 4MHz. */
+	/** Frequency Selection 4MHz */
 	SYSTEM_OSC16M_4M,
-	/** Frequency Selection 8MHz. */
+	/** Frequency Selection 8MHz */
 	SYSTEM_OSC16M_8M,
-	/** Frequency Selection 12MHz. */
+	/** Frequency Selection 12MHz */
 	SYSTEM_OSC16M_12M,
-	/** Frequency Selection 16MHz. */
+	/** Frequency Selection 16MHz */
 	SYSTEM_OSC16M_16M,
 };
 
@@ -380,21 +378,21 @@ enum system_osc16m_fsel {
  * Available division ratios for the CPU and Lowpower and Backup clocks.
  */
 enum system_main_clock_div {
-	/** Divide Main clock by one. */
+	/** Divide Main clock by one */
 	SYSTEM_MAIN_CLOCK_DIV_1,
-	/** Divide Main clock by two. */
+	/** Divide Main clock by two */
 	SYSTEM_MAIN_CLOCK_DIV_2,
-	/** Divide Main clock by four. */
+	/** Divide Main clock by four */
 	SYSTEM_MAIN_CLOCK_DIV_4,
-	/** Divide Main clock by eight. */
+	/** Divide Main clock by eight */
 	SYSTEM_MAIN_CLOCK_DIV_8,
-	/** Divide Main clock by 16. */
+	/** Divide Main clock by 16 */
 	SYSTEM_MAIN_CLOCK_DIV_16,
-	/** Divide Main clock by 32. */
+	/** Divide Main clock by 32 */
 	SYSTEM_MAIN_CLOCK_DIV_32,
-	/** Divide Main clock by 64. */
+	/** Divide Main clock by 64 */
 	SYSTEM_MAIN_CLOCK_DIV_64,
-	/** Divide Main clock by 128. */
+	/** Divide Main clock by 128 */
 	SYSTEM_MAIN_CLOCK_DIV_128,
 };
 
@@ -404,9 +402,9 @@ enum system_main_clock_div {
  * Available external clock source types.
  */
 enum system_clock_external {
-	/** The external clock source is a crystal oscillator. */
+	/** The external clock source is a crystal oscillator */
 	SYSTEM_CLOCK_EXTERNAL_CRYSTAL,
-	/** The connected clock source is an external logic level clock signal. */
+	/** The connected clock source is an external logic level clock signal */
 	SYSTEM_CLOCK_EXTERNAL_CLOCK,
 };
 
@@ -416,16 +414,16 @@ enum system_clock_external {
  * Available operating modes of the DFLL clock source module.
  */
 enum system_clock_dfll_loop_mode {
-	/** The DFLL is operating in open loop mode with no feedback. */
+	/** The DFLL is operating in open loop mode with no feedback */
 	SYSTEM_CLOCK_DFLL_LOOP_MODE_OPEN,
 	/** The DFLL is operating in closed loop mode with frequency feedback from
-	 *  a low frequency reference clock.
+	 *  a low frequency reference clock
 	 */
 	SYSTEM_CLOCK_DFLL_LOOP_MODE_CLOSED = OSCCTRL_DFLLCTRL_MODE,
 
 #ifdef OSCCTRL_DFLLCTRL_USBCRM
 	/** The DFLL is operating in USB recovery mode with frequency feedback
-	 *  from USB SOF.
+	 *  from USB SOF
 	 */
 	SYSTEM_CLOCK_DFLL_LOOP_MODE_USB_RECOVERY = OSCCTRL_DFLLCTRL_USBCRM,
 #endif
@@ -437,9 +435,9 @@ enum system_clock_dfll_loop_mode {
  * DFLL lock behavior modes on device wake-up from sleep.
  */
 enum system_clock_dfll_wakeup_lock {
-	/** Keep DFLL lock when the device wakes from sleep. */
+	/** Keep DFLL lock when the device wakes from sleep */
 	SYSTEM_CLOCK_DFLL_WAKEUP_LOCK_KEEP,
-	/** Lose DFLL lock when the devices wakes from sleep. */
+	/** Lose DFLL lock when the devices wakes from sleep */
 	SYSTEM_CLOCK_DFLL_WAKEUP_LOCK_LOSE = OSCCTRL_DFLLCTRL_LLAW,
 };
 
@@ -449,23 +447,23 @@ enum system_clock_dfll_wakeup_lock {
  * DFLL fine tracking behavior modes after a lock has been acquired.
  */
 enum system_clock_dfll_stable_tracking {
-	/** Keep tracking after the DFLL has gotten a fine lock. */
+	/** Keep tracking after the DFLL has gotten a fine lock */
 	SYSTEM_CLOCK_DFLL_STABLE_TRACKING_TRACK_AFTER_LOCK,
-	/** Stop tracking after the DFLL has gotten a fine lock. */
+	/** Stop tracking after the DFLL has gotten a fine lock */
 	SYSTEM_CLOCK_DFLL_STABLE_TRACKING_FIX_AFTER_LOCK = OSCCTRL_DFLLCTRL_STABLE,
 };
 
 /**
- * \brief Chill-cycle behavior of the DFLL module.
+ * \brief Chill cycle behavior of the DFLL module.
  *
- * DFLL chill-cycle behavior modes of the DFLL module. A chill cycle is a period
+ * DFLL chill cycle behavior modes of the DFLL module. A chill cycle is a period
  * of time when the DFLL output frequency is not measured by the unit, to allow
  * the output to stabilize after a change in the input clock source.
  */
 enum system_clock_dfll_chill_cycle {
-	/** Enable a chill cycle, where the DFLL output frequency is not measured. */
+	/** Enable a chill cycle, where the DFLL output frequency is not measured */
 	SYSTEM_CLOCK_DFLL_CHILL_CYCLE_ENABLE,
-	/** Disable a chill cycle, where the DFLL output frequency is not measured. */
+	/** Disable a chill cycle, where the DFLL output frequency is not measured */
 	SYSTEM_CLOCK_DFLL_CHILL_CYCLE_DISABLE = OSCCTRL_DFLLCTRL_CCDIS,
 };
 
@@ -476,9 +474,9 @@ enum system_clock_dfll_chill_cycle {
  * the DFLL output frequency at the expense of accuracy.
  */
 enum system_clock_dfll_quick_lock {
-	/** Enable the QuickLock feature for looser lock requirements on the DFLL. */
+	/** Enable the QuickLock feature for looser lock requirements on the DFLL */
 	SYSTEM_CLOCK_DFLL_QUICK_LOCK_ENABLE,
-	/** Disable the QuickLock feature for strict lock requirements on the DFLL. */
+	/** Disable the QuickLock feature for strict lock requirements on the DFLL */
 	SYSTEM_CLOCK_DFLL_QUICK_LOCK_DISABLE = OSCCTRL_DFLLCTRL_QLDIS,
 };
 
@@ -488,24 +486,24 @@ enum system_clock_dfll_quick_lock {
  * Clock sources available to the GCLK generators
  */
 enum system_clock_source {
-	/** Internal 16MHz RC oscillator. */
+	/** Internal 16MHz RC oscillator */
 	SYSTEM_CLOCK_SOURCE_OSC16M    = GCLK_SOURCE_OSC16M,
-	/** Internal 32KHz RC oscillator. */
+	/** Internal 32KHz RC oscillator */
 	SYSTEM_CLOCK_SOURCE_OSC32K   = GCLK_SOURCE_OSC32K,
-	/** External oscillator. */
+	/** External oscillator */
 	SYSTEM_CLOCK_SOURCE_XOSC     = GCLK_SOURCE_XOSC ,
-	/** External 32KHz oscillator. */
+	/** External 32KHz oscillator */
 	SYSTEM_CLOCK_SOURCE_XOSC32K  = GCLK_SOURCE_XOSC32K,
-	/** Digital Frequency Locked Loop (DFLL). */
+	/** Digital Frequency Locked Loop (DFLL) */
 	SYSTEM_CLOCK_SOURCE_DFLL     = GCLK_SOURCE_DFLL48M,
-	/** Internal Ultra Low Power 32KHz oscillator. */
+	/** Internal Ultra Low Power 32KHz oscillator */
 	SYSTEM_CLOCK_SOURCE_ULP32K   = GCLK_SOURCE_OSCULP32K,
-	/** Generator input pad. */
+	/** Generator input pad */
 	SYSTEM_CLOCK_SOURCE_GCLKIN     = GCLK_SOURCE_GCLKIN,
-	/** Generic clock generator one output. */
+	/** Generic clock generator one output */
 	SYSTEM_CLOCK_SOURCE_GCLKGEN1   = GCLK_SOURCE_GCLKGEN1,
 
-	/** Digital Phase Locked Loop (DPLL). */
+	/** Digital Phase Locked Loop (DPLL) */
 	SYSTEM_CLOCK_SOURCE_DPLL     = GCLK_SOURCE_FDPLL,
 };
 
@@ -515,15 +513,15 @@ enum system_clock_source {
  * Available bus clock domains on the APB bus.
  */
 enum system_clock_apb_bus {
-	/** Peripheral bus A on the APB bus. */
+	/** Peripheral bus A on the APB bus */
 	SYSTEM_CLOCK_APB_APBA,
-	/** Peripheral bus B on the APB bus. */
+	/** Peripheral bus B on the APB bus */
 	SYSTEM_CLOCK_APB_APBB,
-	/** Peripheral bus C on the APB bus. */
+	/** Peripheral bus C on the APB bus */
 	SYSTEM_CLOCK_APB_APBC,
-	/** Peripheral bus D on the APB bus. */
+	/** Peripheral bus D on the APB bus */
 	SYSTEM_CLOCK_APB_APBD,
-	/** Peripheral bus E on the APB bus. */
+	/** Peripheral bus E on the APB bus */
 	SYSTEM_CLOCK_APB_APBE,
 };
 
@@ -533,18 +531,18 @@ enum system_clock_apb_bus {
  * External oscillator clock configuration structure.
  */
 struct system_clock_source_xosc_config {
-	/** External clock type. */
+	/** External clock type */
 	enum system_clock_external external_clock;
-	/** Crystal oscillator start-up time. */
+	/** Crystal oscillator start-up time */
 	enum system_xosc_startup startup_time;
-	/** Enable automatic amplitude gain control. */
+	/** Enable automatic amplitude gain control */
 	bool auto_gain_control;
-	/** External clock/crystal frequency. */
+	/** External clock/crystal frequency */
 	uint32_t frequency;
-	/** Keep the XOSC enabled in standby sleep mode. */
+	/** Keep the XOSC enabled in standby sleep mode */
 	bool run_in_standby;
 	/** Run On Demand. If this is set the XOSC won't run
-	 * until requested by a peripheral. */
+	 * until requested by a peripheral */
 	bool on_demand;
 };
 
@@ -554,23 +552,23 @@ struct system_clock_source_xosc_config {
  * External 32KHz oscillator clock configuration structure.
  */
 struct system_clock_source_xosc32k_config {
-	/** External clock type. */
+	/** External clock type */
 	enum system_clock_external external_clock;
-	/** Crystal oscillator start-up time. */
+	/** Crystal oscillator start-up time */
 	enum system_xosc32k_startup startup_time;
-	/** Enable 1KHz output. */
+	/** Enable 1KHz output */
 	bool enable_1khz_output;
-	/** Enable 32KHz output. */
+	/** Enable 32KHz output */
 	bool enable_32khz_output;
-	/** External clock/crystal frequency. */
+	/** External clock/crystal frequency */
 	uint32_t frequency;
-	/** Keep the XOSC32K enabled in standby sleep mode. */
+	/** Keep the XOSC32K enabled in standby sleep mode */
 	bool run_in_standby;
 	/** Run On Demand. If this is set the XOSC32K won't run
-	 * until requested by a peripheral. */
+	 * until requested by a peripheral */
 	bool on_demand;
 	/** Lock configuration after it has been written,
-	 *  a device reset will release the lock. */
+	 *  a device reset will release the lock */
 	bool write_once;
 };
 
@@ -580,12 +578,12 @@ struct system_clock_source_xosc32k_config {
  * Internal 16MHz (nominal) oscillator configuration structure.
  */
 struct system_clock_source_osc16m_config {
-	/* Internal 16MHz RC oscillator prescaler. */
+	/** Internal 16MHz RC oscillator prescaler */
 	enum system_osc16m_fsel fsel;
-	/** Keep the OSC16M enabled in standby sleep mode. */
+	/** Keep the OSC16M enabled in standby sleep mode */
 	bool run_in_standby;
 	/** Run On Demand. If this is set the OSC16M won't run
-	 * until requested by a peripheral. */
+	 * until requested by a peripheral */
 	bool on_demand;
 };
 
@@ -596,7 +594,7 @@ struct system_clock_source_osc16m_config {
  */
 struct system_clock_source_osculp32k_config {
 	/** Lock configuration after it has been written,
-	 *  a device reset will release the lock. */
+	 *  a device reset will release the lock */
 	bool write_once;
 };
 
@@ -606,19 +604,19 @@ struct system_clock_source_osculp32k_config {
  * Internal 32KHz  oscillator configuration structure.
  */
 struct system_clock_source_osc32k_config {
-	/** Startup time. */
+	/** Start-up time */
 	enum system_osc32k_startup startup_time;
-	/** Enable 1KHz output. */
+	/** Enable 1KHz output */
 	bool enable_1khz_output;
-	/** Enable 32KHz output. */
+	/** Enable 32KHz output */
 	bool enable_32khz_output;
-	/** Keep the OSC32K enabled in standby sleep mode. */
+	/** Keep the OSC32K enabled in standby sleep mode */
 	bool run_in_standby;
 	/** Run On Demand. If this is set the OSC32K won't run
-	 * until requested by a peripheral. */
+	 * until requested by a peripheral */
 	bool on_demand;
 	/** Lock configuration after it has been written,
-	 *  a device reset will release the lock. */
+	 *  a device reset will release the lock */
 	bool write_once;
 };
 
@@ -628,30 +626,30 @@ struct system_clock_source_osc32k_config {
  * DFLL oscillator configuration structure.
  */
 struct system_clock_source_dfll_config {
-	/** Loop mode. */
+	/** Loop mode */
 	enum system_clock_dfll_loop_mode loop_mode;
 	/** Run On Demand. If this is set the DFLL won't run
-	 * until requested by a peripheral. */
+	 * until requested by a peripheral */
 	bool on_demand;
 	/** Run in stanby*/
 	bool run_in_stanby;
-	/** Enable Quick Lock. */
+	/** Enable quick lock */
 	enum system_clock_dfll_quick_lock quick_lock;
-	/** Enable Chill Cycle. */
+	/** Enable chill cycle */
 	enum system_clock_dfll_chill_cycle chill_cycle;
-	/** DFLL lock state on wakeup. */
+	/** DFLL lock state on wakeup */
 	enum system_clock_dfll_wakeup_lock wakeup_lock;
-	/** DFLL tracking after fine lock. */
+	/** DFLL tracking after fine lock */
 	enum system_clock_dfll_stable_tracking stable_tracking;
-	/** Coarse calibration value (Open loop mode). */
+	/** Coarse calibration value (Open loop mode) */
 	uint8_t coarse_value;
-	/** Fine calibration value (Open loop mode). */
+	/** Fine calibration value (Open loop mode) */
 	uint16_t fine_value;
-	/** Coarse adjustment maximum step size (Closed loop mode). */
+	/** Coarse adjustment maximum step size (Closed loop mode) */
 	uint8_t coarse_max_step;
-	/** Fine adjustment maximum step size (Closed loop mode). */
+	/** Fine adjustment maximum step size (Closed loop mode) */
 	uint16_t fine_max_step;
-	/** DFLL multiply factor (Closed loop mode. */
+	/** DFLL multiply factor (Closed loop mode) */
 	uint16_t multiply_factor;
 };
 
@@ -753,7 +751,7 @@ void system_clock_source_xosc32k_set_config(
  *   - 32KHz clock output enabled
  *   - Don't run in STANDBY sleep mode
  *   - Run only when requested by peripheral (on demand)
- *   - Set startup time to 130 cycles
+ *   - Set start-up time to 130 cycles
  *   - Don't lock registers after configuration has been written
  *
  * \param[out] config  Configuration structure to fill with default values
@@ -779,7 +777,7 @@ void system_clock_source_osc32k_set_config(
  */
 
 /**
- * \name Internal Ultra Low Power 32KHz Oscillator management
+ * \name Internal Ultra Low Power 32KHz Oscillator Management
  * @{
  */
 
@@ -936,13 +934,13 @@ uint32_t system_clock_source_get_hz(
  * detect, during a RCSYS period, at least one rising edge of the main clock.
  * If no rising edge is seen the clock is considered failed.
  * As soon as the detector is enabled, the clock failure detector
- * CFD) will monitor the divided main clock. When a clock failure is detected,
+ * (CFD) will monitor the divided main clock. When a clock failure is detected,
  * the main clock automatically switches to the RCSYS clock and the CFD
  * interrupt is generated if enabled.
  *
  * \note The failure detect must be disabled if the system clock is the same or
  *       slower than 32KHz as it will believe the system clock has failed with
- *       a too-slow clock.
+ *       a too slow clock.
  *
  * \param[in] enable  Boolean \c true to enable, \c false to disable detection
  */
@@ -1073,7 +1071,7 @@ static inline void system_ahb_clock_set_mask(
  * \brief Clear bits in the clock mask for the AHB bus.
  *
  * This function will clear bits in the clock mask for the AHB bus.
- * Any bits set to 1 will disable that clock, 0 bits in the mask
+ * Any bits set to 1 will disable that clock, zero bits in the mask
  * will be ignored.
  *
  * \param[in] ahb_mask  AHB clock mask to disable
@@ -1186,11 +1184,11 @@ static inline enum status_code system_apb_clock_clear_mask(
  * \brief Reference clock source of the DPLL module.
  */
 enum system_clock_source_dpll_reference_clock {
-	/** Select XOSC32K as clock reference. */
+	/** Select XOSC32K as clock reference */
 	SYSTEM_CLOCK_SOURCE_DPLL_REFERENCE_CLOCK_XOSC32K,
-	/** Select XOSC as clock reference. */
+	/** Select XOSC as clock reference */
 	SYSTEM_CLOCK_SOURCE_DPLL_REFERENCE_CLOCK_XOSC,
-	/** Select GCLK as clock reference. */
+	/** Select GCLK as clock reference */
 	SYSTEM_CLOCK_SOURCE_DPLL_REFERENCE_CLOCK_GCLK,
 };
 
@@ -1198,15 +1196,15 @@ enum system_clock_source_dpll_reference_clock {
  * \brief Lock time-out value of the DPLL module.
  */
 enum system_clock_source_dpll_lock_time {
-	/** Set no time-out as default. */
+	/** Set no time-out as default */
 	SYSTEM_CLOCK_SOURCE_DPLL_LOCK_TIME_DEFAULT,
-	/** Set time-out if no lock within 8ms. */
+	/** Set time-out if no lock within 8ms */
 	SYSTEM_CLOCK_SOURCE_DPLL_LOCK_TIME_8MS = 0x04,
-	/** Set time-out if no lock within 9ms. */
+	/** Set time-out if no lock within 9ms */
 	SYSTEM_CLOCK_SOURCE_DPLL_LOCK_TIME_9MS,
-	/** Set time-out if no lock within 10ms. */
+	/** Set time-out if no lock within 10ms */
 	SYSTEM_CLOCK_SOURCE_DPLL_LOCK_TIME_10MS,
-	/** Set time-out if no lock within 11ms. */
+	/** Set time-out if no lock within 11ms */
 	SYSTEM_CLOCK_SOURCE_DPLL_LOCK_TIME_11MS,
 };
 
@@ -1214,13 +1212,13 @@ enum system_clock_source_dpll_lock_time {
  * \brief Filter type of the DPLL module.
  */
 enum system_clock_source_dpll_filter {
-	/** Default filter mode. */
+	/** Default filter mode */
 	SYSTEM_CLOCK_SOURCE_DPLL_FILTER_DEFAULT,
-	/** Low bandwidth filter. */
+	/** Low bandwidth filter */
 	SYSTEM_CLOCK_SOURCE_DPLL_FILTER_LOW_BANDWIDTH_FILTER,
-	/** High bandwidth filter. */
+	/** High bandwidth filter */
 	SYSTEM_CLOCK_SOURCE_DPLL_FILTER_HIGH_BANDWIDTH_FILTER,
-	/** High damping filter. */
+	/** High damping filter */
 	SYSTEM_CLOCK_SOURCE_DPLL_FILTER_HIGH_DAMPING_FILTER,
 };
 
@@ -1243,31 +1241,32 @@ enum system_clock_source_dpll_prescaler {
  */
 struct system_clock_source_dpll_config {
 	/** Run On Demand. If this is set the DPLL won't run
-	 * until requested by a peripheral. */
+	 * until requested by a peripheral */
 	bool on_demand;
-	/** Keep the DPLL enabled in standby sleep mode. */
+	/** Keep the DPLL enabled in standby sleep mode */
 	bool run_in_standby;
-	/** Bypass lock signal. */
+	/** Bypass lock signal */
 	bool lock_bypass;
 	/** Wake up fast. If this is set DPLL output clock is enabled after
-	 * the startup time. */
+	 * the start-up time */
 	bool wake_up_fast;
-	/** Enable low power mode.  */
+	/** Enable low power mode  */
 	bool low_power_enable;
 
-	/** Output frequency of the clock. */
+	/** Output frequency of the clock */
 	uint32_t output_frequency;
-	/** Reference frequency of the clock. */
+	/** Reference frequency of the clock */
 	uint32_t reference_frequency;
-	/** Devider of reference clock. */
+	/** Devider of reference clock */
 	uint16_t reference_divider;
 
-	/** Filter type of the DPLL module. */
+	/** Filter type of the DPLL module */
 	enum system_clock_source_dpll_filter          filter;
-	/** Lock time-out value of the DPLL module. */
+	/** Lock time-out value of the DPLL module */
 	enum system_clock_source_dpll_lock_time       lock_time;
-	/** Reference clock source of the DPLL module. */
+	/** Reference clock source of the DPLL module */
 	enum system_clock_source_dpll_reference_clock reference_clock;
+	/** DPLL prescaler */
 	enum system_clock_source_dpll_prescaler  prescaler;
 };
 
@@ -1433,7 +1432,7 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  *
  *	- This driver implements experimental workaround for errata 9905
  *
- *	  "The DFLL clock must be requested before being configured otherwise a
+ *	  "The DFLL clock must be requested before being configured. Otherwise a
  *	  write access to a DFLL register can freeze the device."
  *	  This driver will enable and configure the DFLL before the ONDEMAND bit is set.
  *
@@ -1460,7 +1459,7 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_system_clock_group. QSGs are simple
  * examples with step-by-step instructions to configure and use this driver in
- * a selection of use cases. Note that QSGs can be compiled as a standalone
+ * a selection of use cases. Note that a QSG can be compiled as a standalone
  * application or be added to the user application.
  *
  *  - \subpage asfdoc_sam0_system_clock_basic_use_case
@@ -1475,9 +1474,9 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>04/2015</td>
- *		<td>Initial release</td>
+ *		<td>42452A</td>
+ *		<td>06/2015</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

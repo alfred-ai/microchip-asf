@@ -55,6 +55,7 @@ CSRCS = \
        common/components/wifi/winc1500/bsp/source/nm_bsp_sam4s.c \
        common/components/wifi/winc1500/bus_wrapper/source/nm_bus_wrapper_sam4s.c \
        common/components/wifi/winc1500/common/source/nm_common.c \
+       common/components/wifi/winc1500/driver/source/m2m_ate_mode.c \
        common/components/wifi/winc1500/driver/source/m2m_hif.c \
        common/components/wifi/winc1500/driver/source/m2m_ota.c \
        common/components/wifi/winc1500/driver/source/m2m_periph.c \
@@ -66,6 +67,7 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/nmspi.c \
        common/components/wifi/winc1500/driver/source/nmuart.c \
        common/components/wifi/winc1500/socket/source/socket.c \
+       common/components/wifi/winc1500/spi_flash/spi_flash.c \
        common/components/wifi/winc1500/ssl_connect_example/main.c \
        common/services/clock/sam4s/sysclk.c               \
        common/services/delay/sam/cycle_counter.c          \
@@ -109,6 +111,7 @@ INC_PATH = \
        common/components/wifi/winc1500/socket             \
        common/components/wifi/winc1500/socket/include     \
        common/components/wifi/winc1500/socket/source      \
+       common/components/wifi/winc1500/spi_flash          \
        common/components/wifi/winc1500/ssl_connect_example \
        common/components/wifi/winc1500/ssl_connect_example/sam4sd32c_sam4s_xplained_pro \
        common/services/clock                              \

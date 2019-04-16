@@ -54,6 +54,17 @@ typedef Twihs *twihs_slave_t;
 
 static inline void twihs_slave_setup(twihs_slave_t p_twihs, uint32_t dw_device_addr)
 {
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+	if (p_twihs == TWIHS0) {
+		sysclk_enable_peripheral_clock(ID_TWIHS0);
+	} else if (p_twihs == TWIHS1) {
+		sysclk_enable_peripheral_clock(ID_TWIHS1);
+	} else if (p_twihs == TWIHS2) {
+		sysclk_enable_peripheral_clock(ID_TWIHS2);
+	} else {
+		// Do Nothing
+	}
+#else
 	if (p_twihs == TWI0) {
 		sysclk_enable_peripheral_clock(ID_TWI0);
 #if SAMG55		
@@ -71,10 +82,11 @@ static inline void twihs_slave_setup(twihs_slave_t p_twihs, uint32_t dw_device_a
 		sysclk_enable_peripheral_clock(ID_TWI6);
 	} else if (p_twihs == TWI7) {
 		sysclk_enable_peripheral_clock(ID_TWI7);
-#endif	
+#endif		
 	} else {
-		/* Do Nothing */
+		// Do Nothing
 	}
+#endif
 	twihs_slave_init(p_twihs, dw_device_addr);
 }
 

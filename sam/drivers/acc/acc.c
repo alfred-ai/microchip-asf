@@ -391,6 +391,25 @@ void acc_set_writeprotect(
 		p_acc->ACC_WPMR = ACC_WPMR_WPKEY_PASSWD;
 }
 
+#if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+/**
+ * \brief Get the ACC register write-protection status.
+ *
+ * \param[in] p_acc Module hardware register base address pointer
+ *
+ * \return The ACC register write-protection status.
+ * \retval 0                 No write-protection violation occurred
+ * \retval ACC_WPSR_WPVS Write-protection violation (WPEN = 1) has occurred since the last read of ACC_WPSR
+ */
+uint32_t acc_get_writeprotect_status(
+		Acc *p_acc)
+{
+	/* Validate the parameters. */
+	Assert(p_acc);
+	
+	return p_acc->ACC_WPSR & ACC_WPSR_WPVS;
+}
+#else
 /**
  * \brief Get the ACC register write-protection status.
  *
@@ -408,6 +427,7 @@ uint32_t acc_get_writeprotect_status(
 	
 	return p_acc->ACC_WPSR & ACC_WPSR_WPROTERR;
 }
+#endif
 
 /// @cond
 /**INDENT-OFF**/

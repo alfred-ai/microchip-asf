@@ -54,8 +54,8 @@ TARGET_SRAM = dac_quick_start_callback_sram.elf
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        sam0/boards/samd21_xplained_pro/board_init.c       \
-       sam0/drivers/dac/dac_sam_d/dac.c                   \
-       sam0/drivers/dac/dac_sam_d/dac_callback.c          \
+       sam0/drivers/dac/dac_sam_d_c/dac.c                 \
+       sam0/drivers/dac/dac_sam_d_c/dac_callback.c        \
        sam0/drivers/dac/quick_start_callback/qs_dac_callback.c \
        sam0/drivers/events/events_hooks.c                 \
        sam0/drivers/events/events_sam_d_r/events.c        \
@@ -81,7 +81,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/samd21_xplained_pro                    \
        sam0/drivers/dac                                   \
-       sam0/drivers/dac/dac_sam_d                         \
+       sam0/drivers/dac/dac_sam_d_c                       \
        sam0/drivers/dac/quick_start_callback              \
        sam0/drivers/dac/quick_start_callback/samd21_xplained_pro \
        sam0/drivers/events                                \

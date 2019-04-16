@@ -67,9 +67,9 @@ typedef void (*aes_callback_t)(void);
 
 /** AES callback type. */
 enum aes_callback_type {
-	/** Encryption complete callback.*/
+	/** Encryption complete callback */
 	AES_CALLBACK_ENCRYPTION_COMPLETE = 0,
-	/** GF Multiplication Complete callback.*/
+	/** GF Multiplication Complete callback */
 	AES_CALLBACK_GF_MULTI_COMPLETE = 1,
 };
  

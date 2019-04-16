@@ -67,7 +67,7 @@ extern "C" {
  * \param[in] ul_mode    Control mode register bitmask value to set
  *
  * \note For more information regarding <i>ul_mode</i> configuration refer to
- * the section  entitled "Channel Mode Register: Capture Mode" and.or section
+ * the section entitled "Channel Mode Register: Capture Mode" and/or section
  * "Waveform Operating Mode" in the device-specific datasheet.
  *
  * \note If the TC is configured for waveform generation then the external event
@@ -482,7 +482,7 @@ uint32_t tc_get_status(
  * Finds the best MCK divisor given the timer frequency and MCK. The result
  * is guaranteed to satisfy the following equation:
  * \code (MCK / (DIV * 65536)) <= freq <= (MCK / DIV) \endcode
- * with DIV being the lowest possible value, to maximize timing adjust resolution.
+ * With DIV being the lowest possible value, to maximize timing adjust resolution.
  *
  * \param[in] ul_freq     Desired timer frequency
  * \param[in] ul_mck      Master clock frequency

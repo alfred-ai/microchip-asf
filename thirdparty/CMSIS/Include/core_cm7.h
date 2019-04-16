@@ -712,13 +712,13 @@ typedef struct
 #define SCB_ITCMCR_SZ_Msk                  (0xFUL << SCB_ITCMCR_SZ_Pos)                   /*!< SCB ITCMCR: SZ Mask */
 
 #define SCB_ITCMCR_RETEN_Pos                2                                             /*!< SCB ITCMCR: RETEN Position */
-#define SCB_ITCMCR_RETEN_Msk               (1FFUL << SCB_ITCMCR_RETEN_Pos)                /*!< SCB ITCMCR: RETEN Mask */
+#define SCB_ITCMCR_RETEN_Msk               (0x1FFUL << SCB_ITCMCR_RETEN_Pos)                /*!< SCB ITCMCR: RETEN Mask */
 
 #define SCB_ITCMCR_RMW_Pos                  1                                             /*!< SCB ITCMCR: RMW Position */
-#define SCB_ITCMCR_RMW_Msk                 (1FFUL << SCB_ITCMCR_RMW_Pos)                  /*!< SCB ITCMCR: RMW Mask */
+#define SCB_ITCMCR_RMW_Msk                 (0x1FFUL << SCB_ITCMCR_RMW_Pos)                  /*!< SCB ITCMCR: RMW Mask */
 
 #define SCB_ITCMCR_EN_Pos                   0                                             /*!< SCB ITCMCR: EN Position */
-#define SCB_ITCMCR_EN_Msk                  (1FFUL << SCB_ITCMCR_EN_Pos)                   /*!< SCB ITCMCR: EN Mask */
+#define SCB_ITCMCR_EN_Msk                  (0x1FFUL << SCB_ITCMCR_EN_Pos)                   /*!< SCB ITCMCR: EN Mask */
 
 /* Data Tightly-Coupled Memory Control Registers */
 #define SCB_DTCMCR_SZ_Pos                   3                                             /*!< SCB DTCMCR: SZ Position */

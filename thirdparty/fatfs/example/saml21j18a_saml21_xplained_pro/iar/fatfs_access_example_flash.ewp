@@ -306,9 +306,10 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../sam0/boards/saml21_xplained_pro</state>
+					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../fatfs-r0.09/src</state>
-					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
+					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom</state>
@@ -321,9 +322,8 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -333,7 +333,7 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../common/services/storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/clock</state>
@@ -593,9 +593,10 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../sam0/boards/saml21_xplained_pro</state>
+					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../fatfs-r0.09/src</state>
-					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
+					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom</state>
@@ -608,9 +609,8 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -620,7 +620,7 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../common/services/storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/clock</state>
@@ -1305,9 +1305,10 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../sam0/boards/saml21_xplained_pro</state>
+					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../fatfs-r0.09/src</state>
-					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
+					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom</state>
@@ -1320,9 +1321,8 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -1332,7 +1332,7 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../common/services/storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/clock</state>
@@ -1592,9 +1592,10 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../sam0/boards/saml21_xplained_pro</state>
+					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../fatfs-r0.09/src</state>
-					<state>$PROJ_DIR$/../../../../../common2/services/delay</state>
+					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/sercom</state>
@@ -1607,9 +1608,8 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -1619,7 +1619,7 @@
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc</state>
-					<state>$PROJ_DIR$/../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../sam0/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../common/services/storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../sam0/drivers/system/clock</state>
@@ -2053,90 +2053,147 @@
 		</group>
 	</group>
 	<group>
+		<name>thirdparty</name>
+		<group>
+			<name>fatfs</name>
+			<group>
+				<name>example</name>
+				<file>
+					<name>$PROJ_DIR$/../../memories_initialization_sam0.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../fatfs_access_example.c</name>
+				</file>
+				<group>
+					<name>saml21j18a_saml21_xplained_pro</name>
+					<file>
+						<name>$PROJ_DIR$/../conf_rtc.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../conf_board.h</name>
+					</file>
+					<group>
+						<name>iar</name>
+						<file>
+							<name>$PROJ_DIR$/asf.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../conf_sd_mmc.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../conf_access.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../conf_spi.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../conf_clocks.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../conf_fatfs.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../memories_initialization.h</name>
+				</file>
+			</group>
+			<group>
+				<name>fatfs-port-r0.09</name>
+				<group>
+					<name>sam0</name>
+					<file>
+						<name>$PROJ_DIR$/../../../fatfs-port-r0.09/sam0/fattime_rtc.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../fatfs-port-r0.09/diskio.c</name>
+				</file>
+			</group>
+			<group>
+				<name>fatfs-r0.09</name>
+				<group>
+					<name>src</name>
+					<file>
+						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/ff.c</name>
+					</file>
+					<group>
+						<name>option</name>
+						<file>
+							<name>$PROJ_DIR$/../../../fatfs-r0.09/src/option/ccsbcs.c</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/diskio.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/ff.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/integer.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/ffconf.h</name>
+					</file>
+				</group>
+			</group>
+		</group>
+	</group>
+	<group>
+		<name>common2</name>
+		<group>
+			<name>components</name>
+			<group>
+				<name>memory</name>
+				<group>
+					<name>sd_mmc</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_spi.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_mem.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_protocol.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_mem.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_spi.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc.h</name>
+					</file>
+				</group>
+			</group>
+		</group>
+		<group>
+			<name>services</name>
+			<group>
+				<name>delay</name>
+				<group>
+					<name>sam0</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/services/delay/sam0/cycle_counter.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../common2/services/delay/sam0/cycle_counter.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../common2/services/delay/delay.h</name>
+				</file>
+			</group>
+		</group>
+	</group>
+	<group>
 		<name>sam0</name>
 		<group>
 			<name>drivers</name>
-			<group>
-				<name>system</name>
-				<group>
-					<name>pinmux</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux/pinmux.c</name>
-					</file>
-					<group>
-						<name>quick_start</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux/quick_start/qs_pinmux_basic.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux/pinmux.h</name>
-					</file>
-				</group>
-				<group>
-					<name>clock</name>
-					<group>
-						<name>clock_saml21</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/gclk.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/clock.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/clock_feature.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/clock_config_check.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/gclk.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock.h</name>
-					</file>
-				</group>
-				<group>
-					<name>interrupt</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt.h</name>
-					</file>
-					<group>
-						<name>system_interrupt_saml21</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21/system_interrupt_features.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../sam0/drivers/system/system.c</name>
-				</file>
-				<group>
-					<name>reset</name>
-					<group>
-						<name>reset_sam_l</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/reset/reset_sam_l/reset.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>power</name>
-					<group>
-						<name>power_sam_l</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/power/power_sam_l/power.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../sam0/drivers/system/system.h</name>
-				</file>
-			</group>
 			<group>
 				<name>sercom</name>
 				<group>
@@ -2211,6 +2268,12 @@
 						<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/usart_interrupt.h</name>
 					</file>
 					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
+					<group>
 						<name>quick_start_callback</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/quick_start_callback/qs_usart_callback.h</name>
@@ -2234,6 +2297,99 @@
 				</file>
 			</group>
 			<group>
+				<name>system</name>
+				<group>
+					<name>clock</name>
+					<group>
+						<name>clock_saml21</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/gclk.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/clock.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/clock_feature.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock_saml21/clock_config_check.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/gclk.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/clock/clock.h</name>
+					</file>
+				</group>
+				<group>
+					<name>pinmux</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux/pinmux.c</name>
+					</file>
+					<group>
+						<name>quick_start</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux/quick_start/qs_pinmux_basic.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/pinmux/pinmux.h</name>
+					</file>
+				</group>
+				<group>
+					<name>interrupt</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt.h</name>
+					</file>
+					<group>
+						<name>system_interrupt_saml21</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21/system_interrupt_features.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../sam0/drivers/system/system.c</name>
+				</file>
+				<group>
+					<name>reset</name>
+					<group>
+						<name>reset_sam_l</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/reset/reset_sam_l/reset.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>power</name>
+					<group>
+						<name>power_sam_l</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/system/power/power_sam_l/power.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../sam0/drivers/system/system.h</name>
+				</file>
+			</group>
+			<group>
+				<name>rtc</name>
+				<group>
+					<name>rtc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l_c/rtc_calendar.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
+				</file>
+			</group>
+			<group>
 				<name>port</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../sam0/drivers/port/port.c</name>
@@ -2247,18 +2403,6 @@
 						<name>$PROJ_DIR$/../../../../../sam0/drivers/port/quick_start/qs_port_basic.h</name>
 					</file>
 				</group>
-			</group>
-			<group>
-				<name>rtc</name>
-				<group>
-					<name>rtc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_sam_l/rtc_calendar.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
-				</file>
 			</group>
 		</group>
 		<group>
@@ -2616,144 +2760,6 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../../sam0/boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
 				</file>
-			</group>
-		</group>
-	</group>
-	<group>
-		<name>common2</name>
-		<group>
-			<name>components</name>
-			<group>
-				<name>memory</name>
-				<group>
-					<name>sd_mmc</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_spi.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_mem.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_protocol.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_mem.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc_spi.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/components/memory/sd_mmc/sd_mmc.h</name>
-					</file>
-				</group>
-			</group>
-		</group>
-		<group>
-			<name>services</name>
-			<group>
-				<name>delay</name>
-				<group>
-					<name>sam0</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/services/delay/sam0/cycle_counter.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../common2/services/delay/sam0/cycle_counter.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../common2/services/delay/delay.h</name>
-				</file>
-			</group>
-		</group>
-	</group>
-	<group>
-		<name>thirdparty</name>
-		<group>
-			<name>fatfs</name>
-			<group>
-				<name>fatfs-port-r0.09</name>
-				<group>
-					<name>sam0</name>
-					<file>
-						<name>$PROJ_DIR$/../../../fatfs-port-r0.09/sam0/fattime_rtc.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../fatfs-port-r0.09/diskio.c</name>
-				</file>
-			</group>
-			<group>
-				<name>example</name>
-				<file>
-					<name>$PROJ_DIR$/../../memories_initialization_sam0.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../fatfs_access_example.c</name>
-				</file>
-				<group>
-					<name>saml21j18a_saml21_xplained_pro</name>
-					<file>
-						<name>$PROJ_DIR$/../conf_rtc.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../conf_board.h</name>
-					</file>
-					<group>
-						<name>iar</name>
-						<file>
-							<name>$PROJ_DIR$/asf.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../conf_sd_mmc.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../conf_access.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../conf_spi.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../conf_clocks.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../conf_fatfs.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../memories_initialization.h</name>
-				</file>
-			</group>
-			<group>
-				<name>fatfs-r0.09</name>
-				<group>
-					<name>src</name>
-					<file>
-						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/ff.c</name>
-					</file>
-					<group>
-						<name>option</name>
-						<file>
-							<name>$PROJ_DIR$/../../../fatfs-r0.09/src/option/ccsbcs.c</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/diskio.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/ff.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/integer.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../fatfs-r0.09/src/ffconf.h</name>
-					</file>
-				</group>
 			</group>
 		</group>
 	</group>

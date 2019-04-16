@@ -62,7 +62,11 @@ void configure_adc(void)
 //! [setup_config_defaults]
 
 //! [setup_set_config]
+#if (SAMC21)
+	adc_init(&adc_instance, ADC1, &config_adc);
+#else
 	adc_init(&adc_instance, ADC, &config_adc);
+#endif
 //! [setup_set_config]
 
 //! [setup_enable]

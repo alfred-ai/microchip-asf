@@ -309,7 +309,6 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd20</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd20/source</state>
@@ -322,6 +321,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd20</state>
@@ -605,7 +605,6 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd20</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd20/source</state>
@@ -618,6 +617,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd20</state>
@@ -1326,7 +1326,6 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd20</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd20/source</state>
@@ -1339,6 +1338,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd20</state>
@@ -1622,7 +1622,6 @@
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd20</state>
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
 					<state>$PROJ_DIR$/../../../../utils/cmsis/samd20/source</state>
@@ -1635,6 +1634,7 @@
 					<state>$PROJ_DIR$/../../../../drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd20</state>
@@ -2111,27 +2111,6 @@
 				</file>
 			</group>
 			<group>
-				<name>dac</name>
-				<group>
-					<name>dac_sam_d</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d/dac_callback.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d/dac.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d/dac_feature.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../drivers/dac/dac.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../drivers/dac/dac_callback.h</name>
-				</file>
-			</group>
-			<group>
 				<name>system</name>
 				<group>
 					<name>interrupt</name>
@@ -2172,9 +2151,6 @@
 						<name>$PROJ_DIR$/../../../../drivers/system/clock/clock.h</name>
 					</file>
 				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../drivers/system/system.c</name>
-				</file>
 				<group>
 					<name>pinmux</name>
 					<file>
@@ -2190,6 +2166,9 @@
 						<name>$PROJ_DIR$/../../../../drivers/system/pinmux/pinmux.h</name>
 					</file>
 				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/system/system.c</name>
+				</file>
 				<group>
 					<name>reset</name>
 					<group>
@@ -2312,15 +2291,21 @@
 							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start_callback/qs_usart_callback.h</name>
 						</file>
 					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../drivers/sercom/usart/usart_interrupt.h</name>
-					</file>
 					<group>
 						<name>quick_start</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start/qs_usart_basic_use.h</name>
 						</file>
 					</group>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../drivers/sercom/usart/usart_interrupt.h</name>
+					</file>
 					<file>
 						<name>$PROJ_DIR$/../../../../drivers/sercom/usart/usart.h</name>
 					</file>
@@ -2355,6 +2340,27 @@
 						<name>$PROJ_DIR$/../../../../drivers/port/quick_start/qs_port_basic.h</name>
 					</file>
 				</group>
+			</group>
+			<group>
+				<name>dac</name>
+				<group>
+					<name>dac_sam_d_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c/dac_callback.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c/dac.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c/dac_feature.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/dac/dac.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../drivers/dac/dac_callback.h</name>
+				</file>
 			</group>
 		</group>
 		<group>
@@ -2606,6 +2612,9 @@
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samd20/include/samd20g18.h</name>
 						</file>
 						<file>
+							<name>$PROJ_DIR$/../../../../utils/cmsis/samd20/include/samd20.h</name>
+						</file>
+						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samd20/include/samd20e18.h</name>
 						</file>
 						<file>
@@ -2619,9 +2628,6 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samd20/include/samd20g16.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../utils/cmsis/samd20/include/samd20.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samd20/include/samd20g14.h</name>

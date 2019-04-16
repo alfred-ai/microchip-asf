@@ -308,12 +308,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
-					<state>$PROJ_DIR$/../../../../sercom</state>
+					<state>$PROJ_DIR$/../../../../extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -321,7 +321,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -592,12 +592,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
-					<state>$PROJ_DIR$/../../../../sercom</state>
+					<state>$PROJ_DIR$/../../../../extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -605,7 +605,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1301,12 +1301,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
-					<state>$PROJ_DIR$/../../../../sercom</state>
+					<state>$PROJ_DIR$/../../../../extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1314,7 +1314,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1585,12 +1585,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
-					<state>$PROJ_DIR$/../../../../sercom</state>
+					<state>$PROJ_DIR$/../../../../extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1598,7 +1598,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -2075,28 +2075,10 @@
 				</file>
 			</group>
 			<group>
-				<name>events</name>
-				<group>
-					<name>events_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../events/events_sam_l/events.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../events/events_hooks.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../events/events_hooks.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../events/events.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../events/events_common.h</name>
-				</file>
-			</group>
-			<group>
 				<name>system</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../system/system.c</name>
+				</file>
 				<group>
 					<name>clock</name>
 					<group>
@@ -2121,9 +2103,6 @@
 						<name>$PROJ_DIR$/../../../../system/clock/clock.h</name>
 					</file>
 				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../system/system.c</name>
-				</file>
 				<group>
 					<name>pinmux</name>
 					<file>
@@ -2182,9 +2161,9 @@
 					<name>$PROJ_DIR$/../../../../extint/extint_callback.c</name>
 				</file>
 				<group>
-					<name>extint_sam_l</name>
+					<name>extint_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../extint/extint_sam_l/extint.c</name>
+						<name>$PROJ_DIR$/../../../../extint/extint_sam_l_c/extint.c</name>
 					</file>
 				</group>
 				<file>
@@ -2199,17 +2178,20 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../sercom/sercom.c</name>
 				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../sercom/sercom_interrupt.c</name>
-				</file>
 				<group>
 					<name>usart</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../sercom/usart/usart_interrupt.c</name>
-					</file>
-					<file>
 						<name>$PROJ_DIR$/../../../../sercom/usart/usart.c</name>
 					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../sercom/usart/usart_interrupt.c</name>
+					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>
@@ -2236,6 +2218,9 @@
 					</group>
 				</group>
 				<file>
+					<name>$PROJ_DIR$/../../../../sercom/sercom_interrupt.c</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../sercom/sercom_pinout.h</name>
 				</file>
 				<file>
@@ -2259,6 +2244,27 @@
 						<name>$PROJ_DIR$/../../../../port/quick_start/qs_port_basic.h</name>
 					</file>
 				</group>
+			</group>
+			<group>
+				<name>events</name>
+				<group>
+					<name>events_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../events/events_sam_l_c/events.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../events/events_hooks.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../events/events_hooks.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../events/events.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../events/events_common.h</name>
+				</file>
 			</group>
 		</group>
 		<group>

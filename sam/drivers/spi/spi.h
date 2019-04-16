@@ -522,7 +522,7 @@ static inline Pdc *spi_get_pdc_base(Spi *p_spi)
 }
 #endif
 
-#if (SAM3U  || SAM3XA)
+#if (SAM3U  || SAM3XA || SAMV71 || SAMV70 || SAME70 || SAMS70)
 /**
  * \brief Get transmit data register address for DMA operation.
  *

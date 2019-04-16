@@ -74,7 +74,7 @@ CSRCS = \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
        sam0/drivers/tc/tc_interrupt.c                     \
-       sam0/drivers/tc/tc_sam_l/tc.c                      \
+       sam0/drivers/tc/tc_sam_l_c/tc.c                    \
        sam0/utils/cmsis/saml21/source/gcc/startup_saml21.c \
        sam0/utils/cmsis/saml21/source/system_saml21.c     \
        sam0/utils/syscalls/gcc/syscalls.c                 \
@@ -118,7 +118,7 @@ INC_PATH = \
        sam0/drivers/system/reset                          \
        sam0/drivers/system/reset/reset_sam_l              \
        sam0/drivers/tc                                    \
-       sam0/drivers/tc/tc_sam_l                           \
+       sam0/drivers/tc/tc_sam_l_c                         \
        sam0/utils                                         \
        sam0/utils/cmsis/saml21/include                    \
        sam0/utils/cmsis/saml21/source                     \

@@ -40,6 +40,7 @@
  * \asf_license_stop
  *
  */
+
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
@@ -132,11 +133,11 @@ enum status_code tc_unregister_callback(
 		}
 
 #if (SAML21E) || (SAML21G)
-_TC_INTERRUPT_HANDLER(0,0)
-_TC_INTERRUPT_HANDLER(1,1)
-_TC_INTERRUPT_HANDLER(4,2)
+	_TC_INTERRUPT_HANDLER(0,0)
+	_TC_INTERRUPT_HANDLER(1,1)
+	_TC_INTERRUPT_HANDLER(4,2)
 #else
-MRECURSION(TC_INST_NUM, _TC_INTERRUPT_HANDLER, TC_INST_MAX_ID)
+	MRECURSION(TC_INST_NUM, _TC_INTERRUPT_HANDLER, TC_INST_MAX_ID)
 #endif
 
 

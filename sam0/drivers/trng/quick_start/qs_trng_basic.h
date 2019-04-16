@@ -47,23 +47,23 @@
  * In this use case, the True Random Number Generator (TRNG) module is configured for:
  *  \li The TRNG peripheral will not be stopped in standby sleep mode
  *
- * This use case will read random data in polling mode repeatly. After reading
+ * This use case will read random data in polling mode repeatedly. After reading
  * a data, the board LED will be toggled.
  *
  * \section asfdoc_sam0_trng_basic_use_case_setup Setup
  *
  * \subsection asfdoc_sam0_trng_basic_use_case_setup_prereq Prerequisites
- * There are no special setup requirements for this use-case.
+ * There are no special set up requirements for this use-case.
  *
  * \subsection asfdoc_sam0_trng_basic_use_case_setup_code Code
- * Copy-paste the following setup code to your user application:
+ * Copy-paste the following set up code to your user application:
  * \snippet qs_trng_basic.c setup
  *
  * Add to user application initialization (typically the start of \c main()):
  * \snippet qs_trng_basic.c setup_init
  *
  * \subsection asfdoc_sam0_trng_basic_use_case_setup_flow Workflow
- * -# Create an TRNG device instance struct, which will be associated with a
+ * -# Create a TRNG device instance struct, which will be associated with a
  *    TRNG peripheral hardware instance.
  *    \snippet qs_trng_basic.c setup_1
  *    \note Device instance structures shall \b never go out of scope when in
@@ -72,7 +72,7 @@
  * -# Create a new function \c configure_trng(), which will be used to configure
  *    the overall TRNG peripheral.
  *    \snippet qs_trng_basic.c setup_2
- * -# Create an TRNG peripheral configuration structure that will
+ * -# Create a TRNG peripheral configuration structure that will
  *    be filled out to set the module configuration.
  *    \snippet qs_trng_basic.c setup_2_1
  * -# Fill the TRNG peripheral configuration structure with the

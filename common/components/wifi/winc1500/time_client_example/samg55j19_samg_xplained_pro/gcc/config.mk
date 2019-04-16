@@ -66,6 +66,7 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/nmspi.c \
        common/components/wifi/winc1500/driver/source/nmuart.c \
        common/components/wifi/winc1500/socket/source/socket.c \
+       common/components/wifi/winc1500/spi_flash/spi_flash.c \
        common/components/wifi/winc1500/time_client_example/main.c \
        common/services/clock/samg/sysclk.c                \
        common/services/delay/sam/cycle_counter.c          \
@@ -111,6 +112,7 @@ INC_PATH = \
        common/components/wifi/winc1500/socket             \
        common/components/wifi/winc1500/socket/include     \
        common/components/wifi/winc1500/socket/source      \
+       common/components/wifi/winc1500/spi_flash          \
        common/components/wifi/winc1500/time_client_example \
        common/components/wifi/winc1500/time_client_example/samg55j19_samg_xplained_pro \
        common/services/clock                              \

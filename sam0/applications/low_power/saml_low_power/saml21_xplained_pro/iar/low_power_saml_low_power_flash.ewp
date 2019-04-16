@@ -308,18 +308,18 @@
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../drivers/adc</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../drivers/dma</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom/usart</state>
-					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l_c</state>
+					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt</state>
@@ -328,7 +328,7 @@
 					<state>$PROJ_DIR$/../../../../../drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -336,8 +336,8 @@
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/pinmux</state>
-					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system</state>
+					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../drivers/events</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
@@ -601,18 +601,18 @@
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../drivers/adc</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../drivers/dma</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom/usart</state>
-					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l_c</state>
+					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt</state>
@@ -621,7 +621,7 @@
 					<state>$PROJ_DIR$/../../../../../drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -629,8 +629,8 @@
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/pinmux</state>
-					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system</state>
+					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../drivers/events</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
@@ -1319,18 +1319,18 @@
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../drivers/adc</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../drivers/dma</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom/usart</state>
-					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l_c</state>
+					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt</state>
@@ -1339,7 +1339,7 @@
 					<state>$PROJ_DIR$/../../../../../drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -1347,8 +1347,8 @@
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/pinmux</state>
-					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system</state>
+					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../drivers/events</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
@@ -1612,18 +1612,18 @@
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../drivers/adc</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../drivers/dma</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/sercom/usart</state>
-					<state>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../../drivers/events/events_sam_l_c</state>
+					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/interrupt</state>
@@ -1632,7 +1632,7 @@
 					<state>$PROJ_DIR$/../../../../../drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -1640,8 +1640,8 @@
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system/pinmux</state>
-					<state>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../drivers/system</state>
+					<state>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../drivers/events</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
@@ -2046,6 +2046,258 @@
 	<group>
 		<name>sam0</name>
 		<group>
+			<name>drivers</name>
+			<group>
+				<name>tc</name>
+				<group>
+					<name>tc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l_c/tc.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/tc/tc_interrupt.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/tc/tc_interrupt.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/tc/tc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>extint</name>
+				<group>
+					<name>extint_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l_c/extint.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/extint/extint_callback.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/extint/extint.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/extint/extint_callback.h</name>
+				</file>
+			</group>
+			<group>
+				<name>dma</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/dma/dma.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/dma/dma.h</name>
+				</file>
+				<group>
+					<name>quick_start</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/dma/quick_start/qs_dma_basic.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/dma/dma_crc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>port</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/port/port.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/port/port.h</name>
+				</file>
+				<group>
+					<name>quick_start</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/port/quick_start/qs_port_basic.h</name>
+					</file>
+				</group>
+			</group>
+			<group>
+				<name>system</name>
+				<group>
+					<name>clock</name>
+					<group>
+						<name>clock_saml21</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/gclk.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/clock.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/clock_feature.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/clock_config_check.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/system/clock/gclk.h</name>
+					</file>
+				</group>
+				<group>
+					<name>pinmux</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/system/pinmux/pinmux.c</name>
+					</file>
+					<group>
+						<name>quick_start</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/pinmux/quick_start/qs_pinmux_basic.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/system/pinmux/pinmux.h</name>
+					</file>
+				</group>
+				<group>
+					<name>interrupt</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt.h</name>
+					</file>
+					<group>
+						<name>system_interrupt_saml21</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt_saml21/system_interrupt_features.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/system/system.c</name>
+				</file>
+				<group>
+					<name>reset</name>
+					<group>
+						<name>reset_sam_l</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/reset/reset_sam_l/reset.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>power</name>
+					<group>
+						<name>power_sam_l</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/system/power/power_sam_l/power.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/system/system.h</name>
+				</file>
+			</group>
+			<group>
+				<name>sercom</name>
+				<group>
+					<name>usart</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/usart.c</name>
+					</file>
+					<group>
+						<name>quick_start</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/quick_start/qs_usart_basic_use.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/usart.h</name>
+					</file>
+					<group>
+						<name>quick_start_dma</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/quick_start_dma/qs_usart_dma_use.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/sercom/sercom.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/sercom/sercom.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/sercom/sercom_pinout.h</name>
+				</file>
+			</group>
+			<group>
+				<name>adc</name>
+				<group>
+					<name>adc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c/adc.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c/adc_callback.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l_c/adc_feature.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/adc/adc_callback.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/adc/adc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>events</name>
+				<group>
+					<name>events_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/events/events_sam_l_c/events.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/events/events_hooks.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/events/events_hooks.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/events/events.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/events/events_common.h</name>
+				</file>
+			</group>
+			<group>
+				<name>rtc</name>
+				<group>
+					<name>rtc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l_c/rtc_count.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_count.h</name>
+				</file>
+			</group>
+		</group>
+		<group>
+			<name>boards</name>
+			<group>
+				<name>saml21_xplained_pro</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/board_init.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
+				</file>
+			</group>
+		</group>
+		<group>
 			<name>utils</name>
 			<group>
 				<name>cmsis</name>
@@ -2053,15 +2305,15 @@
 					<name>saml21</name>
 					<group>
 						<name>source</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source/system_saml21.c</name>
-						</file>
 						<group>
 							<name>iar</name>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source/iar/startup_saml21.c</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source/system_saml21.c</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source/system_saml21.h</name>
 						</file>
@@ -2387,258 +2639,6 @@
 				<name>header_files</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../utils/header_files/io.h</name>
-				</file>
-			</group>
-		</group>
-		<group>
-			<name>drivers</name>
-			<group>
-				<name>dma</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/dma/dma.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/dma/dma.h</name>
-				</file>
-				<group>
-					<name>quick_start</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/dma/quick_start/qs_dma_basic.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/dma/dma_crc.h</name>
-				</file>
-			</group>
-			<group>
-				<name>events</name>
-				<group>
-					<name>events_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/events/events_sam_l/events.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/events/events_hooks.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/events/events_hooks.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/events/events.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/events/events_common.h</name>
-				</file>
-			</group>
-			<group>
-				<name>port</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/port/port.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/port/port.h</name>
-				</file>
-				<group>
-					<name>quick_start</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/port/quick_start/qs_port_basic.h</name>
-					</file>
-				</group>
-			</group>
-			<group>
-				<name>system</name>
-				<group>
-					<name>clock</name>
-					<group>
-						<name>clock_saml21</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/gclk.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/clock.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/clock_feature.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock_saml21/clock_config_check.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/system/clock/clock.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/system/clock/gclk.h</name>
-					</file>
-				</group>
-				<group>
-					<name>pinmux</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/system/pinmux/pinmux.c</name>
-					</file>
-					<group>
-						<name>quick_start</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/pinmux/quick_start/qs_pinmux_basic.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/system/pinmux/pinmux.h</name>
-					</file>
-				</group>
-				<group>
-					<name>interrupt</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt.h</name>
-					</file>
-					<group>
-						<name>system_interrupt_saml21</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/interrupt/system_interrupt_saml21/system_interrupt_features.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/system/system.c</name>
-				</file>
-				<group>
-					<name>reset</name>
-					<group>
-						<name>reset_sam_l</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/reset/reset_sam_l/reset.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>power</name>
-					<group>
-						<name>power_sam_l</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/system/power/power_sam_l/power.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/system/system.h</name>
-				</file>
-			</group>
-			<group>
-				<name>extint</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/extint/extint_callback.c</name>
-				</file>
-				<group>
-					<name>extint_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/extint/extint_sam_l/extint.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/extint/extint.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/extint/extint_callback.h</name>
-				</file>
-			</group>
-			<group>
-				<name>rtc</name>
-				<group>
-					<name>rtc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_sam_l/rtc_count.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/rtc/rtc_count.h</name>
-				</file>
-			</group>
-			<group>
-				<name>sercom</name>
-				<group>
-					<name>usart</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/usart.c</name>
-					</file>
-					<group>
-						<name>quick_start</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/quick_start/qs_usart_basic_use.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/usart.h</name>
-					</file>
-					<group>
-						<name>quick_start_dma</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../drivers/sercom/usart/quick_start_dma/qs_usart_dma_use.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/sercom/sercom.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/sercom/sercom.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/sercom/sercom_pinout.h</name>
-				</file>
-			</group>
-			<group>
-				<name>adc</name>
-				<group>
-					<name>adc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l/adc.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l/adc_callback.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/adc/adc_sam_l/adc_feature.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/adc/adc_callback.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/adc/adc.h</name>
-				</file>
-			</group>
-			<group>
-				<name>tc</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/tc/tc_interrupt.c</name>
-				</file>
-				<group>
-					<name>tc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../drivers/tc/tc_sam_l/tc.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/tc/tc_interrupt.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../drivers/tc/tc.h</name>
-				</file>
-			</group>
-		</group>
-		<group>
-			<name>boards</name>
-			<group>
-				<name>saml21_xplained_pro</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/board_init.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
 				</file>
 			</group>
 		</group>

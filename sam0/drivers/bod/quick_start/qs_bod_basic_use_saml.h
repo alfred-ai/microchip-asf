@@ -78,7 +78,7 @@
  *    \snippet qs_bod_basic_use_saml.c setup_enable
  * 
  *
- * The workflow of the BOD12 is same as the BOD33.
+ * The workflow of the BOD12 is the same as for the BOD33.
  *
  * \section asfdoc_sam0_bod_basic_use_case_main Use Case
  *

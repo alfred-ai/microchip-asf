@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAM I<SUP>2</SUP>C Slave Interrupt Driver
+ * \brief SAM I2C Slave Interrupt Driver
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *

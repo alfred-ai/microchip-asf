@@ -209,6 +209,7 @@ static void configure_tcc(void)
 	//! [setup_config_defaults]
 
 	//! [setup_change_config]
+	config_tcc.counter.clock_prescaler = TCC_CLOCK_PRESCALER_DIV1024;
 	config_tcc.counter.period = 0x1000;
 	config_tcc.compare.channel_function[CONF_TCC_CAPTURE_CHANNEL] =
 			TCC_CHANNEL_FUNCTION_CAPTURE;

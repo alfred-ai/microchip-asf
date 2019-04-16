@@ -69,7 +69,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * The reader is assumed to be familiar with the regular SERCOM SPI driver, and
  * how it is configured and operated. Configuration of this driver is done a
@@ -660,22 +661,27 @@ static inline enum status_code spi_master_vec_transceive_buffer_wait(
   * \page asfdoc_sam0_sercom_spi_master_vec_document_revision_history Document Revision History
   *
   * <table>
-  *     <tr>
+  *      <tr>
   *         <th>Doc. Rev.</td>
   *         <th>Date</td>
   *         <th>Comments</td>
-  *	    </tr>
-  *	     <tr>
-  *		      <td>C</td>
-  *		      <td>12/2014</td>
-  *		      <td>Add SAM D10/D11 support.</td>
-  *	    </tr>
-  *	    <tr>
-  *		      <td>B</td>
-  *		      <td>03/2014</td>
-  *		      <td>Add SAMR21 support.</td>
-  *	    </tr>
-  *	    <tr>
+  *      </tr>
+  *      <tr>
+  *           <td>D</td>
+  *           <td>12/2014</td>
+  *           <td>Add SAM L21/C21 support.</td>
+  *     </tr>
+  *      <tr>
+  *           <td>C</td>
+  *           <td>04/2014</td>
+  *           <td>Add SAM D10/D11 support.</td>
+  *     </tr>
+  *     <tr>
+  *           <td>B</td>
+  *           <td>03/2014</td>
+  *           <td>Add SAMR21 support.</td>
+  *     </tr>
+  *     <tr>
   *         <td>A</td>
   *         <td>01/2014</td>
   *         <td>Initial release</td>

@@ -60,7 +60,7 @@ CSRCS = \
        common2/services/delay/sam0/cycle_counter.c        \
        sam0/boards/saml21_xplained_pro/board_init.c       \
        sam0/drivers/port/port.c                           \
-       sam0/drivers/rtc/rtc_sam_l/rtc_calendar.c          \
+       sam0/drivers/rtc/rtc_sam_l_c/rtc_calendar.c        \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
        sam0/drivers/sercom/spi/spi.c                      \
@@ -100,7 +100,7 @@ INC_PATH = \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/port                                  \
        sam0/drivers/rtc                                   \
-       sam0/drivers/rtc/rtc_sam_l                         \
+       sam0/drivers/rtc/rtc_sam_l_c                       \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/spi                            \
        sam0/drivers/sercom/usart                          \

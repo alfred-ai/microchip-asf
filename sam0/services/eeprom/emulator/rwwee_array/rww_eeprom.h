@@ -49,18 +49,19 @@
 /**
  * \defgroup asfdoc_sam0_rww_eeprom_group SAM Read While Write EEPROM (RWW EEPROM) Emulator Service
  *
- * This driver for Atmel&reg; | SMART SAM provides a RWW emulated EEPROM
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an RWW emulated EEPROM
  * memory area, for the storage and retrieval of user-application
  * configuration data into and out of non-volatile memory. The main array
- * can therefore run code while eeprom data is written.
+ * can therefore run code while EEPROM data is written.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - NVM (Non-Volatile Memory Controller)
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM L21
  *  - Atmel | SMART SAM D21
- *  - Atmel | SMART SAM DA1
+ *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM DAx
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_rww_eeprom_prerequisites
@@ -95,7 +96,7 @@
  *
  * There are many different algorithms that may be employed for EEPROM emulation,
  * to tune the write and read latencies, RAM usage, wear
- * levelling and other characteristics. As a result, multiple different emulator
+ * levelling, and other characteristics. As a result, multiple different emulator
  * schemes may be implemented, so that the most appropriate scheme for a
  * specific application's requirements may be used.
  *
@@ -103,12 +104,12 @@
  * The following information is relevant for <b>RWW EEPROM Emulator scheme 1,
  * version 1.0.0</b>, as implemented by this module. Other revisions or
  * emulation schemes may vary in their implementation details and may have
- * different wear-leveling, latency and other characteristics.
+ * different wear-leveling, latency, and other characteristics.
  *
  * \subsubsection asfdoc_sam0_rww_eeprom_module_overview_implementation_ec Emulator Characteristics
  * This emulator is designed for <b>best reliability, with a good balance of
  * available storage and write-cycle limits</b>. It is designed to ensure that
- * page data is atomically updated so that in the event of a failed update the
+ * page data is updated by an atomic operation, so that in the event of a failed update the
  * previous data is not lost (when used correctly). With the exception of a
  * system reset with data cached to the internal write-cache buffer, at most
  * only the latest write to physical non-volatile memory will be lost in the
@@ -122,7 +123,7 @@
  * \subsubsection asfdoc_sam0_rww_eeprom_module_overview_implementation_pf Physical Memory
  * RWW EEPROM emulator is divided into a number of physical rows, each
  * containing four identically sized pages. Pages may be read or written
- * to individually, however pages must be erased before being reprogrammed and
+ * to individually, however, pages must be erased before being reprogrammed and
  * the smallest granularity available for erasure is one single row.
  *
  * This discrepancy results in the need for an emulator scheme that is able to
@@ -211,11 +212,11 @@
  *
  * \subsubsection asfdoc_sam0_rww_eeprom_module_overview_implementation_rc Row Contents
  * Each physical row initially stores the contents of one or two logical RWW EEPROM
- * memory pages(It depends on application configuration file). This quartered or
+ * memory pages (it depends on application configuration file). This quarters or
  * halves the available storage space for the emulated RWW EEPROM
  * but reduces the overall number of row erases that are required, by reserving
  * two or three pages within each row for updated versions of the logical page contents.
- * See \ref asfdoc_sam0_rww_eeprom_init_layout "here" for a visual layout of the RWW
+ * See \ref asfdoc_sam0_rww_eeprom_page_layout "here" for a visual layout of the RWW
  * EEPROM Emulator physical memory.
  *
  * As logical pages within a physical row are updated, the new data is filled
@@ -224,9 +225,9 @@
  * current row to the spare row with the new (updated) logical page data, before
  * the old row is erased.
  *
- * When it's configured each physical row stores the contents of one logical RWW EEPROM
- * memory page, this system will allows for the same logical page to be updated up
- * to four times into physical memory before a row erasure procedure is needed.
+ * When it is configured, each physical row stores the contents of one logical RWW EEPROM
+ * memory page. This system will allow for the same logical page to be updated up
+ * to four times into the physical memory before a row erasure procedure is needed.
  * In the case of multiple versions of the same logical RWW EEPROM page being stored in
  * the same physical row, the right-most (highest physical memory page address)
  * version is considered to be the most current.
@@ -244,16 +245,18 @@
  * reducing the lifespan of the non-volatile memory.
  *
  * \subsection asfdoc_sam0_rww_eeprom_special_considerations_memlayout Memory Layout
- * A single logical RWW EEPROM page is physically stored as the page contents and a
+ * A single logical RWW EEPROM page is physically stored as the page content and a
  * header inside a single physical page, as shown in
  * \ref asfdoc_sam0_rww_eeprom_page_layout "the following figure".
  *
  * \anchor asfdoc_sam0_rww_eeprom_page_layout
- * \image html page_layout.svg "Internal Layout of An Emulated RWW EEPROM age"
+ * \image html page_layout.svg "Internal Layout of an Emulated RWW EEPROM Page"
  *
  * \note In the following memory layout example, each physical row stores the
- * contents of one logical RWW EEPROM page, you can refer to "AT03265: SAM EEPROM
- * Emulator Service (EEPROM)" for the example of two logical EEPROM pages in one row.
+ * contents of one logical RWW EEPROM page. Refer to
+ * <a href="http://www.atmel.com/images/atmel-42125-sam-d20-eeprom-emulator-service-eeprom_application-note_at03265.pdf"> 
+ * "AT03265: SAM EEPROM Emulator Service (EEPROM)"</a> 
+ * for the example of two logical EEPROM pages in one row.
  *
  * Within the RWW EEPROM memory reservation section at the top of the NVM memory
  * space, this emulator will produce the layout as shown in
@@ -261,10 +264,10 @@
  * the first time.
  *
  * \anchor asfdoc_sam0_rww_eeprom_init_layout
- * \image html init_layout.svg "Initial Physical Layout of The Emulated RWW EEPROM Memory"
+ * \image html init_layout.svg "Initial Physical Layout of the Emulated RWW EEPROM Memory"
  *
  * When a RWW EEPROM page needs to be committed to physical memory, the next free
- * page in the same row will be chosen - this makes recovery simple, as the
+ * page in the same row will be chosen. This makes recovery simple, as the
  * right-most version of a logical page in a row is considered the most current.
  * With four pages to a physical NVM row, this allows for up to four updates to
  * the same logical page to be made before an erase is needed.
@@ -279,23 +282,23 @@
  * in \ref asfdoc_sam0_rww_eeprom_page_write2 "the figure below".
  *
  * \anchor asfdoc_sam0_rww_eeprom_page_write2
- * \image html nm1_page_write2.svg "Second Write To Logical RWW EEPROM Page N-1"
+ * \image html nm1_page_write2.svg "Second Write to Logical RWW EEPROM Page N-1"
  *
  * A third write of the same logical RWW EEPROM page results in the layout shown
  * in \ref asfdoc_sam0_rww_eeprom_page_write3 "the figure below".
  *
  * \anchor asfdoc_sam0_rww_eeprom_page_write3
- * \image html nm1_page_write3.svg "Third Write To Logical RWW EEPROM Page N-1"
+ * \image html nm1_page_write3.svg "Third Write to Logical RWW EEPROM Page N-1"
  *
  * A fourth write of the same logical page requires that the RWW EEPROM emulator
- * erase the row, as it has become full. Prior to this, the contents of the
+ * erase the row, as it has become full. Prior to this, the content of the
  * unmodified page in the same row as the page being updated will be copied into
  * the spare row, along with the new version of the page being updated. The old
  * (full) row is then erased, resulting in the layout shown in
  * \ref asfdoc_sam0_rww_eeprom_page_write4 "the figure below".
  *
  * \anchor asfdoc_sam0_rww_eeprom_page_write4
- * \image html nm1_page_write4.svg "Third Write To Logical RWW EEPROM Page N-1"
+ * \image html nm1_page_write4.svg "Third Write to Logical RWW EEPROM Page N-1"
  *
  *
  * \section asfdoc_sam0_rww_eeprom_special_considerations Special Considerations
@@ -310,7 +313,7 @@
  *
  * \subsection asfdoc_sam0_rww_eeprom_special_considerations_pagesize Logical RWW EEPROM Page Size
  * As a small amount of information needs to be stored in a header before the
- * contents of a logical EEPROM page in memory (for use by the emulation
+ * content of a logical EEPROM page in memory (for use by the emulation
  * service), the available data in each RWW EEPROM page is less than the total size
  * of a single NVM memory page by several bytes.
  *
@@ -328,13 +331,13 @@
  *
  * \subsection asfdoc_sam0_rww_eeprom_special_considerations_checksum RWW EEPROM Page Checksum
  * For each page, a checksum function is used to verify the integrity of
- * the page data. After reading the page data using \ref rww_eeprom_emulator_read_page() ,
- * When its checksum is not correct, and error can be detected.
- * This function can be enabled or disabled through configuration file.
+ * the page data. After reading the page data using 
+ * \ref rww_eeprom_emulator_read_page(). When its checksum is not correct, an error can be
+ * detected. This function can be enabled or disabled through the configuration file.
  *
  * \section asfdoc_sam0_rww_eeprom_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_rww_eeprom_extra. This includes:
+ * For extra information, see \ref asfdoc_sam0_rww_eeprom_extra. This includes:
  *  - \ref asfdoc_sam0_rww_eeprom_extra_acronyms
  *  - \ref asfdoc_sam0_rww_eeprom_extra_dependencies
  *  - \ref asfdoc_sam0_rww_eeprom_extra_errata
@@ -373,9 +376,9 @@ extern "C" {
  *
  */
 enum rwwee_logical_page_num_in_row {
-	/** One logical page stored in a physical row. */
+	/** One logical page stored in a physical row */
 	RWWEE_LOGICAL_PAGE_NUM_1 = 1,
-	/** Two logical pages stored in a physical row. */
+	/** Two logical pages stored in a physical row */
 	RWWEE_LOGICAL_PAGE_NUM_2 = 2,
 };
 
@@ -405,9 +408,9 @@ enum rwwee_logical_page_num_in_row {
  * Structure containing the memory layout parameters of the EEPROM emulator module.
  */
 struct rww_eeprom_emulator_parameters {
-	/** Number of bytes per emulated EEPROM page. */
+	/** Number of bytes per emulated EEPROM page */
 	uint8_t  page_size;
-	/** Number of emulated pages of EEPROM. */
+	/** Number of emulated pages of EEPROM */
 	uint16_t eeprom_number_of_pages;
 };
 
@@ -523,12 +526,12 @@ enum status_code rww_eeprom_emulator_read_buffer(
  */
 
 /**
- * \page asfdoc_sam0_rww_eeprom_exqsg Examples for Emulated RWW EEPROM service
+ * \page asfdoc_sam0_rww_eeprom_exqsg Examples for Emulated RWW EEPROM Service
  *
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_rww_eeprom_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_rww_eeprom_basic_use_case
@@ -542,8 +545,8 @@ enum status_code rww_eeprom_emulator_read_buffer(
  *		<th>Comments</th>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>04/2015</td>
+ *		<td>42447A</td>
+ *		<td>06/2015</td>
  *		<td>Initial release</td>
  *	</tr>
  * </table>

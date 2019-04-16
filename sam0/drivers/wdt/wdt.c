@@ -60,7 +60,7 @@
  * \retval STATUS_ERR_INVALID_ARG   If invalid argument(s) were supplied
  * \retval STATUS_ERR_IO  If the Watchdog module is locked to be always on
  */
-#if (SAML21)
+#if (SAML21) || (SAMC20) || (SAMC21)
 enum status_code wdt_set_config(
 		const struct wdt_conf *const config)
 {

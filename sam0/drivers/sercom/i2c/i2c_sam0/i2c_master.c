@@ -171,11 +171,15 @@ static enum status_code _i2c_master_set_config(
 	/* Set configurations in CTRLB. */
 	i2c_module->CTRLB.reg = SERCOM_I2CM_CTRLB_SMEN;
 
-	/* Find and set baudrate. */
-	tmp_baud = (int32_t)(div_ceil(
-				system_gclk_chan_get_hz(SERCOM0_GCLK_ID_CORE + sercom_index),
-				(2000*(config->baud_rate))) - 5);
-
+	/* Find and set baudrate, considering sda/scl rise time */
+	uint32_t fgclk       = system_gclk_chan_get_hz(SERCOM0_GCLK_ID_CORE + sercom_index);
+	uint32_t fscl        = 1000*config->baud_rate;
+	uint32_t trise       = config->sda_scl_rise_time_ns;
+	int32_t  numerator   = fgclk - fscl*(10 + fgclk*trise/1000000000);
+	int32_t  denominator = 2*fscl;
+	/* For more accurate result, can use round div. */
+	tmp_baud = (int32_t)(div_ceil(numerator, denominator));
+	 
 	/* Check that baudrate is supported at current speed. */
 	if (tmp_baud > 255 || tmp_baud < 0) {
 		/* Baud rate not supported. */
@@ -237,17 +241,37 @@ enum status_code i2c_master_init(
 	module->hw = hw;
 
 	SercomI2cm *const i2c_module = &(module->hw->I2CM);
-
+	
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
+	uint32_t pm_index, gclk_index; 
+#if (SAML21) || (SAMC20) || (SAMC21)
 #if (SAML21)
-	uint32_t pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
+	if (sercom_index == 5) {
+		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
+		gclk_index   = SERCOM5_GCLK_ID_CORE;
+	} else {
+		pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
+		gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+	}
 #else
-	uint32_t pm_index     = sercom_index + PM_APBCMASK_SERCOM0_Pos;
+	pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
+	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
 #endif
-	uint32_t gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
-
+#else
+	pm_index     = sercom_index + PM_APBCMASK_SERCOM0_Pos;
+	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+#endif
+	
 	/* Turn on module in PM */
+#if (SAML21)
+	if (sercom_index == 5) {
+		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, 1 << pm_index);
+	} else {
+		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);	
+	}
+#else
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);
+#endif
 
 	/* Set up the GCLK for the module */
 	struct system_gclk_chan_config gclk_chan_conf;
@@ -563,9 +587,6 @@ static enum status_code _i2c_master_read_packet(
 			/* Send stop command unless arbitration is lost. */
 			_i2c_master_wait_for_sync(module);
 			i2c_module->CTRLB.reg |= SERCOM_I2CM_CTRLB_CMD(3);
-		} else {
-		  	_i2c_master_wait_for_sync(module);
-			i2c_module->CTRLB.reg |= SERCOM_I2CM_CTRLB_CMD(1);
 		}
 
 		/* Save last data to buffer. */

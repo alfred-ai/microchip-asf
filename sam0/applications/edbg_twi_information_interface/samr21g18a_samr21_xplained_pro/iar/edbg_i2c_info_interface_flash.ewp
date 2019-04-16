@@ -2052,9 +2052,6 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/wdt.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/ac.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/usb.h</name>
 							</file>
 							<file>
@@ -2065,6 +2062,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/pac0.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/ac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/tc4.h</name>
@@ -2294,6 +2294,12 @@
 						<name>quick_start</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start/qs_usart_basic_use.h</name>
+						</file>
+					</group>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
 						</file>
 					</group>
 					<file>

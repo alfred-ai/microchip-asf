@@ -121,6 +121,8 @@ void supc_switch_sclk_to_32kxtal(Supc *p_supc, uint32_t ul_bypass)
 	/* Set Bypass mode if required */
 	if (ul_bypass == 1) {
 		p_supc->SUPC_MR |= SUPC_MR_KEY_PASSWD | SUPC_MR_OSCBYPASS;
+	} else {
+		p_supc->SUPC_MR &= ~(SUPC_MR_KEY_PASSWD | SUPC_MR_OSCBYPASS);
 	}
 
 	p_supc->SUPC_CR |= SUPC_CR_KEY_PASSWD | SUPC_CR_XTALSEL;
@@ -385,6 +387,30 @@ void supc_set_regulator_trim_user(Supc *p_supc, uint32_t value)
 		 | SUPC_MR_VRVDD(value);
 }
 
+#endif
+
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+/**
+ * \brief SRAM On In Backup Mode.
+ *
+ * \param p_supc Pointer to a SUPC instance.
+ *
+ */
+void supc_backup_sram_on(Supc *p_supc)
+{
+	p_supc->SUPC_MR |= (SUPC_MR_KEY_PASSWD | SUPC_MR_BKUPRETON);
+}
+
+/**
+ * \brief SRAM Off In Backup Mode.
+ *
+ * \param p_supc Pointer to a SUPC instance.
+ *
+ */
+void supc_backup_sram_off(Supc *p_supc)
+{
+	p_supc->SUPC_MR &= (~(SUPC_MR_KEY_PASSWD | SUPC_MR_BKUPRETON));	
+}
 #endif
 
 //@}

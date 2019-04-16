@@ -82,4 +82,12 @@
 #  include "samda1.h"
 #endif
 
+#if (SAMC20)
+#  include "samc20.h"
+#endif
+
+#if (SAMC21)
+#  include "samc21.h"
+#endif
+
 #endif /* _SAM_IO_ */

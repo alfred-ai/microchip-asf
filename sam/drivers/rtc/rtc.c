@@ -570,7 +570,7 @@ void rtc_set_calibration(Rtc *p_rtc, uint32_t ul_direction_ppm,
 }
 #endif
 
-#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || (SAMG) || (SAM4CP) || (SAM4CM))
+#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || (SAMG) || (SAM4CP) || (SAM4CM) || SAMV71 || SAMV70 || SAME70 || SAMS70)
 /**
  * \brief Set the RTC output waveform.
  *
@@ -683,7 +683,7 @@ void rtc_set_waveform(Rtc *p_rtc, uint32_t ul_channel, uint32_t ul_value)
 	}
 }
 
-#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C))
+#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || SAMV71 || SAMV70 || SAME70 || SAMS70)
 /**
  * \brief Set the pulse output waveform parameters.
  *

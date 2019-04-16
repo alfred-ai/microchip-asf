@@ -305,15 +305,15 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -577,15 +577,15 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1274,15 +1274,15 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1546,15 +1546,15 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/..</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
+					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1941,144 +1941,15 @@
 	<group>
 		<name>sam0</name>
 		<group>
-			<name>drivers</name>
+			<name>boards</name>
 			<group>
-				<name>tc</name>
+				<name>saml21_xplained_pro</name>
 				<file>
-					<name>$PROJ_DIR$/../../../tc_interrupt.c</name>
-				</file>
-				<group>
-					<name>quick_start_timer</name>
-					<file>
-						<name>$PROJ_DIR$/../../qs_tc_timer.c</name>
-					</file>
-					<group>
-						<name>saml21_xplained_pro</name>
-						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../conf_board.h</name>
-						</file>
-						<group>
-							<name>iar</name>
-							<file>
-								<name>$PROJ_DIR$/asf.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../conf_qs_tc_timer.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>tc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../tc_sam_l/tc.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../tc.h</name>
+					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/board_init.c</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../tc_interrupt.h</name>
+					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
 				</file>
-			</group>
-			<group>
-				<name>system</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../system/system.c</name>
-				</file>
-				<group>
-					<name>pinmux</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
-					</file>
-					<group>
-						<name>quick_start</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
-					</file>
-				</group>
-				<group>
-					<name>clock</name>
-					<group>
-						<name>clock_saml21</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/gclk.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/clock.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/clock_feature.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/clock_config_check.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/clock/gclk.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/clock/clock.h</name>
-					</file>
-				</group>
-				<group>
-					<name>interrupt</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.h</name>
-					</file>
-					<group>
-						<name>system_interrupt_saml21</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21/system_interrupt_features.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>reset</name>
-					<group>
-						<name>reset_sam_l</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/reset/reset_sam_l/reset.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../system/system.h</name>
-				</file>
-				<group>
-					<name>power</name>
-					<group>
-						<name>power_sam_l</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/power/power_sam_l/power.h</name>
-						</file>
-					</group>
-				</group>
-			</group>
-			<group>
-				<name>port</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../port/port.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../port/port.h</name>
-				</file>
-				<group>
-					<name>quick_start</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../port/quick_start/qs_port_basic.h</name>
-					</file>
-				</group>
 			</group>
 		</group>
 		<group>
@@ -2412,15 +2283,144 @@
 			</group>
 		</group>
 		<group>
-			<name>boards</name>
+			<name>drivers</name>
 			<group>
-				<name>saml21_xplained_pro</name>
+				<name>tc</name>
+				<group>
+					<name>tc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../tc_sam_l_c/tc.c</name>
+					</file>
+				</group>
+				<group>
+					<name>quick_start_timer</name>
+					<file>
+						<name>$PROJ_DIR$/../../qs_tc_timer.c</name>
+					</file>
+					<group>
+						<name>saml21_xplained_pro</name>
+						<file>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../conf_board.h</name>
+						</file>
+						<group>
+							<name>iar</name>
+							<file>
+								<name>$PROJ_DIR$/asf.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../conf_qs_tc_timer.h</name>
+						</file>
+					</group>
+				</group>
 				<file>
-					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/board_init.c</name>
+					<name>$PROJ_DIR$/../../../tc_interrupt.c</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
+					<name>$PROJ_DIR$/../../../tc.h</name>
 				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../tc_interrupt.h</name>
+				</file>
+			</group>
+			<group>
+				<name>system</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../system/system.c</name>
+				</file>
+				<group>
+					<name>pinmux</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
+					</file>
+					<group>
+						<name>quick_start</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
+					</file>
+				</group>
+				<group>
+					<name>clock</name>
+					<group>
+						<name>clock_saml21</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/gclk.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/clock.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/clock_feature.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/clock/clock_saml21/clock_config_check.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/clock/gclk.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/clock/clock.h</name>
+					</file>
+				</group>
+				<group>
+					<name>interrupt</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt.h</name>
+					</file>
+					<group>
+						<name>system_interrupt_saml21</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21/system_interrupt_features.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>reset</name>
+					<group>
+						<name>reset_sam_l</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/reset/reset_sam_l/reset.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../system/system.h</name>
+				</file>
+				<group>
+					<name>power</name>
+					<group>
+						<name>power_sam_l</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/power/power_sam_l/power.h</name>
+						</file>
+					</group>
+				</group>
+			</group>
+			<group>
+				<name>port</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../port/port.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../port/port.h</name>
+				</file>
+				<group>
+					<name>quick_start</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../port/quick_start/qs_port_basic.h</name>
+					</file>
+				</group>
 			</group>
 		</group>
 	</group>

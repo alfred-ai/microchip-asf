@@ -309,9 +309,8 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
+					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
@@ -320,6 +319,7 @@
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
@@ -597,9 +597,8 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
+					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
@@ -608,6 +607,7 @@
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
@@ -1310,9 +1310,8 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
+					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
@@ -1321,6 +1320,7 @@
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
@@ -1598,9 +1598,8 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
+					<state>$PROJ_DIR$/../../../../../../common2/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../sercom</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
@@ -1609,6 +1608,7 @@
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
@@ -2007,6 +2007,45 @@
 		<group>
 			<name>drivers</name>
 			<group>
+				<name>dac</name>
+				<group>
+					<name>dac_sam_d_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac_feature.h</name>
+					</file>
+				</group>
+				<group>
+					<name>unit_test</name>
+					<file>
+						<name>$PROJ_DIR$/../../unit_test.c</name>
+					</file>
+					<group>
+						<name>samd21j18a_samd21_xplained_pro</name>
+						<file>
+							<name>$PROJ_DIR$/../conf_board.h</name>
+						</file>
+						<group>
+							<name>iar</name>
+							<file>
+								<name>$PROJ_DIR$/asf.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../conf_test.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../dac.h</name>
+				</file>
+			</group>
+			<group>
 				<name>system</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../system/system.c</name>
@@ -2121,45 +2160,6 @@
 				</file>
 			</group>
 			<group>
-				<name>dac</name>
-				<group>
-					<name>unit_test</name>
-					<file>
-						<name>$PROJ_DIR$/../../unit_test.c</name>
-					</file>
-					<group>
-						<name>samd21j18a_samd21_xplained_pro</name>
-						<file>
-							<name>$PROJ_DIR$/../conf_board.h</name>
-						</file>
-						<group>
-							<name>iar</name>
-							<file>
-								<name>$PROJ_DIR$/asf.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../conf_test.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>dac_sam_d</name>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac_feature.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../dac.h</name>
-				</file>
-			</group>
-			<group>
 				<name>sercom</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../sercom/sercom.c</name>
@@ -2178,6 +2178,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../sercom/usart/usart_interrupt.h</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>

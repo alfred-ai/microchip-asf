@@ -2578,6 +2578,12 @@
 						<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/usart.h</name>
 					</file>
 					<group>
+						<name>quick_start_callback</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/quick_start_callback/qs_usart_callback.h</name>
+						</file>
+					</group>
+					<group>
 						<name>quick_start_dma</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/quick_start_dma/qs_usart_dma_use.h</name>
@@ -2593,9 +2599,9 @@
 						<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/usart_interrupt.h</name>
 					</file>
 					<group>
-						<name>quick_start_callback</name>
+						<name>quick_start_lin</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/quick_start_callback/qs_usart_callback.h</name>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
 						</file>
 					</group>
 				</group>
@@ -2690,9 +2696,6 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/evsys.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/sercom0.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/port.h</name>
 							</file>
 							<file>
@@ -2751,6 +2754,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/tc5.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/sercom0.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/tc3.h</name>

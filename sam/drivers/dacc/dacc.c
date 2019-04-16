@@ -121,6 +121,29 @@ void dacc_reset(Dacc *p_dacc)
 	p_dacc->DACC_CR = DACC_CR_SWRST;
 }
 
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+/**
+ * \brief Enable trigger and set the trigger source.
+ *
+ * \param p_dacc Pointer to a DACC instance. 
+ * \param ul_trigger Trigger source number.
+ * \param channel Channel to be set
+ *
+ * \return \ref DACC_RC_OK for OK.
+ */
+uint32_t dacc_set_trigger(Dacc *p_dacc, uint32_t ul_trigger, uint32_t channel)
+{
+	if(channel == 0) {
+		uint32_t mr = p_dacc->DACC_TRIGR & (~(DACC_TRIGR_TRGSEL0_Msk));
+		p_dacc->DACC_TRIGR = mr | DACC_TRIGR_TRGEN0_EN | DACC_TRIGR_TRGSEL0(ul_trigger);
+	}else if(channel == 1) {
+		uint32_t mr = p_dacc->DACC_TRIGR & (~(DACC_TRIGR_TRGSEL1_Msk));
+		p_dacc->DACC_TRIGR = mr | DACC_TRIGR_TRGEN1_EN | DACC_TRIGR_TRGSEL1(ul_trigger);
+		
+	}
+	return DACC_RC_OK;
+}
+#else
 /**
  * \brief Enable trigger and set the trigger source.
  *
@@ -141,7 +164,24 @@ uint32_t dacc_set_trigger(Dacc *p_dacc, uint32_t ul_trigger)
 #endif
 	return DACC_RC_OK;
 }
+#endif
 
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+/**
+ * \brief Disable trigger (free run mode).
+ *
+ * \param p_dacc Pointer to a DACC instance.
+ * \param channel Channel to be disabled 
+ */
+void dacc_disable_trigger(Dacc *p_dacc, uint32_t channel)
+{
+	if(channel == 0) {
+		p_dacc->DACC_TRIGR &= ~(DACC_TRIGR_TRGEN0_EN);
+	}else if(channel == 1) {
+		p_dacc->DACC_TRIGR &= ~(DACC_TRIGR_TRGEN1_EN);
+	}
+}
+#else
 /**
  * \brief Disable trigger (free run mode).
  *
@@ -151,6 +191,7 @@ void dacc_disable_trigger(Dacc *p_dacc)
 {
 	p_dacc->DACC_MR &= ~DACC_MR_TRGEN;
 }
+#endif
 
 /**
  * \brief Set the transfer mode.
@@ -168,6 +209,8 @@ uint32_t dacc_set_transfer_mode(Dacc *p_dacc, uint32_t ul_mode)
 #elif (SAM4S) || (SAM4E)
 		p_dacc->DACC_MR |= DACC_MR_ONE;
 		p_dacc->DACC_MR |= DACC_MR_WORD_WORD;
+#elif (SAMV70 || SAMV71 || SAME70 || SAMS70)
+		p_dacc->DACC_MR = ul_mode;
 #else
 		p_dacc->DACC_MR |= DACC_MR_WORD_WORD;
 #endif
@@ -177,6 +220,8 @@ uint32_t dacc_set_transfer_mode(Dacc *p_dacc, uint32_t ul_mode)
 #elif (SAM4S) || (SAM4E)
 		p_dacc->DACC_MR |= DACC_MR_ONE;
 		p_dacc->DACC_MR &= (~DACC_MR_WORD_WORD);
+#elif (SAMV70 || SAMV71 || SAME70 || SAMS70)
+		p_dacc->DACC_MR = ul_mode;
 #else
 		p_dacc->DACC_MR &= (~DACC_MR_WORD_WORD);
 #endif
@@ -230,6 +275,7 @@ uint32_t dacc_get_interrupt_status(Dacc *p_dacc)
 	return p_dacc->DACC_ISR;
 }
 
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Write data to conversion register.
  *
@@ -246,11 +292,35 @@ uint32_t dacc_get_interrupt_status(Dacc *p_dacc)
  *
  * \param p_dacc Pointer to a DACC instance. 
  * \param ul_data The data to be transferred to analog value. 
+ * \param channel The channel to convert the data ul_data
+ */
+void dacc_write_conversion_data(Dacc *p_dacc, uint32_t ul_data, uint32_t channel)
+{
+	p_dacc->DACC_CDR[channel] = ul_data;
+}
+#else
+/**
+ * \brief Write data to conversion register.
+ *
+ * \note The \a ul_data could be output data or data with channel TAG when
+ * flexible mode is used.
+ *
+ * In flexible mode the 2 bits, DACC_CDR[13:12] which are otherwise unused,
+ * are employed to select the channel in the same way as with the USER_SEL
+ * field. Finally, if the WORD field is set, the 2 bits, DACC_CDR[13:12] are
+ * used for channel selection of the first data and the 2 bits,
+ * DACC_CDR[29:28] for channel selection of the second data.
+ *
+ * \see dacc_enable_flexible_selection()
+ *
+ * \param p_dacc Pointer to a DACC instance. 
+ * \param ul_data The data to be transferred to analog value.
  */
 void dacc_write_conversion_data(Dacc *p_dacc, uint32_t ul_data)
 {
 	p_dacc->DACC_CDR = ul_data;
 }
+#endif
 
 /**
  * \brief Enable or disable write protect of DACC registers.
@@ -280,7 +350,7 @@ uint32_t dacc_get_writeprotect_status(Dacc *p_dacc)
 	return p_dacc->DACC_WPSR;
 }
 
-#if !SAM4L
+#if !(SAM4L || SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Get PDC registers base address.
  *
@@ -339,7 +409,8 @@ uint32_t dacc_set_timing(Dacc *p_dacc, uint32_t ul_startup,
 }
 #endif /* #if (SAM3N) || (SAM4L) || (SAM4N) */
 
-#if (SAM3S) || (SAM3XA) || (SAM4S) || (SAM4E) || defined(__DOXYGEN__)
+#if (SAM3S) || (SAM3XA) || (SAM4S) || (SAM4E) || SAMV70 || SAMV71 || SAME70 || SAMS70 || defined(__DOXYGEN__)
+#if !(SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Disable flexible (TAG) mode and select a channel for DAC outputs.
  *
@@ -357,6 +428,7 @@ uint32_t dacc_set_channel_selection(Dacc *p_dacc, uint32_t ul_channel)
 	mr &= ~(DACC_MR_TAG);
 	mr |= ul_channel << DACC_MR_USER_SEL_Pos;
 	p_dacc->DACC_MR = mr;
+
 	return DACC_RC_OK;
 }
 
@@ -375,6 +447,7 @@ void dacc_enable_flexible_selection(Dacc *p_dacc)
 {
 	p_dacc->DACC_MR |= DACC_MR_TAG;
 }
+#endif
 
 #if (SAM3S) || (SAM3XA) || defined(__DOXYGEN__)
 /**
@@ -403,6 +476,7 @@ uint32_t dacc_set_power_save(Dacc *p_dacc,
 }
 #endif /* (SAM3S) || (SAM3XA) */
 
+#if !(SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Set DACC timings.
  *
@@ -417,17 +491,59 @@ uint32_t dacc_set_timing(Dacc *p_dacc,
 		uint32_t ul_refresh, uint32_t ul_maxs, uint32_t ul_startup)
 {
 	uint32_t mr = p_dacc->DACC_MR
-		& (~(DACC_MR_REFRESH_Msk | DACC_MR_STARTUP_Msk));
+	& (~(DACC_MR_REFRESH_Msk | DACC_MR_STARTUP_Msk));
 	mr |= DACC_MR_REFRESH(ul_refresh);
 	if (ul_maxs) {
 		mr |= DACC_MR_MAXS;
-	} else {
+		} else {
 		mr &= ~DACC_MR_MAXS;
 	}
 	mr |= (DACC_MR_STARTUP_Msk & ((ul_startup) << DACC_MR_STARTUP_Pos));
+
 	p_dacc->DACC_MR = mr;
 	return DACC_RC_OK;
 }
+#endif
+
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+/**
+ * \brief Set DACC prescaler.
+ *
+ * \param p_dacc Pointer to a DACC instance. 
+ * \param ul_prescaler Prescaler value.
+ *
+ * \return \ref DACC_RC_OK for OK.
+ */
+uint32_t dacc_set_prescaler(Dacc *p_dacc, uint32_t ul_prescaler) 
+{
+	uint32_t mr = p_dacc->DACC_MR & (~DACC_MR_PRESCALER_Msk);
+	p_dacc->DACC_MR = mr | DACC_MR_PRESCALER(ul_prescaler);	
+	return DACC_RC_OK;
+}
+
+/**
+ * \brief Set DACC osr.
+ *
+ * \param p_dacc Pointer to a DACC instance. 
+ * \param channel DACC osr channel to be set.
+ * \param ul_prescaler Osr value.
+ *
+ * \return \ref DACC_RC_OK for OK.
+ */
+uint32_t dacc_set_osr(Dacc *p_dacc, uint32_t channel, uint32_t ul_osr)
+{
+	uint32_t mr = p_dacc->DACC_TRIGR;
+	if(channel == 0) {
+		mr &= (~DACC_TRIGR_OSR0_Msk);
+		mr |=  DACC_TRIGR_OSR0(ul_osr);
+	}else if(channel == 1) {
+		mr &= (~DACC_TRIGR_OSR1_Msk);
+		mr |=  DACC_TRIGR_OSR1(ul_osr);
+	}
+	p_dacc->DACC_TRIGR = mr;
+	return DACC_RC_OK;
+}
+#endif
 
 /**
  * \brief Enable DACC channel.
@@ -500,7 +616,7 @@ uint32_t dacc_get_analog_control(Dacc *p_dacc)
 {
 	return p_dacc->DACC_ACR;
 }
-#endif /* (SAM3S) || (SAM3XA) || (SAM4S) || (SAM4E) */
+#endif /* (SAM3S) || (SAM3XA) || (SAM4S) || (SAM4E) || (SAMV70) || (SAMV71) || (SAME70) || (SAMS70) */
 
 //@}
 

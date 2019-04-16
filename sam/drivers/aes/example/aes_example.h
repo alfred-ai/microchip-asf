@@ -47,7 +47,7 @@
  #ifndef AES_EXAMPLE_H_INCLUDED
  #define AES_EXAMPLE_H_INCLUDED
  
-/** \page asfdoc_sam_drivers_aes_example1 Advanced Encryption Standard - Example cipher operating modes and DMA
+/** \page asfdoc_sam_drivers_aes_example1 Advanced Encryption Standard - Example Cipher Operating Modes and DMA
  *
  * \section asfdoc_sam_drivers_aes_example1_purpose Purpose
  *

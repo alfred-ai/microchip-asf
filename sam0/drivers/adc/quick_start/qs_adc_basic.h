@@ -81,13 +81,13 @@
  *
  * \subsection asfdoc_sam0_adc_basic_use_case_workflow Workflow
  * -# Create a module software instance structure for the ADC module to store
- *    the ADC driver state while it is in use.
+ *    the ADC driver state while in use.
  *    \snippet qs_adc_basic.c module_inst
  *    \note This should never go out of scope as long as the module is in use.
  *          In most cases, this should be global.
  *
  * -# Configure the ADC module.
- *  -# Create a ADC module configuration struct, which can be filled out to
+ *  -# Create an ADC module configuration struct, which can be filled out to
  *     adjust the configuration of a physical ADC peripheral.
  *     \snippet qs_adc_basic.c setup_config
  *  -# Initialize the ADC configuration struct with the module's default values.

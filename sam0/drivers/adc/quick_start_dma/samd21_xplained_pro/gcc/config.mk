@@ -56,8 +56,8 @@ CSRCS = \
        sam0/boards/samd21_xplained_pro/board_init.c       \
        sam0/drivers/adc/adc_sam_d_r/adc.c                 \
        sam0/drivers/adc/quick_start_dma/qs_adc_dma_use.c  \
-       sam0/drivers/dac/dac_sam_d/dac.c                   \
-       sam0/drivers/dac/dac_sam_d/dac_callback.c          \
+       sam0/drivers/dac/dac_sam_d_c/dac.c                 \
+       sam0/drivers/dac/dac_sam_d_c/dac_callback.c        \
        sam0/drivers/dma/dma.c                             \
        sam0/drivers/port/port.c                           \
        sam0/drivers/system/clock/clock_samd21_r21_da/clock.c \
@@ -83,7 +83,7 @@ INC_PATH = \
        sam0/drivers/adc/quick_start_dma                   \
        sam0/drivers/adc/quick_start_dma/samd21_xplained_pro \
        sam0/drivers/dac                                   \
-       sam0/drivers/dac/dac_sam_d                         \
+       sam0/drivers/dac/dac_sam_d_c                       \
        sam0/drivers/dma                                   \
        sam0/drivers/port                                  \
        sam0/drivers/system                                \

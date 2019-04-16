@@ -2041,10 +2041,10 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/evsys.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/mtb.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/pac2.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/pac2.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/mtb.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samr21/include/instance/pac0.h</name>
@@ -2465,6 +2465,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../sercom/usart/usart.c</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>

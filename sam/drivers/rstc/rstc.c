@@ -161,7 +161,11 @@ void rstc_disable_user_reset_interrupt(
 void rstc_start_software_reset(
 		Rstc *p_rstc)
 {
+#if (SAMV71 || SAMV70 || SAMS70 || SAME70)
+	p_rstc->RSTC_CR = RSTC_KEY | RSTC_CR_PROCRST;
+#else
 	p_rstc->RSTC_CR = RSTC_KEY | RSTC_CR_PROCRST | RSTC_CR_PERRST;
+#endif
 }
 
 /**

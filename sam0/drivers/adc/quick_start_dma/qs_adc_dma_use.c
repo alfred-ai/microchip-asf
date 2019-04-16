@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SAM D21/D11/L21/DA1 ADC with DMA quick start
+ * \brief SAM D21/D11/L21/DA1/C21 ADC with DMA quick start
  *
  * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
  *
@@ -83,7 +83,9 @@ void configure_adc(void)
 
 //! [setup_adc_config_extra]
 #if !(SAML21)
+#if !(SAMC21)
 	config_adc.gain_factor     = ADC_GAIN_FACTOR_DIV2;
+#endif
 	config_adc.resolution      = ADC_RESOLUTION_10BIT;
 #endif
 	config_adc.clock_prescaler = ADC_CLOCK_PRESCALER_DIV16;
@@ -94,7 +96,11 @@ void configure_adc(void)
 //! [setup_adc_config_extra]
 
 //! [setup_adc_set_config]
+#if (SAMC21)
+	adc_init(&adc_instance, ADC1, &config_adc);
+#else
 	adc_init(&adc_instance, ADC, &config_adc);
+#endif
 //! [setup_adc_set_config]
 
 //! [setup_adc_enable]
@@ -162,7 +168,11 @@ void configure_dma_resource(struct dma_resource *resource)
 //! [setup_dma_set_config_default]
 
 //! [setup_dma_set_config_extra]
+#if (SAMC21)
+	config.peripheral_trigger = ADC1_DMAC_ID_RESRDY;
+#else
 	config.peripheral_trigger = ADC_DMAC_ID_RESRDY;
+#endif
 	config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
 //! [setup_dma_set_config_extra]
 

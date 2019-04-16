@@ -56,7 +56,7 @@
 #  define CONF_CLOCK_BACKUP_DIVIDER               SYSTEM_MAIN_CLOCK_DIV_1
 
 /* SYSTEM_CLOCK_SOURCE_OSC16M configuration - Internal 16MHz oscillator */
-#  define CONF_CLOCK_OSC16M_FREQ_SEL              SYSTEM_OSC16M_4M
+#  define CONF_CLOCK_OSC16M_FREQ_SEL              SYSTEM_OSC16M_8M
 #  define CONF_CLOCK_OSC16M_ON_DEMAND             true
 #  define CONF_CLOCK_OSC16M_RUN_IN_STANDBY        false
 
@@ -86,7 +86,6 @@
 #  define CONF_CLOCK_OSC32K_ON_DEMAND             true
 #  define CONF_CLOCK_OSC32K_RUN_IN_STANDBY        false
 
-/* SYSTEM_CLOCK_SOURCE_OSCULP32K configuration - Internal Ultra Low Power 32KHz oscillator */
 
 /* SYSTEM_CLOCK_SOURCE_DFLL configuration - Digital Frequency Locked Loop */
 #  define CONF_CLOCK_DFLL_ENABLE                  false

@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM I2C Unit test
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -74,6 +74,7 @@
  *  - SAM L21 Xplained Pro board
  *  - SAM R21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM C21 Xplained Pro board
  *
  * \section asfdoc_sam0_i2c_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -86,6 +87,9 @@
  * - SAM R21 Xplained Pro board
  *  - \b PA16 (EXT1 PIN11) <-----> PB02 (EXT1 PIN17) 
  *  - \b PA17 (EXT1 PIN12) <-----> PB03 (EXT1 PIN15)
+ * - SAM C21 Xplained Pro board
+ *  - \b PA12 (EXT2 PIN11) <-----> PA22 (EXT2 PIN13) 
+ *  - \b PA13 (EXT2 PIN12) <-----> PA23 (EXT2 PIN14)
  *
  * To run the test:
  *  - Connect the supported Xplained Pro board to the computer using a
@@ -325,9 +329,6 @@ static void run_i2c_master_transfer_test(const struct test_case *test)
 	} while (timeout_cycles > 0);
 	test_assert_true(test, timeout_cycles > 0,
                          "i2c master write without stop failed");
-	
-	/* use i2c_master_send_stop to complete master writing */
-	i2c_master_send_stop(&i2c_master_instance);
 	
 	/* wait the master read to finish */
 	master_packet.data = master_read_buffer;

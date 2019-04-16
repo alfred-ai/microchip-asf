@@ -57,7 +57,7 @@ CSRCS = \
        sam0/applications/getting-started/main.c           \
        sam0/boards/saml21_xplained_pro/board_init.c       \
        sam0/drivers/extint/extint_callback.c              \
-       sam0/drivers/extint/extint_sam_l/extint.c          \
+       sam0/drivers/extint/extint_sam_l_c/extint.c        \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
@@ -69,7 +69,7 @@ CSRCS = \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
        sam0/drivers/tc/tc_interrupt.c                     \
-       sam0/drivers/tc/tc_sam_l/tc.c                      \
+       sam0/drivers/tc/tc_sam_l_c/tc.c                    \
        sam0/utils/cmsis/saml21/source/gcc/startup_saml21.c \
        sam0/utils/cmsis/saml21/source/system_saml21.c     \
        sam0/utils/stdio/read.c                            \
@@ -91,7 +91,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/extint                                \
-       sam0/drivers/extint/extint_sam_l                   \
+       sam0/drivers/extint/extint_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \
@@ -106,7 +106,7 @@ INC_PATH = \
        sam0/drivers/system/reset                          \
        sam0/drivers/system/reset/reset_sam_l              \
        sam0/drivers/tc                                    \
-       sam0/drivers/tc/tc_sam_l                           \
+       sam0/drivers/tc/tc_sam_l_c                         \
        sam0/utils                                         \
        sam0/utils/cmsis/saml21/include                    \
        sam0/utils/cmsis/saml21/source                     \

@@ -68,6 +68,7 @@ CSRCS = \
        common/components/wifi/winc1500/simple_growl_example/growl/growl.c \
        common/components/wifi/winc1500/simple_growl_example/main.c \
        common/components/wifi/winc1500/socket/source/socket.c \
+       common/components/wifi/winc1500/spi_flash/spi_flash.c \
        common/services/clock/samg/sysclk.c                \
        common/services/delay/sam/cycle_counter.c          \
        common/services/serial/usart_serial.c              \
@@ -115,6 +116,7 @@ INC_PATH = \
        common/components/wifi/winc1500/socket             \
        common/components/wifi/winc1500/socket/include     \
        common/components/wifi/winc1500/socket/source      \
+       common/components/wifi/winc1500/spi_flash          \
        common/services/clock                              \
        common/services/delay                              \
        common/services/ioport                             \

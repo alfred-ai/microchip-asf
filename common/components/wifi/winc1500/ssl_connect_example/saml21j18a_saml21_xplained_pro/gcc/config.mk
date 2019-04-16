@@ -66,12 +66,13 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/nmspi.c \
        common/components/wifi/winc1500/driver/source/nmuart.c \
        common/components/wifi/winc1500/socket/source/socket.c \
+       common/components/wifi/winc1500/spi_flash/spi_flash.c \
        common/components/wifi/winc1500/ssl_connect_example/main21.c \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/saml21_xplained_pro/board_init.c       \
        sam0/drivers/extint/extint_callback.c              \
-       sam0/drivers/extint/extint_sam_l/extint.c          \
+       sam0/drivers/extint/extint_sam_l_c/extint.c        \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
@@ -112,6 +113,7 @@ INC_PATH = \
        common/components/wifi/winc1500/socket             \
        common/components/wifi/winc1500/socket/include     \
        common/components/wifi/winc1500/socket/source      \
+       common/components/wifi/winc1500/spi_flash          \
        common/components/wifi/winc1500/ssl_connect_example \
        common/components/wifi/winc1500/ssl_connect_example/saml21j18a_saml21_xplained_pro \
        common/services/serial                             \
@@ -121,7 +123,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/extint                                \
-       sam0/drivers/extint/extint_sam_l                   \
+       sam0/drivers/extint/extint_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/spi                            \

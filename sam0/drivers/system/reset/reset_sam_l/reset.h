@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SAM L21 Reset functionality
+ * \brief SAM Reset functionality
  *
  * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
  *
@@ -64,19 +64,19 @@ extern "C" {
  * List of possible reset causes of the system.
  */
 enum system_reset_cause {
-	/** The system was last reset by a backup reset. */
+	/** The system was last reset by a backup reset */
 	SYSTEM_RESET_CAUSE_BACKUP         = RSTC_RCAUSE_BACKUP,
-	/** The system was last reset by a software reset. */
+	/** The system was last reset by a software reset */
 	SYSTEM_RESET_CAUSE_SOFTWARE       = RSTC_RCAUSE_SYST,
-	/** The system was last reset by the watchdog timer. */
+	/** The system was last reset by the watchdog timer */
 	SYSTEM_RESET_CAUSE_WDT            = RSTC_RCAUSE_WDT,
-	/** The system was last reset because the external reset line was pulled low. */
+	/** The system was last reset because the external reset line was pulled low */
 	SYSTEM_RESET_CAUSE_EXTERNAL_RESET = RSTC_RCAUSE_EXT,
-	/** The system was last reset by the BOD33. */
+	/** The system was last reset by the BOD33 */
 	SYSTEM_RESET_CAUSE_BOD33          = RSTC_RCAUSE_BOD33,
-	/** The system was last reset by the BOD12. */
+	/** The system was last reset by the BOD12 */
 	SYSTEM_RESET_CAUSE_BOD12          = RSTC_RCAUSE_BOD12,
-	/** The system was last reset by the POR (Power on reset). */
+	/** The system was last reset by the POR (Power on reset) */
 	SYSTEM_RESET_CAUSE_POR            = RSTC_RCAUSE_POR,
 };
 
@@ -86,11 +86,11 @@ enum system_reset_cause {
  * List of possible backup exit source.
  */
 enum system_reset_backup_exit_source {
-	/** The backup exit source was external wakeup. */
+	/** The backup exit source was external wakeup */
 	SYSTEM_RESET_BACKKUP_EXIT_EXTWAKE    = RSTC_BKUPEXIT_EXTWAKE,
-	/** The backup exit source was RTC interrupt. */
+	/** The backup exit source was RTC interrupt */
 	SYSTEM_RESET_BACKKUP_EXIT_RTC        = RSTC_BKUPEXIT_RTC,
-	/** The backup exit source was battery backup power switch. */
+	/** The backup exit source was battery backup power switch */
 	SYSTEM_RESET_BACKKUP_EXIT_BBPS       = RSTC_BKUPEXIT_BBPS,
 };
 
@@ -100,19 +100,19 @@ enum system_reset_backup_exit_source {
  * Wakeup debounce counter value when waking up by external wakeup pin from backup mode.
  */
 enum system_wakeup_debounce_count {
-	/** No debouncing. */
+	/** No debouncing */
 	SYSTEM_WAKEUP_DEBOUNCE_OFF         = RSTC_WKDBCONF_WKDBCNT_OFF,
-	/** Input pin shall be active for at least two 32KHz clock period. */
+	/** Input pin shall be active for at least two 32KHz clock periods */
 	SYSTEM_WAKEUP_DEBOUNCE_2CK32       = RSTC_WKDBCONF_WKDBCNT_2K32,
-	/** Input pin shall be active for at least three 32KHz clock period. */
+	/** Input pin shall be active for at least three 32KHz clock periods */
 	SYSTEM_WAKEUP_DEBOUNCE_3CK32       = RSTC_WKDBCONF_WKDBCNT_3CK32,
-	/** Input pin shall be active for at least 32 32KHz clock period. */
+	/** Input pin shall be active for at least 32 32KHz clock periods */
 	SYSTEM_WAKEUP_DEBOUNCE_32CK32      = RSTC_WKDBCONF_WKDBCNT_32CK32,
-	/** Input pin shall be active for at least 512 32KHz clock period. */
+	/** Input pin shall be active for at least 512 32KHz clock periods */
 	SYSTEM_WAKEUP_DEBOUNCE_512CK32     = RSTC_WKDBCONF_WKDBCNT_512CK32,
-	/** Input pin shall be active for at least 4096 32KHz clock period. */
+	/** Input pin shall be active for at least 4096 32KHz clock periods */
 	SYSTEM_WAKEUP_DEBOUNCE_4096CK32    = RSTC_WKDBCONF_WKDBCNT_4096CK32,
-	/** Input pin shall be active for at least 32768 32KHz clock period. */
+	/** Input pin shall be active for at least 32768 32KHz clock periods */
 	SYSTEM_WAKEUP_DEBOUNCE_32768CK32   = RSTC_WKDBCONF_WKDBCNT_32768CK32,
 };
 
@@ -125,7 +125,7 @@ enum system_wakeup_debounce_count {
  * \brief Reset the MCU.
  *
  * Resets the MCU and all associated peripherals and registers, except RTC,
- * OSC32KCTRL, RSTC, GCLK(if WRTLOCK is set) and I/O retention state of PM.
+ * OSC32KCTRL, RSTC, GCLK (if WRTLOCK is set), and I/O retention state of PM.
  *
  */
 static inline void system_reset(void)
@@ -228,12 +228,12 @@ static inline void system_disable_pin_wakeup(const uint16_t pin_mask)
 }
 
 /**
- * \brief Check whether  pin is active and causes the wakeup.
+ * \brief Check whether any of the enabled wake up pins are active and caused the wakeup.
  *
- * Check whether pin is active that causes the wakeup
- * when exiting backup mode.
+ * Check whether any of the enabled wake up pins are active and caused the wakeup
+ *  from backup sleep mode when exiting backup mode.
  *
- * \return Pin mask,the corresponding pin is active when its pin mask is 1.
+ * \return Pin mask, the corresponding pin is active when its pin mask is 1.
  */
 static inline uint16_t system_get_pin_wakeup_cause(void)
 {

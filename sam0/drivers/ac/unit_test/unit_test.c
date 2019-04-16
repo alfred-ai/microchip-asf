@@ -76,6 +76,7 @@
  *  - SAM D21 Xplained Pro board
  *  - SAM L21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM C21 Xplained Pro board
  *
  * \section appdoc_sam0_ac_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -116,9 +117,15 @@
 #include <string.h>
 #include "conf_test.h"
 
-#define AC_SCALER_0_25_VOLT 4
-#define AC_SCALER_0_50_VOLT 9
-#define AC_SCALER_0_75_VOLT 14
+#if (SAMC21)
+#  define AC_SCALER_0_25_VOLT 2
+#  define AC_SCALER_0_50_VOLT 6
+#  define AC_SCALER_0_75_VOLT 9
+#else
+#  define AC_SCALER_0_25_VOLT 4
+#  define AC_SCALER_0_50_VOLT 9
+#  define AC_SCALER_0_75_VOLT 14
+#endif
 
 /* Theoretical DAC value for 0.0V output*/
 #define DAC_VAL_ZERO_VOLT   0

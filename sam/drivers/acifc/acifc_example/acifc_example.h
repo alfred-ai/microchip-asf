@@ -48,7 +48,7 @@
 #define ACIFC_EXAMPLE_H_INCLUDED
 
 /**
- * \page asfdoc_sam_drivers_acifc_example Analog Comparator Interface Controller - Example using comparison interrupt
+ * \page asfdoc_sam_drivers_acifc_example Analog Comparator Interface Controller - Example Using Comparison Interrupt
  *
  * \section asfdoc_sam_drivers_acifc_example_purpose Purpose
  *

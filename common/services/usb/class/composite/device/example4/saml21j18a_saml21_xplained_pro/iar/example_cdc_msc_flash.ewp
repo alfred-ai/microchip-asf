@@ -326,7 +326,7 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../udc</state>
@@ -618,7 +618,7 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../udc</state>
@@ -1336,7 +1336,7 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../udc</state>
@@ -1628,7 +1628,7 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../udc</state>
@@ -2021,216 +2021,24 @@
 		</settings>
 	</configuration>
 	<group>
-		<name>common</name>
-		<group>
-			<name>services</name>
-			<group>
-				<name>sleepmgr</name>
-				<group>
-					<name>saml</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sleepmgr/saml/sleepmgr.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sleepmgr/saml/sleepmgr.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sleepmgr/sleepmgr.h</name>
-				</file>
-			</group>
-			<group>
-				<name>storage</name>
-				<group>
-					<name>ctrl_access</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../storage/ctrl_access/ctrl_access.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../storage/ctrl_access/ctrl_access.h</name>
-					</file>
-				</group>
-			</group>
-			<group>
-				<name>usb</name>
-				<group>
-					<name>class</name>
-					<group>
-						<name>composite</name>
-						<group>
-							<name>device</name>
-							<group>
-								<name>example4</name>
-								<file>
-									<name>$PROJ_DIR$/../../uart_samd.c</name>
-								</file>
-								<group>
-									<name>saml21j18a_saml21_xplained_pro</name>
-									<file>
-										<name>$PROJ_DIR$/../ui.c</name>
-									</file>
-									<file>
-										<name>$PROJ_DIR$/../conf_virtual_mem.h</name>
-									</file>
-									<file>
-										<name>$PROJ_DIR$/../conf_board.h</name>
-									</file>
-									<group>
-										<name>iar</name>
-										<file>
-											<name>$PROJ_DIR$/asf.h</name>
-										</file>
-									</group>
-									<file>
-										<name>$PROJ_DIR$/../conf_sleepmgr.h</name>
-									</file>
-									<file>
-										<name>$PROJ_DIR$/../conf_example.h</name>
-									</file>
-									<file>
-										<name>$PROJ_DIR$/../conf_access.h</name>
-									</file>
-									<file>
-										<name>$PROJ_DIR$/../conf_clocks.h</name>
-									</file>
-									<file>
-										<name>$PROJ_DIR$/../conf_extint.h</name>
-									</file>
-								</group>
-								<file>
-									<name>$PROJ_DIR$/../../main.c</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../memories_initialization_samd.c</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../uart.h</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../main.h</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../conf_usb.h</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../ui.h</name>
-								</file>
-							</group>
-							<file>
-								<name>$PROJ_DIR$/../../../udi_composite_desc.c</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../udi_composite_conf.h</name>
-							</file>
-						</group>
-					</group>
-					<group>
-						<name>cdc</name>
-						<group>
-							<name>device</name>
-							<file>
-								<name>$PROJ_DIR$/../../../../../cdc/device/udi_cdc.c</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../cdc/device/udi_cdc.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../../../../../cdc/usb_protocol_cdc.h</name>
-						</file>
-					</group>
-					<group>
-						<name>msc</name>
-						<group>
-							<name>device</name>
-							<file>
-								<name>$PROJ_DIR$/../../../../../msc/device/udi_msc.c</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../msc/device/udi_msc.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../../../../../msc/usb_protocol_msc.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../msc/sbc_protocol.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../msc/spc_protocol.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>udc</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../udc/udc.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../udc/udi.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../udc/udd.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../udc/udc_desc.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../udc/udc.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../usb_atmel.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../usb_protocol.h</name>
-				</file>
-			</group>
-		</group>
-		<group>
-			<name>utils</name>
-			<group>
-				<name>interrupt</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../../utils/interrupt/interrupt_sam_nvic.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../../utils/interrupt/interrupt_sam_nvic.h</name>
-				</file>
-			</group>
-			<file>
-				<name>$PROJ_DIR$/../../../../../../../../utils/interrupt.h</name>
-			</file>
-			<file>
-				<name>$PROJ_DIR$/../../../../../../../../utils/parts.h</name>
-			</file>
-		</group>
-		<group>
-			<name>components</name>
-			<group>
-				<name>memory</name>
-				<group>
-					<name>virtual_mem</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../components/memory/virtual_mem/virtual_mem.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../components/memory/virtual_mem/virtual_mem.h</name>
-					</file>
-				</group>
-			</group>
-		</group>
-		<group>
-			<name>boards</name>
-			<file>
-				<name>$PROJ_DIR$/../../../../../../../../boards/board.h</name>
-			</file>
-		</group>
-	</group>
-	<group>
 		<name>sam0</name>
 		<group>
 			<name>drivers</name>
+			<group>
+				<name>port</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/port/port.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/port/port.h</name>
+				</file>
+				<group>
+					<name>quick_start</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/port/quick_start/qs_port_basic.h</name>
+					</file>
+				</group>
+			</group>
 			<group>
 				<name>system</name>
 				<group>
@@ -2313,21 +2121,6 @@
 				</group>
 			</group>
 			<group>
-				<name>port</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/port/port.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/port/port.h</name>
-				</file>
-				<group>
-					<name>quick_start</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/port/quick_start/qs_port_basic.h</name>
-					</file>
-				</group>
-			</group>
-			<group>
 				<name>sercom</name>
 				<group>
 					<name>usart</name>
@@ -2337,6 +2130,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/sercom/usart/usart_interrupt.c</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<file>
 						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/sercom/usart/usart.h</name>
 					</file>
@@ -2384,9 +2183,9 @@
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_callback.c</name>
 				</file>
 				<group>
-					<name>extint_sam_l</name>
+					<name>extint_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l/extint.c</name>
+						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c/extint.c</name>
 					</file>
 				</group>
 				<file>
@@ -2609,6 +2408,9 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/component/mclk.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/component/usb.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/component/dmac.h</name>
 							</file>
 							<file>
@@ -2642,9 +2444,6 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/component/pm.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/component/usb.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/component/gclk.h</name>
 							</file>
 							<file>
@@ -2675,6 +2474,9 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/pio/saml21g17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/pio/saml21e15a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/pio/saml21e17a.h</name>
 							</file>
 							<file>
@@ -2682,9 +2484,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/pio/saml21g18a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/pio/saml21e15a.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include/pio/saml21e16a.h</name>
@@ -2762,6 +2561,213 @@
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
 				</file>
 			</group>
+		</group>
+	</group>
+	<group>
+		<name>common</name>
+		<group>
+			<name>services</name>
+			<group>
+				<name>storage</name>
+				<group>
+					<name>ctrl_access</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../storage/ctrl_access/ctrl_access.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../storage/ctrl_access/ctrl_access.h</name>
+					</file>
+				</group>
+			</group>
+			<group>
+				<name>usb</name>
+				<group>
+					<name>class</name>
+					<group>
+						<name>composite</name>
+						<group>
+							<name>device</name>
+							<group>
+								<name>example4</name>
+								<file>
+									<name>$PROJ_DIR$/../../uart_samd.c</name>
+								</file>
+								<group>
+									<name>saml21j18a_saml21_xplained_pro</name>
+									<file>
+										<name>$PROJ_DIR$/../ui.c</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../conf_virtual_mem.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../conf_board.h</name>
+									</file>
+									<group>
+										<name>iar</name>
+										<file>
+											<name>$PROJ_DIR$/asf.h</name>
+										</file>
+									</group>
+									<file>
+										<name>$PROJ_DIR$/../conf_sleepmgr.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../conf_example.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../conf_access.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../conf_clocks.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../conf_extint.h</name>
+									</file>
+								</group>
+								<file>
+									<name>$PROJ_DIR$/../../memories_initialization_samd.c</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../main.c</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../uart.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../main.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../conf_usb.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../ui.h</name>
+								</file>
+							</group>
+							<file>
+								<name>$PROJ_DIR$/../../../udi_composite_desc.c</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../udi_composite_conf.h</name>
+							</file>
+						</group>
+					</group>
+					<group>
+						<name>cdc</name>
+						<group>
+							<name>device</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../cdc/device/udi_cdc.c</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../cdc/device/udi_cdc.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../cdc/usb_protocol_cdc.h</name>
+						</file>
+					</group>
+					<group>
+						<name>msc</name>
+						<group>
+							<name>device</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../msc/device/udi_msc.c</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../msc/device/udi_msc.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../msc/usb_protocol_msc.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../msc/sbc_protocol.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../msc/spc_protocol.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>udc</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../udc/udc.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../udc/udi.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../udc/udd.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../udc/udc_desc.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../udc/udc.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../usb_atmel.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../usb_protocol.h</name>
+				</file>
+			</group>
+			<group>
+				<name>sleepmgr</name>
+				<group>
+					<name>saml</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sleepmgr/saml/sleepmgr.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sleepmgr/saml/sleepmgr.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sleepmgr/sleepmgr.h</name>
+				</file>
+			</group>
+		</group>
+		<group>
+			<name>components</name>
+			<group>
+				<name>memory</name>
+				<group>
+					<name>virtual_mem</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../components/memory/virtual_mem/virtual_mem.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../components/memory/virtual_mem/virtual_mem.h</name>
+					</file>
+				</group>
+			</group>
+		</group>
+		<group>
+			<name>utils</name>
+			<group>
+				<name>interrupt</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../utils/interrupt/interrupt_sam_nvic.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../utils/interrupt/interrupt_sam_nvic.h</name>
+				</file>
+			</group>
+			<file>
+				<name>$PROJ_DIR$/../../../../../../../../utils/interrupt.h</name>
+			</file>
+			<file>
+				<name>$PROJ_DIR$/../../../../../../../../utils/parts.h</name>
+			</file>
+		</group>
+		<group>
+			<name>boards</name>
+			<file>
+				<name>$PROJ_DIR$/../../../../../../../../boards/board.h</name>
+			</file>
 		</group>
 	</group>
 </project>

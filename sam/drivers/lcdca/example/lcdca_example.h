@@ -48,7 +48,7 @@
 #define LCDCA_EXAMPLE_H_INCLUDED
 
 /**
- * \page asfdoc_sam_drivers_lcdca_example Liquid Crystal Controller - Example interfacing to a C42048A display
+ * \page asfdoc_sam_drivers_lcdca_example Liquid Crystal Controller - Example Interfacing to a C42048A Display
  *
  * \section asfdoc_sam_drivers_lcdca_example_intro Purpose
  * This example demonstrates how to use the LCDCA driver to interface to an external

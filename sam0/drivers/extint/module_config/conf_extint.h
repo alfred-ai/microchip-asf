@@ -51,7 +51,7 @@
  *     - EXTINT_CLK_GCLK
  *     - EXTINT_CLK_ULP32K
  *
- * EXTINT_CLK_ULP32K is only available for SAM L21.
+ * EXTINT_CLK_ULP32K is available for SAM L21/C21.
  */
 #define EXTINT_CLOCK_SELECTION   EXTINT_CLK_GCLK
  

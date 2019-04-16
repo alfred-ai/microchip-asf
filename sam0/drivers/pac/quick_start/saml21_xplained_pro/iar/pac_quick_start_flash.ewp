@@ -306,10 +306,10 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../pac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../pac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
@@ -577,10 +577,10 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../pac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../pac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
@@ -1273,10 +1273,10 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../pac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../pac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
@@ -1544,10 +1544,10 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../pac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../..</state>
-					<state>$PROJ_DIR$/../../../pac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
@@ -2352,9 +2352,9 @@
 			<group>
 				<name>pac</name>
 				<group>
-					<name>pac_sam_l</name>
+					<name>pac_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../pac_sam_l/pac.c</name>
+						<name>$PROJ_DIR$/../../../pac_sam_l_c/pac.c</name>
 					</file>
 				</group>
 				<group>

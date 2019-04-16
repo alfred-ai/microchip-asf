@@ -87,11 +87,13 @@ void init_specific_board(void)
 	 *   driven by the EDBG in this application
 	 * - CDC UART TX (PA28) This is actively driven by the SAMG55 in this
 	 *   application
+	 * - PB04 should set as output
+	 * - PB8 PB9 PB10 PB11 should set as output
 	 */
 	pio_set_input(PIOA, 0xE7FFFFFF, PIO_PULLUP);
 	pio_set_input(PIOA, 0x18000000, PIO_DEFAULT);
-	pio_set_input(PIOB, 0xFFFFFFFF, PIO_PULLUP);
-
+	pio_set_input(PIOB, 0xFFFF0EF, PIO_PULLUP);
+	pio_set_output(PIOB, 0xF10, HIGH, DISABLE, DISABLE);
 	/* Enable the PMC clocks of push button for wakeup */
 	pmc_enable_periph_clk(ID_PIOA);
 	pio_handler_set_priority(PIOA, PIOA_IRQn, IRQ_PRIORITY_PIO);

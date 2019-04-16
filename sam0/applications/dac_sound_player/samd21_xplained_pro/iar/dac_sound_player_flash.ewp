@@ -306,13 +306,13 @@
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd21</state>
@@ -584,13 +584,13 @@
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd21</state>
@@ -1287,13 +1287,13 @@
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd21</state>
@@ -1565,13 +1565,13 @@
 					<state>$PROJ_DIR$/../../../../drivers/port</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/clock</state>
 					<state>$PROJ_DIR$/../../../../drivers/system/interrupt/system_interrupt_samd21</state>
@@ -1990,15 +1990,15 @@
 			<group>
 				<name>dac</name>
 				<group>
-					<name>dac_sam_d</name>
+					<name>dac_sam_d_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d/dac.c</name>
+						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c/dac.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d/dac_callback.c</name>
+						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c/dac_callback.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d/dac_feature.h</name>
+						<name>$PROJ_DIR$/../../../../drivers/dac/dac_sam_d_c/dac_feature.h</name>
 					</file>
 				</group>
 				<file>

@@ -69,6 +69,7 @@
  * - sam4e16e_sam4e_ek
  * - sam4c16c_sam4c_ek
  * - sam4cp16b_sam4cp16bmb
+ * - samv71q21_samv71_xplained_ultra
  *
  * \section compinfo Compilation info
  * This software was written for the GNU GCC and IAR for ARM. Other compilers
@@ -842,7 +843,13 @@ int main(void)
 {
 	const usart_serial_options_t usart_serial_options = {
 		.baudrate = CONF_TEST_BAUDRATE,
+#ifdef CONF_UART_CHAR_LENGTH
+		.charlength = CONF_UART_CHAR_LENGTH,
+#endif
 		.paritytype = CONF_TEST_PARITY,
+#ifdef CONF_UART_STOP_BITS
+		.stopbits = CONF_UART_STOP_BITS,
+#endif
 	};
 
 	sysclk_init();

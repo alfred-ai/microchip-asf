@@ -308,7 +308,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../msc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb</state>
@@ -322,11 +324,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/usb_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../uhc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../msc/host</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -337,7 +337,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../hid</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../../../storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -598,7 +598,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../msc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb</state>
@@ -612,11 +614,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/usb_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../uhc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../msc/host</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -627,7 +627,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../hid</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../../../storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1314,7 +1314,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../msc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb</state>
@@ -1328,11 +1330,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/usb_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../uhc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../msc/host</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -1343,7 +1343,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../hid</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../../../storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1604,7 +1604,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../msc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb</state>
@@ -1618,11 +1620,9 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/usb_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../uhc</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/usb/stack_interface</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../msc/host</state>
 					<state>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/sam0</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/include</state>
@@ -1633,7 +1633,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../hid</state>
-					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/header_files</state>
+					<state>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../../../../storage/ctrl_access</state>
 					<state>$PROJ_DIR$/../../../../../../../../../sam0/drivers/system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -2196,54 +2196,21 @@
 		</group>
 	</group>
 	<group>
-		<name>thirdparty</name>
-		<group>
-			<name>fatfs</name>
-			<group>
-				<name>fatfs-r0.09</name>
-				<group>
-					<name>src</name>
-					<group>
-						<name>option</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/option/ccsbcs.c</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/ff.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/ffconf.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/ff.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/diskio.h</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/integer.h</name>
-					</file>
-				</group>
-			</group>
-			<group>
-				<name>fatfs-port-r0.09</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/diskio.c</name>
-				</file>
-				<group>
-					<name>sam0</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/sam0/fattime_rtc.c</name>
-					</file>
-				</group>
-			</group>
-		</group>
-	</group>
-	<group>
 		<name>sam0</name>
 		<group>
 			<name>drivers</name>
+			<group>
+				<name>rtc</name>
+				<group>
+					<name>rtc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l_c/rtc_calendar.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
+				</file>
+			</group>
 			<group>
 				<name>system</name>
 				<group>
@@ -2370,9 +2337,9 @@
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_callback.c</name>
 				</file>
 				<group>
-					<name>extint_sam_l</name>
+					<name>extint_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l/extint.c</name>
+						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint_sam_l_c/extint.c</name>
 					</file>
 				</group>
 				<file>
@@ -2380,18 +2347,6 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/extint/extint.h</name>
-				</file>
-			</group>
-			<group>
-				<name>rtc</name>
-				<group>
-					<name>rtc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_sam_l/rtc_calendar.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/rtc/rtc_calendar.h</name>
 				</file>
 			</group>
 		</group>
@@ -2735,6 +2690,51 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../../../sam0/boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
 				</file>
+			</group>
+		</group>
+	</group>
+	<group>
+		<name>thirdparty</name>
+		<group>
+			<name>fatfs</name>
+			<group>
+				<name>fatfs-r0.09</name>
+				<group>
+					<name>src</name>
+					<group>
+						<name>option</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/option/ccsbcs.c</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/ff.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/ffconf.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/ff.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/diskio.h</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-r0.09/src/integer.h</name>
+					</file>
+				</group>
+			</group>
+			<group>
+				<name>fatfs-port-r0.09</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/diskio.c</name>
+				</file>
+				<group>
+					<name>sam0</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../../../thirdparty/fatfs/fatfs-port-r0.09/sam0/fattime_rtc.c</name>
+					</file>
+				</group>
 			</group>
 		</group>
 	</group>

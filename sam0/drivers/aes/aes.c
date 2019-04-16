@@ -226,7 +226,7 @@ void aes_write_key(
 }
 
 /**
- * \brief Write the initialization vector (for the CBC, CFB, OFB, CTR & GCM
+ * \brief Write the initialization vector (for the CBC, CFB, OFB, CTR, and GCM
  * cipher modes).
  *
  * \param[in] module  Pointer to the software instance struct

@@ -305,6 +305,7 @@
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
@@ -318,7 +319,6 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
@@ -577,6 +577,7 @@
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
@@ -590,7 +591,6 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
@@ -1274,6 +1274,7 @@
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
@@ -1287,7 +1288,6 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
@@ -1546,6 +1546,7 @@
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../tc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
@@ -1559,7 +1560,6 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
-					<state>$PROJ_DIR$/../../../tc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
@@ -1969,9 +1969,9 @@
 					</group>
 				</group>
 				<group>
-					<name>tc_sam_l</name>
+					<name>tc_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../tc_sam_l/tc.c</name>
+						<name>$PROJ_DIR$/../../../tc_sam_l_c/tc.c</name>
 					</file>
 				</group>
 				<file>
@@ -2073,18 +2073,6 @@
 						<name>$PROJ_DIR$/../../../../port/quick_start/qs_port_basic.h</name>
 					</file>
 				</group>
-			</group>
-		</group>
-		<group>
-			<name>boards</name>
-			<group>
-				<name>saml21_xplained_pro</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/board_init.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
-				</file>
 			</group>
 		</group>
 		<group>
@@ -2414,6 +2402,18 @@
 				<name>header_files</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../utils/header_files/io.h</name>
+				</file>
+			</group>
+		</group>
+		<group>
+			<name>boards</name>
+			<group>
+				<name>saml21_xplained_pro</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/board_init.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro/saml21_xplained_pro.h</name>
 				</file>
 			</group>
 		</group>

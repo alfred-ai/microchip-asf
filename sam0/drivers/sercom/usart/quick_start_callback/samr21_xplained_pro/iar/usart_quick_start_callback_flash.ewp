@@ -1972,13 +1972,13 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/sysctrl.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/sercom.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/wdt.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/ac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/sercom.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/dmac.h</name>
@@ -2336,6 +2336,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../usart_interrupt.h</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>

@@ -71,7 +71,7 @@
  * \copydetails appdoc_preface
  *
  * The following kit is required for carrying out the test:
- *  - SAM D21/R21/L21/DA1 Xplained Pro board
+ *  - SAM D21/R21/L21/DA1/C21 Xplained Pro board
  *
  * \section appdoc_sam0_tcc_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -81,6 +81,8 @@
  *  - \b EXTINT 6 (PA06, EXT1 pin 3 ) <-----> TCC0 WO0 (PA08, EXT3 pin 10)
  * - SAM L21 Xplained Pro:
  *  - \b EXTINT 4 (PB04, EXT1 pin 9 ) <-----> TCC0 WO0 (PB30, EXT3 pin 5)
+ * - SAM C21 Xplained Pro:
+ *  - \b EXTINT 4 (PA20, EXT1 pin 5 ) <-----> TCC0 WO0 (PA08, EXT2 pin 3)
  *
  * To run the test:
  *  - Connect the SAM Xplained Pro board to the computer using a
@@ -405,7 +407,7 @@ static void run_capture_and_compare_test(const struct test_case *test)
 	extint_chan_config.gpio_pin            = CONF_EIC_PIN;
 	extint_chan_config.gpio_pin_mux        = CONF_EIC_MUX;
 	extint_chan_config.gpio_pin_pull       = EXTINT_PULL_UP;
-#if (!SAML21)
+#if (!SAML21 && !SAMC21)
 	extint_chan_config.wake_if_sleeping    = false;
 #endif
 	extint_chan_config.filter_input_signal = false;

@@ -158,7 +158,13 @@ static void configure_console(void)
 {
 	const usart_serial_options_t uart_serial_options = {
 		.baudrate = CONF_UART_BAUDRATE,
-		.paritytype = CONF_UART_PARITY
+#ifdef CONF_UART_CHAR_LENGTH
+		.charlength = CONF_UART_CHAR_LENGTH,
+#endif
+		.paritytype = CONF_UART_PARITY,
+#ifdef CONF_UART_STOP_BITS
+		.stopbits = CONF_UART_STOP_BITS,
+#endif
 	};
 
 	/* Configure console UART. */
@@ -186,7 +192,7 @@ int main(void)
 	uint32_t ul_error;
 	volatile uint32_t *p_test_page_data;
 	uint32_t p_buffer[BUFFER_SIZE];
-
+	
 	/* Initialize the system. */
 	sysclk_init();
 	board_init();
@@ -219,7 +225,7 @@ int main(void)
 	for (i = 0; i < BUFFER_SIZE; i++) {
 		p_buffer[i] = 1 << (i % MAX_SHIFTING_NUMBER);
 	}
-#if (SAM4E || SAM4C)
+#if (SAM4E || SAM4C || SAMV71)
 	/**
 	 * The EWP command can only be used in 8 KBytes sector for SAM4E,
 	 * so an erase command is requried before write operation.

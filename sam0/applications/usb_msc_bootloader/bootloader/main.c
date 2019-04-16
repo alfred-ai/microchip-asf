@@ -372,7 +372,7 @@ static bool program_memory(void)
 	curr_address = 0;
 	
 	/* Erase flash rows to fit new firmware */
-	rows_clear = file_size / NVMCTRL_ROW_SIZE;
+	rows_clear = ((file_size / NVMCTRL_ROW_SIZE) + 1);
 	for (i = 0; i < rows_clear; i++) {
 		do {
 			error_code =

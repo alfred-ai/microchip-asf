@@ -40,6 +40,7 @@
  * \asf_license_stop
  *
  */
+
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
@@ -86,6 +87,8 @@
  *   \snippet quick_start/saml21_xplained_pro/conf_quick_start.h definition_pwm
  * - SAM DA1 Xplained Pro.
  *   \snippet quick_start/samda1_xplained_pro/conf_quick_start.h definition_pwm
+ * - SAM C21 Xplained Pro.
+ *   \snippet quick_start/samc21_xplained_pro/conf_quick_start.h definition_pwm
  *
  * Add to the main application source file, outside of any functions:
  * \snippet qs_tc_basic.c module_inst
@@ -135,3 +138,4 @@
  * -# Enter an infinite loop while the PWM wave is generated via the TC module.
  *    \snippet qs_tc_basic.c main_loop
  */
+

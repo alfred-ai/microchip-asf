@@ -303,6 +303,7 @@
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
@@ -310,7 +311,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../extint_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -575,6 +575,7 @@
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
@@ -582,7 +583,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../extint_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -1272,6 +1272,7 @@
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
@@ -1279,7 +1280,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../extint_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -1544,6 +1544,7 @@
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
+					<state>$PROJ_DIR$/../../../extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
@@ -1551,7 +1552,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../extint_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
@@ -1972,9 +1972,9 @@
 					</group>
 				</group>
 				<group>
-					<name>extint_sam_l</name>
+					<name>extint_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../extint_sam_l/extint.c</name>
+						<name>$PROJ_DIR$/../../../extint_sam_l_c/extint.c</name>
 					</file>
 				</group>
 				<file>

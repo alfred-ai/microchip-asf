@@ -59,8 +59,8 @@ CSRCS = \
        sam0/drivers/ac/ac_callback.c                      \
        sam0/drivers/ac/ac_sam_d_r/ac.c                    \
        sam0/drivers/ac/unit_test/unit_test.c              \
-       sam0/drivers/dac/dac_sam_d/dac.c                   \
-       sam0/drivers/dac/dac_sam_d/dac_callback.c          \
+       sam0/drivers/dac/dac_sam_d_c/dac.c                 \
+       sam0/drivers/dac/dac_sam_d_c/dac_callback.c        \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
@@ -94,7 +94,7 @@ INC_PATH = \
        sam0/drivers/ac/unit_test                          \
        sam0/drivers/ac/unit_test/samda1j16a_samda1_xplained_pro \
        sam0/drivers/dac                                   \
-       sam0/drivers/dac/dac_sam_d                         \
+       sam0/drivers/dac/dac_sam_d_c                       \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \

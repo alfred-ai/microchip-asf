@@ -2164,6 +2164,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/sercom/usart/usart_interrupt.c</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<file>
 						<name>$PROJ_DIR$/../../../../../../../../../sam0/drivers/sercom/usart/usart.h</name>
 					</file>
@@ -2277,6 +2283,9 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/instance/tcc2.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/instance/pm.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/instance/evsys.h</name>
 							</file>
 							<file>
@@ -2299,9 +2308,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/instance/gclk.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/instance/pm.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/instance/adc.h</name>
@@ -2430,6 +2436,12 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/component/nvmctrl.h</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/samr21.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/samr21g17a.h</name>
+						</file>
 						<group>
 							<name>pio</name>
 							<file>
@@ -2451,12 +2463,6 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g17a.h</name>
 							</file>
 						</group>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/samr21.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/samr21g17a.h</name>
-						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samr21/include/samr21g16a.h</name>
 						</file>

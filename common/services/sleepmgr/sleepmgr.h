@@ -49,7 +49,7 @@
 #include <compiler.h>
 #include <parts.h>
 
-#if (SAM3S || SAM3U || SAM3N || SAM3XA || SAM4S || SAM4E || SAM4N || SAM4C || SAMG || SAM4CP || SAM4CM)
+#if (SAM3S || SAM3U || SAM3N || SAM3XA || SAM4S || SAM4E || SAM4N || SAM4C || SAMG || SAM4CP || SAM4CM || SAMV71 || SAMV70 || SAMS70 || SAME70)
 # include "sam/sleepmgr.h"
 #elif XMEGA
 # include "xmega/sleepmgr.h"
@@ -63,6 +63,8 @@
 # include "samd/sleepmgr.h"
 #elif (SAML21)
 # include "saml/sleepmgr.h"
+#elif (SAMC21)
+# include "samc/sleepmgr.h"
 #else
 # error Unsupported device.
 #endif

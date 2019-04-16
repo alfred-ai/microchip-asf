@@ -68,6 +68,7 @@ CSRCS = \
        common/components/wifi/winc1500/send_email_example/base64.c \
        common/components/wifi/winc1500/send_email_example/main21.c \
        common/components/wifi/winc1500/socket/source/socket.c \
+       common/components/wifi/winc1500/spi_flash/spi_flash.c \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/samd21_xplained_pro/board_init.c       \
@@ -115,6 +116,7 @@ INC_PATH = \
        common/components/wifi/winc1500/socket             \
        common/components/wifi/winc1500/socket/include     \
        common/components/wifi/winc1500/socket/source      \
+       common/components/wifi/winc1500/spi_flash          \
        common/services/serial                             \
        common/utils                                       \
        common2/services/delay                             \

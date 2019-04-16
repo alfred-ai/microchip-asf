@@ -49,6 +49,7 @@
  * - Master Mode enabled
  * - MSB of the data is transmitted first
  * - Transfer mode 0
+ * - SPI MUX Setting E (see \ref asfdoc_sam0_sercom_spi_mux_settings_master)
  * - 8-bit character size
  * - Not enabled in sleep mode
  * - Baudrate 100000

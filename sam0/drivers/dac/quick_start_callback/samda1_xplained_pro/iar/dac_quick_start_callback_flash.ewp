@@ -303,7 +303,6 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
@@ -312,6 +311,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -581,7 +581,6 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
@@ -590,6 +589,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1284,7 +1284,6 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
@@ -1293,6 +1292,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1562,7 +1562,6 @@
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
@@ -1571,6 +1570,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1967,6 +1967,48 @@
 		<group>
 			<name>drivers</name>
 			<group>
+				<name>dac</name>
+				<group>
+					<name>dac_sam_d_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac_callback.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac_feature.h</name>
+					</file>
+				</group>
+				<group>
+					<name>quick_start_callback</name>
+					<file>
+						<name>$PROJ_DIR$/../../qs_dac_callback.c</name>
+					</file>
+					<group>
+						<name>samda1_xplained_pro</name>
+						<file>
+							<name>$PROJ_DIR$/../conf_board.h</name>
+						</file>
+						<group>
+							<name>iar</name>
+							<file>
+								<name>$PROJ_DIR$/asf.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../dac.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../dac_callback.h</name>
+				</file>
+			</group>
+			<group>
 				<name>system</name>
 				<group>
 					<name>pinmux</name>
@@ -2046,48 +2088,6 @@
 						</file>
 					</group>
 				</group>
-			</group>
-			<group>
-				<name>dac</name>
-				<group>
-					<name>quick_start_callback</name>
-					<file>
-						<name>$PROJ_DIR$/../../qs_dac_callback.c</name>
-					</file>
-					<group>
-						<name>samda1_xplained_pro</name>
-						<file>
-							<name>$PROJ_DIR$/../conf_board.h</name>
-						</file>
-						<group>
-							<name>iar</name>
-							<file>
-								<name>$PROJ_DIR$/asf.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>dac_sam_d</name>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac_callback.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac_feature.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../dac.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../dac_callback.h</name>
-				</file>
 			</group>
 			<group>
 				<name>rtc</name>

@@ -63,7 +63,7 @@ aes_callback_t aes_callback_pointer[AES_INTERRUPT_SOURCE_NUM];
  * Initializes the specified AES configuration structure to a set of
  * known default values.
  *
- * \note This function should be called to initialize <b>all</b> new instances of
+ * \note This function should be called to initialize <i>all</i> new instances of
  * AES configuration structures before they are further modified by the user
  * application.
  *
@@ -182,7 +182,7 @@ void aes_set_config(
 		ul_mode |= AES_MR_LOD;
 	}
 
-	#if SAM4C || SAM4CP || SAM4CM
+	#if (SAM4C || SAM4CP || SAM4CM || SAMV70 || SAMV71 || SAME70 || SAMS70)
 	if ((p_cfg->opmode == AES_GCM_MODE) && (p_cfg->gtag_en == true)) {
 		ul_mode |= AES_MR_GTAGEN;
 	}
@@ -196,7 +196,7 @@ void aes_set_config(
 }
 
 /**
- * \brief Write the 128/192/256bit cryptographic key.
+ * \brief Write the 128/192/256-bit cryptographic key.
  *
  * \param[out] p_aes Module hardware register base address pointer
  * \param[in]  p_key Pointer to 4/6/8 contiguous 32-bit words
@@ -307,7 +307,6 @@ void aes_read_output_data(
 }
 
 #if SAM4C || SAM4CP || SAM4CM || defined(__DOXYGEN__)
-
 /**
  * \brief Get AES PDC base address.
  *
@@ -332,7 +331,6 @@ Pdc *aes_get_pdc_base(
 
 	return p_pdc_base;
 }
-
 #endif /* SAM4C || SAM4CP || SAM4CM || defined(__DOXYGEN__) */
 
 /**
@@ -356,7 +354,7 @@ void aes_set_callback(
 		aes_callback_pointer[0] = callback;
 	} else if (source == AES_INTERRUPT_UNSPECIFIED_REGISTER_ACCESS) {
 		aes_callback_pointer[1] = callback;
-	}
+	} 
 
 #if SAM4C || SAM4CP || SAM4CM
 	else if (source == AES_INTERRUPT_END_OF_RECEIVE_BUFFER) {
@@ -367,6 +365,10 @@ void aes_set_callback(
 		aes_callback_pointer[4] = callback;
 	} else if (source == AES_INTERRUPT_TRANSMIT_BUFFER_FULL) {
 		aes_callback_pointer[5] = callback;
+	}
+#elif SAMV70 || SAMV71 || SAME70 || SAMS70
+	else if ((source == AES_INTERRUPT_TAG_READY)) {
+		aes_callback_pointer[2] = callback;
 	}
 #endif /* SAM4C || SAM4CP || SAM4CM */
 	irq_register_handler((IRQn_Type)AES_IRQn, irq_level);
@@ -415,6 +417,12 @@ void AES_Handler(void)
 	if ((status & AES_ISR_TXBUFE) && (mask & AES_IMR_TXBUFE)) {
 		if (aes_callback_pointer[5]) {
 			aes_callback_pointer[5]();
+		}
+	}
+#elif SAMV70 || SAMV71 || SAME70 || SAMS70
+	if ((status & AES_IER_TAGRDY) && (mask & AES_IER_TAGRDY)) {
+		if (aes_callback_pointer[2]) {
+			aes_callback_pointer[2]();
 		}
 	}
 #endif /* SAM4C || SAM4CP || SAM4CM */

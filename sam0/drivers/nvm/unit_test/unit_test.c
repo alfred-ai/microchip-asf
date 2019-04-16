@@ -76,6 +76,7 @@
  *  - SAM R21 Xplained Pro board
  *  - SAM L21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM C21 Xplained Pro board
  *
  * \section appdoc_sam0_nvm_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -123,7 +124,7 @@
 	((uint8_t)(((x) * 3) & 0xff))
 
 /* Test page is set to 8th from last */
-#define TEST_PAGE_ADDR     (NVMCTRL_PAGES - 8) * NVMCTRL_PAGE_SIZE
+#define TEST_PAGE_ADDR     (FLASH_NB_OF_PAGES - 8) * NVMCTRL_PAGE_SIZE
 
 /* Flag to indicate NVM initialization status */
 static volatile bool nvm_init_success = false;

@@ -47,9 +47,9 @@
 #define DAC_FEATURE_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam0_dac_group SAM Digital-to-Analog Driver (DAC)
+ * \defgroup asfdoc_sam0_dac_group SAM Digital-to-Analog (DAC) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the conversion of
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the conversion of
  * digital values to analog voltage. The following driver API modes are covered
  * by this manual:
  *
@@ -58,8 +58,8 @@
  *  - Callback APIs
  * \endif
  *
- * The following peripherals are used by this module:
- *  - DAC (Digital to Analog Converter)
+ * The following peripheral is used by this module:
+ *  - DAC (Digital-to-Analog Converter)
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM L21
@@ -80,9 +80,9 @@
  *
  * \section asfdoc_sam0_dac_module_overview Module Overview
  *
- * The Digital-to-Analog converter converts a digital value to analog voltage.
- * The DAC Controller can operate as two independent DAC or as a single DAC
- * in differential mode. Each DAC is 12-bit resolution and it is capable of
+ * The Digital-to-Analog converter converts a digital value to an analog voltage.
+ * The DAC Controller can operate as two independent DACs or as a single DAC
+ * in differential mode. Each DAC has a 12-bit resolution and it is capable of
  * converting up to 1M samples per second (Msps).
  *
  * A common use of DAC is to generate audio signals by connecting the DAC
@@ -91,7 +91,7 @@
  *
  * After being set up, the DAC will convert new digital values written to the
  * conversion data register (DATA0 or DATA1) to an analog value either on the
- * DAC output(VOUT0 or VOUT1) pin of the device, or internally for use as an
+ * DAC output (VOUT0 or VOUT1) pin of the device, or internally for use as an
  * input to the AC, ADC, and other analog modules.
  *
  * Writing the DATA register will start a new conversion. It is also possible
@@ -106,7 +106,7 @@
  * \subsection asfdoc_sam0_dac_conversion_range Conversion Range
  * The conversion range is between GND and the selected voltage reference.
  * Available voltage references are:
- * \li voltage supply (VDDANA)
+ * \li Voltage supply (VDDANA)
  * \li Internal bandgap reference (INTREF)
  * \li Unbuffered External voltage reference (VREFPU)
  * \li Buffered External voltage reference (VREFPB)
@@ -138,8 +138,8 @@
  * value. VOUT0 is the positive output and VOUT1 the negative output.
  *
  * VOUT0 signal is internally connected so that it can be used as input for
- * AC or ADC or OPAMP modules when DAC0 is enabled.
- * \note the pin VOUT0 will be dedicated to internal input and cannot be
+ * AC, ADC, or OPAMP modules when DAC0 is enabled.
+ * \note The pin VOUT0 will be dedicated to internal input and cannot be
  * configured as alternate function.
  *
  * \subsection asfdoc_sam0_dac_events Events
@@ -289,7 +289,7 @@
  *
  * \section asfdoc_sam0_dac_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_dac_extra. This includes:
+ * For extra information, see \ref asfdoc_sam0_dac_extra. This includes:
  *  - \ref asfdoc_sam0_dac_extra_acronyms
  *  - \ref asfdoc_sam0_dac_extra_dependencies
  *  - \ref asfdoc_sam0_dac_extra_errata
@@ -333,12 +333,12 @@ extern "C" {
  */
 #define DAC_STATUS_CHANNEL_1_EMPTY     (1UL << 1)
 
-/** Under-run Channel 0 - Set when a start conversion event occurs when
+/** Underrun Channel 0 - Set when a start conversion event occurs when
  *  DATABUF is empty.
  */
 #define DAC_STATUS_CHANNEL_0_UNDERRUN  (1UL << 2)
 
-/** Under-run Channel 1 - Set when a start conversion event occurs when
+/** Underrun Channel 1 - Set when a start conversion event occurs when
  *  DATABUF is empty.
  */
 #define DAC_STATUS_CHANNEL_1_UNDERRUN  (1UL << 3)
@@ -351,13 +351,13 @@ extern "C" {
  * Enum for the possible reference voltages for the DAC.
  */
 enum dac_reference {
-	/** Unbuffered external voltage reference.*/
+	/** Unbuffered external voltage reference */
 	DAC_REFERENCE_VREFPU = DAC_CTRLB_REFSEL(0),
-	/** Analog VCC as reference. */
+	/** Analog VCC as reference */
 	DAC_REFERENCE_VDDANA = DAC_CTRLB_REFSEL(1),
-	/** Buffered external voltage reference. */
+	/** Buffered external voltage reference */
 	DAC_REFERENCE_VREFPB = DAC_CTRLB_REFSEL(2),
-	/** Internal bandgap reference. */
+	/** Internal bandgap reference */
 	DAC_REFERENCE_INTREF = DAC_CTRLB_REFSEL(3),
 };
 
@@ -367,13 +367,13 @@ enum dac_reference {
  * Enum for the current in output buffer according the conversion rate.
  */
 enum dac_current_ctrl {
-	/** 1MHz < GCLK_DAC < 12MHz.*/
+	/** 1MHz < GCLK_DAC < 12MHz */
 	DAC_CURRENT_12M  = DAC_DACCTRL_CCTRL(0),
-	/** 100KHz < GCLK_DAC < 1MHz. */
+	/** 100KHz < GCLK_DAC < 1MHz */
 	DAC_CURRENT_1M   = DAC_DACCTRL_CCTRL(1),
-	/** 10KHz < GCLK_DAC < 100KHz. */
+	/** 10KHz < GCLK_DAC < 100KHz */
 	DAC_CURRENT_100K = DAC_DACCTRL_CCTRL(2),
-	/** GCLK_DAC < 10KHz. */
+	/** GCLK_DAC < 10KHz */
 	DAC_CURRENT_10K  = DAC_DACCTRL_CCTRL(3),
 };
 
@@ -383,9 +383,9 @@ enum dac_current_ctrl {
  * Enum for the DAC channel selection.
  */
 enum dac_channel {
-	/** DAC output channel 0. */
+	/** DAC output channel 0 */
 	DAC_CHANNEL_0,
-	/** DAC output channel 1. */
+	/** DAC output channel 1 */
 	DAC_CHANNEL_1,
 #if !defined(__DOXYGEN__)
 	DAC_CHANNEL_N,
@@ -403,24 +403,24 @@ enum dac_channel {
  */
 struct dac_module {
 #if !defined(__DOXYGEN__)
-	/** DAC hardware module. */
+	/** DAC hardware module */
 	Dac *hw;
-	/** Reference selection. */
+	/** Reference selection */
 	enum dac_reference reference;
-	/** DAC event selection. */
+	/** DAC event selection */
 	bool start_on_event[DAC_CHANNEL_N];
 #  if DAC_CALLBACK_MODE == true
-	/** Pointer to buffer used for ADC results. */
+	/** Pointer to buffer used for ADC results */
 	volatile uint16_t *job_buffer[DAC_CHANNEL_N];
-	/** Remaining number of conversions in current job. */
+	/** Remaining number of conversions in current job */
 	volatile uint16_t remaining_conversions[DAC_CHANNEL_N];
-	/** Transferred number of conversions in current job. */
+	/** Transferred number of conversions in current job */
 	volatile uint16_t transferred_conversions[DAC_CHANNEL_N];
-	/** DAC callback enable. */
+	/** DAC callback enable */
 	bool callback_enable[DAC_CHANNEL_N][DAC_CALLBACK_N];
-	/** DAC registered callback functions. */
+	/** DAC registered callback functions */
 	dac_callback_t callback[DAC_CHANNEL_N][DAC_CALLBACK_N];
-	/** Holds the status of the ongoing or last conversion job. */
+	/** Holds the status of the ongoing or last conversion job */
 	volatile enum status_code job_status[DAC_CHANNEL_N];
 #  endif
 #endif
@@ -434,11 +434,11 @@ struct dac_module {
  * function before being modified by the user application.
  */
 struct dac_config {
-	/** Differential mode enable data. */
+	/** Differential mode enable data */
 	bool differential_mode;
-	/** Reference voltage. */
+	/** Reference voltage */
 	enum dac_reference reference;
-	/** GCLK generator used to clock the peripheral. */
+	/** GCLK generator used to clock the peripheral */
 	enum gclk_generator clock_source;
 };
 
@@ -450,20 +450,20 @@ struct dac_config {
  * user application.
  */
 struct dac_chan_config {
-	/** Left adjusted data. */
+	/** Left adjusted data */
 	bool left_adjust;
-	/** Current control data. */
+	/** Current control data */
 	enum dac_current_ctrl current;
 	/**
 	 * The DAC behaves as in normal mode when the chip enters STANDBY sleep
-	 * mode.
+	 * mode
 	 */
 	bool run_in_standby;
-	/** Dither mode enable data. */
+	/** Dither mode enable data */
 	bool dither_mode;
 	/**
 	 * The DAC conversion refreshed periodically when used to generate a static
-	 * voltage.
+	 * voltage
 	 */
 	uint8_t refresh_period;
 };
@@ -475,17 +475,17 @@ struct dac_chan_config {
  * disable events via \ref dac_enable_events() and \ref dac_disable_events().
  */
 struct dac_events {
-	/** Start a new DAC0 conversion. */
+	/** Start a new DAC0 conversion */
 	bool on_event_chan0_start_conversion;
-	/** Start a new DAC1 conversion. */
+	/** Start a new DAC1 conversion */
 	bool on_event_chan1_start_conversion;
-	/** Enable event generation on DAC0 data buffer empty. */
+	/** Enable event generation on DAC0 data buffer empty */
 	bool generate_event_on_chan0_buffer_empty;
-	/** Enable event generation on DAC1 data buffer empty. */
+	/** Enable event generation on DAC1 data buffer empty */
 	bool generate_event_on_chan1_buffer_empty;
-	/** Enable the falling edge of the input event for DAC0. */
+	/** Enable the falling edge of the input event for DAC0 */
 	bool generate_event_on_chan0_falling_edge;
-	/** Enable the falling edge of the input event for DAC1. */
+	/** Enable the falling edge of the input event for DAC1 */
 	bool generate_event_on_chan1_falling_edge;
 };
 
@@ -539,7 +539,7 @@ bool dac_chan_is_end_of_conversion(
  *
  *
  * \section asfdoc_sam0_dac_extra_dependencies Dependencies
- * This driver has the following dependencies:
+ * This driver has the following dependency:
  *
  *  - \ref asfdoc_sam0_system_pinmux_group "System Pin Multiplexer Driver"
  *
@@ -570,7 +570,7 @@ bool dac_chan_is_end_of_conversion(
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_dac_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_dac_basic_use_case
@@ -579,8 +579,6 @@ bool dac_chan_is_end_of_conversion(
  * \endif
  * \if DAC_DMA_USE_MODE_SELECTION
  *  - \subpage asfdoc_sam0_adc_dma_use_case_dac_in_dma
- * \else
- *  - \subpage asfdoc_sam0_adc_dma_use_case
  * \endif
  *
  * \if DAC_DMA_USE_MODE_SELECTION
@@ -598,9 +596,9 @@ bool dac_chan_is_end_of_conversion(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>04/2015</td>
- *		<td>Initial release</td>
+ *		<td>42450A</td>
+ *		<td>07/2015</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

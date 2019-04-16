@@ -77,10 +77,11 @@
  *  - SAM D21 Xplained Pro board
  *  - SAM L21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
+ *  - SAM C21 Xplained Pro board
  *
  * \section asfdoc_sam0_adc_unit_test_setup Setup
  * The following connections has to be made using wires:
- * - SAM D21/L21 Xplained Pro
+ * - SAM D21/L21/C21 Xplained Pro
  *  - \b DAC VOUT (PA02) <-----> ADC4 (PA04)
  * - SAM D20 Xplained Pro
  *  - \b DAC VOUT (PA02) <-----> ADC2 (PB08)
@@ -236,18 +237,22 @@ static void run_adc_init_test(const struct test_case *test)
 	adc_get_config_defaults(&config);
 	config.positive_input = CONF_ADC_POSITIVE_INPUT;
 	config.negative_input = CONF_ADC_NEGATIVE_INPUT;
-#if (SAML21)
+#if (SAML21) || (SAMC21)
 	config.reference      = ADC_REFERENCE_INTREF;
 #else
 	config.reference      = ADC_REFERENCE_INT1V;
 #endif
 	config.clock_source   = GCLK_GENERATOR_3;
-#if !(SAML21)
+#if !(SAML21) && !(SAMC21)
 	config.gain_factor    = ADC_GAIN_FACTOR_1X;
 #endif
 
 	/* Initialize the ADC */
+#if (SAMC21)
+	status = adc_init(&adc_inst, ADC0, &config);
+#else
 	status = adc_init(&adc_inst, ADC, &config);
+#endif
 
 	/* Check for successful initialization */
 	test_assert_true(test, status == STATUS_OK,
@@ -298,7 +303,12 @@ static void run_adc_polled_mode_test(const struct test_case *test)
 			(adc_result < (ADC_VAL_DAC_HALF_OUTPUT + ADC_OFFSET)),
 			"Error in ADC conversion at 0.5V input (Expected: ~%d, Result: %d)", ADC_VAL_DAC_HALF_OUTPUT, adc_result);
 
+	/* Errata 14094 for SAMC21
+	   Once set, the ADC.SWTRIG.START will not be cleared until the Microcontroller is reset.
+	   Border effect: FLUSH function always start a new conversion, once START = 1. */
+#if !(SAMC21)
 	adc_flush(&adc_inst);
+#endif
 
 	/* Set 1V on DAC output */
 	dac_chan_write(&dac_inst, DAC_CHANNEL_0, DAC_VAL_ONE_VOLT);
@@ -318,8 +328,10 @@ static void run_adc_polled_mode_test(const struct test_case *test)
 
 	/* Ensure ADC gives linearly increasing conversions for linearly increasing inputs */
 	for (uint16_t i = 0; i < DAC_VAL_ONE_VOLT; i++) {
+	/* Errata 14094 for SAMC21 */
+#if !(SAMC21)
 		adc_flush(&adc_inst);
-
+#endif
 		/* Write the next highest DAC output voltage */
 		dac_chan_write(&dac_inst, DAC_CHANNEL_0, i);
 		delay_ms(1);
@@ -449,18 +461,22 @@ static void setup_adc_average_mode_test(const struct test_case *test)
 	adc_get_config_defaults(&config);
 	config.positive_input     = CONF_ADC_POSITIVE_INPUT;
 	config.negative_input     = CONF_ADC_NEGATIVE_INPUT;
-#if (SAML21)
+#if (SAML21) || (SAMC21)
 	config.reference          = ADC_REFERENCE_INTREF;
 #else
 	config.reference          = ADC_REFERENCE_INT1V;
 #endif
 	config.clock_source       = GCLK_GENERATOR_3;
-#if !(SAML21)
+#if !(SAML21) && !(SAMC21)
 	config.gain_factor        = ADC_GAIN_FACTOR_1X;
 #endif
 
 	/* Re-initialize & enable ADC */
+#if (SAMC21)
+	status = adc_init(&adc_inst, ADC0, &config);
+#else
 	status = adc_init(&adc_inst, ADC, &config);
+#endif
 	test_assert_true(test, status == STATUS_OK,
 			"ADC initialization failed");
 	status = adc_enable(&adc_inst);
@@ -528,14 +544,14 @@ static void setup_adc_window_mode_test(const struct test_case *test)
 	adc_get_config_defaults(&config);
 	config.positive_input = CONF_ADC_POSITIVE_INPUT;
 	config.negative_input = CONF_ADC_NEGATIVE_INPUT;
-#if (SAML21)
+#if (SAML21) || (SAMC21)
 	config.reference      = ADC_REFERENCE_INTREF;
 	config.clock_prescaler = ADC_CLOCK_PRESCALER_DIV16;
 #else
 	config.reference      = ADC_REFERENCE_INT1V;
 #endif
 	config.clock_source   = GCLK_GENERATOR_3;
-#if !(SAML21)
+#if !(SAML21) && !(SAMC21)
 	config.gain_factor    = ADC_GAIN_FACTOR_1X;
 #endif
 	config.resolution     = ADC_RESOLUTION_12BIT;
@@ -545,7 +561,11 @@ static void setup_adc_window_mode_test(const struct test_case *test)
 	config.window.window_upper_value = (ADC_VAL_DAC_HALF_OUTPUT + ADC_OFFSET);
 
 	/* Re-initialize & enable ADC */
+#if (SAMC21)
+	status = adc_init(&adc_inst, ADC0, &config);
+#else
 	status = adc_init(&adc_inst, ADC, &config);
+#endif
 	test_assert_true(test, status == STATUS_OK,
 			"ADC initialization failed");
 	status = adc_enable(&adc_inst);

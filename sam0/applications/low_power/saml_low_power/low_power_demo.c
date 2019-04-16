@@ -559,7 +559,6 @@ static void test_standby_mode_static_power_sleepwalking(void)
 	config.linked_power_domain = SYSTEM_LINKED_POWER_DOMAIN_DEFAULT;
 	config.hmcramchs_back_bias = SYSTEM_RAM_BACK_BIAS_STANDBY_OFF;
 	config.hmcramclp_back_bias = SYSTEM_RAM_BACK_BIAS_STANDBY_OFF;
-	config.picopram_back_bias  = SYSTEM_RAM_BACK_BIAS_STANDBY_OFF;
 
 	system_standby_set_config(&config);
 

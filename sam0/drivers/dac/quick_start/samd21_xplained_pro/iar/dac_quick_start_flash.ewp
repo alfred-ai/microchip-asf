@@ -305,10 +305,10 @@
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include</state>
@@ -577,10 +577,10 @@
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include</state>
@@ -1274,10 +1274,10 @@
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include</state>
@@ -1546,10 +1546,10 @@
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../..</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd21/include</state>
@@ -1966,12 +1966,12 @@
 					</group>
 				</group>
 				<group>
-					<name>dac_sam_d</name>
+					<name>dac_sam_d_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac.c</name>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac_feature.h</name>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac_feature.h</name>
 					</file>
 				</group>
 				<file>

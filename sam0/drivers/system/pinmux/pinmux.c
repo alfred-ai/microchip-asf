@@ -232,22 +232,21 @@ void system_pinmux_group_set_input_sample_mode(
  * \param[in] mode     New pin slew rate mode to configure
  */
 void system_pinmux_group_set_output_slew_rate(
-    PortGroup *const port,
-    const uint32_t mask,
-    const enum system_pinmux_pin_slew_rate mode)
+		PortGroup *const port,
+		const uint32_t mask,
+		const enum system_pinmux_pin_slew_rate mode)
 {
-  Assert(port);
+	Assert(port);
 
-  for (int i = 0; i < 32; i++) {
-    if (mask & (1UL << i)) {
-      if (mode == SYSTEM_PINMUX_PIN_SLEW_RATE_LIMITED) {
-        port->PINCFG[i].reg |=  PORT_PINCFG_SLEWLIM;
-      }
-      else {
-        port->PINCFG[i].reg &= ~PORT_PINCFG_SLEWLIM;
-      }
-    }
-  }
+	for (int i = 0; i < 32; i++) {
+		if (mask & (1UL << i)) {
+			if (mode == SYSTEM_PINMUX_PIN_SLEW_RATE_LIMITED) {
+				port->PINCFG[i].reg |=  PORT_PINCFG_SLEWLIM;
+			} else {
+				port->PINCFG[i].reg &= ~PORT_PINCFG_SLEWLIM;
+			}
+		}
+	}
 }
 #endif
 
@@ -263,22 +262,21 @@ void system_pinmux_group_set_output_slew_rate(
  * \param[in] mode     New output driver strength mode to configure
  */
 void system_pinmux_group_set_output_strength(
-    PortGroup *const port,
-    const uint32_t mask,
-    const enum system_pinmux_pin_strength mode)
+		PortGroup *const port,
+		const uint32_t mask,
+		const enum system_pinmux_pin_strength mode)
 {
-  Assert(port);
+	Assert(port);
 
-  for (int i = 0; i < 32; i++) {
-    if (mask & (1UL << i)) {
-      if (mode == SYSTEM_PINMUX_PIN_STRENGTH_HIGH) {
-        port->PINCFG[i].reg |=  PORT_PINCFG_DRVSTR;
-      }
-     else {
-        port->PINCFG[i].reg &= ~PORT_PINCFG_DRVSTR;
-      }
-    }
-  }
+	for (int i = 0; i < 32; i++) {
+		if (mask & (1UL << i)) {
+			if (mode == SYSTEM_PINMUX_PIN_STRENGTH_HIGH) {
+				port->PINCFG[i].reg |=  PORT_PINCFG_DRVSTR;
+			} else {
+				port->PINCFG[i].reg &= ~PORT_PINCFG_DRVSTR;
+			}
+		}
+	}
 }
 #endif
 
@@ -294,20 +292,20 @@ void system_pinmux_group_set_output_strength(
  * \param[in] mode New pad output driver mode to configure
  */
 void system_pinmux_group_set_output_drive(
-    PortGroup *const port,
-    const uint32_t mask,
-    const enum system_pinmux_pin_drive mode)
+		PortGroup *const port,
+		const uint32_t mask,
+		const enum system_pinmux_pin_drive mode)
 {
-  Assert(port);
+	Assert(port);
 
-  for (int i = 0; i < 32; i++) {
-    if (mask & (1UL << i)) {
-     if (mode == SYSTEM_PINMUX_PIN_DRIVE_OPEN_DRAIN) {
-       port->PINCFG[i].reg |= PORT_PINCFG_ODRAIN;
-      } else {
-        port->PINCFG[i].reg &= ~PORT_PINCFG_ODRAIN;
-      }
-    }
-  }
+	for (int i = 0; i < 32; i++) {
+		if (mask & (1UL << i)) {
+			if (mode == SYSTEM_PINMUX_PIN_DRIVE_OPEN_DRAIN) {
+				port->PINCFG[i].reg |= PORT_PINCFG_ODRAIN;
+			} else {
+				port->PINCFG[i].reg &= ~PORT_PINCFG_ODRAIN;
+			}
+		}
+	}
 }
 #endif

@@ -48,7 +48,7 @@
 #define PARC_EXAMPLE_H_INCLUDED
 
 /**
- * \page asfdoc_sam_drivers_parc_example Parallel Capture (PARC) - Example using GPIO as stimuli
+ * \page asfdoc_sam_drivers_parc_example Parallel Capture (PARC) - Example Using GPIO as Stimuli
  *
  * \section asfdoc_sam_drivers_parc_example_purpose Purpose
  * This example demonstrates the data capture function provided by the PARC
@@ -64,7 +64,7 @@
  * \section asfdoc_sam_drivers_parc_example_description Description
  *
  * In this example the GPIO pins on the same evaluation board act as the signal
- * source which provides the PARC module with data, clock and EN signals.
+ * source which provides the PARC module with data, clock, and EN signals.
  *
  * The GPIO pins should be connected to the PARC pins through the development kit's
  * on-board connectors. These pins can be connected easily by using interconnect
@@ -115,7 +115,7 @@
  *
  * \note The PCDATA5 signal is only connected to the LCD connector (EXT5) which
  * cannot be connected to easily using interconnect wires. In this
- * example PCDATA5 is <b>not required</b> so can be left unconnected.
+ * example PCDATA5 is <i>not required</i> so can be left unconnected.
  *
  *
  * \section asfdoc_sam_drivers_parc_example_files Main Files

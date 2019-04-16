@@ -62,7 +62,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_pac_prerequisites
@@ -685,8 +686,8 @@ __no_inline enum status_code system_peripheral_unlock(
 		const uint32_t key);
 /** @}  */
 
-#if (SAML21) || defined(__DOXYGEN__)
-/** \name APIs available for SAM L21.
+#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+/** \name APIs available for SAM L21/C20/C21.
  * @{
  */
 __no_inline enum status_code system_peripheral_lock_always(
@@ -829,9 +830,6 @@ static inline void system_pac_disable_event(void)
  * <table>
  *	<tr>
  *		<th>Changelog</th>
- *	</tr>
- *	<tr>
- *		<td>Added support for SAMD21</td>
  *	</tr>
  *	<tr>
  *		<td>Initial Release</td>
@@ -982,48 +980,37 @@ static inline void system_pac_disable_event(void)
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>F</td>
- *		<td>04/2015</td>
- *		<td>Added support for SAML21 and SAMDAx.</td>
+ *		<td>42107F</td>
+ *		<td>06/2015</td>
+ *		<td>Added support for SAML21, SAMC21, and SAMDAx</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
+ *		<td>42107E</td>
  *		<td>12/2014</td>
- *		<td>Added support for SAMR21 and SAMD10/D11.</td>
+ *		<td>Added support for SAMR21 and SAMD10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>D</td>
+ *		<td>42107D</td>
  *		<td>01/2014</td>
- *		<td>Added support for SAMD21.</td>
+ *		<td>Added support for SAMD21</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42107C</td>
  *		<td>10/2013</td>
  *		<td>Extended acronyms list</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42107B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42107A</td>
  *		<td>06/2013</td>
- *		<td>Initial release</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */
 
 #endif /* PAC_H_INCLUDED */
-
-
-
-
-
-
-
-
-
-
-
 

@@ -56,15 +56,15 @@ CSRCS = \
        common2/services/delay/sam0/cycle_counter.c        \
        sam0/applications/low_power/saml_low_power/low_power_demo.c \
        sam0/boards/saml21_xplained_pro/board_init.c       \
-       sam0/drivers/adc/adc_sam_l/adc.c                   \
-       sam0/drivers/adc/adc_sam_l/adc_callback.c          \
+       sam0/drivers/adc/adc_sam_l_c/adc.c                 \
+       sam0/drivers/adc/adc_sam_l_c/adc_callback.c        \
        sam0/drivers/dma/dma.c                             \
        sam0/drivers/events/events_hooks.c                 \
-       sam0/drivers/events/events_sam_l/events.c          \
+       sam0/drivers/events/events_sam_l_c/events.c        \
        sam0/drivers/extint/extint_callback.c              \
-       sam0/drivers/extint/extint_sam_l/extint.c          \
+       sam0/drivers/extint/extint_sam_l_c/extint.c        \
        sam0/drivers/port/port.c                           \
-       sam0/drivers/rtc/rtc_sam_l/rtc_count.c             \
+       sam0/drivers/rtc/rtc_sam_l_c/rtc_count.c           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/usart/usart.c                  \
        sam0/drivers/system/clock/clock_saml21/clock.c     \
@@ -73,7 +73,7 @@ CSRCS = \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
        sam0/drivers/tc/tc_interrupt.c                     \
-       sam0/drivers/tc/tc_sam_l/tc.c                      \
+       sam0/drivers/tc/tc_sam_l_c/tc.c                    \
        sam0/utils/cmsis/saml21/source/gcc/startup_saml21.c \
        sam0/utils/cmsis/saml21/source/system_saml21.c     \
        sam0/utils/stdio/read.c                            \
@@ -95,15 +95,15 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/adc                                   \
-       sam0/drivers/adc/adc_sam_l                         \
+       sam0/drivers/adc/adc_sam_l_c                       \
        sam0/drivers/dma                                   \
        sam0/drivers/events                                \
-       sam0/drivers/events/events_sam_l                   \
+       sam0/drivers/events/events_sam_l_c                 \
        sam0/drivers/extint                                \
-       sam0/drivers/extint/extint_sam_l                   \
+       sam0/drivers/extint/extint_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/rtc                                   \
-       sam0/drivers/rtc/rtc_sam_l                         \
+       sam0/drivers/rtc/rtc_sam_l_c                       \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \
        sam0/drivers/system                                \
@@ -117,7 +117,7 @@ INC_PATH = \
        sam0/drivers/system/reset                          \
        sam0/drivers/system/reset/reset_sam_l              \
        sam0/drivers/tc                                    \
-       sam0/drivers/tc/tc_sam_l                           \
+       sam0/drivers/tc/tc_sam_l_c                         \
        sam0/utils                                         \
        sam0/utils/cmsis/saml21/include                    \
        sam0/utils/cmsis/saml21/source                     \

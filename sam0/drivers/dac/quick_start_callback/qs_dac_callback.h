@@ -44,7 +44,7 @@
 /**
  * \page asfdoc_sam0_dac_basic_use_case_callback Quick Start Guide for DAC - Callback
  *
- * In this use case, the DAC will be convert 16 samples using interrupt driven conversion.
+ * In this use case, the DAC will convert 16 samples using interrupt driven conversion.
  * When all samples have been sampled, a callback will be called that signals the main
  * application that conversion is compete.
  *
@@ -59,7 +59,7 @@
  * \section asfdoc_sam0_dac_callback_basic_use_case_callback_setup Setup
  *
  * \subsection asfdoc_sam0_dac_callback_basic_use_case_prereq Prerequisites
- * There are no special setup requirements for this use-case.
+ * There are no special setup requirements for this use case.
  *
  * \subsection asfdoc_sam0_dac_callback_basic_use_case_callback_code Code
  * Add to the main application source file, outside of any functions:
@@ -86,7 +86,7 @@
  *
  * \subsection asfdoc_sam0_dac_basic_use_case_callback_workflow Workflow
  * -# Create a module software instance structure for the DAC module to store
- *    the DAC driver state while it is in use.
+ *    the DAC driver state while in use.
  *    \snippet qs_dac_callback.c dac_module_inst
  *    \note This should never go out of scope as long as the module is in use.
  *          In most cases, this should be global.
@@ -140,10 +140,10 @@
  *    \snippet qs_dac_callback.c enable_dac
  *
  * -# Configure the RTC module.
- *  -# Create a RTC module event struct, which can be filled out to
+ *  -# Create an RTC module event struct, which can be filled out to
  *     adjust the configuration of a physical RTC peripheral.
  *     \snippet qs_dac_callback.c setup_rtc_event
- *  -# Create a RTC module configuration struct, which can be filled out to
+ *  -# Create an RTC module configuration struct, which can be filled out to
  *     adjust the configuration of a physical RTC peripheral.
  *     \snippet qs_dac_callback.c setup_rtc_config
  *  -# Initialize the RTC configuration struct with the module's default values.
@@ -165,7 +165,7 @@
  *     \snippet qs_dac_callback.c enable_rtc
 
  * -# Configure the Event resource.
- *  -# Create a event resource config struct, which can be filled out to
+ *  -# Create an event resource config struct, which can be filled out to
  *     adjust the configuration of a physical event peripheral.
  *     \snippet qs_dac_callback.c event_config
  *  -# Initialize the event configuration struct with the module's default values.
@@ -197,7 +197,7 @@
  * \snippet qs_dac_callback.c main_start
  *
  * \subsection asfdoc_sam0_dac_basic_use_case_callback_use_workflow Workflow
- *  -# Start an DAC conversion and generate a callback when complete.
+ *  -# Start a DAC conversion and generate a callback when complete.
  *  \snippet qs_dac_callback.c main_write
  *  -# Wait until the conversion is complete.
  *  \snippet qs_dac_callback.c main_check_transfer_done

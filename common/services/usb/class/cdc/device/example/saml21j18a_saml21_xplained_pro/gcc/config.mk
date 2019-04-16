@@ -62,7 +62,7 @@ CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        sam0/boards/saml21_xplained_pro/board_init.c       \
        sam0/drivers/extint/extint_callback.c              \
-       sam0/drivers/extint/extint_sam_l/extint.c          \
+       sam0/drivers/extint/extint_sam_l_c/extint.c        \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
@@ -97,7 +97,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/extint                                \
-       sam0/drivers/extint/extint_sam_l                   \
+       sam0/drivers/extint/extint_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \

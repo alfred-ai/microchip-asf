@@ -95,6 +95,15 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint32 u32Addr)
 				gpfAppWifiCb(M2M_WIFI_RESP_CON_STATE_CHANGED, &strState);
 		}
 	}
+	else if (u8OpCode == M2M_WIFI_RESP_GET_SYS_TIME)
+	{
+		tstrSystemTime strSysTime;
+		if (hif_receive(u32Addr, (uint8*) &strSysTime,sizeof(tstrSystemTime), 0) == M2M_SUCCESS)
+		{
+			if (gpfAppWifiCb)
+				gpfAppWifiCb(M2M_WIFI_RESP_GET_SYS_TIME, &strSysTime);
+		}
+	}
 	else if(u8OpCode == M2M_WIFI_RESP_CONN_INFO)
 	{
 		tstrM2MConnInfo		strConnInfo;
@@ -367,9 +376,14 @@ ERR1:
 sint8 m2m_wifi_init(tstrWifiInitParam * param)
 {
 	sint8 ret = M2M_SUCCESS;
-
+	
+	if(param == NULL) {
+		ret = M2M_ERR_FAIL;
+		goto _EXIT0;
+	}
+	
 	gpfAppWifiCb = param->pfAppWifiCb;
-
+		
 #ifdef ETH_MODE
  	gpfAppEthCb  	    = param->strEthInitParam.pfAppEthCb;
 	gau8ethRcvBuf       = param->strEthInitParam.au8ethRcvBuf;
@@ -389,7 +403,7 @@ sint8 m2m_wifi_init(tstrWifiInitParam * param)
 
 	hif_register_cb(M2M_REQ_GRP_WIFI,m2m_wifi_cb);
 
-	return ret;
+	goto _EXIT0;
 
 _EXIT1:
 	nm_drv_deinit(NULL);
@@ -1022,6 +1036,11 @@ sint8 m2m_wifi_set_sytem_time(uint32 u32UTCSeconds)
 	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_SYS_TIME, (uint8*)&u32UTCSeconds, sizeof(tstrSystemTime), NULL, 0, 0);
 }
 
+sint8 m2m_wifi_get_sytem_time(void)
+{
+	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_GET_SYS_TIME, NULL,0, NULL, 0, 0);
+}
+
 sint8 m2m_wifi_enable_sntp(uint8 bEnable)
 {
 	uint8	u8Req;
@@ -1029,6 +1048,84 @@ sint8 m2m_wifi_enable_sntp(uint8 bEnable)
 	u8Req = bEnable ? M2M_WIFI_REQ_ENABLE_SNTP_CLIENT : M2M_WIFI_REQ_DISABLE_SNTP_CLIENT;
 	return hif_send(M2M_REQ_GRP_WIFI, u8Req, NULL, 0, NULL, 0, 0);
 }
+/*!
+@fn			NMI_API sint8 m2m_wifi_set_power_profile(uint8 u8PwrMode);
+@brief		Change the power profile mode 
+@param [in]	u8PwrMode
+			Change the WINC power profile to different mode 
+			PWR_LOW1/PWR_LOW2/PWR_HIGH/PWR_AUTO (tenuM2mPwrMode)
+@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
+@sa			tenuM2mPwrMode
+@pre		m2m_wifi_init
+@warning	must be called after the initializations and before any connection request and can't be changed in run time, 
+*/
+sint8 m2m_wifi_set_power_profile(uint8 u8PwrMode)
+{
+	sint8 ret = M2M_SUCCESS;
+	tstrM2mPwrMode strM2mPwrMode;
+	strM2mPwrMode.u8PwrMode = u8PwrMode;
+	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_POWER_PROFILE, (uint8*)&strM2mPwrMode,sizeof(tstrM2mPwrMode), NULL, 0, 0);
+	return ret;
+}
+/*!
+@fn			NMI_API sint8 m2m_wifi_set_tx_power(uint8 u8TxPwrLevel);
+@brief		set the TX power tenuM2mTxPwrLevel
+@param [in]	u8TxPwrLevel
+			change the TX power tenuM2mTxPwrLevel
+@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
+@sa			tenuM2mTxPwrLevel
+@pre		m2m_wifi_init
+@warning	
+*/
+sint8 m2m_wifi_set_tx_power(uint8 u8TxPwrLevel)
+{
+	sint8 ret = M2M_SUCCESS;
+	tstrM2mTxPwrLevel strM2mTxPwrLevel;
+	strM2mTxPwrLevel.u8TxPwrLevel = u8TxPwrLevel;
+	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_TX_POWER, (uint8*)&strM2mTxPwrLevel,sizeof(tstrM2mTxPwrLevel), NULL, 0, 0);
+	return ret;
+}
+
+/*!
+@fn			NMI_API sint8 m2m_wifi_enable_firmware_logs(uint8 u8Enable);
+@brief		Enable or Disable logs in run time (Disable Firmware logs will 
+			enhance the firmware start-up time and performance)
+@param [in]	u8Enable
+			Set 1 to enable the logs 0 for disable
+@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
+@sa			__DISABLE_FIRMWARE_LOGS__ (build option to disable logs from initializations)
+@pre		m2m_wifi_init
+@warning	
+*/
+sint8 m2m_wifi_enable_firmware_logs(uint8 u8Enable)
+{
+	sint8 ret = M2M_SUCCESS;
+	tstrM2mEnableLogs strM2mEnableLogs;
+	strM2mEnableLogs.u8Enable = u8Enable;
+	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_ENABLE_LOGS, (uint8*)&strM2mEnableLogs,sizeof(tstrM2mEnableLogs), NULL, 0, 0);
+	return ret;
+}
+
+/*!
+@fn			NMI_API sint8 m2m_wifi_set_battery_voltage(uint16 u16BattVoltx100);
+@brief		Enable or Disable logs in run time (Disable Firmware logs will 
+			enhance the firmware start-up time and performance)
+@param [in]	u16BattVoltx100
+			battery voltage multiplied by 100
+@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
+@sa			__DISABLE_FIRMWARE_LOGS__ (build option to disable logs from initializations)
+@pre		m2m_wifi_init
+@warning	
+*/
+sint8 m2m_wifi_set_battery_voltage(uint16 u16BattVoltx100)
+{
+	sint8 ret = M2M_SUCCESS;
+	tstrM2mBatteryVoltage strM2mBattVol = {0};
+	strM2mBattVol.u16BattVolt = u16BattVoltx100;
+	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_BATTERY_VOLTAGE, (uint8*)&strM2mBattVol,sizeof(tstrM2mBatteryVoltage), NULL, 0, 0);
+	return ret;
+}
+
 #ifdef ETH_MODE
 /*!
 @fn	\

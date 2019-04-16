@@ -50,7 +50,11 @@
 /**
  * \defgroup asfdoc_sam_drivers_dmac_group SAM3A/3U/3X/4E DMA Controller (DMAC) Driver
  *
- * This driver for Atmel&reg; | SMART SAM4 DMA Controller (DMAC) is an AHB-central DMA controller core that
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers 
+ * provides an interface for the configuration and management of the 
+ * device's Direct Memory Access DMA Controller (DMAC) functionality.
+ *
+ * The DMAC is an AHB-central DMA controller core that
  * transfers data from a source peripheral to a destination peripheral
  * over one or more AMBA buses. This is a driver for the configuration,
  * enabling, disabling, and use of the DMAC peripheral.
@@ -118,28 +122,28 @@ extern "C" {
 /** @endcond */
 
 
-/** \brief DMAC priority mode. */
+/** \brief DMAC priority mode */
 typedef enum {
 #if (SAM3U)
-	/** Fixed priority arbiter. */
+	/** Fixed priority arbiter */
 	DMAC_PRIORITY_FIXED       = 0,
-	/** Modified round robin arbiter. */
+	/** Modified round robin arbiter */
 	DMAC_PRIORITY_ROUND_ROBIN = DMAC_GCFG_ARB_CFG
 #else
-	/** Fixed priority arbiter. */
+	/** Fixed priority arbiter */
 	DMAC_PRIORITY_FIXED       = DMAC_GCFG_ARB_CFG_FIXED,
-	/** Modified round robin arbiter. */
+	/** Modified round robin arbiter */
 	DMAC_PRIORITY_ROUND_ROBIN = DMAC_GCFG_ARB_CFG_ROUND_ROBIN
 #endif
 } dmac_priority_mode_t;
 
 /** DMA transfer descriptor structure, otherwise known as a Linked List Item (LLI). */
 typedef struct {
-	uint32_t ul_source_addr;      /**< Source buffer address. */
-	uint32_t ul_destination_addr; /**< Destination buffer address. */
-	uint32_t ul_ctrlA;            /**< Control A register settings. */
-	uint32_t ul_ctrlB;            /**< Control B register settings. */
-	uint32_t ul_descriptor_addr;  /**< Next descriptor address. */
+	uint32_t ul_source_addr;      /**< Source buffer address */
+	uint32_t ul_destination_addr; /**< Destination buffer address */
+	uint32_t ul_ctrlA;            /**< Control A register settings */
+	uint32_t ul_ctrlB;            /**< Control B register settings */
+	uint32_t ul_descriptor_addr;  /**< Next descriptor address */
 } dma_transfer_descriptor_t;
 
 #if !defined(__DOXYGEN__)
@@ -268,7 +272,7 @@ uint32_t dmac_get_writeprotect_status(Dmac *p_dmac);
  * This is a list of the available Quick Start Guides (QSGs) and example
  * applications for \ref asfdoc_sam_drivers_dmac_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam_drivers_dmac_qsg
@@ -281,6 +285,11 @@ uint32_t dmac_get_writeprotect_status(Dmac *p_dmac);
  *		<th>Doc. Rev.</td>
  *		<th>Date</td>
  *		<th>Comments</td>
+ *	</tr>
+ *	<tr>
+ *		<td>42291B</td>
+ *		<td>07/2015</td>
+ *		<td>Updated title of application note and added list of supported devices</td>
  *	</tr>
  *	<tr>
  *		<td>42291A</td>
@@ -296,9 +305,9 @@ uint32_t dmac_get_writeprotect_status(Dmac *p_dmac);
  *
  * This is the quick start guide for the \ref asfdoc_sam_drivers_dmac_group, with
  * step-by-step instructions on how to configure and use the driver for
- * a specific use case.The code examples can be copied into e.g the main
- * application loop or any other function that will need to control the
- * DMAC module.
+ * a specific use case. The code examples can be
+ * copied into the main application loop or any other function that will need 
+ * to control the DMAC module.
  *
  * \section asfdoc_sam_drivers_dmac_qsg_use_cases Use Cases
  * - \ref asfdoc_sam_drivers_dmac_qsg_basic

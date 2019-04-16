@@ -10,4 +10,4 @@ if NOT "%CD:~230,1%"=="" (
 	exit
 )
 
-image_builder -http_modify ../../../provisioning_webpage/ -fw_path ../../../ota_firmware/m2m_ota.bin -ota_img
+image_builder -http_modify ../../../provisioning_webpage/ -fw_path ../../../firmware/m2m_aio.bin

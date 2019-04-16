@@ -69,7 +69,8 @@
 	   w - Generate Waveform
 \endcode
  *
- * "w" is an additional option for SAM3S8, SAM3SD8, SAM4S, SAM4C, SAM4CP and SAM4CM.
+ * "w" is an additional option for SAM3S8, SAM3SD8, SAM4S, SAM4C, SAM4CP, SAM4CM
+ * SAMV71, SAMV70, SAME70 and SAMS70.
  * An RTC output can be programmed to generate several waveforms, including a
  * prescaled clock derived from slow clock.
  *
@@ -439,7 +440,7 @@ static void refresh_display(void)
 					"  d - Set date\n\r"
 					"  i - Set time alarm\n\r"
 					"  m - Set date alarm\r");
-#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || (SAM4CP) || (SAM4CM))
+#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || (SAM4CP) || (SAM4CM) || (SAMV71)|| (SAMV70) || (SAME70) || (SAMS70))
 			puts("  w - Generate Waveform\r");
 #endif
 			if (gs_ul_alarm_triggered) {
@@ -651,7 +652,7 @@ int main(void)
 			refresh_display();
 		}
 
-#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || (SAM4CP) || (SAM4CM))
+#if ((SAM3S8) || (SAM3SD8) || (SAM4S) || (SAM4C) || (SAM4CP) || (SAM4CM) || (SAMV71)|| (SAMV70) || (SAME70) || (SAMS70))
 		/* Generate Waveform */
 		if (uc_key == 'w') {
 			gs_ul_state = STATE_WAVEFORM;

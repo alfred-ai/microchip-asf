@@ -50,14 +50,15 @@
 /**
  * \defgroup asfdoc_sam0_ccl_group SAM Configurable Custom Logic (CCL) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the device's Configurable Custom Logic functionality.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - CCL (Configurable Custom Logic)
  *
  * The following devices can use this module:
  *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_ccl_prerequisites
@@ -78,15 +79,15 @@
  * This driver provides an interface for the Configurable Custom Logic
  * functions on the device.
  *
- * The Configurable Custom Logic (CCL) contains programmable logic 
- * which can be connected to the device pins, events or internal peripherals.
+ * The Configurable Custom Logic (CCL) contains programmable logic
+ * which can be connected to the device pins, events, or internal peripherals.
  *
  * Each LUT consists of three inputs, a truth table and optional synchronizer,
  * filter and edge detector. Each LUT can generate an output as a user programmable
  * logic expression with three inputs.
  *
  * The output can be combinatorially generated from the inputs, or filtered to remove spike.
- * An optional sequential module can be enabled. The inputs of sequential module are 
+ * An optional sequential module can be enabled. The inputs of sequential module are
  * individually controlled by two independent, adjacent LUT(LUT0/LUT1, LUT2/LUT3 etc.) outputs,
  * enabling complex waveform generation.
  *
@@ -97,7 +98,7 @@
  *
  * \section asfdoc_sam0_ccl_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_ccl_extra. This includes:
+ * For extra information, see \ref asfdoc_sam0_ccl_extra. This includes:
  *  - \ref asfdoc_sam0_ccl_extra_acronyms
  *  - \ref asfdoc_sam0_ccl_extra_dependencies
  *  - \ref asfdoc_sam0_ccl_extra_errata
@@ -125,13 +126,13 @@ extern "C" {
  * \brief CCL LUT(look up table) ID number enum.
  */
 enum ccl_lut_id {
-	/** CCL LUT 0.  */
+	/** CCL LUT 0 */
 	CCL_LUT_0 = 0,
-	/** CCL LUT 1.  */
+	/** CCL LUT 1 */
 	CCL_LUT_1 = 1,
-	/** CCL LUT 2.  */
+	/** CCL LUT 2 */
 	CCL_LUT_2 = 2,
-	/** CCL LUT 3.  */
+	/** CCL LUT 3 */
 	CCL_LUT_3 = 3,
 };
 
@@ -139,9 +140,9 @@ enum ccl_lut_id {
  * \brief CCL sequential module ID number enum.
  */
 enum ccl_seq_id {
-	/** CCL SEQ 0.  */
+	/** CCL SEQ 0 */
 	CCL_SEQ_0 = 0,
-	/** CCL SEQ 1.  */
+	/** CCL SEQ 1 */
 	CCL_SEQ_1 = 1,
 };
 
@@ -151,15 +152,15 @@ enum ccl_seq_id {
  * Enum for the sequential selection configuration.
  */
 enum ccl_seq_selection {
-	/** Sequential logic is disabled. */
+	/** Sequential logic is disabled */
 	CCL_SEQ_DISABLED = CCL_SEQCTRL_SEQSEL_DISABLE,
-	/** D flip flop. */
+	/** D flip flop */
 	CCL_SEQ_D_FLIP_FLOP = CCL_SEQCTRL_SEQSEL_DFF,
-	/** JK flip flop. */
+	/** JK flip flop */
 	CCL_SEQ_JK_FLIP_FLOP = CCL_SEQCTRL_SEQSEL_JK,
-	/** D latch. */
+	/** D latch */
 	CCL_SEQ_D_LATCH = CCL_SEQCTRL_SEQSEL_LATCH,
-	/** RS latch. */
+	/** RS latch */
 	CCL_SEQ_RS_LATCH = CCL_SEQCTRL_SEQSEL_RS,
 };
 
@@ -169,25 +170,25 @@ enum ccl_seq_selection {
  * Enum for the LUT Input source selection.
  */
 enum ccl_lut_input_src_sel {
-	/** Masked input. */
+	/** Masked input */
 	CCL_LUT_INPUT_SRC_MASK = 0,
-	/** Feedback input source. */
+	/** Feedback input source */
 	CCL_LUT_INPUT_SRC_FEEDBACK = 1,
-	/** Linked LUT input source. */
+	/** Linked LUT input source */
 	CCL_LUT_INPUT_SRC_LINK = 2,
-	/** Event input source. */
+	/** Event input source */
 	CCL_LUT_INPUT_SRC_EVENT = 3,
-	/** I/O pin input source. */
+	/** I/O pin input source */
 	CCL_LUT_INPUT_SRC_IO = 4,
-	/** AC input source. */
+	/** AC input source */
 	CCL_LUT_INPUT_SRC_AC = 5,
-	/** TC input source. */
+	/** TC input source */
 	CCL_LUT_INPUT_SRC_TC = 6,
-	/** Alternative TC input source. */
+	/** Alternative TC input source */
 	CCL_LUT_INPUT_SRC_ALTTC = 7,
-	/** TCC input source. */
+	/** TCC input source */
 	CCL_LUT_INPUT_SRC_TCC = 8,
-	/** SERCOM input source. */
+	/** SERCOM input source */
 	CCL_LUT_INPUT_SRC_SERCOM = 9,
 };
 
@@ -197,11 +198,11 @@ enum ccl_lut_input_src_sel {
  * Enum for the LUT output filter options.
  */
 enum ccl_lut_filter_sel {
-	/** Filter disabled. */
+	/** Filter disabled */
 	CCL_LUT_FILTER_DISABLE = CCL_LUTCTRL_FILTSEL_DISABLE,
-	/** Synchronizer enabled. */
+	/** Synchronizer enabled */
 	CCL_LUT_FILTER_SYNC = CCL_LUTCTRL_FILTSEL_SYNCH,
-	/** Filter enabled. */
+	/** Filter enabled */
 	CCL_LUT_FILTER_ENABLE = CCL_LUTCTRL_FILTSEL_FILTER,
 };
 
@@ -211,9 +212,9 @@ enum ccl_lut_filter_sel {
  *  Configuration structure for CCL module.
  */
 struct ccl_config {
-	/** GCLK generator used to clock the peripheral. */
+	/** GCLK generator used to clock the peripheral */
 	enum gclk_generator clock_source;
-	/** If \c true, the GCLK_CCL clock will not stopped in standby sleep mode. */
+	/** If \c true, the GCLK_CCL clock will not stop in standby sleep mode */
 	bool run_in_standby;
 };
 
@@ -223,23 +224,23 @@ struct ccl_config {
  *  Configuration structure for CCL LUT 0 to 3.
  */
 struct ccl_lut_config {
-	/**  The value of truth logic as a function of inputs IN[2:0]. */
+	/**  The value of truth logic as a function of inputs IN[2:0] */
 	uint8_t truth_table_value;
-	/** If \c true, LUT event output is enabled. */
+	/** If \c true, LUT event output is enabled */
 	bool event_output_enable;
-	/** If \c true, LUT incoming event is enabled. */
+	/** If \c true, LUT incoming event is enabled */
 	bool event_input_enable;
-	/** If \c true, incoming event is inverted. */
+	/** If \c true, incoming event is inverted */
 	bool event_input_inverted_enable;
-	/** Selection of the input0 source. */
+	/** Selection of the input0 source */
 	enum ccl_lut_input_src_sel input0_src_sel;
-	/** Selection of the input1 source. */
+	/** Selection of the input1 source */
 	enum ccl_lut_input_src_sel input1_src_sel;
-	/** Selection of the input2 source. */
+	/** Selection of the input2 source */
 	enum ccl_lut_input_src_sel input2_src_sel;
-	/** If \c true, Edge detector is enabled. */
+	/** If \c true, Edge detector is enabled */
 	bool edge_selection_enable;
-	/**  Selection of the LUT output filter options. */
+	/**  Selection of the LUT output filter options */
 	enum ccl_lut_filter_sel filter_sel;
 };
 
@@ -247,7 +248,7 @@ struct ccl_lut_config {
  * \name Initialize and Reset CCL Module
  * @{
  */
- 
+
 /**
  * \brief Initializes CCL module.
  *
@@ -261,7 +262,7 @@ void ccl_init(struct ccl_config *const config);
  *  to safe defaults.
  *
  *  Initializes all members of a given Configurable Custom Logic configuration
- *  structure to safe known default values. This function should be called on
+ *  structure to safe and known default values. This function should be called on
  *  all new instances of these configuration structures before being modified
  *  by the user application.
  *
@@ -301,7 +302,7 @@ static inline void ccl_module_reset(void)
  * \name Enable and Disable CCL Module
  * @{
  */
- 
+
 /**
  * \brief Enables CCL module.
  *
@@ -331,8 +332,8 @@ static inline void ccl_module_disable(void)
  * \name Configure LUT
  * @{
  */
- 
-/** 
+
+/**
  *  \brief Writes sequential selection to the hardware module.
  *
  *  Writes a given sequential selection configuration to the hardware module.
@@ -385,7 +386,7 @@ enum status_code ccl_lut_set_config(const enum ccl_lut_id number,
  * \name Enable and Disable LUT
  * @{
  */
- 
+
 /**
  * \brief Enables an LUT that was previously configured.
  *
@@ -463,7 +464,7 @@ void ccl_lut_disable(const enum ccl_lut_id number);
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_ccl_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_ccl_basic_use_case
@@ -477,9 +478,9 @@ void ccl_lut_disable(const enum ccl_lut_id number);
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>04/2015</td>
- *		<td>Initial release</td>
+ *		<td>42448A</td>
+ *		<td>06/2015</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

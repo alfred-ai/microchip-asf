@@ -1976,9 +1976,6 @@
 					<file>
 						<name>$PROJ_DIR$/../../../usart_interrupt.c</name>
 					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../usart.h</name>
-					</file>
 					<group>
 						<name>quick_start</name>
 						<file>
@@ -1986,8 +1983,17 @@
 						</file>
 					</group>
 					<file>
+						<name>$PROJ_DIR$/../../../usart.h</name>
+					</file>
+					<file>
 						<name>$PROJ_DIR$/../../../usart_interrupt.h</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>
@@ -2305,13 +2311,16 @@
 					</group>
 				</group>
 			</group>
+			<file>
+				<name>$PROJ_DIR$/../../../../../../utils/compiler.h</name>
+			</file>
 			<group>
 				<name>preprocessor</name>
 				<file>
-					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/mrecursion.h</name>
+					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/stringz.h</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/stringz.h</name>
+					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/mrecursion.h</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/tpaste.h</name>
@@ -2323,9 +2332,6 @@
 					<name>$PROJ_DIR$/../../../../../../utils/preprocessor/mrepeat.h</name>
 				</file>
 			</group>
-			<file>
-				<name>$PROJ_DIR$/../../../../../../utils/compiler.h</name>
-			</file>
 			<group>
 				<name>header_files</name>
 				<file>

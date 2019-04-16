@@ -65,13 +65,13 @@ extern "C" {
  * different sleep modes can be found in \ref asfdoc_sam0_system_module_overview_sleep_mode.
  */
 enum system_sleepmode {
-	/** IDLE sleep mode. */
+	/** IDLE sleep mode */
 	SYSTEM_SLEEPMODE_IDLE       = PM_SLEEPCFG_SLEEPMODE(0x2),
-	/** STANDBY sleep mode. */
+	/** STANDBY sleep mode */
 	SYSTEM_SLEEPMODE_STANDBY    = PM_SLEEPCFG_SLEEPMODE_STANDBY,
-	/** BACKUP sleep mode. */
+	/** BACKUP sleep mode */
 	SYSTEM_SLEEPMODE_BACKUP     = PM_SLEEPCFG_SLEEPMODE_BACKUP,
-	/** OFF sleep mode. */
+	/** OFF sleep mode */
 	SYSTEM_SLEEPMODE_OFF        = PM_SLEEPCFG_SLEEPMODE_OFF,
 };
 
@@ -82,9 +82,9 @@ enum system_sleepmode {
  * adjusting the regulator output voltage to reduce power consumption.
  */
 enum system_performance_level {
-	/** Performance level 0. */
+	/** Performance level 0 */
 	SYSTEM_PERFORMANCE_LEVEL_0  = PM_PLCFG_PLSEL_PL0,
-	/** Performance level 2. */
+	/** Performance level 2 */
 	SYSTEM_PERFORMANCE_LEVEL_2  = PM_PLCFG_PLSEL_PL2,
 };
 
@@ -97,31 +97,31 @@ enum system_performance_level {
  * bit groups in STDBYCFG(STDBYCFG.BBIASxx).
  */
 enum system_ram_back_bias_mode {
-	/** Retention Back biasing mode. */
+	/** Retention Back biasing mode */
 	SYSTEM_RAM_BACK_BIAS_RETENTION = 0,
-	/** Standby Back Biasing mode. */
+	/** Standby Back Biasing mode */
 	SYSTEM_RAM_BACK_BIAS_STANDBY,
-	/** Standby OFF mode. */
+	/** Standby OFF mode */
 	SYSTEM_RAM_BACK_BIAS_STANDBY_OFF,
-	/** Always OFF mode. */
+	/** Always OFF mode */
 	SYSTEM_RAM_BACK_BIAS_OFF,
 };
 
 /**
  * \brief Linked power domain.
  *
- * List of linked power domains. Power domains can be linked each other.
+ * List of linked power domains. Power domains can be linked to each other.
  * It allows a power domain (PDn) to be kept in active state if the inferior
  * power domain (PDn-1) is in active state too.
  */
 enum system_linked_power_domain {
-	/** Power domains PD0/PD1/PD2 are not linked. */
+	/** Power domains PD0/PD1/PD2 are not linked */
 	SYSTEM_LINKED_POWER_DOMAIN_DEFAULT   = PM_STDBYCFG_LINKPD_DEFAULT_Val,
-	/** Power domains PD0 and PD1 are linked. */
+	/** Power domains PD0 and PD1 are linked */
 	SYSTEM_LINKED_POWER_DOMAIN_PD01      = PM_STDBYCFG_LINKPD_PD01_Val,
-	/** Power domains PD1 and PD2 are linked. */
+	/** Power domains PD1 and PD2 are linked */
 	SYSTEM_LINKED_POWER_DOMAIN_PD12      = PM_STDBYCFG_LINKPD_PD12_Val,
-	/** All Power domains are linked. */
+	/** All Power domains are linked */
 	SYSTEM_LINKED_POWER_DOMAIN_PD012     = PM_STDBYCFG_LINKPD_PD012_Val,
 };
 
@@ -129,17 +129,17 @@ enum system_linked_power_domain {
  * \brief Power domain.
  *
  * List of power domains. Power domain gating technique consists of turning
- * on or off power domain voltage to save power while keeping other domain
+ * on or off power domain voltage to save power while keeping other domains
  * powered up.
  */
 enum system_power_domain {
-	/** All power domains switching are handled by hardware. */
+	/** All power domains switching are handled by hardware */
 	SYSTEM_POWER_DOMAIN_DEFAULT = PM_STDBYCFG_PDCFG_DEFAULT_Val,
-	/** Power domain 0 (PD0) is forced ACTIVE. */
+	/** Power domain 0 (PD0) is forced ACTIVE */
 	SYSTEM_POWER_DOMAIN_PD0     = PM_STDBYCFG_PDCFG_PD0_Val,
-	/** Power domain 0 and 1 (PD0 and PD1) are forced ACTIVE. */
+	/** Power domain 0 and 1 (PD0 and PD1) are forced ACTIVE */
 	SYSTEM_POWER_DOMAIN_PD01    = PM_STDBYCFG_PDCFG_PD01_Val,
-	/** All power domains are forced ACTIVE. */
+	/** All power domains are forced ACTIVE */
 	SYSTEM_POWER_DOMAIN_PD012   = PM_STDBYCFG_PDCFG_PD012_Val,
 };
 
@@ -150,9 +150,9 @@ enum system_power_domain {
  * can be chosen on the fly between a LDO or a Buck converter.
  */
 enum system_voltage_regulator_sel {
-	/** The voltage regulator in active mode is a LDO voltage regulator. */
+	/** The voltage regulator in active mode is a LDO voltage regulator */
 	SYSTEM_VOLTAGE_REGULATOR_LDO    = SUPC_VREG_SEL_LDO_Val,
-	/** The voltage regulator in active mode is a buck converter. */
+	/** The voltage regulator in active mode is a buck converter */
 	SYSTEM_VOLTAGE_REGULATOR_BUCK   = SUPC_VREG_SEL_BUCK_Val,
 };
 
@@ -163,10 +163,10 @@ enum system_voltage_regulator_sel {
  */
 enum system_voltage_regulator_low_power_efficiency {
 	/** The voltage regulator in Low power mode has the default efficiency and
-		support the whole VDD range (1,62V to 3,6V). */
+		support the whole VDD range (1.62V to 3.6V) */
 	SYSTEM_VOLTAGE_REGULATOR_LOW_POWER_EFFICIENCY_DEFAULT,
 	/** The voltage regulator in Low power mode has the highest efficiency and
-		support the limited VDD range (2,5V to 3,6V). */
+		support the limited VDD range (2.5V to 3.6V) */
 	SYSTEM_VOLTAGE_REGULATOR_LOW_POWER_EFFICIENCY_HIGHTEST,
 };
 
@@ -176,21 +176,21 @@ enum system_voltage_regulator_low_power_efficiency {
  * Voltage references selection.
  */
 enum system_voltage_references_sel {
-	/** 1.0V voltage reference typical value. */
+	/** 1.0V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_1V0    = SUPC_VREF_SEL_1V0_Val,
-	/** 1.1V voltage reference typical value. */
+	/** 1.1V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_1V1    = SUPC_VREF_SEL_1V1_Val,
-	/** 1.2V voltage reference typical value. */
+	/** 1.2V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_1V2    = SUPC_VREF_SEL_1V2_Val,
-	/** 1.25V voltage reference typical value. */
+	/** 1.25V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_1V25   = SUPC_VREF_SEL_1V25_Val,
-	/** 2.0V voltage reference typical value. */
+	/** 2.0V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_2V0    = SUPC_VREF_SEL_2V0_Val,
-	/** 2.2V voltage reference typical value. */
+	/** 2.2V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_2V2    = SUPC_VREF_SEL_2V2_Val,
-	/** 2.4V voltage reference typical value. */
+	/** 2.4V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_2V4    = SUPC_VREF_SEL_2V4_Val,
-	/** 2.5V voltage reference typical value. */
+	/** 2.5V voltage reference typical value */
 	SYSTEM_VOLTAGE_REFERENCE_2V5    = SUPC_VREF_SEL_2V5_Val,
 };
 
@@ -200,13 +200,13 @@ enum system_voltage_references_sel {
  * Enum for Battery power switch modes.
  */
 enum system_battery_power_switch {
-	/** The backup domain is always supplied by main power. */
+	/** The backup domain is always supplied by main power */
 	SYSTEM_BATTERY_POWER_SWITCH_NONE      = SUPC_BBPS_CONF_NONE_Val,
-	/** The power switch is handled by the automatic power switch. */
+	/** The power switch is handled by the automatic power switch */
 	SYSTEM_BATTERY_POWER_SWITCH_AUTOMATIC = SUPC_BBPS_CONF_APWS_Val,
-	/** The backup domain is always supplied by battery backup power. */
+	/** The backup domain is always supplied by battery backup power */
 	SYSTEM_BATTERY_POWER_SWITCH_FORCED    = SUPC_BBPS_CONF_FORCED_Val,
-	/** The power switch is handled by the BOD33. */
+	/** The power switch is handled by the BOD33 */
 	SYSTEM_BATTERY_POWER_SWITCH_BOD33     = SUPC_BBPS_CONF_BOD33_Val,
 };
 
@@ -217,9 +217,9 @@ enum system_battery_power_switch {
  * device.
  */
 enum system_voltage_reference {
-	/** Temperature sensor voltage reference. */
+	/** Temperature sensor voltage reference */
 	SYSTEM_VOLTAGE_REFERENCE_TEMPSENSE,
-	/** Voltage reference output. */
+	/** Voltage reference output */
 	SYSTEM_VOLTAGE_REFERENCE_OUTPUT,
 };
 
@@ -227,15 +227,15 @@ enum system_voltage_reference {
  * \brief Backup IO enum.
  *
  * List of Backup input and output pins.
- * If enabled(\ref system_backup_pin_output_enable), those pin can be driven
+ * If enabled (\ref system_backup_pin_output_enable), the pins can be driven
  * by the SUPC.
  */
 enum system_backup_pin {
-	/** Power Supply OK status pin. */
+	/** Power Supply OK status pin */
 	SYSTEM_BACKUP_PIN_PSOK  = (0x1 << 0),
-	/** Backup output pin 0.  */
+	/** Backup output pin 0  */
 	SYSTEM_BACKUP_PIN_OUT_0 = (0x1 << 1),
-	/** Backup output pin 1.  */
+	/** Backup output pin 1  */
 	SYSTEM_BACKUP_PIN_OUT_1 = (0x1 << 2)
 };
 
@@ -245,22 +245,20 @@ enum system_backup_pin {
  * Configuration structure for standby mode.
  */
 struct system_standby_config {
-	/** Power domain. */
+	/** Power domain */
 	enum system_power_domain  power_domain;
-	/** Enable dynamic power gating for power domain 0. */
+	/** Enable dynamic power gating for power domain 0 */
 	bool enable_dpgpd0;
-	/** Enable dynamic power gating for power domain 1. */
+	/** Enable dynamic power gating for power domain 1 */
 	bool enable_dpgpd1;
-	/** Automatic VREG switching disable. */
+	/** Automatic VREG switching disable */
 	bool disable_avregsd;
-	/** Linked power domain. */
+	/** Linked power domain */
 	enum system_linked_power_domain linked_power_domain;
-	/** Back bias for HMCRAMCHS. */
+	/** Back bias for HMCRAMCHS */
 	enum system_ram_back_bias_mode hmcramchs_back_bias;
-	/** Back bias for HMCRAMCLP. */
+	/** Back bias for HMCRAMCLP */
 	enum system_ram_back_bias_mode hmcramclp_back_bias;
-	/** Back bias for PICOPRAM. */
-	enum system_ram_back_bias_mode picopram_back_bias;
 };
 
 /**
@@ -269,15 +267,15 @@ struct system_standby_config {
  * Configuration structure for VREG.
  */
 struct system_voltage_regulator_config {
-	/** Voltage scaling period. */
+	/** Voltage scaling period */
 	uint8_t  voltage_scale_period;
-	/** Voltage scaling voltage step. */
+	/** Voltage scaling voltage step */
 	uint8_t voltage_scale_step;
-	/** Run in standby in standby sleep mode. */
+	/** Run in standby in standby sleep mode */
 	bool run_in_standby;
-	/** Voltage Regulator Selection. */
+	/** Voltage Regulator Selection */
 	enum system_voltage_regulator_sel  regulator_sel;
-	/** Low power efficiency. */
+	/** Low power efficiency */
 	enum system_voltage_regulator_low_power_efficiency low_power_efficiency;
 };
 
@@ -287,11 +285,11 @@ struct system_voltage_regulator_config {
  * Configuration structure for VREF.
  */
 struct system_voltage_references_config {
-	/** Voltage References Selection. */
+	/** Voltage References Selection */
 	enum system_voltage_references_sel  sel;
-	/** On Demand Control. */
+	/** On Demand Control */
 	bool on_demand;
-	/** run in standby. */
+	/** Run in standby */
 	bool run_in_standby;
 };
 
@@ -301,10 +299,10 @@ struct system_voltage_references_config {
  * Configuration structure for Battery Backup Power Switch (BBPS).
  */
 struct system_battery_backup_power_switch_config {
-	/** Whether the device is woken up when switched
-		from battery backup power to main power. */
+	/** Enable device wake up when BBPS switches from
+		battery backup power to main power */
 	bool wake_enabled;
-	/** Battery backup power switch configuration. */
+	/** Battery backup power switch configuration */
 	enum system_battery_power_switch battery_power_switch;
 };
 
@@ -317,10 +315,10 @@ struct system_battery_backup_power_switch_config {
  * \brief Retrieve the default configuration for voltage regulator.
  *
  * Fills a configuration structure with the default configuration:
- *   - Voltage scaling period is 1us
+ *   - Voltage scaling period is 1μs
  *   - Voltage scaling voltage step is 2*min_step
  *   - The voltage regulator is in low power mode in Standby sleep mode
- *   - The voltage regulator in active mode is a LDO voltage regulator
+ *   - The voltage regulator in active mode is an LDO voltage regulator
  *   - The voltage regulator in Low power mode has the default efficiency
  *
  * \param[out] config  Configuration structure to fill with default values
@@ -341,7 +339,7 @@ static inline void system_voltage_regulator_get_config_defaults(
  *
  * Configures voltage regulator with the given configuration.
  *
- * \param[in] config  voltage regulator configuration structure containing
+ * \param[in] config  Voltage regulator configuration structure containing
  *                    the new config
  */
 static inline void system_voltage_regulator_set_config(
@@ -392,7 +390,7 @@ static inline void system_voltage_regulator_disable(void)
  *
  * Fill a configuration structure with the default configuration:
  *   - 1.0V voltage reference typical value
- *   - On demand control:disabled
+ *   - On demand control disabled
  *   - The voltage reference and the temperature sensor are halted during standby sleep mode
  *
  * \param[out] config  Configuration structure to fill with default values
@@ -411,7 +409,7 @@ static inline void system_voltage_reference_get_config_defaults(
  *
  * Configures voltage reference with the given configuration.
  *
- * \param[in] config  voltage reference configuration structure containing
+ * \param[in] config  Voltage reference configuration structure containing
  *                    the new config
  */
 static inline void system_voltage_reference_set_config(
@@ -581,7 +579,7 @@ static inline void system_backup_pin_output_disable(
 static inline bool system_backup_pin_output_is_enabled(
 		enum system_backup_pin pin)
 {
-	bool enabled = false; 
+	bool enabled = false;
 
 	if (pin == SYSTEM_BACKUP_PIN_PSOK) {
 		if (SUPC->BBPS.reg & SUPC_BBPS_PSOKEN) {
@@ -658,7 +656,7 @@ static inline void system_backup_pin_output_clear(
 /**
  *  \brief Get the backup I/O input values.
  *
- *  Get the backup I/O data input values, if the corresponding pin is enabled,
+ *  Get the backup I/O data input values. If the corresponding pin is enabled,
  *  the I/O input value is given on the pin.
  *
  *  \param[in] pin Backup pin index
@@ -703,9 +701,9 @@ static inline void system_set_sleepmode(
  * \brief Put the system to sleep waiting for interrupt.
  *
  * Executes a device DSB (Data Synchronization Barrier) instruction to ensure
- * all ongoing memory accesses have completed, then a WFI (Wait For Interrupt)
- * instruction to place the device into the sleep mode specified by
- * \ref system_set_sleepmode until woken by an interrupt.
+ * all ongoing memory accesses have completed. Further, a WFI (Wait For Interrupt)
+ * instruction is executed to place the device into the sleep mode specified by
+ * \ref system_set_sleepmode.
  */
 static inline void system_sleep(void)
 {
@@ -725,13 +723,12 @@ static inline void system_sleep(void)
 /**
  * \brief Switch performance level.
  *
- *  When scaling down the performance level,the bus frequency should be first
- *  scaled down in order to not exceed the maximum frequency allowed for the
- *  low performance level.
+ *  The bus frequency must be reduced prior to scaling down the performance level,
+ *  in order to not exceed the maximum frequency allowed for the performance level.
  *
  *  When scaling up the performance level (for example from PL0 to PL2), the bus
- *  frequency can be increased only once the performance level transition is
- *  completed,check the performance level status.
+ *  frequency can be increased first when the performance level transition is
+ *  completed. Check the performance level status before increasing the frequency.
  *
  * \param[in] performance_level  Performance level to switch
  *
@@ -775,7 +772,7 @@ static inline enum system_performance_level system_get_performance_level(void)
  * \brief Get performance level status.
  *
  * Get performance level status.
- * \return Performance level status: 1 Performance level is ready,0 others.
+ * \return Performance level status: Written to one when the performance level is ready.
  */
 static inline uint8_t system_get_performance_level_status(void)
 {
@@ -805,7 +802,6 @@ static inline void system_clear_performance_level_status(void)
  * \brief Retrieve the default configuration for standby.
  *
  * Fills a configuration structure with the default configuration for standby:
- *   - Retention back biasing mode for PICOPRAM
  *   - Retention back biasing mode for HMCRAMCLP
  *   - Retention back biasing mode for HMCRAMCHS
  *   - Power domains PD0/PD1/PD2 are not linked
@@ -827,7 +823,6 @@ static inline void system_standby_get_config_defaults(
 	config->linked_power_domain = SYSTEM_LINKED_POWER_DOMAIN_DEFAULT;
 	config->hmcramchs_back_bias = SYSTEM_RAM_BACK_BIAS_RETENTION;
 	config->hmcramclp_back_bias = SYSTEM_RAM_BACK_BIAS_RETENTION;
-	config->picopram_back_bias  = SYSTEM_RAM_BACK_BIAS_RETENTION;
 }
 
 /**
@@ -835,7 +830,7 @@ static inline void system_standby_get_config_defaults(
  *
  * Configures standby with the given configuration.
  *
- * \param[in] config  standby configuration structure containing
+ * \param[in] config  Standby configuration structure containing
  *                    the new config
  */
 static inline void system_standby_set_config(
@@ -848,8 +843,7 @@ static inline void system_standby_set_config(
 					 | (config->disable_avregsd << PM_STDBYCFG_AVREGSD_Pos)
 					 | PM_STDBYCFG_LINKPD(config->linked_power_domain)
 					 | PM_STDBYCFG_BBIASHS(config->hmcramchs_back_bias)
-					 | PM_STDBYCFG_BBIASLP(config->hmcramclp_back_bias)
-					 | PM_STDBYCFG_BBIASPP(config->picopram_back_bias);
+					 | PM_STDBYCFG_BBIASLP(config->hmcramclp_back_bias);
 }
 
 /**

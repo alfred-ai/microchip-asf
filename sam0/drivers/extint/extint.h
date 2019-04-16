@@ -67,7 +67,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_extint_prerequisites
@@ -286,7 +287,7 @@ struct extint_chan_conf {
 	uint32_t gpio_pin_mux;
 	/** Internal pull to enable on the input pin. */
 	enum extint_pull gpio_pin_pull;
-#if (SAML21)
+#if (SAML21) || (SAMC20) || (SAMC21)
 	/** Enable asynchronous edge detection. */
 	bool enable_async_edge_detection;
 #else
@@ -332,7 +333,7 @@ struct extint_nmi_conf {
 	 *  detection modes for NMIs.
 	 */
 	enum extint_detect detection_criteria;
-#if (SAML21)
+#if (SAML21) || (SAMC20) || (SAMC21)
 	/** Enable asynchronous edge detection. */
 	bool enable_async_edge_detection;
 #endif
@@ -471,7 +472,7 @@ static inline void extint_nmi_get_config_defaults(
 	config->gpio_pin_pull       = EXTINT_PULL_UP;
 	config->filter_input_signal = false;
 	config->detection_criteria  = EXTINT_DETECT_FALLING;
-#if (SAML21)
+#if (SAML21) || (SAMC20) || (SAMC21)
 	 config->enable_async_edge_detection = false;
 #endif
 
@@ -675,8 +676,8 @@ static inline void extint_nmi_clear_detected(
  *  </tr>
  *  <tr>
  *      <td>E</td>
- *      <td>04/2015</td>
- *      <td>Added support for SAML21 and SAMDAx.</td>
+ *      <td>06/2015</td>
+ *      <td>Added support for SAML21, SAMC21, and SAMDAx.</td>
  *  </tr>
  *  <tr>
  *      <td>D</td>

@@ -45,7 +45,7 @@
  #define ACC_EXAMPLE_H_INCLUDED
  
 /**
- * \page asfdoc_sam_drivers_acc_example_irq Analog Comparator Controller - Example interrupt event generation
+ * \page asfdoc_sam_drivers_acc_example_irq Analog Comparator Controller - Example Interrupt Event Generation
  *
  * \section asfdoc_sam_drivers_acc_example_irq_purpose Purpose
  *
@@ -102,7 +102,7 @@
    -- m: Display this menu again.-- \endverbatim
  * -# Enter a character on the terminal to select a menu option.
  * -# Change the voltage on AD5 by adjusting VR1 on the evaluation kit in order.
- * to see what comparison events occur.
+ * To see what comparison events occur.
  */
 
 #endif /* ACC_EXAMPLE_H_INCLUDED */

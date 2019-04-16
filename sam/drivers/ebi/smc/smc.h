@@ -69,7 +69,8 @@ extern "C" {
  * \note Some APIs are only available for specific SAM devices.
  */
 
-#if ((SAM3S) || (SAM3U) || (SAM3XA) || (SAM4S) || (SAM4E) || (SAM4C) || (SAM4CM) || (__DOXYGEN__))
+#if ((SAM3S) || (SAM3U) || (SAM3XA) || (SAM4S) || (SAM4E) || (SAM4C) || (SAM4CM) \
+	|| (SAMV71) || (SAMV70) || (SAME70) || (SAMS70) || (__DOXYGEN__))
 void smc_set_setup_timing(Smc *p_smc, uint32_t ul_cs, uint32_t ul_setup_timing);
 void smc_set_pulse_timing(Smc *p_smc, uint32_t ul_cs, uint32_t ul_pulse_timing);
 void smc_set_cycle_timing(Smc *p_smc, uint32_t ul_cs, uint32_t ul_cycle_timing);

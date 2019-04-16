@@ -296,6 +296,8 @@ struct i2c_master_config {
 	/** Set to enable maser SCL low extend time-out. */
 	bool master_scl_low_extend_timeout;
 #endif
+	/** Get more accurate BAUD, considering rise time(required for standard-mode and Fast-mode). */
+	uint16_t sda_scl_rise_time_ns;
 };
 
 /**
@@ -458,6 +460,8 @@ static inline void i2c_master_get_config_defaults(
 	config->slave_scl_low_extend_timeout   = false;
 	config->master_scl_low_extend_timeout  = false;
 #endif
+	/* The typical value is 215ns */
+	config->sda_scl_rise_time_ns = 215;
 }
 
 enum status_code i2c_master_init(

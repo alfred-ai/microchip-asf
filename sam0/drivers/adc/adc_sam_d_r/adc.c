@@ -477,7 +477,7 @@ static enum status_code _adc_set_config(
 					(config->window.window_lower_value > 511 ||
 					config->window.window_lower_value < -512 ||
 					config->window.window_upper_value > 511 ||
-					config->window.window_upper_value > -512)) {
+					config->window.window_upper_value < -512)) {
 				/* Invalid value */
 				return STATUS_ERR_INVALID_ARG;
 			} else if (config->window.window_lower_value > 1023 ||

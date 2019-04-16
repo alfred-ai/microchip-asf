@@ -49,8 +49,9 @@
 
 /**
  * \defgroup asfdoc_sam_drivers_pdc_group SAM3A/3N/3S/3U/3X/4E/4N/4S/G Peripheral DMA Controller (PDC) Driver
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the
- * configuration and management of the the Peripheral DMA Controller (PDC) module.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides 
+ * an interface for the configuration and management of the the Peripheral 
+ * Direct Memory Access (DMA) Controller (PDC) module.
  *
  * The PDC transfers data between on-chip serial peripherals and the on and/or
  * off-chip memories. The link between the PDC and a serial peripheral is
@@ -258,31 +259,30 @@ uint32_t pdc_read_tx_next_counter(Pdc *p_pdc);
  *
  *
  *
- * \page asfdoc_sam_pmc_quickstart Quickstart guide for SAM4
- * This is the quickstart guide for the "PDC driver" with step-by-step
- * instructions on how to configure and use the driver.
+ * \page asfdoc_sam_pdc_quickstart_basic Quick Start Guide for PDC - Basic
+ * This is the quickstart guide for \ref asfdoc_sam_drivers_pdc_group
+ * with step-by-step instructions on how to configure and use the driver.
  *
- * \section asfdoc_sam_pmc_quickstart_basic_use_case Basic Use Case
  *
- * A handler is required for the interrupt, below is a simple example
+ * A handler is required for the interrupt, below is a simple example:
  * \snippet pdc_uart_example.c int_handler
  *
  * First initialise the board:
  *
  * \snippet pdc_uart_example.c board_setup
  *
- * Now setup the PDC registers
+ * Now setup the PDC registers:
  * \snippet pdc_uart_example.c pdc_config
  *
- * Enable UART IRQ
+ * Enable UART IRQ:
  * \snippet pdc_uart_example.c uart_irq
  *
- * and enable UART interrupt
+ * Enable UART interrupt
  * \snippet pdc_uart_example.c uart_nvic_irq
  *
- * Once the required number of bytes have been transferred an interupt is
- * triggered and the handler will run.  In the interim programme to do
- * something else, or be busy waiting
+ * Once the required number of bytes have been transferred, an interrupt is
+ * triggered and the handler will run. The main program may execute other code
+ * or be busy-waiting:
  *
  * \snippet pdc_uart_example.c busy_waiting
  *
@@ -291,9 +291,10 @@ uint32_t pdc_read_tx_next_counter(Pdc *p_pdc);
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam_drivers_pdc_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
+ *  - \subpage asfdoc_sam_pdc_quickstart_basic
  *  - \subpage asfdoc_sam_drivers_pdc_example
  *
  *
@@ -304,6 +305,11 @@ uint32_t pdc_read_tx_next_counter(Pdc *p_pdc);
  *		<th>Doc. Rev.</td>
  *		<th>Date</td>
  *		<th>Comments</td>
+ *	</tr>
+ *	<tr>
+ *		<td>42316B</td>
+ *		<td>07/2015</td>
+ *		<td>Updated title of application note and added list of supported devices</td>
  *	</tr>
  *	<tr>
  *		<td>42316A</td>

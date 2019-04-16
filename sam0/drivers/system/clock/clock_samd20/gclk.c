@@ -175,13 +175,6 @@ void system_gclk_gen_set_config(
 
 	system_interrupt_enter_critical_section();
 
-	/* Select the correct generator */
-	*((uint8_t*)&GCLK->GENDIV.reg) = generator;
-
-	/* Write the new generator configuration */
-	while (system_gclk_is_syncing()) {
-		/* Wait for synchronization */
-	};
 	GCLK->GENDIV.reg  = new_gendiv_config;
 
 	while (system_gclk_is_syncing()) {

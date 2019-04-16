@@ -136,9 +136,11 @@ static inline void ac_enable_callback(
 		case AC_CALLBACK_COMPARATOR_3:
 			inenset_temp |= AC_INTFLAG_COMP3;
 			break;
+#  if !(SAMC20)
 		case AC_CALLBACK_WINDOW_1:
 			inenset_temp |= AC_INTFLAG_WIN1;
 			break;
+#  endif
 #endif
 		default:
 			break;
@@ -196,9 +198,11 @@ static inline void ac_disable_callback(
 		case AC_CALLBACK_COMPARATOR_3:
 			inenclr_temp |= AC_INTFLAG_COMP3;
 			break;
+#  if !(SAMC20)
 		case AC_CALLBACK_WINDOW_1:
 			inenclr_temp |= AC_INTFLAG_WIN1;
 			break;
+#  endif
 #endif
 		default:
 			break;

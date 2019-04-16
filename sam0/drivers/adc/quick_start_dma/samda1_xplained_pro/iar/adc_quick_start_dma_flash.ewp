@@ -306,13 +306,13 @@
 					<state>$PROJ_DIR$/../../../../dac</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../dma</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../adc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
@@ -582,13 +582,13 @@
 					<state>$PROJ_DIR$/../../../../dac</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../dma</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../adc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
@@ -1283,13 +1283,13 @@
 					<state>$PROJ_DIR$/../../../../dac</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../dma</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../adc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
@@ -1559,13 +1559,13 @@
 					<state>$PROJ_DIR$/../../../../dac</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../dma</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samda1/include</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../adc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_d_r</state>
@@ -1959,27 +1959,6 @@
 		<group>
 			<name>drivers</name>
 			<group>
-				<name>dac</name>
-				<group>
-					<name>dac_sam_d</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../dac/dac_sam_d/dac_callback.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../dac/dac_sam_d/dac.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../dac/dac_sam_d/dac_feature.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../dac/dac.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../dac/dac_callback.h</name>
-				</file>
-			</group>
-			<group>
 				<name>system</name>
 				<group>
 					<name>clock</name>
@@ -2005,9 +1984,6 @@
 						<name>$PROJ_DIR$/../../../../system/clock/clock.h</name>
 					</file>
 				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../system/system.c</name>
-				</file>
 				<group>
 					<name>interrupt</name>
 					<file>
@@ -2023,6 +1999,9 @@
 						</file>
 					</group>
 				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../system/system.c</name>
+				</file>
 				<group>
 					<name>pinmux</name>
 					<file>
@@ -2100,6 +2079,27 @@
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../adc.h</name>
+				</file>
+			</group>
+			<group>
+				<name>dac</name>
+				<group>
+					<name>dac_sam_d_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../dac/dac_sam_d_c/dac.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../dac/dac_sam_d_c/dac_callback.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../dac/dac_sam_d_c/dac_feature.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../dac/dac.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../dac/dac_callback.h</name>
 				</file>
 			</group>
 			<group>

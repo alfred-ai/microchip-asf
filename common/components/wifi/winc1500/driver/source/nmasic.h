@@ -70,6 +70,14 @@
 #define REV(id)         ( ((id) & 0x00000fff ) )
 #define EFUSED_MAC(value) (value & 0xffff0000)
 
+#define rHAVE_SDIO_IRQ_GPIO_BIT     (NBIT0)
+#define rHAVE_USE_PMU_BIT           (NBIT1)
+#define rHAVE_SLEEP_CLK_SRC_RTC_BIT (NBIT2)
+#define rHAVE_SLEEP_CLK_SRC_XO_BIT  (NBIT3)
+#define rHAVE_EXT_PA_INV_TX_RX      (NBIT4)
+#define rHAVE_LEGACY_RF_SETTINGS    (NBIT5)
+#define rHAVE_LOGS_DISABLED_BIT		(NBIT6)
+
 /**
 *  @struct		tstrM2mWifiGetRevision
 *  @brief		Structure holding firmware version parameters
@@ -139,6 +147,8 @@ sint8 pullup_ctrl(uint32 pinmask, uint8 enable);
 sint8 nmi_get_otp_mac_address(uint8 *pu8MacAddr, uint8 * pu8IsValid);
 
 sint8 nmi_get_mac_address(uint8 *pu8MacAddr);
+
+sint8 chip_apply_conf(uint32 u32conf);
 
 #ifdef __cplusplus
 	 }

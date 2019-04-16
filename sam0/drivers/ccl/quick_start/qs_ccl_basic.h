@@ -66,7 +66,7 @@
  *    adjust the configuration of CCL.
  *    \snippet qs_ccl_basic.c setup_1
  *
- * -# settings and fill the CCL configuration struct with the default settings.
+ * -# Settings and fill the CCL configuration struct with the default settings.
  *    \snippet qs_ccl_basic.c setup_2
  *
  * -# Initializes CCL module.

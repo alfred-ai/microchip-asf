@@ -56,8 +56,8 @@ CSRCS = \
        common/utils/unit_test/suite.c                     \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/saml21_xplained_pro/board_init.c       \
-       sam0/drivers/adc/adc_sam_l/adc.c                   \
-       sam0/drivers/adc/adc_sam_l/adc_callback.c          \
+       sam0/drivers/adc/adc_sam_l_c/adc.c                 \
+       sam0/drivers/adc/adc_sam_l_c/adc_callback.c        \
        sam0/drivers/adc/unit_test/unit_test.c             \
        sam0/drivers/dac/dac_sam_l/dac.c                   \
        sam0/drivers/dac/dac_sam_l/dac_callback.c          \
@@ -90,7 +90,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/adc                                   \
-       sam0/drivers/adc/adc_sam_l                         \
+       sam0/drivers/adc/adc_sam_l_c                       \
        sam0/drivers/adc/unit_test                         \
        sam0/drivers/adc/unit_test/saml21j18a_saml21_xplained_pro \
        sam0/drivers/dac                                   \

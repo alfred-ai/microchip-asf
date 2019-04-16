@@ -49,10 +49,10 @@
 /**
  * \defgroup asfdoc_sam0_system_pinmux_group SAM System Pin Multiplexer Driver (SYSTEM PINMUX)
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
- * and management of the device's physical I/O Pins, to alter the direction and
- * input/drive characteristics as well as to configure the pin peripheral
- * multiplexer selection.
+ * This driver for Atmel&reg; | SMART SAM devices provides an interface for the
+ * configuration and management of the device's physical I/O Pins, to alter the
+ * direction and input/drive characteristics as well as to configure the pin 
+ * peripheral multiplexer selection.
  *
  * The following peripherals are used by this module:
  *  - PORT (Port I/O Management)
@@ -62,7 +62,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * Physically, the modules are interconnected within the device as shown in the
  * following diagram:
@@ -97,7 +98,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH</td>
- *    <td>SAML21</td>
+ *    <td>SAML21, SAMC20/C21</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -202,7 +203,7 @@ extern "C" {
 #endif
 
 /*@{*/
-#if (SAML21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 /** Output Driver Strength Selection feature support. */
 #  define FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH
 #endif
@@ -607,9 +608,6 @@ void system_pinmux_group_set_output_drive(
  *		<th>Changelog</th>
  *	</tr>
  *	<tr>
- *		<td>Add SAML21 support.</td>
- *	</tr>
- *	<tr>
  *		<td>Removed code of open drain, slew limit and drive strength
  *		features</td>
  *	</tr>
@@ -647,8 +645,8 @@ void system_pinmux_group_set_output_drive(
  *	</tr>
  *	<tr>
  *		<td>F</td>
- *		<td>04/2015</td>
- *		<td>Add support for SAML21 and SAMDAx.</td>
+ *		<td>06/2015</td>
+ *		<td>Add support for SAML21, SAMDAx, and SAMC20/C21.</td>
  *	</tr>
  *	<tr>
  *		<td>E</td>

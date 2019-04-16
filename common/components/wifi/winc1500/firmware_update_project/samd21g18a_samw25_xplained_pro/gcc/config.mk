@@ -81,6 +81,9 @@ INC_PATH = \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/root_certificate_downloader/debug_uart \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/serial_bridge \
        common/components/wifi/winc1500/firmware_update_project/firmware/firmware \
+       common/components/wifi/winc1500/firmware_update_project/firmware/firmware/wifi_v111 \
+       common/components/wifi/winc1500/firmware_update_project/firmware/firmware/wifi_v111/ASIC_2B0 \
+       common/components/wifi/winc1500/firmware_update_project/firmware/firmware/wifi_v111/ASIC_3A0 \
        common/components/wifi/winc1500/firmware_update_project/firmware/ota_firmware \
        common/components/wifi/winc1500/firmware_update_project/firmware/programmer_firmware \
        common/components/wifi/winc1500/firmware_update_project/firmware/programmer_firmware/release \

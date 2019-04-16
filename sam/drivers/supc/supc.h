@@ -111,6 +111,10 @@ void supc_set_slcd_vol(Supc *p_supc, uint32_t vol);
 void supc_set_regulator_trim_factory(Supc *p_supc);
 void supc_set_regulator_trim_user(Supc *p_supc, uint32_t value);
 #endif
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+void supc_backup_sram_on(Supc *p_supc);
+void supc_backup_sram_off(Supc *p_supc);
+#endif
 
 /// @cond 0
 /**INDENT-OFF**/

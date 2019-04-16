@@ -50,7 +50,7 @@
 /**
  * \defgroup asfdoc_sam0_trng_group SAM True Random Number Generator (TRNG) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the device's True Random Number Generator functionality.
  *
  * The following driver API modes are covered by this manual:
@@ -59,7 +59,7 @@
  * - Callback APIs
  * \endif
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - TRNG (True Random Number Generator)
  *
  * The following devices can use this module:
@@ -94,7 +94,7 @@
  *
  * \section asfdoc_sam0_trng_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_trng_extra. This includes:
+ * For extra information, see \ref asfdoc_sam0_trng_extra. This includes:
  *  - \ref asfdoc_sam0_trng_extra_acronyms
  *  - \ref asfdoc_sam0_trng_extra_dependencies
  *  - \ref asfdoc_sam0_trng_extra_errata
@@ -129,7 +129,7 @@ typedef void (*trng_callback_t)(struct trng_module *const module_inst);
 
 /** Enum for possible callback types for the TRNG module. */
 enum trng_callback {
-	/** Callback for specific number of random data ready. */
+	/** Callback for specific number of random data ready */
 	TRNG_CALLBACK_READ_BUFFER = 0,
 	/** Number of available callbacks. */
 #if !defined(__DOXYGEN__)
@@ -174,8 +174,8 @@ struct trng_module {
  *  Configuration structure for a True Random Number Generator.
  */
 struct trng_config {
-	/** If \c true, the True Random Number Generator will not stopped in
-	 *  standby sleep mode. */
+	/** If \c true, the True Random Number Generator will not be stopped in
+	 *  standby sleep mode */
 	bool run_in_standby;
 };
 
@@ -186,7 +186,7 @@ struct trng_config {
  * disable events via \ref trng_enable_events() and \ref trng_disable_events().
  */
 struct trng_events {
-	/** Enable event generation on random data ready. */
+	/** Enable event generation on random data ready */
 	bool generate_event_on_data_ready;
 };
 
@@ -437,9 +437,9 @@ static inline enum status_code trng_read(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>04/2015</td>
- *		<td>Initial release</td>
+ *		<td>42444A</td>
+ *		<td>06/2015</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

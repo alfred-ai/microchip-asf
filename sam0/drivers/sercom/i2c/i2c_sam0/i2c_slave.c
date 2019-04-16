@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SAM I<SUP>2</SUP>C Slave Driver
+ * \brief SAM I2C Slave Driver
  *
  * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
  *
@@ -169,15 +169,35 @@ enum status_code i2c_slave_init(
 	}
 
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
+	uint32_t pm_index, gclk_index; 
+#if (SAML21) || (SAMC20) || (SAMC21)
 #if (SAML21)
-	uint32_t pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
+	if (sercom_index == 5) {
+		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
+		gclk_index   = SERCOM5_GCLK_ID_CORE;
+	} else {
+		pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
+		gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+	}
 #else
-	uint32_t pm_index     = sercom_index + PM_APBCMASK_SERCOM0_Pos;
+	pm_index     = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
+	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
 #endif
-	uint32_t gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
-
+#else
+	pm_index     = sercom_index + PM_APBCMASK_SERCOM0_Pos;
+	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+#endif
+	
 	/* Turn on module in PM */
+#if (SAML21)
+	if (sercom_index == 5) {
+		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, 1 << pm_index);
+	} else {
+		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);	
+	}
+#else
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, 1 << pm_index);
+#endif
 
 	/* Set up the GCLK for the module */
 	struct system_gclk_chan_config gclk_chan_conf;

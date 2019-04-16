@@ -59,9 +59,9 @@ extern "C" {
  *
  * \param[out] p_pdc        Device structure pointer
  * \param[in] p_packet      Pointer to packet information for current buffer register
- *                          set, NULL to let them as is.
+ *                          set. Use NULL to leave unaltered.
  * \param[in] p_next_packet Pointer to packet information for next buffer register
- *                          set, NULL to let them as is.
+ *                          set. Use NULL to leave unaltered.
  */
 void pdc_tx_init(
 		Pdc *p_pdc,
@@ -86,9 +86,9 @@ void pdc_tx_init(
  *
  * \param[out] p_pdc        Device structure pointer
  * \param[in] p_packet      Pointer to packet information for current buffer register
- *                          set, NULL to let them as is.
+ *                          set. Use NULL to leave unaltered.
  * \param[in] p_next_packet Pointer to packet information for next buffer register
- *                          set, NULL to let them as is.
+ *                          set. Use NULL to leave unaltered.
  */
 void pdc_rx_init(
 		Pdc *p_pdc,

@@ -38,6 +38,7 @@
  * \asf_license_stop
  *
  */
+
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
@@ -62,6 +63,7 @@ static void configure_tcc(void)
 	//! [setup_config_defaults]
 
 	//! [setup_change_config]
+	config_tcc.counter.clock_prescaler = TCC_CLOCK_PRESCALER_DIV256;
 	config_tcc.counter.period = 0xFFFF;
 	config_tcc.compare.wave_generation = TCC_WAVE_GENERATION_SINGLE_SLOPE_PWM;
 	config_tcc.compare.match[CONF_PWM_CHANNEL] = (0xFFFF / 4);

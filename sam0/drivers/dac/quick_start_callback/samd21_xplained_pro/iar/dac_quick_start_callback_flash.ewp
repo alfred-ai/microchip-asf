@@ -306,13 +306,13 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd21</state>
@@ -584,13 +584,13 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd21</state>
@@ -1287,13 +1287,13 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd21</state>
@@ -1565,13 +1565,13 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
-					<state>$PROJ_DIR$/../../../dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_samd21_r21_da</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_d_r</state>
+					<state>$PROJ_DIR$/../../../dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd21</state>
@@ -1967,22 +1967,49 @@
 		<group>
 			<name>drivers</name>
 			<group>
-				<name>system</name>
+				<name>dac</name>
 				<group>
-					<name>pinmux</name>
+					<name>dac_sam_d_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac_callback.c</name>
 					</file>
-					<group>
-						<name>quick_start</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
-						</file>
-					</group>
 					<file>
-						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_d_c/dac_feature.h</name>
 					</file>
 				</group>
+				<group>
+					<name>quick_start_callback</name>
+					<file>
+						<name>$PROJ_DIR$/../../qs_dac_callback.c</name>
+					</file>
+					<group>
+						<name>samd21_xplained_pro</name>
+						<file>
+							<name>$PROJ_DIR$/../conf_board.h</name>
+						</file>
+						<group>
+							<name>iar</name>
+							<file>
+								<name>$PROJ_DIR$/asf.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
+						</file>
+					</group>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../dac.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../dac_callback.h</name>
+				</file>
+			</group>
+			<group>
+				<name>system</name>
 				<group>
 					<name>clock</name>
 					<group>
@@ -2010,6 +2037,21 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../system/system.c</name>
 				</file>
+				<group>
+					<name>pinmux</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.c</name>
+					</file>
+					<group>
+						<name>quick_start</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../system/pinmux/quick_start/qs_pinmux_basic.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../system/pinmux/pinmux.h</name>
+					</file>
+				</group>
 				<group>
 					<name>interrupt</name>
 					<file>
@@ -2063,48 +2105,6 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../rtc/rtc_count_interrupt.h</name>
-				</file>
-			</group>
-			<group>
-				<name>dac</name>
-				<group>
-					<name>quick_start_callback</name>
-					<file>
-						<name>$PROJ_DIR$/../../qs_dac_callback.c</name>
-					</file>
-					<group>
-						<name>samd21_xplained_pro</name>
-						<file>
-							<name>$PROJ_DIR$/../conf_board.h</name>
-						</file>
-						<group>
-							<name>iar</name>
-							<file>
-								<name>$PROJ_DIR$/asf.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>dac_sam_d</name>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac_callback.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_d/dac_feature.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../dac.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../dac_callback.h</name>
 				</file>
 			</group>
 			<group>

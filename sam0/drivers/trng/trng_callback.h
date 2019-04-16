@@ -64,7 +64,7 @@ extern "C" {
  * the driver.
  */
 enum trng_job_type {
-	/** Asynchronous TRNG read into a user provided buffer. */
+	/** Asynchronous TRNG read into a user provided buffer */
 	TRNG_JOB_READ_BUFFER,
 };
 

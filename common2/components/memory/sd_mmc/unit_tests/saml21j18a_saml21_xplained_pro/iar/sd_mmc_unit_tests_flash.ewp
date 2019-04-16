@@ -2027,9 +2027,6 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/dsu.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/usb.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/port.h</name>
 							</file>
 							<file>
@@ -2037,6 +2034,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/aes.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/usb.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/mclk.h</name>
@@ -2153,7 +2153,7 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/aes.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/gclk.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/nvmctrl.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/port.h</name>
@@ -2213,7 +2213,7 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/sercom2.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/nvmctrl.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/gclk.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/pm.h</name>
@@ -2446,6 +2446,12 @@
 						<name>quick_start_dma</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart/quick_start_dma/qs_usart_dma_use.h</name>
+						</file>
+					</group>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
 						</file>
 					</group>
 					<file>

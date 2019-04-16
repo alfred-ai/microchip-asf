@@ -50,10 +50,10 @@
 /**
  * \defgroup asfdoc_sam0_opamp_group SAM Operational Amplifier Controller (OPAMP) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the device's Operational Amplifier Controller functionality.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - OPAMP (Operational Amplifier Controller)
  *
  * The following devices can use this module:
@@ -75,16 +75,16 @@
  *
  * \section asfdoc_sam0_opamp_module_overview Module Overview
  *
- * The OPAMP is individually configurable low power, general purpose operational
+ * The OPAMP is an individually configurable low power, general purpose operational
  * amplifier offering a high degree of flexibility and rail-to-rail inputs.
  *
  * Each operational amplifier can be configured in standalone operational amplifier
  * and operational amplifier with built-in feedback. All OPAMPs can be cascaded
  * to support circuits such as differential amplifiers.
- * \note For more detail configuration reference, refer to the datasheet
- * "Build-in Modes" section.
+ * \note For more detail configuration reference, refer to the "Built-in Modes"
+ * section in the device datasheet.
  *
- * Each OPAMP has one positive and one negative input which be flexibly chosen
+ * Each OPAMP has one positive and one negative input which can be flexible chosen
  * from analog input pins including the output of another OPAMP, internal inputs
  * such as the DAC or the resistor ladder, and the ground.
  *
@@ -102,7 +102,7 @@
  *
  * \section asfdoc_sam0_opamp_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_opamp_extra. This includes:
+ * For extra information, see \ref asfdoc_sam0_opamp_extra. This includes:
  *  - \ref asfdoc_sam0_opamp_extra_acronyms
  *  - \ref asfdoc_sam0_opamp_extra_dependencies
  *  - \ref asfdoc_sam0_opamp_extra_errata
@@ -130,207 +130,207 @@ extern "C" {
  * \brief OPAMP ID number enum.
  */
 enum opamp_id {
-	/** OPAMP 0.  */
+	/** OPAMP 0  */
 	OPAMP_0 = 0,
-	/** OPAMP 1.  */
+	/** OPAMP 1  */
 	OPAMP_1 = 1,
-	/** OPAMP 2.  */
+	/** OPAMP 2  */
 	OPAMP_2 = 2,
-	/** OPAMP number.  */
+	/** OPAMP number  */
 	OPAMP_NUM,
 };
 
 /**
- * \brief Negative input mux selection configuration enum.
+ * \brief Negative input MUX selection configuration enum.
  *
  * Enum for the negative input of OPAMP0.
  */
 enum opamp0_neg_mux {
-	/** Negative I/O pin 0. */
+	/** Negative I/O pin 0 */
 	OPAMP0_NEG_MUX_PIN0 = OPAMP_OPAMPCTRL_MUXNEG(0),
-	/** Resistor ladder 0 taps. */
+	/** Resistor ladder 0 taps */
 	OPAMP0_NEG_MUX_TAP0 = OPAMP_OPAMPCTRL_MUXNEG(1),
-	/** OPAMP output. */
+	/** OPAMP output */
 	OPAMP0_NEG_MUX_OUT0 = OPAMP_OPAMPCTRL_MUXNEG(2),
-	/** DAC output. */
+	/** DAC output */
 	OPAMP0_NEG_MUX_DAC = OPAMP_OPAMPCTRL_MUXNEG(3),
 };
 
 /**
- * \brief Negative input mux selection configuration enum.
+ * \brief Negative input MUX selection configuration enum.
  *
  * Enum for the negative input of OPAMP1.
  */
 enum opamp1_neg_mux {
-	/** Negative I/O pin 1. */
+	/** Negative I/O pin 1 */
 	OPAMP1_NEG_MUX_PIN1 = OPAMP_OPAMPCTRL_MUXNEG(0),
-	/** Resistor ladder 1 taps. */
+	/** Resistor ladder 1 taps */
 	OPAMP1_NEG_MUX_TAP1 = OPAMP_OPAMPCTRL_MUXNEG(1),
-	/** OPAMP output. */
+	/** OPAMP output */
 	OPAMP1_NEG_MUX_OUT1 = OPAMP_OPAMPCTRL_MUXNEG(2),
-	/** DAC output. */
+	/** DAC output */
 	OPAMP1_NEG_MUX_DAC = OPAMP_OPAMPCTRL_MUXNEG(3),
 };
 
 /**
- * \brief Negative input mux selection configuration enum.
+ * \brief Negative input MUX selection configuration enum.
  *
  * Enum for the negative input of OPAMP2.
  */
 enum opamp2_neg_mux {
-	/** Negative I/O pin 2. */
+	/** Negative I/O pin 2 */
 	OPAMP2_NEG_MUX_PIN2 = OPAMP_OPAMPCTRL_MUXNEG(0),
-	/** Resistor ladder 2 taps. */
+	/** Resistor ladder 2 taps */
 	OPAMP2_NEG_MUX_TAP2 = OPAMP_OPAMPCTRL_MUXNEG(1),
-	/** OPAMP output. */
+	/** OPAMP output */
 	OPAMP2_NEG_MUX_OUT2 = OPAMP_OPAMPCTRL_MUXNEG(2),
-	/** Negative I/O pin 0. */
+	/** Negative I/O pin 0 */
 	OPAMP2_NEG_MUX_PIN0 = OPAMP_OPAMPCTRL_MUXNEG(3),
-	/** Negative I/O pin 1. */
+	/** Negative I/O pin 1 */
 	OPAMP2_NEG_MUX_PIN1 = OPAMP_OPAMPCTRL_MUXNEG(4),
-	/** DAC output. */
+	/** DAC output */
 	OPAMP2_NEG_MUX_DAC = OPAMP_OPAMPCTRL_MUXNEG(5),
 };
 
 /**
- * \brief Positive input mux selection configuration enum.
+ * \brief Positive input MUX selection configuration enum.
  *
  * Enum for the positive input of OPAMP0.
  */
 enum opamp0_pos_mux {
-	/** Positive I/O pin 0. */
+	/** Positive I/O pin 0 */
 	OPAMP0_POS_MUX_PIN0 = OPAMP_OPAMPCTRL_MUXPOS(0),
-	/** Resistor ladder 0 taps. */
+	/** Resistor ladder 0 taps */
 	OPAMP0_POS_MUX_TAP0 = OPAMP_OPAMPCTRL_MUXPOS(1),
-	/** DAC output. */
+	/** DAC output */
 	OPAMP0_POS_MUX_DAC = OPAMP_OPAMPCTRL_MUXPOS(2),
-	/** Ground. */
+	/** Ground */
 	OPAMP0_POS_MUX_GND = OPAMP_OPAMPCTRL_MUXPOS(3),
 };
 
 /**
- * \brief Positive input mux selection configuration enum.
+ * \brief Positive input MUX selection configuration enum.
  *
  * Enum for the positive input of OPAMP1.
  */
 enum opamp1_pos_mux {
-	/** Positive I/O pin 1. */
+	/** Positive I/O pin 1 */
 	OPAMP1_POS_MUX_PIN1 = OPAMP_OPAMPCTRL_MUXPOS(0),
-	/** Resistor ladder 1 taps. */
+	/** Resistor ladder 1 taps */
 	OPAMP1_POS_MUX_TAP1 = OPAMP_OPAMPCTRL_MUXPOS(1),
-	/** OPAMP0 output. */
+	/** OPAMP0 output */
 	OPAMP1_POS_MUX_OUT0 = OPAMP_OPAMPCTRL_MUXPOS(2),
-	/** Ground. */
+	/** Ground */
 	OPAMP1_POS_MUX_GND = OPAMP_OPAMPCTRL_MUXPOS(3),
 };
 
 /**
- * \brief Positive input mux selection configuration enum.
+ * \brief Positive input MUX selection configuration enum.
  *
  * Enum for the positive input of OPAMP2.
  */
 enum opamp2_pos_mux {
-	/** Positive I/O pin 2. */
+	/** Positive I/O pin 2 */
 	OPAMP2_POS_MUX_PIN2 = OPAMP_OPAMPCTRL_MUXPOS(0),
-	/** Resistor ladder 2 taps. */
+	/** Resistor ladder 2 taps */
 	OPAMP2_POS_MUX_TAP2 = OPAMP_OPAMPCTRL_MUXPOS(1),
-	/** OPAMP1 output. */
+	/** OPAMP1 output */
 	OPAMP2_POS_MUX_OUT1 = OPAMP_OPAMPCTRL_MUXPOS(2),
-	/** Ground. */
+	/** Ground */
 	OPAMP2_POS_MUX_GND = OPAMP_OPAMPCTRL_MUXPOS(3),
-	/** Positive I/O pin 0. */
+	/** Positive I/O pin 0 */
 	OPAMP2_POS_MUX_PIN0 = OPAMP_OPAMPCTRL_MUXPOS(4),
-	/** Positive I/O pin 1. */
+	/** Positive I/O pin 1 */
 	OPAMP2_POS_MUX_PIN1 = OPAMP_OPAMPCTRL_MUXPOS(5),
-	/** Resistor ladder 0 taps. */
+	/** Resistor ladder 0 taps */
 	OPAMP2_POS_MUX_TAP0 = OPAMP_OPAMPCTRL_MUXPOS(6),
 };
 
 /**
- * \brief Potentimeter selection mux configuration enum.
+ * \brief Potentiometer selection MUX configuration enum.
  *
- * Enum for the Potentimeter selection of OPAMP 0 to 2.
+ * Enum for the potentiometer selection of OPAMP 0 to 2.
  */
 enum opamp_pot_mux {
-	/** Gain = R2/R1 = 1/7. */
+	/** Gain = R2/R1 = 1/7 */
 	OPAMP_POT_MUX_14R_2R = OPAMP_OPAMPCTRL_POTMUX(0),
-	/** Gain = R2/R1 = 1/3. */
+	/** Gain = R2/R1 = 1/3 */
 	OPAMP_POT_MUX_12R_4R = OPAMP_OPAMPCTRL_POTMUX(1),
-	/** Gain = R2/R1 = 1. */
+	/** Gain = R2/R1 = 1 */
 	OPAMP_POT_MUX_8R_8R = OPAMP_OPAMPCTRL_POTMUX(2),
-	/** Gain = R2/R1 = 1 + 2/3. */
+	/** Gain = R2/R1 = 1 + 2/3 */
 	OPAMP_POT_MUX_6R_10R = OPAMP_OPAMPCTRL_POTMUX(3),
-	/** Gain = R2/R1 = 3. */
+	/** Gain = R2/R1 = 3 */
 	OPAMP_POT_MUX_4R_12R = OPAMP_OPAMPCTRL_POTMUX(4),
-	/** Gain = R2/R1 = 4 + 1/3. */
+	/** Gain = R2/R1 = 4 + 1/3 */
 	OPAMP_POT_MUX_3R_13R = OPAMP_OPAMPCTRL_POTMUX(5),
-	/** Gain = R2/R1 = 7. */
+	/** Gain = R2/R1 = 7 */
 	OPAMP_POT_MUX_2R_14R = OPAMP_OPAMPCTRL_POTMUX(6),
-	/** Gain = R2/R1 = 15. */
+	/** Gain = R2/R1 = 15 */
 	OPAMP_POT_MUX_R_15R = OPAMP_OPAMPCTRL_POTMUX(7),
 };
 
 /**
- * \brief Resistor 1 mux selection configuration enum.
+ * \brief Resistor 1 MUX selection configuration enum.
  *
  * Enum for the Resistor 1 of OPAMP0.
  */
 enum opamp0_res1_mux {
-	/** Positive input of OPAMP0. */
+	/** Positive input of OPAMP0 */
 	OPAMP0_RES1_MUX_POS_PIN0 = OPAMP_OPAMPCTRL_RES1MUX(0),
-	/** Negative input of OPAMP0. */
+	/** Negative input of OPAMP0 */
 	OPAMP0_RES1_MUX_NEG_PIN0 = OPAMP_OPAMPCTRL_RES1MUX(1),
-	/** DAC output. */
+	/** DAC output */
 	OPAMP0_RES1_MUX_DAC = OPAMP_OPAMPCTRL_RES1MUX(2),
-	/** Ground. */
+	/** Ground */
 	OPAMP0_RES1_MUX_GND = OPAMP_OPAMPCTRL_RES1MUX(3),
 };
 
 /**
- * \brief Resistor 1 mux selection configuration enum.
+ * \brief Resistor 1 MUX selection configuration enum.
  *
  * Enum for the Resistor 1 of OPAMP1.
  */
 enum opamp1_res1_mux {
-	/** Positive input of OPAMP1. */
+	/** Positive input of OPAMP1 */
 	OPAMP1_RES1_MUX_POS_PIN0 = OPAMP_OPAMPCTRL_RES1MUX(0),
-	/** Negative input of OPAMP1. */
+	/** Negative input of OPAMP1 */
 	OPAMP1_RES1_MUX_NEG_PIN0 = OPAMP_OPAMPCTRL_RES1MUX(1),
-	/** OPAMP0 output. */
+	/** OPAMP0 output */
 	OPAMP1_RES1_MUX_OUT0 = OPAMP_OPAMPCTRL_RES1MUX(2),
-	/** Ground. */
+	/** Ground */
 	OPAMP1_RES1_MUX_GND = OPAMP_OPAMPCTRL_RES1MUX(3),
 };
 
 /**
- * \brief Resistor 1 mux selection configuration enum.
+ * \brief Resistor 1 MUX selection configuration enum.
  *
  * Enum for the Resistor 1 of OPAMP2.
  */
 enum opamp2_res1_mux {
-	/** Positive input of OPAMP2. */
+	/** Positive input of OPAMP2 */
 	OPAMP2_RES1_MUX_POS_PIN0 = OPAMP_OPAMPCTRL_RES1MUX(0),
-	/** Negative input of OPAMP2. */
+	/** Negative input of OPAMP2 */
 	OPAMP2_RES1_MUX_NEG_PIN0 = OPAMP_OPAMPCTRL_RES1MUX(1),
-	/** OPAMP1 output. */
+	/** OPAMP1 output */
 	OPAMP2_RES1_MUX_OUT1 = OPAMP_OPAMPCTRL_RES1MUX(2),
-	/** Ground. */
+	/** Ground */
 	OPAMP2_RES1_MUX_GND = OPAMP_OPAMPCTRL_RES1MUX(3),
 };
 
 /**
- * \brief Bias mode selection mux configuration enum.
+ * \brief Bias mode selection MUX configuration enum.
  *
  * Enum for the Bias mode selection of OPAMP 0 to 2.
  */
 enum opamp_bias_selection {
-	/** Minimum current consumption but the slowest mode. */
+	/** Minimum current consumption but the slowest mode */
 	OPAMP_BIAS_MODE_0 = OPAMP_OPAMPCTRL_BIAS(0),
-	/** Low current consumption, slow speed. */
+	/** Low current consumption, slow speed */
 	OPAMP_BIAS_MODE_1 = OPAMP_OPAMPCTRL_BIAS(1),
-	/** High current consumption, fast speed. */
+	/** High current consumption, fast speed */
 	OPAMP_BIAS_MODE_2 = OPAMP_OPAMPCTRL_BIAS(2),
-	/** Maximum current consumption but the fastest mode. */
+	/** Maximum current consumption but the fastest mode */
 	OPAMP_BIAS_MODE_3 = OPAMP_OPAMPCTRL_BIAS(3),
 };
 
@@ -340,24 +340,24 @@ enum opamp_bias_selection {
  *  Common configuration structure for OPAMP 0 to 2.
  */
 struct opamp_config_common {
-	/**  Potentimeter selection. */
+	/**  Potentiometer selection */
 	enum opamp_pot_mux potentiometer_selection;
-	/** If \c true, R1 connected to RES1MUX. */
+	/** If \c true, R1 connected to RES1MUX */
 	bool r1_enable;
-	/** If \c true, resistor ladder to V<SUB>CC</SUB>. */
+	/** If \c true, resistor ladder to V<SUB>CC</SUB> */
 	bool r2_vcc;
-	/** If \c true, resistor ladder to output. */
+	/** If \c true, resistor ladder to output */
 	bool r2_out;
 	/** If \c true, the OPAMPx is enabled when a peripheral is requesting
 	 * the OPAMPx to be used as an input. The OPAMPx is
         * disabled if no peripheral is requesting it as an input. */
 	bool on_demand;
 	/** If \c true, the OPAMPx is not stopped during sleep
-	 *  mode when triggered. */
+	 *  mode when triggered */
 	bool run_in_standby;
-	/**  Bias mode selection. */
+	/**  Bias mode selection */
 	enum opamp_bias_selection bias_value;
-	/** If \c true, OPAMP output is connected to the ADC or AC input. */
+	/** If \c true, OPAMP output is connected to the ADC or AC input */
 	bool analog_out;
 };
 
@@ -367,14 +367,14 @@ struct opamp_config_common {
  *  Configuration structure for OPAMP 0.
  */
 struct opamp0_config {
-	/** Negative input mux selection. */
+	/** Negative input MUX selection */
 	enum opamp0_neg_mux negative_input;
-	/** Positive input mux selection. */
+	/** Positive input MUX selection */
 	enum opamp0_pos_mux positive_input;
-	/** Resistor 1 mux selection. */
+	/** Resistor 1 MUX selection */
 	enum opamp0_res1_mux r1_connection;
 	/** If \c true, the comparator will continue to sample during sleep
-	 *  mode when triggered. */
+	 *  mode when triggered */
 	struct opamp_config_common config_common;
 };
 
@@ -384,14 +384,14 @@ struct opamp0_config {
  *  Configuration structure for OPAMP 1.
  */
 struct opamp1_config {
-	/** Negative input mux selection. */
+	/** Negative input MUX selection */
 	enum opamp1_neg_mux negative_input;
-	/** Positive input mux selection. */
+	/** Positive input MUX selection */
 	enum opamp1_pos_mux positive_input;
-	/** Resistor 1 mux selection. */
+	/** Resistor 1 MUX selection */
 	enum opamp1_res1_mux r1_connection;
 	/** If \c true, the comparator will continue to sample during sleep
-	 *  mode when triggered. */
+	 *  mode when triggered */
 	struct opamp_config_common config_common;
 };
 
@@ -401,14 +401,14 @@ struct opamp1_config {
  *  Configuration structure for OPAMP 2.
  */
 struct opamp2_config {
-	/** Negative input mux selection. */
+	/** Negative input MUX selection */
 	enum opamp2_neg_mux negative_input;
-	/** Positive input mux selection. */
+	/** Positive input MUX selection */
 	enum opamp2_pos_mux positive_input;
-	/** Resistor 1 mux selection. */
+	/** Resistor 1 MUX selection */
 	enum opamp2_res1_mux r1_connection;
 	/** If \c true, the comparator will continue to sample during sleep
-	 *  mode when triggered. */
+	 *  mode when triggered */
 	struct opamp_config_common config_common;
 };
 
@@ -459,8 +459,8 @@ static inline void opamp_module_disable(void)
 /**
  * \brief Enables OPAMP voltage doubler.
  *
- * The analog input muxes have low resistance, but consume more
- * power at lower voltages(e.g., driven by the voltage doubler).
+ * The analog input MUXes have low resistance, but consume more
+ * power at lower voltages (e.g., driven by the voltage doubler).
  *
  */
 static inline void opamp_voltage_doubler_enable(void)
@@ -478,7 +478,7 @@ static inline void opamp_voltage_doubler_enable(void)
 /**
  * \brief Disables OPAMP voltage doubler.
  *
- * The analog input muxes have high resistance, but consume less power
+ * The analog input MUXes have high resistance, but consume less power
  * at lower voltages (e.g., the voltage doubler is disabled).
  */
 static inline void opamp_voltage_doubler_disable(void)
@@ -496,8 +496,8 @@ static inline void opamp_voltage_doubler_disable(void)
  *  instances of these configuration structures before being modified by the
  *  user application.
  *
- *  The default configuration is setting OPAMP0 as "Voltage Follower",
- *  refer to the first mode in datasheet "Build-in Modes" section.
+ *  The default configuration is setting OPAMP0 as "Voltage Follower", refer to
+ *  the first mode of "Built-in Modes" in the device datasheet.
  *
  *  \param[out] config  OPAMP0 configuration structure to initialize to
  *                       default values
@@ -513,8 +513,8 @@ void opamp0_get_config_defaults(struct opamp0_config *const config);
  *  instances of these configuration structures before being modified by the
  *  user application.
  *
- *  The default configuration is setting OPAMP1 as "Voltage Follower",
- *  refer to the first mode in datasheet "Build-in Modes" section.
+ *  The default configuration is setting OPAMP1 as "Voltage Follower", refer to
+ *  the first mode of "Built-in Modes" in the device datasheet.
  *
  *  \param[out] config  OPAMP1 configuration structure to initialize to
  *                       default values
@@ -530,8 +530,8 @@ void opamp1_get_config_defaults(struct opamp1_config *const config);
  *  instances of these configuration structures before being modified by the
  *  user application.
  *
- *  The default configuration is setting OPAMP2 as "Voltage Follower",
- *  refer to the first mode in datasheet "Build-in Modes" section.
+ *  The default configuration is setting OPAMP2 as "Voltage Follower", refer to
+ *  the first mode of "Built-in Modes" in the device datasheet.
  *
  *  \param[out] config  OPAMP2 configuration structure to initialize to
  *                       default values
@@ -653,7 +653,7 @@ bool opamp_is_ready(const enum opamp_id number);
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_opamp_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_opamp_basic_use_case
@@ -667,9 +667,9 @@ bool opamp_is_ready(const enum opamp_id number);
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>04/2015</td>
- *		<td>Initial release</td>
+ *		<td>42446A</td>
+ *		<td>07/2015</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

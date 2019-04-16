@@ -317,13 +317,13 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -593,13 +593,13 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1294,13 +1294,13 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1570,13 +1570,13 @@
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1980,6 +1980,48 @@
 				</file>
 			</group>
 			<group>
+				<name>adc</name>
+				<group>
+					<name>adc_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../adc_sam_l_c/adc.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../adc_sam_l_c/adc_feature.h</name>
+					</file>
+				</group>
+				<group>
+					<name>quick_start_dma</name>
+					<file>
+						<name>$PROJ_DIR$/../../qs_adc_dma_use.c</name>
+					</file>
+					<group>
+						<name>saml21_xplained_pro</name>
+						<file>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../conf_board.h</name>
+						</file>
+						<group>
+							<name>iar</name>
+							<file>
+								<name>$PROJ_DIR$/asf.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../conf_dma.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../qs_adc_dma_use.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../adc.h</name>
+				</file>
+			</group>
+			<group>
 				<name>system</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../system/system.c</name>
@@ -2059,48 +2101,6 @@
 						</file>
 					</group>
 				</group>
-			</group>
-			<group>
-				<name>adc</name>
-				<group>
-					<name>adc_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../adc_sam_l/adc.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../adc_sam_l/adc_feature.h</name>
-					</file>
-				</group>
-				<group>
-					<name>quick_start_dma</name>
-					<file>
-						<name>$PROJ_DIR$/../../qs_adc_dma_use.c</name>
-					</file>
-					<group>
-						<name>saml21_xplained_pro</name>
-						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../conf_board.h</name>
-						</file>
-						<group>
-							<name>iar</name>
-							<file>
-								<name>$PROJ_DIR$/asf.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../conf_dma.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../qs_adc_dma_use.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../adc.h</name>
-				</file>
 			</group>
 			<group>
 				<name>port</name>
@@ -2378,9 +2378,6 @@
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g16a.h</name>
 						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g18a.h</name>
-						</file>
 						<group>
 							<name>pio</name>
 							<file>
@@ -2411,6 +2408,9 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21g17a.h</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g18a.h</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g17a.h</name>
 						</file>

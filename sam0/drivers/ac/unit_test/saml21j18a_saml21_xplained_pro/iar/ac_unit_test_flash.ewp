@@ -325,6 +325,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../ac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -332,7 +333,6 @@
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
-					<state>$PROJ_DIR$/../../../ac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -610,6 +610,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../ac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -617,7 +618,6 @@
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
-					<state>$PROJ_DIR$/../../../ac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1320,6 +1320,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../ac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1327,7 +1328,6 @@
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
-					<state>$PROJ_DIR$/../../../ac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1605,6 +1605,7 @@
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
 					<state>$PROJ_DIR$/../../../../../../common2/services/delay/sam0</state>
+					<state>$PROJ_DIR$/../../../ac_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1612,7 +1613,6 @@
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
-					<state>$PROJ_DIR$/../../../ac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -2099,6 +2099,12 @@
 			<group>
 				<name>ac</name>
 				<group>
+					<name>ac_sam_l_c</name>
+					<file>
+						<name>$PROJ_DIR$/../../../ac_sam_l_c/ac.c</name>
+					</file>
+				</group>
+				<group>
 					<name>unit_test</name>
 					<file>
 						<name>$PROJ_DIR$/../../unit_test.c</name>
@@ -2121,12 +2127,6 @@
 							<name>$PROJ_DIR$/../conf_test.h</name>
 						</file>
 					</group>
-				</group>
-				<group>
-					<name>ac_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../ac_sam_l/ac.c</name>
-					</file>
 				</group>
 				<file>
 					<name>$PROJ_DIR$/../../../ac_callback.c</name>
@@ -2154,6 +2154,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../sercom/usart/usart.c</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>

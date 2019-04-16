@@ -63,6 +63,11 @@ void configure_gclock_generator(void)
 	gclock_gen_conf.source_clock    = SYSTEM_CLOCK_SOURCE_OSC16M;
 	gclock_gen_conf.division_factor = 128;
 //! [setup_3]
+#elif (SAMC21)
+//! [setup_3]
+	gclock_gen_conf.source_clock    = SYSTEM_CLOCK_SOURCE_OSC48M;
+	gclock_gen_conf.division_factor = 128;
+//! [setup_3]
 #else
 //! [setup_3]
 	gclock_gen_conf.source_clock    = SYSTEM_CLOCK_SOURCE_OSC8M;

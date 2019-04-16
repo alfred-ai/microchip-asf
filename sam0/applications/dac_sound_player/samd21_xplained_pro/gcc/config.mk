@@ -55,8 +55,8 @@ CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        sam0/applications/dac_sound_player/dac_sound_player.c \
        sam0/boards/samd21_xplained_pro/board_init.c       \
-       sam0/drivers/dac/dac_sam_d/dac.c                   \
-       sam0/drivers/dac/dac_sam_d/dac_callback.c          \
+       sam0/drivers/dac/dac_sam_d_c/dac.c                 \
+       sam0/drivers/dac/dac_sam_d_c/dac_callback.c        \
        sam0/drivers/events/events_hooks.c                 \
        sam0/drivers/events/events_sam_d_r/events.c        \
        sam0/drivers/port/port.c                           \
@@ -83,7 +83,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/samd21_xplained_pro                    \
        sam0/drivers/dac                                   \
-       sam0/drivers/dac/dac_sam_d                         \
+       sam0/drivers/dac/dac_sam_d_c                       \
        sam0/drivers/events                                \
        sam0/drivers/events/events_sam_d_r                 \
        sam0/drivers/port                                  \

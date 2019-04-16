@@ -217,12 +217,21 @@ uint32_t usart_init_sync_slave(Usart *p_usart,
 		const sam_usart_opt_t *p_usart_opt);
 uint32_t usart_init_rs485(Usart *p_usart,
 		const sam_usart_opt_t *p_usart_opt, uint32_t ul_mck);
-#if (!SAMG55)
+#if (!SAMG55 && !SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
 uint32_t usart_init_irda(Usart *p_usart,
 		const sam_usart_opt_t *p_usart_opt, uint32_t ul_mck);
 #endif
+#if (!SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
 uint32_t usart_init_iso7816(Usart *p_usart,
 		const usart_iso7816_opt_t *p_usart_opt, uint32_t ul_mck);
+void usart_reset_iterations(Usart *p_usart);
+void usart_reset_nack(Usart *p_usart);
+uint32_t usart_is_rx_buf_end(Usart *p_usart);
+uint32_t usart_is_tx_buf_end(Usart *p_usart);
+uint32_t usart_is_rx_buf_full(Usart *p_usart);
+uint32_t usart_is_tx_buf_empty(Usart *p_usart);
+uint8_t usart_get_error_number(Usart *p_usart);
+#endif
 uint32_t usart_init_spi_master(Usart *p_usart,
 		const usart_spi_opt_t *p_usart_opt, uint32_t ul_mck);
 uint32_t usart_init_spi_slave(Usart *p_usart,
@@ -268,8 +277,6 @@ void usart_start_tx_break(Usart *p_usart);
 void usart_stop_tx_break(Usart *p_usart);
 void usart_start_rx_timeout(Usart *p_usart);
 uint32_t usart_send_address(Usart *p_usart, uint32_t ul_addr);
-void usart_reset_iterations(Usart *p_usart);
-void usart_reset_nack(Usart *p_usart);
 void usart_restart_rx_timeout(Usart *p_usart);
 #if (SAM3S || SAM4S || SAM3U || SAM4L || SAM4E)
 void usart_drive_DTR_pin_low(Usart *p_usart);
@@ -282,10 +289,6 @@ void usart_spi_release_chip_select(Usart *p_usart);
 uint32_t usart_is_tx_ready(Usart *p_usart);
 uint32_t usart_is_tx_empty(Usart *p_usart);
 uint32_t usart_is_rx_ready(Usart *p_usart);
-uint32_t usart_is_rx_buf_end(Usart *p_usart);
-uint32_t usart_is_tx_buf_end(Usart *p_usart);
-uint32_t usart_is_rx_buf_full(Usart *p_usart);
-uint32_t usart_is_tx_buf_empty(Usart *p_usart);
 uint32_t usart_write(Usart *p_usart, uint32_t c);
 uint32_t usart_putchar(Usart *p_usart, uint32_t c);
 void usart_write_line(Usart *p_usart, const char *string);
@@ -295,13 +298,12 @@ uint32_t usart_getchar(Usart *p_usart, uint32_t *c);
 uint32_t *usart_get_tx_access(Usart *p_usart);
 uint32_t *usart_get_rx_access(Usart *p_usart);
 #endif
-#if (!SAM4L)
+#if (!SAM4L && !SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
 Pdc *usart_get_pdc_base(Usart *p_usart);
 #endif
 void usart_enable_writeprotect(Usart *p_usart);
 void usart_disable_writeprotect(Usart *p_usart);
 uint32_t usart_get_writeprotect_status(Usart *p_usart);
-uint8_t usart_get_error_number(Usart *p_usart);
 #if (SAM3S || SAM4S || SAM3U || SAM3XA || SAM4L || SAM4E || SAM4C || SAM4CP || SAM4CM)
 void usart_man_set_tx_pre_len(Usart *p_usart, uint8_t uc_len);
 void usart_man_set_tx_pre_pattern(Usart *p_usart, uint8_t uc_pattern);

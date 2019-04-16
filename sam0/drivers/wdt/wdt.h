@@ -67,7 +67,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_wdt_prerequisites
@@ -251,7 +252,7 @@ struct wdt_conf {
 	bool always_on;
 	/** Enable/Disable the Watchdog Timer. */
 	bool enable;
-#if !(SAML21)
+#if !(SAML21) && !(SAMC20) && !(SAMC21)
 	/** GCLK generator used to clock the peripheral except SAM L21.*/
 	enum gclk_generator clock_source;
 #endif
@@ -286,7 +287,7 @@ static inline bool wdt_is_syncing(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21)
+#if (SAML21) || (SAMC20) || (SAMC21)
 	if (WDT_module->SYNCBUSY.reg) {
 #else
 	if (WDT_module->STATUS.reg & WDT_STATUS_SYNCBUSY) {
@@ -324,7 +325,7 @@ static inline void wdt_get_config_defaults(
 	/* Default configuration values */
 	config->always_on            = false;
 	config->enable               = true;
-#if !(SAML21)
+#if !(SAML21) && !(SAMC20) && !(SAMC21)
 	config->clock_source         = GCLK_GENERATOR_4;
 #endif
 	config->timeout_period       = WDT_PERIOD_16384CLK;
@@ -346,7 +347,7 @@ static inline bool wdt_is_locked(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21)
+#if (SAML21) || (SAMC20) || (SAMC21)
 	return (WDT_module->CTRLA.reg & WDT_CTRLA_ALWAYSON);
 #else
 	return (WDT_module->CTRL.reg & WDT_CTRL_ALWAYSON);
@@ -468,6 +469,11 @@ void wdt_reset_count(void);
  *		<th>Doc. Rev.</td>
  *		<th>Date</td>
  *		<th>Comments</td>
+ *	</tr>
+ *	<tr>
+ *		<td>F</td>
+ *		<td>01/2015</td>
+ *		<td>Added SAMC21 support.</td>
  *	</tr>
  *	<tr>
  *		<td>E</td>

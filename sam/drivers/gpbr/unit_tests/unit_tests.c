@@ -88,6 +88,7 @@
  * - sam4cp16b_sam4cp16bmb
  * - sam4cmp16c_sam4cmp_db
  * - sam4cms16c_sam4cms_db
+ * - samv71q21_samv71_xplained_ultra
  *
  * \section compinfo Compilation info
  * This software was written for the GNU GCC and IAR for ARM. Other compilers
@@ -189,7 +190,7 @@ static void run_gpbr_test(const struct test_case *test)
 		/* Read the data from GPBR0 */
 		ul_read_value = gpbr_read(GPBR0);
 
-#if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CP || SAM4CM)
+#if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CP || SAM4CM || SAMV70 || SAMV71 || SAME70 || SAMS70)
 		/* Erase flag page */
 		flash_erase_page(ul_test_page_addr, IFLASH_ERASE_PAGES_8);
 
@@ -228,7 +229,7 @@ static void run_gpbr_test(const struct test_case *test)
 	/* Wait for RTT alarm event */
 	rtt_write_alarm_time(RTT, RTT_WAIT_TIME);
 
-#if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CP || SAM4CM)
+#if (SAM4S || SAM4E || SAM4N || SAM4C || SAM4CP || SAM4CM || SAMV70 || SAMV71 || SAME70 || SAMS70)
 	/* Erase flag page */
 	if(flash_erase_page(ul_test_page_addr, IFLASH_ERASE_PAGES_8) != FLASH_RC_OK)
 		printf("erase page failed!\r\n");
@@ -250,7 +251,7 @@ static void run_gpbr_test(const struct test_case *test)
 
 	/* Enter backup mode */
 	pmc_enable_backupmode();
-#if (!(SAM4S) && !(SAM4E) && !(SAM4N) && !(SAM4C) && !(SAM4CP) && !(SAM4CM))
+#if (!(SAM4S) && !(SAM4E) && !(SAM4N) && !(SAM4C) && !(SAM4CP) && !(SAM4CM) && !(SAMV70) && !(SAMV71) && !(SAME70) && !(SAMS70))
 	supc_enable_backup_mode(SUPC);
 #endif
 
@@ -266,7 +267,13 @@ int main(void)
 {
 	const usart_serial_options_t usart_serial_options = {
 		.baudrate = CONF_TEST_BAUDRATE,
-		.paritytype = CONF_TEST_PARITY
+#ifdef CONF_TEST_CHAR_LENGTH
+		.charlength = CONF_TEST_CHAR_LENGTH,
+#endif
+		.paritytype = CONF_TEST_PARITY,
+#ifdef CONF_TEST_STOP_BITS
+		.stopbits = CONF_TEST_STOP_BITS,
+#endif
 	};
 
 	/* Initialize the system clock and board */

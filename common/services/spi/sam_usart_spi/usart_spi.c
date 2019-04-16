@@ -303,7 +303,9 @@ uint32_t usart_spi_is_tx_ready(Usart *p_usart)
  */
 uint32_t usart_spi_is_rx_full(Usart *p_usart)
 {
+#if (!SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
 	return usart_is_rx_buf_full(p_usart);
+#endif
 }
 
 /*! \brief Enable the USART for the specified USART in SPI mode.

@@ -198,42 +198,6 @@ static void usart_set_sync_slave_baudrate(Usart *p_usart)
 			US_MR_USCLKS_SCK | US_MR_SYNC;
 }
 
-
-/**
- * \brief Calculate a clock divider (\e CD) for the USART ISO7816 mode to
- * generate an ISO7816 clock as close as possible to the clock set point.
- *
- * \note ISO7816 clock calculation: Clock = ul_mck / cd
- *
- * \param p_usart Pointer to a USART instance.
- * \param clock ISO7816 clock set point.
- * \param ul_mck USART module input clock frequency.
- *
- * \retval 0 ISO7816 clock is successfully initialized.
- * \retval 1 ISO7816 clock set point is out of range for the given input clock
- * frequency.
- */
-static uint32_t usart_set_iso7816_clock(Usart *p_usart,
-		uint32_t clock, uint32_t ul_mck)
-{
-	uint32_t cd;
-
-	/* Calculate clock divider according to the formula in ISO7816 mode. */
-	cd = (ul_mck + clock / 2) / clock;
-
-	if (cd < MIN_CD_VALUE || cd > MAX_CD_VALUE) {
-		return 1;
-	}
-
-	p_usart->US_MR = (p_usart->US_MR & ~(US_MR_USCLKS_Msk | US_MR_SYNC |
-			US_MR_OVER)) | US_MR_USCLKS_MCK | US_MR_CLKO;
-
-	/* Configure the baudrate generate register. */
-	p_usart->US_BRGR = cd << US_BRGR_CD_Pos;
-
-	return 0;
-}
-
 /**
  * \brief Calculate a clock divider (\e CD) for the USART SPI master mode to
  * generate a baud rate as close as possible to the baud rate set point.
@@ -520,7 +484,7 @@ uint32_t usart_init_rs485(Usart *p_usart,
 	return 0;
 }
 
-#if (!SAMG55)
+#if (!SAMG55 && !SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
 /**
  * \brief Configure USART to work in IrDA mode.
  *
@@ -551,6 +515,42 @@ uint32_t usart_init_irda(Usart *p_usart,
 	return 0;
 }
 #endif
+
+#if (!SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
+/**
+ * \brief Calculate a clock divider (\e CD) for the USART ISO7816 mode to
+ * generate an ISO7816 clock as close as possible to the clock set point.
+ *
+ * \note ISO7816 clock calculation: Clock = ul_mck / cd
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param clock ISO7816 clock set point.
+ * \param ul_mck USART module input clock frequency.
+ *
+ * \retval 0 ISO7816 clock is successfully initialized.
+ * \retval 1 ISO7816 clock set point is out of range for the given input clock
+ * frequency.
+ */
+static uint32_t usart_set_iso7816_clock(Usart *p_usart,
+		uint32_t clock, uint32_t ul_mck)
+{
+	uint32_t cd;
+
+	/* Calculate clock divider according to the formula in ISO7816 mode. */
+	cd = (ul_mck + clock / 2) / clock;
+
+	if (cd < MIN_CD_VALUE || cd > MAX_CD_VALUE) {
+		return 1;
+	}
+
+	p_usart->US_MR = (p_usart->US_MR & ~(US_MR_USCLKS_Msk | US_MR_SYNC |
+			US_MR_OVER)) | US_MR_USCLKS_MCK | US_MR_CLKO;
+
+	/* Configure the baudrate generate register. */
+	p_usart->US_BRGR = cd << US_BRGR_CD_Pos;
+
+	return 0;
+}
 
 /**
  * \brief Configure USART to work in ISO7816 mode.
@@ -624,6 +624,92 @@ uint32_t usart_init_iso7816(Usart *p_usart,
 
 	return 0;
 }
+
+/**
+ * \brief Reset the ITERATION in US_CSR when the ISO7816 mode is enabled.
+ *
+ * \param p_usart Pointer to a USART instance.
+ */
+void usart_reset_iterations(Usart *p_usart)
+{
+	p_usart->US_CR = US_CR_RSTIT;
+}
+
+/**
+ * \brief Reset NACK in US_CSR.
+ *
+ * \param p_usart Pointer to a USART instance.
+ */
+void usart_reset_nack(Usart *p_usart)
+{
+	p_usart->US_CR = US_CR_RSTNACK;
+}
+
+/**
+ * \brief Check if one receive buffer is filled.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \retval 1 Receive is complete.
+ * \retval 0 Receive is still pending.
+ */
+uint32_t usart_is_rx_buf_end(Usart *p_usart)
+{
+	return (p_usart->US_CSR & US_CSR_ENDRX) > 0;
+}
+
+/**
+ * \brief Check if one transmit buffer is empty.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \retval 1 Transmit is complete.
+ * \retval 0 Transmit is still pending.
+ */
+uint32_t usart_is_tx_buf_end(Usart *p_usart)
+{
+	return (p_usart->US_CSR & US_CSR_ENDTX) > 0;
+}
+
+/**
+ * \brief Check if both receive buffers are full.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \retval 1 Receive buffers are full.
+ * \retval 0 Receive buffers are not full.
+ */
+uint32_t usart_is_rx_buf_full(Usart *p_usart)
+{
+	return (p_usart->US_CSR & US_CSR_RXBUFF) > 0;
+}
+
+/**
+ * \brief Check if both transmit buffers are empty.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \retval 1 Transmit buffers are empty.
+ * \retval 0 Transmit buffers are not empty.
+ */
+uint32_t usart_is_tx_buf_empty(Usart *p_usart)
+{
+	return (p_usart->US_CSR & US_CSR_TXBUFE) > 0;
+}
+
+/**
+ * \brief Get the total number of errors that occur during an ISO7816 transfer.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \return The number of errors that occurred.
+ */
+uint8_t usart_get_error_number(Usart *p_usart)
+{
+	return (p_usart->US_NER & US_NER_NB_ERRORS_Msk);
+}
+
+#endif
 
 /**
  * \brief Configure USART to work in SPI mode and act as a master.
@@ -1229,26 +1315,6 @@ uint32_t usart_send_address(Usart *p_usart, uint32_t ul_addr)
 }
 
 /**
- * \brief Reset the ITERATION in US_CSR when the ISO7816 mode is enabled.
- *
- * \param p_usart Pointer to a USART instance.
- */
-void usart_reset_iterations(Usart *p_usart)
-{
-	p_usart->US_CR = US_CR_RSTIT;
-}
-
-/**
- * \brief Reset NACK in US_CSR.
- *
- * \param p_usart Pointer to a USART instance.
- */
-void usart_reset_nack(Usart *p_usart)
-{
-	p_usart->US_CR = US_CR_RSTNACK;
-}
-
-/**
  * \brief Restart the receive timeout.
  *
  * \param p_usart Pointer to a USART instance.
@@ -1364,58 +1430,6 @@ uint32_t usart_is_tx_empty(Usart *p_usart)
 uint32_t usart_is_rx_ready(Usart *p_usart)
 {
 	return (p_usart->US_CSR & US_CSR_RXRDY) > 0;
-}
-
-/**
- * \brief Check if one receive buffer is filled.
- *
- * \param p_usart Pointer to a USART instance.
- *
- * \retval 1 Receive is complete.
- * \retval 0 Receive is still pending.
- */
-uint32_t usart_is_rx_buf_end(Usart *p_usart)
-{
-	return (p_usart->US_CSR & US_CSR_ENDRX) > 0;
-}
-
-/**
- * \brief Check if one transmit buffer is empty.
- *
- * \param p_usart Pointer to a USART instance.
- *
- * \retval 1 Transmit is complete.
- * \retval 0 Transmit is still pending.
- */
-uint32_t usart_is_tx_buf_end(Usart *p_usart)
-{
-	return (p_usart->US_CSR & US_CSR_ENDTX) > 0;
-}
-
-/**
- * \brief Check if both receive buffers are full.
- *
- * \param p_usart Pointer to a USART instance.
- *
- * \retval 1 Receive buffers are full.
- * \retval 0 Receive buffers are not full.
- */
-uint32_t usart_is_rx_buf_full(Usart *p_usart)
-{
-	return (p_usart->US_CSR & US_CSR_RXBUFF) > 0;
-}
-
-/**
- * \brief Check if both transmit buffers are empty.
- *
- * \param p_usart Pointer to a USART instance.
- *
- * \retval 1 Transmit buffers are empty.
- * \retval 0 Transmit buffers are not empty.
- */
-uint32_t usart_is_tx_buf_empty(Usart *p_usart)
-{
-	return (p_usart->US_CSR & US_CSR_TXBUFE) > 0;
 }
 
 /**
@@ -1544,7 +1558,7 @@ uint32_t *usart_get_rx_access(Usart *p_usart)
 }
 #endif
 
-#if (!SAM4L)
+#if (!SAM4L && !SAMV71 && !SAMV70 && !SAME70 && !SAMS70)
 /**
  * \brief Get USART PDC base address.
  *
@@ -1655,18 +1669,6 @@ uint32_t usart_get_writeprotect_status(Usart *p_usart)
 	} else {
 		return 0;
 	}
-}
-
-/**
- * \brief Get the total number of errors that occur during an ISO7816 transfer.
- *
- * \param p_usart Pointer to a USART instance.
- *
- * \return The number of errors that occurred.
- */
-uint8_t usart_get_error_number(Usart *p_usart)
-{
-	return (p_usart->US_NER & US_NER_NB_ERRORS_Msk);
 }
 
 #if (SAM3S || SAM4S || SAM3U || SAM3XA || SAM4L || SAM4E || SAM4C || SAM4CP || SAM4CM)

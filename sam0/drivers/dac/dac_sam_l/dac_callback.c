@@ -70,7 +70,7 @@ struct dac_module *_dac_instances[DAC_INST_NUM];
  * \retval STATUS_ERR_UNSUPPORTED_DEV  If a callback that requires event driven
  *                                     mode was specified with a DAC instance
  *                                     configured in non-event mode
- * \retval STATUS_BUSY      The DAC is busy to accept new job
+ * \retval STATUS_BUSY      The DAC is busy and can not accept a new job
  */
 enum status_code dac_chan_write_buffer_job(
 		struct dac_module *const module_inst,
@@ -145,7 +145,7 @@ enum status_code dac_chan_write_buffer_job(
  * \retval STATUS_ERR_UNSUPPORTED_DEV  If a callback that requires event driven
  *                                     mode was specified with a DAC instance
  *                                     configured in non-event mode
- * \retval STATUS_BUSY      The DAC is busy to accept new job
+ * \retval STATUS_BUSY      The DAC is busy and can not accept a new job
  */
 enum status_code dac_chan_write_job(
 		struct dac_module *const module_inst,
@@ -180,7 +180,7 @@ enum status_code dac_chan_write_job(
  *
  * \param[in,out] module_inst  Pointer to the DAC software instance struct
  * \param[in]     callback    Pointer to the callback function to register
- * \param[in]     channel     Logical channel to regiseter callback function
+ * \param[in]     channel     Logical channel to register callback function
  * \param[in]     type        Type of callback function to register
  *
  * \return Status of the registration operation.
@@ -221,7 +221,7 @@ enum status_code dac_register_callback(
  * from the internal callback registration table.
  *
  * \param[in,out] module_inst  Pointer to the DAC software instance struct
- * \param[in]     channel     Logical channel to unregiseter callback function
+ * \param[in]     channel     Logical channel to unregister callback function
  * \param[in]     type        Type of callback function to unregister
  *
  * \return Status of the de-registration operation.

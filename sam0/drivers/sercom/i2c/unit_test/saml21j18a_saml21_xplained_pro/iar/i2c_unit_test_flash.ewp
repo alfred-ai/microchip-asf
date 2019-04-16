@@ -2093,6 +2093,12 @@
 						<name>$PROJ_DIR$/../../../../usart/usart.c</name>
 					</file>
 					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
+					<group>
 						<name>quick_start_dma</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../usart/quick_start_dma/qs_usart_dma_use.h</name>
@@ -2121,10 +2127,10 @@
 					<name>$PROJ_DIR$/../../../../sercom.c</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../sercom_pinout.h</name>
+					<name>$PROJ_DIR$/../../../../sercom_interrupt.h</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../sercom_interrupt.h</name>
+					<name>$PROJ_DIR$/../../../../sercom_pinout.h</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../sercom.h</name>
@@ -2442,7 +2448,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/rtc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/mtb.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/opamp.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/trng.h</name>
@@ -2451,7 +2457,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/gclk.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/opamp.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/mtb.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/saml21/include/component/aes.h</name>

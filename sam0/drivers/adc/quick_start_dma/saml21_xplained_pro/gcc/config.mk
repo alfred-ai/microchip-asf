@@ -54,7 +54,7 @@ TARGET_SRAM = adc_quick_start_dma_sram.elf
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        sam0/boards/saml21_xplained_pro/board_init.c       \
-       sam0/drivers/adc/adc_sam_l/adc.c                   \
+       sam0/drivers/adc/adc_sam_l_c/adc.c                 \
        sam0/drivers/adc/quick_start_dma/qs_adc_dma_use.c  \
        sam0/drivers/dac/dac_sam_l/dac.c                   \
        sam0/drivers/dac/dac_sam_l/dac_callback.c          \
@@ -79,7 +79,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/adc                                   \
-       sam0/drivers/adc/adc_sam_l                         \
+       sam0/drivers/adc/adc_sam_l_c                       \
        sam0/drivers/adc/quick_start_dma                   \
        sam0/drivers/adc/quick_start_dma/saml21_xplained_pro \
        sam0/drivers/dac                                   \

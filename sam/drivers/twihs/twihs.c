@@ -57,7 +57,7 @@ extern "C" {
 /**
  * \defgroup sam_drivers_twihs_group High-Speed Two-Wire Interface (TWIHS)
  *
- * Driver for the TWIHS (High-Speed Two-Wire Interface). This driver provides access to the main 
+ * Driver for the TWIHS (High-Speed Two-Wire Interface). This driver provides access to the main
  * features of the TWIHS controller.
  * The TWIHS interconnects components on a unique two-wire bus.
  * The TWIHS is programmable as a master or a slave with sequential or single-byte access.
@@ -251,7 +251,7 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 {
 	uint32_t status, cnt = p_packet->length;
 	uint8_t *buffer = p_packet->buffer;
-	uint32_t timeout = TWIHS_TIMEOUT;;
+	uint32_t timeout = TWIHS_TIMEOUT;
 
 	/* Check argument */
 	if (cnt == 0) {
@@ -573,6 +573,7 @@ void twihs_reset(Twihs *p_twihs)
 	p_twihs->TWIHS_RHR;
 }
 
+#if !(SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Get TWIHS PDC base address.
  *
@@ -592,6 +593,7 @@ Pdc *twihs_get_pdc_base(Twihs *p_twihs)
 
 	return p_pdc_base;
 }
+#endif
 
 /**
  * \brief Enables/Disables write protection mode.
@@ -630,6 +632,7 @@ void twihs_smbus_set_timing(Twihs *p_twihs, uint32_t ul_timing)
 	p_twihs->TWIHS_SMBTR = ul_timing;;
 }
 
+#if !(SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Set length/direction/PEC for alternative command mode.
  *
@@ -640,6 +643,7 @@ void twihs_set_alternative_command(Twihs *p_twihs, uint32_t ul_alt_cmd)
 {
 	p_twihs->TWIHS_ACR = ul_alt_cmd;;
 }
+#endif
 
 /**
  * \brief Set the filter for TWIHS.
@@ -664,7 +668,7 @@ void twihs_mask_slave_addr(Twihs *p_twihs, uint32_t ul_mask)
 	p_twihs->TWIHS_SMR |= TWIHS_SMR_MASK(ul_mask);
 }
 
-#if (SAMG53 || SAMG54)
+#if (SAMG53 || SAMG54 || SAMV70 || SAMV71 || SAME70 || SAMS70)
 /**
  * \brief Set sleepwalking match mode.
  *

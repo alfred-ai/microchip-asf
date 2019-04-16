@@ -308,7 +308,6 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd20/source</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd20_xplained_pro</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -319,6 +318,7 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -593,7 +593,6 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd20/source</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd20_xplained_pro</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -604,6 +603,7 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1303,7 +1303,6 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd20/source</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd20_xplained_pro</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1314,6 +1313,7 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -1588,7 +1588,6 @@
 					<state>$PROJ_DIR$/../../../../port</state>
 					<state>$PROJ_DIR$/../../../../system/reset</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/samd20/source</state>
-					<state>$PROJ_DIR$/../../../../dac/dac_sam_d</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../boards/samd20_xplained_pro</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1599,6 +1598,7 @@
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../../../../sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../../dac/dac_sam_d_c</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_samd20</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt</state>
@@ -2078,15 +2078,15 @@
 			<group>
 				<name>dac</name>
 				<group>
-					<name>dac_sam_d</name>
+					<name>dac_sam_d_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../dac/dac_sam_d/dac.c</name>
+						<name>$PROJ_DIR$/../../../../dac/dac_sam_d_c/dac.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../dac/dac_sam_d/dac_callback.c</name>
+						<name>$PROJ_DIR$/../../../../dac/dac_sam_d_c/dac_callback.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../dac/dac_sam_d/dac_feature.h</name>
+						<name>$PROJ_DIR$/../../../../dac/dac_sam_d_c/dac_feature.h</name>
 					</file>
 				</group>
 				<file>
@@ -2154,6 +2154,12 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../sercom/usart/usart.c</name>
 					</file>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<group>
 						<name>quick_start_dma</name>
 						<file>
@@ -2402,10 +2408,10 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd20/include/instance/tc3.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd20/include/instance/pac2.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd20/include/instance/tc1.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd20/include/instance/tc1.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd20/include/instance/pac2.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/samd20/include/instance/nvmctrl.h</name>

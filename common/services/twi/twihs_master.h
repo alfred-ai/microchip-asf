@@ -49,7 +49,7 @@
 #include <parts.h>
 #include <compiler.h>
 
-#if (SAMG)
+#if (SAMG || SAMV70 || SAMV71 || SAME70 || SAMS70)
 # include "sam_twihs/twihs_master.h"
 #else
 # error Unsupported chip type

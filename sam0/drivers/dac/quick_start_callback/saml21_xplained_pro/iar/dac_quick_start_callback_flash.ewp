@@ -306,11 +306,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../dac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/..</state>
@@ -318,7 +319,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -584,11 +584,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../dac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/..</state>
@@ -596,7 +597,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1287,11 +1287,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../dac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/..</state>
@@ -1299,7 +1300,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1565,11 +1565,12 @@
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
 					<state>$PROJ_DIR$/../../../dac_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/preprocessor</state>
+					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils</state>
-					<state>$PROJ_DIR$/../../../../events/events_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/power</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
 					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../../events/events_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../rtc</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/..</state>
@@ -1577,7 +1578,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../boards/saml21_xplained_pro</state>
-					<state>$PROJ_DIR$/../../../../rtc/rtc_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../../../../system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../../../common/boards</state>
@@ -1969,12 +1969,12 @@
 			<group>
 				<name>rtc</name>
 				<group>
-					<name>rtc_sam_l</name>
+					<name>rtc_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../rtc/rtc_sam_l/rtc_count.c</name>
+						<name>$PROJ_DIR$/../../../../rtc/rtc_sam_l_c/rtc_count_interrupt.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../../rtc/rtc_sam_l/rtc_count_interrupt.c</name>
+						<name>$PROJ_DIR$/../../../../rtc/rtc_sam_l_c/rtc_count.c</name>
 					</file>
 				</group>
 				<file>
@@ -1982,51 +1982,6 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../rtc/rtc_count_interrupt.h</name>
-				</file>
-			</group>
-			<group>
-				<name>dac</name>
-				<group>
-					<name>dac_sam_l</name>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_l/dac.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_l/dac_callback.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../dac_sam_l/dac_feature.h</name>
-					</file>
-				</group>
-				<group>
-					<name>quick_start_callback</name>
-					<file>
-						<name>$PROJ_DIR$/../../qs_dac_callback.c</name>
-					</file>
-					<group>
-						<name>saml21_xplained_pro</name>
-						<file>
-							<name>$PROJ_DIR$/../conf_rtc.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../conf_board.h</name>
-						</file>
-						<group>
-							<name>iar</name>
-							<file>
-								<name>$PROJ_DIR$/asf.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../conf_clocks.h</name>
-						</file>
-					</group>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../dac.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../dac_callback.h</name>
 				</file>
 			</group>
 			<group>
@@ -2111,11 +2066,56 @@
 				</group>
 			</group>
 			<group>
+				<name>dac</name>
+				<group>
+					<name>quick_start_callback</name>
+					<file>
+						<name>$PROJ_DIR$/../../qs_dac_callback.c</name>
+					</file>
+					<group>
+						<name>saml21_xplained_pro</name>
+						<file>
+							<name>$PROJ_DIR$/../conf_rtc.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../conf_board.h</name>
+						</file>
+						<group>
+							<name>iar</name>
+							<file>
+								<name>$PROJ_DIR$/asf.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../conf_clocks.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>dac_sam_l</name>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_l/dac.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_l/dac_callback.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../dac_sam_l/dac_feature.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../dac.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../dac_callback.h</name>
+				</file>
+			</group>
+			<group>
 				<name>events</name>
 				<group>
-					<name>events_sam_l</name>
+					<name>events_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../../events/events_sam_l/events.c</name>
+						<name>$PROJ_DIR$/../../../../events/events_sam_l_c/events.c</name>
 					</file>
 				</group>
 				<file>

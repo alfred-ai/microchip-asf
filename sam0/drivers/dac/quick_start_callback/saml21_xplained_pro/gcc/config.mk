@@ -58,10 +58,10 @@ CSRCS = \
        sam0/drivers/dac/dac_sam_l/dac_callback.c          \
        sam0/drivers/dac/quick_start_callback/qs_dac_callback.c \
        sam0/drivers/events/events_hooks.c                 \
-       sam0/drivers/events/events_sam_l/events.c          \
+       sam0/drivers/events/events_sam_l_c/events.c        \
        sam0/drivers/port/port.c                           \
-       sam0/drivers/rtc/rtc_sam_l/rtc_count.c             \
-       sam0/drivers/rtc/rtc_sam_l/rtc_count_interrupt.c   \
+       sam0/drivers/rtc/rtc_sam_l_c/rtc_count.c           \
+       sam0/drivers/rtc/rtc_sam_l_c/rtc_count_interrupt.c \
        sam0/drivers/system/clock/clock_saml21/clock.c     \
        sam0/drivers/system/clock/clock_saml21/gclk.c      \
        sam0/drivers/system/interrupt/system_interrupt.c   \
@@ -85,10 +85,10 @@ INC_PATH = \
        sam0/drivers/dac/quick_start_callback              \
        sam0/drivers/dac/quick_start_callback/saml21_xplained_pro \
        sam0/drivers/events                                \
-       sam0/drivers/events/events_sam_l                   \
+       sam0/drivers/events/events_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/rtc                                   \
-       sam0/drivers/rtc/rtc_sam_l                         \
+       sam0/drivers/rtc/rtc_sam_l_c                       \
        sam0/drivers/system                                \
        sam0/drivers/system/clock                          \
        sam0/drivers/system/clock/clock_saml21             \

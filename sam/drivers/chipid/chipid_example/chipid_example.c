@@ -53,7 +53,7 @@
  *
  * \par Requirements
  *
- * This example can be used on any SAM3/4 boards.
+ * This example can be used on any SAM3/4 boards and SAMV71 Xplained Ultra board.
  *
  * \par Description
  *
@@ -189,8 +189,8 @@ const chipidtype_t chipid_sramsize[CHIPID_SRAMSIZE_SIZE] = {
 
 	// identifier       description
 	{0x0,               "48K bytes"},
-	{0x1,               "1K bytes"},
-	{0x2,               "2K bytes"},
+	{0x1,               "192K bytes"},
+	{0x2,               "384K bytes"},
 	{0x3,               "6K bytes"},
 	{0x4,               "112K bytes"},
 	{0x5,               "4K bytes"},
@@ -207,11 +207,15 @@ const chipidtype_t chipid_sramsize[CHIPID_SRAMSIZE_SIZE] = {
 };
 
 //! Number of architectures Supported
-#define CHIPID_ARCH_SIZE    43
+#define CHIPID_ARCH_SIZE    47
 //! Architectures support list
 const chipidtype_t chipid_archsize[CHIPID_ARCH_SIZE] = {
 
 	// identifier       description
+	{0x10,              "ATSAME70 Series"},
+	{0x11,              "ATSAMS70 Series"},
+	{0x12,              "ATSAMV71 Series"},
+	{0x13,              "ATSAMV70 Series"},
 	{0x19,              "AT91SAM9xx Series"},
 	{0x29,              "AT91SAM9XExx Series"},
 	{0x34,              "AT91x34 series"},

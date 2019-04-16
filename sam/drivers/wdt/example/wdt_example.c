@@ -245,7 +245,9 @@ int main(void)
 	}
 	/* Configure WDT to trigger an interrupt (or reset). */
 	wdt_mode = WDT_MR_WDFIEN |  /* Enable WDT fault interrupt. */
+#if !(SAMV70 || SAMV71 || SAME70 || SAMS70)
 			WDT_MR_WDRPROC   |  /* WDT fault resets processor only. */
+#endif
 			WDT_MR_WDDBGHLT  |  /* WDT stops in debug state. */
 			WDT_MR_WDIDLEHLT;   /* WDT stops in idle state. */
 	/* Initialize WDT with the given parameters. */
@@ -272,7 +274,7 @@ int main(void)
 
 			/* Toggle LED at the given period. */
 			if ((g_ul_ms_ticks % BLINK_PERIOD) == 0) {
-#if (SAM4E || SAM4N || SAM4C || SAMG)
+#if (SAM4E || SAM4N || SAM4C || SAMG || SAMV70 || SAMV71 || SAME70 || SAMS70)
 				LED_Toggle(LED0);
 #else
 				LED_Toggle(LED0_GPIO);

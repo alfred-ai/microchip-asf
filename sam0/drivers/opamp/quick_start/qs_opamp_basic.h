@@ -45,17 +45,17 @@
  * \page asfdoc_sam0_opamp_basic_use_case Quick Start Guide for OPAMP - Basic
  *
  * In this use case, the OPAMP0 is configured as "Non-Inverting PGA" mode,
- *  Please refer to the second mode in datasheet "Build-in Modes" section.
+ * refer to the second mode of "Built-in Modes" in the device datasheet.
  *
  * This use case sets up the OPAMP0 to invert the input signal in OA0NEG
  * pin, and output it to the OA0OUT pin.
  * You can give a signal on OA0NEG and watch the output on OA0OUT
- * through oscilloscope.
+ * through an oscilloscope.
  *
  * \section asfdoc_sam0_opamp_basic_use_case_setup Setup
  *
  * \subsection asfdoc_sam0_opamp_basic_use_case_setup_prereq Prerequisites
- * There are no special setup requirements for this use-case.
+ * There are no special setup requirements for this use case.
  *
  * \subsection asfdoc_sam0_opamp_basic_use_case_setup_code Code
  * Copy-paste the following setup code to your user application:
@@ -65,20 +65,20 @@
  * \snippet qs_opamp_basic.c setup_init
  *
  * \subsection asfdoc_sam0_opamp_basic_use_case_setup_flow Workflow
- * -# Creates a OPAMP0 configuration struct, which can be filled out to
+ * -# Create an OPAMP0 configuration struct, which can be filled out to
  *    adjust the configuration of OPAMP0.
  *    \snippet qs_opamp_basic.c setup_1
  *
- * -# Initializes OPAMP module.
+ * -# Initialize the OPAMP module.
  *    \snippet qs_opamp_basic.c setup_2
  *
- * -# settings and fill the OPAMP0 configuration struct with the default settings.
+ * -# Initialize the OPAMP0 configuration struct with the module's default values.
  *    \snippet qs_opamp_basic.c setup_3
  *    \note This should always be performed before using the configuration
  *          struct to ensure that all values are initialized to known default
  *          settings.
  *
- * -# Adjust the configuration struct to Set the the OPAMP0 as "Non-Inverting PGA" mode.
+ * -# Adjust the configuration struct to set the OPAMP0 as "Non-Inverting PGA" mode.
  *    \snippet qs_opamp_basic.c setup_4
  *    \note The existing configuration struct may be re-used, as long as any
  *          values that have been altered from the default settings are taken
@@ -87,7 +87,7 @@
  * -# Set up OA0NEG pin and OA0OUT pin.
  *    \snippet qs_opamp_basic.c setup_5
  *
- * -# Writes OPAMP0 configuration to the hardware module.
+ * -# Write OPAMP0 configuration to the hardware module.
  *    \snippet qs_opamp_basic.c setup_6
  *
  * -# Enable OPAMP0.

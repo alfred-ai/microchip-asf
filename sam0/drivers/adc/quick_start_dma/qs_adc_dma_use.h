@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SAM D21/D11/L21/DA1 Quick Start Guide for Using ADC/DAC driver with DMA
+ * \brief SAM D21/D11/L21/DA1/C21 Quick Start Guide for Using ADC/DAC driver with DMA
  *
  * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
  *
@@ -49,6 +49,7 @@
  *    - SAMD11 Xplained Pro
  *    - SAML21 Xplained Pro
  *    - SAMDA1 Xplained Pro
+ *    - SAMC21 Xplained Pro
  *
  * This quick start will convert an analog input signal from AIN4 and output
  * the converted value to DAC on PA2. The data between ADC and DAC with be
@@ -115,7 +116,7 @@
  *          In most cases, this should be global.
  *
  * -# Configure the ADC module.
- *  -# Create a ADC module configuration struct, which can be filled out to
+ *  -# Create an ADC module configuration struct, which can be filled out to
  *     adjust the configuration of a physical ADC peripheral.
  *     \snippet qs_adc_dma_use.c setup_adc_config
  *  -# Initialize the ADC configuration struct with the module's default values.
@@ -176,7 +177,7 @@
  *    adjust the configuration of a single DMA transfer.
  *  \snippet qs_adc_dma_use.c setup_dma_config
  *
- * -# Initialize the DMA resource configuration struct with the module's.
+ * -# Initialize the DMA resource configuration struct with the module's
  *    default values.
  *    \snippet qs_adc_dma_use.c setup_dma_set_config_default
  *    \note This should always be performed before using the configuration
@@ -227,6 +228,8 @@
  * -# Enter endless loop.
  *  \snippet qs_adc_dma_use.c endless_loop
  */
+
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+

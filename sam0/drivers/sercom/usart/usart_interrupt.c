@@ -203,7 +203,7 @@ void usart_unregister_callback(
 }
 
 /**
- * \brief Asynchronous write a single char
+ * \brief Asynchronous write a data
  *
  * Sets up the driver to write the data given. If registered and enabled,
  * a callback function will be called when the transmit is completed.
@@ -236,7 +236,7 @@ enum status_code usart_write_job(
 }
 
 /**
- * \brief Asynchronous read a single char
+ * \brief Asynchronous read a data
  *
  * Sets up the driver to read data from the USART module to the data
  * pointer given. If registered and enabled, a callback will be called
@@ -540,6 +540,12 @@ void _usart_interrupt_handler(
 			/* CTS status should not be considered as an error */
 			if(error_code & SERCOM_USART_STATUS_CTS) {
 				error_code &= ~SERCOM_USART_STATUS_CTS;
+			}
+#endif
+#ifdef FEATURE_USART_LIN_MASTER
+			/* TXE status should not be considered as an error */
+			if(error_code & SERCOM_USART_STATUS_TXE) {
+				error_code &= ~SERCOM_USART_STATUS_TXE;
 			}
 #endif
 			/* Check if an error has occurred during the receiving */

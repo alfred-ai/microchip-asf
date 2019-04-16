@@ -61,7 +61,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_port_prerequisites
@@ -93,7 +94,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_PORT_INPUT_EVENT</td>
- *    <td>SAML21</td>
+ *    <td>SAML21/C20/C21</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -168,7 +169,7 @@ extern "C" {
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 /** Event input control feature support for PORT group. */
 #  define FEATURE_PORT_INPUT_EVENT
 #endif
@@ -245,7 +246,7 @@ enum port_pin_pull {
  */
 enum port_input_event_action {
 	/** Event out to pin. */
-	PORT_INPUT_EVENT_ACTION_OUT	= 0,
+	PORT_INPUT_EVENT_ACTION_OUT = 0,
 	/** Set output register of pin on event. */
 	PORT_INPUT_EVENT_ACTION_SET,
 	/** Clear output register pin on event. */
@@ -261,13 +262,13 @@ enum port_input_event_action {
  */
 enum port_input_event{
 	/** Port input event 0. */
-	PORT_INPUT_EVENT_0	= 0,
+	PORT_INPUT_EVENT_0 = 0,
 	/** Port input event 1. */
-	PORT_INPUT_EVENT_1	= 1,
+	PORT_INPUT_EVENT_1 = 1,
 	/** Port input event 2. */
-	PORT_INPUT_EVENT_2	= 2,
+	PORT_INPUT_EVENT_2 = 2,
 	/** Port input event 3. */
-	PORT_INPUT_EVENT_3	= 3,
+	PORT_INPUT_EVENT_3 = 3,
 };
 
 /**
@@ -276,7 +277,7 @@ enum port_input_event{
  *  Configuration structure for a port input event.
  */
 struct port_input_event_config{
-	/** PPort input event action. */
+	/** Port input event action. */
 	enum port_input_event_action  action;
 	/** GPIO pin. */
 	uint8_t gpio_pin;
@@ -655,7 +656,7 @@ static inline enum status_code port_input_event_set_config(
 	switch (n) {
 		case PORT_INPUT_EVENT_0:
 			port_base->EVCTRL.reg |= PORT_EVCTRL_EVACT0(config->action)
-						   		   | PORT_EVCTRL_PID0(pin_index);
+									| PORT_EVCTRL_PID0(pin_index);
 			break;
 		case PORT_INPUT_EVENT_1:
 			port_base->EVCTRL.reg |= PORT_EVCTRL_EVACT1(config->action)
@@ -757,10 +758,10 @@ static inline enum status_code port_input_event_set_config(
  *		<th>Date</td>
  *		<th>Comments</td>
  *	</tr>
-  *	<tr>
+ *	<tr>
  *		<td>E</td>
- *		<td>04/2015</td>
- *		<td>Added support for SAML21 and SAMDAx.</td>
+ *		<td>06/2015</td>
+ *		<td>Added input event feature and support for SAML21, SAMC21, and SAMDAx.</td>
  *	</tr>
  *	<tr>
  *		<td>D</td>

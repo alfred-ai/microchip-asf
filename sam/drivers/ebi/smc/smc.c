@@ -55,7 +55,8 @@ extern "C" {
 /**INDENT-ON**/
 /// @endcond
 
-#if ((SAM3S) || (SAM3U) || (SAM3XA) || (SAM4S) || (SAM4E) || (SAM4C) || (SAM4CM) || (__DOXYGEN__))
+#if ((SAM3S) || (SAM3U) || (SAM3XA) || (SAM4S) || (SAM4E) || (SAM4C) || (SAM4CM) \
+	|| (SAMV71) || (SAMV70) || (SAME70) || (SAMS70) || (__DOXYGEN__))
 #define SMC_WPKEY_VALUE (0x534D43)
 /**
  * \brief Configure the SMC Setup timing for the specified Chip Select.
@@ -129,7 +130,7 @@ uint32_t smc_get_mode(Smc *p_smc, uint32_t ul_cs)
  */
 void smc_enable_writeprotect(Smc *p_smc, uint32_t ul_enable)
 {
-#if (SAM3S || SAM4S || SAM4E || SAM4C || SAM4CM)
+#if (SAM3S || SAM4S || SAM4E || SAM4C || SAM4CM || (SAMV71) || (SAMV70) || (SAME70) || (SAMS70))
 	if (ul_enable) {
 		p_smc->SMC_WPMR =
 				SMC_WPMR_WPKEY(SMC_WPKEY_VALUE) | SMC_WPMR_WPEN;

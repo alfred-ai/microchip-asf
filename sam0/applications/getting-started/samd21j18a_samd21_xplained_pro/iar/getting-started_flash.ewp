@@ -2056,6 +2056,12 @@
 							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start/qs_usart_basic_use.h</name>
 						</file>
 					</group>
+					<group>
+						<name>quick_start_lin</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../drivers/sercom/usart/quick_start_lin/qs_lin.h</name>
+						</file>
+					</group>
 					<file>
 						<name>$PROJ_DIR$/../../../../drivers/sercom/usart/usart_interrupt.h</name>
 					</file>
@@ -2346,9 +2352,6 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/instance/pm.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/instance/ac1.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/instance/ac.h</name>
 							</file>
 							<file>
@@ -2356,6 +2359,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/instance/sercom0.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/instance/ac1.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/instance/nvmctrl.h</name>
@@ -2424,7 +2430,7 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/port.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/pac.h</name>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/sysctrl.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/hmatrixb.h</name>
@@ -2451,7 +2457,7 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/dac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/sysctrl.h</name>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/pac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samd21/include/component/ac.h</name>

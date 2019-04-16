@@ -61,7 +61,8 @@
  *  - Atmel | SMART SAM R21
  *  - Atmel | SMART SAM D10/D11
  *  - Atmel | SMART SAM L21
- *  - Atmel | SMART SAM DA0/DA1
+ *  - Atmel | SMART SAM DAx
+ *  - Atmel | SMART SAM C20/C21
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_nvm_prerequisites
@@ -91,7 +92,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_NVM_RWWEE</td>
- *    <td>SAML21, SAMD21-64K, SAMDAx</td>
+ *    <td>SAML21, SAMD21-64K, SAMDAx, SAMC20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_BOD12</td>
@@ -286,7 +287,7 @@ extern "C" {
  * Define NVM features set according to different device family
  * @{
 */
-#if (SAML21) || (SAMDA1) || defined(SAMD21_64K) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMDA1) || (SAMC20) || (SAMC21) || defined(SAMD21_64K) || defined(__DOXYGEN__)
 /** Read while write EEPROM emulation feature. */
 #  define FEATURE_NVM_RWWEE
 #endif
@@ -443,7 +444,14 @@ struct nvm_config {
 	 * nvm controller.
 	 */
 	bool disable_cache;
-
+#if (SAMC20) || (SAMC21)
+	/**
+	 * Setting this to true will disable the pre-fetch RWW cache in front of the
+	 * nvm controller.
+	 * If RWW cache is enabled, NVM cache will also be enabled.
+	 */
+	bool disable_rww_cache;
+#endif
 	/**
 	 * Select the mode for  how the cache will pre-fetch data from the flash.
 	 */
@@ -632,6 +640,16 @@ struct nvm_fusebits {
 	enum nvm_bootloader_size          bootloader_size;
 	/** EEPROM emulation area size. */
 	enum nvm_eeprom_emulator_size     eeprom_size;
+#if (SAMC20) || (SAMC21)
+	/** BODVDD Threshold level at power on. */
+	uint8_t                           bodvdd_level;
+	/** BODVDD Enable at power on. */
+	bool                              bodvdd_enable;
+	/** BODVDD Action at power on. */
+	enum nvm_bod33_action             bodvdd_action;
+	/* BODVDD Hysteresis at power on*/
+	bool                              bodvdd_hysteresis;
+#else
 	/** BOD33 Threshold level at power on. */
 	uint8_t                           bod33_level;
 	/** BOD33 Enable at power on. */
@@ -640,6 +658,7 @@ struct nvm_fusebits {
 	enum nvm_bod33_action             bod33_action;
 	/* BOD33 Hysteresis at power on*/
 	bool                              bod33_hysteresis;
+#endif
 	/** WDT Enable at power on. */
 	bool                              wdt_enable;
 	/** WDT Always-on at power on. */
@@ -698,6 +717,9 @@ static inline void nvm_get_config_defaults(
 	config->manual_page_write = true;
 	config->wait_states       = NVMCTRL->CTRLB.bit.RWS;
 	config->disable_cache     = false;
+#if (SAMC20) || (SAMC21)
+	config->disable_rww_cache = false;
+#endif
 	config->cache_readmode    = NVM_CACHE_READMODE_NO_MISS_PENALTY;
 }
 
@@ -849,11 +871,7 @@ static inline enum nvm_error nvm_get_error(void)
  *		<th>Changelog</th>
  *	</tr>
  *	<tr>
- *		<td>Added support for SAML21.</td>
- *	</tr>
- *	<tr>
- *		<td>Added support for SAMD21, removed BOD12 reference, removed
- *          nvm_set_fuses() API</td>
+ *		<td>Removed BOD12 reference, removed nvm_set_fuses() API</td>
  *	</tr>
  *	<tr>
  *		<td>Added functions to read/write fuse settings</td>
@@ -891,29 +909,29 @@ static inline enum nvm_error nvm_get_error(void)
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>E</td>
- *		<td>04/2015</td>
- *		<td>Added support for SAML21 and SAMDAx.</td>
+ *		<td>42114E</td>
+ *		<td>06/2015</td>
+ *		<td>Added support for SAML21, SAMC21 and SAMDAx</td>
  *	</tr> 
  *	<tr>
- *		<td>D</td>
+ *		<td>42114D</td>
  *		<td>12/2014</td>
- *		<td>Added support for SAMR21 and SAMD10/D11.</td>
+ *		<td>Added support for SAMR21 and SAMD10/D11</td>
  *	</tr>
  *	<tr>
- *		<td>C</td>
+ *		<td>42114C</td>
  *		<td>01/2014</td>
- *		<td>Added support for SAMD21.</td>
+ *		<td>Added support for SAMD21</td>
  *	</tr>
  *	<tr>
- *		<td>B</td>
+ *		<td>42114B</td>
  *		<td>06/2013</td>
- *		<td>Corrected documentation typos.</td>
+ *		<td>Corrected documentation typos</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
+ *		<td>42114A</td>
  *		<td>06/2013</td>
- *		<td>Initial release</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

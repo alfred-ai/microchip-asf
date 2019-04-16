@@ -42,10 +42,8 @@
  */
 #include <asf.h>
 
-void configure_bod33(void);
-
 //! [setup]
-void configure_bod33(void)
+static void configure_bod33(void)
 {
 //! [setup_config]
 	struct bod_config config_bod33;

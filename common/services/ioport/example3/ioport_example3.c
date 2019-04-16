@@ -74,6 +74,7 @@
  *  - SAM4C evaluation kit
  *  - SAMG53 Xplained Pro kit
  *  - SAMG55 Xplained Pro kit
+ *  - SAMV71 Xplained Ultra kit
  *
  * \section example_description Description of the example
  * This example reads input from a button and outputs it on a LED.

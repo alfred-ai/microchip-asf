@@ -2,7 +2,8 @@
 
 set TOOL=%1
 set MCU=%2
-set IMAGE_FILE=%CD%\%3
+set IMAGE_FILE=%3
+set IMAGE_FILE_FULL_PATH=%CD%\%3
 set MCU_ALIAS=%4
 set varPath=%PROGRAMFILES%
 :CheckOS
@@ -13,7 +14,7 @@ set varPath=%PROGRAMFILES(X86)%
 echo %MCU_ALIAS% flashing script: please connect %TOOL% and power up the board.
 
 :: Test path length.
-if NOT "%IMAGE_FILE:~240,1%"=="" (
+if NOT "%IMAGE_FILE_FULL_PATH:~210,1%"=="" (
 	echo.
 	echo [ERROR] File path is too long. Please move firmware update tool at the root of your hard drive and try again.
 	echo.
@@ -38,13 +39,13 @@ IF EXIST "%varPath%\Atmel\Atmel Studio 6.2\atbackend\atprogram.exe" (
 IF %ERRORLEVEL% NEQ 0 ( echo Fail
 echo     #######################################################################
 echo     ##                                                                   ##
-echo     ##                    ########    ###     ####  ##                   ##
-echo     ##                    ##         ## ##     ##   ##                   ##
-echo     ##                    ##        ##   ##    ##   ##                   ##
-echo     ##                    ######   ##     ##   ##   ##                   ##
-echo     ##                    ##       #########   ##   ##                   ##
-echo     ##                    ##       ##     ##   ##   ##                   ##
-echo     ##                    ##       ##     ##  ####  ########             ##
+echo     ##                  ########    ###     ####  ##                     ##
+echo     ##                  ##         ## ##     ##   ##                     ##
+echo     ##                  ##        ##   ##    ##   ##                     ##
+echo     ##                  ######   ##     ##   ##   ##                     ##
+echo     ##                  ##       #########   ##   ##                     ##
+echo     ##                  ##       ##     ##   ##   ##                     ##
+echo     ##                  ##       ##     ##  ####  ########               ##
 echo     ##                                                                   ##
 echo     #######################################################################
 pause
@@ -56,13 +57,13 @@ exit
 IF %ERRORLEVEL% NEQ 0 ( echo Fail
 echo     #######################################################################
 echo     ##                                                                   ##
-echo     ##                    ########    ###     ####  ##                   ##
-echo     ##                    ##         ## ##     ##   ##                   ##
-echo     ##                    ##        ##   ##    ##   ##                   ##
-echo     ##                    ######   ##     ##   ##   ##                   ##
-echo     ##                    ##       #########   ##   ##                   ##
-echo     ##                    ##       ##     ##   ##   ##                   ##
-echo     ##                    ##       ##     ##  ####  ########             ##
+echo     ##                  ########    ###     ####  ##                     ##
+echo     ##                  ##         ## ##     ##   ##                     ##
+echo     ##                  ##        ##   ##    ##   ##                     ##
+echo     ##                  ######   ##     ##   ##   ##                     ##
+echo     ##                  ##       #########   ##   ##                     ##
+echo     ##                  ##       ##     ##   ##   ##                     ##
+echo     ##                  ##       ##     ##  ####  ########               ##
 echo     ##                                                                   ##
 echo     #######################################################################
 pause
@@ -72,33 +73,33 @@ exit
 echo Please wait...
 ping 192.0.0.1 -w 1000 > NUL
 
-download_all.bat UART %MCU_ALIAS%
+download_all.bat UART
 IF %ERRORLEVEL% NEQ 0 ( echo Fail
 echo     #######################################################################
 echo     ##                                                                   ##
-echo     ##                    ########    ###     ####  ##                   ##
-echo     ##                    ##         ## ##     ##   ##                   ##
-echo     ##                    ##        ##   ##    ##   ##                   ##
-echo     ##                    ######   ##     ##   ##   ##                   ##
-echo     ##                    ##       #########   ##   ##                   ##
-echo     ##                    ##       ##     ##   ##   ##                   ##
-echo     ##                    ##       ##     ##  ####  ########             ##
+echo     ##                  ########    ###     ####  ##                     ##
+echo     ##                  ##         ## ##     ##   ##                     ##
+echo     ##                  ##        ##   ##    ##   ##                     ##
+echo     ##                  ######   ##     ##   ##   ##                     ##
+echo     ##                  ##       #########   ##   ##                     ##
+echo     ##                  ##       ##     ##   ##   ##                     ##
+echo     ##                  ##       ##     ##  ####  ########               ##
 echo     ##                                                                   ##
 echo     #######################################################################
 pause
 exit
 )
 
-echo OK
+echo OK.
 echo     #######################################################################
 echo     ##                                                                   ##
-echo     ##                 ########     ###     ######   ######              ##
-echo     ##                 ##     ##   ## ##   ##    ## ##    ##             ##
-echo     ##                 ##     ##  ##   ##  ##       ##                   ##
-echo     ##                 ########  ##     ##  ######   ######              ##
-echo     ##                 ##        #########       ##       ##             ##
-echo     ##                 ##        ##     ## ##    ## ##    ##             ##
-echo     ##                 ##        ##     ##  ######   ######              ##
+echo     ##               ########     ###     ######   ######                ##
+echo     ##               ##     ##   ## ##   ##    ## ##    ##               ##
+echo     ##               ##     ##  ##   ##  ##       ##                     ##
+echo     ##               ########  ##     ##  ######   ######                ##
+echo     ##               ##        #########       ##       ##               ##
+echo     ##               ##        ##     ## ##    ## ##    ##               ##
+echo     ##               ##        ##     ##  ######   ######                ##
 echo     ##                                                                   ##
 echo     #######################################################################
 echo Programming ends successfully

@@ -193,6 +193,7 @@ void _ac_interrupt_handler(const uint32_t instance_index)
 		module->hw->INTFLAG.reg = AC_INTFLAG_COMP3;
 	}
 
+#  if !(SAMC20)
 		/* Check if window 1 needs to be serviced */
 	if (interrupt_and_callback_status_mask & AC_INTFLAG_WIN1) {
 		/* Invoke registered and enabled callback function */
@@ -200,5 +201,6 @@ void _ac_interrupt_handler(const uint32_t instance_index)
 		/* Clear interrupt flag */
 		module->hw->INTFLAG.reg = AC_INTFLAG_WIN1;
 	}
+#  endif
 #endif /* (AC_NUM_CMP > 2) */
 }

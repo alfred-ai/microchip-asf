@@ -48,7 +48,7 @@
 #define DMAC_EXAMPLE_H_INCLUDED
 
 /**
- * \page asfdoc_sam_drivers_dmac_example SAM Direct Memory Access Controller - Example memory to memory transfer
+ * \page asfdoc_sam_drivers_dmac_example SAM Direct Memory Access Controller - Example Memory to Memory Transfer
  *
  * \section asfdoc_sam_drivers_dmac_example_purpose Purpose
  * This example demonstrates how to configure and use DMAC controller
@@ -85,8 +85,7 @@
  *   - 1 stop bit
  *   - No flow control
  * -# Start the application.
- * -# In the terminal window, the following text should appear.
- *    (values depend on the board and the chip used):
+ * -# In the terminal window, the following text should appear:
  *    \code
  *     -- DMAC Example --
  *     -- xxxxxx-xx
@@ -97,6 +96,7 @@
  *
  *     Test multiple buffer transfer......
  *     > Test OK. \endcode
+ * \note Values depend on the board and the chip used.
  */
  
  #endif /* DMAC_EXAMPLE_H_INCLUDED */

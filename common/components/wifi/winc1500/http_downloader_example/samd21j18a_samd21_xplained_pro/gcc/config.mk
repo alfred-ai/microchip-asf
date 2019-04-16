@@ -70,6 +70,7 @@ CSRCS = \
        common/components/wifi/winc1500/http_downloader_example/iot/sw_timer.c \
        common/components/wifi/winc1500/http_downloader_example/main21.c \
        common/components/wifi/winc1500/socket/source/socket.c \
+       common/components/wifi/winc1500/spi_flash/spi_flash.c \
        common/services/storage/ctrl_access/ctrl_access.c  \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common2/components/memory/sd_mmc/sd_mmc.c          \
@@ -131,6 +132,7 @@ INC_PATH = \
        common/components/wifi/winc1500/socket             \
        common/components/wifi/winc1500/socket/include     \
        common/components/wifi/winc1500/socket/source      \
+       common/components/wifi/winc1500/spi_flash          \
        common/services/serial                             \
        common/services/storage/ctrl_access                \
        common/utils                                       \

@@ -56,7 +56,7 @@ CSRCS = \
        sam0/applications/xosc32k_failure_detector/xosc32k_failure_detector.c \
        sam0/boards/saml21_xplained_pro/board_init.c       \
        sam0/drivers/events/events_hooks.c                 \
-       sam0/drivers/events/events_sam_l/events.c          \
+       sam0/drivers/events/events_sam_l_c/events.c        \
        sam0/drivers/port/port.c                           \
        sam0/drivers/system/clock/clock_saml21/clock.c     \
        sam0/drivers/system/clock/clock_saml21/gclk.c      \
@@ -64,7 +64,7 @@ CSRCS = \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
        sam0/drivers/tc/tc_interrupt.c                     \
-       sam0/drivers/tc/tc_sam_l/tc.c                      \
+       sam0/drivers/tc/tc_sam_l_c/tc.c                    \
        sam0/utils/cmsis/saml21/source/gcc/startup_saml21.c \
        sam0/utils/cmsis/saml21/source/system_saml21.c     \
        sam0/utils/syscalls/gcc/syscalls.c
@@ -81,7 +81,7 @@ INC_PATH = \
        sam0/boards                                        \
        sam0/boards/saml21_xplained_pro                    \
        sam0/drivers/events                                \
-       sam0/drivers/events/events_sam_l                   \
+       sam0/drivers/events/events_sam_l_c                 \
        sam0/drivers/port                                  \
        sam0/drivers/system                                \
        sam0/drivers/system/clock                          \
@@ -94,7 +94,7 @@ INC_PATH = \
        sam0/drivers/system/reset                          \
        sam0/drivers/system/reset/reset_sam_l              \
        sam0/drivers/tc                                    \
-       sam0/drivers/tc/tc_sam_l                           \
+       sam0/drivers/tc/tc_sam_l_c                         \
        sam0/utils                                         \
        sam0/utils/cmsis/saml21/include                    \
        sam0/utils/cmsis/saml21/source                     \

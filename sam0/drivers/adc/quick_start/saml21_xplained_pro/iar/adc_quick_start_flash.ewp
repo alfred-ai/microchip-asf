@@ -311,7 +311,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -320,6 +319,7 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -583,7 +583,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -592,6 +591,7 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1280,7 +1280,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1289,6 +1288,7 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1552,7 +1552,6 @@
 					<state>$PROJ_DIR$/../../../../system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../system/interrupt/system_interrupt_saml21</state>
-					<state>$PROJ_DIR$/../../../adc_sam_l</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include</state>
 					<state>$PROJ_DIR$/../..</state>
@@ -1561,6 +1560,7 @@
 					<state>$PROJ_DIR$/../../../../system/reset/reset_sam_l</state>
 					<state>$PROJ_DIR$/../../../../system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../system</state>
+					<state>$PROJ_DIR$/../../../adc_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../../utils/cmsis/saml21/source</state>
 					<state>$PROJ_DIR$/../../../../system/clock</state>
 					<state>$PROJ_DIR$/.</state>
@@ -1966,12 +1966,12 @@
 					</group>
 				</group>
 				<group>
-					<name>adc_sam_l</name>
+					<name>adc_sam_l_c</name>
 					<file>
-						<name>$PROJ_DIR$/../../../adc_sam_l/adc.c</name>
+						<name>$PROJ_DIR$/../../../adc_sam_l_c/adc.c</name>
 					</file>
 					<file>
-						<name>$PROJ_DIR$/../../../adc_sam_l/adc_feature.h</name>
+						<name>$PROJ_DIR$/../../../adc_sam_l_c/adc_feature.h</name>
 					</file>
 				</group>
 				<file>

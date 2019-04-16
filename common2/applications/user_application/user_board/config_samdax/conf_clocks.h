@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SAM DA0/DA1 Clock configuration
+ * \brief SAM DAx Clock configuration
  *
  * Copyright (C) 2015 Atmel Corporation. All rights reserved.
  *
@@ -49,7 +49,6 @@
 #  define CONF_CLOCKS_H_INCLUDED
 
 /* System clock bus configuration */
-#  define CONF_CLOCK_CPU_CLOCK_FAILURE_DETECT     false
 #  define CONF_CLOCK_FLASH_WAIT_STATES            0
 #  define CONF_CLOCK_CPU_DIVIDER                  SYSTEM_MAIN_CLOCK_DIV_1
 #  define CONF_CLOCK_APBA_DIVIDER                 SYSTEM_MAIN_CLOCK_DIV_1
@@ -93,9 +92,12 @@
 #  define CONF_CLOCK_DFLL_LOOP_MODE               SYSTEM_CLOCK_DFLL_LOOP_MODE_OPEN
 #  define CONF_CLOCK_DFLL_ON_DEMAND               false
 
+/* DFLL open loop mode configuration */
+#  define CONF_CLOCK_DFLL_FINE_VALUE              (0xff / 4)
+
 /* DFLL closed loop mode configuration */
 #  define CONF_CLOCK_DFLL_SOURCE_GCLK_GENERATOR   GCLK_GENERATOR_1
-#  define CONF_CLOCK_DFLL_MULTIPLY_FACTOR         (48000000 / 32768)
+#  define CONF_CLOCK_DFLL_MULTIPLY_FACTOR         1465 /* (48000000 / 32768) */
 #  define CONF_CLOCK_DFLL_QUICK_LOCK              true
 #  define CONF_CLOCK_DFLL_TRACK_AFTER_FINE_LOCK   true
 #  define CONF_CLOCK_DFLL_KEEP_LOCK_ON_WAKEUP     true

@@ -68,7 +68,7 @@
  *
  * \subsection asfdoc_sam0_dac_basic_use_case_setup_flow Workflow
  * -# Create a module software instance structure for the DAC module to store
- *    the DAC driver state while it is in use.
+ *    the DAC driver state while in use.
  *    \snippet qs_dac_basic.c module_inst
  *    \note This should never go out of scope as long as the module is in use.
  *          In most cases, this should be global.

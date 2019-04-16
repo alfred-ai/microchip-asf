@@ -48,8 +48,13 @@
 
 void ccl_init(struct ccl_config *const config)
 {
+#if (SAMC20) || (SAMC21)
+	/* Turn on the digital interface clock. */
+	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, MCLK_APBCMASK_CCL);
+#else
 	/* Turn on the digital interface clock. */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, MCLK_APBDMASK_CCL);
+#endif
 
 	/* Reset module. */
 	ccl_module_reset();
@@ -129,7 +134,7 @@ enum status_code ccl_seq_config(const enum ccl_seq_id number,
 {
 	if(CCL->CTRL.reg & CCL_CTRL_ENABLE)
 		return STATUS_BUSY;
-	
+
 	CCL->SEQCTRL[number].reg = seq_selection;
 
 	return STATUS_OK;

@@ -50,13 +50,49 @@
 #define NMI_INTR_ENABLE (NMI_INTR_REG_BASE)
 #define GET_UINT32(X,Y) (X[0+Y] + ((uint32)X[1+Y]<<8) + ((uint32)X[2+Y]<<16) +((uint32)X[3+Y]<<24))
 
-
-
-
 #define TIMEOUT				(2000)
 #define M2M_DISABLE_PS        0xD0UL
 
 static uint32 clk_status_reg_adr = 0xf; /* Assume initially it is B0 chip */
+
+sint8 chip_apply_conf(uint32 u32Conf)
+{
+	sint8 ret = M2M_SUCCESS;
+	uint32 val32 = u32Conf;
+	
+#ifdef __ENABLE_PMU__
+	val32 |= rHAVE_USE_PMU_BIT;
+#endif
+#ifdef __ENABLE_SLEEP_CLK_SRC_RTC__
+	val32 |= rHAVE_SLEEP_CLK_SRC_RTC_BIT;
+#elif defined __ENABLE_SLEEP_CLK_SRC_XO__
+	val32 |= rHAVE_SLEEP_CLK_SRC_XO_BIT;
+#endif
+#ifdef __ENABLE_EXT_PA_INV_TX_RX__
+	val32 |= rHAVE_EXT_PA_INV_TX_RX;
+#endif
+#ifdef __ENABLE_LEGACY_RF_SETTINGS__
+	val32 |= rHAVE_LEGACY_RF_SETTINGS;
+#endif
+#ifdef __DISABLE_FIRMWARE_LOGS__
+	val32 |= rHAVE_LOGS_DISABLED_BIT;
+#endif
+	do  {
+		nm_write_reg(rNMI_GP_REG_1, val32);
+		if(val32 != 0) {		
+			uint32 reg = 0;
+			ret = nm_read_reg_with_ret(rNMI_GP_REG_1, &reg);
+			if(ret == M2M_SUCCESS) {
+				if(reg == val32)
+					break;
+			}
+		} else {
+			break;
+		}
+	} while(1);
+
+	return M2M_SUCCESS;
+}
 
 /**
 *	@fn		nm_clkless_wake
@@ -485,6 +521,15 @@ sint8 wait_for_bootrom(uint8 arg)
 		/*bypass this step*/
 	}
 
+	if(REV(nmi_get_chipid()) == REV_3A0)
+	{
+		chip_apply_conf(rHAVE_USE_PMU_BIT);
+	}
+	else
+	{
+		chip_apply_conf(0);
+	}
+	
 	nm_write_reg(BOOTROM_REG,M2M_START_FIRMWARE);
 
 #ifdef __ROM_TEST__

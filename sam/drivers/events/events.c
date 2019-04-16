@@ -102,7 +102,7 @@ void events_disable(void)
 }
 
 /**
- * \brief Initialize an event channel configuration structure to defaults.
+ * \brief Initialize an Event Channel configuration structure to defaults.
  *
  *  The default configuration is as follows:
  *  - Channel ID is initialized to invalid number

@@ -90,6 +90,7 @@
  * - sam4cp16b_sam4cp16bmb
  * - sam4cmp16c_sam4cmp_db
  * - sam4cms16c_sam4cms_db
+ * - samv71q21_samv71_xplained_ultra
  *
  * \section compinfo Compilation info
  * This software was written for the GNU GCC and IAR for ARM. Other compilers
@@ -163,7 +164,11 @@ static void run_rstc_test(const struct test_case *test)
 			"Test: unexpected reset type, expected SOFTWARE_RESET!");
 		/* Step 2: Watchdog reset test. */
 		gpbr_write(RSTC_GPBR_STEP, RSTC_UT_STEP3);
+#if (SAMV71 || SAMV70 || SAMS70 || SAME70)
+		wdt_init(WDT, WDT_MR_WDRSTEN, 0, 0);
+#else
 		wdt_init(WDT, WDT_MR_WDRSTEN | WDT_MR_WDRPROC, 0, 0);
+#endif
 		while (1) {
 		}
 
@@ -191,7 +196,13 @@ int main(void)
 {
 	const usart_serial_options_t usart_serial_options = {
 		.baudrate = CONF_TEST_BAUDRATE,
-		.paritytype = CONF_TEST_PARITY
+#ifdef CONF_TEST_CHAR_LENGTH
+		.charlength = CONF_TEST_CHAR_LENGTH,
+#endif
+		.paritytype = CONF_TEST_PARITY,
+#ifdef CONF_TEST_STOP_BITS
+		.stopbits = CONF_TEST_STOP_BITS,
+#endif
 	};
 	/* Clear DEMCR.VC_CORERESET bit in case of external tool set it.
 	   When RSTC unit test performs reset in the code with VC_CORERESET bit set,

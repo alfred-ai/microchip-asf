@@ -48,11 +48,11 @@
 #define TC_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam_drivers_tc_group SAM Timer Counter (TC) Driver
+ * \defgroup asfdoc_sam_drivers_tc_group SAM3/4S/4L/4E/4N/4CM/4C/G Timer Counter (TC) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for
- * the configuration and management of the device's Timer Counter
- * functionality.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers 
+ * provides an interface for the configuration and management of the 
+ * device's Timer Counter functionality.
  *
  * The Timer Counter (TC) includes several identical 16-bit or 32-bit
  * Timer Counter channels. Each channel can be independently programmed
@@ -61,7 +61,14 @@
  * delay timing, and pulse width modulation.
  *
  * Devices from the following series can use this module:
+ * - Atmel | SMART SAM3
+ * - Atmel | SMART SAM4S
  * - Atmel | SMART SAM4L
+ * - Atmel | SMART SAM4E
+ * - Atmel | SMART SAM4N
+ * - Atmel | SMART SAM4CM
+ * - Atmel | SMART SAM4C
+ * - Atmel | SMART SAMG
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam_drivers_tc_prerequisites
@@ -283,7 +290,7 @@ uint32_t tc_get_version(Tc *p_tc);
  * This is a list of the available Quick Start Guides (QSGs) and example
  * applications for \ref asfdoc_sam_drivers_tc_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam_drivers_tc_qsg
@@ -298,6 +305,11 @@ uint32_t tc_get_version(Tc *p_tc);
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
+ *		<td>42301B</td>
+ *		<td>07/2015</td>
+ *		<td>Updated title of application note and added list of supported devices</td>
+ *	</tr>
+ *	<tr>
  *		<td>42301A</td>
  *		<td>05/2014</td>
  *		<td>Initial document release</td>
@@ -309,10 +321,10 @@ uint32_t tc_get_version(Tc *p_tc);
 /**
  * \page asfdoc_sam_drivers_tc_qsg Quick Start Guide for the TC driver
  *
- * This is the quick start guide for the \ref asfdoc_sam_drivers_ast_group, with
+ * This is the quick start guide for the \ref asfdoc_sam_drivers_tc_group, with
  * step-by-step instructions on how to configure and use the driver for
- * a specific use case. The code examples can be copied into e.g. the main
- * application loop or any other function that will need to control the
+ * a specific use case. The code examples can be copied into the main 
+ * application loop or any other function that will need to control the 
  * AST module.
  *
  * \section asfdoc_sam_drivers_tc_qsg_use_cases Use Cases

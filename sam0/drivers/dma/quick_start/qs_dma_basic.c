@@ -64,7 +64,7 @@ static volatile bool transfer_is_done = false;
 
 //! [transfer_descriptor]
 COMPILER_ALIGNED(16)
-DmacDescriptor example_descriptor;
+DmacDescriptor example_descriptor SECTION_DMAC_DESCRIPTOR;
 //! [transfer_descriptor]
 
 //! [_transfer_done]
