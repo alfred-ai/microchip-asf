@@ -63,7 +63,7 @@
 //	<i> Defines inteval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> ancs_app_anp_fast_adv
-#define APP_ANP_FAST_ADV						(100) //100 ms
+#define APP_ANP_FAST_ADV						(1600) //1000 ms
 
 /**@brief Advertisement Timeout*/
 //	<o> Advertisement Timeout <1000-10000:50>
@@ -102,7 +102,6 @@
 #define ANP_SOLICITATION_LEN					   (16)
 #define ANP_ADV_DATA_SERVSOLICITATION_16UUID_TYPE  (0x14)
 #define ANP_ADV_DATA_SERVSOLICITATION_128UUID_TYPE (0x15)
-#define ANP_ANCS_SERVICE_UUID                       ("\xD0\x00\x2D\x12\x1E\x4B\x0F\xA4\x99\x4E\xCE\xB5\x31\xF4\x05\x79")
 
 #define ANCS_CHAR_NOTIFICATION_SOURCE_UUID "\xBD\x1D\xA2\x99\xE6\x25\x58\x8C\xD9\x42\x01\x63\x0D\x12\xBF\x9F"
 #define ANCS_CHAR_CONTROL_POINT "\xD9\xD9\xAA\xFD\xBD\x9B\x21\x98\xA8\x49\xE1\x45\xF3\xD8\xD1\x69"
@@ -205,42 +204,42 @@ void anp_client_adv(void);
  * @param[in] connected event parameter containing details like handle
  * \note Called by the ble_manager after receiving connection event
  */
-void anp_client_connected_state_handler(at_ble_connected_t *params);
+at_ble_status_t anp_client_connected_state_handler(void *params);
 
 /**
  * @brief Handler for disconnection event
  * @param[in] disconnected event parameter containing details like handle
  * \note Called by the ble_manager after receiving disconnection event
  */
-void anp_client_disconnected_event_handler(at_ble_disconnected_t *params);
+at_ble_status_t anp_client_disconnected_event_handler(void *params);
 
 /**
  * @brief Handler for service found event
  * @param[in] service found event parameter containing details like service handle,uuid
  * \note Called by the ble_manager after receiving service found event
  */
-void anp_client_service_found_handler(at_ble_primary_service_found_t * params);
+at_ble_status_t anp_client_service_found_handler(void * params);
 
 /**
  * @brief Handler for discovery complete event
  * @param[in] discovery complete event which contains result of discovery event
  * \note Called by the ble_manager after receiving discovery complete event
  */
-void anp_client_discovery_complete_handler(at_ble_discovery_complete_t *params);
+at_ble_status_t anp_client_discovery_complete_handler(void *params);
 
 /**
  * @brief Handler for characteristic found event
  * @param[in] characteristic found event parameter containing details like characteristic handle,uuid
  * \note Called by the ble_manager after receiving characteristic found event
  */
-void anp_client_characteristic_found_handler(at_ble_characteristic_found_t *params);
+at_ble_status_t anp_client_characteristic_found_handler(void *params);
 
 /**
  * @brief Handler for descriptor found event
  * @param[in] descriptor found event parameter containing details like descriptor handle,uuid
  * \note Called by the ble_manager after receiving descriptor found event
  */
-void anp_client_descriptor_found_handler(at_ble_descriptor_found_t *params);
+at_ble_status_t anp_client_descriptor_found_handler(void *params);
 
 /**
  * @brief Handler for char changed handler 
@@ -254,20 +253,20 @@ void anp_client_char_changed_handler(at_ble_characteristic_changed_t *params);
  * @param[in] write response parameter contating the result of write request
  * \note Called by the ble_manager after receiving write response event
  */
-void anp_client_write_response_handler(at_ble_characteristic_write_response_t *params);
+at_ble_status_t anp_client_write_response_handler(void *params);
 
 /**
  * @brief Handler for notification event 
  * @param[in] notification received parameter containing the notification value
  * \note Called by the ble_manager after receiving the notification
  */
-void anp_client_notification_handler(at_ble_notification_recieved_t *params);
+at_ble_status_t anp_client_notification_handler(void *params);
 
 /**
  * @brief Handler for enabling the notification 
  * \note Called by the ble_manager for enabling the notification in the gatt server
  */
-void anp_client_write_notification_handler(void *param);
+at_ble_status_t anp_client_write_notification_handler(void *param);
 #endif /* __ANCS_CLIENT_H__*/
 // </h>
 

@@ -62,6 +62,7 @@ CSRCS = \
        sam/boards/samg55_xplained_pro/board_init.c        \
        sam/drivers/efc/efc.c                              \
        sam/drivers/flexcom/flexcom.c                      \
+       sam/drivers/pdc/pdc.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -101,6 +102,8 @@ INC_PATH = \
        sam/boards/samg55_xplained_pro                     \
        sam/drivers/efc                                    \
        sam/drivers/flexcom                                \
+       sam/drivers/pdc                                    \
+       sam/drivers/pdc/pdc_uart_example                   \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/supc                                   \
@@ -115,6 +118,7 @@ INC_PATH = \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
        thirdparty/wireless/addons/sio2host/uart           \
+       thirdparty/wireless/ble_sdk/apps/config/samg55     \
        thirdparty/wireless/ble_sdk/apps/custom_serial_chat \
        thirdparty/wireless/ble_sdk/apps/custom_serial_chat/samg55_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/cscp      \
@@ -183,11 +187,14 @@ CFLAGS =  \
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
        -D ATT_DB_MEMORY                                   \
-       -D BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL      \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D CSC_DEVICE                                      \
+       -D CSC_SERVICE                                     \
        -D ENABLE_POWER_SAVE                               \
        -D NEW_EVT_HANDLER                                 \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

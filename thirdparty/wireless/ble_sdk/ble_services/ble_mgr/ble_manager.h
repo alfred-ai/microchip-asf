@@ -58,104 +58,153 @@
 #include "ble_utils.h"
 
 #ifndef BLE_DEVICE_ROLE
-#define BLE_DEVICE_ROLE BLE_CENTRAL_AND_PERIPHERAL
+#warning "BLE Device role is not defined, BLE Device Role defaults to BLE_ROLE_ALL"
+#define BLE_DEVICE_ROLE BLE_ROLE_ALL
 #endif
 
 #if defined HID_DEVICE
-#include "hid_device.h"
-#ifdef HID_KEYBOARD_DEVICE
-#define BLE_DEVICE_NAME				"ATMEL-HIDK"
-#define BLE_AUTHENTICATION_LEVEL	(AT_BLE_NO_SEC)
-#define BLE_IO_CAPABALITIES			(AT_BLE_IO_CAP_NO_INPUT_NO_OUTPUT)
-#define BLE_MITM_REQ				(false)
-#define BLE_BOND_REQ				(false)
-#define BLE_PAIR_ENABLE				(false)
-#endif
+	#ifdef HID_KEYBOARD_DEVICE
+	#ifndef BLE_DEVICE_NAME
+		#define BLE_DEVICE_NAME				"ATMEL-HID"
+	#endif	/* BLE_DEVICE_NAME */
+	#define BLE_AUTHENTICATION_LEVEL	(AT_BLE_NO_SEC)
+	#define BLE_IO_CAPABALITIES			(AT_BLE_IO_CAP_NO_INPUT_NO_OUTPUT)
+	#define BLE_MITM_REQ				(false)
+	#define BLE_BOND_REQ				(false)
+	#define BLE_PAIR_ENABLE				(false)
+	#endif
 
-#ifdef HID_MOUSE_DEVICE
-#define BLE_DEVICE_NAME				"ATMEL-HIDM"
-#endif
+	#ifdef HID_MOUSE_DEVICE
+	#ifndef BLE_DEVICE_NAME
+		#define BLE_DEVICE_NAME				"ATMEL-HID"
+	#endif	/* BLE_DEVICE_NAME */
+	#endif
 #endif /* HID_DEVICE */
 
 #if defined PROXIMITY_REPORTER
-#include "pxp_reporter.h"
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-PXP"
+#endif	/* BLE_DEVICE_NAME */
 #endif /* PROXIMITY_REPORTER */
 
 #if defined HR_SENSOR
-#include "hr_sensor.h"
-#define BLE_DEVICE_NAME				"ATMEL-HR"
-#endif
-
-#if defined PROXIMITY_MONITOR
-#include "pxp_monitor.h"
-#define BLE_DEVICE_NAME				"ATMEL-MON"
-#endif /* PROXIMITY_MONITOR */
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-HRP"
+#endif	/* BLE_DEVICE_NAME */
+#endif /* HR_SENSOR */
 
 #if defined BLP_SENSOR
-#include "blp_sensor.h"
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-BLP"
+#endif	/* BLE_DEVICE_NAME */
 #endif /* Blood_Pressure_Sensor*/
 
-#if (BLE_DEVICE_ROLE == BLE_OBSERVER)
-#include "ble_observer.h"
+#if (BLE_DEVICE_ROLE == BLE_ROLE_OBSERVER)
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-OBS"
-#endif /* BLE_DEVICE_ROLE == BLE_OBSERVER) */
+#endif	/* BLE_DEVICE_NAME */
+#endif /* BLE_DEVICE_ROLE == BLE_ROLE_OBSERVER) */
 
 #if defined ANP_CLIENT
-#include "ancs_profile.h"
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-ANCS"
+#endif	/* BLE_DEVICE_NAME */
 #endif /* ANCS_CLIENT */
 
 #if defined TIP_CLIENT
-#include "time_info.h"
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-TIP"
+#endif	/* BLE_DEVICE_NAME */
 #endif /* TIP_CLIENT */
 
 #if defined FIND_ME_TARGET
-#include "find_me_target.h"
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-FMP"
-#endif /* PROXIMITY_REPORTER */
+#endif	/* BLE_DEVICE_NAME */
+#endif /* FIND_ME_TARGET */
 
 #if defined ANP_SIG_CLIENT
-#include "alert_notification_profile.h"
-#define BLE_DEVICE_NAME				"ATMEL-ANP"
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-ANS"
+#endif	/* BLE_DEVICE_NAME */
 #define BLE_PAIR_ENABLE					(false)
 #endif /* ANP_SIG_CLIENT */
 
 #if defined PAS_CLIENT
-#include "pas_client.h"
+#ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-PAS"
+#endif	/* BLE_DEVICE_NAME */
 #endif /* PAS_CLIENT */
 
+
 #if defined CSC_DEVICE
-#include "cscp.h"
-#define BLE_DEVICE_NAME				"ATMEL-CSC"
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"AT-CSC"
+#endif	/* BLE_DEVICE_NAME */
 #endif /* CSC_DEVICE */
+
+#if defined	BATTERY_SERVICE
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-BAS"
+#endif	/* BLE_DEVICE_NAME */
+#endif /*BATTERY_SERVICE*/
+
+
+#if defined	SCAN_PARAM_SERVICE
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-SCP"
+#endif	/* BLE_DEVICE_NAME */
+#endif	/*SCAN_PARAM_SERVICE*/
+
+#if defined	DEVICE_INFORMATION_SERVICE
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-DIS"
+#endif	/* BLE_DEVICE_NAME */
+#endif	/* DEVICE_INFORMATION_SERVICE */
+
+#if defined PROXIMITY_MONITOR
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME				"ATMEL-MON"
+#endif	/* BLE_DEVICE_NAME */
+#endif /* PROXIMITY_MONITOR */
 
 /** @brief default device name */
 #ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-BLE"
 #endif
 
+
+typedef enum {
+	BLE_GAP_EVENT_TYPE,
+	BLE_GATT_CLIENT_EVENT_TYPE,
+	BLE_GATT_SERVER_EVENT_TYPE,
+	BLE_L2CAP_EVENT_TYPE,
+	BLE_GATT_HTPT_EVENT_TYPE,
+	BLE_DTM_EVENT_TYPE,
+	BLE_CUSTOM_EVENT_TYPE
+}ble_mgr_event_t;
+
+typedef enum {
+	REGISTER_CALL_BACK,
+	UNREGISTER_CALL_BACK,
+}ble_mgr_event_cb_t;
+
+typedef enum ble_peripheral_state {
+	PERIPHERAL_IDLE_STATE,
+	PERIPHERAL_ADVERTISING_STATE,
+	PERIPHERAL_CONNECTED_STATE,
+	PERIPHERAL_PAIRED_STATE,
+	PERIPHERAL_ENCRYPTION_STATE,
+	PERIPHERAL_DISCONNECTED_STATE,
+}ble_peripheral_state_t;
+
+typedef at_ble_status_t (*ble_event_callback_t) (void *params);
+
 /** @brief event timeout */
 #define BLE_EVENT_TIMEOUT			(20)
 
-/* Dummy BLE handler's for unused functions */
-static inline void ble_dummy_handler(void *param)
-{
-	UNUSED(param);
-	DBG_LOG_DEV("!:(:(");
-}
-
-/* Unused variable - remove compiler warning */
-static inline at_ble_status_t BLE_UNUSED2_VAR(void *param1_var, void *param2_var)
-{
-	UNUSED(param1_var);
-	UNUSED(param2_var);
-	DBG_LOG_DEV("!!:(");
-	return AT_BLE_SUCCESS;
-}
+/** @brief pin timeout */
+#define PIN_TIMEOUT					30*1000
 
 /** @brief Observer related declarations */
 #define LE_LIMITED_DISCOVERABLE_MODE  ((uint8_t) 1 << 0)
@@ -193,12 +242,24 @@ static inline at_ble_status_t BLE_UNUSED2_VAR(void *param1_var, void *param2_var
 #define BLE_OOB_REQ						(false)
 #endif
 
+#ifndef BLE_ATT_DB_MEMORY_SIZE
+#define BLE_ATT_DB_MEMORY_SIZE				(1250)  /* Maximum ATT DB memory in Bytes */
+#endif
+
+/* BLE Event array of function pointer maximum size */
+#define	MAX_GAP_EVENT_SUBSCRIBERS    5
+#define MAX_GATT_CLIENT_SUBSCRIBERS  5
+#define MAX_GATT_SERVER_SUBSCRIBERS  5
+#define MAX_L2CAP_EVENT_SUBSCRIBERS  1
+#define MAX_HTPT_EVENT_SUBSCRIBERS   1
+#define MAX_DTM_EVENT_SUBSCRIBERS	 5
+#define MAX_CUSTOM_EVENT_SUBSCRIBERS 1
 
 
 /** @brief Gap Advertisement Types */
 typedef enum
 {
-	/// flags 
+	/// flags
 	FLAGS = 0x01,
 	/// incomplete list of 16bits service uuids
 	INCOMPLETE_LIST_16BIT_SERV_UUIDS,
@@ -212,7 +273,7 @@ typedef enum
 	INCOMPLETE_LIST_128BIT_SERV_UUIDS,
 	/// complete list of 128bits of service uuids
 	COMPLETE_LIST_128BIT_SERV_UUIDS,
-	/// shortened local name of the device 
+	/// shortened local name of the device
 	SHORTENED_LOCAL_NAME,
 	/// complete local name of the device
 	COMPLETE_LOCAL_NAME,
@@ -230,7 +291,7 @@ typedef enum
 	SECURITY_MANAGER_OOB_FLAGS,
 	/// slave connection interval range
 	SLAVE_CONNECTION_INTERVAL_RANGE,
-	/// list of 16bits service solicitation uuid 
+	/// list of 16bits service solicitation uuid
 	LIST_16BIT_SERV_SOLICITATION_UUIDS = 0x14,
 	/// list of 128bits service solicitation uuids
 	LIST_128BIT_SERV_SOLICITATION_UUIDS,
@@ -252,6 +313,8 @@ typedef enum
 	SIMPLE_PAIRING_HASHING_C256,
 	/// simple pairing randomizer r256
 	SIMPLE_PAIRING_RANDOMIZER_R256,
+	/// list of 16bits service solicitation uuid
+	LIST_32BIT_SERV_SOLICITATION_UUIDS,
 	/// service data 32bits
 	SERVICE_DATA_32BIT = 0x20,
 	/// service data 128bits
@@ -266,18 +329,11 @@ typedef enum
 	MANUFACTURER_SPECIFIC_DATA = 0xFF
 }gap_ad_type;
 
-#if (BLE_DEVICE_ROLE == BLE_OBSERVER)
-/* scan report handler */
-#define BLE_SCAN_REPORT_HANDLER								ble_scan_report_handler
-/* scan information handler */
-#define BLE_SCAN_INFO_HANDLER(param)						ble_observer_scan_info_handler(param);\
-															ble_scan_info_handler(param);
-/* scan data handler */															
-#define	BLE_SCAN_DATA_HANDLER								ble_observer_scan_data_handler
-#endif /* (BLE_DEVICE_ROLE == BLE_OBSERVER) */
-
 
 /** @brief Service UUID's */
+
+/* Blood Pressure Service UUID */
+#define BLOOD_PRESSURE_SERVICE_UUID             (0x1810)
 
 /* Immediate Alert service UUID  */
 #define IMMEDIATE_ALERT_SERVICE_UUID			(0x1802)
@@ -305,14 +361,25 @@ typedef enum
 /** Alert notification service uuid */
 #define ANP_SERVICE_UUID						(0x1811)
 
+/**
+ * @brief Heart rate service UUID
+ */
+#define HEART_RATE_SERVICE_UUID                 (0x180D)
+
 /** HID Service UUID. */
 #define HID_SERV_UUID							(0x1812)
+
+/* Phone Alert Service UUID */
+#define PAS_SERVICE_UUID						(0x180E)
 
 /** Scan param service uuid */
 #define SPS_SERVICE_UUID 						(0x1813)
 
 /** CSC Service UUID. */
-#define CSC_SERVICE_UUID				("\x1b\xc5\xd5\xa5\x02\x00\xa6\x85\xe5\x11\x35\x39\xa0\xbb\x5a\xfd")
+#define CSC_SERVICE_UUID						("\x1b\xc5\xd5\xa5\x02\x00\xa6\x85\xe5\x11\x35\x39\xa0\xbb\x5a\xfd")
+
+/** ANCS service UUID. */
+#define ANP_ANCS_SERVICE_UUID					("\xD0\x00\x2D\x12\x1E\x4B\x0F\xA4\x99\x4E\xCE\xB5\x31\xF4\x05\x79")
 
 /* Characteristics UUID's */
 /* Alert Level Characteristic UUID */
@@ -391,6 +458,7 @@ typedef enum
 /** HID Control Point UUID. */
 #define HID_UUID_CHAR_HID_CONTROL_POINT			(0x2A4C)
 
+
 /** CSC Endpoint Characteristic UUID. */
 #define CSC_ENDPOINT_CHAR_UUID			("\x1b\xc5\xd5\xa5\x02\x00\xa6\x85\xe5\x11\x35\x39\xa1\xbb\x5a\xfd")
 
@@ -400,18 +468,17 @@ typedef enum
 #define GATT_DISCOVERY_ENDING_HANDLE	(0xFFFF)
 
 /* All GAP Connection Parameter defined */
-#if ((BLE_DEVICE_ROLE == BLE_CENTRAL) || (BLE_DEVICE_ROLE == BLE_CENTRAL_AND_PERIPHERAL) || (BLE_DEVICE_ROLE == BLE_OBSERVER))
 
 /** minimum connection interval */
 //	<o> GAP Minimum Connection Interval in msec <0-1000:50>
-//	<i> Defines Minimum inteval for GAP Connection.
+//	<i> Defines Minimum interval for GAP Connection.
 //	<i> Default: 20
 //	<id> gap_conn_interval_min
 #define GAP_CONN_INTERVAL_MIN			(20)        //Connection interval min 20ms
 
 /** maximum connection interval */
 //	<o> GAP Maximum Connection Interval in msec <0-1000:50>
-//	<i> Defines Maximum inteval for GAP Connection.
+//	<i> Defines Maximum interval for GAP Connection.
 //	<i> Default: 40
 //	<id> gap_conn_interval_max
 #define GAP_CONN_INTERVAL_MAX			(40)		//Connection interval max 40ms
@@ -443,7 +510,7 @@ typedef enum
 //	<i> Defines maximum number of Scan device can have buffer .
 //	<i> Default: 10
 //	<id> max_scan_device
-#define MAX_SCAN_DEVICE					(10)			  //Max number of scan device
+#define MAX_SCAN_DEVICE					(20)			  //Max number of scan device
 
 /* Scan interval 30ms in term of 625us */
 //	<o> Scan Interval in units of 625us <1-1000:50>
@@ -461,335 +528,831 @@ typedef enum
 #define SCAN_TIMEOUT					(0x0000)          //Timeout  Scan time-out, 0x0000 disables time-out
 #define SCAN_TYPE						(AT_BLE_SCAN_ACTIVE)
 
-#endif //((BLE_DEVICE_ROLE == BLE_CENTRAL) || (BLE_DEVICE_ROLE == BLE_CENTRAL_AND_PERIPHERAL) || (BLE_DEVICE_ROLE == BLE_OBSERVER))
-
 /** maximum number of devices connected */
 //	<o> Maximum number of device to connect <1-5>
-//	<i> Defines the central to connect maximun number to devices
+//	<i> Defines the central to connect maximum number to devices
 //	<i> Default: 1
 //	<id> gap_max_device_connected
-#define MAX_DEVICE_CONNECTED			(1)
+#define BLE_MAX_DEVICE_CONNECTED				(5)
+
+#define BLE_EVENT_PARAM_MAX_SIZE		        524
+
+typedef enum {
+  BLE_DEVICE_DEFAULT_IDLE,
+  BLE_DEVICE_DISCONNECTED,
+  BLE_DEVICE_CONNECTED,
+  BLE_DEVICE_PAIRING,
+  BLE_DEVICE_PAIRING_FAILED,
+  BLE_DEVICE_PAIRED,  
+  BLE_DEVICE_ENCRYPTION_STATE,
+  BLE_DEVICE_ENCRYPTION_FAILED,
+  BLE_DEVICE_ENCRYPTION_COMPLETED  
+}ble_device_state_t;
+
+typedef struct ble_connected_dev_info
+{
+	at_ble_connected_t conn_info;
+	at_ble_dev_role_t dev_role;
+	at_ble_pair_done_t bond_info;
+	ble_device_state_t conn_state;
+}ble_connected_dev_info_t;
 
 
-#if ((BLE_DEVICE_ROLE == BLE_PERIPHERAL) || (BLE_DEVICE_ROLE == BLE_CENTRAL_AND_PERIPHERAL))
+/***************************Advertisement/Scan Response Information configuration *****/
 
-#if defined CSC_DEVICE
-#define BLE_PROFILE_INIT(param)								csc_prf_init(param); \
-															csc_prf_dev_adv();
-															
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER				csc_prf_connected_state_handler
-#define BLE_CHARACTERISTIC_CHANGED							csc_prf_char_changed_handler
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER					csc_prf_service_found_handler
-#define BLE_CHARACTERISTIC_FOUND_HANDLER					csc_prf_characteristic_found_handler
-#define BLE_DESCRIPTOR_FOUND_HANDLER						csc_prf_descriptor_found_handler
-#define BLE_DISCOVERY_COMPLETE_HANDLER						csc_prf_discovery_complete_handler
-#define BLE_NOTIFICATION_RECEIVED_HANDLER					csc_prf_notification_handler
-#define BLE_ADDITIONAL_PAIR_DONE_HANDLER					csc_prf_write_notification_handler
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param)	csc_prf_disconnect_event_handler(param);
-#define BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER(param)    csc_prf_write_notification_handler(param);
-#define BLE_NOTIFICATION_CONFIRMED_HANDLER					csc_notification_confirmation_handler
+typedef enum {
+	LE_PERIPHERAL_ROLE_ONLY = 0x00,
+	LE_CENTRAL_ROLE_ONLY = 0x01,
+	LE_PERIPHERAL_ROLE_CONN_CENTRAL = 0x02,
+	LE_CENTRAL_ROLE_CONN_PERIPHERAL = 0x03	
+}le_role_t;
+
+#define SCAN_RESPONSE_ENABLE				0
+#define SCAN_RESPONSE_DISABLE				1
+#define SCAN_RESPONSE_ONLY_ENABLE			2
+
+/** @brief Length of Adv data types*/
+#define APPEARANCE_SIZE						2
+#define TX_POWER_LEVEL_SIZE					1
+#define ADV_INTERVAL_SIZE					2
+#define ADV_TYPE_FLAG_SIZE					3
+#define ADV_TYPE_SIZE						1
+#define ADV_LENGTH_SIZE						1
+#define ADV_ELEMENT_SIZE					2
+
+#ifndef SERVICE_UUID16_MAX_NUM
+#define SERVICE_UUID16_MAX_NUM				14
+#endif
+
+#ifndef PUBLIC_TARGET_ADDR_MAX_NUM
+#define PUBLIC_TARGET_ADDR_MAX_NUM			5
+#endif
+
+#ifndef PUBLIC_RANDOM_ADDR_MAX_NUM
+#define PUBLIC_RANDOM_ADDR_MAX_NUM			5
+#endif
+
+#ifndef SERVICE_UUID32_MAX_NUM
+#define SERVICE_UUID32_MAX_NUM				5
+#endif
+
+#ifndef SERVICE_UUID128_MAX_NUM
+#define SERVICE_UUID128_MAX_NUM				2
+#endif
+
+#ifdef TP_ANDROID
+#ifdef CURRENT_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID_ENABLE			true
+#endif
+#else
+#ifdef CURRENT_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID_ENABLE			false
+#endif
+#endif
+
+/** UUID Type's and configuration's */
+#ifndef BLE_GAP_ADV_SERVICE_16BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID_ENABLE			true
+#endif
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID_LENGTH			2
+#if BLE_GAP_ADV_SERVICE_16BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID_SCN_RSP_ENABLE	SCAN_RESPONSE_ENABLE
+
+#ifndef IMMEDIATE_ALERT_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID0_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID0_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID0_VAL		IMMEDIATE_ALERT_SERVICE_UUID
+
+#ifndef SCAN_PARAM_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID1_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID1_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID1_VAL		SPS_SERVICE_UUID
+
+#ifndef LINK_LOSS_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID2_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID2_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID2_VAL		LINK_LOSS_SERVICE_UUID
+
+#ifndef TX_POWER_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID3_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID3_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID3_VAL		TX_POWER_SERVICE_UUID
+
+#ifndef CURRENT_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID4_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID4_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID4_VAL		CURRENT_TIME_SERVICE_UUID
+
+#ifndef REFERENCE_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID5_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID5_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID5_VAL		REFERENCE_TIME_SERVICE_UUID
+
+#ifndef	NEXT_DST_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID6_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID6_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID6_VAL		NEXT_DST_SERVICE_UUID
+
+#ifndef DEVICE_INFORMATION_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID7_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID7_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID7_VAL		DIS_SERVICE_UUID
+
+#ifndef BATTERY_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID8_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID8_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID8_VAL		BAT_SERVICE_UUID
+
+#ifndef ANS_CLIENT_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID9_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID9_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID9_VAL		ANP_SERVICE_UUID
+
+#ifndef HID_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID10_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID10_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID10_VAL		HID_SERV_UUID
+
+#ifndef BLOOD_PRESSURE_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID11_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID11_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID11_VAL		BLOOD_PRESSURE_SERVICE_UUID
+
+#ifndef HEART_RATE_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID12_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID12_ENABLE			true
+#endif
+#define BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID12_VAL		HEART_RATE_SERVICE_UUID
+
+
+#ifndef PAS_CLIENT
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID13_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID13_ENABLE			true
+#endif
+#define BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID13_VAL		PAS_SERVICE_UUID
 
 #endif
 
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID_ENABLE			false
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH			4
+#if BLE_GAP_ADV_SERVICE_32BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID_SCN_RSP_ENABLE	SCAN_RESPONSE_ENABLE
 
-#if defined HID_DEVICE
-#define BLE_PROFILE_INIT(param)								hid_prf_init(param); \
-															hid_prf_dev_adv();
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param)	hid_prf_disconnect_event_handler(param);
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID0_ENABLE			true
+#define  BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID0_VAL		"\x12\x34\x56\x78"
 
-#define BLE_CHARACTERISTIC_CHANGED				hid_prf_char_changed_handler
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID1_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID1_VAL		"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID2_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID2_VAL		"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID3_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID3_VAL		"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_32BIT_UUID4_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID4_VAL		"\x12\x34\x56\x78"
 #endif
 
-#if defined PROXIMITY_REPORTER
-#define BLE_PROFILE_INIT							pxp_reporter_init 
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER		pxp_reporter_connected_state_handler
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER	pxp_disconnect_event_handler
-#define BLE_CHARACTERISTIC_CHANGED					pxp_reporter_char_changed_handler
-#endif	/* PROXIMITY_REPORTER	 */
 
-#if defined BLP_SENSOR
-#define BLE_PROFILE_INIT							blp_sensor_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER		blp_sensor_connected_state_handler
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER	blp_sensor_disconnect_event_handler
-#define BLE_CHARACTERISTIC_CHANGED					blp_sensor_char_changed_handler
-#define BLE_NOTIFICATION_CONFIRMED_HANDLER			blp_notification_confirmation_handler
-#define BLE_INDICATION_CONFIRMED_HANDLER			blp_indication_confirmation_handler
-#endif 
-
-#if defined HR_SENSOR
-
-#define BLE_PROFILE_INIT							hr_sensor_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER		hr_sensor_connected_state_handler
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER	hr_sensor_disconnect_event_handler
-#define BLE_CHARACTERISTIC_CHANGED					hr_sensor_char_changed_handler
-#define BLE_NOTIFICATION_CONFIRMED_HANDLER			hr_notification_confirmation_handler
-#endif	/* HR_SENSOR*/
-
-#if defined FIND_ME_TARGET
-#define BLE_PROFILE_INIT							fmp_target_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER		fmp_target_connected_state_handler
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER	fmp_target_disconnect_event_handler
-#define BLE_CHARACTERISTIC_CHANGED					fmp_target_char_changed_handler
-#endif	/* FIND_ME */
-
-#define BLE_CONN_PARAM_UPDATE_REQ_HANDLER			ble_conn_param_update_req
-#define BLE_CONN_PARAM_UPDATE_DONE					ble_conn_param_update
-#define	BLE_PAIR_REQUEST							ble_pair_request_handler
-#define BLE_PAIR_KEY_REQUEST						ble_pair_key_request_handler
-
-#define BLE_PAIR_DONE(param)						ble_pair_done_handler(param);\
-													BLE_ADDITIONAL_PAIR_DONE_HANDLER(param);
-													
-#define BLE_ENCRYPTION_REQUEST						ble_encryption_request_handler
-
-#define BLE_ENCRYPTION_STATUS_CHANGED(param)		ble_encryption_status_change_handler(param);\
-													BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER(param);
-#endif /* (BLE_DEVICE_ROLE == BLE_PERIPHERAL) */
-
-
-#if ((BLE_DEVICE_ROLE == BLE_CENTRAL) || (BLE_DEVICE_ROLE == BLE_CENTRAL_AND_PERIPHERAL))
-#define BLE_SCAN_REPORT_HANDLER						ble_scan_report_handler
-#define BLE_SCAN_INFO_HANDLER						ble_scan_info_handler
-#define BLE_SLAVE_SEC_REQUEST						ble_slave_security_handler
-#define BLE_PAIR_KEY_REQUEST						ble_pair_key_request_handler
-
-/** @brief Function handlers for proximity monitor */
-#if defined PROXIMITY_MONITOR
-#define BLE_PROFILE_INIT							pxp_monitor_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER		pxp_monitor_connected_state_handler
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER	pxp_disconnect_event_handler																								
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER			pxp_monitor_service_found_handler
-#define BLE_DISCOVERY_COMPLETE_HANDLER				pxp_monitor_discovery_complete_handler
-#define	BLE_SCAN_DATA_HANDLER						pxp_monitor_scan_data_handler
-#define BLE_CHARACTERISTIC_READ_RESPONSE			pxp_monitor_characteristic_read_response
-#define BLE_CHARACTERISTIC_FOUND_HANDLER			pxp_monitor_characteristic_found_handler
-#define BLE_SLAVE_SEC_REQUEST						ble_slave_security_handler
-#define BLE_PAIR_KEY_REQUEST						ble_pair_key_request_handler
-#endif /* PROXIMITY_MONITOR */
-
-/** @brief initializing function handlers for ANP client*/
-#ifdef ANP_CLIENT
-#define BLE_PROFILE_INIT										anp_client_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER(param)			anp_client_connected_state_handler(param);
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param)		anp_client_disconnected_event_handler(param);
-#define BLE_CHARACTERISTIC_WRITE_RESPONSE						anp_client_write_response_handler
-#define BLE_CHARACTERISTIC_FOUND_HANDLER						anp_client_characteristic_found_handler
-#define BLE_NOTIFICATION_RECEIVED_HANDLER						anp_client_notification_handler
-#define BLE_DESCRIPTOR_FOUND_HANDLER							anp_client_descriptor_found_handler
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER						anp_client_service_found_handler
-#define BLE_DISCOVERY_COMPLETE_HANDLER							anp_client_discovery_complete_handler
-#define BLE_ADDITIONAL_PAIR_DONE_HANDLER(param)					anp_client_write_notification_handler(param)
-#define BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER(param)		anp_client_write_notification_handler(param)
-#endif /* ANP_CLIENT */
-
-/** @brief initializing function handlers for TIP client*/
-#ifdef TIP_CLIENT
-#define BLE_PROFILE_INIT										time_info_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER(param)			time_info_service_discover(param);
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param)		time_info_disconnected_event_handler(param);
-#define BLE_CHARACTERISTIC_FOUND_HANDLER						time_info_characteristic_found_handler
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER						time_info_service_found_handler
-#define BLE_DISCOVERY_COMPLETE_HANDLER							time_info_discovery_complete_handler
-#define BLE_CHARACTERISTIC_READ_RESPONSE						time_info_characteristic_read_response
-#endif /* TIP_CLIENT */
-
-/** @brief initializing function handlers for ANP client*/
-#ifdef ANP_SIG_CLIENT
-#define BLE_PROFILE_INIT										anp_client_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER(param)			anp_info_service_discover(param);
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param)		anp_client_disconnected_event_handler(param);
-#define BLE_CHARACTERISTIC_WRITE_RESPONSE						anp_client_write_response_handler
-#define BLE_CHARACTERISTIC_READ_RESPONSE						anp_client_read_response_handler
-#define BLE_CHARACTERISTIC_FOUND_HANDLER						anp_client_characteristic_found_handler
-#define BLE_NOTIFICATION_RECEIVED_HANDLER						anp_client_notification_handler
-#define BLE_DESCRIPTOR_FOUND_HANDLER							anp_client_descriptor_found_handler
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER						anp_client_service_found_handler
-#define BLE_DISCOVERY_COMPLETE_HANDLER							anp_client_discovery_complete_handler
-#define BLE_ADDITIONAL_PAIR_DONE_HANDLER(param)					anp_client_security_done_handler(param)
-#define BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER(param)		anp_client_security_done_handler(param)
-#endif /* ANP_CLIENT */
-#ifdef PAS_CLIENT
-#define BLE_PROFILE_INIT										pas_client_init
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER(param)			pas_client_service_discovery(param);
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param)		pas_client_disconnected_event_handler(param);
-#define BLE_CHARACTERISTIC_WRITE_RESPONSE						pas_client_char_write_response_handler
-#define BLE_CHARACTERISTIC_READ_RESPONSE						pas_client_char_read_response_handler
-#define BLE_CHARACTERISTIC_FOUND_HANDLER						pas_client_characteristic_found_handler
-#define BLE_NOTIFICATION_RECEIVED_HANDLER						pas_client_notification_handler
-#define BLE_DESCRIPTOR_FOUND_HANDLER							pas_client_descriptor_found_handler
-
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER						pas_client_service_found_handler
-#define BLE_DISCOVERY_COMPLETE_HANDLER							pas_client_discovery_complete_handler
-#define BLE_ADDITIONAL_PAIR_DONE_HANDLER(param)					pas_client_write_notifications(param)
-#define BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER(param)		pas_client_write_notifications(param)
-#endif /* PAS_CLIENT */
-
-#endif /* ((BLE_DEVICE_ROLE == BLE_CENTRAL) || (BLE_DEVICE_ROLE == BLE_CENTRAL_AND_PERIPHERAL)) */
-
-/* Common functions */
-#define BLE_CONNECTED_STATE_HANDLER(param)			ble_connected_state_handler(param);\
-													BLE_ADDITIONAL_CONNECTED_STATE_HANDLER(param);
-
-#define BLE_DISCONNECTED_STATE_HANDLER(param)		ble_disconnected_state_handler(param);\
-													BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER(param);
-
-#define BLE_EVENT_PARAM_MAX_SIZE					512
-
-#ifndef BLE_PROFILE_INIT
-#define BLE_PROFILE_INIT										ble_dummy_handler
+#ifdef CSC_SERVICE
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID_ENABLE			true
+#else
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID_ENABLE			false
 #endif
 
-#ifndef BLE_ADDITIONAL_CONNECTED_STATE_HANDLER
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER					ble_dummy_handler
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH			16
+#if BLE_GAP_ADV_SERVICE_128BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID_SCN_RSP_ENABLE	SCAN_RESPONSE_ENABLE
+
+#ifndef ANCS_CLIENT_SERVICE 
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID0_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID0_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_128BIT_UUID0_VAL		ANP_ANCS_SERVICE_UUID
+
+#ifndef CSC_SERVICE
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID1_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_128BIT_UUID1_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_128BIT_UUID1_VAL		CSC_SERVICE_UUID
 #endif
 
-#ifndef BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER				ble_dummy_handler
+/** Short Local Name configuration */
+#define BLE_GAP_ADV_SHORTENED_LOCAL_NAME_ENABLE				false
+#if BLE_GAP_ADV_SHORTENED_LOCAL_NAME_ENABLE
+#define BLE_GAP_ADV_SHORTENED_LOCAL_NAME_SCN_RSP_ENABLE		SCAN_RESPONSE_DISABLE
+#define BLE_GAP_ADV_DATA_SHORTENED_LOCAL_NAME				"ATMEL-BLE"
+#define	 BLE_GAP_ADV_DATA_SHORTENED_LOCAL_NAME_LEN			strlen(BLE_GAP_ADV_DATA_SHORTENED_LOCAL_NAME)
 #endif
 
-#ifndef BLE_CHARACTERISTIC_CHANGED
-#define BLE_CHARACTERISTIC_CHANGED								ble_dummy_handler
+/* Complete Local Name Configuration */
+#define BLE_GAP_ADV_COMPLETE_LOCAL_NAME_ENABLE				true
+#if BLE_GAP_ADV_COMPLETE_LOCAL_NAME_ENABLE
+#define BLE_GAP_ADV_COMPLETE_LOCAL_NAME_SCN_RSP_ENABLE		SCAN_RESPONSE_ENABLE
+#define  BLE_GAP_ADV_DATA_COMPLETE_LOCAL_NAME				BLE_DEVICE_NAME
+#define BLE_GAP_ADV_DATA_COMPLETE_LOCAL_NAME_LENGTH			strlen(BLE_GAP_ADV_DATA_COMPLETE_LOCAL_NAME)
 #endif
 
-#ifndef BLE_CONN_PARAM_UPDATE_DONE
-#define BLE_CONN_PARAM_UPDATE_DONE								ble_dummy_handler
+/* Tx Power Configuration */
+#define BLE_GAP_ADV_TX_POWER_ENABLE							false
+#if BLE_GAP_ADV_TX_POWER_ENABLE
+#define BLE_GAP_ADV_TX_POWER_SCN_RSP_ENABLE					SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_TX_POWER							AT_BLE_TX_PWR_LVL_NEG_20_DB
+#define	BLE_GAP_ADV_DATA_TX_POWER_SIZE						1
 #endif
 
-#ifndef BLE_PAIR_REQUEST
-#define	BLE_PAIR_REQUEST										ble_dummy_handler
+/* Connection Interval Range configuration */
+#define BLE_GAP_ADV_SLAVE_CONN_INTERVAL_RANGE_ENABLE			false
+#define BLE_GAP_ADV_DATA_SLAVE_CONN_INTERVAL_RANGE_LENGTH		2
+#if BLE_GAP_ADV_SLAVE_CONN_INTERVAL_RANGE_ENABLE
+#define BLE_GAP_ADV_SLAVE_CONN_INTERVAL_RANGE_SCN_RSP_ENABLE	SCAN_RESPONSE_ENABLE
+
+#define BLE_GAP_ADV_DATA_SLAVE_CONN_INTERVAL_RANGE_MIN			0x0006
+#define BLE_GAP_ADV_DATA_SLAVE_CONN_INTERVAL_RANGE_MAX			0x0C80
 #endif
 
-#ifndef BLE_PAIR_KEY_REQUEST
-#define BLE_PAIR_KEY_REQUEST									ble_dummy_handler
+
+#ifndef TP_ANDROID
+#ifdef CURRENT_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID_ENABLE				true
+#endif
 #endif
 
-#ifndef BLE_PAIR_DONE
-#define BLE_PAIR_DONE											ble_dummy_handler
+/* Service Solicitation UUID Configuration */
+#ifndef BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID_ENABLE				false
 #endif
- 
-#ifndef BLE_ENCRYPTION_REQUEST
-#define BLE_ENCRYPTION_REQUEST									ble_dummy_handler
+#if BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID_SCN_RSP_ENABLE		SCAN_RESPONSE_ENABLE
+
+#ifndef IMMEDIATE_ALERT_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID0_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID0_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID0_VAL			IMMEDIATE_ALERT_SERVICE_UUID
+
+#ifndef SCAN_PARAM_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID1_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID1_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID1_VAL			SPS_SERVICE_UUID
+
+#ifndef LINK_LOSS_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID2_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID2_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID2_VAL			LINK_LOSS_SERVICE_UUID
+
+#ifndef TX_POWER_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID3_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID3_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID3_VAL			TX_POWER_SERVICE_UUID
+
+#ifndef CURRENT_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID4_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID4_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID4_VAL			CURRENT_TIME_SERVICE_UUID
+
+#ifndef REFERENCE_TIME_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID5_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID5_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID5_VAL			REFERENCE_TIME_SERVICE_UUID
+
+#ifndef NEXT_DST_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID6_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID6_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID6_VAL			NEXT_DST_SERVICE_UUID
+
+#ifndef DEVICE_INFORMATION_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID7_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID7_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID7_VAL			DIS_SERVICE_UUID
+
+#ifndef BATTERY_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID8_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID8_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID8_VAL			BAT_SERVICE_UUID
+
+#ifndef ANS_CLIENT_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID9_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID9_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID9_VAL			ANP_SERVICE_UUID
+
+#ifndef HID_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID10_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID10_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID10_VAL		HID_SERV_UUID
+
+#ifndef BLOOD_PRESSURE_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID11_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID11_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID11_VAL		BLOOD_PRESSURE_SERVICE_UUID
+
+#ifndef HEART_RATE_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID12_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID12_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID12_VAL		HEART_RATE_SERVICE_UUID
+
+#ifndef PAS_CLIENT
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID13_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID13_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID13_VAL		PAS_SERVICE_UUID
 #endif
 
-#ifndef BLE_ENCRYPTION_STATUS_CHANGED
-#define BLE_ENCRYPTION_STATUS_CHANGED							ble_dummy_handler
-#endif
-													
-#ifndef BLE_CONN_PARAM_UPDATE_DONE
-#define BLE_CONN_PARAM_UPDATE_DONE								ble_dummy_handler
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID_ENABLE				false
+#if BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID_SCN_RSP_ENABLE		SCAN_RESPONSE_ENABLE
+
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID0_ENABLE			true
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID0_VAL			"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID1_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID1_VAL			"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID2_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID2_VAL			"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID3_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID3_VAL			"\x12\x34\x56\x78"
+
+#define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID4_ENABLE			false
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID4_VAL			"\x12\x34\x56\x78"
 #endif
 
-#ifndef	BLE_PROFILE_INIT
-#define BLE_PROFILE_INIT										ble_dummy_handler
+
+#define BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID_ENABLE			true
+#if BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID_SCN_RSP_ENABLE	SCAN_RESPONSE_ENABLE
+
+#ifndef ANCS_CLIENT_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID0_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID0_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_128BIT_UUID0_VAL		ANP_ANCS_SERVICE_UUID
+
+#ifndef CSC_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID1_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID1_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_128BIT_UUID1_VAL		CSC_SERVICE_UUID
 #endif
 
-#ifndef BLE_ADDITIONAL_CONNECTED_STATE_HANDLER
-#define BLE_ADDITIONAL_CONNECTED_STATE_HANDLER					ble_dummy_handler
+/* Service Data Configuration */
+#define BLE_GAP_ADV_SERVICE_DATA_16BIT_UUID_ENABLE					false
+#if BLE_GAP_ADV_SERVICE_DATA_16BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_DATA_16BIT_UUID_SCN_RSP_ENABLE			SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_SERVICE_DATA_16BIT_UUID					TX_POWER_SERVICE_UUID
+#define BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_16BIT_UUID			"\x12"
+#define BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_16BIT_UUID_LENGTH	(sizeof(BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_16BIT_UUID) - 1)
 #endif
 
-#ifndef BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER
-#define BLE_ADDITIONAL_DISCONNECTED_STATE_HANDLER				ble_dummy_handler
+#define BLE_GAP_ADV_SERVICE_DATA_32BIT_UUID_ENABLE					false
+#if BLE_GAP_ADV_SERVICE_DATA_32BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_DATA_32BIT_UUID_SCN_RSP_ENABLE			SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_SERVICE_DATA_32BIT_UUID					"\x12\x34\x56\x78"
+#define BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_32BIT_UUID			"\x12\x34"
+#define BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_32BIT_UUID_LENGTH	(sizeof(BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_32BIT_UUID) - 1)
 #endif
 
-#ifndef BLE_CHARACTERISTIC_CHANGED
-#define BLE_CHARACTERISTIC_CHANGED								ble_dummy_handler
+#define BLE_GAP_ADV_SERVICE_DATA_128BIT_UUID_ENABLE					false
+#if BLE_GAP_ADV_SERVICE_DATA_128BIT_UUID_ENABLE
+#define BLE_GAP_ADV_SERVICE_DATA_128BIT_UUID_SCN_RSP_ENABLE			SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_SERVICE_DATA_128BIT_UUID					"\x1b\xc5\xd5\xa5\x02\x00\xa6\x85\xe5\x11\x35\x39\xa0\xbb\x5a\xfd"
+#define BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_128BIT_UUID		"\x12\x34"
+#define BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_128BIT_UUID_LENGTH	(sizeof(BLE_GAP_ADV_ADDITIONAL_DATA_SERVICE_DATA_128BIT_UUID) - 1)
 #endif
 
-#ifndef BLE_CONN_PARAM_UPDATE_DONE
-#define BLE_CONN_PARAM_UPDATE_DONE								ble_dummy_handler
+/* Public Target Address Configuration */
+#define BLE_GAP_ADV_PUBLIC_TARGET_ADDR_ENABLE					false
+#define BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH					sizeof(at_ble_addr_t)
+#if BLE_GAP_ADV_PUBLIC_TARGET_ADDR_ENABLE
+#define BLE_GAP_ADV_PUBLIC_TARGET_ADDR_SCN_RSP_ENABLE			SCAN_RESPONSE_ENABLE
+
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR0_ENABLE				true
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR0_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEA"
+
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR1_ENABLE				false
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR1_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEB"
+
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR2_ENABLE				false
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR2_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEC"
+
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR3_ENABLE				false
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR3_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xED"
+
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR4_ENABLE				false
+#define BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR4_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEE"
 #endif
 
-#ifndef BLE_PAIR_REQUEST
-#define	BLE_PAIR_REQUEST										ble_dummy_handler
+/* Random Target Address Configuration */
+#define BLE_GAP_ADV_RANDOM_TARGET_ADDR_ENABLE					false
+#define BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH					sizeof(at_ble_addr_t)
+#if BLE_GAP_ADV_RANDOM_TARGET_ADDR_ENABLE
+#define BLE_GAP_ADV_RANDOM_TARGET_ADDR_SCN_RSP_ENABLE			SCAN_RESPONSE_ENABLE
+
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR0_ENABLE				true
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR0_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEA"
+
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR1_ENABLE				false
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR1_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEB"
+
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR2_ENABLE				false
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR2_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEC"
+
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR3_ENABLE				false
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR3_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xED"
+
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR4_ENABLE				false
+#define BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR4_VAL				"\x00\xAB\xCD\xEF\xAB\xCD\xEE"
 #endif
 
-#ifndef BLE_PAIR_KEY_REQUEST
-#define BLE_PAIR_KEY_REQUEST									ble_dummy_handler
+/* Appearance configuration */
+#ifdef HID_DEVICE
+#define BLE_GAP_ADV_APPEARANCE_ENABLE							true
+#else
+#define BLE_GAP_ADV_APPEARANCE_ENABLE							false
 #endif
 
-#ifndef BLE_PAIR_DONE
-#define BLE_PAIR_DONE											ble_dummy_handler
+#ifndef BLE_GAP_ADV_APPEARANCE_ENABLE
+#define BLE_GAP_ADV_APPEARANCE_ENABLE							false
+#endif
+#if BLE_GAP_ADV_APPEARANCE_ENABLE
+#define BLE_GAP_ADV_APPEARANCE_SCN_RSP_ENABLE					SCAN_RESPONSE_ENABLE
+#ifdef HID_MOUSE_DEVICE
+#define BLE_GAP_ADV_DATA_APPEARANCE								"\xc2\x03"
+#else
+#ifdef HID_KEYBOARD_DEVICE
+#define BLE_GAP_ADV_DATA_APPEARANCE								"\xc1\x03"
+#endif /*HID_MOUSE_DEVICE*/
+#endif /*HID_KEYBOARD_DEVICE*/
+#ifndef BLE_GAP_ADV_DATA_APPEARANCE
+#define BLE_GAP_ADV_DATA_APPEARANCE								"\x80\x00"
+#endif /*BLE_GAP_ADV_DATA_APPEARANCE*/
+#define BLE_GAP_ADV_DATA_APPEARANCE_SIZE						2
 #endif
 
-#ifndef BLE_ENCRYPTION_REQUEST
-#define BLE_ENCRYPTION_REQUEST									ble_dummy_handler
+/* Advertising Interval Configuration */
+#define BLE_GAP_ADV_ADVERTISING_INTERVAL_ENABLE						false
+#define BLE_GAP_ADV_ADVERTISING_INTERVAL_LENGTH						2
+#if BLE_GAP_ADV_ADVERTISING_INTERVAL_ENABLE
+#define BLE_GAP_ADV_ADVERTISING_INTERVAL_SCN_RSP_ENABLE				SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_ADVERTISING_INTERVAL						0x64
 #endif
 
-#ifndef BLE_ENCRYPTION_STATUS_CHANGED
-#define BLE_ENCRYPTION_STATUS_CHANGED							ble_dummy_handler
+/* ?LE Bluetooth Device Address Configuration */
+#define BLE_GAP_ADV_LE_BT_DEVICE_ADDR_ENABLE						false
+#if BLE_GAP_ADV_LE_BT_DEVICE_ADDR_ENABLE
+#define BLE_GAP_ADV_LE_BT_DEVICE_ADDR_SCN_RSP_ENABLE				SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_LE_BT_DEVICE_ADDR							"\x00\xAB\xCD\xEF\xAB\xCD\xEF"
+#define BLE_GAP_ADV_DATA_LE_BT_DEVICE_ADDR_LENGTH					sizeof(at_ble_addr_t)
 #endif
 
-#ifndef BLE_SCAN_REPORT_HANDLER
-#define BLE_SCAN_REPORT_HANDLER									ble_dummy_handler
+/* ?LE Role Configuration */
+#define BLE_GAP_ADV_LE_ROLE_ENABLE									false
+#if BLE_GAP_ADV_LE_ROLE_ENABLE
+#define BLE_GAP_ADV_LE_ROLE_SCN_RSP_ENABLE							SCAN_RESPONSE_ENABLE
+#ifdef BLE_DEVICE_ROLE == BLE_ROLE_PERIPHERAL
+#define BLE_GAP_ADV_DATA_LE_ROLE									LE_PERIPHERAL_ROLE_ONLY
+#elif BLE_DEVICE_ROLE == BLE_ROLE_CENTRAL
+#define BLE_GAP_ADV_DATA_LE_ROLE									LE_CENTRAL_ROLE_ONLY
+#elif BLE_DEVICE_ROLE == BLE_ROLE_ALL
+#define BLE_GAP_ADV_DATA_LE_ROLE									LE_CENTRAL_ROLE_CONN_PERIPHERAL
+//Note: LE Peripheral Preferred connection should be changed manually here
+#endif
+#define BLE_GAP_ADV_DATA_LE_ROLE_SIZE								1
 #endif
 
-#ifndef BLE_SCAN_DATA_HANDLER
-#define BLE_SCAN_DATA_HANDLER(x,y)								BLE_UNUSED2_VAR(x, &y)
+/* Manufacturer Specific Data Configuration */
+#define BLE_GAP_ADV_MANUFACTURER_SPECIFIC_DATA_ENABLE				true
+#if	BLE_GAP_ADV_MANUFACTURER_SPECIFIC_DATA_ENABLE
+#define BLE_GAP_ADV_MANUFACTURER_SPECIFIC_DATA_SCN_RSP_ENABLE		SCAN_RESPONSE_ENABLE
+#define BLE_GAP_ADV_DATA_MANUFACTURER_SPECIFIC_DATA					"\x00\x06\xd6\xb2\xf0\x05\xf0\xf8"
+#define BLE_GAP_ADV_DATA_MANUFACTURER_SPECIFIC_DATA_SIZE			(sizeof(BLE_GAP_ADV_DATA_MANUFACTURER_SPECIFIC_DATA) - 1)
 #endif
 
-#ifndef BLE_SCAN_INFO_HANDLER
-#define BLE_SCAN_INFO_HANDLER									ble_dummy_handler
-#endif
+typedef struct adv_element_container{
+	uint8_t len;
+	uint8_t *adv_ptr;
+}adv_element_container_t;
 
-#ifndef BLE_CHARACTERISTIC_WRITE_RESPONSE
-#define BLE_CHARACTERISTIC_WRITE_RESPONSE						ble_dummy_handler
-#endif
+typedef struct scan_resp_element{
+	uint8_t len;
+	uint8_t *scn_ptr;
+}scan_resp_element_t;
 
-#ifndef BLE_ADDITIONAL_PAIR_DONE_HANDLER
-#define BLE_ADDITIONAL_PAIR_DONE_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_16BIT_UUID(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_16BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_16BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID##n##_VAL; \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) ((BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID##n##_VAL) >> 8); \
+	}\
+}
 
-#ifndef BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER
-#define BLE_ADDITIONAL_ENCRYPTION_CHANGED_HANDLER				ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_16BIT_UUID_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_16BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_16BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID##n##_VAL; \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) ((BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID##n##_VAL) >> 8); \
+	}\
+}
 
-#ifndef BLE_DESCRIPTOR_FOUND_HANDLER
-#define BLE_DESCRIPTOR_FOUND_HANDLER							ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_32BIT_UUID(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_32BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID##n##_VAL, BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_NOTIFICATION_RECEIVED_HANDLER
-#define BLE_NOTIFICATION_RECEIVED_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_32BIT_UUID_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_32BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_32BIT_UUID##n##_VAL, BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_NOTIFICATION_CONFIRMED_HANDLER
-#define BLE_NOTIFICATION_CONFIRMED_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_128BIT_UUID(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_128BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_128BIT_UUID##n##_VAL , BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_CHARACTERISTIC_READ_RESPONSE
-#define BLE_CHARACTERISTIC_READ_RESPONSE						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_128BIT_UUID_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_128BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_128BIT_UUID##n##_VAL , BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_DESCRIPTOR_FOUND_HANDLER
-#define BLE_DESCRIPTOR_FOUND_HANDLER							ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_SOLTN_16BIT_UUID(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_16BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID##n##_VAL; \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) ((BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID##n##_VAL) >> 8); \
+	}\
+}
 
-#ifndef BLE_PRIMARY_SERVICE_FOUND_HANDLER
-#define BLE_PRIMARY_SERVICE_FOUND_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_SOLTN_16BIT_UUID_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_16BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID##n##_VAL; \
+		adv_ptr->adv_ptr[adv_ptr->len++] = (uint8_t) ((BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID##n##_VAL) >> 8); \
+	}\
+}
 
-#ifndef BLE_DISCOVERY_COMPLETE_HANDLER
-#define BLE_DISCOVERY_COMPLETE_HANDLER							ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_SOLTN_32BIT_UUID(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID##n##_VAL, BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_CHARACTERISTIC_FOUND_HANDLER
-#define BLE_CHARACTERISTIC_FOUND_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_SOLTN_32BIT_UUID_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_SOLTN_32BIT_UUID##n##_VAL, BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_32BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef AT_BLE_MTU_CHANGED_INDICATION_HANDLER					
-#define AT_BLE_MTU_CHANGED_INDICATION_HANDLER					ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_SOLTN_128BIT_UUID(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_SOLTN_128BIT_UUID##n##_VAL , BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_INDICATION_CONFIRMED_HANDLER
-#define BLE_INDICATION_CONFIRMED_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_SERVICE_SOLTN_128BIT_UUID_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_SERVICE_SOLTN_128BIT_UUID##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_SERVICE_SOLTN_128BIT_UUID##n##_VAL , BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_SERVICE_128BIT_UUID_LENGTH; \
+	}\
+}
 
-#ifndef BLE_SLAVE_SEC_REQUEST
-#define BLE_SLAVE_SEC_REQUEST									ble_dummy_handler
-#endif
+#define  _CONF_PUBLIC_TARGET_ADDR(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR##n##_VAL, BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH; \
+	}\
+}
 
-#ifndef BLE_CONN_PARAM_UPDATE_REQ_HANDLER
-#define BLE_CONN_PARAM_UPDATE_REQ_HANDLER						ble_dummy_handler
-#endif
+#define  _CONF_PUBLIC_TARGET_ADDR_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_PUBLIC_TARGET_ADDR##n##_VAL, BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_PUBLIC_TARGET_ADDR_LENGTH; \
+	}\
+}
+
+#define  _CONF_RANDOM_TARGET_ADDR(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH) >  (AT_BLE_ADV_MAX_SIZE - ADV_TYPE_FLAG_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR##n##_VAL, BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH; \
+	}\
+}
+
+#define  _CONF_RANDOM_TARGET_ADDR_SCAN_RSP(n, uuid_ptr) \
+{ \
+	if (BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR##n##_ENABLE) \
+	{\
+		adv_element_container_t *adv_ptr;\
+		adv_ptr = (adv_element_container_t *)uuid_ptr;\
+		if((adv_ptr->len + BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH) >  (AT_BLE_ADV_MAX_SIZE))\
+		{ \
+			DBG_LOG("Adv Data too big");\
+			while(1);\
+		} \
+		memcpy(&adv_ptr->adv_ptr[adv_ptr->len], BLE_GAP_ADV_DATA_RANDOM_TARGET_ADDR##n##_VAL, BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH);\
+		adv_ptr->len += BLE_GAP_ADV_RANDOM_TARGET_ADDR_LENGTH; \
+	}\
+}
+
+
 
 /****************************************************************************************
 *							        Structures                                     		*
@@ -807,16 +1370,9 @@ typedef struct adv_element
 	uint8_t *data;
 }adv_element_t;
 
+
 /** @brief GATT services handles
 */
-#if defined HID_SERVICE
-typedef struct gatt_service_handler
-{
-	at_ble_service_t		  serv;
-	at_ble_chr_t		      serv_chars[HID_CHARACTERISTIC_NUM];
-	at_ble_generic_att_desc_t serv_desc[HID_NUM_OF_REPORT];   /*Report descriptor*/
-}gatt_service_handler_t;
-#else
 typedef struct gatt_service_handler
 {
 	/// service uuid
@@ -826,23 +1382,11 @@ typedef struct gatt_service_handler
 	/// service characteristic
 	at_ble_characteristic_t	serv_chars;
 }gatt_service_handler_t;
-#endif
+
 
 /****************************************************************************************
 *                                       Functions                                       *
 ****************************************************************************************/
-
-/* Typedef for GAP event callbacks */
-typedef void (*ble_gap_event_callback_t)(at_ble_handle_t);
-
-/* Typedef for characteristic value changed event callback */
-typedef at_ble_status_t (*ble_characteristic_changed_callback_t)(at_ble_characteristic_changed_t *);
-
-/* Typedef for notification confirmed event callback */
-typedef void (*ble_notification_confirmed_callback_t)(at_ble_cmd_complete_event_t *);
-
-/* Typedef for indication confirmed event callback */
-typedef void (*ble_indication_confirmed_callback_t)(at_ble_indication_confirmed_t *);
 
 /** @brief function to set the device name.
   *
@@ -862,7 +1406,7 @@ at_ble_status_t ble_set_device_name(uint8_t *name, uint8_t name_len);
   * @return none.
   *
   */
-void ble_conn_param_update(at_ble_conn_param_update_done_t *conn_param_update);
+at_ble_status_t ble_conn_param_update(void *params);
 
 /** @brief function triggered on receiving a connection parameter update request from the peer.
   *
@@ -871,7 +1415,7 @@ void ble_conn_param_update(at_ble_conn_param_update_done_t *conn_param_update);
   * @return none.
   *
   */
-void ble_conn_param_update_req(at_ble_conn_param_update_request_t * conn_param_req);
+at_ble_status_t ble_conn_param_update_req(void *params);
 
 /** @brief function called when the AT_BLE_PAIR_REQUEST event is received from stack.
   *
@@ -880,9 +1424,9 @@ void ble_conn_param_update_req(at_ble_conn_param_update_request_t * conn_param_r
   * @return none.
   *
   */
-void ble_pair_request_handler(at_ble_pair_request_t *at_ble_pair_req);
+at_ble_status_t ble_pair_request_handler(void *params);
 
-void ble_slave_security_handler(at_ble_slave_sec_request_t* slave_sec_req);
+at_ble_status_t ble_slave_security_request_handler(void* params);
 
 /** @brief function called when the AT_BLE_PAIR_KEY_REQUEST event is received from stack.
   *
@@ -891,7 +1435,7 @@ void ble_slave_security_handler(at_ble_slave_sec_request_t* slave_sec_req);
   * @return none.
   *
   */
-void ble_pair_key_request_handler(at_ble_pair_key_request_t *pair_key);
+at_ble_status_t ble_pair_key_request_handler(void *params);
 
 /** @brief function called when the AT_BLE_PAIR_DONE event is received from stack.
   *
@@ -901,7 +1445,7 @@ void ble_pair_key_request_handler(at_ble_pair_key_request_t *pair_key);
   * @return @ref AT_BLE_FAILURE Generic error.
   *
   */
-at_ble_status_t ble_pair_done_handler(at_ble_pair_done_t *pairing_params);
+at_ble_status_t ble_pair_done_handler(void *params);
 
 /** @brief function called when the AT_BLE_ENCRYPTION_REQUEST event is received from stack.
   *
@@ -910,7 +1454,7 @@ at_ble_status_t ble_pair_done_handler(at_ble_pair_done_t *pairing_params);
   * @return none.
   *
   */
-void ble_encryption_request_handler (at_ble_encryption_request_t *encry_req);
+at_ble_status_t ble_encryption_request_handler (void *params);
 
 /** @brief function called when the AT_BLE_ENCRYPTION_STATUS_CHANGED event is received from stack.
   *
@@ -919,9 +1463,8 @@ void ble_encryption_request_handler (at_ble_encryption_request_t *encry_req);
   * @return none.
   *
   */
-void ble_encryption_status_change_handler(at_ble_encryption_status_changed_t *encry_status);
+at_ble_status_t ble_encryption_status_change_handler(void *params);
 
-#if ((BLE_DEVICE_ROLE == BLE_CENTRAL) || (BLE_DEVICE_ROLE == BLE_CENTRAL_AND_PERIPHERAL) || (BLE_DEVICE_ROLE == BLE_OBSERVER))
 /** @brief function requesting the device for the connection.
   *
   * @param[in] dev_addr address of the the peer device.
@@ -950,7 +1493,7 @@ at_ble_status_t gap_dev_scan(void);
   * @return @ref AT_BLE_FAILURE Generic error.
   *
   */
-at_ble_status_t ble_scan_info_handler(at_ble_scan_info_t *scan_param);
+at_ble_status_t ble_scan_info_handler(void *params);
 
 /** @brief function to handle the scan status.
   *
@@ -960,7 +1503,7 @@ at_ble_status_t ble_scan_info_handler(at_ble_scan_info_t *scan_param);
   * @return @ref AT_BLE_FAILURE Generic error.
   *
   */
-at_ble_status_t ble_scan_report_handler(at_ble_scan_report_t *scan_report);
+at_ble_status_t ble_scan_report_handler(void *params);
 
 /** @brief function parses the received advertising data for service and local name.
   *
@@ -982,7 +1525,7 @@ uint8_t scan_info_parse(at_ble_scan_info_t *scan_info_data, at_ble_uuid_t *ble_s
   *
   */
 void ble_characteristic_found_handler(at_ble_characteristic_found_t *characteristic_found);
-#endif
+
 
 /** @brief function to handle the BLE event task.
   *
@@ -1031,7 +1574,7 @@ void ble_discovery_complete_handler(at_ble_discovery_complete_t *discover_status
   * @return none.
   *
   */
-void ble_disconnected_state_handler(at_ble_disconnected_t *disconnect);
+at_ble_status_t ble_disconnected_state_handler(void *params);
 
 /** @brief function to send slave security request.
   *
@@ -1050,47 +1593,36 @@ at_ble_status_t ble_send_slave_sec_request(at_ble_handle_t conn_handle);
   * @return none.
   *
   */
-void ble_connected_state_handler(at_ble_connected_t *conn_params);
 
-/** @brief Register callback function, to be triggered when connected to the device.
-  * 
-  * @param[in] connected_cb_fn function called when disconnected from the device.
-  *
-  * @return none.
-  *
-  */
-void register_ble_connected_event_cb(ble_gap_event_callback_t connected_cb_fn);
+bool ble_check_ispheripheral(at_ble_handle_t handle);
 
-/** @brief Register callback function, to be triggered when disconnected from the peer device.
-  * 
-  * @param[in] disconnected_cb_fn function called when disconnected from the peer device.
-  *
-  * @return none.
-  *
-  */
-void register_ble_disconnected_event_cb(ble_gap_event_callback_t disconnected_cb_fn);
+bool ble_check_iscentral(at_ble_handle_t handle);
 
-/** @brief Register callback function, to be triggered when pairing procedure is completed.
-  * 
-  * @param[in] paired_cb_fn function called when pairing is completed.
-  *
-  * @return none.
-  *
-  */
-void register_ble_paired_event_cb(ble_gap_event_callback_t paired_cb_fn);
+at_ble_status_t ble_connected_device_role(at_ble_handle_t conn_handle, at_ble_dev_role_t *dev_role);
 
-/** @brief Register callback function, to be triggered when characteristic value is changed.
-  * 
-  * @param[in]  function called when characteristic value is changed.
-  *
-  * @return none.
-  *
-  */
-void register_ble_characteristic_changed_cb(ble_characteristic_changed_callback_t char_changed_cb_fn);
+bool ble_check_disconnected_iscentral(at_ble_handle_t handle);
 
-void register_ble_notification_confirmed_cb(ble_notification_confirmed_callback_t notif_conf_cb_fn);
+at_ble_status_t ble_disconnected_device_role(at_ble_handle_t conn_handle, at_ble_dev_role_t *dev_role);
 
-void register_ble_indication_confirmed_cb(ble_indication_confirmed_callback_t indic_conf_cb_fn);
+at_ble_status_t ble_check_device_state(at_ble_handle_t conn_handle, ble_device_state_t state);
+
+at_ble_status_t ble_resolv_rand_addr_handler(void *params);
+
+at_ble_status_t ble_connected_state_handler(void *params);
+
+at_ble_status_t ble_advertisement_data_set(void);
+
+at_ble_status_t ble_mtu_changed_indication_handler(void *params);
+
+at_ble_status_t ble_mtu_changed_cmd_complete_handler(void *params);
+
+at_ble_status_t ble_characteristic_write_cmd_complete_handler(void *params);
+
+at_ble_status_t ble_undefined_event_handler(void *params);
+
+bool ble_mgr_events_callback_handler(ble_mgr_event_cb_t event_cb_type,
+							ble_mgr_event_t event_type,
+							const ble_event_callback_t *ble_event_handler);
 #endif /*__BLE_MANAGER_H__*/
 // </h>
 

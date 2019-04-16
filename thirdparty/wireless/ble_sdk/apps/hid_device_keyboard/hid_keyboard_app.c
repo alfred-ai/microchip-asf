@@ -55,14 +55,15 @@
 #include <asf.h>
 #include "platform.h"
 #include "at_ble_api.h"
+#include "console_serial.h"
 #include "ble_manager.h"
 #include "hid.h"
 #include "hid_keyboard_app.h"
 #include "device_info.h"
 #include "ble_utils.h"
-#include "console_serial.h"
 #include "timer_hw.h"
 #include "conf_extint.h"
+#include "hid_device.h"
 
 
 /* =========================== GLOBALS ============================================================ */
@@ -88,11 +89,57 @@ uint8_t keyb_disp[12] = {0x0B, 0x08, 0x0F, 0x0F, 0x12, 0x2C, 0x04, 0x17, 0x10, 0
 /* Keyboard character to be printed */
 uint8_t keyb_id = 0;
 
+/* Profile connection status */
+uint8_t conn_status = 0;
+
 /* Keyboard report value */
 uint8_t app_keyb_report[8] = {0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00};	
 	
 /* Keyboard key status */
-volatile uint8_t key_status = 0;	
+volatile uint8_t key_status = 0;
+
+bool app_exec = true;
+
+static at_ble_status_t hid_connect_cb(void *params);
+
+static at_ble_status_t hid_disconnect_cb(void *params);
+
+static at_ble_status_t hid_notification_confirmed_cb(void *params);
+
+static const ble_event_callback_t hid_app_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	hid_connect_cb,
+	hid_disconnect_cb,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t hid_app_gatt_server_handle[] = {
+	hid_notification_confirmed_cb,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
 
 /* keyboard report */
 static uint8_t hid_app_keyb_report_map[] =
@@ -130,11 +177,28 @@ static uint8_t hid_app_keyb_report_map[] =
    0xC0				/* End Collection                    */
 };
 
-/* Callback called during disconnect */
-static void hid_disconnect_cb(at_ble_handle_t handle)
+
+/* Callback called during connection */
+static at_ble_status_t hid_connect_cb(void *params)
 {
+	at_ble_handle_t *handle;
+	handle = (at_ble_handle_t *)params;
 	keyb_id = 0;
-        ALL_UNUSED(handle);
+	conn_status = 1;
+	ALL_UNUSED(&handle);
+	
+	return AT_BLE_SUCCESS;
+}
+
+/* Callback called during disconnect */
+static at_ble_status_t hid_disconnect_cb(void *params)
+{
+	at_ble_handle_t *handle;
+	handle =(at_ble_handle_t *)params;
+	keyb_id = 0;
+	conn_status = 0;
+    ALL_UNUSED(&handle);
+	return AT_BLE_SUCCESS;
 }
 
 /* Callback called when host change the control point value */
@@ -173,9 +237,12 @@ static void hid_prf_report_ntf_cb(hid_report_ntf_t *report_info)
 }
 
 /* Callback called when report send over the air */
-static void hid_notification_confirmed_cb(at_ble_cmd_complete_event_t *notification_status)
+static at_ble_status_t hid_notification_confirmed_cb(void *params)
 {
+	at_ble_cmd_complete_event_t *notification_status;
+	notification_status = (at_ble_cmd_complete_event_t *)params;
 	DBG_LOG_DEV("Keyboard report send to host status %d", notification_status->status);
+	return AT_BLE_SUCCESS;
 }
 
 /* Callback called when user press the button for writing new characteristic value */
@@ -187,7 +254,9 @@ void button_cb(void)
 /* Initialize the application information for HID profile*/
 static void hid_keyboard_app_init(void)
 {
-	
+#ifdef ENABLE_PTS	
+	uint16_t i=0;
+#endif	
 	hid_prf_data.hid_serv_instance = 1;
 	hid_prf_data.hid_device = HID_KEYBOARD_MODE; 
 	hid_prf_data.protocol_mode = HID_REPORT_PROTOCOL_MODE; 
@@ -205,14 +274,24 @@ static void hid_keyboard_app_init(void)
 	hid_prf_data.hid_device_info.bcountry_code = 0x00;
 	hid_prf_data.hid_device_info.flags = 0x02; 
 	
+#ifdef ENABLE_PTS
+	DBG_LOG("Report Map Characteristic Value");
+	printf("\r\n");
+	for (i=0; i<sizeof(hid_app_keyb_report_map); i++)
+	{
+		printf(" 0x%02X ", hid_app_keyb_report_map[i]);
+	}
+	printf("\r\n");	
+	DBG_LOG("HID Information Characteristic Value");
+	DBG_LOG("bcdHID 0x%02X, bCountryCode 0x%02X Flags 0x%02X", hid_prf_data.hid_device_info.bcd_hid, hid_prf_data.hid_device_info.bcountry_code, hid_prf_data.hid_device_info.flags);
+#endif // _DEBUG
+	
 	if(hid_prf_conf(&hid_prf_data)==HID_PRF_SUCESS){
 		DBG_LOG("HID Profile Configured");
 	}else{
 		DBG_LOG("HID Profile Configuration Failed");
 	}
 }
-
-bool app_exec = true;
 
 int main(void )
 {
@@ -239,13 +318,19 @@ int main(void )
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 	
+	hid_prf_init(NULL);
+	
 	/* Register the notification handler */
-	register_ble_notification_confirmed_cb(hid_notification_confirmed_cb);
-	register_ble_disconnected_event_cb(hid_disconnect_cb);
 	notify_report_ntf_handler(hid_prf_report_ntf_cb);
 	notify_boot_ntf_handler(hid_prf_boot_ntf_cb);
 	notify_protocol_mode_handler(hid_prf_protocol_mode_ntf_cb);
 	notify_control_point_handler(hid_prf_control_point_ntf_cb);
+	
+	/* Callback registering for BLE-GAP Role */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, hid_app_gap_handle);
+	
+	/* Callback registering for BLE-GATT-Server Role */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, hid_app_gatt_server_handle);
 	
 	/* Capturing the events  */
 	while(app_exec)
@@ -253,7 +338,7 @@ int main(void )
 		ble_event_task();
 				
 		/* Check for key status */
-		if(key_status){
+		if(key_status && conn_status){
 			DBG_LOG("Key Pressed...");
 			delay_ms(KEY_PAD_DEBOUNCE_TIME);
 			if((keyb_id == POSITION_ZERO) || (keyb_id == POSITION_SIX)){
@@ -270,9 +355,12 @@ int main(void )
 				
 			key_status = 0;
 			
-			if(keyb_id == MAX_TEXT_LEN){
+			if(keyb_id == MAX_TEXT_LEN)
+			{
 				keyb_id = 0;
-			}else{
+			}
+			else
+			{
 				++keyb_id;
 			}
 		}

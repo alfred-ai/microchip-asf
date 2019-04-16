@@ -466,14 +466,14 @@ void wdt_reset_count(void);
  *
  * <table>
  *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
+ *		<th>Doc. Rev.</th>
+ *		<th>Date</th>
+ *		<th>Comments</th>
  *	</tr>
  *	<tr>
  *		<td>42124E</td>
- *		<td>10/2015</td>
- *		<td>Added support for SAM L21/L22, SAM DA1, and SAM C20/C2</td>
+ *		<td>12/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, and SAM C20/C21</td>
  *	</tr>
  *	<tr>
  *		<td>42124D</td>

@@ -59,6 +59,7 @@
 #include "ble_utils.h"
 #include "blp_sensor_app.h"
 #include "blp_sensor.h"
+#include "profiles.h"
 /****************************************************************************************
 *							        Globals												*
 ****************************************************************************************/
@@ -115,10 +116,7 @@ uint16_t map_val_kpa = MAP_MIN_KPA;
 uint16_t pulse_rate_val = PULSE_RATE_MIN;
 
 /** Current time stamp */
-uint8_t time_stamp[7];
-
-/** Current year*/
-uint16_t year_value = YEAR;
+prf_date_time_t time_stamp;
 
 /* Intermediate Cuff Pressure Values for notification */
 uint16_t interim_diastolic_mmhg = DIASTOLIC_MIN_MMHG;
@@ -133,6 +131,42 @@ uint16_t interim_map_mmhg = MAP_MIN_MMHG;
 
 uint16_t interim_map_kpa = MAP_MIN_KPA;
 
+
+static const ble_event_callback_t app_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	app_connected_state_handler,
+	app_disconnected_state_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t app_gatt_server_handle[] = {
+	app_notification_confirmation_handler,
+	app_indication_confirmation_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
 /****************************************************************************************
 *							        Functions											*
 ****************************************************************************************/
@@ -140,15 +174,20 @@ uint16_t interim_map_kpa = MAP_MIN_KPA;
  * @brief app_connected_state profile notifies the application about state
  * @param[in] connected
  */
-static void app_connected_state(bool connected)
+static at_ble_status_t app_connected_state_handler(void *params)
 {
-	app_state = connected;
-	if (app_state == false)
-	{
-		//Resetting all the simulated values
+	app_state = true;
+	ALL_UNUSED(params);
+	return AT_BLE_SUCCESS;
+}
+
+static at_ble_status_t app_disconnected_state_handler(void *param)
+{
+	app_state = false;
+	//Resetting all the simulated values
 		
 		interim_diastolic_mmhg = DIASTOLIC_MIN_MMHG;
-		interim_diastolic_kpa = DIASTOLIC_MIN_KPA;	
+		interim_diastolic_kpa = DIASTOLIC_MIN_KPA;
 		interim_systolic_mmhg = SYSTOLIC_MIN_MMHG;
 		interim_systolic_kpa = SYSTOLIC_MIN_KPA;
 		interim_map_mmhg = MAP_MIN_MMHG;
@@ -161,7 +200,18 @@ static void app_connected_state(bool connected)
 		map_val_kpa = MAP_MIN_KPA;
 		pulse_rate_val = PULSE_RATE_MIN;
 		units = !units;
-	} 
+		indication_sent = true;
+		notification_sent = true;
+		notify = false;
+		timer_count = APP_DEFAULT_VAL;
+		user_request_flag =  APP_DEFAULT_VAL;
+		indication_flag = APP_DEFAULT_VAL;
+		notification_flag = APP_DEFAULT_VAL;
+		
+		/* Starting advertisement */
+		blp_sensor_adv();
+		ALL_UNUSED(param);
+		return AT_BLE_SUCCESS;
 }
 
 /** @brief Updating the time stamp
@@ -169,41 +219,54 @@ static void app_connected_state(bool connected)
  */
 static void update_time_stamp(void)
 {
-  uint16_t year;
-	if (time_stamp[6] == SECOND_MAX) {
-		time_stamp[6] = SECONDS;
-		if (time_stamp[5] == MINUTE_MAX) {
-			time_stamp[5] = MINUTES;
-			if (time_stamp[4] == HOUR_MAX) {
-				time_stamp[4] = HOURS;
-				if (time_stamp[3] == DAY_MAX) {
-					time_stamp[3] = DAY;
-					if (time_stamp[2] == MONTH_MAX) {
-						time_stamp[2] = MONTH;
-                         memcpy(&year,&time_stamp[0],2);
-						if (year == YEAR_MAX) {
-							year_value = YEAR;
-							 memcpy(&time_stamp[0],&year_value,2);
- 						} else {
-							 year_value++;
-							 memcpy(&time_stamp[0],&year_value,2);
-						 }
-					} else {
-						time_stamp[2]++;
-					}
-				} else {
-					time_stamp[3]++;
-				}
-			} else{
-				time_stamp[4]++;
-			}
-		} else {
-			time_stamp[5]++;
-		}
-	} else {
-		time_stamp[6]++;
+	if (time_stamp.sec < SECOND_MAX)
+	{
+		time_stamp.sec++;
 	}
-	
+	else
+	{
+		time_stamp.sec = 0;	
+		if (time_stamp.min < MINUTE_MAX)
+		{
+			time_stamp.min++;
+		}
+		else
+		{
+			time_stamp.min = 0;
+			if (time_stamp.hour < HOUR_MAX)
+			{
+				time_stamp.hour++;
+			}
+			else
+			{
+				time_stamp.hour = 0;
+				if (time_stamp.day < DAY_MAX)
+				{
+					time_stamp.day++;
+				}
+				else
+				{
+					time_stamp.day = 1;
+					if (time_stamp.month < MONTH_MAX)
+					{
+						time_stamp.month++;
+					}
+					else
+					{
+						time_stamp.month = 1;
+						if (time_stamp.year < YEAR_MAX)
+						{
+							time_stamp.year++;
+						} 
+						else
+						{
+							time_stamp.year = 2015;
+						}
+					}
+				}
+			}
+		}			
+	}	
 }
 
 /** @brief initializes the time stamp with default time stamp
@@ -211,50 +274,48 @@ static void update_time_stamp(void)
  */
 static void time_stamp_init(void)
 {
-	uint8_t idx = 0;
-	uint16_t year_t = YEAR;
-	memcpy(time_stamp,&year_t,2);
-	idx += 2;
-	
-	time_stamp[idx++] = MONTH;
-	time_stamp[idx++] = DAY;
-	time_stamp[idx++] = HOURS;
-	time_stamp[idx++] = MINUTES;
-	time_stamp[idx++] = SECONDS;
+	memset((uint8_t *)&time_stamp, 0, sizeof(prf_date_time_t));
+	time_stamp.year = 2015;
+	time_stamp.day = 1;
+	time_stamp.month = 1;
 }
 
-/** @brief blp_notification_confirmation_handler called by ble manager 
+/** @brief app_notification_confirmation_handler called by ble manager 
  *	to give the status of notification sent
  *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
  */	
-static void app_notification_confirmation_handler(at_ble_cmd_complete_event_t *params)
+static at_ble_status_t app_notification_confirmation_handler(void *params)
 {
-	if (params->status == AT_BLE_SUCCESS) {
+
+	if (((at_ble_cmd_complete_event_t *)params)->status == AT_BLE_SUCCESS) {
 		DBG_LOG_DEV("App Notification Successfully sent over the air");
 		notification_sent = true;
 	} else {
 		DBG_LOG_DEV("Sending Notification over the air failed");
 		notification_sent = false;
 	}
+	return AT_BLE_SUCCESS;
 }
 
 
 
-/** @brief blp_indication_confirmation_handler called by ble manager 
+/** @brief app_indication_confirmation_handler called by ble manager 
  *	to give the status of notification sent
  *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
  */	
-static void app_indication_confirmation_handler(at_ble_indication_confirmed_t *params)
+static at_ble_status_t app_indication_confirmation_handler(void *params)
 {
-	if (params->status == AT_BLE_SUCCESS) {
+	if (((at_ble_cmd_complete_event_t * )params)->status == AT_BLE_SUCCESS) {
 		DBG_LOG_DEV("App Indication successfully sent over the air");
 		indication_sent = true;
 		user_request_flag = false;
 		DBG_LOG("\r\nPress the button to receive the blood pressure parameters");
 	} else {
-		DBG_LOG_DEV("Sending Notification over the air failed");
+		DBG_LOG_DEV("Sending indication over the air failed reason %x ",
+								((at_ble_cmd_complete_event_t * )params)->status);
 		indication_sent = false;
 	}
+	return AT_BLE_SUCCESS;
 }
 
 /** @brief blp_value_update which will change the blood pressure measurement operations
@@ -380,12 +441,22 @@ static void blp_char_indication(void)
 		map_val_kpa = map_val_kpa + (operator[MAP_KPA]);
 		blp_value_update(blp_data,idx,map_val_kpa,MAP_KPA);
 		idx += 2;
-		DBG_LOG("%-12s","Diastolic");
-		DBG_LOG_CONT("   %02d kpa",diastolic_val_kpa);	
+		DBG_LOG("%-12s","Map");
+		DBG_LOG_CONT("   %02d kpa",map_val_kpa);	
 	}
-	
-	memcpy(&blp_data[idx],time_stamp,sizeof(time_stamp));
-	idx += sizeof(time_stamp);
+		memcpy(&blp_data[idx],(uint8_t*)&(time_stamp.year),2);
+		idx += 2;
+		memcpy(&blp_data[idx],(uint8_t*)&(time_stamp.month),1);
+		idx += 1;
+		memcpy(&blp_data[idx],(uint8_t*)&(time_stamp.day),1);
+		idx += 1;
+		memcpy(&blp_data[idx],(uint8_t*)&(time_stamp.hour),1);
+		idx += 1;
+		memcpy(&blp_data[idx],(uint8_t*)&(time_stamp.min),1);
+		idx += 1;
+		memcpy(&blp_data[idx],(uint8_t*)&(time_stamp.sec),1);
+		idx += 1;
+		
 	pulse_rate_val = pulse_rate_val + (operator[PULSE_RATE]);
 	blp_value_update(blp_data,idx,pulse_rate_val,PULSE_RATE);
 	idx += 2;
@@ -402,7 +473,7 @@ static void blp_char_indication(void)
 	
 	/** Appending Measurement status field */
 	blp_data[idx++] = 0xf;
-	blp_data[idx++] = 0xf;
+	blp_data[idx++] = 0x0;
 	
 	blp_sensor_send_indication(blp_data,idx);	
 	
@@ -434,7 +505,7 @@ static void blp_char_notification(void)
 		idx += 2;
 		interim_systolic_kpa = interim_systolic_kpa + (operator[8]);
 	}
-	
+
 	/** Appending diastolic in kpa*/
 	blp_data[idx++] = 0;
 	blp_data[idx++] = 0;
@@ -442,6 +513,15 @@ static void blp_char_notification(void)
 	/** Appending map in kpa */
 	blp_data[idx++] = 0;
 	blp_data[idx++] = 0;
+	
+	blp_data[0]	|= BLOOD_PRESSURE_USERID_FLAG_MASK;
+	
+	/** Appending User id */
+	if (units) {
+		blp_data[idx++] = USERID_1;
+		} else {
+		blp_data[idx++] = USERID_2;
+	}
 	
 	blp_sensor_send_notification(blp_data,idx);
 }
@@ -457,6 +537,7 @@ static void app_notification_handler(bool enable)
 		DBG_LOG("Notifications enabled by the remote device for interim cuff pressure");
 	} else{
 		DBG_LOG("Disabled notifications by the remote device for interim cuff pressure");
+		timer_count = INDICATION_TIMER_VAL;
 	}
 }
 
@@ -500,7 +581,6 @@ static void app_indication_handler(bool enable)
 			DBG_LOG("Pulse rate     %d bpm",pulse_rate_val);
 		memcpy(&blp_data[idx],&pulse_rate_val,2);
 		idx += 2;
-		//DBG_LOG("Flags are %d and length is %d",blp_data[0],idx);
 		
 		/* Sending the default notification for the first time */
 		blp_sensor_send_indication(blp_data,idx);	
@@ -518,17 +598,21 @@ void button_cb(void)
 	/* App connected state*/
 	if (app_state) {
 		if (user_request_flag == false) {
-			if (indication_flag) {
 				/** For changing the units for each button press*/
-				units = !units;
-		
-				/** To trigger the blood pressure indication */
-				user_request_flag = true;
-				timer_count = 0;
+				if (indication_flag) {
+					units = !units;
+				}
+				
+				if (indication_flag || notification_flag) {
+					
+					/** To trigger the blood pressure indication */
+					user_request_flag = true;
+					timer_count = 0;	
+				}
+				
 				if (notification_flag) {
 					DBG_LOG("\r\nStarted sending Interim Cuff Pressure Values");
 				}	
-			}
 		}
 	}
 	
@@ -560,7 +644,7 @@ int main(void)
 	#elif SAM0
 	system_init();
 	#endif
-
+        
 	/* Initialize the button */
 	button_init();
 
@@ -587,18 +671,23 @@ int main(void)
 	/* Registering the app_indication_handler with the profile */
 	register_blp_indication_handler(app_indication_handler);
 	
-	/* Register the connected call back with the profile */
-	register_connected_callback(app_connected_state);
-	
-	/* Register the notification confirmed call back with ble manager */
-	register_ble_notification_confirmed_cb(app_notification_confirmation_handler);
-	
-	/* Register the indication confirmed call back with ble manager */
-	register_ble_indication_confirmed_cb(app_indication_confirmation_handler);
-	
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 
+	/* Initialize the blood pressure sensor profile */
+	blp_sensor_init(NULL);
+	
+	/* Triggering advertisement */
+	blp_sensor_adv();
+	
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GAP_EVENT_TYPE,
+	app_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GATT_SERVER_EVENT_TYPE,
+	app_gatt_server_handle);
+	
+	
 	/* Capturing the events  */
 	while (app_exec) {
 		ble_event_task();
@@ -606,10 +695,8 @@ int main(void)
 		/* Checking for button press */
 		if (user_request_flag ) {
 			
-			/* Checking for indications enabled*/
-			if (indication_flag) {
-				
 				/*Sending notifications of interim cuff pressure*/
+				
 				if (timer_count < INDICATION_TIMER_VAL ) {
 				
 				/* checking for notification enabled */
@@ -628,17 +715,20 @@ int main(void)
 				}
 				
 				if (timer_count == INDICATION_TIMER_VAL) {
-					
-					/*Checking for previous indication sent over the  air */
-					if (indication_sent) {
+					if (indication_flag) {
+						/*Checking for previous indication sent over the  air */
+						if (indication_sent) {
 						
-						/* Send a indication */
-						blp_char_indication();
-						user_request_flag = 0;
+							/* Send a indication */
+							blp_char_indication();
+						} else {
+							DBG_LOG("Previous indication is failed and device is disconnecting");
+							blp_disconnection();
+						}
+					} 
 						timer_count = 0;
-					}
+						user_request_flag = 0;
 				}
-			}	
 		}
 	}
 	return 0;

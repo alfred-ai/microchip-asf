@@ -62,6 +62,7 @@ CSRCS = \
        sam/boards/samg55_xplained_pro/board_init.c        \
        sam/drivers/efc/efc.c                              \
        sam/drivers/flexcom/flexcom.c                      \
+       sam/drivers/pdc/pdc.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -100,6 +101,8 @@ INC_PATH = \
        sam/boards/samg55_xplained_pro                     \
        sam/drivers/efc                                    \
        sam/drivers/flexcom                                \
+       sam/drivers/pdc                                    \
+       sam/drivers/pdc/pdc_uart_example                   \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/supc                                   \
@@ -113,8 +116,8 @@ INC_PATH = \
        sam/utils/preprocessor                             \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/samg55     \
        thirdparty/wireless/ble_sdk/apps/phone_alert_status \
-       thirdparty/wireless/ble_sdk/apps/phone_alert_status/samg55_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/pas_client \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/phone_alert_status \
@@ -180,12 +183,15 @@ CFLAGS =  \
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
-       -D BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL      \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D NEW_EVT_HANDLER                                 \
        -D PAS_CLIENT                                      \
        -D PAS_SERVICE_CLIENT                              \
+       -D PTS=false                                       \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

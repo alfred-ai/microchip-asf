@@ -472,7 +472,7 @@ enum status_code dma_start_transfer_job(struct dma_resource *resource)
  *
  * This function will abort a DMA transfer. The DMA channel used for the DMA
  * resource will be disabled.
- * The block transfer count will be also calculated and written to the DMA
+ * The block transfer count will also be calculated and written to the DMA
  * resource structure.
  *
  * \note The DMA resource will not be freed after calling this function.

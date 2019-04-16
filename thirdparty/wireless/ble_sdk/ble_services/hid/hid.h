@@ -53,9 +53,12 @@
 #ifndef __HID_H__
 #define __HID_H__
 
+#include "hid_device.h"
+
 /****************************************************************************************
 *							        Enumerations	                                   	*
 ****************************************************************************************/
+
 /**@brief Error Code for HID service operation
 */
 typedef enum
@@ -129,19 +132,14 @@ typedef enum
 /**@brief HID service instance for device role. */
 typedef struct hid_serv
 {
-	at_ble_handle_t *hid_dev_serv_handle;			  /**< HID service handle. */
-	
-	at_ble_uuid_t *hid_dev_serv_uuid;				 /**< HID service info (0x1812). */
-	
-	at_ble_chr_t *hid_dev_proto_mode_char;			/**< HID protocol mode (0x2A4E). */
-	
-	at_ble_chr_t *hid_dev_report_map_char;			 /**< HID report map (0x2A4B). */
-	
-    at_ble_chr_t *hid_dev_report_val_char[HID_NUM_OF_REPORT];      /**< HID report value (0x2A4D). */
+	at_ble_handle_t *hid_dev_serv_handle;				/**< HID service handle. */
+	at_ble_uuid_t *hid_dev_serv_uuid;					/**< HID service info (0x1812). */
+	at_ble_chr_t *hid_dev_proto_mode_char;				/**< HID protocol mode (0x2A4E). */
+	at_ble_chr_t *hid_dev_report_map_char;				/**< HID report map (0x2A4B). */
+	at_ble_chr_t *hid_dev_report_val_char[HID_NUM_OF_REPORT];      /**< HID report value (0x2A4D). */
 	
 #ifdef HID_KEYBOARD_DEVICE	
 	at_ble_chr_t *hid_dev_boot_keyboard_in_report;   /**< HID boot keyboard input report (0x2A22). */
-	
 	at_ble_chr_t *hid_dev_boot_keyboard_out_report;   /**< HID boot keyboard output report (0x2A32). */
 #endif	
 
@@ -150,7 +148,6 @@ typedef struct hid_serv
 #endif	
 	
 	at_ble_chr_t *hid_dev_info;						/**< HID information (0x2A4A). */
-	
 	at_ble_chr_t *hid_control_point;				/**< HID information (0x2A4C). */
 
 } hid_serv_t;

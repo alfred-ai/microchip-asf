@@ -115,8 +115,6 @@ typedef void (*blp_notification_callback_t)(bool);
 /* @brief call back handler type  */
 typedef void (*blp_indication_callback_t)(bool);
 
-/* @brief connected callback */
-typedef void (*connected_callback_t) (bool);
 
 /****************************************************************************************
 *							        Function Prototypes	                                *                                                        *
@@ -176,48 +174,48 @@ void register_blp_notification_handler(
 		blp_notification_callback_t blp_notificaton_handler);
 
 /** @brief blp_sensor_char_changed_handler called by the ble manager after a
- * change in the characteristic
+ *  change in the characteristic
  *  @param[in] at_ble_characteristic_changed_t which contains handle of
- *characteristic and new value
+ *  characteristic and new value
+ *  @return AT_BLE_SUCCESS
  */
 at_ble_status_t blp_sensor_char_changed_handler(
-		at_ble_characteristic_changed_t *char_handle);
+					void *char_handle);
 
-/** @brief hr_sensor_disconnect_event_handler called by ble manager after
- * disconnection event recieved
+/** @brief blp_sensor_disconnect_event_handler called by ble manager after
+ * disconnection event received
  *	@param[in] at_ble_disconnected_t	which has connection handle and
  *reason for disconnection
  */
 at_ble_status_t blp_sensor_disconnect_event_handler(
-		at_ble_disconnected_t *disconnect);
+					void *disconnect);
 
-/** @brief hr_sensor_connected_state_handler called by ble manager after a
+/** @brief blp_sensor_connected_state_handler called by ble manager after a
  * change in characteristic
  *  @param[in] at_ble_connected_t which has connection handle and the peer
  *device address
  */
 at_ble_status_t blp_sensor_connected_state_handler(
-		at_ble_connected_t *conn_params);
-
-/**
- * @brief register the call back for application state
- * @param[in]
- * @return none
- */
-void register_connected_callback(connected_callback_t app_connected_cb);
+		void *conn_params);
 
 /** @brief blp_notification_confirmation_handler called by ble manager 
  *	to give the status of notification sent
  *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
+ *  @return AT_BLE_SUCCESS on success
  */	
-void blp_notification_confirmation_handler(at_ble_cmd_complete_event_t *params);
+at_ble_status_t blp_notification_confirmation_handler(void *params);
 
 /** @brief blp_indication_confirmation_handler called by ble manager 
  *	to give the status of notification sent
- *  @param[in] at_ble_indication_confirmed_t address of the cmd completion
+ *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
+ *  @return AT_BLE_SUCCESS on success
  */	
-void blp_indication_confirmation_handler(at_ble_indication_confirmed_t *params);
+at_ble_status_t blp_indication_confirmation_handler(void *params);
 
+/** @brief blp_disconnection called by the application to disconnect
+ *
+ */
+void blp_disconnection(void);
 
 #endif /*__BLP_SENSOR_H__ */
 // </h>

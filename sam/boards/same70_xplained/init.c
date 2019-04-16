@@ -93,7 +93,7 @@
 	} while (0)
 
 
-
+#ifdef CONF_BOARD_CONFIG_MPU_AT_INIT
 /**
  *	Default memory map
  *	Address range        Memory region      Memory type   Shareability  Cache policy
@@ -107,7 +107,6 @@
  *	0xE0000000- 0xFFFFFFFF System           -                  -
  */
 
-#ifdef CONF_BOARD_CONFIG_MPU_AT_INIT
 /**
  * \brief Set up a memory region.
  */
@@ -336,11 +335,83 @@ static void _setup_memory_region( void )
 }
 #endif
 
+#ifdef CONF_BOARD_ENABLE_TCM_AT_INIT
+#if defined(__GNUC__)
+extern char _itcm_lma, _sitcm, _eitcm;
+#endif
+
+/** \brief  TCM memory enable
+* The function enables TCM memories
+*/
+static inline void tcm_enable(void)
+{
+
+	__DSB();
+	__ISB();
+	
+	SCB->ITCMCR = (SCB_ITCMCR_EN_Msk  | SCB_ITCMCR_RMW_Msk | SCB_ITCMCR_RETEN_Msk);
+	SCB->DTCMCR = ( SCB_DTCMCR_EN_Msk | SCB_DTCMCR_RMW_Msk | SCB_DTCMCR_RETEN_Msk);
+	
+	__DSB();
+	__ISB();
+}
+#else
+/** \brief  TCM memory Disable
+
+	The function enables TCM memories
+ */
+static inline void tcm_disable(void) 
+{
+
+	__DSB();
+	__ISB();
+	SCB->ITCMCR &= ~(uint32_t)(1UL);
+	SCB->DTCMCR &= ~(uint32_t)SCB_DTCMCR_EN_Msk;
+	__DSB();
+	__ISB();
+}
+#endif
+
 void board_init(void)
 {
 #ifndef CONF_BOARD_KEEP_WATCHDOG_AT_INIT
 	/* Disable the watchdog */
 	WDT->WDT_MR = WDT_MR_WDDIS;
+#endif
+
+#ifdef CONF_BOARD_CONFIG_MPU_AT_INIT
+	_setup_memory_region();
+#endif
+
+#ifdef CONF_BOARD_ENABLE_CACHE
+	/* Enabling the Cache */
+	SCB_EnableICache(); 
+	SCB_EnableDCache();
+#endif
+
+#ifdef CONF_BOARD_ENABLE_TCM_AT_INIT
+	/* TCM Configuration */
+	EFC->EEFC_FCR = (EEFC_FCR_FKEY_PASSWD | EEFC_FCR_FCMD_CGPB 
+					| EEFC_FCR_FARG(8));
+	EFC->EEFC_FCR = (EEFC_FCR_FKEY_PASSWD | EEFC_FCR_FCMD_SGPB
+					| EEFC_FCR_FARG(7));
+	tcm_enable();
+#if defined(__GNUC__)
+	volatile char *dst = &_sitcm;
+	volatile char *src = &_itcm_lma;
+	/* copy code_TCM from flash to ITCM */
+	while(dst < &_eitcm){
+		*dst++ = *src++;
+	}
+#endif
+#else
+	/* TCM Configuration */
+	EFC->EEFC_FCR = (EEFC_FCR_FKEY_PASSWD | EEFC_FCR_FCMD_CGPB 
+					| EEFC_FCR_FARG(8));
+	EFC->EEFC_FCR = (EEFC_FCR_FKEY_PASSWD | EEFC_FCR_FCMD_CGPB 
+					| EEFC_FCR_FARG(7));
+	
+	tcm_disable();
 #endif
 
 	/* Initialize IOPORTs */
@@ -532,9 +603,5 @@ void board_init(void)
 	pio_configure_pin(LCD_SPI_BACKLIGHT_PIO, LCD_SPI_BACKLIGHT_FLAGS);
 	pio_set_pin_high(LCD_SPI_BACKLIGHT_PIO);
 
-#endif
-
-#ifdef CONF_BOARD_CONFIG_MPU_AT_INIT
-	_setup_memory_region();
 #endif
 }

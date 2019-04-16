@@ -45,7 +45,7 @@
  * \page asfdoc_sam0_i2s_basic_use_case Quick Start Guide for I2S - Basic
  *
  * In this use case, the I2S will be used to generate Master Clock (MCK), Serial
- * Clock (SCK), Frame Sync (FS) and Serial Data (SD) signals.
+ * Clock (SCK), Frame Sync (FS), and Serial Data (SD) signals.
  *
  * Here MCK is set to the half of processor clock. SCK is set to a quarter of
  * the frequency of processor. FS generates half-half square wave for left and
@@ -55,10 +55,10 @@
  * The I2S module will be set up as follows:
  *
  * - GCLK generator 0 (GCLK main) clock source
- * - MCK, SCK and FS clocks outputs are enabled
+ * - MCK, SCK, and FS clocks outputs are enabled
  * - MCK output divider set to 2
  * - SCK generation divider set to 4
- * - Each frame will contain 2 32-bit slots
+ * - Each frame will contain two 32-bit slots
  * - Data will be left adjusted and start transmit without delay
  *
  * \section asfdoc_sam0_i2s_basic_use_case_setup Quick Start
@@ -102,9 +102,9 @@
  *            settings.
  *
  *   -# Alter the I2S Clock Unit settings to configure the general clock source,
- *      MCK, SCK and FS generation.
+ *      MCK, SCK, and FS generation.
  *      \snippet qs_i2s_basic.c setup_clock_unit_change_config
- *   -# Alter the I2S Clock Unit settings to configure the MCK, SCK and FS
+ *   -# Alter the I2S Clock Unit settings to configure the MCK, SCK, and FS
  *      output on physical device pins.
  *      \snippet qs_i2s_basic.c setup_clock_unit_change_pins
  *   -# Configure the I2S Clock Unit with the desired settings.
@@ -128,7 +128,7 @@
  *      \snippet qs_i2s_basic.c setup_serializer_change_config_pin_tx
  *   -# Configure the I2S Serializer with the desired settings.
  *      \snippet qs_i2s_basic.c setup_serializer_set_config_tx
- *  -# Enable the I2S module, the Clock Unit and Serializer to start the clocks
+ *  -# Enable the I2S module, the Clock Unit, and Serializer to start the clocks
  *     and ready to transmit data.
  *     \snippet qs_i2s_basic.c setup_enable
  *

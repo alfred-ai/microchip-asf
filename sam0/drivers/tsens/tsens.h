@@ -81,19 +81,19 @@
  * temperature of the device by comparing the difference in two temperature
  * dependent frequencies to a known frequency. The frequency of the
  * temperature dependent oscillator (TOSC) is measured twice: first with the
- * min configuration and next with the max configuration. The resulting signed
+ * min configuration and next with the maximum configuration. The resulting signed
  * value is proportional to the temperature and is corrected for offset by the
  * contents of the OFFSET register.
  *
  * Accurately measures a temperature:
- *  - +/-1°C over 0°C ~ 60°C
- *  - +/-3°C over -40°C ~ 85°C
- *  - +/-5°C over -40°C ~ 105°C
+ *  - ±1°C over 0°C ~ 60°C
+ *  - ±3°C over -40°C ~ 85°C
+ *  - ±5°C over -40°C ~ 105°C
  *
  * The number of periods of GCLK_TSENS used for the measurement is defined by
  * the GAIN register. The width of the resulting pulse is measured using a
- * counter clocked by GCLK_TSENS in the up direction for the 1st phase and in
- * the down 2nd phase. Register GAIN and OFFSET is loaded from NVM, or can also
+ * counter clocked by GCLK_TSENS in the up direction for the 1<SUP>st</SUP> phase and in
+ * the down 2<SUP>nd</SUP> phase. Register GAIN and OFFSET is loaded from NVM, or can also
  * be fixed by user.
  * \f[
  *    VALUE = OFFSET + (\frac{f_{TOSCMIN} - f_{TOSCMAX}}{f_{GCLK}}) \times GAIN
@@ -152,7 +152,7 @@
  *
  * \section asfdoc_sam0_tsens_extra_info Extra Information
  *
- * For extra information see \ref asfdoc_sam0_tsens_extra. This includes:
+ * For extra information, see \ref asfdoc_sam0_tsens_extra. This includes:
  *  - \ref asfdoc_sam0_tsens_extra_acronyms
  *  - \ref asfdoc_sam0_tsens_extra_dependencies
  *  - \ref asfdoc_sam0_tsens_extra_errata
@@ -191,13 +191,13 @@ extern "C" {
  * @{
  */
 
-/** TSENS result ready */
+/** TSENS result ready. */
 #define TSENS_STATUS_RESULT_READY  (1UL << 0)
-/** TSENS result overwritten before read */
+/** TSENS result overwritten before read. */
 #define TSENS_STATUS_OVERRUN       (1UL << 1)
-/** Window monitor match */
+/** Window monitor match. */
 #define TSENS_STATUS_WINDOW        (1UL << 2)
-/** TSENS result overflows */
+/** TSENS result overflows. */
 #define TSENS_STATUS_OVERFLOW      (1UL << 3)
 
 /** @} */
@@ -522,7 +522,7 @@ static inline void tsens_disable_events(struct tsens_events *const events)
 }
 
 /**
- * \brief Start an TSENS conversion.
+ * \brief Start a TSENS conversion.
  *
  * Start a new TSENS conversion.
  *
@@ -544,9 +544,9 @@ enum status_code tsens_read(int32_t *result);
 /**
  * \page asfdoc_sam0_tsens_extra Extra Information for TSENS Driver
  *
- * \section asfdoc_sam0_tsens_extra_acronyms Acronyms
- * Below is a table listing the acronyms used in this module, along with their
- * intended meanings.
+ * \section asfdoc_sam0_tsens_extra_acronyms Acronym
+ * Below is a table listing the acronym used in this module, along with their
+ * intended meaning.
  *
  * <table>
  *	<tr>
@@ -603,14 +603,14 @@ enum status_code tsens_read(int32_t *result);
  *
  * <table>
  *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
+ *		<th>Doc. Rev.</th>
+ *		<th>Date</th>
+ *		<th>Comments</th>
  *	</tr>
  *	<tr>
  *		<td>42542A</td>
- *		<td>10/2015</td>
- *		<td>Initial release</td>
+ *		<td>12/2015</td>
+ *		<td>Initial document release</td>
  *	</tr>
  * </table>
  */

@@ -85,6 +85,13 @@ enum interface_type {
 	AT_BLE_SPI
 };
 
+typedef enum hw_flow_control
+{
+	ENABLE_HW_FC_PATCH = 1,
+	DISABLE_HW_FC_PATCH
+}hw_flow_control_t;
+
+
 /**@struct	platform_config
  * @ingroup platform_group_datatypes
  * @brief	This platform structure used to define bus type and 
@@ -104,11 +111,21 @@ typedef struct{
 	uint8_t (*wr_api32_reset) (uint32_t memAddr,uint32_t* data,uint8_t size);
 }wr_apis;
 
-enum tenuTransportState{
+typedef enum tenuTransportState{
 	PLATFORM_TRANSPORT_SLAVE_DISCONNECTED=0,
 	PLATFORM_TRANSPORT_SLAVE_PATCH_DOWNLOAD,
 	PLATFORM_TRANSPORT_SLAVE_CONNECTED
+}tenuTransportState_t;
+
+enum transfer_mode
+{
+	TX_MODE = 1,
+	RX_MODE
 };
+
+#define BLE_SERIAL_START_BYTE (0x05)
+
+#define BLE_SERIAL_HEADER_LEN (0x09)
 
  /**@ingroup platform_group_functions
   * @brief implements platform-specific initialization
@@ -221,10 +238,17 @@ at_ble_status_t platform_ble_event_data(void);
  /** @}*/
 
 void platform_start_timer(uint32_t timeout); 
-void platform_stop_timer(void);
 void platform_wakeup(void);
 void platform_set_sleep(void);
 void platform_enter_critical_section(void);
 void platform_leave_critical_section(void);
 void platform_cleanup(void);
+void start_timer(uint32_t timeout);
+uint32_t timer_done(void);
+void stop_timer(void);
+void bus_activity_timer_callback(void);
+void check_and_assert_ext_wakeup(uint8_t mode);
+void platform_configure_hw_fc_uart(void);
+#define UNREFERENCED_PARAMETER(x) ((void)x)
+void platform_dma_process_rxdata(uint8_t *buf, uint16_t len);
 #endif // __PLATFORM_H__

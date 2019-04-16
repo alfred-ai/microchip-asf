@@ -64,7 +64,7 @@
 //	<i> Defines inteval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> anp_app_anp_fast_adv
-#define APP_ANP_FAST_ADV							(100) //100 ms
+#define APP_ANP_FAST_ADV							(1600) //1000 ms
 
 /**@brief Advertisement Timeout*/
 //	<o> Advertisement Timeout <1000-10000:50>
@@ -140,46 +140,45 @@ void anp_client_init( void *params);
 void anp_client_adv(void);
 
 /**
- * @brief Handler for connection event 
- * @param[in] connected event parameter containing details like handle
- * \note Called by the ble_manager after receiving connection event
- */
-void anp_client_connected_state_handler(at_ble_connected_t *params);
-
-/**
  * @brief Handler for disconnection event
  * @param[in] disconnected event parameter containing details like handle
  * \note Called by the ble_manager after receiving disconnection event
  */
-void anp_client_disconnected_event_handler(at_ble_disconnected_t *params);
+at_ble_status_t anp_client_disconnected_event_handler(void *params);
 
 /**
  * @brief Handler for service found event
  * @param[in] service found event parameter containing details like service handle,uuid
  * \note Called by the ble_manager after receiving service found event
  */
-void anp_client_service_found_handler(at_ble_primary_service_found_t * params);
+at_ble_status_t anp_client_service_found_handler(void *params);
+
+/**
+ * @brief Discovering the services of Alert Notification
+ * @return at_ble_status_t which return AT_BLE_SUCCESS on success
+ */
+at_ble_status_t alert_service_discovery(void);
 
 /**
  * @brief Handler for discovery complete event
  * @param[in] discovery complete event which contains result of discovery event
  * \note Called by the ble_manager after receiving discovery complete event
  */
-void anp_client_discovery_complete_handler(at_ble_discovery_complete_t *params);
+at_ble_status_t anp_client_discovery_complete_handler(void *params);
 
 /**
  * @brief Handler for characteristic found event
  * @param[in] characteristic found event parameter containing details like characteristic handle,uuid
  * \note Called by the ble_manager after receiving characteristic found event
  */
-void anp_client_characteristic_found_handler(at_ble_characteristic_found_t *params);
+at_ble_status_t anp_client_characteristic_found_handler(void *params);
 
 /**
  * @brief Handler for descriptor found event
  * @param[in] descriptor found event parameter containing details like descriptor handle,uuid
  * \note Called by the ble_manager after receiving descriptor found event
  */
-void anp_client_descriptor_found_handler(at_ble_descriptor_found_t *params);
+at_ble_status_t anp_client_descriptor_found_handler(void *params);
 
 /**
  * @brief Handler for char changed handler 
@@ -193,14 +192,14 @@ void anp_client_char_changed_handler(at_ble_characteristic_changed_t *params);
  * @param[in] write response parameter contacting the result of write request
  * \note Called by the ble_manager after receiving write response event
  */
-void anp_client_write_response_handler(at_ble_characteristic_write_response_t *params);
+at_ble_status_t anp_client_write_response_handler(void *params);
 
 /**
  * @brief Handler for notification event 
  * @param[in] notification received parameter containing the notification value
  * \note Called by the ble_manager after receiving the notification
  */
-void anp_client_notification_handler(at_ble_notification_recieved_t *params);
+at_ble_status_t anp_client_notification_handler(void *params);
 
 /**
  * @brief Handler for enabling the notification 
@@ -212,13 +211,14 @@ void anp_client_write_notification_handler(void );
  * @brief Handler for read response handle 
  * \note Called by the ble_manager for read response in the gatt server
  */
-void anp_client_read_response_handler(at_ble_characteristic_read_response_t *read_response);
+at_ble_status_t anp_client_read_response_handler(void *params);
 
 /**
- * @brief Handler for discover the services
- * \note Called by the ble_manager for enabling the notification in the gatt server
+ * @brief Discovering the services of Alert Notification
+ * @param[in] at_ble_connected_t which consists of connection handle
+ * @return at_ble_status_t which return AT_BLE_SUCCESS on success
  */
-at_ble_status_t anp_info_service_discover(at_ble_connected_t *conn_params);
+at_ble_status_t anp_info_service_discover(void *params);
 
 /**
  * @brief register the call back for application state
@@ -235,7 +235,13 @@ void anp_client_disable_notification(void);
 /**
  * @brief invoked by ble manager for setting the notification 
  */
-void anp_client_security_done_handler(void *param);
+at_ble_status_t anp_client_security_done_handler(void *param);
+
+/**
+ * @brief char changed handler invoked by application
+ * @param[in] uint8_t array consists of value to be written to alert notification control point
+ */
+at_ble_status_t anp_write_to_ncp(uint8_t *value);
 
 #endif /* __ALERT_NOTIFICATION_PROFILE_H__ */
 // </h>

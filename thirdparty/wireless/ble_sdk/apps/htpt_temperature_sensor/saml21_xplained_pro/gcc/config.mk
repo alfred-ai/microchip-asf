@@ -123,6 +123,7 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor/saml21_xplained_pro \
        thirdparty/wireless/ble_sdk/inc                    \
@@ -190,6 +191,8 @@ CPPFLAGS = \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAML21J18A__
 

@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1500 BSP APIs declarations.
+ * \brief WINC BSP API Declarations.
  *
  * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
@@ -37,6 +37,9 @@
  *
  * \asf_license_stop
  *
+ */
+ 
+/** \defgroup nm_bsp BSP
  */
 /**@defgroup  BSPDefine Defines
  * @ingroup nm_bsp

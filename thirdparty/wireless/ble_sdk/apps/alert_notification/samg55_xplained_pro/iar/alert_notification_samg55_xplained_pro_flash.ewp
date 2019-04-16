@@ -167,9 +167,12 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ANS_CLIENT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NENABLE_PTS</state>
 					<state>ARM_MATH_CM4=true</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -316,11 +319,12 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/sleepmgr</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/source/templates</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc_uart_example</state>
 					<state>$PROJ_DIR$/../../../../ble_services/alert_notification</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils</state>
@@ -333,6 +337,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../services/serial_fifo</state>
+					<state>$PROJ_DIR$/../../../config/samg55</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -488,9 +493,12 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ANS_CLIENT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NENABLE_PTS</state>
 					<state>ARM_MATH_CM4=true</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -604,11 +612,12 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/sleepmgr</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/source/templates</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc_uart_example</state>
 					<state>$PROJ_DIR$/../../../../ble_services/alert_notification</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils</state>
@@ -621,6 +630,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../services/serial_fifo</state>
+					<state>$PROJ_DIR$/../../../config/samg55</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1134,9 +1144,12 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ANS_CLIENT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NENABLE_PTS</state>
 					<state>ARM_MATH_CM4=true</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1283,11 +1296,12 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/sleepmgr</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/source/templates</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc_uart_example</state>
 					<state>$PROJ_DIR$/../../../../ble_services/alert_notification</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils</state>
@@ -1300,6 +1314,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../services/serial_fifo</state>
+					<state>$PROJ_DIR$/../../../config/samg55</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -1455,9 +1470,12 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ANS_CLIENT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NENABLE_PTS</state>
 					<state>ARM_MATH_CM4=true</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1571,11 +1589,12 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/sleepmgr</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/source/templates</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc</state>
+					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc_uart_example</state>
 					<state>$PROJ_DIR$/../../../../ble_services/alert_notification</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/delay</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils</state>
@@ -1588,6 +1607,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/drivers/pio</state>
 					<state>$PROJ_DIR$/../../../../services/serial_fifo</state>
+					<state>$PROJ_DIR$/../../../config/samg55</state>
 					<state>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include</state>
 					<state>$PROJ_DIR$/.</state>
 				</option>
@@ -2039,32 +2059,38 @@
 						</file>
 						<group>
 							<name>samg55_xplained_pro</name>
-							<file>
-								<name>$PROJ_DIR$/../conf_timer.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_uart_serial.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_serialdrv.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_clock.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
-							</file>
 							<group>
 								<name>iar</name>
 								<file>
 									<name>$PROJ_DIR$/asf.h</name>
 								</file>
 							</group>
+						</group>
+					</group>
+					<group>
+						<name>config</name>
+						<group>
+							<name>samg55</name>
 							<file>
-								<name>$PROJ_DIR$/../conf_sleepmgr.h</name>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_extint.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_sleepmgr.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_board.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_uart_serial.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_timer.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_clock.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/samg55/conf_serialdrv.h</name>
 							</file>
 						</group>
 					</group>
@@ -2185,6 +2211,21 @@
 				</file>
 			</group>
 			<group>
+				<name>pdc</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc.h</name>
+				</file>
+				<group>
+					<name>pdc_uart_example</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam/drivers/pdc/pdc_uart_example/pdc_uart_example.h</name>
+					</file>
+				</group>
+			</group>
+			<group>
 				<name>supc</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam/drivers/supc/supc.c</name>
@@ -2267,9 +2308,6 @@
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/udp.h</name>
 								</file>
 								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/pioa.h</name>
-								</file>
-								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/gpbr.h</name>
 								</file>
 								<file>
@@ -2285,10 +2323,13 @@
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/rtc.h</name>
 								</file>
 								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/twi1.h</name>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/usart6.h</name>
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/pmc.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/pioa.h</name>
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/flexcom2.h</name>
@@ -2319,6 +2360,9 @@
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/i2sc0.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/crccu.h</name>
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/flexcom7.h</name>
@@ -2360,10 +2404,7 @@
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/spi7.h</name>
 								</file>
 								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/usart6.h</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/crccu.h</name>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/twi1.h</name>
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/instance/spi5.h</name>
@@ -2408,6 +2449,9 @@
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/efc.h</name>
 								</file>
 								<file>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/tc.h</name>
+								</file>
+								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/flexcom.h</name>
 								</file>
 								<file>
@@ -2420,10 +2464,10 @@
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/adc.h</name>
 								</file>
 								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/tc.h</name>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/i2sc.h</name>
 								</file>
 								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/i2sc.h</name>
+									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/rstc.h</name>
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/supc.h</name>
@@ -2472,9 +2516,6 @@
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/rtc.h</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../../../../../../../sam/utils/cmsis/samg/samg55/include/component/rstc.h</name>
 								</file>
 							</group>
 							<file>

@@ -54,9 +54,43 @@
 /*- Includes ---------------------------------------------------------------*/
 #include <asf.h>
 #include "platform.h"
-#include "console_serial.h"
-#include "timer_hw.h"
 #include "pxp_monitor.h"
+
+
+static const ble_event_callback_t pxp_gap_handle[] = {
+	NULL,
+	NULL,
+	pxp_monitor_scan_data_handler,
+	NULL,
+	NULL,
+	pxp_monitor_connected_state_handler,
+	pxp_disconnect_event_handler,
+	NULL,
+	NULL,
+	pxp_monitor_pair_done_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	pxp_monitor_encryption_change_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t pxp_gatt_client_handle[] = {
+	pxp_monitor_service_found_handler,
+	NULL,
+	pxp_monitor_characteristic_found_handler,
+	NULL,
+	pxp_monitor_discovery_complete_handler,
+	pxp_monitor_characteristic_read_response,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
 
 #if defined TX_POWER_SERVICE
 #include "tx_power.h"
@@ -77,10 +111,10 @@ uint8_t pxp_supp_scan_index[MAX_SCAN_DEVICE];
 uint8_t scan_index = 0;
 
 
-extern at_ble_connected_t ble_connected_dev_info[MAX_DEVICE_CONNECTED];
-extern uint8_t scan_response_count;
+extern volatile uint8_t scan_response_count;
+extern at_ble_scan_info_t scan_info[MAX_SCAN_DEVICE];
 
-volatile bool pxp_connect_request_flag = false;
+volatile uint8_t pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
 
 #if defined TX_POWER_SERVICE
 gatt_txps_char_handler_t txps_handle =
@@ -100,6 +134,10 @@ gatt_ias_char_handler_t ias_handle =
 uint8_t ias_char_data[MAX_IAS_CHAR_SIZE];
 #endif
 
+hw_timer_start_func_cb_t hw_timer_start_func_cb = NULL;
+hw_timer_stop_func_cb_t hw_timer_stop_func_cb = NULL;
+peripheral_state_cb_t peripheral_state_callback = NULL;
+
 /* *@brief Initializes Proximity profile
 * handler Pointer reference to respective variables
 *
@@ -113,6 +151,9 @@ void pxp_monitor_init(void *param)
 	DBG_LOG("High Alert RSSI range: %ddBm and above", (PXP_HIGH_ALERT_RANGE-1));
 	DBG_LOG("Mild Alert RSSI range: %ddBm to %ddBm", PXP_LOW_ALERT_RANGE, PXP_HIGH_ALERT_RANGE);
 	DBG_LOG("No Alert RSSI range:   %ddBm and below", (PXP_LOW_ALERT_RANGE+1));
+	
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, pxp_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_CLIENT_EVENT_TYPE, pxp_gatt_client_handle);
 }
 
 /**@brief Connect to a peer device
@@ -137,8 +178,8 @@ uint8_t index)
 
 	if (gap_dev_connect(&pxp_reporter_address) == AT_BLE_SUCCESS) {
 		DBG_LOG("PXP Connect request sent");
-		pxp_connect_request_flag = true;
-		hw_timer_start(PXP_CONNECT_REQ_INTERVAL);
+		pxp_connect_request_flag = PXP_DEV_CONNECTING;
+		hw_timer_start_func_cb(PXP_CONNECT_REQ_INTERVAL);
 		return AT_BLE_SUCCESS;
 		} else {
 		DBG_LOG("PXP Connect request send failed");
@@ -158,13 +199,14 @@ uint8_t index)
 * @return @ref AT_BLE_INVALID_PARAM incorrect parameter.
 * @return @ref AT_BLE_FAILURE Generic error.
 */
-at_ble_status_t pxp_monitor_scan_data_handler(at_ble_scan_info_t *scan_buffer,
-uint8_t scanned_dev_count)
+at_ble_status_t pxp_monitor_scan_data_handler(void *params)
 {
 	uint8_t scan_device[MAX_SCAN_DEVICE];
 	uint8_t pxp_scan_device_count = 0;
+	uint8_t scanned_dev_count = scan_response_count;
 	scan_index = 0;
 	uint8_t index;
+	at_ble_scan_info_t *scan_buffer = (at_ble_scan_info_t *)scan_info;
 	memset(scan_device, 0, MAX_SCAN_DEVICE);
 	if (scanned_dev_count) {
 		
@@ -244,7 +286,43 @@ uint8_t scanned_dev_count)
 			return gap_dev_scan();
 		}
 	}		
+        ALL_UNUSED(params);
+	return AT_BLE_FAILURE;
+}
 
+at_ble_status_t pxp_monitor_start_scan(void)
+{
+	if (peripheral_state_callback != NULL)
+	{
+		if (peripheral_state_callback() == PERIPHERAL_ADVERTISING_STATE)
+		{
+			DBG_LOG("Peripheral is already Advertising. Scan not permitted");
+			return AT_BLE_FAILURE;
+		}
+	}
+	
+	char index_value;
+	hw_timer_stop_func_cb();
+	do
+	{
+		DBG_LOG("Select [r] to Reconnect or [s] Scan");
+		index_value = getchar();
+		DBG_LOG("%c", index_value);
+	}	while (!((index_value == 'r') || (index_value == 's')));
+	
+	if(index_value == 'r') {
+		if (gap_dev_connect(&pxp_reporter_address) == AT_BLE_SUCCESS) {
+			DBG_LOG("PXP Re-Connect request sent");
+			pxp_connect_request_flag = PXP_DEV_CONNECTING;
+			hw_timer_start_func_cb(PXP_CONNECT_REQ_INTERVAL);
+			return AT_BLE_SUCCESS;
+			} else {
+			DBG_LOG("PXP Re-Connect request send failed");
+		}
+	}
+	else if(index_value == 's') {
+		return gap_dev_scan();
+	}
 	return AT_BLE_FAILURE;
 }
 
@@ -260,32 +338,96 @@ uint8_t scanned_dev_count)
 *device
 * @return @ref AT_BLE_FAILURE Reconnection fails.
 */
-at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect)
-{
-	char index_value;
-	hw_timer_stop();
-	do
-	{
-		DBG_LOG("Select [r] to Reconnect or [s] Scan");
-		index_value = getchar();
-		DBG_LOG("%c", index_value);
-	}	while (!((index_value == 'r') || (index_value == 's')));
+at_ble_status_t pxp_disconnect_event_handler(void *params)
+{	
+	at_ble_disconnected_t *disconnect;
+	disconnect = (at_ble_disconnected_t *)params;
+	static ble_peripheral_state_t peripheral_state = PERIPHERAL_IDLE_STATE;
 	
-	if(index_value == 'r') {
-		if (gap_dev_connect(&pxp_reporter_address) == AT_BLE_SUCCESS) {
-			DBG_LOG("PXP Re-Connect request sent");		
-			pxp_connect_request_flag = true;
-			hw_timer_start(PXP_CONNECT_REQ_INTERVAL);
-			return AT_BLE_SUCCESS;
-		} else {
-			DBG_LOG("PXP Re-Connect request send failed");
+	if(!ble_check_disconnected_iscentral(disconnect->handle))
+	{
+		return AT_BLE_FAILURE;
+	}
+	else if(peripheral_state_callback != NULL)
+	{
+		peripheral_state = peripheral_state_callback();
+	}
+	
+	if(peripheral_state != PERIPHERAL_ADVERTISING_STATE)
+	{
+		if((ble_check_device_state(disconnect->handle, BLE_DEVICE_DISCONNECTED) == AT_BLE_SUCCESS) ||
+		(ble_check_device_state(disconnect->handle, BLE_DEVICE_DEFAULT_IDLE) == AT_BLE_SUCCESS))
+		{
+			if (disconnect->reason == AT_BLE_LL_COMMAND_DISALLOWED) {
+				return AT_BLE_SUCCESS;
+			} else
+				pxp_monitor_start_scan();
 		}
 	}
-	else if(index_value == 's') {
-		return gap_dev_scan();
+	else
+	{
+		pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
+		DBG_LOG("Peripheral is already Advertising,Scan not permitted");
 	}
-	ALL_UNUSED(disconnect);
+
 	return AT_BLE_FAILURE;
+}
+
+/**@brief Discover all services
+ *
+ * @param[in] connection handle.
+ * @return @ref AT_BLE_SUCCESS operation programmed successfully.
+ * @return @ref AT_BLE_INVALID_PARAM incorrect parameter.
+ * @return @ref AT_BLE_FAILURE Generic error.
+ */
+at_ble_status_t pxp_monitor_service_discover(at_ble_handle_t handle)
+{
+	at_ble_status_t status;
+	status = at_ble_primary_service_discover_all(
+					handle,
+					GATT_DISCOVERY_STARTING_HANDLE,
+					GATT_DISCOVERY_ENDING_HANDLE);
+	if (status == AT_BLE_SUCCESS) {
+		DBG_LOG_DEV("GATT Discovery request started ");
+	} else {
+		DBG_LOG("GATT Discovery request failed");
+	}
+	
+	return status;
+}
+
+at_ble_status_t pxp_monitor_pair_done_handler(void *params)
+{
+	at_ble_status_t discovery_status = AT_BLE_FAILURE;
+	at_ble_pair_done_t *pair_done_val;
+	pair_done_val = (at_ble_pair_done_t *)params;		
+		
+	if(!ble_check_iscentral(pair_done_val->handle))
+	{
+		return AT_BLE_FAILURE;
+	}
+	
+	if (pair_done_val->status == AT_BLE_SUCCESS) {
+		discovery_status = pxp_monitor_service_discover(pair_done_val->handle);
+	}
+	return discovery_status;
+}
+
+at_ble_status_t pxp_monitor_encryption_change_handler(void *params)
+{
+	at_ble_status_t discovery_status = AT_BLE_FAILURE;
+	at_ble_encryption_status_changed_t *encryption_status;
+	encryption_status = (at_ble_encryption_status_changed_t *)params;
+	
+	if(!ble_check_iscentral(encryption_status->handle))
+	{
+		return AT_BLE_FAILURE;
+	}
+	
+	if (encryption_status->status == AT_BLE_SUCCESS) {
+		discovery_status = pxp_monitor_service_discover(encryption_status->handle);
+	}
+	return discovery_status;
 }
 
 /**@brief Connected event state handle after connection request to peer device
@@ -299,29 +441,20 @@ at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect)
 *parameter.
 * @return @ref AT_BLE_FAILURE Generic error.
 */
-at_ble_status_t pxp_monitor_connected_state_handler(
-at_ble_connected_t *conn_params)
+at_ble_status_t pxp_monitor_connected_state_handler(void *params)
 {
-	at_ble_status_t discovery_status = AT_BLE_FAILURE;
+	at_ble_connected_t *conn_params;
+	conn_params = (at_ble_connected_t *)params;	
 	
-	hw_timer_stop();
-	pxp_connect_request_flag = false;
-	
-	DBG_LOG_DEV("%d",conn_params->conn_status);
-	if (conn_params->conn_status == AT_BLE_SUCCESS) {
-		discovery_status = at_ble_primary_service_discover_all(
-		ble_connected_dev_info[0].handle,
-		GATT_DISCOVERY_STARTING_HANDLE,
-		GATT_DISCOVERY_ENDING_HANDLE);
-
-		if (discovery_status == AT_BLE_SUCCESS) {
-			DBG_LOG_DEV("GATT Discovery request started ");
-			} else {
-			DBG_LOG("GATT Discovery request failed");
-		}
+	if(!ble_check_iscentral(conn_params->handle))
+	{
+		return AT_BLE_FAILURE;
 	}
 
-	return discovery_status;
+	hw_timer_stop_func_cb();
+	pxp_connect_request_flag = PXP_DEV_CONNECTED;
+		
+	return conn_params->conn_status;
 }
 
 /**@brief Discover the Proximity services
@@ -334,10 +467,18 @@ at_ble_connected_t *conn_params)
 * @param[in] at_ble_primary_service_found_t  Primary service parameter
 *
 */
-void pxp_monitor_service_found_handler(
-at_ble_primary_service_found_t *primary_service_params)
+at_ble_status_t pxp_monitor_service_found_handler(void *params)
 {
 	at_ble_uuid_t *pxp_service_uuid;
+	at_ble_status_t status = AT_BLE_SUCCESS;
+	at_ble_primary_service_found_t *primary_service_params;
+	primary_service_params = (at_ble_primary_service_found_t *)params;
+	
+	if(!ble_check_iscentral(primary_service_params->conn_handle))
+	{
+		return AT_BLE_FAILURE;
+	}
+	
 	pxp_service_uuid = &primary_service_params->service_uuid;
 	if (pxp_service_uuid->type == AT_BLE_UUID_16) {
 		uint16_t service_uuid;
@@ -353,7 +494,7 @@ at_ble_primary_service_found_t *primary_service_params)
 				lls_handle.end_handle
 				= primary_service_params->end_handle;
 				DBG_LOG("link loss service discovered");
-				DBG_LOG_DEV("%04X %04X",
+				DBG_LOG_PTS("start_handle: %04X end_handle: %04X",
 				primary_service_params->start_handle,
 				primary_service_params->end_handle);				
 				lls_handle.char_discovery=(at_ble_status_t)DISCOVER_SUCCESS;
@@ -368,7 +509,7 @@ at_ble_primary_service_found_t *primary_service_params)
 				ias_handle.end_handle
 				= primary_service_params->end_handle;
 				DBG_LOG("Immediate Alert service discovered");
-				DBG_LOG_DEV(" %04X %04X ",
+				DBG_LOG_PTS("start_handle: %04X end_handle: %04X ",
 				primary_service_params->start_handle,
 				primary_service_params->end_handle);				
 				ias_handle.char_discovery=(at_ble_status_t)DISCOVER_SUCCESS;
@@ -383,7 +524,7 @@ at_ble_primary_service_found_t *primary_service_params)
 				txps_handle.end_handle
 				= primary_service_params->end_handle;
 				DBG_LOG("Tx power service discovered");
-				DBG_LOG_DEV("%04X %04X",
+				DBG_LOG_PTS("start_handle: %04X end_handle: %04X",
 				primary_service_params->start_handle,
 				primary_service_params->end_handle);
 				txps_handle.char_discovery=(at_ble_status_t)DISCOVER_SUCCESS;
@@ -391,9 +532,11 @@ at_ble_primary_service_found_t *primary_service_params)
 			break;
 
 			default:
+			status = AT_BLE_INVALID_PARAM; 
 			break;
 		}
 	}
+	return status;
 }
 
 /**@brief Discover all Characteristics supported for Proximity Service of a
@@ -409,16 +552,23 @@ at_ble_primary_service_found_t *primary_service_params)
 * @param[in] discover_status discovery status of each handle
 *
 */
-void pxp_monitor_discovery_complete_handler(
-at_ble_discovery_complete_t *discover_status)
+at_ble_status_t pxp_monitor_discovery_complete_handler(void *params)
 {
 	bool discover_char_flag = true;
+	at_ble_discovery_complete_t *discover_status;
+	discover_status = (at_ble_discovery_complete_t *)params;
+	
+	if(!ble_check_iscentral(discover_status->conn_handle))
+	{
+		return AT_BLE_FAILURE;
+	}
+	
 	DBG_LOG_DEV("discover complete operation %d and %d",discover_status->operation,discover_status->status);
 	if ((discover_status->status == DISCOVER_SUCCESS) || (discover_status->status == AT_BLE_SUCCESS)) {
 		#if defined TX_POWER_SERVICE
 		if ((txps_handle.char_discovery == DISCOVER_SUCCESS) && (discover_char_flag)) {
 			if (at_ble_characteristic_discover_all(
-			ble_connected_dev_info[0].handle,
+			discover_status->conn_handle,
 			txps_handle.start_handle,
 			txps_handle.end_handle) ==
 			AT_BLE_SUCCESS) {
@@ -440,7 +590,7 @@ at_ble_discovery_complete_t *discover_status)
 		if ((lls_handle.char_discovery == DISCOVER_SUCCESS) &&
 		(discover_char_flag)) {
 			if (at_ble_characteristic_discover_all(
-			ble_connected_dev_info[0].handle,
+			discover_status->conn_handle,
 			lls_handle.start_handle,
 			lls_handle.end_handle) ==
 			AT_BLE_SUCCESS) 
@@ -465,7 +615,7 @@ at_ble_discovery_complete_t *discover_status)
 		if ((ias_handle.char_discovery == DISCOVER_SUCCESS) &&
 		(discover_char_flag)) {
 			if (at_ble_characteristic_discover_all(
-			ble_connected_dev_info[0].handle,
+			discover_status->conn_handle,
 			ias_handle.start_handle,
 			ias_handle.end_handle) ==
 			AT_BLE_SUCCESS) {
@@ -488,15 +638,14 @@ at_ble_discovery_complete_t *discover_status)
 		if(lls_handle.char_discovery == AT_BLE_INVALID_STATE) {
 			DBG_LOG("PROXIMITY PROFILE NOT SUPPORTED");
 			discover_char_flag = false;
-			at_ble_disconnect(ble_connected_dev_info[0].handle, AT_BLE_TERMINATED_BY_USER);
+			at_ble_disconnect(discover_status->conn_handle, AT_BLE_TERMINATED_BY_USER);
 		}
 		
 		if (discover_char_flag) {
 			DBG_LOG_DEV("GATT characteristic discovery completed");
 			#if defined LINK_LOSS_SERVICE
 			/* set link loss profile to high alert upon connection */
-			if (!(lls_alert_level_write(ble_connected_dev_info[0].
-			handle, lls_handle.char_handle,
+			if (!(lls_alert_level_write(discover_status->conn_handle, lls_handle.char_handle,
 			LLS_ALERT_LEVEL) == AT_BLE_SUCCESS)) {
 				DBG_LOG("Link Loss write characteristics failed");
 			}
@@ -504,7 +653,7 @@ at_ble_discovery_complete_t *discover_status)
 			#endif
 
 			#if defined TX_POWER_SERVICE
-			if (!(txps_power_read(ble_connected_dev_info[0].handle,
+			if (!(txps_power_read(discover_status->conn_handle,
 			txps_handle.char_handle) ==
 			AT_BLE_SUCCESS)) {
 				DBG_LOG("Characteristic Read Request failed");
@@ -513,6 +662,7 @@ at_ble_discovery_complete_t *discover_status)
 			#endif
 		}
 	}
+	return AT_BLE_SUCCESS;
 }
 
 /**@brief Handles the read response from the peer/connected device
@@ -521,9 +671,16 @@ at_ble_discovery_complete_t *discover_status)
 * compare the read response characteristics with available service.
 * and data is handle to the respective service.
 */
-void pxp_monitor_characteristic_read_response(
-at_ble_characteristic_read_response_t *char_read_resp)
+at_ble_status_t pxp_monitor_characteristic_read_response(void *params)
 {
+	at_ble_characteristic_read_response_t *char_read_resp;
+	char_read_resp = (at_ble_characteristic_read_response_t *)params;
+	
+	if(!ble_check_iscentral(char_read_resp->conn_handle))
+	{
+		return AT_BLE_FAILURE;
+	}
+	
 	#if defined TX_POWER_SERVICE
 	txps_power_read_response(char_read_resp, &txps_handle);
 	#endif
@@ -531,8 +688,9 @@ at_ble_characteristic_read_response_t *char_read_resp)
 	#if defined LINK_LOSS_SERVICE
 	lls_alert_read_response(char_read_resp, &lls_handle);
 	#endif
-	DBG_LOG("Starting timer");
-	hw_timer_start(PXP_RSSI_UPDATE_INTERVAL);
+	DBG_LOG_DEV("Starting timer");
+	hw_timer_start_func_cb(PXP_RSSI_UPDATE_INTERVAL);
+	return AT_BLE_SUCCESS;
 }
 
 /**@brief Handles all Discovered characteristics of a given handler in a
@@ -546,32 +704,65 @@ at_ble_characteristic_read_response_t *char_read_resp)
 *connected device
 *
 */
-void pxp_monitor_characteristic_found_handler(
-at_ble_characteristic_found_t *characteristic_found)
+at_ble_status_t pxp_monitor_characteristic_found_handler(void *params)
 {
 	uint16_t charac_16_uuid;
+	at_ble_characteristic_found_t *characteristic_found;
+	characteristic_found = (at_ble_characteristic_found_t *)params;
+	
+	if(!ble_check_iscentral(characteristic_found->conn_handle))
+	{
+		return AT_BLE_FAILURE;
+	}
 
 	charac_16_uuid = (uint16_t)((characteristic_found->char_uuid.uuid[0]) |	\
 	(characteristic_found->char_uuid.uuid[1] << 8));
 
 	if (charac_16_uuid == TX_POWER_LEVEL_CHAR_UUID) {
 		txps_handle.char_handle = characteristic_found->value_handle;
-		DBG_LOG_DEV("Tx power characteristics %04X",
-		txps_handle.char_handle);
-		} else if ((charac_16_uuid == ALERT_LEVEL_CHAR_UUID)) {
-		if ((characteristic_found->char_handle >
-		lls_handle.start_handle) &&
-		(characteristic_found->char_handle <
-		lls_handle.end_handle)) {
-			lls_handle.char_handle
-			= characteristic_found->value_handle;
-			DBG_LOG_DEV("link loss characteristics %04X",
-			lls_handle.char_handle);
-			} else {
-			ias_handle.char_handle
-			= characteristic_found->value_handle;
-			DBG_LOG_DEV("Immediate alert characteristics %04X",
-			ias_handle.char_handle);
+		DBG_LOG_PTS("Tx power characteristics: Attrib handle %x property %x handle: %x uuid : %x",
+					characteristic_found->char_handle, characteristic_found->properties,
+					txps_handle.char_handle, charac_16_uuid);
+	} else if ((charac_16_uuid == ALERT_LEVEL_CHAR_UUID)) {
+		if ((characteristic_found->char_handle > lls_handle.start_handle) &&
+				(characteristic_found->char_handle < lls_handle.end_handle)) {
+			lls_handle.char_handle = characteristic_found->value_handle;
+			DBG_LOG_PTS("link loss characteristics: Attrib handle %x property %x handle: %x uuid : %x",
+					characteristic_found->char_handle, characteristic_found->properties,
+					lls_handle.char_handle, charac_16_uuid);
+		} else {
+			ias_handle.char_handle = characteristic_found->value_handle;
+			DBG_LOG_PTS("Immediate alert characteristics: Attrib handle %x property %x handle: %x uuid : %x",
+					characteristic_found->char_handle, characteristic_found->properties,
+					ias_handle.char_handle, charac_16_uuid);
 		}
 	}
+	return AT_BLE_SUCCESS;
+}
+
+/**@brief Registers callback for hardware timer start.
+*
+* @param[in] Callback for hardware timer start function.
+*
+* @return none.
+*/
+void register_hw_timer_start_func_cb(hw_timer_start_func_cb_t timer_start_fn)
+{
+	hw_timer_start_func_cb = timer_start_fn;
+}
+
+/**@brief Registers callback for hardware timer stop.
+*
+* @param[in] Callback for hardware timer stop function.
+*
+* @return none.
+*/
+void register_hw_timer_stop_func_cb(hw_timer_stop_func_cb_t timer_stop_fn)
+{
+	hw_timer_stop_func_cb = timer_stop_fn;
+}
+
+void register_peripheral_state_cb(peripheral_state_cb_t peripheral_state_cb)
+{
+	peripheral_state_callback = peripheral_state_cb;
 }

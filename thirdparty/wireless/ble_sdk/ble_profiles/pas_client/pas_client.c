@@ -64,8 +64,6 @@
  **********************************************************************************/
 pas_service_handler_t pas_service_data;
 
-static uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09,0xFF, 0x00, 0x06, 0x28, 0x75, 0x11, 0x6a, 0x7f, 0x7f};
-
 /* Application call backs */
 read_callback_t alert_status_read_cb;
 read_callback_t ringer_setting_read_cb;
@@ -73,7 +71,40 @@ read_callback_t ringer_setting_read_cb;
 notification_callback_t alert_status_notification_cb;
 notification_callback_t ringer_setting_notification_cb;
 
-connected_callback_t connected_cb;
+static const ble_event_callback_t pas_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	pas_client_service_discovery,
+	pas_client_disconnected_event_handler,
+	NULL,
+	NULL,
+	pas_client_write_notifications,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	pas_client_write_notifications,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t pas_gatt_client_handle[] = {
+	pas_client_service_found_handler,
+	NULL,
+	pas_client_characteristic_found_handler,
+	pas_client_descriptor_found_handler,
+	pas_client_discovery_complete_handler,
+	pas_client_char_read_response_handler,
+	NULL,
+	pas_client_char_write_response_handler,
+	pas_client_notification_handler,
+	NULL
+};
 
 /***********************************************************************************
  *									Implementation	                               *
@@ -90,7 +121,7 @@ void pas_data_init(void)
 
 /**
  * @brief register the call back for reading alert status
- * @param[in]
+ * @param[in] read_callback_t type application callback
  * @return none
  */
 void register_alert_status_read_callback(read_callback_t app_read_cb)
@@ -100,7 +131,7 @@ void register_alert_status_read_callback(read_callback_t app_read_cb)
 
 /**
  * @brief register the call back for reading ringer setting 
- * @param[in]
+ * @param[in] read_callback_t type application callback
  * @return none
  */
 void register_ringer_setting_read_callback(read_callback_t app_read_cb)
@@ -110,7 +141,7 @@ void register_ringer_setting_read_callback(read_callback_t app_read_cb)
 
 /**
  * @brief register the call back for notification of alert status  
- * @param[in]
+ * @param[in] notification_callback_t type application callback
  * @return none
  */
 void register_alert_status_notification_callback(notification_callback_t app_notify_cb)
@@ -120,22 +151,12 @@ void register_alert_status_notification_callback(notification_callback_t app_not
 
 /**
  * @brief register the call back for notification of ringer setting
- * @param[in]
+ * @param[in] notification_callback_t type application callback
  * @return none
  */
 void register_ringer_setting_notification_callback(notification_callback_t app_notify_cb)
 {
 	ringer_setting_notification_cb = app_notify_cb ;
-}
-
-/**
- * @brief register the call back for notification of ringer setting
- * @param[in]
- * @return none
- */
-void register_connected_callback(connected_callback_t app_connected_cb)
-{
-	connected_cb = app_connected_cb ;
 }
 
 /**
@@ -145,28 +166,6 @@ void register_connected_callback(connected_callback_t app_connected_cb)
  */
 void pas_client_adv(void)
 {
-	uint8_t idx = 0;
-	uint8_t adv_data[PAS_ADV_DATA_NAME_LEN + PAS_ADV_DATA_UUID_LEN + 2*2];
-	uint16_t adv_service_uuid;
-	
-	adv_service_uuid = PAS_SERVICE_UUID ;
-	
-	// Prepare ADV Data
-	adv_data[idx++] = PAS_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = PAS_ADV_DATA_NAME_TYPE;
-	memcpy(&adv_data[idx], PAS_ADV_DATA_NAME_DATA, PAS_ADV_DATA_NAME_LEN);
-	idx += PAS_ADV_DATA_NAME_LEN;
-	
-	adv_data[idx++] = PAS_ADV_DATA_UUID_LEN  + ADV_TYPE_LEN;
-	adv_data[idx++] = PAS_ADV_DATA_UUID_TYPE;
-	memcpy(&adv_data[idx], &adv_service_uuid, PAS_ADV_DATA_UUID_LEN );
-	idx += PAS_ADV_DATA_UUID_LEN;
-	
-	if (at_ble_adv_data_set(adv_data, idx, scan_rsp_data, SCAN_RESP_LEN) != AT_BLE_SUCCESS) 
-	{
-		DBG_LOG("adv set data not successful");
-	}
-	
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	APP_PAS_FAST_ADV, 0, 0) != AT_BLE_SUCCESS)
 	{
@@ -178,43 +177,53 @@ void pas_client_adv(void)
 
 /**
  * @brief starts the service discovery
+ * @return AT_BLE_SUCCESS for success and AT_BLE_FAILURE for failure
+ */
+at_ble_status_t pas_client_start_service_discovery(void )
+{
+	at_ble_uuid_t pas_uuid;	
+	pas_uuid.type = AT_BLE_UUID_16;
+	pas_uuid.uuid[0] =  (uint8_t) PAS_SERVICE_UUID;
+	pas_uuid.uuid[1] = (uint8_t ) (PAS_SERVICE_UUID >> 8 );
+	
+	if(at_ble_primary_service_discover_by_uuid(pas_service_data.conn_handle,
+												GATT_DISCOVERY_STARTING_HANDLE,
+												GATT_DISCOVERY_ENDING_HANDLE,
+												&pas_uuid) == AT_BLE_SUCCESS) {
+			DBG_LOG_DEV("GATT Discovery request started ");
+			return AT_BLE_SUCCESS;
+	} else {
+			DBG_LOG("GATT Discovery request failed");
+	}
+	
+	return AT_BLE_FAILURE;
+}
+
+/**
+ * @brief to perform the service discovery
  * @param[in] connection parameters 
  * @return AT_BLE_SUCCESS for success and AT_BLE_FAILURE for failure
  * @pre Called after connection by the ble manager
  */
-at_ble_status_t pas_client_service_discovery(at_ble_connected_t *conn_params)
+at_ble_status_t pas_client_service_discovery(void *params)
 {
-	at_ble_uuid_t pas_uuid;
-
-	if (conn_params->conn_status != AT_BLE_SUCCESS) {
-		return conn_params->conn_status;
+	at_ble_connected_t conn_params;
+	memcpy(&conn_params,params,sizeof(at_ble_connected_t));
+	
+	if (conn_params.conn_status != AT_BLE_SUCCESS) {
+		return conn_params.conn_status;
 	}
 	
-	connected_cb(1);
+	pas_service_data.conn_handle = conn_params.handle;
 	
-	pas_uuid.type = AT_BLE_UUID_16;
-	pas_uuid.uuid[0] =  (uint8_t) PAS_SERVICE_UUID;	
-	pas_uuid.uuid[1] = (uint8_t ) (PAS_SERVICE_UUID >> 8 );
-	
-	pas_service_data.conn_handle = conn_params->handle;
-	
-	if(at_ble_primary_service_discover_by_uuid(conn_params->handle, 
-												GATT_DISCOVERY_STARTING_HANDLE,
-												GATT_DISCOVERY_ENDING_HANDLE,
-												&pas_uuid) == AT_BLE_SUCCESS) {
-		DBG_LOG_DEV("GATT Discovery request started ");
-		return AT_BLE_SUCCESS;
-	} else {
-		DBG_LOG("GATT Discovery request failed");
-	}
-	return AT_BLE_FAILURE;
+	return pas_client_start_service_discovery();
 }
 
 /**
  * @brief Discovery Complete handler invoked by ble manager
  * @param[in] at_ble_discovery_complete_t disconnected handler 
  */
-void pas_client_discovery_complete_handler(at_ble_discovery_complete_t *params)
+at_ble_status_t pas_client_discovery_complete_handler(void *params)
 {
 		at_ble_status_t status;
 		at_ble_discovery_complete_t discover_status;
@@ -245,26 +254,29 @@ void pas_client_discovery_complete_handler(at_ble_discovery_complete_t *params)
 					pas_service_data.ringer_control_point_char.discovery = 0;
 				}
 			} else if(discover_status.operation == AT_BLE_DISC_DESC_CHAR) {
+				#if BLE_PAIR_ENABLE
 				DBG_LOG_DEV("Sending slave request");
 				if(ble_send_slave_sec_request(pas_service_data.conn_handle) != AT_BLE_SUCCESS) {
-					DBG_LOG_DEV("Pariring disabled");
+					DBG_LOG_DEV("Pairing disabled");
 				}
+				#else
+				pas_client_write_notifications(NULL);
+				#endif
 			}	
 		} else {
 			DBG_LOG("discovery operation not successfull");
 		}
+			return AT_BLE_SUCCESS;
 }
 		
-		
-
-
 /**
  * @brief Service found handler invoked by ble manager
  * @param[in] at_ble_primary_service_found_t invoked when a primary service is found in peer device
  */
-void pas_client_service_found_handler(at_ble_primary_service_found_t * primary_service_params)
+ at_ble_status_t pas_client_service_found_handler(void * params)
 {
 	at_ble_uuid_t *pas_service_uuid;
+	at_ble_primary_service_found_t * primary_service_params = (at_ble_primary_service_found_t * )params;
 	uint16_t uuid;
 	pas_service_uuid = &primary_service_params->service_uuid;
 	memcpy(&uuid,&primary_service_params->service_uuid.uuid,2);
@@ -284,6 +296,7 @@ void pas_client_service_found_handler(at_ble_primary_service_found_t * primary_s
 			pas_service_data.pas_service_info.discovery = true;
 		}
 	}
+		return AT_BLE_SUCCESS;
 }
 
 
@@ -291,12 +304,12 @@ void pas_client_service_found_handler(at_ble_primary_service_found_t * primary_s
  * @brief characteristic found handler invoked by ble manager
  * @param[in] at_ble_characteristic_found_t when a characteristic is found in peer device
  */
-void pas_client_characteristic_found_handler(at_ble_characteristic_found_t *characteristic_found)
+at_ble_status_t pas_client_characteristic_found_handler(void *params)
 {
 	uint16_t charac_16_uuid;
+	at_ble_characteristic_found_t *characteristic_found = (at_ble_characteristic_found_t *)params;
 	DBG_LOG_DEV("Characteristic found %d",characteristic_found->char_uuid.type);
 	
-	 
 	charac_16_uuid = (uint16_t)((characteristic_found->char_uuid.uuid[0]) | \
 	(characteristic_found->char_uuid.uuid[1] << 8));
 	
@@ -358,33 +371,40 @@ void pas_client_characteristic_found_handler(at_ble_characteristic_found_t *char
 		}
 		break;	
 	}
+	return AT_BLE_SUCCESS;
 }
 
 /**
  * @brief client descriptor found handler invoked by ble manager
  * @param[in] at_ble_descriptor_found_t invoked when a descriptor is found in peer device
  */
-void pas_client_descriptor_found_handler(at_ble_descriptor_found_t *params)
+at_ble_status_t pas_client_descriptor_found_handler(void *param)
 {
 		uint16_t desc_uuid;
+		DBG_LOG_DEV("Descriptor discovered");
+		at_ble_descriptor_found_t *params = (at_ble_descriptor_found_t *)param;
 		if (params->desc_uuid.type == AT_BLE_UUID_16) {
 			desc_uuid = (uint16_t)((params->desc_uuid.uuid[0]) | \
 			(params->desc_uuid.uuid[1] << 8));
 			
 			if (desc_uuid == CLIENT_CONF_CHAR_DESCRIPTOR_UUID) {
+				DBG_LOG_DEV("Descriptor found for ***");
 				if (params->desc_handle > pas_service_data.alert_status_char.char_handle &&
 					params->desc_handle < pas_service_data.ringer_setting_char.char_handle) {
 					pas_service_data.alert_status_desc.desc_handle = params->desc_handle;
 					pas_service_data.alert_status_desc.discovery = true;		
 					DBG_LOG_DEV("The alert status desc handle is %x",pas_service_data.alert_status_desc.desc_handle);
+					DBG_LOG_DEV("The descriptor uuid is %x",desc_uuid);
 				} else if (params->desc_handle > pas_service_data.ringer_setting_char.char_handle &&
 							params->desc_handle < pas_service_data.ringer_control_point_char.char_handle) {
 					pas_service_data.ringer_setting_desc.desc_handle = params->desc_handle;
 					pas_service_data.ringer_setting_desc.discovery = true;
 					DBG_LOG_DEV("The ringer setting desc handle is %x",pas_service_data.ringer_setting_desc.desc_handle);
+					DBG_LOG_DEV("The descriptor uuid is %x",desc_uuid);
 				}
 			}
-		}			
+		}		
+		return AT_BLE_SUCCESS;	
 }
 
 
@@ -392,19 +412,12 @@ void pas_client_descriptor_found_handler(at_ble_descriptor_found_t *params)
  * @brief disconnected event handler invoked by ble manager
  * @param[in] at_ble_disconnected_t contains the disconnection info
  */
-void pas_client_disconnected_event_handler(at_ble_disconnected_t *params)
+at_ble_status_t pas_client_disconnected_event_handler(void *params)
 {
 	at_ble_disconnected_t disconnect;
 	memcpy((uint8_t *)&disconnect, params, sizeof(at_ble_disconnected_t));
-	
-	connected_cb(0);
-	
-	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
-	APP_PAS_FAST_ADV, APP_PAS_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS) {
-		DBG_LOG("Advertisement start Failed");
-	} else {
-		DBG_LOG("Device in Advertisement mode");
-	}
+	ALL_UNUSED(params);
+	return AT_BLE_SUCCESS;
 }
 
 
@@ -412,7 +425,7 @@ void pas_client_disconnected_event_handler(at_ble_disconnected_t *params)
  * @brief invoked by ble manager on receiving notification
  * @param[in] at_ble_notification_recieved_t notification information containing handle data
  */
-void pas_client_notification_handler(at_ble_notification_recieved_t *params)
+at_ble_status_t pas_client_notification_handler(void *params)
 {
 	 at_ble_notification_recieved_t notification;
 	 memcpy((uint8_t *)&notification, params, sizeof(at_ble_notification_recieved_t));
@@ -426,14 +439,16 @@ void pas_client_notification_handler(at_ble_notification_recieved_t *params)
 		 //Calling application notification handler for ringer status characteristic
 		 ringer_setting_notification_cb(notification.char_value,notification.char_len);
 	 }
+	 return AT_BLE_SUCCESS;
 }
 
 /**
  * @brief invoked by ble manager for setting the write response handler 
  * @param[in] at_ble_characteristic_write_response_t response data contains status and handle
  */
-void pas_client_char_write_response_handler(at_ble_characteristic_write_response_t *params)
+at_ble_status_t pas_client_char_write_response_handler(void *event_params)
 {
+	at_ble_characteristic_write_response_t *params = (at_ble_characteristic_write_response_t *)event_params;
 	DBG_LOG("Write Response received");
 	if (params -> status == AT_BLE_SUCCESS) {
 		if (params->char_handle == pas_service_data.alert_status_desc.desc_handle) {
@@ -445,10 +460,17 @@ void pas_client_char_write_response_handler(at_ble_characteristic_write_response
 		DBG_LOG("Setting Failed %d",params->status);
 		DBG_LOG("Char handle %d",params->char_handle);
 	}
+	return AT_BLE_SUCCESS;
 }
 
-void pas_client_char_read_response_handler(at_ble_characteristic_read_response_t *params)
+/**
+ * @brief called by the ble manager after receiving the read response event 
+ * @param[in] characteristic read response parameters
+ * @return none
+ */
+at_ble_status_t pas_client_char_read_response_handler(void *event_params)
 {
+	at_ble_characteristic_read_response_t *params = (at_ble_characteristic_read_response_t *)event_params;
 	if (params ->status == AT_BLE_SUCCESS) {
 		DBG_LOG_DEV("offset is %d",params->char_offset);
 		if (params ->char_handle == pas_service_data.alert_status_char.value_handle) {
@@ -460,11 +482,12 @@ void pas_client_char_read_response_handler(at_ble_characteristic_read_response_t
 			ringer_setting_read_cb(params->char_value,params->char_len);
 		}
 	}
+	return AT_BLE_SUCCESS;
 }
 
 /**
- * @brief invoked by ble manager to read the alert status characteristic
- * @return AT_BLE_SUCCESS if success or AT_BLE_FAILURE
+ * @brief invoked by app to read the alert status characteristic
+ * @return AT_BLE_SUCCESS for success or refer at_ble_err_status_t
  */
 at_ble_status_t pas_client_read_alert_status_char(void)
 {
@@ -474,8 +497,8 @@ at_ble_status_t pas_client_read_alert_status_char(void)
 }
 
 /**
- * @brief invoked by ble manager to read the write status characteristic
- * @return AT_BLE_SUCCESS if success or AT_BLE_FAILURE
+ * @brief invoked by app to read the write status characteristic
+ * @return AT_BLE_SUCCESS for success or refer at_ble_err_status_t
  */
 at_ble_status_t pas_client_read_ringer_setting_char(void)
 {
@@ -485,9 +508,8 @@ at_ble_status_t pas_client_read_ringer_setting_char(void)
 }
 
 /**
- * @brief invoked by ble manager to read the write ringer control point characteristic
- * @return AT_BLE_SUCCESS if success or AT_BLE_FAILURE
- */
+ * @brief invoked by app to read the write ringer control point characteristic
+ * @return AT_BLE_SUCCESS for success or refer at_ble_err_status_t*/
 at_ble_status_t pas_client_write_ringer_control_point(uint8_t ringer)
 {
 	// invoke service function for write	
@@ -499,7 +521,7 @@ at_ble_status_t pas_client_write_ringer_control_point(uint8_t ringer)
  * @brief invoked by ble manager for setting the notification of characteristics
  * @param[in] char_id represents the characteristic,1 for alert status,0 for ringer setting
  * @param[in] enable weather notifications has to enabled or disabled.1 for enable 0 for disable
- * @return	 AT_BLE_SUCCESS if success or AT_BLE_FAILURE
+ * @return	 AT_BLE_SUCCESS for success or refer at_ble_err_status_t
  */
 at_ble_status_t pas_client_enable_char_notification(bool char_id,bool enable)
 {
@@ -516,10 +538,10 @@ at_ble_status_t pas_client_enable_char_notification(bool char_id,bool enable)
 /**
  * @brief invoked by ble manager for setting the notification 
  */
-void pas_client_write_notifications(void *param)
+at_ble_status_t pas_client_write_notifications(void *params)
 {
 	at_ble_status_t status;
-	DBG_LOG("Enabling notificaitons");
+	DBG_LOG("Enabling notifications");
 	if ((status = pas_client_enable_char_notification(0,1)) != AT_BLE_SUCCESS) {
 		DBG_LOG("notification enabling failed");
 	}
@@ -528,7 +550,8 @@ void pas_client_write_notifications(void *param)
 		DBG_LOG("notification enabling failed");
 	}
         ALL_UNUSED(status);
-        ALL_UNUSED(param);
+        ALL_UNUSED(params);
+		return AT_BLE_SUCCESS;
 }
 
 /**
@@ -536,9 +559,21 @@ void pas_client_write_notifications(void *param)
  */
 void pas_client_init( void *params)
 {
+	at_ble_status_t status;
+	
 	pas_data_init();
 	
-	pas_client_adv();
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GAP_EVENT_TYPE,
+	pas_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GATT_CLIENT_EVENT_TYPE,
+	pas_gatt_client_handle);
 	
+	status = ble_advertisement_data_set();
+	if (status != AT_BLE_SUCCESS) {
+		DBG_LOG("Advertisement data set failed reason %d",status);
+	}
+		
 	UNUSED(params);
 }

@@ -61,7 +61,7 @@
 ****************************************************************************************/
 
 uint8_t linkloss_initial_value = 0;
-
+static const char* lls_gs_str[] = {"NO_ALERT", "MILD_ALERT", "HIGH_ALERT"};
 
 /****************************************************************************************
 *							        Implementations	                                    *
@@ -156,12 +156,19 @@ at_ble_status_t lls_primary_service_define(gatt_service_handler_t *lls_service)
   */
 uint8_t lls_set_alert_value(at_ble_characteristic_changed_t *change_params, gatt_service_handler_t *lls_handler)
 {
-	if (change_params->char_handle == lls_handler->serv_chars.char_val_handle)
-	{
-		DBG_LOG("The current alert level for linkloss is %x",change_params->char_new_value[0]);
-		return change_params->char_new_value[0];
-	}
-	return INVALID_LLS_PARAM;
+	uint8_t ret_value = INVALID_LLS_PARAM;
+	
+	if (change_params->char_handle == lls_handler->serv_chars.char_val_handle) {
+		if (change_params->char_new_value[0] <= LLS_HIGH_ALERT) {
+			DBG_LOG("The current alert level for linkloss is %s",
+					lls_gs_str[change_params->char_new_value[0]]);
+			ret_value = change_params->char_new_value[0];
+		} else {
+			DBG_LOG("These value are reserved for future, 0 - 2 is expected range but got %x",
+					change_params->char_new_value[0]);
+		}
+	} 
+	return ret_value;
 }
 
 #endif //LLS_GATT_SERVER
@@ -240,9 +247,9 @@ int8_t lls_alert_read_response(at_ble_characteristic_read_response_t *read_resp,
 		}
 		break;
 
-		case LLS_LOW_ALERT:
+		case LLS_MILD_ALERT:
 		{
-			DBG_LOG_CONT(" LOW ALERT ");
+			DBG_LOG_CONT(" MILD ALERT ");
 		}
 		break;
 

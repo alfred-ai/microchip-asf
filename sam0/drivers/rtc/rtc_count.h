@@ -114,15 +114,15 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_PERIODIC_INT</td>
- *    <td>SAM L21/L22</C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_PRESCALER_OFF</td>
- *    <td>SAM L21/L22</C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_CLOCK_SELECTION</td>
- *    <td>SAM L21/L22</C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_RTC_GENERAL_PURPOSE_REG</td>
@@ -231,9 +231,9 @@
  *
  *
  * \subsection asfdoc_sam0_rtc_count_module_overview_tamper_detect RTC Tamper Detect
- * \section asfdoc_sam0_rtc_count_special_considerations Special Considerations
  * see \ref asfdoc_sam0_rtc_tamper_detect
  *
+ * \section asfdoc_sam0_rtc_count_special_considerations Special Considerations
  *
  * \subsection asfdoc_sam0_rtc_count_special_considerations_clock Clock Setup
  * \subsubsection asfdoc_sam0_rtc_count_clock_samd_r SAM D20/D21/R21/D10/D11/DA1 Clock Setup
@@ -291,7 +291,7 @@
  * \enddot
  *
  * \subsubsection asfdoc_sam0_rtc_count_clock_saml SAM L21/C20/C21 Clock Setup
- * The RTC clock can be selected from OSC32K, XOSC32K or OSCULP32K, and a 32KHz
+ * The RTC clock can be selected from OSC32K, XOSC32K, or OSCULP32K, and a 32KHz
  * or 1KHz oscillator clock frequency is required. This clock must be
  * configured and enabled in the 32KHz oscillator controller before using the RTC.
  *
@@ -368,22 +368,24 @@ extern "C" {
 #endif
 
 /**
+ * \name Driver Feature Definition
+ *
  * Define port features set according to different device family.
  * @{
 */
 #if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
 /** RTC periodic interval interrupt. */
 #  define FEATURE_RTC_PERIODIC_INT
-/** RTC prescaler is off */
+/** RTC prescaler is off. */
 #  define FEATURE_RTC_PRESCALER_OFF
-/** RTC clock selection */
+/** RTC clock selection. */
 #  define FEATURE_RTC_CLOCK_SELECTION
 #  if !(SAMC20) && !(SAMC21)
-/** General purpose registers */
+/** General purpose registers. */
 #  define FEATURE_RTC_GENERAL_PURPOSE_REG
 #  endif
 #else
-/** RTC continuously updated */
+/** RTC continuously updated. */
 #  define FEATURE_RTC_CONTINUOUSLY_UPDATED
 #endif
 
@@ -750,7 +752,7 @@ struct rtc_count_config {
  *  Initializes the configuration structure to default values. This
  *  function should be called at the start of any RTC initialization.
  *
- *  The default configuration is as follows:
+ *  The default configuration is:
  *  - Input clock divided by a factor of 1024
  *  - RTC in 32-bit mode
  *  - Clear on compare match off
@@ -760,7 +762,7 @@ struct rtc_count_config {
  *  - Count read synchronization is enabled for SAM L22
  *
  *  \param[out] config  Configuration structure to be initialized to default
- *                      values.
+ *                      values
  */
 static inline void rtc_count_get_config_defaults(
 		struct rtc_count_config *const config)
@@ -1125,7 +1127,7 @@ static inline void rtc_write_general_purpose_reg(
  * \param[in] module  Pointer to the software instance struct
  * \param[in] index General purpose register index (0..3)
  *
- * \return Value of general purpose register
+ * \return Value of general purpose register.
  */
 static inline uint32_t rtc_read_general_purpose_reg(
 	struct rtc_module *const module,
@@ -1256,14 +1258,14 @@ uint32_t rtc_tamper_get_stamp (struct rtc_module *const module);
  *
  * <table>
  *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
+ *		<th>Doc. Rev.</th>
+ *		<th>Date</th>
+ *		<th>Comments</th>
  *	</tr>
  *	<tr>
  *		<td>42111E</td>
- *		<td>08/2015</td>
- *		<td>Added support for SAM L21/L22, SAM C21, and SAM DA1</td>
+ *		<td>12/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>42111D</td>

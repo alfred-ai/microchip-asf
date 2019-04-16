@@ -331,7 +331,7 @@ enum status_code i2s_serializer_set_config(
  *
  * \param[in] module_inst  Pointer to the I2S software instance struct
  *
- * \return Bitmask of \c I2S_STATUS_* flags
+ * \return Bitmask of \c I2S_STATUS_* flags.
  *
  * \retval I2S_STATUS_SYNC_BUSY            Module is busy synchronization
  * \retval I2S_STATUS_TRANSMIT_UNDERRUN(x) Serializer x (0~1) is underrun
@@ -437,7 +437,7 @@ void i2s_clear_status(
  * \param[in] module_inst Pointer to the I2S software instance struct
  * \param[in] status Status interrupts to enable
  *
- * \return Status of enable procedure
+ * \return Status of enable procedure.
  *
  * \retval STATUS_OK              Interrupt is enabled successfully
  * \retval STATUS_ERR_INVALID_ARG Status with no interrupt is passed

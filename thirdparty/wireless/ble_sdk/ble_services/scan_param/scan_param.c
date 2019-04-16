@@ -64,7 +64,7 @@
  * @return none
  */
 
-extern at_ble_connected_t ble_connected_dev_info[MAX_DEVICE_CONNECTED];
+extern at_ble_connected_t ble_dev_info[BLE_MAX_DEVICE_CONNECTED];
 
 bool volatile sps_notification_flag = false;
 
@@ -85,7 +85,7 @@ void sps_init_service(sps_gatt_service_handler_t *sps_serv, uint16_t *scan_inter
 		sps_serv->serv_chars[0].init_value = (uint8_t *)scan_interval_window;             /* value */
 		sps_serv->serv_chars[0].value_init_len = (sizeof(uint16_t) * 2);
 		sps_serv->serv_chars[0].value_max_len =  (sizeof(uint16_t) * 2);
-		sps_serv->serv_chars[0].value_permissions = AT_BLE_ATTR_NO_PERMISSIONS;   /* permissions */											
+		sps_serv->serv_chars[0].value_permissions = AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR;   /* permissions */											
 		sps_serv->serv_chars[0].user_desc = NULL;           /* user defined name */
 		sps_serv->serv_chars[0].user_desc_len = 0;
 		sps_serv->serv_chars[0].user_desc_max_len = 0;
@@ -105,18 +105,16 @@ void sps_init_service(sps_gatt_service_handler_t *sps_serv, uint16_t *scan_inter
 		sps_serv->serv_chars[1].init_value = scan_refresh;             /* value */
 		sps_serv->serv_chars[1].value_init_len = sizeof(uint8_t);
 		sps_serv->serv_chars[1].value_max_len =  sizeof(uint8_t);
-#if BLE_PAIR_ENABLE
-		sps_serv->serv_chars[1].value_permissions = (AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR |
-													AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR);   /* permissions */
-#else
-		sps_serv->serv_chars[1].value_permissions = (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR |
-													AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);   /* permissions */
-#endif
+		sps_serv->serv_chars[1].value_permissions = AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR;   /* permissions */
 		sps_serv->serv_chars[1].user_desc = NULL;           /* user defined name */
 		sps_serv->serv_chars[1].user_desc_len = 0;
 		sps_serv->serv_chars[1].user_desc_max_len = 0;
 		sps_serv->serv_chars[1].user_desc_permissions = AT_BLE_ATTR_NO_PERMISSIONS;             /*user description permissions*/
+#if BLE_PAIR_ENABLE
+		sps_serv->serv_chars[1].client_config_permissions = AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR;         /*client config permissions*/
+#else 
 		sps_serv->serv_chars[1].client_config_permissions = AT_BLE_ATTR_NO_PERMISSIONS;         /*client config permissions*/
+#endif
 		sps_serv->serv_chars[1].server_config_permissions = AT_BLE_ATTR_NO_PERMISSIONS;         /*server config permissions*/
 		sps_serv->serv_chars[1].user_desc_handle = 0;             /*user desc handles*/
 		sps_serv->serv_chars[1].client_config_handle = 0;         /*client config handles*/
@@ -150,7 +148,7 @@ at_ble_status_t sps_scan_refresh_char_update(sps_gatt_service_handler_t *sps_ser
 	
 	//sending notification to the peer about change in the scan parameters
 	if(sps_notification_flag){
-		if((at_ble_notification_send(ble_connected_dev_info[0].handle, sps_serv->serv_chars[1].char_val_handle)) == AT_BLE_FAILURE) {
+		if((at_ble_notification_send(ble_dev_info[0].handle, sps_serv->serv_chars[1].char_val_handle)) == AT_BLE_FAILURE) {
 			DBG_LOG("sending notification failed");
 			return AT_BLE_FAILURE;
 		}
@@ -188,7 +186,7 @@ at_ble_status_t	sps_char_changed_event(sps_gatt_service_handler_t *sps_service_h
 		if(change_params.char_new_value[0])
 		{
 			sps_notification_flag = true;
-			if((at_ble_notification_send(ble_connected_dev_info[0].handle, sps_service_handler->serv_chars[1].char_val_handle)) == AT_BLE_FAILURE) {
+			if((at_ble_notification_send(change_params.conn_handle, sps_service_handler->serv_chars[1].char_val_handle)) == AT_BLE_FAILURE) {
 				DBG_LOG("sending notification failed");
 				return AT_BLE_FAILURE;
 			}

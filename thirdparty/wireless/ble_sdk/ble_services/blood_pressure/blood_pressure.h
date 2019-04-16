@@ -64,7 +64,7 @@
 /**
  * @brief Blood Pressure service UUID
  */
-#define BLOOD_PRESSURE_SERVICE_UUID                                                 (0x1810)
+//#define BLOOD_PRESSURE_SERVICE_UUID                                                 (0x1810)
 
 /**
  * @brief Blood Pressure measurement characteristic UUID

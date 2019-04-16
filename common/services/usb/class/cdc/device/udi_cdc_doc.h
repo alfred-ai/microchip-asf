@@ -875,13 +875,13 @@ iram_size_t udi_cdc_multi_write_buf(uint8_t port, const void* buf, iram_size_t s
  *
  * <table>
  * <tr>
- *    <th>Doc. Rev.</td>
- *    <th>Date</td>
- *    <th>Comments</td>
+ *    <th>Doc. Rev.</th>
+ *    <th>Date</th>
+ *    <th>Comments</th>
  * </tr>
  * <tr>
  *    <td>42337B</td>
- *    <td>10/2015</td>
+ *    <td>12/2015</td>
  *    <td>Fixed typos</td>
  * </tr>
  * <tr>

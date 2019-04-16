@@ -174,7 +174,7 @@ int main(void)
 	
 	/* Draw text, image and basic shapes on the LCD */
 	ili9488_set_foreground_color(COLOR_CONVERT(COLOR_WHITE));
-	ili9488_draw_filled_rectangle(0, 0, ILI9488_LCD_WIDTH-1,ILI9488_LCD_HEIGHT-1);
+	ili9488_draw_filled_rectangle(0, 0, ILI9488_LCD_WIDTH,ILI9488_LCD_HEIGHT);
 	
 	
 	ili9488_set_foreground_color(COLOR_CONVERT(COLOR_BLACK));
@@ -189,7 +189,7 @@ int main(void)
 	ili9488_draw_circle(180, 160, 40);
 	
 	ili9488_set_foreground_color(COLOR_CONVERT(COLOR_VIOLET));
-	ili9488_draw_line(0, 0, ILI9488_LCD_WIDTH-1, ILI9488_LCD_HEIGHT-1);
+	ili9488_draw_line(0, 0, ILI9488_LCD_WIDTH, ILI9488_LCD_HEIGHT);
 	
 	while(1) {
 

@@ -62,7 +62,7 @@ uint16_t blp_measurement_value = DEFAULT_VALUE;
 uint8_t intermediate_cuff_pressure_value = DEFAULT_VALUE;
 
 /** initial blood pressure feature value */
-uint16_t blood_pressure_feature_value = 0xffff;
+uint16_t blood_pressure_feature_value = 0x001f;
 
 
 
@@ -109,17 +109,9 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 		BLP_MAX_TIME_STAMP_SIZE + BLP_MAX_PULSE_RATE_SIZE + BLP_MAX_USER_ID_SIZE+
 		BLP_MAX_MM_STATUS_SIZE;
 		
-	/* Permissions */
-	#if BLE_PAIR_ENABLE
-			blood_pressure_serv->serv_chars[0].value_permissions
-						= (AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR |
-							AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR);
-	#else
-			blood_pressure_serv->serv_chars[0].value_permissions
-						= (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR |
-							AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);
-	#endif
-
+	/* Permissions for characteristics */
+	blood_pressure_serv->serv_chars[0].value_permissions
+											= AT_BLE_ATTR_NO_PERMISSIONS;
 	/* user defined */
 	blood_pressure_serv->serv_chars[0].user_desc = NULL;
 	blood_pressure_serv->serv_chars[0].user_desc_len = 0;
@@ -128,8 +120,14 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 	blood_pressure_serv->serv_chars[0].user_desc_permissions
 		= AT_BLE_ATTR_NO_PERMISSIONS;
 	/*client config permissions*/
-	blood_pressure_serv->serv_chars[0].client_config_permissions
-		= AT_BLE_ATTR_NO_PERMISSIONS;
+	#if BLE_PAIR_ENABLE
+			blood_pressure_serv->serv_chars[0].client_config_permissions
+			=	( AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR);
+	#else 
+			blood_pressure_serv->serv_chars[0].client_config_permissions
+			= AT_BLE_ATTR_NO_PERMISSIONS;
+	#endif 
+
 	/*server config permissions*/
 	blood_pressure_serv->serv_chars[0].server_config_permissions
 		= AT_BLE_ATTR_NO_PERMISSIONS;
@@ -163,18 +161,9 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 	BLP_MAX_TIME_STAMP_SIZE + BLP_MAX_PULSE_RATE_SIZE + BLP_MAX_USER_ID_SIZE+
 	BLP_MAX_MM_STATUS_SIZE;
 
-	#if BLE_PAIR_ENABLE
 		/* permissions */
 		blood_pressure_serv->serv_chars[1].value_permissions
-		= (AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR |
-			AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR);
-	#else 
-		/* permissions */
-		blood_pressure_serv->serv_chars[1].value_permissions
-				= (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR |
-					AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);
-	#endif
-	
+							= AT_BLE_ATTR_NO_PERMISSIONS;
 	
 	/* user defined name */
 	blood_pressure_serv->serv_chars[1].user_desc = NULL;
@@ -183,9 +172,16 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 	/*user description permissions*/
 	blood_pressure_serv->serv_chars[1].user_desc_permissions
 		= AT_BLE_ATTR_NO_PERMISSIONS;
+		
 	/*client config permissions*/
+	#if BLE_PAIR_ENABLE
 	blood_pressure_serv->serv_chars[1].client_config_permissions
-		= AT_BLE_ATTR_NO_PERMISSIONS;
+									= (AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR);
+	#else
+	blood_pressure_serv->serv_chars[1].client_config_permissions
+	= AT_BLE_ATTR_NO_PERMISSIONS;
+	#endif
+
 	/*server config permissions*/
 	blood_pressure_serv->serv_chars[1].server_config_permissions
 		= AT_BLE_ATTR_NO_PERMISSIONS;
@@ -220,13 +216,11 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 	#if BLE_PAIR_ENABLE
 			/* permissions */
 			blood_pressure_serv->serv_chars[2].value_permissions
-						= (AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR |
-							AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR);
+						= AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR;
 	#else
 			/* permissions */
 			blood_pressure_serv->serv_chars[2].value_permissions
-						= (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR |
-							AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);
+						= AT_BLE_ATTR_NO_PERMISSIONS;
 	#endif
 
 	/* user defined name */
@@ -279,7 +273,6 @@ uint8_t blp_char_change_handler(blp_gatt_service_handler_t *blp_primary_service,
 {
 	if (params->char_handle ==
 			blp_primary_service->serv_chars[0].client_config_handle) {
-		//DBG_LOG("Blp char changed handler the value is %d ",params->char_new_value[0]);
 		if (params->char_new_value[0] == BLP_INDICATION) {
 			return BLP_INDICATION_ENABLE;
 		} else if (params->char_new_value[0] == false) {

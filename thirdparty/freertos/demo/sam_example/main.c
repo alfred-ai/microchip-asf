@@ -101,7 +101,7 @@ extern void vApplicationStackOverflowHook(xTaskHandle *pxTask,
 		signed char *pcTaskName);
 extern void vApplicationIdleHook(void);
 extern void vApplicationTickHook(void);
-
+extern void vApplicationMallocFailedHook(void);
 extern void xPortSysTickHandler(void);
 
 /**
@@ -138,6 +138,18 @@ extern void vApplicationIdleHook(void)
  */
 extern void vApplicationTickHook(void)
 {
+}
+
+extern void vApplicationMallocFailedHook(void)
+{
+	/* Called if a call to pvPortMalloc() fails because there is insufficient
+	free memory available in the FreeRTOS heap.  pvPortMalloc() is called
+	internally by FreeRTOS API functions that create tasks, queues, software
+	timers, and semaphores.  The size of the FreeRTOS heap is set by the
+	configTOTAL_HEAP_SIZE configuration constant in FreeRTOSConfig.h. */
+
+	/* Force an assert. */
+	configASSERT( ( volatile void * ) NULL );
 }
 
 /**

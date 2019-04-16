@@ -671,14 +671,14 @@ static inline void extint_nmi_clear_detected(
  *
  * <table>
  *  <tr>
- *      <th>Doc. Rev.</td>
- *      <th>Date</td>
- *      <th>Comments</td>
+ *      <th>Doc. Rev.</th>
+ *      <th>Date</th>
+ *      <th>Comments</th>
  *  </tr>
  *  <tr>
  *      <td>42112E</td>
- *      <td>08/2015</td>
- *      <td>Added support for SAM L21/L22, SAM C21, and SAM DA1</td>
+ *      <td>12/2015</td>
+ *      <td>Added support for SAM L21/L22, SAM C21, SAM D09, and SAM DA1</td>
  *  </tr>
  *  <tr>
  *      <td>42112D</td>

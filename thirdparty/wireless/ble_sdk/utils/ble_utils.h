@@ -1,7 +1,7 @@
 /**
 * \file
 *
-* \brief Proximity Monitor Profile Application declarations
+* \brief BLE Utils declarations
 *
 * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
 *
@@ -49,15 +49,25 @@
 
 #include <asf.h>
 
-#define BLE_CENTRAL					(0x01)
-#define BLE_PERIPHERAL				(0x02)
-#define BLE_CENTRAL_AND_PERIPHERAL	(0x03)
-#define BLE_OBSERVER				(0x04)
-#define BLE_BROADCASTER				(0x05)
+    /// Observer role
+#define   BLE_ROLE_OBSERVER   0x01
+    /// Broadcaster role
+#define   BLE_ROLE_BROADCASTER 0x02
+    /// Master/Central role
+#define   BLE_ROLE_CENTRAL     0x05
+    /// Peripheral/Slave role
+#define   BLE_ROLE_PERIPHERAL  0x0A
+    /// Device has all role, both peripheral and central
+#define   BLE_ROLE_ALL         0x0F
+
+
 
 #define DBG_LOG_CONT	printf
 
 #define DBG_LOG		    printf("\r\n");\
+						printf
+
+#define DBG_LOG_ADV	    printf("\r\nBLE-ADV: ");\
 						printf
 						
 #define UNUSED1(x) (void)(x)
@@ -76,8 +86,9 @@
 #define ALL_UNUSED_IMPL(nargs) ALL_UNUSED_IMPL_(nargs)
 #define ALL_UNUSED(...) ALL_UNUSED_IMPL( VA_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__ )
 
-#define DBG_LOG_DEV		ALL_UNUSED
+#define DBG_LOG_DEV			ALL_UNUSED
 
+#define DBG_LOG_CONT_DEV	ALL_UNUSED
 						
 #define IEEE11073_EXPONENT						(0xFF000000)
 
@@ -92,5 +103,9 @@ static inline uint32_t convert_ieee754_ieee11073_float(float f_val)
 	ieee11073_float = IEEE754_TO_IEEE11073_FLOAT(f_val);
 	return (ieee11073_float);
 }
+
+#ifndef COSOLE_SERIAL_H
+extern uint8_t getchar_timeout(uint32_t timeout);
+#endif
 
 #endif /*__BLE_UTILS_H__*/

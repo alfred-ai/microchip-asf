@@ -122,8 +122,8 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/samd21     \
        thirdparty/wireless/ble_sdk/apps/hid_device_mouse  \
-       thirdparty/wireless/ble_sdk/apps/hid_device_mouse/samd21_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/hid_device \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/device_infomation \
@@ -186,7 +186,7 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D ATT_DB_MEMORY                                   \
-       -D BLE_DEVICE_ROLE=BLE_PERIPHERAL                  \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D DEVICE_INFORMATION_SERVICE                      \
        -D ENABLE_POWER_SAVE                               \
@@ -195,9 +195,12 @@ CPPFLAGS = \
        -D HID_GATT_SERVER                                 \
        -D HID_MOUSE_DEVICE                                \
        -D HID_SERVICE                                     \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAMD21J18A__
 

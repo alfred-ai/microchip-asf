@@ -62,7 +62,7 @@
 //	<i> Defines inteval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> csc_fast_adv
-#define APP_CSC_FAST_ADV				(100) //100 ms
+#define APP_CSC_FAST_ADV				(1600) //1000 ms
 
 /** @brief APP_SPOG_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x3FFF in seconds, 0x0000 disables time-out.*/
 //	<o> Advertisement Timeout <1000-10000:50>
@@ -193,9 +193,11 @@ void csc_prf_send_data(uint8_t *databuf, uint16_t datalen);
  */
 void csc_prf_init(void *param);
 
-/** @brief CSC device disconnected handler function
- */
-at_ble_status_t csc_prf_disconnect_event_handler(at_ble_disconnected_t *disconnect);
+/**
+* \CSC device disconnected handler function
+*/
+
+at_ble_status_t csc_prf_disconnect_event_handler(void *params);
 
 /** @brief CSC profile advertisement function
  */
@@ -203,52 +205,52 @@ void csc_prf_dev_adv(void);
 
 /** @brief Service characteristic change handler function
  */
-at_ble_status_t csc_prf_char_changed_handler(at_ble_characteristic_changed_t *char_handle);
+at_ble_status_t csc_prf_char_changed_handler(void *params);
 
 /**
  * @brief Handler for connection event 
  * @param[in] connected event parameter containing details like handle
  * \note Called by the ble_manager after receiving connection event
  */
-void csc_prf_connected_state_handler(at_ble_connected_t *params);
+at_ble_status_t csc_prf_connected_state_handler(void *params);
 
 /**
  * @brief Handler for service found 
  * @param[in] service found event parameter containing details about the service found
  * \note Called by the ble_manager after receiving the service
  */
-void csc_prf_service_found_handler(at_ble_primary_service_found_t * params);
+at_ble_status_t csc_prf_service_found_handler(void * params);
 
 /**
  * @brief Handler for characteristic found 
  * @param[in] characteristic found event parameter containing details about the characteristic found
  * \note Called by the ble_manager after receiving the characteristic
  */
-void csc_prf_characteristic_found_handler(at_ble_characteristic_found_t *params);
+at_ble_status_t csc_prf_characteristic_found_handler(void *params);
 
 /**
  * @brief Handler for descriptor found 
  * @param[in] characteristic found event parameter containing details about the descriptor found
  * \note Called by the ble_manager after receiving the descriptor
  */
-void csc_prf_descriptor_found_handler(at_ble_descriptor_found_t *params);
+at_ble_status_t csc_prf_descriptor_found_handler(void *params);
 
 /**
  * @brief Handler for discovery complete
  * @param[in] discovery complete event parameter containing details about the descriptor found
  * \note Called by the ble_manager after receiving the descriptor
  */
-void csc_prf_discovery_complete_handler(at_ble_discovery_complete_t *params);
+at_ble_status_t csc_prf_discovery_complete_handler(void *params);
 
 /**
- * @brief Handler for notification
+ * @brief invoked by ble manager on receiving notification
  */
-void csc_prf_notification_handler(at_ble_notification_recieved_t *params);
+at_ble_status_t csc_prf_notification_handler(void *params);
 
 /**
- * @brief Handler for configuing the notifcation for remote device
+ * @brief Handler for configuring the notification for remote device
  */
-void csc_prf_write_notification_handler(void *param);
+at_ble_status_t csc_prf_write_notification_handler(void *params);
 
 /** @brief Function call the user defined callback for sending the receive data
 */
@@ -256,7 +258,7 @@ void notify_recv_ntf_handler(recv_ntf_callback_t recv_ntf_fn);
 
 /** @brief Notification confirmation handler
 */
-void csc_notification_confirmation_handler(at_ble_cmd_complete_event_t *params);
+at_ble_status_t csc_notification_confirmation_handler(void *params);
 
 #endif /*__CSC_H__*/
 // </h>

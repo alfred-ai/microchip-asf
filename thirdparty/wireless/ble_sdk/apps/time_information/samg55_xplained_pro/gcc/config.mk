@@ -62,6 +62,7 @@ CSRCS = \
        sam/boards/samg55_xplained_pro/board_init.c        \
        sam/drivers/efc/efc.c                              \
        sam/drivers/flexcom/flexcom.c                      \
+       sam/drivers/pdc/pdc.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -102,6 +103,8 @@ INC_PATH = \
        sam/boards/samg55_xplained_pro                     \
        sam/drivers/efc                                    \
        sam/drivers/flexcom                                \
+       sam/drivers/pdc                                    \
+       sam/drivers/pdc/pdc_uart_example                   \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/supc                                   \
@@ -115,8 +118,8 @@ INC_PATH = \
        sam/utils/preprocessor                             \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/samg55     \
        thirdparty/wireless/ble_sdk/apps/time_information  \
-       thirdparty/wireless/ble_sdk/apps/time_information/samg55_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/time_information \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/current_time \
@@ -184,15 +187,18 @@ CFLAGS =  \
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
-       -D BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL      \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D CURRENT_TIME_SERVICE                            \
        -D ENABLE_POWER_SAVE                               \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D NEXT_DST_SERVICE                                \
        -D REFERENCE_TIME_SERVICE                          \
        -D TIP_CLIENT                                      \
        -D TP_ANDROID                                      \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

@@ -109,15 +109,15 @@ void dualtimer_set_counter(enum dualtimer_timer timer,
 {
 	if (timer == DUALTIMER_TIMER1) {
 		if (cur_bg == DUALTIMER_SET_CURRUNT_REG) {
-			DUALTIMER0->TIMER1LOAD.reg;
+			DUALTIMER0->TIMER1LOAD.reg = value;
 		} else {
-			DUALTIMER0->TIMER1BGLOAD.reg;
+			DUALTIMER0->TIMER1BGLOAD.reg = value;
 		}
 	} else {
 		if (cur_bg == DUALTIMER_SET_CURRUNT_REG) {
-			DUALTIMER0->TIMER2LOAD.reg;
+			DUALTIMER0->TIMER2LOAD.reg = value;
 			} else {
-			DUALTIMER0->TIMER2BGLOAD.reg;
+			DUALTIMER0->TIMER2BGLOAD.reg = value;
 		}
 	}
 }

@@ -64,13 +64,14 @@ static struct usart_module eusart_instance;
 
 static ser_fifo_desc_t ble_eusart_tx_fifo;
 static  uint8_t ble_eusart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+static  uint8_t ble_usart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
 
 static ser_fifo_desc_t ble_eusart_rx_fifo;
 static uint8_t ble_eusart_rx_buf[BLE_MAX_RX_PAYLOAD_SIZE];
 
 extern struct usart_module usart_instance;
 
-extern ser_fifo_desc_t ble_usart_tx_fifo;
+ser_fifo_desc_t ble_usart_tx_fifo;
 
 extern ser_fifo_desc_t ble_usart_rx_fifo;
 
@@ -98,6 +99,8 @@ uint8_t serial_bridge_init(void)
 	
 	ser_fifo_init(&ble_eusart_rx_fifo, ble_eusart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
 	ser_fifo_init(&ble_eusart_tx_fifo, ble_eusart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
+	ser_fifo_init(&ble_usart_tx_fifo, ble_usart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
+	
 
 	/* register and enable usart callbacks */
 	usart_register_callback(&eusart_instance,

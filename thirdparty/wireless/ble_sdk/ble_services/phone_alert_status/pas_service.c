@@ -89,13 +89,13 @@ at_ble_status_t pas_read_ringer_setting_char(at_ble_handle_t conn_handle,at_ble_
  * @param[in] at_ble_handle_t connection handle
  * @param[in] at_ble_handle-t characteristic handle
  * @param[in] set/clear the notification
- * @return AT_BLE_SUCCESS for success AT_BLE_FAILURE for failure
+ * @return AT_BLE_SUCCESS for success or refer at_ble_err_status_t
  */
 at_ble_status_t pas_char_write_notification(at_ble_handle_t conn_handle,at_ble_handle_t char_handle,bool enable)
 {
 	uint16_t data = enable;
 	return (at_ble_characteristic_write(conn_handle,char_handle,0,CLIENT_CONF_CHAR_DESCRIPTOR_LEN
-	,(uint8_t *)&data,false,false));
+	,(uint8_t *)&data,false,true));
 }
 
 /**
@@ -103,7 +103,7 @@ at_ble_status_t pas_char_write_notification(at_ble_handle_t conn_handle,at_ble_h
  * @param[in] at_ble_handle_t connection handle
  * @param[in] at_ble_handle-t characteristic handle
  * @param[in] set/clear the notification
- * @return AT_BLE_SUCCESS for success AT_BLE_FAILURE for failure
+ * @return AT_BLE_SUCCESS for success or refer at_ble_err_status_t
  */
 
 at_ble_status_t pas_char_set_ringer_control_point(at_ble_handle_t conn_handle,at_ble_handle_t char_handle,uint8_t data)

@@ -95,7 +95,7 @@ extern "C" {
 #define CONF_WINC_SPI_PHA				(1)
 
 /** SPI clock. */
-#define CONF_WINC_SPI_CLOCK				(60000000)
+#define CONF_WINC_SPI_CLOCK				(48000000)
 
 /*
    ---------------------------------

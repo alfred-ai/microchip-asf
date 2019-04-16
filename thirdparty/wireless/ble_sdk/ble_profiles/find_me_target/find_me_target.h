@@ -72,7 +72,7 @@
 //	<i> Defines inteval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> fmp_sensor_fast_adv
-#define APP_FMP_FAST_ADV				(100) /* 100 ms */
+#define APP_FMP_FAST_ADV				(1600) /* 1000 ms */
 
 /** @brief APP_FMP_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x3FFF in
  *seconds, 0x0000 disables time-out.*/
@@ -172,8 +172,7 @@ void fmp_target_adv(void);
  * @return @ref AT_BLE_SUCCESS operation completed successfully
  * @return @ref AT_BLE_FAILURE Generic error.
  */
-at_ble_status_t fmp_target_connected_state_handler(
-		at_ble_connected_t *conn_params);
+at_ble_status_t fmp_target_connected_state_handler(void *params);
 
 /** @brief disconnection event handler
  *
@@ -183,8 +182,7 @@ at_ble_status_t fmp_target_connected_state_handler(
  * @return @ref AT_BLE_SUCCESS operation completed successfully
  * @return @ref AT_BLE_FAILURE Generic error.
  */
-at_ble_status_t fmp_target_disconnect_event_handler(
-		at_ble_disconnected_t *disconnect);
+at_ble_status_t fmp_target_disconnect_event_handler(void *params);
 
 /** @brief character changed handler
  *
@@ -195,8 +193,7 @@ at_ble_status_t fmp_target_disconnect_event_handler(
  * @return @ref AT_BLE_SUCCESS operation completed successfully
  * @return @ref AT_BLE_FAILURE Generic error.
  */
-at_ble_status_t fmp_target_char_changed_handler(
-		at_ble_characteristic_changed_t *char_handle);
+at_ble_status_t fmp_target_char_changed_handler(void *params);
 
 /**
  * @brief function which register the application alerting function for

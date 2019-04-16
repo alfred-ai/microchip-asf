@@ -121,8 +121,8 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/apps/phone_alert_status \
-       thirdparty/wireless/ble_sdk/apps/phone_alert_status/saml21_xplained_pro_b \
        thirdparty/wireless/ble_sdk/ble_profiles/pas_client \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/phone_alert_status \
@@ -183,15 +183,18 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
-       -D BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL      \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D NEW_EVT_HANDLER                                 \
        -D PAS_CLIENT                                      \
        -D PAS_SERVICE_CLIENT                              \
+       -D PTS=false                                       \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAML21J18B__
 

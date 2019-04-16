@@ -67,6 +67,8 @@ CSRCS = \
        sam0/drivers/system/interrupt/system_interrupt.c   \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
+       sam0/drivers/tc/tc_interrupt.c                     \
+       sam0/drivers/tc/tc_sam_l_c/tc.c                    \
        sam0/utils/cmsis/saml21/source/gcc/startup_saml21.c \
        sam0/utils/cmsis/saml21/source/system_saml21.c     \
        sam0/utils/stdio/read.c                            \
@@ -77,6 +79,7 @@ CSRCS = \
        thirdparty/wireless/ble_sdk/services/serial/uart/sam0/serial_drv.c \
        thirdparty/wireless/ble_sdk/services/serial_bridge/uart/sam0/serial_bridge.c \
        thirdparty/wireless/ble_sdk/services/serial_fifo/serial_fifo.c \
+       thirdparty/wireless/ble_sdk/services/timer/sam0/timer_hw.c \
        thirdparty/wireless/ble_sdk/src/platform.c
 
 # List of assembler source files.
@@ -106,6 +109,8 @@ INC_PATH = \
        sam0/drivers/system/power/power_sam_l              \
        sam0/drivers/system/reset                          \
        sam0/drivers/system/reset/reset_sam_l              \
+       sam0/drivers/tc                                    \
+       sam0/drivers/tc/tc_sam_l_c                         \
        sam0/utils                                         \
        sam0/utils/cmsis/saml21/include_b                  \
        sam0/utils/cmsis/saml21/source                     \
@@ -114,12 +119,13 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
-       thirdparty/wireless/ble_sdk/apps/ble_dtm/saml21_xplained_pro_b \
+       thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/inc                    \
        thirdparty/wireless/ble_sdk/services/console       \
        thirdparty/wireless/ble_sdk/services/serial/uart   \
        thirdparty/wireless/ble_sdk/services/serial_bridge/uart \
        thirdparty/wireless/ble_sdk/services/serial_fifo   \
+       thirdparty/wireless/ble_sdk/services/timer         \
        thirdparty/wireless/ble_sdk/utils \
        thirdparty/wireless/ble_sdk/apps/ble_dtm/saml21_xplained_pro_b/gcc
 
@@ -178,6 +184,9 @@ CPPFLAGS = \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
+       -D TC_ASYNC=true                                   \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAML21J18B__
 

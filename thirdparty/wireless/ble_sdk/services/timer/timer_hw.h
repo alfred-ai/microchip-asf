@@ -50,4 +50,8 @@ void hw_timer_register_callback(hw_timer_callback_t cb_ptr);
 void hw_timer_start(uint32_t timer_val);
 void hw_timer_stop(void);
 
+void platform_configure_timer(hw_timer_callback_t bus_tc_cb_ptr);
+void Platform_start_bus_timer(uint32_t timeout);
+void Platform_stop_bus_timer(void);
+void platform_reset_bus_timer(void);
 #endif /* __TIMER_HW_H__ */

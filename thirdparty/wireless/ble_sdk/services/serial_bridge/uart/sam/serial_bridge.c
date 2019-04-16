@@ -54,12 +54,13 @@ volatile bool ble_eusart_tx_cmpl = true;
 
 static ser_fifo_desc_t ble_eusart_tx_fifo;
 static  uint8_t ble_eusart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+static  uint8_t ble_usart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+
 
 static ser_fifo_desc_t ble_eusart_rx_fifo;
 static uint8_t ble_eusart_rx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
 
-extern ser_fifo_desc_t ble_usart_tx_fifo;
-
+ser_fifo_desc_t ble_usart_tx_fifo;
 extern ser_fifo_desc_t ble_usart_rx_fifo;
 
 /* === TYPES =============================================================== */
@@ -117,6 +118,7 @@ uint8_t serial_bridge_init(void)
 	
 	ser_fifo_init(&ble_eusart_rx_fifo, ble_eusart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
 	ser_fifo_init(&ble_eusart_tx_fifo, ble_eusart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
+	ser_fifo_init(&ble_usart_tx_fifo, ble_usart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
 
 	/* Enable UART interrupt */
 	NVIC_EnableIRQ(SB_UART_IRQn);
@@ -150,6 +152,7 @@ void SB_UART_Handler(void)
 	}
 }
 
+extern void ble_pdc_send_data(uint8_t *buf, uint16_t len);
 
 void serial_bridge_task(void)
 {
@@ -157,8 +160,7 @@ void serial_bridge_task(void)
 
 	/* Check the UART Rx data from BLE UART */
 	if(ser_fifo_pull_uint8(&ble_usart_rx_fifo, (uint8_t *)&t_rx_data) == SER_FIFO_OK)
-	{
-		
+	{		
 		LED_Toggle(LED0);
 		/* Write to the EDBG UART Buffer */
 		ser_fifo_push_uint8(&ble_eusart_tx_fifo, (uint8_t)t_rx_data);
@@ -182,15 +184,14 @@ void serial_bridge_task(void)
 		ser_fifo_push_uint8(&ble_usart_tx_fifo, (uint8_t)t_rx_data);
 		if (ble_usart_tx_cmpl)
 		{
+			static uint8_t ble_usart_tx_byte[2] = {0, 0};
 			if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &t_rx_data) == SER_FIFO_OK)
 			{
+				ble_usart_tx_byte[0] = t_rx_data;
 				ble_usart_tx_cmpl = false;
-				usart_putchar(BLE_UART, t_rx_data);
-				//Enable the USART Empty Interrupt
-				usart_enable_interrupt(BLE_UART, US_IER_TXEMPTY);
+				ble_pdc_send_data(ble_usart_tx_byte, 1);
 			}
-		}
-		
+		}		
 	}
 }
 

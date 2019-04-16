@@ -45,7 +45,7 @@
  * \page asfdoc_sam0_i2s_dma_use_case Quick Start Guide for I2S - DMA
  *
  * In this use case, the I2S will be used to generate Master Clock (MCK), Serial
- * Clock (SCK), Frame Sync (FS) and Serial Data (SD) signals.
+ * Clock (SCK), Frame Sync (FS), and Serial Data (SD) signals.
  *
  * Here MCK is set to the half of processor clock. SCK is set to a quarter of
  * the frequency of processor. FS generates half-half square wave for left and
@@ -58,10 +58,10 @@
  * The I2S module will be setup as follows:
  *
  * - GCLK generator 0 (GCLK main) clock source
- * - MCK, SCK and FS clocks outputs are enabled
+ * - MCK, SCK, and FS clocks outputs are enabled
  * - MCK output divider set to 2
  * - SCK generation divider set to 4
- * - Each frame will contain 2 32-bit slots
+ * - Each frame will contain two 32-bit slots
  * - Data will be left adjusted and start transmit without delay
  *
  * \section asfdoc_sam0_i2s_dma_use_case_setup Quick Start
@@ -151,7 +151,7 @@
  *  -# Start DMA transfer job with prepared descriptor
  *    \snippet qs_i2s_dma.c config_dma_job_for_tx
  *
- * \subsubsection asfdoc_sam0_i2s_dma_use_case_setup_flow_i2s Configure the I2S
+ * \subsubsection asfdoc_sam0_i2s_dma_use_case_setup_flow_i2s Configure the I2S.
  * -# Create I2S module software instance structure for the I2S module to store
  *    the I2S driver state while it is in use.
  *    \snippet qs_i2s_dma.c module_inst
@@ -173,9 +173,9 @@
  *            settings.
  *
  *   -# Alter the I2S Clock Unit settings to configure the general clock source,
- *      MCK, SCK and FS generation.
+ *      MCK, SCK, and FS generation.
  *      \snippet qs_i2s_dma.c setup_clock_unit_change_config
- *   -# Alter the I2S Clock Unit settings to configure the MCK, SCK and FS
+ *   -# Alter the I2S Clock Unit settings to configure the MCK, SCK, and FS
  *      output on physical device pins.
  *      \snippet qs_i2s_dma.c setup_clock_unit_change_pins
  *   -# Configure the I2S Clock Unit with the desired settings.

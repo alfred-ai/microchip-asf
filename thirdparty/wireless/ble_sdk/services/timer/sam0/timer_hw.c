@@ -49,10 +49,11 @@
 /* === TYPES =============================================================== */
 uint32_t timeout_count;
 hw_timer_callback_t timer_callback;
+hw_timer_callback_t bus_timer_callback;
 /* === MACROS ============================================================== */
 
 void tc_cc0_cb(struct tc_module *const module_inst);
-
+void bus_tc_cc0_cb(struct tc_module *const module_inst);
 
 void hw_timer_init(void)
 {
@@ -78,6 +79,11 @@ void hw_timer_init(void)
 void hw_timer_register_callback(hw_timer_callback_t cb_ptr)
 {
 	timer_callback = cb_ptr;
+}
+
+void bus_tc_cc0_cb(struct tc_module *const module_inst)
+{
+	bus_timer_callback();
 }
 
 void tc_cc0_cb(struct tc_module *const module_inst)
@@ -107,5 +113,50 @@ void hw_timer_stop(void)
 	tc_disable_callback(&tc_instance, TC_CALLBACK_CC_CHANNEL0);
 }
 
+uint32_t bus_activity_timer_frequency;
+void platform_configure_timer(hw_timer_callback_t bus_tc_cb_ptr)
+{
+	uint32_t prescaler;
+	struct tc_config timer_config;
+	bus_timer_callback = bus_tc_cb_ptr;
+	tc_get_config_defaults(&timer_config);
+	timer_config.clock_prescaler		= TC_CLOCK_PRESCALER_DIV4;
+	timer_config.count_direction		= TC_COUNT_DIRECTION_UP;
+	timer_config.oneshot				= true;
+	timer_config.counter_size			= TC_COUNTER_SIZE_16BIT;
+	timer_config.count_direction		= TC_COUNT_DIRECTION_DOWN;
+	tc_init(&bus_tc_instance, CONF_BUS_TC_MODULE, &timer_config);
+	prescaler = 1 << (timer_config.clock_prescaler >> TC_CTRLA_PRESCALER_Pos);
+	bus_activity_timer_frequency = (system_gclk_gen_get_hz(timer_config.clock_source) / prescaler);
+	tc_set_count_value(&bus_tc_instance, 0xFFFFFFFF);
+	tc_enable(&bus_tc_instance);
+	tc_stop_counter(&bus_tc_instance);
+	tc_register_callback(&bus_tc_instance, bus_tc_cc0_cb,
+									TC_CALLBACK_OVERFLOW);
+	tc_enable_callback(&bus_tc_instance, TC_CALLBACK_OVERFLOW);
+}
 
+
+void Platform_start_bus_timer(uint32_t timeout)
+{
+	uint32_t top_value;
+	if (timeout == 0xFFFFFFFF)
+	{
+		return;
+	}
+	top_value = (bus_activity_timer_frequency / 1000) * timeout;
+	tc_set_count_value(&bus_tc_instance, top_value);
+	tc_start_counter(&bus_tc_instance);
+}
+
+void Platform_stop_bus_timer(void)
+{
+	tc_stop_counter(&bus_tc_instance);
+}
+
+void platform_reset_bus_timer(void)
+{
+	Platform_stop_bus_timer();
+	Platform_start_bus_timer(5);
+}
 /* EOF */

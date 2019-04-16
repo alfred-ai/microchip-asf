@@ -59,6 +59,23 @@
 #define DEVICE_NORMAL				(3)
 #define READ_REQUEST				(4)
 
+#define READ_ALERT_STATUS			(4)
+#define READ_RINGER_SETTING			(5)
+#define DISCOVER_ATTRIBUTES			(6)
+
+
+
+
 /****************************************************************************************
 *							        Function Prototype                                 	*
 ****************************************************************************************/
+/**
+ * @brief app_connected_state ble manager notifies the application about state
+ * @param[in] connected
+ */
+static at_ble_status_t app_disconnected_event_handler(void *params);
+/**
+ * @brief app_connected_state blemanager notifies the application about state
+ * @param[in] at_ble_connected_t
+ */
+static at_ble_status_t app_connected_event_handler(void *params);

@@ -120,7 +120,7 @@ INC_PATH = \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
        thirdparty/wireless/ble_sdk/apps/ble_observer      \
-       thirdparty/wireless/ble_sdk/apps/ble_observer/saml21_xplained_pro_b \
+       thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/inc                    \
        thirdparty/wireless/ble_sdk/services/console       \
@@ -179,13 +179,15 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
-       -D BLE_DEVICE_ROLE=BLE_OBSERVER                    \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_OBSERVER               \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAML21J18B__
 

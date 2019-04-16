@@ -51,13 +51,6 @@
 
 #include "board.h"
 
-#define LCD_DATA_CACHE_SIZE ILI9488_LCD_WIDTH
-#define LCD_DATA_COLOR_UNIT 3
-//#define LCD_DATA_COLOR_UNIT 1
-
-#define COLOR_CONVERT       RGB_24_TO_18BIT
-//#define COLOR_CONVERT       RGB_24_TO_RGB565
-
 #define ILI9488_SPI_BAUDRATE 20000000
 
 #if !defined(BOARD_ILI9488_ADDR)

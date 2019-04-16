@@ -53,11 +53,9 @@
 */
 /*- Includes ---------------------------------------------------------------*/
 
-#define DEBUG_LOG
-
 #include <asf.h>
 #include "platform.h"
-
+#include "console_serial.h"
 #include "pxp_monitor_app.h"
 
 #if defined IMMEDIATE_ALERT_SERVICE
@@ -83,8 +81,8 @@ extern gatt_txps_char_handler_t txps_handle;
 extern gatt_lls_char_handler_t lls_handle;
 extern gatt_ias_char_handler_t ias_handle;
 
-extern at_ble_connected_t ble_connected_dev_info[MAX_DEVICE_CONNECTED];
-extern bool pxp_connect_request_flag;
+extern ble_connected_dev_info_t ble_dev_info[BLE_MAX_DEVICE_CONNECTED];
+extern uint8_t pxp_connect_request_flag;
 
 volatile bool app_timer_done = false;
 pxp_current_alert_t alert_level = PXP_NO_ALERT;
@@ -173,7 +171,7 @@ static void pxp_app_init(void)
 }
 
 /* @brief timer call back for rssi update
-* enable the flags to execute the application taskc
+* enable the flags to execute the application task
 *
 */
 static void timer_callback_handler(void)
@@ -205,9 +203,13 @@ int main(void)
 
 	/* Register the callback */
 	hw_timer_register_callback(timer_callback_handler);
+	register_hw_timer_start_func_cb(hw_timer_start);
+	register_hw_timer_stop_func_cb(hw_timer_stop);
 
 	/* initialize the BLE chip  and Set the device mac address */
 	ble_device_init(NULL);
+	
+	pxp_monitor_init(NULL);
 
 	DBG_LOG("Initializing Proximity Monitor Application");
 
@@ -218,29 +220,77 @@ int main(void)
 		/* BLE Event Task */
 		ble_event_task();
 
-		/* Application Task */
-		if (app_timer_done) {
-			if (pxp_connect_request_flag) {
-				at_ble_disconnected_t pxp_connect_request_fail;
-				pxp_connect_request_fail.reason
-					= AT_BLE_TERMINATED_BY_USER;
-				pxp_connect_request_flag = false;
-				if (at_ble_connect_cancel() == AT_BLE_SUCCESS) {
-					DBG_LOG("Connection Timeout");
-					pxp_disconnect_event_handler(
-							&pxp_connect_request_fail);
-				} else {
-					DBG_LOG(
-							"Unable to connect with device. Reseting the device");
-					ble_device_init(NULL);
-					pxp_app_init();
+		#ifdef ENABLE_PTS
+			if (button_pressed) {
+				DBG_LOG("Press 1 for service discovery");
+				DBG_LOG("Press 2 for encryption start");
+				DBG_LOG("Press 3 for send MID ALERT");
+				DBG_LOG("Press 4 for send HIGH ALERT");
+				DBG_LOG("Press 5 for send NO ALERT");
+				DBG_LOG("Press 6 for disconnection");
+				uint8_t option = getchar();
+				switch (option) {
+				case '1':
+					pxp_monitor_service_discover(ble_dev_info[0].conn_info.handle);
+					break;
+				case '2':
+					at_ble_encryption_start(ble_dev_info[0].conn_info.handle,
+								&ble_dev_info[0].bond_info.peer_ltk,
+								ble_dev_info[0].bond_info.auth);
+					break;
+				case '3':
+					ias_alert_level_write(ble_dev_info[0].conn_info.handle,
+								ias_handle.char_handle,
+								IAS_MID_ALERT);
+					break;
+				case '4':
+					ias_alert_level_write(ble_dev_info[0].conn_info.handle,
+								ias_handle.char_handle,
+								IAS_HIGH_ALERT);
+					break;
+				case '5':
+					ias_alert_level_write(ble_dev_info[0].conn_info.handle,
+								ias_handle.char_handle,
+								IAS_NO_ALERT);
+					break;
+				case '6':
+					at_ble_disconnect(ble_dev_info[0].conn_info.handle, AT_BLE_TERMINATED_BY_USER);
+					break;
 				}
-			} else {
-				rssi_update(ble_connected_dev_info[0].handle);
-				hw_timer_start(PXP_RSSI_UPDATE_INTERVAL);
+				button_pressed = false;
 			}
-
-			app_timer_done = false;
-		}
+		#else		
+			if (button_pressed)
+			{
+				at_ble_disconnect(ble_dev_info[0].conn_info.handle, AT_BLE_TERMINATED_BY_USER);
+				button_pressed = false;
+				app_timer_done = false;
+			}
+	
+			/* Application Task */
+			if (app_timer_done) {
+				if (pxp_connect_request_flag == PXP_DEV_CONNECTING) {
+					at_ble_disconnected_t pxp_connect_request_fail;
+					pxp_connect_request_fail.reason
+						= AT_BLE_TERMINATED_BY_USER;
+					pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
+					if (at_ble_connect_cancel() == AT_BLE_SUCCESS) {
+						DBG_LOG("Connection Timeout");
+						pxp_disconnect_event_handler(
+								&pxp_connect_request_fail);
+					} else {
+						DBG_LOG(
+								"Unable to connect with device. Reseting the device");
+						ble_device_init(NULL);
+						pxp_app_init();
+					}
+				} else if (pxp_connect_request_flag == PXP_DEV_CONNECTED) {
+					rssi_update(ble_dev_info[0].conn_info.handle);
+					hw_timer_start(PXP_RSSI_UPDATE_INTERVAL);
+				}
+	
+				app_timer_done = false;
+			}
+		#endif
 	}
 }

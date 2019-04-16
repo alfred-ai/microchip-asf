@@ -63,13 +63,20 @@
 #include "ble_utils.h"
 #include "ble_manager.h"
 
-/*Function Definitions */
+extern uint8_t scan_response_count;
 
 /*Initialization function for Ble Observer */
 
 static void ble_observer_init(void)
 {
 	at_ble_status_t scan_status;
+	
+	if(at_ble_scan_stop() != AT_BLE_SUCCESS)
+	{
+		/* If scan not started stop scan failed message will be displayed on terminal */
+		/* If the scan already started then stop scan will return AT_BLE_SUCCESS */
+		DBG_LOG_DEV("Stop scan failed");
+	}
 
 	/* Initialize the scanning procedure */
 	scan_status = gap_dev_scan();
@@ -85,9 +92,10 @@ static void ble_observer_init(void)
 }
 
 /* Handler for Scan info data */
-void ble_observer_scan_info_handler(at_ble_scan_info_t *scan_info_data)
+at_ble_status_t ble_observer_scan_info_handler(void * param)
 {
 	int8_t iterator;
+	at_ble_scan_info_t *scan_info_data = (at_ble_scan_info_t *)param;
 
 	DBG_LOG("%-28s", "\r\n\r\nAdvertisement type");
 	DBG_LOG_CONT("    :  ");
@@ -466,16 +474,40 @@ void ble_observer_scan_info_handler(at_ble_scan_info_t *scan_info_data)
 			adv_data_size -= adv_element_data.len;
 		}
 	}
+	return AT_BLE_SUCCESS;
 }
 
 /* Handler for AT_BLE_SCAN_REPORT event from stack */
-at_ble_status_t ble_observer_scan_data_handler(at_ble_scan_info_t *scan_info_data, uint8_t scan_resp_count)
+at_ble_status_t ble_observer_scan_data_handler(void *param)
 {
-	DBG_LOG("Scan Complete. Total No.of device scanned:%d", scan_resp_count);
+	DBG_LOG("Scan Complete. Total No.of device scanned:%d", scan_response_count);
 	ble_observer_init();
-	ALL_UNUSED(scan_info_data);
+	ALL_UNUSED(param);
 	return AT_BLE_SUCCESS;
 }
+
+static const ble_event_callback_t observer_app_gap_cb[] = {
+	NULL,
+	ble_observer_scan_info_handler,
+	ble_observer_scan_data_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
 
 int main(void )
 {
@@ -495,6 +527,11 @@ int main(void )
 	
 	/* observer init */
 	ble_observer_init();
+	
+	/* Register callbacks for gap related events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+									BLE_GAP_EVENT_TYPE,
+									observer_app_gap_cb);
 	
 	/* Receiving events */
 	while (1) {

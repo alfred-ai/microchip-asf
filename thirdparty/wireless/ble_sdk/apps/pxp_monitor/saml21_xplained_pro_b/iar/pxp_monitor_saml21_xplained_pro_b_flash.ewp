@@ -168,14 +168,17 @@
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>NEW_EVT_HANDLER</state>
-					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
+					<state>TC_ASYNC=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>LLS_GATT_CLIENT</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>__SAML21J18B__</state>
 					<state>LINK_LOSS_SERVICE</state>
@@ -313,6 +316,7 @@
 					<name>CCIncludePath2</name>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
+					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_profiles/pxp_monitor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
@@ -327,7 +331,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -335,7 +339,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -505,14 +508,17 @@
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>NEW_EVT_HANDLER</state>
-					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
+					<state>TC_ASYNC=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>LLS_GATT_CLIENT</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>__SAML21J18B__</state>
 					<state>LINK_LOSS_SERVICE</state>
@@ -617,6 +623,7 @@
 					<name>AUserIncludes</name>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
+					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_profiles/pxp_monitor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
@@ -631,7 +638,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -639,7 +646,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -1201,14 +1207,17 @@
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>NEW_EVT_HANDLER</state>
-					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
+					<state>TC_ASYNC=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>LLS_GATT_CLIENT</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>__SAML21J18B__</state>
 					<state>LINK_LOSS_SERVICE</state>
@@ -1346,6 +1355,7 @@
 					<name>CCIncludePath2</name>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
+					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_profiles/pxp_monitor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
@@ -1360,7 +1370,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -1368,7 +1378,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -1538,14 +1547,17 @@
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>NEW_EVT_HANDLER</state>
-					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
+					<state>TC_ASYNC=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>LLS_GATT_CLIENT</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>__SAML21J18B__</state>
 					<state>LINK_LOSS_SERVICE</state>
@@ -1650,6 +1662,7 @@
 					<name>AUserIncludes</name>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
+					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_profiles/pxp_monitor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/clock/clock_saml21</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
@@ -1664,7 +1677,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
-					<state>$PROJ_DIR$/../..</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -1672,7 +1685,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -2201,34 +2213,40 @@
 						</file>
 						<group>
 							<name>saml21_xplained_pro_b</name>
-							<file>
-								<name>$PROJ_DIR$/../conf_timer.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_serialdrv.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
-							</file>
 							<group>
 								<name>iar</name>
 								<file>
 									<name>$PROJ_DIR$/asf.h</name>
 								</file>
 							</group>
-							<file>
-								<name>$PROJ_DIR$/../conf_clocks.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_console.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
-							</file>
 						</group>
 						<file>
 							<name>$PROJ_DIR$/../../pxp_monitor_app.h</name>
 						</file>
+					</group>
+					<group>
+						<name>config</name>
+						<group>
+							<name>saml21</name>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_extint.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_timer.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_board.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_console.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_serialdrv.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_clocks.h</name>
+							</file>
+						</group>
 					</group>
 				</group>
 				<group>
@@ -2289,6 +2307,9 @@
 						<group>
 							<name>pio</name>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21g18b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21e17b.h</name>
 							</file>
 							<file>
@@ -2296,9 +2317,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21j17b.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21g18b.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21e15b.h</name>
@@ -2463,9 +2481,6 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/tc3.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/opamp.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/rstc.h</name>
 							</file>
 							<file>
@@ -2518,6 +2533,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/evsys.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/opamp.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/sercom1.h</name>

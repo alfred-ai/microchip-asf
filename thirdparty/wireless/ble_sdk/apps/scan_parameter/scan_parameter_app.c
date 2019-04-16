@@ -63,8 +63,6 @@ bool app_exec  = true;
 
 #define SCAN_PRAM_UPDATE_INTERVAL	(5) //5 second
 
-/** @brief Scan response data*/
-uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09,0xff, 0x00, 0x06, 0xd6, 0xb2, 0xf0, 0x05, 0xf0, 0xf8};
 sps_gatt_service_handler_t sps_service_handler;
 uint16_t scan_interval_window[2];
 uint8_t scan_refresh;
@@ -73,7 +71,6 @@ bool volatile timer_cb_done = false;
 bool volatile flag = true;
 
 uint8_t scan_refresh_value = 0;
-at_ble_handle_t device_conn_handle;
 
 /**
 * \Timer callback handler called on timer expiry
@@ -87,83 +84,118 @@ void timer_callback_handler(void)
 /* Advertisement data set and Advertisement start */
 static at_ble_status_t sps_service_advertise(void)
 {
-	uint8_t idx = 0;
-	uint8_t adv_data [ SPS_ADV_DATA_NAME_LEN + SPS_ADV_DATA_UUID_LEN   + (2*2)];
+	at_ble_status_t status;
 	
-	adv_data[idx++] = SPS_ADV_DATA_UUID_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = SPS_ADV_DATA_UUID_TYPE;
-
-	/* Appending the UUID */
-	adv_data[idx++] = (uint8_t)SPS_SERVICE_UUID;
-	adv_data[idx++] = (uint8_t)(SPS_SERVICE_UUID >> 8);
-	
-	//Appending the complete name to the Ad packet
-	adv_data[idx++] = SPS_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = SPS_ADV_DATA_NAME_TYPE;
-	
-	memcpy(&adv_data[idx], SPS_ADV_DATA_NAME_DATA, SPS_ADV_DATA_NAME_LEN );
-	idx += SPS_ADV_DATA_NAME_LEN;
-	
-	/* Adding the advertisement data and scan response data */
-	if(at_ble_adv_data_set(adv_data, idx, scan_rsp_data, SCAN_RESP_LEN) == AT_BLE_SUCCESS) {
-		/* Start of advertisement */
-		if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE,
-							 NULL, AT_BLE_ADV_FP_ANY, APP_BAS_FAST_ADV, 
-							 APP_BAS_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS) { 
-			DBG_LOG("BLE Started Adv");
-			return AT_BLE_SUCCESS;
-		}
-		else {
-			DBG_LOG("BLE Adv start Failed");
-		}
-	} else {
-		DBG_LOG("Failed to set adv data");
+	if((status = ble_advertisement_data_set()) != AT_BLE_SUCCESS)
+	{
+		DBG_LOG("advertisement data set failed reason :%d",status);
+		return status;
 	}
 	
-	return AT_BLE_FAILURE;
+	if((status = at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE,
+						 NULL, AT_BLE_ADV_FP_ANY, APP_SCP_FAST_ADV, 
+						 APP_SCP_ADV_TIMEOUT, 0)) == AT_BLE_SUCCESS) { 
+		DBG_LOG("BLE Started Adv");
+		return AT_BLE_SUCCESS;
+	}
+	else {
+		DBG_LOG("BLE Adv start Failed");
+	}
+	return status;
 }
 
 /* Callback registered for AT_BLE_PAIR_DONE event from stack */
-static void ble_paired_app_event(at_ble_handle_t conn_handle)
+static at_ble_status_t ble_paired_app_event(void *param)
 {
 	timer_cb_done = true;
 	hw_timer_start(SCAN_PRAM_UPDATE_INTERVAL);
-	device_conn_handle=conn_handle;
 	LED_On(LED0);
+	ALL_UNUSED(param);
+	return AT_BLE_SUCCESS;
 }
 
 /* Callback registered for AT_BLE_DISCONNECTED event from stack */
-static void ble_disconnected_app_event(at_ble_handle_t conn_handle)
+static at_ble_status_t ble_disconnected_app_event(void *param)
 {
 	timer_cb_done = false;
 	hw_timer_stop();
 	sps_service_advertise();
 	LED_Off(LED0);
-        ALL_UNUSED(conn_handle);
+    ALL_UNUSED(param);
+	return AT_BLE_SUCCESS;
+}
+
+/* Callback registered for AT_BLE_CONNECTED event from stack */
+static at_ble_status_t ble_connected_app_event(void *param)
+{
+	#if !BLE_PAIR_ENABLE
+		ble_paired_app_event(param);
+	#else
+		ALL_UNUSED(param);
+	#endif
+	return AT_BLE_SUCCESS;
 }
 
 /**
 * \Service Characteristic change handler function
 */
-static at_ble_status_t sps_char_changed_cb(at_ble_characteristic_changed_t *char_handle)
+static at_ble_status_t sps_char_changed_cb(void *param)
 {
+	at_ble_characteristic_changed_t *char_handle = (at_ble_characteristic_changed_t *)param;
 	return sps_char_changed_event(&sps_service_handler, char_handle, &flag);
 }
 
 /* Callback registered for AT_BLE_NOTIFICATION_CONFIRMED event from stack */
-static void sps_notification_confirmed_cb(at_ble_cmd_complete_event_t *notification_status)
+static at_ble_status_t sps_notification_confirmed_cb(void *param)
 {
+	at_ble_cmd_complete_event_t *notification_status = (at_ble_cmd_complete_event_t *)param;
 	if(!notification_status->status)
 	{
 		flag = true;
 		DBG_LOG_DEV("sending notification to the peer success");
 	}
+	return AT_BLE_SUCCESS;
 }
 
 void button_cb(void)
 {
 	/* For user usage */
 }
+
+static const ble_event_callback_t ble_scan_param_app_gap_cb[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	ble_connected_app_event,
+	ble_disconnected_app_event,
+	NULL,
+	NULL,
+	ble_paired_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	ble_paired_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t ble_scan_param_app_gatt_server_cb[] = {
+	sps_notification_confirmed_cb,
+	NULL,
+	sps_char_changed_cb,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
 
 /**
 * \Scan Parameter Application main function
@@ -205,17 +237,15 @@ int main(void)
 	
 	sps_service_advertise();
 	
-	/* Register callback for paired event */
-	register_ble_paired_event_cb(ble_paired_app_event);
+	/* Register callbacks for gap related events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+									BLE_GAP_EVENT_TYPE,
+									ble_scan_param_app_gap_cb);
 	
-	/* Register callback for disconnected event */
-	register_ble_disconnected_event_cb(ble_disconnected_app_event);
-	
-	/* Register callback for characteristic changed event */
-	register_ble_characteristic_changed_cb(sps_char_changed_cb);
-	
-	/* Register callback for notification confirmed event */
-	register_ble_notification_confirmed_cb(sps_notification_confirmed_cb);
+	/* Register callbacks for gatt server related events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+									BLE_GATT_SERVER_EVENT_TYPE,
+									ble_scan_param_app_gatt_server_cb);
 	
 	/* Capturing the events  */ 
 	while (app_exec) {

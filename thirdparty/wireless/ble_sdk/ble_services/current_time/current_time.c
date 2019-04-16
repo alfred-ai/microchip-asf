@@ -66,14 +66,15 @@
 
 /**@brief write notification handler for Current Time Service
  */
-at_ble_status_t tis_current_time_noti(at_ble_handle_t conn_handle, 
-									at_ble_handle_t desc_handle, uint8_t notify)
+ at_ble_status_t tis_current_time_noti(at_ble_handle_t conn_handle, 
+ 									at_ble_handle_t desc_handle, uint8_t *notify)
 {
-	if(desc_handle == CTS_INVALID_CHAR_HANDLE) {
-		return (AT_BLE_INVALID_STATE);
-	}
-	return(at_ble_characteristic_write(conn_handle, desc_handle, 0, 2, 
-									   &notify, false, true));
+ 	if(desc_handle == CTS_INVALID_CHAR_HANDLE) {
+ 		return (AT_BLE_INVALID_STATE);
+ 	}
+ 	DBG_LOG("Received data is %x %x",(uint8_t)*(notify+1), (uint8_t)*notify);
+ 	return(at_ble_characteristic_write(conn_handle, desc_handle, 0, 2, 
+ 									   notify, false, true));
 }
 
 /**@brief Send the Read request to the current time characteristic
@@ -100,10 +101,10 @@ int8_t tis_current_time_read_response(at_ble_characteristic_read_response_t *rea
 		return read_resp->status;
 	}
 	if (read_resp->char_handle == cts_handler->curr_char_handle) {
-		#if defined TP_ANDROID
-		const char *ptr[] = {"SUN","MON","TUE","WED","THU","FRI","SAT","UNKNOWN"};
-		#else
+		#if defined ENABLE_PTS || !defined TP_ANDROID
 		const char *ptr[] = {"UNKNOWN","MON","TUE","WED","THU","FRI","SAT","SUN"};
+		#else
+		const char *ptr[] = {"SUN","MON","TUE","WED","THU","FRI","SAT","UNKNOWN"};
 		#endif
 	
 		DBG_LOG("Current Time:");		
@@ -117,7 +118,8 @@ int8_t tis_current_time_read_response(at_ble_characteristic_read_response_t *rea
 		read_resp->char_value[6],
 		ptr[read_resp->char_value[7]]
 		);
-		DBG_LOG_CONT("  Fraction:%02d",read_resp->char_value[8]);				
+		DBG_LOG_CONT("  Fraction:%02d",read_resp->char_value[8]);
+		DBG_LOG_CONT("  Adjust Reason:%02d",read_resp->char_value[9]);
 	} else if (read_resp->char_handle == cts_handler->lti_char_handle) {
 		const char *dst_ptr[] = {"Standard Time", 0, "Haft An Hour Daylight Time", 0,
 								"Daylight Time",0,0,0,"Double Daylight Time" };

@@ -62,4 +62,17 @@
 /**@brief Enter button press to send data */
 #define ENTER_BUTTON_PRESS (13)
 
+
+/**
+* @brief app_connected_state blemanager notifies the application about state
+* @param[in] at_ble_connected_t
+*/
+static at_ble_status_t app_connected_event_handler(void *params);
+
+/**
+ * @brief app_connected_state ble manager notifies the application about state
+ * @param[in] connected
+ */
+static at_ble_status_t app_disconnected_event_handler(void *params);
+
 #endif /*__CSC_APP_H__*/

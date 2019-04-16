@@ -151,7 +151,7 @@ static enum status_code _i2c_master_set_config(
 	}
 
 	/* Check and set SCL clock stretch mode. */
-	if (config->scl_stretch_only_after_ack_bit) {
+	if (config->scl_stretch_only_after_ack_bit || (config->transfer_speed == I2C_MASTER_SPEED_HIGH_SPEED)) {
 		tmp_ctrla |= SERCOM_I2CM_CTRLA_SCLSM;
 	}
 

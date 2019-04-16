@@ -9,7 +9,7 @@
  * BLE Application Developers using Atmel BLE SDK
  *
  *
- *  Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ *  Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
  *
@@ -114,7 +114,7 @@ extern "C" {
 ///@cond IGNORE_DOXYGEN
 AT_BLE_API
 ///@endcond
-void trace_register_printFn(void *pf);
+void trace_register_printFn(int (*pf)(const char *_Format, ...));
 
 /** @ingroup dbg_logs_group_functions
  * @brief Used to set level of tracing logs

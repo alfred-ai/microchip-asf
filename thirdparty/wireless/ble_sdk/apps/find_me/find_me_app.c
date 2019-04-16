@@ -55,10 +55,10 @@
 #include "timer_hw.h"
 #include "conf_extint.h"
 #include "ble_manager.h"
-#include "at_ble_errno.h"
-#include "at_ble_trace.h"
 #include "immediate_alert.h"
 #include "find_me_app.h"
+#include "find_me_target.h"
+
 
 /* === GLOBALS ============================================================ */
 
@@ -66,7 +66,7 @@
 
 volatile bool app_timer_done = false;
 
-/** @brief Timer interval variable for applicaition task */
+/** @brief Timer interval variable for application task */
 static uint8_t timer_interval = INIT_TIMER_INTERVAL;
 
 void button_cb(void)
@@ -140,6 +140,8 @@ int main(void)
 
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
+	
+	fmp_target_init(NULL);
 
 	/* callback registration for immediate alert value*/
 	register_find_me_handler(app_immediate_alert);

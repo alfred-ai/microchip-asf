@@ -60,6 +60,12 @@ typedef enum {
 	AD_TYPE_COMPLETE_LOCAL_NAME = 0x09
 } AD_TYPE;
 
+typedef enum {
+	PXP_DEV_UNCONNECTED,
+	PXP_DEV_CONNECTING,
+	PXP_DEV_CONNECTED
+} PXP_DEV;
+
 //   <o> Rssi Prameter Update Interval <1-10>
 //   <i> Defines inteval at which rssi value get updated.
 //   <i> Default: 1
@@ -81,6 +87,15 @@ typedef enum {
 #define PXP_CONNECT_REQ_INTERVAL        (20)
 
 #define DISCOVER_SUCCESS				(10)
+#ifdef ENABLE_PTS
+#define DBG_LOG_PTS 					DBG_LOG
+#else
+#define DBG_LOG_PTS						ALL_UNUSED
+#endif
+
+typedef void (*hw_timer_start_func_cb_t)(uint32_t);
+typedef void (*hw_timer_stop_func_cb_t)(void);
+typedef ble_peripheral_state_t (*peripheral_state_cb_t)(void);
 
 /* *@brief Initializes Proximity profile
  * handler Pointer reference to respective variables
@@ -100,8 +115,7 @@ void pxp_monitor_init(void *param);
  * @return @ref AT_BLE_INVALID_PARAM incorrect parameter.
  * @return @ref AT_BLE_FAILURE Generic error.
  */
-at_ble_status_t pxp_monitor_scan_data_handler(at_ble_scan_info_t *scan_buffer,
-		uint8_t scanned_dev_count);
+at_ble_status_t pxp_monitor_scan_data_handler(void *params);
 
 /**@brief peer device connection terminated
  *
@@ -115,7 +129,7 @@ at_ble_status_t pxp_monitor_scan_data_handler(at_ble_scan_info_t *scan_buffer,
  *device
  * @return @ref AT_BLE_FAILURE Reconnection fails.
  */
-at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect);
+at_ble_status_t pxp_disconnect_event_handler(void *params);
 
 /**@brief Connected event state handle after connection request to peer device
  *
@@ -128,8 +142,11 @@ at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect);
  *parameter.
  * @return @ref AT_BLE_FAILURE Generic error.
  */
-at_ble_status_t pxp_monitor_connected_state_handler(
-		at_ble_connected_t *conn_params);
+at_ble_status_t pxp_monitor_connected_state_handler(void *params);
+
+at_ble_status_t pxp_monitor_pair_done_handler(void *params);
+
+at_ble_status_t pxp_monitor_encryption_change_handler(void *params);
 
 /**@brief Discover all Characteristics supported for Proximity Service of a
  * connected device
@@ -146,8 +163,7 @@ at_ble_status_t pxp_monitor_connected_state_handler(
  * @param[in] end_handle   end of the searched range
  *
  */
-void pxp_monitor_discovery_complete_handler(
-		at_ble_discovery_complete_t *discover_status);
+at_ble_status_t pxp_monitor_discovery_complete_handler(void *params);
 
 /**@brief Handles the read response from the peer/connected device
  *
@@ -155,8 +171,7 @@ void pxp_monitor_discovery_complete_handler(
  * compare the read response characteristics with available service.
  * and data is handle to the respective service.
  */
-void pxp_monitor_characteristic_read_response(
-		at_ble_characteristic_read_response_t *char_read_resp);
+at_ble_status_t pxp_monitor_characteristic_read_response(void *params);
 
 /**@brief Handles all Discovered characteristics of a given handler in a
  * connected device
@@ -169,8 +184,7 @@ void pxp_monitor_characteristic_read_response(
  *connected device
  *
  */
-void pxp_monitor_characteristic_found_handler(
-		at_ble_characteristic_found_t *characteristic_found);
+at_ble_status_t pxp_monitor_characteristic_found_handler(void *params);
 
 /**@brief Discover the Proximity services
  *
@@ -181,9 +195,12 @@ void pxp_monitor_characteristic_found_handler(
  *
  * @param[in] at_ble_primary_service_found_t  Primary service parameter
  *
+ * @return @ref AT_BLE_SUCCESS operation programmed successfully
+ * @return @ref AT_BLE_INVALID_PARAM incorrect parameter.
+ * @return @ref AT_BLE_FAILURE Generic error.
  */
-void pxp_monitor_service_found_handler(
-		at_ble_primary_service_found_t *primary_service_params);
+at_ble_status_t pxp_monitor_service_found_handler(
+		void *params);
 
 /**@brief Connect to a peer device
  *
@@ -202,6 +219,19 @@ void pxp_monitor_service_found_handler(
 at_ble_status_t pxp_monitor_connect_request(at_ble_scan_info_t *scan_buffer,
 		uint8_t index);
 
+/**@brief Discover all services
+ *
+ * @param[in] connection handle.
+ * @return @ref AT_BLE_SUCCESS operation programmed successfully
+ * @return @ref AT_BLE_INVALID_PARAM incorrect parameter.
+ * @return @ref AT_BLE_FAILURE Generic error.
+ */
+at_ble_status_t pxp_monitor_service_discover(at_ble_handle_t);
+
+at_ble_status_t pxp_monitor_start_scan(void);
+void register_hw_timer_start_func_cb(hw_timer_start_func_cb_t timer_start_fn);
+void register_hw_timer_stop_func_cb(hw_timer_stop_func_cb_t timer_stop_fn);
+void register_peripheral_state_cb(peripheral_state_cb_t peripheral_state_cb);
 #endif /*__PXP_MONITOR_H__*/
 // </h>
 

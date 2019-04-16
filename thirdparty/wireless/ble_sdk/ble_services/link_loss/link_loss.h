@@ -173,7 +173,7 @@ uint8_t lls_set_alert_value(at_ble_characteristic_changed_t *change_params, gatt
 
 typedef enum {
   LLS_NO_ALERT,
-  LLS_LOW_ALERT,
+  LLS_MILD_ALERT,
   LLS_HIGH_ALERT
 } link_loss_alert_level_t;
 

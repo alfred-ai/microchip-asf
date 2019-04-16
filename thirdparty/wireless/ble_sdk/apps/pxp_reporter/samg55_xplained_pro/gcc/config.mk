@@ -62,6 +62,7 @@ CSRCS = \
        sam/boards/samg55_xplained_pro/board_init.c        \
        sam/drivers/efc/efc.c                              \
        sam/drivers/flexcom/flexcom.c                      \
+       sam/drivers/pdc/pdc.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
@@ -102,6 +103,8 @@ INC_PATH = \
        sam/boards/samg55_xplained_pro                     \
        sam/drivers/efc                                    \
        sam/drivers/flexcom                                \
+       sam/drivers/pdc                                    \
+       sam/drivers/pdc/pdc_uart_example                   \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/supc                                   \
@@ -115,8 +118,8 @@ INC_PATH = \
        sam/utils/preprocessor                             \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/samg55     \
        thirdparty/wireless/ble_sdk/apps/pxp_reporter      \
-       thirdparty/wireless/ble_sdk/apps/pxp_reporter/samg55_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/pxp_reporter \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/immediate_alert \
@@ -185,7 +188,7 @@ CFLAGS =  \
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
        -D ATT_DB_MEMORY                                   \
-       -D BLE_DEVICE_ROLE=BLE_PERIPHERAL                  \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D IAS_GATT_SERVER                                 \
@@ -196,6 +199,8 @@ CPPFLAGS = \
        -D PROXIMITY_REPORTER                              \
        -D TXPS_GATT_SERVER                                \
        -D TX_POWER_SERVICE                                \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

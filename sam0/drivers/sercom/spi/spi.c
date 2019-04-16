@@ -630,7 +630,7 @@ enum status_code spi_init(
  * \return Status of the read operation.
  * \retval STATUS_OK              If the read was completed
  * \retval STATUS_ABORTED          If transaction was ended by master before
- *                                 entire buffer was transferred
+ *                                 the entire buffer was transferred
  * \retval STATUS_ERR_INVALID_ARG If invalid argument(s) were provided
  * \retval STATUS_ERR_TIMEOUT     If the operation was not completed within the
  *                                timeout in slave mode

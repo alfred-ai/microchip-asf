@@ -62,14 +62,47 @@
 /***********************************************************************************
  *									Globals			                               *
  **********************************************************************************/
+
+static const ble_event_callback_t ancs_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	anp_client_connected_state_handler,
+	anp_client_disconnected_event_handler,
+	NULL,
+	NULL,
+	anp_client_write_notification_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	anp_client_write_notification_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t ancs_gatt_client_handle[] = {
+	anp_client_service_found_handler,
+	NULL,
+	anp_client_characteristic_found_handler,
+	anp_client_descriptor_found_handler,
+	anp_client_discovery_complete_handler,
+	NULL,
+	NULL,
+	anp_client_write_response_handler,
+	anp_client_notification_handler,
+	NULL
+};
+
 /*Profile Information*/
 app_anp_data_t app_anp_info;
 
 /*ANCS profile data*/
 ancs_prf_t ancs_data;
-
-static uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09,0xFF, 0x00, 0x06, 0x28, 0x75, 0x11, 0x6a, 0x7f, 0x7f};
-
 
 /***********************************************************************************
  *									Implementation	                               *
@@ -89,24 +122,24 @@ void anp_info_init(void)
  */
 void anp_client_adv(void)
 {
-	uint8_t idx = 0;
-	uint8_t adv_data[ANP_ADV_DATA_NAME_LEN + ANP_SOLICITATION_LEN + 2*2];
-	
-	// Prepare ADV Data
-	adv_data[idx++] = ANP_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = ANP_ADV_DATA_NAME_TYPE;
-	memcpy(&adv_data[idx], ANP_ADV_DATA_NAME_DATA, ANP_ADV_DATA_NAME_LEN);
-	idx += ANP_ADV_DATA_NAME_LEN;
-	
-	adv_data[idx++] = ANP_SOLICITATION_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = ANP_ADV_DATA_SERVSOLICITATION_128UUID_TYPE;
-	memcpy(&adv_data[idx], ANP_ANCS_SERVICE_UUID, ANP_SOLICITATION_LEN);
-	idx += ANP_SOLICITATION_LEN;
-	
-	if (at_ble_adv_data_set(adv_data, idx, scan_rsp_data, SCAN_RESP_LEN) != AT_BLE_SUCCESS) 
-	{
-		DBG_LOG("adv set data not successful");
-	}
+	//uint8_t idx = 0;
+	//uint8_t adv_data[ANP_ADV_DATA_NAME_LEN + ANP_SOLICITATION_LEN + 2*2];
+	//
+	//// Prepare ADV Data
+	//adv_data[idx++] = ANP_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
+	//adv_data[idx++] = ANP_ADV_DATA_NAME_TYPE;
+	//memcpy(&adv_data[idx], ANP_ADV_DATA_NAME_DATA, ANP_ADV_DATA_NAME_LEN);
+	//idx += ANP_ADV_DATA_NAME_LEN;
+	//
+	//adv_data[idx++] = ANP_SOLICITATION_LEN + ADV_TYPE_LEN;
+	//adv_data[idx++] = ANP_ADV_DATA_SERVSOLICITATION_128UUID_TYPE;
+	//memcpy(&adv_data[idx], ANP_ANCS_SERVICE_UUID, ANP_SOLICITATION_LEN);
+	//idx += ANP_SOLICITATION_LEN;
+	//
+	//if (at_ble_adv_data_set(adv_data, idx, scan_rsp_data, SCAN_RESP_LEN) != AT_BLE_SUCCESS) 
+	//{
+		//DBG_LOG("adv set data not successful");
+	//}
 	
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	APP_ANP_FAST_ADV, APP_ANP_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS)
@@ -123,7 +156,7 @@ void anp_client_adv(void)
  * @param[in] connected event parameter containing details like handle
  * \note Called by the ble_manager after receiving connection event
  */
-void anp_client_connected_state_handler(at_ble_connected_t *params)
+at_ble_status_t anp_client_connected_state_handler(void *params)
 {
 	at_ble_status_t status;
 	
@@ -141,7 +174,7 @@ void anp_client_connected_state_handler(at_ble_connected_t *params)
 			DBG_LOG("Failed to start service discovery. status = %d", status);
 		}		
 	}
-
+	return AT_BLE_SUCCESS;
 }
 
 /**
@@ -149,7 +182,7 @@ void anp_client_connected_state_handler(at_ble_connected_t *params)
  * @param[in] discovery complete event which contains result of discovery event
  * \note Called by the ble_manager after receiving discovery complete event
  */
-void anp_client_discovery_complete_handler(at_ble_discovery_complete_t *params)
+at_ble_status_t anp_client_discovery_complete_handler(void *params)
 {
 		at_ble_discovery_complete_t discover_status;
 		memcpy((uint8_t *)&discover_status, params, sizeof(at_ble_discovery_complete_t));
@@ -175,6 +208,7 @@ void anp_client_discovery_complete_handler(at_ble_discovery_complete_t *params)
 				
 			}
 		}
+		return AT_BLE_SUCCESS;
 }
 
 /**
@@ -182,14 +216,15 @@ void anp_client_discovery_complete_handler(at_ble_discovery_complete_t *params)
  * @param[in] service found event parameter containing details like service handle,uuid
  * \note Called by the ble_manager after receiving service found event
  */
-void anp_client_service_found_handler(at_ble_primary_service_found_t * params)
+at_ble_status_t anp_client_service_found_handler(void * params)
 {
 	memcpy((uint8_t *)&ancs_data.ancs_serv, params, sizeof(at_ble_primary_service_found_t));
 	
 	DBG_LOG_DEV("Discover service Info:\r\n -->ConnHandle 0x%02x\r\n -->start handle 0x%02x\r\n -->End handle : 0x%02x",
 	ancs_data.ancs_serv.conn_handle,
 	ancs_data.ancs_serv.start_handle,
-	ancs_data.ancs_serv.end_handle);	
+	ancs_data.ancs_serv.end_handle);
+	return AT_BLE_SUCCESS;	
 }
 
 
@@ -198,7 +233,7 @@ void anp_client_service_found_handler(at_ble_primary_service_found_t * params)
  * @param[in] characteristic found event parameter containing details like characteristic handle,uuid
  * \note Called by the ble_manager after receiving characteristic found event
  */
-void anp_client_characteristic_found_handler(at_ble_characteristic_found_t *params)
+at_ble_status_t anp_client_characteristic_found_handler(void *params)
 {
 	memcpy((uint8_t *)&app_anp_info.char_info, params, sizeof(at_ble_characteristic_found_t));
 	
@@ -221,6 +256,7 @@ void anp_client_characteristic_found_handler(at_ble_characteristic_found_t *para
 			app_anp_info.char_info.char_handle,
 			app_anp_info.char_info.value_handle,
 			app_anp_info.char_info.properties);	
+			return AT_BLE_SUCCESS;
 }
 
 /**
@@ -228,22 +264,12 @@ void anp_client_characteristic_found_handler(at_ble_characteristic_found_t *para
  * @param[in] disconnected event parameter containing details like handle
  * \note Called by the ble_manager after receiving disconnection event
  */
-void anp_client_disconnected_event_handler(at_ble_disconnected_t *params)
+at_ble_status_t anp_client_disconnected_event_handler(void *params)
 {
 	at_ble_disconnected_t disconnect;
 	memcpy((uint8_t *)&disconnect, params, sizeof(at_ble_disconnected_t));
 	app_anp_info.devicedb = FALSE;
-	
-	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
-	APP_ANP_FAST_ADV, APP_ANP_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS)
-	{
-		DBG_LOG("BLE Adv start Failed");
-	}
-	else
-	{
-		DBG_LOG("Device in Advertisement mode");
-	}
-			
+	return AT_BLE_SUCCESS;
 }
 
 /**
@@ -251,7 +277,7 @@ void anp_client_disconnected_event_handler(at_ble_disconnected_t *params)
  * @param[in] descriptor found event parameter containing details like descriptor handle,uuid
  * \note Called by the ble_manager after receiving descriptor found event
  */
-void anp_client_descriptor_found_handler(at_ble_descriptor_found_t *params)
+at_ble_status_t anp_client_descriptor_found_handler(void *params)
 {
 		memcpy((uint8_t *)&ancs_data.notification_source_desc, params, sizeof(at_ble_descriptor_found_t));
 					
@@ -263,6 +289,7 @@ void anp_client_descriptor_found_handler(at_ble_descriptor_found_t *params)
 		DBG_LOG_DEV(" -->UUID: 0x%02x%02x",
 					ancs_data.notification_source_desc.desc_uuid.uuid[1],
 					ancs_data.notification_source_desc.desc_uuid.uuid[0]);
+		return AT_BLE_SUCCESS;
 }
 
 /**
@@ -279,13 +306,14 @@ void anp_client_char_changed_handler(at_ble_characteristic_changed_t *params)
 
 /**
  * @brief Handler for write response 
- * @param[in] write response parameter contating the result of write request
+ * @param[in] write response parameter contacting the result of write request
  * \note Called by the ble_manager after receiving write response event
  */
-void anp_client_write_response_handler(at_ble_characteristic_write_response_t *params)
+at_ble_status_t anp_client_write_response_handler(void *params)
 {
 	at_ble_characteristic_write_response_t writersp;
 	memcpy((uint8_t *)&writersp, params, sizeof(at_ble_characteristic_write_response_t));
+	return AT_BLE_SUCCESS;
 }
 
 /**
@@ -293,7 +321,7 @@ void anp_client_write_response_handler(at_ble_characteristic_write_response_t *p
  * @param[in] notification received parameter containing the notification value
  * \note Called by the ble_manager after receiving the notification
  */
-void anp_client_notification_handler(at_ble_notification_recieved_t *params)
+at_ble_status_t anp_client_notification_handler(void *params)
 {
 	 at_ble_notification_recieved_t notif;
 	 memcpy((uint8_t *)&notif, params, sizeof(at_ble_notification_recieved_t));
@@ -312,30 +340,45 @@ void anp_client_notification_handler(at_ble_notification_recieved_t *params)
 			 DBG_LOG("Waiting for Alert");
 		 }
 	 }
+	 return AT_BLE_SUCCESS;
 }
 
 /**
  * @brief Handler for enabling the notification 
  * \note Called by the ble_manager for enabling the notification in the gatt server
  */
-void anp_client_write_notification_handler(void *param)
+at_ble_status_t anp_client_write_notification_handler(void *param)
 {
 	uint8_t data[2] = {1, 0};
+		
 	if(at_ble_characteristic_write(ancs_data.notification_source_desc.conn_handle, 
 									ancs_data.notification_source_desc.desc_handle,
 									0, 2, data,FALSE, TRUE) == AT_BLE_FAILURE) {
 		DBG_LOG("\r\nFailed to send characteristic Write Request");
 	}
 	UNUSED(param);
+	return AT_BLE_SUCCESS;
 }
 
 /**
- * @brief invoked by ble manager for initializing the profro
+ * @brief invoked by application for initializing the profile
  */
 void anp_client_init( void *params)
 {
+	at_ble_status_t status;
 	anp_info_init();
 	ancs_init(&ancs_data);
-	anp_client_adv();
+	
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GAP_EVENT_TYPE,
+	ancs_gap_handle);
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GATT_CLIENT_EVENT_TYPE,
+	ancs_gatt_client_handle);
+	
+	status = ble_advertisement_data_set();
+	if (status != AT_BLE_SUCCESS) {
+		DBG_LOG("Advertisement data set failed reason %d",status);
+	}
 	UNUSED(params);
 }

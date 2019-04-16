@@ -58,7 +58,8 @@
  *  \section Description
  *
  *  Upon startup, the program will configure the GMAC with a default IP and
- *  MAC address and then ask the transceiver to auto-negotiate the best mode
+ *  MAC address. If the device support AT24MAC EEPROM, EIA-48 MAC address is
+ *  stored in it. And then ask the transceiver to auto-negotiate the best mode
  *  of operation. Once this is done, it will start to monitor incoming packets
  *  and process them whenever appropriate.
  *
@@ -390,6 +391,38 @@ static void gmac_process_eth_packet(uint8_t *p_uc_data, uint32_t ul_size)
 	}
 }
 
+#ifdef ETH_SUPPORT_AT24MAC
+static void at24mac_get_mac_address(void)
+{
+	twihs_options_t opt;
+	twihs_packet_t packet_mac_addr;
+	uint8_t orginal_mac_addr[BOARD_AT24MAC_PAGE_SIZE];
+
+	/* Enable TWI peripheral */
+	pmc_enable_periph_clk(ID_TWIHS0);
+
+	/* Init TWI peripheral */
+	opt.master_clk = sysclk_get_cpu_hz();
+	opt.speed = BOARD_AT24MAC_TWIHS_CLK;
+	twihs_master_init(BOARD_AT24MAC_TWIHS, &opt);
+
+	/* MAC address */
+	packet_mac_addr.chip = BOARD_AT24MAC_ADDRESS;
+	packet_mac_addr.addr[0] = 0x9A;
+	packet_mac_addr.addr_length = 1;
+	packet_mac_addr.buffer = orginal_mac_addr;
+	packet_mac_addr.length = BOARD_AT24MAC_PAGE_SIZE;
+
+	twihs_master_read(BOARD_AT24MAC_TWIHS, &packet_mac_addr);
+
+	if ((orginal_mac_addr[0] == 0xFC) && (orginal_mac_addr[1] == 0xC2)
+		&& (orginal_mac_addr[2] == 0x3D)) {
+		for (uint8_t i = 0; i < 6; i++)
+			gs_uc_mac_address[i] = orginal_mac_addr[i];
+	}
+}
+#endif
+
 /**
  *  \brief Configure UART console.
  */
@@ -442,6 +475,10 @@ int main(void)
 	configure_console();
 
 	puts(STRING_HEADER);
+
+#ifdef ETH_SUPPORT_AT24MAC
+	at24mac_get_mac_address();
+#endif
 
 	/* Display MAC & IP settings */
 	printf("-- MAC %x:%x:%x:%x:%x:%x\n\r",

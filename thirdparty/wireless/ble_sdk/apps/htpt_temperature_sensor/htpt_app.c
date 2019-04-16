@@ -137,10 +137,6 @@ static void ble_init(void)
 	/* Initialize the platform */
 	DBG_LOG("Initializing BTLC1000");
 	
-	/*Trace Logs*/
-	trace_register_printFn((void *)&printf);
-	trace_set_level(TRACE_LVL_ALL);
-	
 	/* Init BLE device */
 	if(at_ble_init(&pf_cfg) != AT_BLE_SUCCESS)
 	{
@@ -159,8 +155,8 @@ static void htp_init_defaults(htp_app_t *htp_temp)
 	htp_temp->temperature_type = HTP_TYPE_ARMPIT;
 	htp_temp->max_meaurement_intv = 30;
 	htp_temp->min_measurement_intv = 1;
-	htp_temp->security_lvl = HTPT_UNAUTH;
-	htp_temp->optional = HTPT_ALL_FEAT_SUP;
+	htp_temp->security_lvl = HTPT_AUTH;
+	htp_temp->optional = HTPT_TEMP_TYPE_CHAR_SUP;
 	htp_temp->flags = (at_ble_htpt_temp_flags)(HTPT_FLAG_CELSIUS | HTPT_FLAG_TYPE);
 }
 
@@ -625,13 +621,13 @@ int main (void)
 				if(!app_device_bond)
 				{
 					/* Authentication requirement is bond and MITM*/
-					features.desired_auth =  AT_BLE_MODE1_L1_NOAUTH_PAIR_ENC;
-					features.bond = false;
-					features.mitm_protection = false;
+					features.desired_auth =  AT_BLE_MODE1_L2_AUTH_PAIR_ENC;
+					features.bond = true;
+					features.mitm_protection = true;
 					features.oob_avaiable = false;
 					/* Device capabilities is display only , key will be generated 
 					and displayed */
-					features.io_cababilities = AT_BLE_IO_CAP_NO_INPUT_NO_OUTPUT;
+					features.io_cababilities = AT_BLE_IO_CAP_DISPLAY_ONLY;
 					/* Distribution of LTK is required */
 					features.initiator_keys =   AT_BLE_KEY_DIST_ENC;
 					features.responder_keys =   AT_BLE_KEY_DIST_ENC;
@@ -657,8 +653,8 @@ int main (void)
 							handle);
 					if(at_ble_authenticate(handle, &features, &app_bond_info, NULL) != AT_BLE_SUCCESS)
 					{
-						features.bond = false;
-						features.mitm_protection = false;
+						features.bond = true;
+						features.mitm_protection = true;
 						at_ble_authenticate(handle, &features, NULL, NULL);
 					}					
 				}

@@ -123,8 +123,8 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/samd21     \
        thirdparty/wireless/ble_sdk/apps/time_information  \
-       thirdparty/wireless/ble_sdk/apps/time_information/samd21_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/time_information \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/current_time \
@@ -187,11 +187,12 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
-       -D BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL      \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D CURRENT_TIME_SERVICE                            \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D NEXT_DST_SERVICE                                \
        -D REFERENCE_TIME_SERVICE                          \
@@ -199,6 +200,8 @@ CPPFLAGS = \
        -D TC_ASYNC=true                                   \
        -D TIP_CLIENT                                      \
        -D TP_ANDROID                                      \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAMD21J18A__
 

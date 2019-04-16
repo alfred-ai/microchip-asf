@@ -306,7 +306,7 @@ static void send_receive_cmd(void)
 			for (i=0; i < uc_size; i++) {
 				printf("0x%02X ", uc_message[i]);
 			}
-		} else {
+		} else if (uc_key != 'q') {
 			puts("Receive error! \r\n");
 		}
 	}

@@ -23,9 +23,6 @@
  * 3. The name of Atmel may not be used to endorse or promote products derived
  *    from this software without specific prior written permission.
  *
- * 4. This software may only be redistributed and used in connection with an
- *    Atmel microcontroller product.
- *
  * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
@@ -247,7 +244,7 @@ int main(void)
 
 	/**
 	 * AP mode.
-	 * On and off AP mode.
+	 * Turn On and off AP mode.
 	 */
 	ret = enable_disable_ap_mode();
 	if (M2M_SUCCESS != ret) {
@@ -260,7 +257,7 @@ int main(void)
 
 	/**
 	 * P2P mode.
-	 * On and off P2P mode.
+	 * Turn On and off P2P mode.
 	 */
 	ret = enable_disable_p2p_mode();
 	if (M2M_SUCCESS != ret) {

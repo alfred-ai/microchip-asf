@@ -90,6 +90,7 @@
 
 /**
  * \brief Install interface
+ *
  * Allocate interface endpoints if supported.
  *
  * \param[in] uhc_device_t	  Device to request
@@ -198,6 +199,7 @@ bool uhi_cdc_is_tx_ready(uint8_t port);
 
 /**
  * \brief Puts a byte on CDC line
+ *
  * The type int is used to support printf redirection from compiler LIB.
  *
  * \param[in] port       Communication port number
@@ -373,7 +375,7 @@ iram_size_t uhi_cdc_write_buf(uint8_t port, const void* buf, iram_size_t size);
  *
  * \section asfdoc_uhi_cdc_config_examples_3 conf_clocks.h
  *
- * \subsection asfdoc_uhi_cdc_config_examples_3_1 SAMD21 Devices (USB)
+ * \subsection asfdoc_uhi_cdc_config_examples_3_1 SAM D21 Devices (USB)
  * \include example/samd21j18a_samd21_xplained_pro/conf_clocks.h
  *
  * \section asfdoc_uhi_cdc_config_examples_4 conf_board.h
@@ -390,7 +392,7 @@ iram_size_t uhi_cdc_write_buf(uint8_t port, const void* buf, iram_size_t size);
  * \subsection asfdoc_uhi_cdc_config_examples_4_4 SAM3X, SAM3A Devices (UOTGHS: USB OTG High Speed)
  * \include example/sam3x8h_sam3x_ek/conf_board.h
  *
- * \subsection asfdoc_uhi_cdc_config_examples_4_5 SAMD21 Devices (USB)
+ * \subsection asfdoc_uhi_cdc_config_examples_4_5 SAM D21 Devices (USB)
  * \include example/samd21j18a_samd21_xplained_pro/conf_board.h
  */
 
@@ -399,14 +401,19 @@ iram_size_t uhi_cdc_write_buf(uint8_t port, const void* buf, iram_size_t size);
  *
  * <table>
  * <tr>
- *    <th>Doc. Rev.</td>
- *    <th>Date</td>
- *    <th>Comments</td>
+ *    <th>Doc. Rev.</th>
+ *    <th>Date</th>
+ *    <th>Comments</th>
+ * </tr>
+ * <tr>
+ *    <td>42338B</td>
+ *    <td>12/2015</td>
+ *    <td>Fixed typos</td>
  * </tr>
  * <tr>
  *    <td>42338A</td>
  *    <td>12/2014</td>
- *    <td>Initial release.</td>
+ *    <td>Initial release</td>
  * </tr>
  * </table>
  */

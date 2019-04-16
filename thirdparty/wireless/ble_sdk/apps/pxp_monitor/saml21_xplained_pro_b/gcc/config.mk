@@ -123,8 +123,8 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/apps/pxp_monitor       \
-       thirdparty/wireless/ble_sdk/apps/pxp_monitor/saml21_xplained_pro_b \
        thirdparty/wireless/ble_sdk/ble_profiles/pxp_monitor \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/immediate_alert \
@@ -187,7 +187,7 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
-       -D BLE_DEVICE_ROLE=BLE_CENTRAL                     \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL                \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
@@ -195,12 +195,15 @@ CPPFLAGS = \
        -D IMMEDIATE_ALERT_SERVICE                         \
        -D LINK_LOSS_SERVICE                               \
        -D LLS_GATT_CLIENT                                 \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D PROXIMITY_MONITOR                               \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
        -D TXPS_GATT_CLIENT                                \
        -D TX_POWER_SERVICE                                \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAML21J18B__
 

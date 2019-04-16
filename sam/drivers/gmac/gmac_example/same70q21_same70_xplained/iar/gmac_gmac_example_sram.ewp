@@ -311,6 +311,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../twihs</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../boards/same70_xplained</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
@@ -583,6 +584,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../twihs</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../boards/same70_xplained</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
@@ -1280,6 +1282,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../twihs</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../boards/same70_xplained</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
@@ -1552,6 +1555,7 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/clock</state>
 					<state>$PROJ_DIR$/../../../../../boards</state>
+					<state>$PROJ_DIR$/../../../../twihs</state>
 					<state>$PROJ_DIR$/../../../../../../common/utils/stdio/stdio_serial</state>
 					<state>$PROJ_DIR$/../../../../../boards/same70_xplained</state>
 					<state>$PROJ_DIR$/../../../../../../common/services/gpio</state>
@@ -2042,6 +2046,15 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../usart/usart.h</name>
+				</file>
+			</group>
+			<group>
+				<name>twihs</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../twihs/twihs.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../twihs/twihs.h</name>
 				</file>
 			</group>
 		</group>

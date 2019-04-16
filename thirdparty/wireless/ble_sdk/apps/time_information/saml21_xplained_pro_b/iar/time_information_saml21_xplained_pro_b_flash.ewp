@@ -169,16 +169,19 @@
 					<state>SYSTICK_MODE</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
-					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>NEXT_DST_SERVICE</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>CURRENT_TIME_SERVICE</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TIP_CLIENT</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
@@ -325,10 +328,10 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
@@ -504,16 +507,19 @@
 					<state>SYSTICK_MODE</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
-					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>NEXT_DST_SERVICE</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>CURRENT_TIME_SERVICE</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TIP_CLIENT</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
@@ -627,10 +633,10 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
@@ -1198,16 +1204,19 @@
 					<state>SYSTICK_MODE</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
-					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>NEXT_DST_SERVICE</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>CURRENT_TIME_SERVICE</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TIP_CLIENT</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
@@ -1354,10 +1363,10 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
@@ -1533,16 +1542,19 @@
 					<state>SYSTICK_MODE</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
-					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>NEXT_DST_SERVICE</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>CURRENT_TIME_SERVICE</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
-					<state>BLE_DEVICE_ROLE=BLE_CENTRAL_AND_PERIPHERAL</state>
+					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TIP_CLIENT</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
@@ -1656,10 +1668,10 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
@@ -2191,36 +2203,42 @@
 						<file>
 							<name>$PROJ_DIR$/../../tip_app.c</name>
 						</file>
+						<file>
+							<name>$PROJ_DIR$/../../tip_app.h</name>
+						</file>
 						<group>
 							<name>saml21_xplained_pro_b</name>
-							<file>
-								<name>$PROJ_DIR$/../conf_timer.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_serialdrv.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_console.h</name>
-							</file>
 							<group>
 								<name>iar</name>
 								<file>
 									<name>$PROJ_DIR$/asf.h</name>
 								</file>
 							</group>
+						</group>
+					</group>
+					<group>
+						<name>config</name>
+						<group>
+							<name>saml21</name>
 							<file>
-								<name>$PROJ_DIR$/../conf_clocks.h</name>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_extint.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_timer.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_board.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_console.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_serialdrv.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_clocks.h</name>
 							</file>
 						</group>
-						<file>
-							<name>$PROJ_DIR$/../../tip_app.h</name>
-						</file>
 					</group>
 				</group>
 				<group>
@@ -2281,6 +2299,9 @@
 						<group>
 							<name>pio</name>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21g18b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21e17b.h</name>
 							</file>
 							<file>
@@ -2288,9 +2309,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21j17b.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21g18b.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21e15b.h</name>
@@ -2371,13 +2389,13 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/evsys.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/rstc.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/ac.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/rtc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/ac.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/rstc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/component/sercom.h</name>

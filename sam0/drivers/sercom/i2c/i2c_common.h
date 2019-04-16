@@ -344,7 +344,7 @@ extern "C" {
  *   <tr>
  *      <td>false</td>
  *      <td>Disabled, all reception is dropped</td>
- *      <td>GCLK disabled when master is idle</td>
+ *      <td>Generic Clock (GCLK) disabled when master is idle</td>
  *   </tr>
  *   <tr>
  *      <td>true</td>
@@ -535,14 +535,14 @@ enum i2c_transfer_direction {
  * \if (I2C_MASTER_MODE || I2C_MASTER_CALLBACK_MODE)
  * <table>
  *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
+ *		<th>Doc. Rev.</th>
+ *		<th>Date</th>
+ *		<th>Comments</th>
  *	</tr>
  *	<tr>
  *		<td>42117E</td>
- *		<td>08/2015</td>
- *		<td>Added support for SAM L21/L22, SAM DA1 and SAM C21</td>
+ *		<td>12/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, and SAM C21</td>
  *	</tr>
  *	<tr>
  *		<td>42117D</td>
@@ -569,14 +569,14 @@ enum i2c_transfer_direction {
  * \else
  * <table>
  *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
+ *		<th>Doc. Rev.</th>
+ *		<th>Date</th>
+ *		<th>Comments</th>
  *	</tr>
  *	<tr>
  *		<td>42116E</td>
- *		<td>08/2015</td>
- *		<td>Added support for SAM L21/L22, SAM DA1 and SAM C21</td>
+ *		<td>12/2015</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, and SAM C21</td>
  *	</tr>
  *	<tr>
  *		<td>42116D</td>

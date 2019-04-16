@@ -62,9 +62,6 @@
 #include "ble_manager.h"
 
 /* === GLOBALS ============================================================ */
-/** @brief Scan response data*/
-uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09,0xff, 0x00, 0x06, 0xd6, 0xb2, 0xf0, 0x05, 0xf0, 0xf8};
-	
 bool volatile timer_cb_done = false; 
 uint8_t fw_version[10];
 at_ble_handle_t dis_conn_handle;
@@ -84,65 +81,86 @@ static void timer_callback_handler(void)
 
 /* Advertisement data set and Advertisement start */
 static at_ble_status_t device_information_advertise(void)
-{
-	uint8_t idx = 0;
-	uint8_t adv_data [ DIS_ADV_DATA_NAME_LEN + DIS_ADV_DATA_UUID_LEN   + (2*2)];
+{	
+	at_ble_status_t status = AT_BLE_FAILURE;
 	
-	adv_data[idx++] = DIS_ADV_DATA_UUID_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = DIS_ADV_DATA_UUID_TYPE;
-
-	/* Appending the UUID */
-	adv_data[idx++] = (uint8_t)DIS_SERVICE_UUID;
-	adv_data[idx++] = (uint8_t)(DIS_SERVICE_UUID >> 8);
-	
-	//Appending the complete name to the Ad packet
-	adv_data[idx++] = DIS_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
-	adv_data[idx++] = DIS_ADV_DATA_NAME_TYPE;
-	
-	memcpy(&adv_data[idx], DIS_ADV_DATA_NAME_DATA, DIS_ADV_DATA_NAME_LEN );
-	idx += DIS_ADV_DATA_NAME_LEN;
-	
-	/* Adding the advertisement data and scan response data */
-	if(!(at_ble_adv_data_set(adv_data, idx, scan_rsp_data, SCAN_RESP_LEN) == AT_BLE_SUCCESS) )
+	if((status = ble_advertisement_data_set()) != AT_BLE_SUCCESS)
 	{
-		DBG_LOG("Failed to set adv data");
+		DBG_LOG("advertisement data set failed reason :%d",status);
+		return status;
 	}
 	
 	/* Start of advertisement */
-	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY, APP_DIS_FAST_ADV, APP_DIS_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS)
+	if((status = at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY, APP_DIS_FAST_ADV, APP_DIS_ADV_TIMEOUT, 0)) == AT_BLE_SUCCESS)
 	{
 		DBG_LOG("BLE Started Adv");
 		return AT_BLE_SUCCESS;
 	}
 	else
 	{
-		DBG_LOG("BLE Adv start Failed");
+		DBG_LOG("BLE Adv start Failed status :%d",status);
 	}
-	return AT_BLE_FAILURE;
+	return status;
 }
 
 /* Callback registered for AT_BLE_PAIR_DONE event from stack */
-static void ble_paired_app_event(at_ble_handle_t conn_handle)
+static at_ble_status_t ble_paired_app_event(void *param)
 {
+	at_ble_pair_done_t *at_ble_pair_done = (at_ble_pair_done_t *)param;
 	LED_On(LED0);
 	hw_timer_start(FIRMWARE_UPDATE_INTERVAL);
-	dis_conn_handle = conn_handle;
+	dis_conn_handle = at_ble_pair_done->handle;
+	return AT_BLE_SUCCESS;
 }
 
 /* Callback registered for AT_BLE_DISCONNECTED event from stack */
-static void ble_disconnected_app_event(at_ble_handle_t conn_handle)
+static at_ble_status_t ble_disconnected_app_event(void *param)
 {
 	hw_timer_stop();
 	timer_cb_done = false;
 	LED_Off(LED0);
 	device_information_advertise();
-        ALL_UNUSED(conn_handle);
+    ALL_UNUSED(param);
+	return AT_BLE_SUCCESS;
+}
+
+/* Callback registered for AT_BLE_CONNECTED event from stack */
+static at_ble_status_t ble_connected_app_event(void *param)
+{
+	#if !BLE_PAIR_ENABLE
+		ble_paired_app_event(param);
+	#else
+		ALL_UNUSED(param);
+	#endif
+	return AT_BLE_SUCCESS;
 }
 
 void button_cb(void)
 {
 	/* For user usage */
 }
+
+static const ble_event_callback_t device_info_app_gap_cb[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	ble_connected_app_event,
+	ble_disconnected_app_event,
+	NULL,
+	NULL,
+	ble_paired_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	ble_paired_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
  
 /**
 * \Device Information Service Application main function
@@ -188,12 +206,11 @@ int main(void)
 	
 	device_information_advertise();
 	
-	/* Register callback for paired event */
-	register_ble_paired_event_cb(ble_paired_app_event);
-	
-	/* Register callback for disconnected event */
-	register_ble_disconnected_event_cb(ble_disconnected_app_event);
-	
+	/* Register callbacks for gap related events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+									BLE_GAP_EVENT_TYPE,
+									device_info_app_gap_cb);
+										
 	/* Capturing the events  */ 
 	while (app_exec) {
 		/* BLE Event Task */

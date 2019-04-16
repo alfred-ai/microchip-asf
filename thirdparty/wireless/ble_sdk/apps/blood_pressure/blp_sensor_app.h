@@ -114,13 +114,7 @@
 /**
  * @brief Default Time stamp Values
  */
-
-#define YEAR												(2015)
-#define MONTH												(8)
-#define DAY													(15)
-#define HOURS												(0)
-#define MINUTES												(0)
-#define SECONDS												(0)								
+							
 
 /**
  * @brief Max Time stamp Values for time stamp calculation
@@ -145,3 +139,26 @@
 #define INTERIM_SYS_MMHG									(7)
 #define INTERIM_SYS_KPA										(8)
 
+/**
+ * @brief app_connected_state ble manger notifies the application about state
+ * @param[in] connected parameters
+ */
+static at_ble_status_t app_connected_state_handler(void *params);
+
+/**
+ * @brief app_connected_state ble manger notifies the application about state
+ * @param[in] disconnection parameters
+ */
+static at_ble_status_t app_disconnected_state_handler(void *param);
+
+/** @brief app_notification_confirmation_handler called by ble manager 
+ *	to give the status of notification sent
+ *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
+ */	
+static at_ble_status_t app_notification_confirmation_handler(void *params);
+
+/** @brief app_indication_confirmation_handler called by ble manager 
+ *	to give the status of notification sent
+ *  @param[in] at_ble_cmd_complete_event_t address of the cmd completion
+ */	
+static at_ble_status_t app_indication_confirmation_handler(void *params);

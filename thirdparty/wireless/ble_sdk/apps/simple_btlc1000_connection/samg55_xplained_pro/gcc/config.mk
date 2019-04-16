@@ -62,11 +62,13 @@ CSRCS = \
        sam/boards/samg55_xplained_pro/board_init.c        \
        sam/drivers/efc/efc.c                              \
        sam/drivers/flexcom/flexcom.c                      \
+       sam/drivers/pdc/pdc.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
        sam/drivers/pmc/pmc.c                              \
        sam/drivers/pmc/sleep.c                            \
        sam/drivers/supc/supc.c                            \
+       sam/drivers/tc/tc.c                                \
        sam/drivers/usart/usart.c                          \
        sam/utils/cmsis/samg/samg55/source/templates/gcc/startup_samg55.c \
        sam/utils/cmsis/samg/samg55/source/templates/system_samg55.c \
@@ -75,6 +77,7 @@ CSRCS = \
        thirdparty/wireless/ble_sdk/services/console/sam/console_serial.c \
        thirdparty/wireless/ble_sdk/services/serial/uart/sam/serial_drv.c \
        thirdparty/wireless/ble_sdk/services/serial_fifo/serial_fifo.c \
+       thirdparty/wireless/ble_sdk/services/timer/sam/timer_hw.c \
        thirdparty/wireless/ble_sdk/src/platform.c
 
 # List of assembler source files.
@@ -95,9 +98,12 @@ INC_PATH = \
        sam/boards/samg55_xplained_pro                     \
        sam/drivers/efc                                    \
        sam/drivers/flexcom                                \
+       sam/drivers/pdc                                    \
+       sam/drivers/pdc/pdc_uart_example                   \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \
        sam/drivers/supc                                   \
+       sam/drivers/tc                                     \
        sam/drivers/usart                                  \
        sam/utils                                          \
        sam/utils/cmsis/samg/samg55/include                \
@@ -107,11 +113,12 @@ INC_PATH = \
        sam/utils/preprocessor                             \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
-       thirdparty/wireless/ble_sdk/apps/simple_btlc1000_connection/samg55_xplained_pro \
+       thirdparty/wireless/ble_sdk/apps/config/samg55     \
        thirdparty/wireless/ble_sdk/inc                    \
        thirdparty/wireless/ble_sdk/services/console       \
        thirdparty/wireless/ble_sdk/services/serial/uart   \
        thirdparty/wireless/ble_sdk/services/serial_fifo   \
+       thirdparty/wireless/ble_sdk/services/timer         \
        thirdparty/wireless/ble_sdk/utils \
        thirdparty/wireless/ble_sdk/apps/simple_btlc1000_connection/samg55_xplained_pro/gcc
 
@@ -173,6 +180,8 @@ CPPFLAGS = \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D NEW_EVT_HANDLER                                 \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

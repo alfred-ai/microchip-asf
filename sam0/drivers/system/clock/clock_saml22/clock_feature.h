@@ -1365,13 +1365,13 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  *
  * <table>
  *	<tr>
- *		<th>Doc. Rev.</td>
- *		<th>Date</td>
- *		<th>Comments</td>
+ *		<th>Doc. Rev.</th>
+ *		<th>Date</th>
+ *		<th>Comments</th>
  *	</tr>
  *	<tr>
  *		<td>42551A</td>
- *		<td>10/2015</td>
+ *		<td>12/2015</td>
  *		<td>Initial release</td>
  *	</tr>
  * </table>

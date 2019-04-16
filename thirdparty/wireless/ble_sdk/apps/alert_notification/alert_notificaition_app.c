@@ -62,7 +62,7 @@
 
 extern gatt_anp_handler_t anp_handle;
 
-extern at_ble_connected_t ble_connected_dev_info[MAX_DEVICE_CONNECTED];
+extern ble_connected_dev_info_t ble_dev_info[BLE_MAX_DEVICE_CONNECTED];
 
 volatile bool user_request = false;
 
@@ -97,7 +97,10 @@ static void app_connected_state(bool connected)
 {
 	app_state = connected;
 	if (connected) {
-		DBG_LOG("App connected");	
+		DBG_LOG_DEV("App connected");	
+	} else {
+		/* Starting advertisement on disconnection */
+		anp_client_adv();
 	}		
 }
 
@@ -131,15 +134,64 @@ int main(void)
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 	
+	/* Initializing the anp profile */
+	anp_client_init(NULL);
+	
+	/* Starting the advertisement */
+	anp_client_adv();
+	
 	/* Capturing the events  */
 	while(1) {
 
 		/* BLE Event Task */
 		ble_event_task();
 		if (user_request) {
-			
+	
 			/* Button debounce delay*/
 			delay_ms(350);
+			#ifdef ENABLE_PTS
+			DBG_LOG("Press 1 for service discovery");
+			DBG_LOG("Press 2 for write notification");
+			DBG_LOG("Press 3 for disable notification");
+			DBG_LOG("Press 4 for write to alert notification control point");
+			DBG_LOG("And press Enter");
+			uint8_t ncp_data[2] = {0};
+			int option = 0;
+			scanf("%d", &option);
+			DBG_LOG("Received %d",option);
+			switch (option) {
+			case 1 :
+				alert_service_discovery();
+				break;
+			case 2 :
+				anp_client_write_notification_handler();
+				break;
+			case 3 :
+				anp_client_disable_notification();
+				break;
+ 			case 4 :
+				DBG_LOG("Enter alert catagory[email/news/..] and press Enter");
+				scanf("%d",&option);
+				if (option > 255) {
+					DBG_LOG("Entered a wrong value[0-255]");
+					break;
+				} else {
+					ncp_data[1] = (uint8_t) option;
+					DBG_LOG("Alert catogory is %d",ncp_data[1]);
+				}
+ 				DBG_LOG("Enter the command ID[0 - 5] and press Enter");
+				scanf("%d", &option);
+				if (option > 255) {
+					DBG_LOG("Entered a wrong value[0-255]");
+					break;
+				} else {
+					ncp_data[0] = (uint8_t) option;
+					DBG_LOG("Command ID is %d",ncp_data[0]);
+				}
+ 				anp_write_to_ncp(ncp_data);
+				break;
+			}
+			#else
 			if (notification_enable) {
 				anp_client_write_notification_handler();
 				notification_enable = false;
@@ -147,6 +199,7 @@ int main(void)
 				anp_client_disable_notification();
 				notification_enable = true;
 			}
+			#endif
 			user_request = false;
 		}
 	}

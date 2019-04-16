@@ -328,6 +328,9 @@ int main( void )
 	sysclk_init();
 	board_init();
 
+	SCB_DisableICache();
+	SCB_DisableDCache();
+
 	/* Initialize debug console */
 	configure_console();
 

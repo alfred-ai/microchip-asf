@@ -48,6 +48,8 @@ extern "C" {
 
 #include "board.h"
 
+/** Default settings for SAME70 Xplained. */
+
 /*
    ---------------------------------
    ---------- PIN settings ---------
@@ -69,14 +71,14 @@ extern "C" {
 /** SPI pin and instance settings. */
 #define CONF_WINC_SPI					SPI0
 #define CONF_WINC_SPI_ID				ID_SPI0
-#define CONF_WINC_SPI_MISO_GPIO			SPI0_MISO_GPIO
-#define CONF_WINC_SPI_MISO_FLAGS		SPI0_MISO_FLAGS
-#define CONF_WINC_SPI_MOSI_GPIO			SPI0_MOSI_GPIO
-#define CONF_WINC_SPI_MOSI_FLAGS		SPI0_MOSI_FLAGS
-#define CONF_WINC_SPI_CLK_GPIO			SPI0_SPCK_GPIO
-#define CONF_WINC_SPI_CLK_FLAGS			SPI0_SPCK_FLAGS
-#define CONF_WINC_SPI_CS_GPIO			SPI0_NPCS1_GPIO
-#define CONF_WINC_SPI_CS_FLAGS			SPI0_NPCS1_FLAGS
+#define CONF_WINC_SPI_MISO_GPIO			PIO_PD20_IDX
+#define CONF_WINC_SPI_MISO_FLAGS		IOPORT_MODE_MUX_B
+#define CONF_WINC_SPI_MOSI_GPIO			PIO_PD21_IDX
+#define CONF_WINC_SPI_MOSI_FLAGS		IOPORT_MODE_MUX_B
+#define CONF_WINC_SPI_CLK_GPIO			PIO_PD22_IDX
+#define CONF_WINC_SPI_CLK_FLAGS			IOPORT_MODE_MUX_B
+#define CONF_WINC_SPI_CS_GPIO			PIO_PD25_IDX
+#define CONF_WINC_SPI_CS_FLAGS			IOPORT_MODE_MUX_B
 #define CONF_WINC_SPI_NPCS				(1)
 
 /** SPI delay before SPCK and between consecutive transfer. */

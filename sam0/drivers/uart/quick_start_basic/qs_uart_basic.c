@@ -78,7 +78,7 @@ static void configure_uart(void)
 //! [setup_config_defaults]
 
 //! [setup_change_config]
-	config_uart.baud_rate = 38400;
+	config_uart.baud_rate = 115200;
 	config_uart.pin_number_pad[0] = EDBG_CDC_SERCOM_PIN_PAD0;
 	config_uart.pin_number_pad[1] = EDBG_CDC_SERCOM_PIN_PAD1;
 	config_uart.pin_number_pad[2] = EDBG_CDC_SERCOM_PIN_PAD2;
@@ -100,6 +100,12 @@ static void configure_uart(void)
 
 int main(void)
 {
+	/**
+	 * For make this QS work, disable the systick to stop task switch.
+	 * Should not do it if you want the BLE functions.
+	 */
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+
 	system_clock_config(CLOCK_RESOURCE_XO_26_MHZ, CLOCK_FREQ_26_MHZ);
 
 //! [setup_init]

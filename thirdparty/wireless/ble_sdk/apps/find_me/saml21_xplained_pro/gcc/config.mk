@@ -121,8 +121,8 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/apps/find_me           \
-       thirdparty/wireless/ble_sdk/apps/find_me/saml21_xplained_pro \
        thirdparty/wireless/ble_sdk/ble_profiles/find_me_target \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/ble_services/immediate_alert \
@@ -184,7 +184,7 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D ATT_DB_MEMORY                                   \
-       -D BLE_DEVICE_ROLE=BLE_PERIPHERAL                  \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
@@ -194,6 +194,8 @@ CPPFLAGS = \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
+       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_6WIRE_MODE=true                \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAML21J18A__
 

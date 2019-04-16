@@ -248,7 +248,7 @@ void slcd_reset(void)
  * \param[in] contrast Contrast value
  *
  * \return Status of set contrast.
- * \retval STATUS_OK SLCD contrast set successful
+ * \retval STATUS_OK               SLCD contrast set successful
  * \retval STATUS_ERR_INVALID_ARG  SLCD is not working in internal supply mode
  */
 enum status_code slcd_set_contrast(uint8_t contrast)
@@ -292,8 +292,8 @@ void slcd_blink_get_config_defaults(struct slcd_blink_config *blink_config)
  * \param[in] config  Pointer to an SLCD blink configuration structure
  *
  * \return Status of the configuration procedure.
- * \retval STATUS_OK SLCD blink configuration went successful
- * \retval STATUS_ERR_INVALID_ARG  If blink  configuration failed
+ * \retval STATUS_OK               SLCD blink configuration went successful
+ * \retval STATUS_ERR_INVALID_ARG  If blink configuration failed
  */
 
 enum status_code  slcd_blink_set_config(struct slcd_blink_config *const blink_config)
@@ -536,9 +536,9 @@ void slcd_set_display_memory(void)
 /**
  * \brief Set the specified segment in the SLCD display memory
  *
- * \param[in] pix_seg Pixel/segment SEG coordinate
+ * \param[in] pix_seg     Pixel/segment SEG coordinate
  * \param[in] byte_offset Byte offset in display memory
- * \param[in] seg_mask Byte offset in display memory
+ * \param[in] seg_mask    Byte offset in display memory
  */
 void slcd_set_seg_data(uint8_t seg_data,uint8_t byte_offset,uint8_t seg_mask)
 {
@@ -592,7 +592,7 @@ void slcd_automated_char_get_config_default(
  * \param[in] config  Pointer to an SLCD automated character configuration structure
  *
  * \return Status of the configuration procedure.
- * \retval STATUS_OK SLCD automated character configuration went successful
+ * \retval STATUS_OK               SLCD automated character configuration went successful
  * \retval STATUS_ERR_INVALID_ARG  If automated character  configuration failed
  */
 enum status_code slcd_automated_char_set_config(
@@ -621,9 +621,9 @@ enum status_code slcd_automated_char_set_config(
  *
  * Set Character mode amd SEG line per digit.
  *
- * \param[in] order  Mapping order in char mode
+ * \param[in] order         Mapping order in char mode
  * \param[in] seg_line_num  Define the number of SEG line per digit,
- * 	it equal to number of SEG line - 1
+ *                          it equal to number of SEG line - 1
  */
 void slcd_character_map_set(
 		enum slcd_automated_char_order order,
@@ -636,8 +636,8 @@ void slcd_character_map_set(
 /**
  * \brief Write segments data to display memory in character mode
  *
- * \param[in] seg_data Pixel/segment data
- * \param[in] data_mask Segments data mask
+ * \param[in] seg_data       Pixel/segment data
+ * \param[in] data_mask      Segments data mask
  * \param[in] com_line_index COM line index
  * \param[in] seg_line_index Segments line index
  */
@@ -683,7 +683,7 @@ void slcd_circular_shift_get_config_defaults(
  * \param[in] config  Pointer to an SLCD circular shift configuration structure
  *
  * \return Status of the configuration procedure.
- * \retval STATUS_OK SLCD circular shift configuration went successful
+ * \retval STATUS_OK               SLCD circular shift configuration went successful
  * \retval STATUS_ERR_INVALID_ARG  If circular shift configuration failed
  */
 

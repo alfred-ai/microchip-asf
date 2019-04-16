@@ -42,11 +42,11 @@
 
 /* === INCLUDES ============================================================ */
 
-#include "asf.h"
+#include <asf.h>
 #include "console_serial.h"
 #include "conf_console.h"
-
-
+#include "usart.h"
+#include "platform.h"
 /* === TYPES =============================================================== */
 
 /* === MACROS ============================================================== */
@@ -72,6 +72,14 @@ void serial_console_init(void)
 	usart_enable(&cdc_uart_module);
 }
 
+uint8_t getchar_timeout(uint32_t timeout)
+{
+	uint16_t temp = NULL;
 
+	start_timer(timeout);
+	while((STATUS_OK != usart_read_wait(&cdc_uart_module, &temp)) && (timer_done()>0));
+
+	return ((uint8_t)temp);	
+}
 
 /* EOF */

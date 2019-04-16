@@ -106,14 +106,14 @@
 
 /** @brief APP_HID_FAST_ADV between 0x0020 and 0x4000 in 0.625 ms units (20ms to 10.24s). */
 //	<o> Fast Advertisement Interval <100-1000:50>
-//	<i> Defines inteval of Fast advertisement in ms.
+//	<i> Defines interval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> hid_fast_adv
-#define APP_HID_FAST_ADV				(100) //100 ms
+#define APP_HID_FAST_ADV				(1600) //1000 ms
 
 /** @brief APP_HID_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x3FFF in seconds, 0x0000 disables time-out.*/
 //	<o> Advertisement Timeout <1000-10000:50>
-//	<i> Defines inteval at which advertisement timout in ms.
+//	<i> Defines interval at which advertisement timeout in ms.
 //	<i> Default: 1000
 //	<id> hid_adv_timeout
 #define APP_HID_ADV_TIMEOUT				(1000) // 100 Secs
@@ -155,6 +155,13 @@
 /****************************************************************************************
 *							        Enumerations	                                   	*
 ****************************************************************************************/
+typedef struct hid_gatt_serv_handler
+{
+	at_ble_service_t		  serv;
+	at_ble_chr_t		      serv_chars[HID_CHARACTERISTIC_NUM];
+	at_ble_generic_att_desc_t serv_desc[HID_NUM_OF_REPORT];   /*Report descriptor*/
+}hid_gatt_serv_handler_t;
+
 /**@brief HID characteristic
 */
 typedef enum
@@ -290,7 +297,7 @@ void hid_prf_init(void *param);
   * @param[in] disconnect disconnect info
   * @return @ref AT_BLE_SUCCESS operation completed successfully
   */
-at_ble_status_t hid_prf_disconnect_event_handler(at_ble_disconnected_t *disconnect);
+at_ble_status_t hid_prf_disconnect_event_handler(void *params);
 
 /** @brief Report notification handler function
 */
@@ -314,7 +321,7 @@ void hid_prf_dev_adv(void);
 
 /** @brief Service characteristic change handler function
  */
-at_ble_status_t hid_prf_char_changed_handler(at_ble_characteristic_changed_t *char_handle);
+at_ble_status_t hid_prf_char_changed_handler(void *params);
 
 /** @brief Called by user to notify report to HID host 
   * 

@@ -63,7 +63,7 @@
 ****************************************************************************************/
 /** @brief PATHLOSS which defines if the user wants pathloss functionality*/
 //   <q> Enable PathLoss
-//   <i> Defines whether to enable the pathlosss funchionality or not.
+//   <i> Defines whether to enable the pathlosss functionality or not.
 #define PATHLOSS_VALUE 1
 
 #if (PATHLOSS_VALUE == 1)
@@ -76,11 +76,11 @@
 //  <i> Defines inteval of Fast advertisement in ms.
 //  <i> Default: 100
 //  <id> pxp_reporter_fast_adv
-#define APP_PXP_FAST_ADV				  (100) //100 ms
+#define APP_PXP_FAST_ADV				(1600) //1000 ms
 
 /** @brief APP_PXP_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x3FFF in seconds, 0x0000 disables time-out.*/
 //  <o> Advertisement Timeout <1000-10000:50>
-//  <i> Defines inteval at which advertisement timout in ms.
+//  <i> Defines interval at which advertisement timeout in ms.
 //  <i> Default: 1000
 //  <id> pxp_reporter_adv_timeout
 #define APP_PXP_ADV_TIMEOUT				(1000) // 100 Secs
@@ -90,13 +90,13 @@
 //  <i> Defines size of buffer for scan response.
 //  <i> Default: 10
 //  <id> pxp_reporter_scan_resp_len
-#define SCAN_RESP_LEN		           (10)
+#define SCAN_RESP_LEN					(10)
 
 /** @brief ADV_DATA_LEN */
-#define ADV_DATA_LEN               (18)
+#define ADV_DATA_LEN					(18)
 
 /** @brief ADV_TYPE_LEN */
-#define ADV_TYPE_LEN					     (0x1)
+#define ADV_TYPE_LEN					(0x1)
 
 /** @brief LL_ADV_DATA_UUID_LEN the size of LL service uuid */
 #define LL_ADV_DATA_UUID_LEN			(2)
@@ -191,7 +191,7 @@ void pxp_reporter_adv(void);
   * @return @ref AT_BLE_SUCCESS operation completed successfully
   * @return @ref AT_BLE_FAILURE Generic error.
   */
-extern at_ble_status_t pxp_reporter_connected_state_handler (at_ble_connected_t * conn_params);
+at_ble_status_t pxp_reporter_connected_state_handler (void *params);
 
 
 /** @brief disconnection event handler
@@ -203,7 +203,7 @@ extern at_ble_status_t pxp_reporter_connected_state_handler (at_ble_connected_t 
   * @return @ref AT_BLE_SUCCESS operation completed successfully
   * @return @ref AT_BLE_FAILURE Generic error.
   */
-at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect);
+at_ble_status_t pxp_reporter_disconnect_event_handler(void *params);
 
 
 /** @brief character changed handler
@@ -215,7 +215,7 @@ at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect);
   * @return @ref AT_BLE_SUCCESS operation completed successfully
   * @return @ref AT_BLE_FAILURE Generic error.
   */
-at_ble_status_t pxp_reporter_char_changed_handler(at_ble_characteristic_changed_t *char_handle);
+at_ble_status_t pxp_reporter_char_changed_handler(void *params);
 
 /**
 * @brief function which register the application alerting function for pathloss to the profile

@@ -44,5 +44,5 @@
 #define COSOLE_SERIAL_H
 
 void serial_console_init(void);
-
+uint8_t getchar_timeout(uint32_t timeout);
 #endif /* COSOLE_SERIAL_H */

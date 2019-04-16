@@ -1,8 +1,6 @@
 /**
  * \file
  *
- * \brief gcc starttup file for SAMB11
- *
  * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
@@ -43,50 +41,41 @@
 
 #include "samb11.h"
 
-/* Initialize segments */
-extern uint32_t _sfixed;
-extern uint32_t _efixed;
-extern uint32_t _etext;
-extern uint32_t _srelocate;
-extern uint32_t _erelocate;
-extern uint32_t _szero;
-extern uint32_t _ezero;
-extern uint32_t _sstack;
-extern uint32_t _estack;
+typedef void (*intfunc) (void);
+typedef union { intfunc __fun; void * __ptr; } intvec_elem;
 
-/** \cond DOXYGEN_SHOULD_SKIP_THIS */
-int main(void);
-/** \endcond */
-
-void __libc_init_array(void);
+void __iar_program_start(void);
+int __low_level_init(void);
 
 /* Default empty handler */
 void Dummy_Handler(void);
 
 /* Cortex-M0+ core handlers */
-void NMI_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void HardFault_Handler       ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void SVC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void PendSV_Handler          ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void SysTick_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#pragma weak NonMaskableInt_Handler              = Dummy_Handler
+#pragma weak HardFault_Handler        = Dummy_Handler
+#pragma weak SVCall_Handler              = Dummy_Handler
+#pragma weak PendSV_Handler           = Dummy_Handler
+#pragma weak SysTick_Handler          = Dummy_Handler
 
 /* Peripherals handlers */
-void SYSTEM_Handler          ( void ) __attribute__ ((weak, alias("Dummy_Handler"))); /* MCLK, OSCCTRL, OSC32KCTRL, PAC, PM, SUPC, TAL */
-void WDT_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void RTC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 // TODO: Correct and complete ...
 
 
 
 /* Exception Table */
-__attribute__ ((section(".vectors")))
-const DeviceVectors exception_table = {
+#pragma language = extended
+#pragma segment  = "CSTACK"
 
-        /* Configure Initial Stack Pointer, using linker-generated symbols */
-        (void*) (&_estack),
+/* The name "__vector_table" has special meaning for C-SPY: */
+/* it is where the SP start value is found, and the NVIC vector */
+/* table register (VTOR) is initialized to this address if != 0 */
 
+#pragma section  = ".intvec"
+#pragma location = ".intvec"
+const DeviceVectors __vector_table[] = {
+        __sfe("CSTACK"),
         (void*) Reset_Handler,
-        (void*) NMI_Handler,
+        (void*) NonMaskableInt_Handler,
         (void*) HardFault_Handler,
         (void*) (0UL), /* Reserved */
         (void*) (0UL), /* Reserved */
@@ -95,56 +84,37 @@ const DeviceVectors exception_table = {
         (void*) (0UL), /* Reserved */
         (void*) (0UL), /* Reserved */
         (void*) (0UL), /* Reserved */
-        (void*) SVC_Handler,
+        (void*) SVCall_Handler,
         (void*) (0UL), /* Reserved */
         (void*) (0UL), /* Reserved */
         (void*) PendSV_Handler,
         (void*) SysTick_Handler,
 
         /* Configurable interrupts */
-        (void*) SYSTEM_Handler,         /*  0 Main Clock, Oscillators Control, 32k Oscillators Control, Peripheral Access Controller, Power Manager, Supply Controller, Trigger Allocator */
-        (void*) WDT_Handler,            /*  1 Watchdog Timer */
-        (void*) RTC_Handler,            /*  2 Real-Time Counter */
 		// TODO: Correct and complete ...
 
 };
 
-/**
- * \brief This is the code that gets called on processor reset.
- * To initialize the device, and call the main() routine.
- */
+/**------------------------------------------------------------------------------
+ * This is the code that gets called on processor reset. To initialize the
+ * device.
+ *------------------------------------------------------------------------------*/
+int __low_level_init(void)
+{
+//        uint32_t *pSrc = __section_begin(".intvec");
+
+//        SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
+
+        return 1; /* if return 0, the data sections will not be initialized */
+}
+
+/**------------------------------------------------------------------------------
+ * This is the code that gets called on processor reset. To initialize the
+ * device.
+ *------------------------------------------------------------------------------*/
 void Reset_Handler(void)
 {
-        uint32_t *pSrc, *pDest;
-
-        /* Initialize the relocate segment */
-        pSrc = &_etext;
-        pDest = &_srelocate;
-
-        if (pSrc != pDest) {
-                for (; pDest < &_erelocate;) {
-                        *pDest++ = *pSrc++;
-                }
-        }
-
-        /* Clear the zero segment */
-        for (pDest = &_szero; pDest < &_ezero;) {
-                *pDest++ = 0;
-        }
-
-        /* Set the vector table base address */
-        //pSrc = (uint32_t *) & _sfixed;
-        //SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
-		// TODO: Correct and complete ...
-
-        /* Initialize the C library */
-        __libc_init_array();
-
-        /* Branch to main function */
-        main();
-
-        /* Infinite loop */
-        while (1);
+        __iar_program_start();
 }
 
 /**

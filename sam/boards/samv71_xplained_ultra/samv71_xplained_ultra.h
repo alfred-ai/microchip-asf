@@ -420,10 +420,10 @@
 						 PIO_PD9A_GMDIO)
 
 /** Board configuration of the AT24MAC EEPROM */
-#define BOARD_AT24MAC_TWIHS_INSTANCE      TWIHS0
-#define BOARD_AT24MAC_ADDRESS             (0xAE >> 1)
-#define BOARD_CLK_TWIHS_EEPROM            0
-#define BOARD_CLK_TWIHS_MUX_EEPROM        0
+#define BOARD_AT24MAC_TWIHS               TWIHS0
+#define BOARD_AT24MAC_ADDRESS             (0xBE >> 1)
+#define BOARD_AT24MAC_TWIHS_CLK           (400000UL)
+#define BOARD_AT24MAC_PAGE_SIZE           16
 
 /** HSMCI pins definition. */
 /*! Number of slot connected on HSMCI interface */

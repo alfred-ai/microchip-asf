@@ -373,7 +373,7 @@ void i2s_serializer_abort_job(
  * \param[in]  serializer    The serializer which runs the job
  * \param[in]  job_type      Type of job to abort
  *
- * \return Status of the job
+ * \return Status of the job.
  */
 enum status_code i2s_serializer_get_job_status(
 		const struct i2s_module *const module_inst,

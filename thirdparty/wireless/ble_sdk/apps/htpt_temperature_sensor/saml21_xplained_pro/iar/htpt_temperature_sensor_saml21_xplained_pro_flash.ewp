@@ -173,9 +173,11 @@
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>AT30TSE_TEMPERATURE_TWI_ADDR=0x48</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -319,6 +321,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../services/console</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/components/sensor/at30tse75x</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
@@ -502,9 +505,11 @@
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>AT30TSE_TEMPERATURE_TWI_ADDR=0x48</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -615,6 +620,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../services/console</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/components/sensor/at30tse75x</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
@@ -1190,9 +1196,11 @@
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>AT30TSE_TEMPERATURE_TWI_ADDR=0x48</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1336,6 +1344,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../services/console</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/components/sensor/at30tse75x</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
@@ -1519,9 +1528,11 @@
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>AT30TSE_TEMPERATURE_TWI_ADDR=0x48</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1632,6 +1643,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_sam_l_c</state>
 					<state>$PROJ_DIR$/../../../../services/console</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/components/sensor/at30tse75x</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
@@ -2059,17 +2071,11 @@
 						<file>
 							<name>$PROJ_DIR$/../../htpt_app.c</name>
 						</file>
+						<file>
+							<name>$PROJ_DIR$/../../htpt_app.h</name>
+						</file>
 						<group>
 							<name>saml21_xplained_pro</name>
-							<file>
-								<name>$PROJ_DIR$/../conf_timer.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_serialdrv.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
-							</file>
 							<group>
 								<name>iar</name>
 								<file>
@@ -2079,19 +2085,31 @@
 							<file>
 								<name>$PROJ_DIR$/../conf_at30tse75x.h</name>
 							</file>
+						</group>
+					</group>
+					<group>
+						<name>config</name>
+						<group>
+							<name>saml21</name>
 							<file>
-								<name>$PROJ_DIR$/../conf_console.h</name>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_extint.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_clocks.h</name>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_timer.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_console.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_serialdrv.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_clocks.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_board.h</name>
 							</file>
 						</group>
-						<file>
-							<name>$PROJ_DIR$/../../htpt_app.h</name>
-						</file>
 					</group>
 				</group>
 				<group>
@@ -2239,9 +2257,6 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/wdt.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/eic_100.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/trng.h</name>
 							</file>
 							<file>
@@ -2291,6 +2306,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/tal.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/component/eic_100.h</name>
 							</file>
 						</group>
 						<file>
@@ -2348,6 +2366,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/dac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/oscctrl.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/tc3_100.h</name>
@@ -2408,9 +2429,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/evsys.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/oscctrl.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include/instance/trng.h</name>

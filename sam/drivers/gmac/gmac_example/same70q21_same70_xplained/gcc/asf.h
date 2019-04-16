@@ -103,6 +103,9 @@
 // From module: System Clock Control - SAME70 implementation
 #include <sysclk.h>
 
+// From module: TWI - Two-wire Interface High Speed
+#include <twihs.h>
+
 // From module: UART - Univ. Async Rec/Trans
 #include <uart.h>
 

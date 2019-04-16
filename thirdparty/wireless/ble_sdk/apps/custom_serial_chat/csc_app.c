@@ -54,13 +54,12 @@
 /*- Includes -----------------------------------------------------------------------*/
 #include <asf.h>
 #include "platform.h"
+#include "console_serial.h"
 #include "at_ble_api.h"
 #include "ble_manager.h"
 #include "csc_app.h"
 #include "cscp.h"
 #include "cscs.h"
-#include "ble_utils.h"
-#include "console_serial.h"
 #include "conf_extint.h"
 #include "sio2host.h"  
 
@@ -74,6 +73,51 @@ uint16_t send_length = 0;
 
 /* Buffer data to be send over the air */
 uint8_t send_data[APP_TX_BUF_SIZE];
+
+
+static const ble_event_callback_t app_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	app_connected_event_handler,
+	app_disconnected_event_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+/**
+* @brief app_connected_state blemanager notifies the application about state
+* @param[in] at_ble_connected_t
+*/
+static at_ble_status_t app_connected_event_handler(void *params)
+{
+	ALL_UNUSED(params);
+	return AT_BLE_SUCCESS;
+}
+
+/**
+ * @brief app_connected_state ble manager notifies the application about state
+ * @param[in] connected
+ */
+static at_ble_status_t app_disconnected_event_handler(void *params)
+{
+		/* Started advertisement */
+		csc_prf_dev_adv();		
+		ALL_UNUSED(params);
+		return AT_BLE_SUCCESS;
+}
 
 /* Function used for receive data */
 static void csc_app_recv_buf(uint8_t *recv_data, uint8_t recv_len)
@@ -144,6 +188,16 @@ int main(void )
 	
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
+	
+	/* Initializing the profile */
+	csc_prf_init(NULL);
+	
+	/* Started advertisement */
+	csc_prf_dev_adv();
+	
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GAP_EVENT_TYPE,
+	app_gap_handle);
 	
 	/* Register the notification handler */
 	notify_recv_ntf_handler(csc_prf_report_ntf_cb);

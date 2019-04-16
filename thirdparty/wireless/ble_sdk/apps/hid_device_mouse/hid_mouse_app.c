@@ -47,7 +47,7 @@
  */
 
 /**
- * \mainpage
+ * \main page
  * \section preface Preface
  * This is the reference manual for the HID Keyboard Device Profile Application declarations
  */
@@ -55,12 +55,12 @@
 #include <asf.h>
 #include "platform.h"
 #include "at_ble_api.h"
+#include "console_serial.h"
 #include "ble_manager.h"
 #include "hid.h"
 #include "hid_mouse_app.h"
 #include "device_info.h"
 #include "ble_utils.h"
-#include "console_serial.h"
 #include "conf_extint.h"
 
 /* =========================== GLOBALS ============================================================ */
@@ -83,12 +83,11 @@ hid_prf_info_t hid_prf_data;
 /* Mouse report value */
 int8_t app_mouse_report[4] = {0x00, 0x00, 0x00, 0x00};		
 	
+/* Profile connection status */
+uint8_t conn_status = 0;
+	
 /* Mouse status */
 uint8_t mouse_status = 0;
-
-/* Mouse Movement*/
-uint8_t x_move = 0;
-uint8_t y_move = 0;	
 
 /*Counter*/
 uint8_t cnt = 0;
@@ -99,35 +98,107 @@ uint8_t mouse_pos = MOUSE_RIGHT_MOVEMENT;
 /* Mouse report info*/
 static uint8_t hid_app_mouse_report_map[] =
 {
-	0x05, 0x01,	/* Usage Page (Generic Desktop),       */
-	0x09, 0x02,	/* Usage (Mouse),                      */
-	0xA1, 0x01,	/*  Collection (Application),          */
-	0x85, 0x01, /*  REPORT ID (1) - MANDATORY		  */
-	0x09, 0x01,	/*   Usage (Pointer),                  */
-	0xA1, 0x00,	/*  Collection (Physical),             */
-	0x05, 0x09,	/*     Usage Page (Buttons),           */
-	0x19, 0x01,	/*     Usage Minimum (01),             */
-	0x29, 0x03,	/*     Usage Maximum (03),             */
-	0x15, 0x00,	/*     Logical Minimum (0),            */
-	0x25, 0x01,	/*     Logical Maximum (1),            */
-	0x75, 0x01,	/*     Report Size (1),                */
-	0x95, 0x03,	/*     Report Count (3),               */
-	0x81, 0x02,	/*     Input (Data, Variable, Absolute) */
-	0x75, 0x05,	/*     Report Size (5),                */
-	0x95, 0x01,	/*     Report Count (1),               */
-	0x81, 0x01,	/*     Input (Constant),               */
-	0x05, 0x01,	/*     Usage Page (Generic Desktop),   */
-	0x09, 0x30,	/*     Usage (X),                      */
-	0x09, 0x31,	/*     Usage (Y),                      */
-	0x09, 0x38,	/*     Usage (Scroll),                 */
-	0x15, 0x81,	/*     Logical Minimum (-127),         */
-	0x25, 0x7F,	/*     Logical Maximum (127),          */
-	0x75, 0x08,	/*     Report Size (8),                */
-	0x95, 0x03,	/*     Report Count (3),               */
-	0x81, 0x06,	/*     Input (Data, Variable, Relative) */
-	0xC0,	/*  End Collection,                    */
-	0xC0,	/* End Collection                      */
+	0x05, 0x01,	/*	Usage Page (Generic Desktop),       */
+	0x09, 0x02,	/*	Usage (Mouse),                      */
+	0xA1, 0x01,	/*	Collection (Application),          */
+	0x85, 0x01, /*	REPORT ID (1) - MANDATORY		  */
+	0x09, 0x01,	/*	Usage (Pointer),                  */
+	0xA1, 0x00,	/*	Collection (Physical),             */
+	0x05, 0x09,	/*    Usage Page (Buttons),           */
+	0x19, 0x01,	/*	Usage Minimum (01),             */
+	0x29, 0x03,	/*    Usage Maximum (03),             */
+	0x15, 0x00,	/*    Logical Minimum (0),            */
+	0x25, 0x01,	/*    Logical Maximum (1),            */
+	0x75, 0x01,	/*    Report Size (1),                */
+	0x95, 0x03,	/*	Report Count (3),               */
+	0x81, 0x02,	/*	Input (Data, Variable, Absolute) */
+	0x75, 0x05,	/*	Report Size (5),                */
+	0x95, 0x01,	/*	Report Count (1),               */
+	0x81, 0x01,	/*	Input (Constant),               */
+	0x05, 0x01,	/*	Usage Page (Generic Desktop),   */
+	0x09, 0x30,	/*	Usage (X),                      */
+	0x09, 0x31,	/*	Usage (Y),                      */
+	0x09, 0x38,	/*	Usage (Scroll),                 */
+	0x15, 0x81,	/*	Logical Minimum (-127),         */
+	0x25, 0x7F,	/*	Logical Maximum (127),          */
+	0x75, 0x08,	/*	Report Size (8),                */
+	0x95, 0x03,	/*	Report Count (3),               */
+	0x81, 0x06,	/*	Input (Data, Variable, Relative) */
+	0xC0,		/*  End Collection,                    */
+	0xC0,		/* End Collection                      */
 };
+
+static at_ble_status_t hid_connect_cb(void *params);
+
+static at_ble_status_t hid_disconnect_cb(void *params);
+
+static at_ble_status_t hid_notification_confirmed_cb(void *params);
+
+/** To keep the app executing continuously*/
+bool app_exec = true;
+
+static const ble_event_callback_t hid_app_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	hid_connect_cb,
+	hid_disconnect_cb,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t hid_app_gatt_server_handle[] = {
+	hid_notification_confirmed_cb,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+/* Callback called during connection */
+static at_ble_status_t hid_connect_cb(void *params)
+{
+	mouse_pos = MOUSE_RIGHT_MOVEMENT;
+	conn_status = 1;
+	cnt = 0;
+	app_mouse_report[0] = 0;
+	app_mouse_report[1] = 0;
+	app_mouse_report[2] = 0;
+	app_mouse_report[3] = 0;
+	ALL_UNUSED(&params);
+	return AT_BLE_SUCCESS;
+}
+
+/* Callback called during disconnect */
+static at_ble_status_t hid_disconnect_cb(void *params)
+{
+	mouse_pos = MOUSE_RIGHT_MOVEMENT;
+	conn_status = 0;
+	cnt = 0;
+	app_mouse_report[0] = 0;
+	app_mouse_report[1] = 0;
+	app_mouse_report[2] = 0;
+	app_mouse_report[3] = 0;
+	ALL_UNUSED(&params);
+	return AT_BLE_SUCCESS;
+}
 
 /* Callback called when host change the control point value */
 static void hid_prf_control_point_ntf_cb(hid_control_mode_ntf_t *hid_control_point_value_t)
@@ -166,9 +237,12 @@ static void hid_prf_report_ntf_cb(hid_report_ntf_t *report_info)
 }
 
 /* Callback called when report send over the air */
-static void hid_notification_confirmed_cb(at_ble_cmd_complete_event_t *notification_status)
+static at_ble_status_t hid_notification_confirmed_cb(void *params)
 {
+	at_ble_cmd_complete_event_t *notification_status;
+	notification_status = (at_ble_cmd_complete_event_t *)params;
 	DBG_LOG_DEV("Mouse report send to host status %d", notification_status->status);
+	return AT_BLE_SUCCESS;
 }
 
 /* Callback called when user press the button for writing new characteristic value */
@@ -182,6 +256,9 @@ void button_cb(void)
 /* Initialize the application information for HID profile*/
 static void hid_mouse_app_init(void)
 {
+#ifdef ENABLE_PTS
+	uint16_t i=0;
+#endif
 	hid_prf_data.hid_serv_instance = 1;
 	hid_prf_data.hid_device = HID_MOUSE_MODE; 
 	hid_prf_data.protocol_mode = HID_REPORT_PROTOCOL_MODE; 
@@ -196,6 +273,19 @@ static void hid_mouse_app_init(void)
 	hid_prf_data.hid_device_info.bcd_hid = 0x0111;        
 	hid_prf_data.hid_device_info.bcountry_code = 0x00;
 	hid_prf_data.hid_device_info.flags = 0x02; 
+	
+#ifdef ENABLE_PTS
+	DBG_LOG("Report Map Characteristic Value");
+	printf("\r\n");
+	for (i=0; i<sizeof(hid_app_mouse_report_map); i++)
+	{
+		printf(" 0x%02X ", hid_app_mouse_report_map[i]);
+	}
+	printf("\r\n");
+	DBG_LOG("HID Information Characteristic Value");
+	DBG_LOG("bcdHID 0x%02X, bCountryCode 0x%02X Flags 0x%02X", hid_prf_data.hid_device_info.bcd_hid, hid_prf_data.hid_device_info.bcountry_code, hid_prf_data.hid_device_info.flags);
+#endif // _DEBUG
+	
 	if(hid_prf_conf(&hid_prf_data)==HID_PRF_SUCESS){
 		DBG_LOG("HID Profile Configured");
 	}else{
@@ -216,8 +306,7 @@ static bool hid_mouse_move(int8_t pos, uint8_t index_report)
 	return true;
 }
 
-/** To keep the app executing continously*/
-bool app_exec = true;
+
 int main(void )
 {		
 #if SAMG55
@@ -242,18 +331,25 @@ int main(void )
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 	
+	hid_prf_init(NULL);
+	
 	/* Register the notification handler */
-	register_ble_notification_confirmed_cb(hid_notification_confirmed_cb);
 	notify_report_ntf_handler(hid_prf_report_ntf_cb);
 	notify_boot_ntf_handler(hid_prf_boot_ntf_cb);
 	notify_protocol_mode_handler(hid_prf_protocol_mode_ntf_cb);
 	notify_control_point_handler(hid_prf_control_point_ntf_cb);
 	
+	/* Callback registering for BLE-GAP Role */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GAP_EVENT_TYPE, hid_app_gap_handle);
+	
+	/* Callback registering for BLE-GATT-Server Role */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK, BLE_GATT_SERVER_EVENT_TYPE, hid_app_gatt_server_handle);
+	
 	/* Capturing the events  */
 	while(app_exec){
 		ble_event_task();
 		/* Check for key status */
-		if(mouse_status){ 
+		if(mouse_status && conn_status){ 
 			delay_ms(KEY_PAD_DEBOUNCE_TIME);
 			switch(mouse_pos)
 			{
@@ -316,7 +412,7 @@ int main(void )
 			}
 			hid_prf_report_update(report_ntf_info.conn_handle, report_ntf_info.serv_inst, 1, (uint8_t *)app_mouse_report, sizeof(app_mouse_report));
 			mouse_status = 0;			
-    	}
+		}
 	}
 	return 0;
 }

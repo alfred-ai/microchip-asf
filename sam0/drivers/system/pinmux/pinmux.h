@@ -203,7 +203,7 @@ extern "C" {
 #endif
 
 /*@{*/
-#if (SAML21) || (SAMC20) || (SAMC21) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || defined(__DOXYGEN__)
 /** Output Driver Strength Selection feature support */
 #  define FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH
 #endif

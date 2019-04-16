@@ -167,18 +167,20 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>BLE_DEVICE_ROLE=BLE_PERIPHERAL</state>
+					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
-					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>BLP_SENSOR</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -311,7 +313,6 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/blood_pressure</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards/saml21_xplained_pro_b</state>
@@ -323,6 +324,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -500,18 +502,20 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>BLE_DEVICE_ROLE=BLE_PERIPHERAL</state>
+					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
-					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>BLP_SENSOR</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -611,7 +615,6 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/blood_pressure</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards/saml21_xplained_pro_b</state>
@@ -623,6 +626,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -1192,18 +1196,20 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>BLE_DEVICE_ROLE=BLE_PERIPHERAL</state>
+					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
-					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>BLP_SENSOR</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1336,7 +1342,6 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/blood_pressure</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards/saml21_xplained_pro_b</state>
@@ -1348,6 +1353,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -1525,18 +1531,20 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>BLE_DEVICE_ROLE=BLE_PERIPHERAL</state>
+					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
-					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>__SAML21J18B__</state>
 					<state>BLP_SENSOR</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1636,7 +1644,6 @@
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/blood_pressure</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
-					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../../../../ble_services/ble_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/preprocessor</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards/saml21_xplained_pro_b</state>
@@ -1648,6 +1655,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart</state>
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
+					<state>$PROJ_DIR$/../../../config/saml21</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b</state>
 					<state>$PROJ_DIR$/../../../../services/serial/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_l_c</state>
@@ -2176,34 +2184,40 @@
 						</file>
 						<group>
 							<name>saml21_xplained_pro_b</name>
-							<file>
-								<name>$PROJ_DIR$/../conf_timer.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_serialdrv.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
-							</file>
 							<group>
 								<name>iar</name>
 								<file>
 									<name>$PROJ_DIR$/asf.h</name>
 								</file>
 							</group>
-							<file>
-								<name>$PROJ_DIR$/../conf_clocks.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_console.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
-							</file>
 						</group>
 						<file>
 							<name>$PROJ_DIR$/../../blp_sensor_app.h</name>
 						</file>
+					</group>
+					<group>
+						<name>config</name>
+						<group>
+							<name>saml21</name>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_extint.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_timer.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_board.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_console.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_serialdrv.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_clocks.h</name>
+							</file>
+						</group>
 					</group>
 				</group>
 				<group>
@@ -2264,6 +2278,9 @@
 						<group>
 							<name>pio</name>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21g18b.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21e17b.h</name>
 							</file>
 							<file>
@@ -2271,9 +2288,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21j17b.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21g18b.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/pio/saml21e15b.h</name>
@@ -2438,9 +2452,6 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/tc3.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/opamp.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/rstc.h</name>
 							</file>
 							<file>
@@ -2493,6 +2504,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/evsys.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/opamp.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/saml21/include_b/instance/sercom1.h</name>

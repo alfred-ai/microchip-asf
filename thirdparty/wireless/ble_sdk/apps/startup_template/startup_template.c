@@ -65,52 +65,6 @@
 
 #include "startup_template.h"
 
-/* BLE Advertisement */
-/** @brief scan_resp_len is the length of the scan response data */
-#define SCAN_RESP_LEN						(10)
-
-/** @brief Scan response data*/
-uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09, 0xff, 0x00, 0x06, 0xd6, \
-										0xb2, 0xf0, 0x05, 0xf0, 0xf8};
-
-/* Advertisement data set and Advertisement start */
-static at_ble_status_t advertisement_template(void)
-{
-	/* Advertisement data length */
-	uint8_t adv_len = 0;
-	
-	/* Allocating the memory for advertisement data with two services, keeping 
-	maximum length of advertisement data(31 bytes). 2 bytes are 
-	allocated for adv length and adv type for each advertisement data type*/
-	uint8_t adv_data[31];
-	
-	/* Appending the list of 16-bit service UUID to adv data, list is having two services*/
-	adv_data[adv_len++] = ADV_DATA_UUID1_LEN + ADV_DATA_UUID2_LEN + ADV_TYPE_LEN;
-	adv_data[adv_len++] = ADV_DATA_TYPE_UUID16_LIST;
-
-	adv_data[adv_len++] = (uint8_t)SERVICE_UUID1;
-	adv_data[adv_len++] = (uint8_t)(SERVICE_UUID1 >> 8);
-	
-	adv_data[adv_len++] = (uint8_t)SERVICE_UUID2;
-	adv_data[adv_len++] = (uint8_t)(SERVICE_UUID2 >> 8);
-		
-	/* Appending the complete name to the Ad packet */
-	adv_data[adv_len++] = ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
-	adv_data[adv_len++] = ADV_DATA_TYPE_COMP_NAME;
-	
-	memcpy(&adv_data[adv_len], ADV_DATA_NAME_DATA, ADV_DATA_NAME_LEN );
-	adv_len += ADV_DATA_NAME_LEN;
-	
-	/* Adding the advertisement data and scan response data */
-	if(!(at_ble_adv_data_set(adv_data, adv_len, scan_rsp_data, SCAN_RESP_LEN) == \
-	 AT_BLE_SUCCESS) )
-	{
-		DBG_LOG("Failed to set advertisement data");
-		return AT_BLE_FAILURE;
-	}
-	return AT_BLE_SUCCESS;
-}
-
 static at_ble_status_t start_advertisement(void)
 {
 	/* Start of advertisement */
@@ -132,33 +86,73 @@ static at_ble_status_t start_advertisement(void)
 /* Callback functions */
 
 /* Callback registered for AT_BLE_PAIR_DONE event from stack */
-static void ble_paired_app_event(at_ble_handle_t conn_handle)
+static at_ble_status_t ble_paired_app_event(void *param)
 {
-	ALL_UNUSED(conn_handle);
+	ALL_UNUSED(param);
+	return AT_BLE_SUCCESS;
 }
 
 /* Callback registered for AT_BLE_DISCONNECTED event from stack */
-static void ble_disconnected_app_event(at_ble_handle_t conn_handle)
+static at_ble_status_t ble_disconnected_app_event(void *param)
 {
 	start_advertisement();
-	ALL_UNUSED(conn_handle);
+	ALL_UNUSED(param);
+	return AT_BLE_SUCCESS;	
 }
 
 /* Callback registered for AT_BLE_NOTIFICATION_CONFIRMED event from stack */
-static void ble_notification_confirmed_app_event(at_ble_cmd_complete_event_t *notification_status)
+static at_ble_status_t ble_notification_confirmed_app_event(void *param)
 {
+	at_ble_cmd_complete_event_t *notification_status = (at_ble_cmd_complete_event_t *)param;
 	if(!notification_status->status)
 	{
 		DBG_LOG_DEV("Notification sent successfully");
+		return AT_BLE_SUCCESS;
 	}
+	return AT_BLE_FAILURE;
 }
 
 /* Callback registered for AT_BLE_CHARACTERISTIC_CHANGED event from stack */
-static at_ble_status_t ble_char_changed_app_event(at_ble_characteristic_changed_t *char_handle)
+static at_ble_status_t ble_char_changed_app_event(void *param)
 {
-	ALL_UNUSED(char_handle);
+	ALL_UNUSED(param);
 	return AT_BLE_SUCCESS;
 }
+
+static const ble_event_callback_t startup_template_app_gap_cb[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	ble_disconnected_app_event,
+	NULL,
+	NULL,
+	ble_paired_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	ble_paired_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+static const ble_event_callback_t startup_template_app_gatt_server_cb[] = {
+	ble_notification_confirmed_app_event,
+	NULL,
+	ble_char_changed_app_event,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
 
 /* timer callback function */
 static void timer_callback_fn(void)
@@ -197,28 +191,24 @@ int main(void)
 	
 	/* initialize the BLE chip  and Set the Device Address */
 	ble_device_init(NULL);
-	
-	/* Register BLE Event callbacks */
-	
-	/* Register callback for paired event */
-	register_ble_paired_event_cb(ble_paired_app_event);
-	
-	/* Register callback for disconnected event */
-	register_ble_disconnected_event_cb(ble_disconnected_app_event);
-	
-	/* Register callback for notification confirmed event */
-	register_ble_notification_confirmed_cb(ble_notification_confirmed_app_event);
-	
-	/* Register callback for characteristic changed event */
-	register_ble_characteristic_changed_cb(ble_char_changed_app_event);
-	
+
 	/* Register Primary/Included service in case of GATT Server */
 	
 	/* set the advertisement data */
-	advertisement_template();
-	
+	ble_advertisement_data_set();
+		
 	/* Start the advertisement */
 	start_advertisement();
+	
+	/* Register callbacks for gap related events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+									BLE_GAP_EVENT_TYPE,
+									startup_template_app_gap_cb);
+	
+	/* Register callbacks for gatt server related events */
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+									BLE_GATT_SERVER_EVENT_TYPE,
+									startup_template_app_gatt_server_cb);
 	
 	while(true)
 	{

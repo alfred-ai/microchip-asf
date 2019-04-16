@@ -63,7 +63,7 @@
 //	<i> Defines inteval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> hr_sensor_fast_adv
-#define HR_SENSOR_FAST_ADV								(100) //100 ms
+#define HR_SENSOR_FAST_ADV								(1600) //1000 ms
 
 /** @brief APP_HR_SENSOR_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x3FFF in seconds, 0x0000 disables time-out.*/
 //	<o> Advertisement Timeout <1000-10000:50>
@@ -127,9 +127,6 @@ typedef void (*hr_notification_callback_t)(uint8_t);
 /* @brief call back handler type  */
 typedef void (*hr_reset_callback_t)(void);
 
-/* @brief call back handler type  */
-typedef void (*hr_state_callback_t)(bool);
-
 /****************************************************************************************
 *							        Function Prototypes	                                *                                                        *
 ****************************************************************************************/
@@ -171,33 +168,25 @@ void hr_sensor_disconnect(void);
  */
 bool hr_sensor_send_notification(uint8_t *hr_data, uint8_t length);
 
-/** @brief hr_notification_confirmation_handler called on notification confirmation
+/** @brief hr_sensor_notification_cfm_handler called on notification confirmation
  *  event by the ble manager
  *	@param[in] at_ble_status_t AT_BLE_SUCCESS on success AT_BLE_FAILURE on failure
- *called
+ *  called
  */
-void hr_notification_confirmation_handler(at_ble_cmd_complete_event_t * params);
+at_ble_status_t hr_sensor_notification_cfm_handler(void * params);
 
 /** @brief register_hr_notification_handler registers the notification handler
  *  passed by the application
  *  @param[in] hr_notification_callback_t address of the notification handler
  *  function to be called
  */
-void register_hr_notification_handler(
-		hr_notification_callback_t hr_notificaton_handler);
+at_ble_status_t hr_notification_confirmation_handler(void * params);
 
 /** @brief register_hr_reset_handler registers the reset handler passed by the
  * application
  *  @param[in]	hr_reset_callback_t address of the handler function to be called
  */
 void register_hr_reset_handler(hr_reset_callback_t hr_reset_handler);
-
-/** @brief register_hr_state_handler registers the state handler passed by the
- *  application
- *	@param[in] hr_state_callback_t address of the handler function to be
- *  called
- */
-void register_hr_state_handler(hr_state_callback_t state_handler);
 
 /** @brief hr_sensor_char_changed_handler called by the ble manager after a
  *  change in the characteristic
@@ -206,7 +195,7 @@ void register_hr_state_handler(hr_state_callback_t state_handler);
  *  @return AT_BLE_SUCCESS on success and AT_BLE_FAILURE on failure
  */
 at_ble_status_t hr_sensor_char_changed_handler(
-		at_ble_characteristic_changed_t *char_handle);
+		void *char_params);
 
 /** @brief hr_sensor_disconnect_event_handler called by ble manager after
  *  disconnection event recieved
@@ -214,15 +203,23 @@ at_ble_status_t hr_sensor_char_changed_handler(
  *  reason for disconnection
  */
 at_ble_status_t hr_sensor_disconnect_event_handler(
-		at_ble_disconnected_t *disconnect);
+		void *disconnect);
 
 /** @brief hr_sensor_connected_state_handler called by ble manager after a
- *	change in characteristic
+ * change in characteristic
  *  @param[in] at_ble_connected_t which has connection handle and the peer
- *	device address
+ *device address
  */
 at_ble_status_t hr_sensor_connected_state_handler(
-		at_ble_connected_t *conn_params);
+							void *params);
+							
+							/** @brief register_hr_notification_handler registers the notification handler
+ *	passed by the application
+ *  param[in] hr_notification_callback_t address of the notification handler
+ *	function to be called
+ */
+void register_hr_notification_handler(
+		hr_notification_callback_t hr_notificaton_handler);
 
 #endif /*__HR_SENSOR_H__ */
 // </h>

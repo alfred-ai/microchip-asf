@@ -53,17 +53,15 @@
 #include "console_serial.h"
 #include "at_ble_api.h"
 #include "platform.h"
-#include "pxp_reporter.h"
 #include "timer_hw.h"
 #include "conf_extint.h"
 #include "ble_utils.h"
-#include "pxp_reporter_app.h"
 #include "ble_manager.h"
 #include "immediate_alert.h"
 #include "link_loss.h"
 #include "tx_power.h"
-#include "at_ble_errno.h"
-#include "at_ble_trace.h"
+#include "pxp_reporter.h"
+#include "pxp_reporter_app.h"
 
 
 
@@ -185,16 +183,19 @@ int main(void)
 	/* Register the callback */
 	hw_timer_register_callback(timer_callback_handler);
 	
-	trace_set_level(TRACE_LVL_ALL);
-	
 	DBG_LOG("Initializing Proximity Reporter Application");
 	
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
+	
+	pxp_reporter_init(NULL);
+	
 	DBG_LOG("Proximity Reporter Initializing Completed");
 	
 	register_pathloss_handler(app_pathloss_alert);
+	
 	register_linkloss_handler(app_linkloss_alert);
+	
 	register_state_handler(app_connected_state);
 		
 	/* Capturing the events  */ 

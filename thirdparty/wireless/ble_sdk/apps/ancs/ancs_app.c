@@ -58,6 +58,50 @@
 #include "at_ble_errno.h"
 #include "at_ble_trace.h"
 
+
+static const ble_event_callback_t app_gap_handle[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	app_connected_event_handler,
+	app_disconnected_event_handler,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+/**
+* @brief app_connected_state blemanager notifies the application about state
+* @param[in] at_ble_connected_t
+*/
+static at_ble_status_t app_connected_event_handler(void *params)
+{
+	ALL_UNUSED(params);
+	return AT_BLE_SUCCESS;
+}
+
+/**
+ * @brief app_connected_state ble manager notifies the application about state
+ * @param[in] connected
+ */
+static at_ble_status_t app_disconnected_event_handler(void *params)
+{
+		anp_client_adv();
+		ALL_UNUSED(params);
+		return AT_BLE_SUCCESS;
+}
+
 void button_cb(void)
 {
 	/** For user  */
@@ -84,6 +128,16 @@ int main(void)
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 	
+	/* Initializing the profile */
+	anp_client_init(NULL);
+	
+	/* Starting advertisement */
+	anp_client_adv();
+	
+	ble_mgr_events_callback_handler(REGISTER_CALL_BACK,
+	BLE_GAP_EVENT_TYPE,
+	app_gap_handle);
+		
 	/* Capturing the events  */
 	while(1)
 	{

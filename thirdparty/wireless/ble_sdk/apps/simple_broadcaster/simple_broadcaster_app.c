@@ -101,6 +101,8 @@ static status_t brd_set_data_type(uint8_t type)
 static void brd_start_broadcast(void)
 {
 	at_ble_status_t status;
+	at_ble_adv_mode_t adv_mode;
+	adv_mode = AT_BLE_ADV_BROADCASTER_MODE;
 
 	if (at_ble_adv_data_set(adv_data, adv_length, scan_rsp_data,
 			scan_length) != AT_BLE_SUCCESS) {
@@ -112,7 +114,7 @@ static void brd_start_broadcast(void)
 
 	if ((status
 				= at_ble_adv_start((at_ble_adv_type_t)adv_type,
-					AT_BLE_ADV_GEN_DISCOVERABLE,
+					adv_mode,
 					NULL, AT_BLE_ADV_FP_ANY,
 					APP_BROADCAST_FAST_ADV,
 					APP_BROADCAST_ADV_TIMEOUT,
@@ -726,7 +728,7 @@ static status_t brd_adv_init(void)
 
 	if ((status
 				= brd_set_advertisement_type(
-					ADV_TYPE_NONCONN_UNDIRECTED)) !=
+					ADV_TYPE_SCANNABLE_UNDIRECTED)) !=
 			STATUS_SUCCESS) {
 		DBG_LOG("Advertisement type set failed(%d)", status);
 		return STATUS_FAILED;
@@ -750,7 +752,17 @@ static status_t brd_adv_init(void)
 	brd_set_advertisement_data(ADV_DATA_TYPE_COMPLETE_SERVICE_UUID16,
 			(uint8_t *)BRD_ADV_DATA_UUID_DATA,
 			BRD_ADV_DATA_UUID_LEN);
-
+	
+	/*set advertisement data type */
+	if ((status = brd_set_data_type(SCAN_RESP_DATA)) != STATUS_SUCCESS) {
+			DBG_LOG("Advertisement data type set failed(%d)", status);
+			return STATUS_FAILED;
+	}
+	/* set Scan response data with manufacturer specific data */
+	brd_set_advertisement_data(ADV_DATA_TYPE_MANUFACTURER_DATA,
+								(uint8_t *)BRD_ADV_DATA_MANUFACTURER_DATA,
+								BRD_ADV_DATA_MANUFACTURER_LEN);
+								
 	return STATUS_SUCCESS;
 }
 

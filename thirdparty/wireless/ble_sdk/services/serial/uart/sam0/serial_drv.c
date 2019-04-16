@@ -46,6 +46,7 @@
 #include "serial_drv.h"
 #include "conf_serialdrv.h"
 #include "serial_fifo.h"
+#include "ble_utils.h"
 
 /* === TYPES =============================================================== */
 
@@ -59,19 +60,55 @@ static void serial_drv_write_cb(struct usart_module *const usart_module);
 /* === GLOBALS ========================================================== */
 struct usart_module usart_instance;
 
-ser_fifo_desc_t ble_usart_tx_fifo;
-uint8_t ble_usart_tx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
-
 ser_fifo_desc_t ble_usart_rx_fifo;
-uint8_t ble_usart_rx_buf[BLE_MAX_TX_PAYLOAD_SIZE];
+uint8_t ble_usart_rx_buf[BLE_MAX_RX_PAYLOAD_SIZE];
 
 uint16_t g_txdata;
 static uint16_t rx_data;
 
+static volatile uint16_t ble_txbyte_count = 0;
+static volatile uint8_t *ble_txbuf_ptr = NULL;
+
 /* === IMPLEMENTATION ====================================================== */
+static inline void usart_configure_flowcontrol(void)
+{
+	struct usart_config config_usart;
+#if UART_FLOWCONTROL_6WIRE_MODE == true
+	usart_disable(&usart_instance);
+	usart_reset(&usart_instance);
+#endif
+	usart_get_config_defaults(&config_usart);
+
+	config_usart.baudrate = CONF_FLCR_BLE_BAUDRATE;
+	config_usart.generator_source = CONF_FLCR_BLE_UART_CLOCK;
+	config_usart.mux_setting = CONF_FLCR_BLE_MUX_SETTING;
+	config_usart.pinmux_pad0 = CONF_FLCR_BLE_PINMUX_PAD0;
+	config_usart.pinmux_pad1 = CONF_FLCR_BLE_PINMUX_PAD1;
+	config_usart.pinmux_pad2 = CONF_FLCR_BLE_PINMUX_PAD2;
+	config_usart.pinmux_pad3 = CONF_FLCR_BLE_PINMUX_PAD3;
+
+	while (usart_init(&usart_instance, CONF_FLCR_BLE_USART_MODULE, &config_usart) != STATUS_OK);
+
+	usart_enable(&usart_instance);
+	
+	ser_fifo_init(&ble_usart_rx_fifo, ble_usart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
+
+	/* register and enable usart callbacks */
+	usart_register_callback(&usart_instance,
+	serial_drv_read_cb, USART_CALLBACK_BUFFER_RECEIVED);
+	usart_register_callback(&usart_instance,
+	serial_drv_write_cb, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_RECEIVED);
+	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);
+	serial_read_byte(&rx_data);
+}
 
 uint8_t configure_serial_drv(void)
 {
+	#if UART_FLOWCONTROL_4WIRE_MODE == true
+		usart_configure_flowcontrol();
+		#warning "This mode works only if Flow Control Permanently Enabled in the BTLC1000"
+	#else
 	struct usart_config config_usart;
 	usart_get_config_defaults(&config_usart);
 	config_usart.baudrate = CONF_BLE_BAUDRATE;
@@ -87,7 +124,6 @@ uint8_t configure_serial_drv(void)
 	usart_enable(&usart_instance);
 	
 	ser_fifo_init(&ble_usart_rx_fifo, ble_usart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
-	ser_fifo_init(&ble_usart_tx_fifo, ble_usart_tx_buf, BLE_MAX_TX_PAYLOAD_SIZE);
 
 	/* register and enable usart callbacks */
 	usart_register_callback(&usart_instance,
@@ -97,24 +133,36 @@ uint8_t configure_serial_drv(void)
 	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_RECEIVED);
 	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);
 	serial_read_byte(&rx_data);
+	#endif
+	
 	return STATUS_OK;
+}
+
+void configure_usart_after_patch(void)
+{
+	#if UART_FLOWCONTROL_6WIRE_MODE == true
+	usart_configure_flowcontrol();
+	#endif	
 }
 
 uint16_t serial_drv_send(uint8_t* data, uint16_t len)
 {  
-  uint16_t i;
-  uint8_t txdata;
+  system_interrupt_enter_critical_section();
+  ble_txbuf_ptr = data;
+  ble_txbyte_count = len;
+  system_interrupt_leave_critical_section();
   
-  for (i =0; i < len; i++)
+  if(ble_txbyte_count)
   {
-	  ser_fifo_push_uint8(&ble_usart_tx_fifo, data[i]);
-  }
-  
-  if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &txdata) == SER_FIFO_OK)
-  {
-	  g_txdata = txdata;
+	  g_txdata = *ble_txbuf_ptr;
 	  while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
+	  if(--ble_txbyte_count)
+	  {
+		  ++ble_txbuf_ptr;
+	  }
   }
+  /* Wait for ongoing transmission complete */
+  while(ble_txbyte_count); 
   return STATUS_OK;
 }
 
@@ -145,20 +193,31 @@ uint8_t serial_read_byte(uint16_t* data)
 static void serial_drv_write_cb(struct usart_module *const usart_module)
 {
 	/* USART Tx callback */
-	uint8_t txdata;
-	if(ser_fifo_pull_uint8(&ble_usart_tx_fifo, &txdata) == SER_FIFO_OK)
+	if(ble_txbyte_count)
 	{
-		g_txdata = txdata;
+		g_txdata = *ble_txbuf_ptr;
 		while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
+		if(--ble_txbyte_count)
+		{
+			++ble_txbuf_ptr;
+		}
 	}
 	else
 	{
 		#if SERIAL_DRV_TX_CB_ENABLE == true
 			SERIAL_DRV_TX_CB();
 		#endif
-	}	
-	
+	}		
 }
 
+uint32_t platform_set_serial_drv_tx_status(void)
+{
+	return true;
+}
+
+uint32_t platform_serial_drv_tx_status(void)
+{
+	return(usart_get_job_status(&usart_instance, USART_TRANSCEIVER_TX));
+}
 
 /* EOF */

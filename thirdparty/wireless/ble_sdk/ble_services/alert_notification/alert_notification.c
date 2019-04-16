@@ -231,20 +231,17 @@ void anp_alert_notify_response (at_ble_notification_recieved_t *notify_resp, gat
 {
 	DBG_LOG_DEV("The length of notification received is %d",notify_resp->char_len);
 	
-	if (notify_resp->char_handle == anp_handler->new_alert_char_handle) {
-			DBG_LOG("New Alert received");
-			DBG_LOG("The no of new alerts are %d",notify_resp->char_value[1]);
-			if (notify_resp->char_value[1]) {
-				DBG_LOG("The alert type is :");
-				anp_alert_type(&notify_resp->char_value[0]);
-			}
-	} else if (notify_resp->char_handle == anp_handler->unread_alert_char_handle) {
-		
-			DBG_LOG("Unread alert received");
-			DBG_LOG("The no of unread alerts are %d",notify_resp->char_value[1]);
-			if (notify_resp->char_value[1]) {
-				DBG_LOG("The alert type is :");
-				anp_alert_type(&notify_resp->char_value[0]);
-			}	
+	if ((notify_resp->char_handle == anp_handler->new_alert_char_handle) &&
+												notify_resp->char_value[1]) {
+		DBG_LOG("New Alert received");
+		DBG_LOG("The no of new alerts are %d",notify_resp->char_value[1]);
+		DBG_LOG("The alert type is :");
+		anp_alert_type(&notify_resp->char_value[0]);
+	} else if ((notify_resp->char_handle == anp_handler->unread_alert_char_handle) &&
+												notify_resp->char_value[1]) {
+		DBG_LOG("Unread alert received");
+		DBG_LOG("The no of unread alerts are %d",notify_resp->char_value[1]);
+		DBG_LOG("The alert type is :");
+		anp_alert_type(&notify_resp->char_value[0]);	
 	}
 }

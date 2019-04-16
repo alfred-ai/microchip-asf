@@ -64,9 +64,9 @@ extern "C" {
  * device.
  */
 enum system_voltage_reference {
-	/** Temperature sensor voltage reference. */
+	/** Temperature sensor voltage reference */
 	SYSTEM_VOLTAGE_REFERENCE_TEMPSENSE,
-	/** Bandgap voltage reference. */
+	/** Bandgap voltage reference */
 	SYSTEM_VOLTAGE_REFERENCE_BANDGAP,
 };
 
@@ -77,13 +77,13 @@ enum system_voltage_reference {
  * different sleep modes can be found in \ref asfdoc_sam0_system_module_overview_sleep_mode.
  */
 enum system_sleepmode {
-	/** IDLE 0 sleep mode. */
+	/** IDLE 0 sleep mode */
 	SYSTEM_SLEEPMODE_IDLE_0,
-	/** IDLE 1 sleep mode. */
+	/** IDLE 1 sleep mode */
 	SYSTEM_SLEEPMODE_IDLE_1,
-	/** IDLE 2 sleep mode. */
+	/** IDLE 2 sleep mode */
 	SYSTEM_SLEEPMODE_IDLE_2,
-	/** Standby sleep mode. */
+	/** Standby sleep mode */
 	SYSTEM_SLEEPMODE_STANDBY,
 };
 

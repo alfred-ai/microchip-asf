@@ -87,6 +87,9 @@
 #define ETHERNET_CONF_NET_MASK3                       0
 
 /** Ethernet MII/RMII mode */
-#define ETH_PHY_MODE  GMAC_PHY_RMII
+#define ETH_PHY_MODE                                  GMAC_PHY_RMII
+
+/** Support AT24MAC EEPROM with EIA-48 MAC address */
+#define ETH_SUPPORT_AT24MAC
 
 #endif /* CONF_GMAC_H_INCLUDED */
