@@ -119,7 +119,7 @@ static void configure_dma_resource_tx(struct dma_resource *tx_resource)
 
 //! [dma_tx_setup_3]
 	tx_config.peripheral_trigger = CONF_PERIPHERAL_TRIGGER_TX;
-	tx_config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
+	tx_config.trigger_action = DMA_TRIGGER_ACTION_BEAT;
 //! [dma_tx_setup_3]
 
 //! [dma_tx_setup_4]
@@ -141,7 +141,7 @@ static void configure_dma_resource_rx(struct dma_resource *rx_resource)
 
 //! [dma_rx_setup_3]
 	rx_config.peripheral_trigger = CONF_PERIPHERAL_TRIGGER_RX;
-	rx_config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
+	rx_config.trigger_action = DMA_TRIGGER_ACTION_BEAT;
 //! [dma_rx_setup_3]
 
 //! [dma_rx_setup_4]

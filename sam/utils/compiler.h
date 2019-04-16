@@ -892,7 +892,7 @@ typedef struct
 #define  LSB1D(u64)     MSB6D(u64)           //!< Least significant byte of 2nd rank of \a u64.
 #define  LSB0D(u64)     MSB7D(u64)           //!< Least significant byte of 1st rank of \a u64.
 
-#define  BE16(x)        Swap16(x)
+#define  BE16(x)        swap16(x)
 #define  LE16(x)        (x)
 
 #define  le16_to_cpu(x) (x)
@@ -900,10 +900,10 @@ typedef struct
 #define  LE16_TO_CPU(x) (x)
 #define  CPU_TO_LE16(x) (x)
 
-#define  be16_to_cpu(x) Swap16(x)
-#define  cpu_to_be16(x) Swap16(x)
-#define  BE16_TO_CPU(x) Swap16(x)
-#define  CPU_TO_BE16(x) Swap16(x)
+#define  be16_to_cpu(x) swap16(x)
+#define  cpu_to_be16(x) swap16(x)
+#define  BE16_TO_CPU(x) swap16(x)
+#define  CPU_TO_BE16(x) swap16(x)
 
 #define  le32_to_cpu(x) (x)
 #define  cpu_to_le32(x) (x)

@@ -3,7 +3,7 @@
  *
  * \brief SAM DUALTIMER Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -237,10 +237,7 @@ void dualtimer_init(const struct dualtimer_config *config)
 	uint8_t regval = 0;
 
 	/* Global reset */
-	LPMCU_MISC_REGS0->LPMCU_GLOBAL_RESET_1.reg &=
-			~LPMCU_MISC_REGS_LPMCU_GLOBAL_RESET_1_DUALTIMER_RSTN;
-	LPMCU_MISC_REGS0->LPMCU_GLOBAL_RESET_1.reg |=
-			LPMCU_MISC_REGS_LPMCU_GLOBAL_RESET_1_DUALTIMER_RSTN;
+	system_peripheral_reset(PERIPHERAL_DUALT_TIMER);
 
 	/* Common config */
 	if (config->timer1.timer_enable || config->timer2.timer_enable) {

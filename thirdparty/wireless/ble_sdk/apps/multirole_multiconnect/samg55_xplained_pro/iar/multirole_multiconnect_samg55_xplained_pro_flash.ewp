@@ -166,13 +166,13 @@
 					<state>IAS_GATT_CLIENT</state>
 					<state>__SAMG55J19__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>TX_POWER_SERVICE</state>
 					<state>BATTERY_SERVICE</state>
 					<state>LLS_GATT_CLIENT</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_ALL</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>ARM_MATH_CM4=true</state>
@@ -499,13 +499,13 @@
 					<state>IAS_GATT_CLIENT</state>
 					<state>__SAMG55J19__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>TX_POWER_SERVICE</state>
 					<state>BATTERY_SERVICE</state>
 					<state>LLS_GATT_CLIENT</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_ALL</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>ARM_MATH_CM4=true</state>
@@ -1157,13 +1157,13 @@
 					<state>IAS_GATT_CLIENT</state>
 					<state>__SAMG55J19__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>TX_POWER_SERVICE</state>
 					<state>BATTERY_SERVICE</state>
 					<state>LLS_GATT_CLIENT</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_ALL</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>ARM_MATH_CM4=true</state>
@@ -1490,13 +1490,13 @@
 					<state>IAS_GATT_CLIENT</state>
 					<state>__SAMG55J19__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>TX_POWER_SERVICE</state>
 					<state>BATTERY_SERVICE</state>
 					<state>LLS_GATT_CLIENT</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_ALL</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>ARM_MATH_CM4=true</state>

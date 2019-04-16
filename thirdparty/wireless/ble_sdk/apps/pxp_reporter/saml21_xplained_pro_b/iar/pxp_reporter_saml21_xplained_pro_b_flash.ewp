@@ -169,18 +169,19 @@
 					<state>LLS_GATT_SERVER</state>
 					<state>SYSTICK_MODE</state>
 					<state>TXPS_GATT_SERVER</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>__SAML21J18B__</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PROXIMITY_REPORTER</state>
 					<state>IAS_GATT_SERVER</state>
-					<state>__SAML21J18B__</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TX_POWER_SERVICE</state>
@@ -509,18 +510,19 @@
 					<state>LLS_GATT_SERVER</state>
 					<state>SYSTICK_MODE</state>
 					<state>TXPS_GATT_SERVER</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>__SAML21J18B__</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PROXIMITY_REPORTER</state>
 					<state>IAS_GATT_SERVER</state>
-					<state>__SAML21J18B__</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TX_POWER_SERVICE</state>
@@ -1208,18 +1210,19 @@
 					<state>LLS_GATT_SERVER</state>
 					<state>SYSTICK_MODE</state>
 					<state>TXPS_GATT_SERVER</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>__SAML21J18B__</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PROXIMITY_REPORTER</state>
 					<state>IAS_GATT_SERVER</state>
-					<state>__SAML21J18B__</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TX_POWER_SERVICE</state>
@@ -1548,18 +1551,19 @@
 					<state>LLS_GATT_SERVER</state>
 					<state>SYSTICK_MODE</state>
 					<state>TXPS_GATT_SERVER</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>__SAML21J18B__</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PROXIMITY_REPORTER</state>
 					<state>IAS_GATT_SERVER</state>
-					<state>__SAML21J18B__</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>LINK_LOSS_SERVICE</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
 					<state>TX_POWER_SERVICE</state>

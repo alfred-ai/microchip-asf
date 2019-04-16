@@ -193,6 +193,7 @@ CPPFLAGS = \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D HEART_RATE_SERVICE                              \
        -D HR_SENSOR                                       \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \

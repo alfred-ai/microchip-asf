@@ -187,10 +187,10 @@ CPPFLAGS = \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D PAS_CLIENT                                      \
        -D PAS_SERVICE_CLIENT                              \
-       -D PTS=false                                       \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \
        -D UART_FLOWCONTROL_4WIRE_MODE=false               \

@@ -3,7 +3,7 @@
  *
  * \brief HID Keyboard Device Profile Application declarations
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -275,15 +275,15 @@ static void hid_keyboard_app_init(void)
 	hid_prf_data.hid_device_info.flags = 0x02; 
 	
 #ifdef ENABLE_PTS
-	DBG_LOG("Report Map Characteristic Value");
-	printf("\r\n");
+	DBG_LOG_PTS("Report Map Characteristic Value");
+	DBG_LOG_PTS("\r\n");
 	for (i=0; i<sizeof(hid_app_keyb_report_map); i++)
 	{
-		printf(" 0x%02X ", hid_app_keyb_report_map[i]);
+		DBG_LOG_PTS(" 0x%02X ", hid_app_keyb_report_map[i]);
 	}
-	printf("\r\n");	
-	DBG_LOG("HID Information Characteristic Value");
-	DBG_LOG("bcdHID 0x%02X, bCountryCode 0x%02X Flags 0x%02X", hid_prf_data.hid_device_info.bcd_hid, hid_prf_data.hid_device_info.bcountry_code, hid_prf_data.hid_device_info.flags);
+	DBG_LOG_PTS("\r\n");	
+	DBG_LOG_PTS("HID Information Characteristic Value");
+	DBG_LOG_PTS("bcdHID 0x%02X, bCountryCode 0x%02X Flags 0x%02X", hid_prf_data.hid_device_info.bcd_hid, hid_prf_data.hid_device_info.bcountry_code, hid_prf_data.hid_device_info.flags);
 #endif // _DEBUG
 	
 	if(hid_prf_conf(&hid_prf_data)==HID_PRF_SUCESS){
@@ -296,7 +296,7 @@ static void hid_keyboard_app_init(void)
 int main(void )
 {
 	
-#if SAMG55
+#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();

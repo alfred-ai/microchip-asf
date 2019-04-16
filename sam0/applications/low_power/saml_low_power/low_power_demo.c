@@ -259,7 +259,7 @@ static void configure_dma(void)
 	dma_get_config_defaults(&config);
 
 	config.peripheral_trigger = ADC_DMAC_ID_RESRDY;
-	config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
+	config.trigger_action = DMA_TRIGGER_ACTION_BEAT;
 	config.run_in_standby = true;
 	dma_allocate(&example_resource, &config);
 

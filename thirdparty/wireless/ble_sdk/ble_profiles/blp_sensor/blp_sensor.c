@@ -3,7 +3,7 @@
  *
  * \brief Blood Pressure Sensor Profile
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -392,48 +392,48 @@ void blp_sensor_init(void *param)
 	}
 				
 	/* Handles for the Blood pressure service */
-	DBG_LOG_DEV("\n\nThe service handle for blp is 0x%04x",
+	DBG_LOG_PTS("\n\nThe service handle for blp is 0x%04x",
 	blp_service_handler.serv_handle);
-	DBG_LOG_DEV("The characteristic handle for blp measurement is 0x%04x",
+	DBG_LOG_PTS("The characteristic handle for blp measurement is 0x%04x",
 	blp_service_handler.serv_chars[0].char_val_handle - 1);
-	DBG_LOG_DEV("The characteristic value handle for blp measurement is 0x%04x",
+	DBG_LOG_PTS("The characteristic value handle for blp measurement is 0x%04x",
 	blp_service_handler.serv_chars[0].char_val_handle);
-	DBG_LOG_DEV("The characteristic handle for intermediate cuff pressure is "
+	DBG_LOG_PTS("The characteristic handle for intermediate cuff pressure is "
 	"0x%04x",blp_service_handler.serv_chars[1].char_val_handle - 1);
-	DBG_LOG_DEV("The characteristic value handle for intermediate cuff pressure is "
+	DBG_LOG_PTS("The characteristic value handle for intermediate cuff pressure is "
 	"0x%04x",blp_service_handler.serv_chars[1].char_val_handle);
-	DBG_LOG_DEV("The characteristic handle for blood pressure feature is 0x%04x",
+	DBG_LOG_PTS("The characteristic handle for blood pressure feature is 0x%04x",
 	blp_service_handler.serv_chars[2].char_val_handle - 1);
-	DBG_LOG_DEV("The characteristic value handle for blood pressure feature is 0x%04x",
+	DBG_LOG_PTS("The characteristic value handle for blood pressure feature is 0x%04x",
 	blp_service_handler.serv_chars[2].char_val_handle);
-	DBG_LOG_DEV("The descriptor handle for blp measurement is 0x%04x",
+	DBG_LOG_PTS("The descriptor handle for blp measurement is 0x%04x",
 	blp_service_handler.serv_chars[0].client_config_handle);
-	DBG_LOG_DEV("The descriptor handle for intermediate cuff press is 0x%04x",
+	DBG_LOG_PTS("The descriptor handle for intermediate cuff press is 0x%04x",
 	blp_service_handler.serv_chars[1].client_config_handle);
 	/* The handles received for Device information */
-	DBG_LOG_DEV("\r\nThe service handle for Device information service is 0x%04x",
+	DBG_LOG_PTS("\r\nThe service handle for Device information service is 0x%04x",
 	dis_service_handler.serv_handle);
-	DBG_LOG_DEV("The Handles for the characteristics of DIS are given below\n");
-	DBG_LOG_DEV("Characteristic 1 - 0x%04x",
+	DBG_LOG_PTS("The Handles for the characteristics of DIS are given below\n");
+	DBG_LOG_PTS("Characteristic 1 - 0x%04x",
 	dis_service_handler.serv_chars[0].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 2 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 2 - 0x%04x",
 	dis_service_handler.serv_chars[1].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 3 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 3 - 0x%04x",
 	dis_service_handler.serv_chars[2].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 4 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 4 - 0x%04x",
 	dis_service_handler.serv_chars[3].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 5 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 5 - 0x%04x",
 	dis_service_handler.serv_chars[4].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 6 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 6 - 0x%04x",
 	dis_service_handler.serv_chars[5].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 7 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 7 - 0x%04x",
 	dis_service_handler.serv_chars[6].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 8 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 8 - 0x%04x",
 	dis_service_handler.serv_chars[7].char_val_handle - 1);
-	DBG_LOG_DEV("Characteristic 9 - 0x%04x",
+	DBG_LOG_PTS("Characteristic 9 - 0x%04x",
 	dis_service_handler.serv_chars[8].char_val_handle - 1);
 							
-	DBG_LOG_DEV("The default value of blood pressure feature is 0x%02x",
+	DBG_LOG_PTS("The default value of blood pressure feature is 0x%02x",
 							*(blp_service_handler.serv_chars[2].init_value));					
 							
 							

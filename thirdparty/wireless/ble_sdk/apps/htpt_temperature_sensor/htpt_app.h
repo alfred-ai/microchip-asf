@@ -3,7 +3,7 @@
  *
  * \brief Health Thermometer Profile Application declarations
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -57,7 +57,7 @@
 
 #define APP_HT_FAST_ADV 1600 //1000 ms
 
-#define APP_HT_ADV_TIMEOUT 1000 // 100 Secs
+#define APP_HT_ADV_TIMEOUT 655 // 100 Secs
 
 #define SCAN_RESP_LEN 10
 #define ADV_DATA_LEN 18
@@ -111,23 +111,17 @@ typedef enum
 	STABLE_TEMPERATURE_VAL=1
 }stable_temp_reading;
 
-#define IEEE11073_EXPONENT				(0xFF000000)
-
-#define IEEE754_MANTISA(val)			((uint32_t)(val * 10))
-
-#define IEEE754_TO_IEEE11073_FLOAT(f_val)	(IEEE11073_EXPONENT | IEEE754_MANTISA(f_val))
-
-/* Converting floating point IEEE754 format to floating point IEEE11073 format
- * 
- * @Param[0] f_val floating point IEEE754 format
- * @return floating point IEEE11073
- *
- */
-static inline uint32_t convert_ieee754_ieee11073_float(float f_val)
-{
-	uint32_t ieee11073_float;
-	ieee11073_float = IEEE754_TO_IEEE11073_FLOAT(f_val);
-	return (ieee11073_float);
-}
-
+static at_ble_status_t app_connected_event_handler(void *params);
+static at_ble_status_t app_disconnected_event_handler(void *params);
+static at_ble_status_t app_pair_done_event_handler(void *params);
+static at_ble_status_t app_encryption_status_changed_handler(void *params);
+static at_ble_status_t  app_htpt_create_db_cfm_handler(void *params) ;
+static at_ble_status_t  app_htpt_error_ind_handler(void *params);
+static at_ble_status_t  app_htpt_disable_ind_handler(void *params);
+static at_ble_status_t  app_htpt_temp_send_cfm(void *params);
+static at_ble_status_t  app_htpt_meas_intv_chg_ind_handler(void *params);
+static at_ble_status_t  app_htpt_cfg_indntf_ind_handler(void *params);
+static at_ble_status_t  app_htptp_meas_intv_chg_req(void *params);
+static at_ble_status_t  app_htpt_enable_rsp_handler(void *params);
+static at_ble_status_t  app_htpt_meas_intv_upd_rsp(void *params);
 #endif /* __HTPT_APP_H__ */

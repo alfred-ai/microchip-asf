@@ -3,7 +3,7 @@
 *
 * \brief Device Information Service - Application
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -168,7 +168,7 @@ static const ble_event_callback_t device_info_app_gap_cb[] = {
 int main(void)
 {
 	at_ble_status_t status;
-	#if SAMG55
+	#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();

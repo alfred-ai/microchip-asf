@@ -167,16 +167,16 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
+					<state>__SAMD21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>PAS_SERVICE_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PAS_CLIENT</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
@@ -500,16 +500,16 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
+					<state>__SAMD21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>PAS_SERVICE_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PAS_CLIENT</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
@@ -1192,16 +1192,16 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
+					<state>__SAMD21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>PAS_SERVICE_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PAS_CLIENT</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
@@ -1525,16 +1525,16 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
+					<state>__SAMD21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>PAS_SERVICE_CLIENT</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>PAS_CLIENT</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>

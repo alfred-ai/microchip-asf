@@ -171,6 +171,7 @@
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
@@ -506,6 +507,7 @@
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
@@ -1200,6 +1202,7 @@
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>
@@ -1535,6 +1538,7 @@
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>BLOOD_PRESSURE_SERVICE</state>

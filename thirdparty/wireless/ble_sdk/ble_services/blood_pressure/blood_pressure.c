@@ -3,7 +3,7 @@
  *
  * \brief Blood Pressure Service
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -111,7 +111,8 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 		
 	/* Permissions for characteristics */
 	blood_pressure_serv->serv_chars[0].value_permissions
-											= AT_BLE_ATTR_NO_PERMISSIONS;
+											= (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR
+											|AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);
 	/* user defined */
 	blood_pressure_serv->serv_chars[0].user_desc = NULL;
 	blood_pressure_serv->serv_chars[0].user_desc_len = 0;
@@ -163,7 +164,8 @@ void blp_init_service(blp_gatt_service_handler_t *blood_pressure_serv)
 
 		/* permissions */
 		blood_pressure_serv->serv_chars[1].value_permissions
-							= AT_BLE_ATTR_NO_PERMISSIONS;
+							= (AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR
+							|AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR);
 	
 	/* user defined name */
 	blood_pressure_serv->serv_chars[1].user_desc = NULL;

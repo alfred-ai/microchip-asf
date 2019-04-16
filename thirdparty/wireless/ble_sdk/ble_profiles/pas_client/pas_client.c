@@ -3,7 +3,7 @@
 *
 * \brief Phone Alert Status Profile
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -254,17 +254,13 @@ at_ble_status_t pas_client_discovery_complete_handler(void *params)
 					pas_service_data.ringer_control_point_char.discovery = 0;
 				}
 			} else if(discover_status.operation == AT_BLE_DISC_DESC_CHAR) {
-				#if BLE_PAIR_ENABLE
-				DBG_LOG_DEV("Sending slave request");
-				if(ble_send_slave_sec_request(pas_service_data.conn_handle) != AT_BLE_SUCCESS) {
-					DBG_LOG_DEV("Pairing disabled");
-				}
-				#else
-				pas_client_write_notifications(NULL);
+				DBG_LOG_DEV("Descriptor discovery successfull");
+				#if !BLE_PAIR_ENABLE
+					pas_client_write_notifications(NULL);
 				#endif
 			}	
 		} else {
-			DBG_LOG("discovery operation not successfull");
+			DBG_LOG("discovery operation not successfully");
 		}
 			return AT_BLE_SUCCESS;
 }
@@ -280,7 +276,7 @@ at_ble_status_t pas_client_discovery_complete_handler(void *params)
 	uint16_t uuid;
 	pas_service_uuid = &primary_service_params->service_uuid;
 	memcpy(&uuid,&primary_service_params->service_uuid.uuid,2);
-	DBG_LOG_DEV("service found with uuidtype %d %x",primary_service_params->service_uuid.type,uuid);
+	DBG_LOG_PTS("service found with uuidtype %d %x",primary_service_params->service_uuid.type,uuid);
 	if	(pas_service_uuid->type == AT_BLE_UUID_16) {
 		uint16_t service_uuid = (uint16_t)((primary_service_params->service_uuid.uuid[0]) |	\
 		(primary_service_params->service_uuid.uuid[1] << 8));
@@ -290,7 +286,7 @@ at_ble_status_t pas_client_discovery_complete_handler(void *params)
 			pas_service_data.pas_service_info.start_handle = primary_service_params->start_handle;
 			pas_service_data.pas_service_info.end_handle   = primary_service_params->end_handle;
 		
-			DBG_LOG_DEV("Phone Alert Status Service Discovered  %04X %04X", pas_service_data.pas_service_info.start_handle,
+			DBG_LOG_PTS("Phone Alert Status Service Discovered  %04X %04X", pas_service_data.pas_service_info.start_handle,
 			 pas_service_data.pas_service_info.end_handle);
 			DBG_LOG("Phone Alert Status Service discovered in the remote device");
 			pas_service_data.pas_service_info.discovery = true;
@@ -322,13 +318,13 @@ at_ble_status_t pas_client_characteristic_found_handler(void *params)
 			pas_service_data.alert_status_char.value_handle = characteristic_found->value_handle;
 			pas_service_data.alert_status_char.properties = characteristic_found->properties;
 			
-			DBG_LOG_DEV("Supported Alert Status characteristics %04X",pas_service_data.alert_status_char.char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
+			DBG_LOG_PTS("Supported Alert Status characteristics %04X",pas_service_data.alert_status_char.char_handle);
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
 			characteristic_found->conn_handle,
 			characteristic_found->char_handle,
 			characteristic_found->value_handle,
 			characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],characteristic_found->char_uuid.uuid[0]);
+			DBG_LOG_PTS("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],characteristic_found->char_uuid.uuid[0]);
 			
 			pas_service_data.alert_status_char.discovery = true;
 		}
@@ -341,13 +337,13 @@ at_ble_status_t pas_client_characteristic_found_handler(void *params)
 			pas_service_data.ringer_setting_char.value_handle = characteristic_found->value_handle;
 			pas_service_data.ringer_setting_char.properties = characteristic_found->properties;
 			
-			DBG_LOG_DEV("Ringer Setting Characteristics %04X",pas_service_data.ringer_setting_char.char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
+			DBG_LOG_PTS("Ringer Setting Characteristics %04X",pas_service_data.ringer_setting_char.char_handle);
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
 			characteristic_found->conn_handle,
 			characteristic_found->char_handle,
 			characteristic_found->value_handle,
 			characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],characteristic_found->char_uuid.uuid[0]);
+			DBG_LOG_PTS("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],characteristic_found->char_uuid.uuid[0]);
 			
 			pas_service_data.ringer_setting_char.discovery = true;
 		}
@@ -360,13 +356,13 @@ at_ble_status_t pas_client_characteristic_found_handler(void *params)
 			pas_service_data.ringer_control_point_char.value_handle = characteristic_found->value_handle;
 			pas_service_data.ringer_control_point_char.properties = characteristic_found->properties;
 			
-			DBG_LOG_DEV("Ringer Control Point characteristics %04X",pas_service_data.ringer_control_point_char.char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
+			DBG_LOG_PTS("Ringer Control Point characteristics %04X",pas_service_data.ringer_control_point_char.char_handle);
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
 			characteristic_found->conn_handle,
 			characteristic_found->char_handle,
 			characteristic_found->value_handle,
 			characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],characteristic_found->char_uuid.uuid[0]);
+			DBG_LOG_PTS("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],characteristic_found->char_uuid.uuid[0]);
 			pas_service_data.ringer_control_point_char.discovery = true;
 		}
 		break;	
@@ -393,14 +389,14 @@ at_ble_status_t pas_client_descriptor_found_handler(void *param)
 					params->desc_handle < pas_service_data.ringer_setting_char.char_handle) {
 					pas_service_data.alert_status_desc.desc_handle = params->desc_handle;
 					pas_service_data.alert_status_desc.discovery = true;		
-					DBG_LOG_DEV("The alert status desc handle is %x",pas_service_data.alert_status_desc.desc_handle);
-					DBG_LOG_DEV("The descriptor uuid is %x",desc_uuid);
+					DBG_LOG_PTS("The alert status desc handle is %x",pas_service_data.alert_status_desc.desc_handle);
+					DBG_LOG_PTS("The descriptor uuid is %x",desc_uuid);
 				} else if (params->desc_handle > pas_service_data.ringer_setting_char.char_handle &&
 							params->desc_handle < pas_service_data.ringer_control_point_char.char_handle) {
 					pas_service_data.ringer_setting_desc.desc_handle = params->desc_handle;
 					pas_service_data.ringer_setting_desc.discovery = true;
-					DBG_LOG_DEV("The ringer setting desc handle is %x",pas_service_data.ringer_setting_desc.desc_handle);
-					DBG_LOG_DEV("The descriptor uuid is %x",desc_uuid);
+					DBG_LOG_PTS("The ringer setting desc handle is %x",pas_service_data.ringer_setting_desc.desc_handle);
+					DBG_LOG_PTS("The descriptor uuid is %x",desc_uuid);
 				}
 			}
 		}		

@@ -778,6 +778,7 @@
 				</option>
 				<option>
 					<name>IlinkExtraOptions</name>
+					<state>--config_def __ICFEDIT_size_cstack__=0x400</state>
 				</option>
 				<option>
 					<name>IlinkLowLevelInterfaceSlave</name>
@@ -1747,6 +1748,7 @@
 				</option>
 				<option>
 					<name>IlinkExtraOptions</name>
+					<state>--config_def __ICFEDIT_size_cstack__=0x400</state>
 				</option>
 				<option>
 					<name>IlinkLowLevelInterfaceSlave</name>

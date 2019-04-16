@@ -167,9 +167,9 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
@@ -500,9 +500,9 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
@@ -1192,9 +1192,9 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
@@ -1525,9 +1525,9 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
-					<state>PTS=false</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAML21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>

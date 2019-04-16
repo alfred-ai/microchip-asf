@@ -47,12 +47,12 @@
 #define WDT_H_INCLUDED
 
 /**
- * \defgroup asfdoc_sam0_wdt_group SAM Watchdog Driver (WDT)
+ * \defgroup asfdoc_sam0_wdt_group SAM Watchdog (WDT) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
- * and management of the device's Watchdog Timer module, including the enabling,
- * disabling, and kicking within the device. The following driver API modes are
- * covered by this manual:
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides
+ * an interface for the configuration and management of the device's Watchdog
+ * Timer module, including the enabling, disabling, and kicking within the device.
+ * The following driver API modes are covered by this manual:
  *
  *  - Polled APIs
  * \if WDT_CALLBACK_MODE
@@ -454,7 +454,7 @@ void wdt_reset_count(void);
  * This is a list of the available Quick Start guides (QSGs) and example
  * applications for \ref asfdoc_sam0_wdt_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
- * use cases. Note that QSGs can be compiled as a standalone application or be
+ * use cases. Note that a QSG can be compiled as a standalone application or be
  * added to the user application.
  *
  *  - \subpage asfdoc_sam0_wdt_basic_use_case

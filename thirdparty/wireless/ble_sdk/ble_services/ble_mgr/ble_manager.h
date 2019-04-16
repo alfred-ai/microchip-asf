@@ -3,7 +3,7 @@
 *
 * \brief BLE Manager declarations
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -127,7 +127,6 @@
 #ifndef BLE_DEVICE_NAME
 #define BLE_DEVICE_NAME				"ATMEL-ANS"
 #endif	/* BLE_DEVICE_NAME */
-#define BLE_PAIR_ENABLE					(false)
 #endif /* ANP_SIG_CLIENT */
 
 #if defined PAS_CLIENT
@@ -155,6 +154,12 @@
 #define BLE_DEVICE_NAME				"ATMEL-SCP"
 #endif	/* BLE_DEVICE_NAME */
 #endif	/*SCAN_PARAM_SERVICE*/
+
+#if defined HTPT_SERVICE
+#ifndef BLE_DEVICE_NAME
+#define BLE_DEVICE_NAME "ATMEL-HTP"
+#endif  
+#endif
 
 #if defined	DEVICE_INFORMATION_SERVICE
 #ifndef BLE_DEVICE_NAME
@@ -204,7 +209,7 @@ typedef at_ble_status_t (*ble_event_callback_t) (void *params);
 #define BLE_EVENT_TIMEOUT			(20)
 
 /** @brief pin timeout */
-#define PIN_TIMEOUT					30*1000
+#define PIN_TIMEOUT					30000
 
 /** @brief Observer related declarations */
 #define LE_LIMITED_DISCOVERABLE_MODE  ((uint8_t) 1 << 0)
@@ -381,6 +386,9 @@ typedef enum
 /** ANCS service UUID. */
 #define ANP_ANCS_SERVICE_UUID					("\xD0\x00\x2D\x12\x1E\x4B\x0F\xA4\x99\x4E\xCE\xB5\x31\xF4\x05\x79")
 
+/** HTPT SERVICE UUID */
+#define HTPT_SERVICE_UUID						(0x1809)
+
 /* Characteristics UUID's */
 /* Alert Level Characteristic UUID */
 #define ALERT_LEVEL_CHAR_UUID					(0x2A06)
@@ -555,6 +563,7 @@ typedef struct ble_connected_dev_info
 	at_ble_dev_role_t dev_role;
 	at_ble_pair_done_t bond_info;
 	ble_device_state_t conn_state;
+	at_ble_LTK_t host_ltk;
 }ble_connected_dev_info_t;
 
 
@@ -581,7 +590,7 @@ typedef enum {
 #define ADV_ELEMENT_SIZE					2
 
 #ifndef SERVICE_UUID16_MAX_NUM
-#define SERVICE_UUID16_MAX_NUM				14
+#define SERVICE_UUID16_MAX_NUM				15
 #endif
 
 #ifndef PUBLIC_TARGET_ADDR_MAX_NUM
@@ -716,6 +725,13 @@ typedef enum {
 #define BLE_GAP_ADV_SERVICE_16BIT_UUID13_ENABLE			true
 #endif
 #define BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID13_VAL		PAS_SERVICE_UUID
+
+#ifndef HTPT_SERVICE
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID14_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_16BIT_UUID14_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_16BIT_UUID14_VAL		HTPT_SERVICE_UUID
 
 #endif
 
@@ -911,6 +927,14 @@ typedef enum {
 #define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID13_ENABLE			true
 #endif
 #define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID13_VAL		PAS_SERVICE_UUID
+
+#ifndef HTPT_SERVICE
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID14_ENABLE			false
+#else
+#define BLE_GAP_ADV_SERVICE_SOLTN_16BIT_UUID14_ENABLE			true
+#endif
+#define  BLE_GAP_ADV_DATA_SERVICE_SOLTN_16BIT_UUID14_VAL		HTPT_SERVICE_UUID
+
 #endif
 
 #define BLE_GAP_ADV_SERVICE_SOLTN_32BIT_UUID_ENABLE				false

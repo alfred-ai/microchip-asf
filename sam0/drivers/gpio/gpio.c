@@ -3,7 +3,7 @@
  *
  * \brief SAM GPIO Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -50,6 +50,7 @@
  * Internal driver device instance struct.
  */
 struct gpio_module _gpio_instances[2];
+static void (*aon_handle_ext_wakeup_isr)(void) = (void (*)(void))0x1bc51;
 
 /**
  *  \brief Initializes a gpio pin/group configuration structure to defaults.
@@ -70,6 +71,7 @@ void gpio_get_config_defaults(struct gpio_config *const config)
 	config->direction  = GPIO_PIN_DIR_INPUT;
 	config->input_pull = GPIO_PIN_PULL_UP;
 	config->powersave  = false;
+	config->aon_wakeup = false;
 }
 
 /**
@@ -116,36 +118,52 @@ enum status_code gpio_pin_set_config(const uint8_t gpio_pin,
 		} else if (gpio_pin <= 23) {
 			LPMCU_MISC_REGS0->PINMUX_SEL_2.reg &= ~(7 << ((gpio_pin % 8) * 4));
 		}
-
-		if(config->direction == GPIO_PIN_DIR_INPUT) {
-			if(gpio_pin < 16) {
-				GPIO0->OUTENCLR.reg = (1 << gpio_pin);
+		
+		if ((gpio_pin == PIN_AO_GPIO_0) || (gpio_pin == PIN_AO_GPIO_1) ||
+				(gpio_pin == PIN_AO_GPIO_2)) {
+			/* Active Low, Always On Pull Enable Control */
+			if (config->input_pull == GPIO_PIN_PULL_UP) {
+				AON_GP_REGS0->AON_PULL_ENABLE.reg &= ~(1 << (31 - gpio_pin));
 			} else {
-				GPIO1->OUTENCLR.reg = (1 << (gpio_pin % 16));
+				AON_GP_REGS0->AON_PULL_ENABLE.reg |= 1 << (31 - gpio_pin);
 			}
-			/* pull_enable. */
-			switch(config->input_pull) {
-				case GPIO_PIN_PULL_NONE:
-					LPMCU_MISC_REGS0->PULL_ENABLE.reg |= (1 << gpio_pin);
-					break;
-				case GPIO_PIN_PULL_UP:
-					LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
-					break;
-				case GPIO_PIN_PULL_DOWN:
-					/* Set R-Type */
-					LPMCU_MISC_REGS0->RTYPE_PAD_0.reg |= (1 << gpio_pin);
-					/* Set REN */
-					LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
-					break;
-				default:
-					status = STATUS_ERR_INVALID_ARG;
-					break;
+			if (config->aon_wakeup) {
+				/* Enable AON_GPIO_x to be a wakeup MCU from sleep mode */
+				AON_GP_REGS0->AON_PINMUX_SEL.reg |= 1 << (4 * (31 - gpio_pin));
+				/* Enable AON_GPIO_x to wake up the BLE domain from sleep mode */
+				AON_PWR_SEQ0->GPIO_WAKEUP_CTRL.bit.BLE_ENABLE = 1;
 			}
-		} else if(config->direction == GPIO_PIN_DIR_OUTPUT) {
-			if (gpio_pin < 16) {
-				GPIO0->OUTENSET.reg |= (1 << gpio_pin);
-			} else {
-				GPIO1->OUTENSET.reg |= (1 << (gpio_pin % 16));
+		} else {
+			if(config->direction == GPIO_PIN_DIR_INPUT) {
+				if(gpio_pin < 16) {
+					GPIO0->OUTENCLR.reg = (1 << gpio_pin);
+				} else {
+					GPIO1->OUTENCLR.reg = (1 << (gpio_pin % 16));
+				}
+				/* pull_enable. */
+				switch(config->input_pull) {
+					case GPIO_PIN_PULL_NONE:
+						LPMCU_MISC_REGS0->PULL_ENABLE.reg |= (1 << gpio_pin);
+						break;
+					case GPIO_PIN_PULL_UP:
+						LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
+						break;
+					case GPIO_PIN_PULL_DOWN:
+						/* Set R-Type */
+						LPMCU_MISC_REGS0->RTYPE_PAD_0.reg |= (1 << gpio_pin);
+						/* Set REN */
+						LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~(1 << gpio_pin);
+						break;
+					default:
+						status = STATUS_ERR_INVALID_ARG;
+						break;
+				}
+			} else if(config->direction == GPIO_PIN_DIR_OUTPUT) {
+				if (gpio_pin < 16) {
+					GPIO0->OUTENSET.reg |= (1 << gpio_pin);
+				} else {
+					GPIO1->OUTENSET.reg |= (1 << (gpio_pin % 16));
+				}
 			}
 		}
 	}
@@ -316,13 +334,13 @@ void gpio_register_callback(uint8_t gpio_pin, gpio_callback_t callback_func,
 {
 	/* Sanity check arguments */
 	Assert(callback_func);
-	Assert(gpio_pin < 24);
+	Assert(gpio_pin < 32);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else if (gpio_pin < 24) {
+	} else {
 		gpio_port = 1;
 	}
 	switch (callback_type) {
@@ -370,13 +388,13 @@ void gpio_unregister_callback(uint8_t gpio_pin,
 {
 	/* Sanity check arguments */
 	Assert(callback_func);
-	Assert(gpio_pin < 24);
+	Assert(gpio_pin < 32);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else if (gpio_pin < 24) {
+	} else {
 		gpio_port = 1;
 	}
 
@@ -397,13 +415,13 @@ void gpio_unregister_callback(uint8_t gpio_pin,
  */
 void gpio_enable_callback(uint8_t gpio_pin)
 {
-	Assert(gpio_pin < 24);
+	Assert(gpio_pin < 32);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else if (gpio_pin < 24) {
+	} else {
 		gpio_port = 1;
 	}
 
@@ -422,13 +440,13 @@ void gpio_enable_callback(uint8_t gpio_pin)
  */
 void gpio_disable_callback(uint8_t gpio_pin)
 {
-	Assert(gpio_pin < 24);
+	Assert(gpio_pin < 32);
 
 	uint8_t gpio_port = 0;
 
 	if (gpio_pin < 16) {
 		gpio_port = 0;
-	} else if (gpio_pin < 24) {
+	} else {
 		gpio_port = 1;
 	}
 
@@ -457,6 +475,7 @@ static void gpio_port0_isr_handler(void)
 			break;
 		}
 	}
+	NVIC_ClearPendingIRQ(GPIO0_IRQn);
 }
 
 /**
@@ -470,6 +489,11 @@ static void gpio_port1_isr_handler(void)
 	uint32_t flag = _gpio_instances[1].hw->INTSTATUSCLEAR.reg;
 
 	for (uint8_t i = 0; i < 16; i++){
+		/* For AON wakeup pin clear interrupt */
+		if (flag & ((1<<15) | (1<<14) | (1<<13))) {
+			aon_handle_ext_wakeup_isr();
+		}
+
 		if (flag & (1 << i)) {
 			/* Clear interrupt flag */
 			_gpio_instances[1].hw->INTSTATUSCLEAR.reg |= (1 << i);
@@ -480,6 +504,7 @@ static void gpio_port1_isr_handler(void)
 			}
 		}
 	}
+	NVIC_ClearPendingIRQ(GPIO1_IRQn);
 }
 
 /**

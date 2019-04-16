@@ -317,42 +317,42 @@ bool uhc_dev_is_high_speed_support(uhc_device_t* dev);
  * The following optional USB host callback can be defined in the conf_usb_host.h
  * file of the application:
  *
- * \b 1. void UHC_MODE_CHANGE(bool b_host_mode).
+ * \b 1. void UHC_MODE_CHANGE (bool b_host_mode).
  *
  * To notify that the USB mode are switched automatically.
  * This is possible only when ID pin is available.
  *
- * \b 2. void UHC_VBUS_CHANGE(bool b_present).
+ * \b 2. void UHC_VBUS_CHANGE (bool b_present).
  *
  * To notify that the Vbus level has changed
  * (Available only in USB hardware with Vbus monitoring).
  *
- * \b 3. void UHC_VBUS_ERROR(void).
+ * \b 3. void UHC_VBUS_ERROR (void).
  *
  * To notify that a Vbus error has occurred
  * (Available only in USB hardware with Vbus monitoring).
  *
- * \b 4. void UHC_CONNECTION_EVENT(uhc_device_t* dev, bool b_present).
+ * \b 4. void UHC_CONNECTION_EVENT (uhc_device_t* dev, bool b_present).
  *
  * To notify that a device has been connected or disconnected.
  *
- * \b 5. void UHC_WAKEUP_EVENT(void).
+ * \b 5. void UHC_WAKEUP_EVENT (void).
  *
  * Called when a USB device or the host have wake up the USB line.
  *
- * \b 6. void UHC_SOF_EVENT(void).
+ * \b 6. void UHC_SOF_EVENT (void).
  *
  * Called for each received SOF each 1ms.
  * Available in High and Full speed mode.
  *
- * \b 7. uint8_t UHC_DEVICE_CONF(uhc_device_t* dev).
+ * \b 7. uint8_t UHC_DEVICE_CONF (uhc_device_t* dev).
  *
  * Called when a USB device configuration must be chosen.
  * Thus, the application can choose either a configuration number
  * for this device or a configuration number 0 to reject it.
  * If callback not defined the configuration 1 is chosen.
  *
- * \b 8. void UHC_ENUM_EVENT(uhc_device_t* dev, uint8_t b_status).
+ * \b 8. void UHC_ENUM_EVENT (uhc_device_t* dev, uint8_t b_status).
  *
  * Called when a USB device enumeration is completed or failed.
  *
@@ -362,8 +362,8 @@ bool uhc_dev_is_high_speed_support(uhc_device_t* dev);
  * Common prerequisites for all USB hosts.
  *
  * This module is based on USB host stack full interrupt driven and supporting
- * \ref sleepmgr_group "sleepmgr". For AVR&reg; and Atmel&reg; | SMART SAM3/4 devices the
- * \ref clk_group "clock services" is supported. For SAM D21 devices the
+ * \ref sleepmgr_group "sleepmgr". For AVR&reg; and Atmel&reg; | SMART ARM&reg;-based
+ * SAM3/4 devices the \ref clk_group "clock services" is supported. For SAM D21 devices the
  * \ref asfdoc_sam0_system_clock_group "clock driver" is supported.
  *
  * The following procedure must be executed to setup the project correctly:

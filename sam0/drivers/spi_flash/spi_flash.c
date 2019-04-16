@@ -3,7 +3,7 @@
  *
  * \brief SAM SPI Flash Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -118,14 +118,14 @@ static uint8_t spi_flash_read_status_reg(void)
 }
 
 /**
-* \brief Program SPI Flash page
-*
-* Program SPI Flash page
-*
-* \param[in]  memory_addr    Start address of memory
-* \param[in]  flash_addr     Start address of the spi flash
-* \param[in]  size           Number of bytes to be programmed to flash
-*/
+ * \brief Program SPI Flash page
+ *
+ * Program SPI Flash page
+ *
+ * \param[in]  memory_addr    Start address of memory
+ * \param[in]  flash_addr     Start address of the spi flash
+ * \param[in]  size           Number of bytes to be programmed to flash
+ */
 static void spi_flash_page_program(uint32_t flash_addr, uint32_t memory_addr, uint16_t size)
 {
 	unsigned char cmd[8];
@@ -164,10 +164,10 @@ static void spi_flash_page_program(uint32_t flash_addr, uint32_t memory_addr, ui
 }
 
 /**
-* \brief Initializes the SPI Flash module
-*
-* Initializes the SPI Flash module
-*/
+ * \brief Initializes the SPI Flash module
+ *
+ * Initializes the SPI Flash module
+ */
 void spi_flash_init(void)
 {
 	/* PINMUX init */
@@ -182,11 +182,11 @@ void spi_flash_init(void)
 }
 
 /**
-* \brief Read SPI Flash Chip ID
-*
-* Reads SPI Flash Chip ID
-*/
-uint32_t spi_flash_read_id(void)
+ * \brief Read SPI Flash Chip ID
+ *
+ * Reads SPI Flash Chip ID
+ */
+uint32_t spi_flash_rdid(void)
 {
 	volatile uint32_t register_value;
 
@@ -208,13 +208,13 @@ uint32_t spi_flash_read_id(void)
 }
 
 /**
-* \brief Read SPI Flash memory
-*
-* Reads SPI Flash memory with up to page size (256 bytes) length
-* \param[in]  read_buf    Pointer to buffer to read into
-* \param[in]  flash_addr  Flash memory address to read from
-* \param[in]  size        Data length to be read, must be less than or equal to FLASH_PAGE_SIZE
-*/
+ * \brief Read SPI Flash memory
+ *
+ * Reads SPI Flash memory with up to page size (256 bytes) length
+ * \param[in]  read_buf    Pointer to buffer to read into
+ * \param[in]  flash_addr  Flash memory address to read from
+ * \param[in]  size        Data length to be read, must be less than or equal to FLASH_PAGE_SIZE
+ */
 void spi_flash_read(uint8_t *read_buf, uint32_t flash_addr, uint32_t size)
 {
 	uint8_t   cmd[8] = {0, };
@@ -259,14 +259,14 @@ void spi_flash_read(uint8_t *read_buf, uint32_t flash_addr, uint32_t size)
 }
 
 /**
-* \brief Write SPI Flash memory
-*
-* Writes SPI Flash memory with up to page size (256 bytes) length
-* \param[in]  write_buf    Pointer to buffer to write from
-* \param[in]  flash_addr   Flash memory address to write to
-* \param[in]  size         Data length to be written, must be less than or
-*                          equal to FLASH_PAGE_SIZE
-*/
+ * \brief Write SPI Flash memory
+ *
+ * Writes SPI Flash memory with up to page size (256 bytes) length
+ * \param[in]  write_buf    Pointer to buffer to write from
+ * \param[in]  flash_addr   Flash memory address to write to
+ * \param[in]  size         Data length to be written, must be less than or
+ *                          equal to FLASH_PAGE_SIZE
+ */
 int8_t spi_flash_write(void *write_buf, uint32_t flash_addr, uint32_t size)
 {
 	int8_t      ret = -1;
@@ -314,12 +314,12 @@ int8_t spi_flash_write(void *write_buf, uint32_t flash_addr, uint32_t size)
 }
 
 /**
-* \brief Erase SPI Flash sector
-*
-* Erases SPI Flash Sector
-* \param[in]  flash_addr  Flash memory address within the sector to erase
-*/
-static void spi_flash_sector_erase(uint32_t flash_addr)
+ * \brief Erase SPI Flash sector
+ *
+ * Erases SPI Flash Sector
+ * \param[in]  flash_addr  Flash memory address within the sector to erase
+ */
+void spi_flash_sector_erase(uint32_t flash_addr)
 {
 	uint8_t cmd[8] = {0,};
 	uint32_t  i=0;
@@ -353,15 +353,15 @@ static void spi_flash_sector_erase(uint32_t flash_addr)
 }
 
 /**
-* \brief Erase SPI Flash sector
-*
-* Erases SPI Flash Sector
-* \param[in]  start_offset   Start address of the spi flash
-* \param[in]  size           Size of the spi flash
-*
-* \retval 1    Address over spi flash memory size
-* \retval 0    Operation complete
-*/
+ * \brief Erase SPI Flash sector
+ *
+ * Erases SPI Flash Sector
+ * \param[in]  start_offset   Start address of the spi flash
+ * \param[in]  size           Size of the spi flash
+ *
+ * \retval 1    Address over spi flash memory size
+ * \retval 0    Operation complete
+ */
 unsigned char spi_flash_erase(uint32_t start_offset, uint32_t size)
 {
     unsigned long end_offset = start_offset + size;
@@ -391,10 +391,10 @@ unsigned char spi_flash_erase(uint32_t start_offset, uint32_t size)
 }
 
 /**
-* \brief Enter SPI Flash low power mode
-*
-* Enter SPI Flash low power mode
-*/
+ * \brief Enter SPI Flash low power mode
+ *
+ * Enter SPI Flash low power mode
+ */
 void spi_flash_enter_low_power_mode(void)
 {
 	SPI_FLASH0->READ_CTRL.reg = SPI_FLASH_READ_CTRL_RDATA_COUNT(0x0);
@@ -413,10 +413,10 @@ void spi_flash_enter_low_power_mode(void)
 }
 
 /**
-* \brief Exit SPI Flash Low power mode
-*
-* Exit SPI Flash Low power mode
-*/
+ * \brief Exit SPI Flash Low power mode
+ *
+ * Exit SPI Flash Low power mode
+ */
 void spi_flash_leave_low_power_mode(void)
 {
 	SPI_FLASH0->READ_CTRL.reg = SPI_FLASH_READ_CTRL_RDATA_COUNT(0x0);
@@ -432,4 +432,46 @@ void spi_flash_leave_low_power_mode(void)
 			SPI_FLASH_IRQ_STATUS_FLASH_TRANS_DONE) {
 		/* Wait for current flash transaction done. */
 	}
+}
+
+/**
+ * \brief Initializes the SPI Flash module
+ */
+void spi_flash_clock_init(void)
+{	
+	/* Reset SPI_Flash */
+	system_peripheral_reset(PERIPHERAL_SPI_FLASH);
+	system_peripheral_reset(PERIPHERAL_SPI_FLASH_IF);
+	/* SPI_Flash core clock enable */
+	system_clock_peripheral_enable(PERIPHERAL_SPI_FLASH);
+	/* change clock speed */
+	system_clock_peripheral_freq_config(PERIPHERAL_SPI_FLASH, CLOCK_FREQ_13_MHZ);
+}
+
+/**
+ * \brief Turns off the supply to SPI_Flash Core
+ *
+ * This functions turns off the supply to SPI_Flash core.
+ * Since SPI_Flash won't be used on every wakeup it is safe to disable
+ * the power to SPI_Flash core and enable it when required.
+ *
+ */
+void spi_flash_turn_off(void)
+{
+	LPMCU_MISC_REGS0->PULL_ENABLE.reg &= ~LPMCU_MISC_REGS_PULL_ENABLE_LP_SIP__Msk;
+	
+	LPMCU_MISC_REGS0->SPIFLASH_VDDIO_CTRL.reg = 0x0;
+}
+
+/**
+ * \brief Turns on the supply to SPI_Flash Core
+ *
+ * This functions turns on the supply to SPI_Flash core.
+ *
+ */
+void spi_flash_turn_on(void)
+{
+	LPMCU_MISC_REGS0->PULL_ENABLE.reg |= LPMCU_MISC_REGS_PULL_ENABLE_LP_SIP__Msk;
+	
+	LPMCU_MISC_REGS0->SPIFLASH_VDDIO_CTRL.reg = LPMCU_MISC_REGS_SPIFLASH_VDDIO_CTRL_ENABLE;
 }

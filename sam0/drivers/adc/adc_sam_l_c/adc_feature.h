@@ -414,13 +414,13 @@ enum adc_interrupt_flag {
 enum adc_oversampling_and_decimation {
 	/** Don't use oversampling and decimation mode */
 	ADC_OVERSAMPLING_AND_DECIMATION_DISABLE = 0,
-	/** 1 bit resolution increase */
+	/** 1-bit resolution increase */
 	ADC_OVERSAMPLING_AND_DECIMATION_1BIT,
-	/** 2 bits resolution increase */
+	/** 2-bit resolution increase */
 	ADC_OVERSAMPLING_AND_DECIMATION_2BIT,
-	/** 3 bits resolution increase */
+	/** 3-bit resolution increase */
 	ADC_OVERSAMPLING_AND_DECIMATION_3BIT,
-	/** 4 bits resolution increase */
+	/** 4-bit resolution increase */
 	ADC_OVERSAMPLING_AND_DECIMATION_4BIT
 };
 

@@ -9,7 +9,7 @@
  *
  *
  *
- *  Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
  *
@@ -50,7 +50,6 @@ typedef enum
     ///Generic errors
     ///Success
     AT_BLE_SUCCESS  = 0x00,
-
 
     ///ATT Error Codes
     ///Handle is invalid

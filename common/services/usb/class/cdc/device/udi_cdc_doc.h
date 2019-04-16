@@ -625,7 +625,7 @@ iram_size_t udi_cdc_multi_write_buf(uint8_t port, const void* buf, iram_size_t s
  \endcode
  *
  * \subsubsection udi_cdc_basic_use_case_setup_usage_flow Workflow
- * -# Ensure that conf_usb.h is available and contains the following configuration
+ * -# Ensure that conf_usb.h is available and contains the following configuration,
  * which is the USB device CDC configuration:
  * \code
  #define USB_DEVICE_SERIAL_NAME  "12...EF" // Disk SN for CDC
@@ -832,7 +832,7 @@ iram_size_t udi_cdc_multi_write_buf(uint8_t port, const void* buf, iram_size_t s
  * \subsection asfdoc_udi_cdc_config_examples_2_2 AT32UC3A0, AT32UC3A1, AT32UC3B Devices (USBB)
  * \include example/at32uc3a0512_evk1100/conf_clock.h
  *
- * \subsection asfdoc_udi_cdc_config_examples_2_3 AT32UC3A3, AT32UC3A4 Devices (USBB with High Speed Support)
+ * \subsection asfdoc_udi_cdc_config_examples_2_3 AT32UC3A3 and AT32UC3A4 Devices (USBB with High Speed Support)
  * \include example/at32uc3a3256_evk1104/conf_clock.h
  *
  * \subsection asfdoc_udi_cdc_config_examples_2_4 AT32UC3C, ATUCXXD, ATUCXXL3U, ATUCXXL4U Devices (USBC)
@@ -844,7 +844,7 @@ iram_size_t udi_cdc_multi_write_buf(uint8_t port, const void* buf, iram_size_t s
  * \subsection asfdoc_udi_cdc_config_examples_2_6 SAM3U Device (UPDHS: USB Peripheral Device High Speed)
  * \include example/sam3u4e_sam3u_ek/conf_clock.h
  *
- * \subsection asfdoc_udi_cdc_config_examples_2_7 SAM3X, SAM3A Devices (UOTGHS: USB OTG High Speed)
+ * \subsection asfdoc_udi_cdc_config_examples_2_7 SAM3X and SAM3A Devices (UOTGHS: USB OTG High Speed)
  * \include example/sam3x8h_sam3x_ek/conf_clock.h
  *
  * \section asfdoc_udi_cdc_config_examples_3 conf_clocks.h
@@ -857,13 +857,13 @@ iram_size_t udi_cdc_multi_write_buf(uint8_t port, const void* buf, iram_size_t s
  * \subsection asfdoc_udi_cdc_config_examples_4_1 AT32UC3A0, AT32UC3A1, AT32UC3B Devices (USBB)
  * \include example/at32uc3a0512_evk1100/conf_board.h
  *
- * \subsection asfdoc_udi_cdc_config_examples_4_2 AT32UC3A3, AT32UC3A4 Devices (USBB with High Speed Support)
+ * \subsection asfdoc_udi_cdc_config_examples_4_2 AT32UC3A3 and AT32UC3A4 Devices (USBB with High Speed Support)
  * \include example/at32uc3a3256_evk1104/conf_board.h
  *
  * \subsection asfdoc_udi_cdc_config_examples_4_3 AT32UC3C, ATUCXXD, ATUCXXL3U, ATUCXXL4U Devices (USBC)
  * \include example/at32uc3c0512c_uc3c_ek/conf_board.h
  *
- * \subsection asfdoc_udi_cdc_config_examples_4_4 SAM3X, SAM3A Devices (UOTGHS: USB OTG High Speed)
+ * \subsection asfdoc_udi_cdc_config_examples_4_4 SAM3X and SAM3A Devices (UOTGHS: USB OTG High Speed)
  * \include example/sam3x8h_sam3x_ek/conf_board.h
  *
  * \subsection asfdoc_udi_cdc_config_examples_4_5 SAM D21 Device (USB)

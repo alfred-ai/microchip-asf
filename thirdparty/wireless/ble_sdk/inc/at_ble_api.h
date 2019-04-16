@@ -9,7 +9,7 @@
  * BLE Application Developers using Atmel BLE SDK
  *
  *
- *  Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
  *
@@ -128,7 +128,7 @@ extern "C" {
 /// Maximal MTU value
 #define AT_MTU_VAL_MAX                  (512)      //(0x200)
 /// Recommended MTU value
-#define AT_MTU_VAL_RECOMMENDED          (158)       //(0x200)
+#define AT_MTU_VAL_RECOMMENDED          (512)       //(0x200)
 /// Minimal Renew duration value (150 seconds); resolution of 10 mSeconds (N*10ms)
 #define AT_RENEW_DUR_VAL_MIN            (0x3A98)    //(15000)
 /// ATT MAximum Attribute Length
@@ -150,17 +150,79 @@ extern "C" {
 /**
 * Initialization Configuration parameters
 */
+typedef enum
+{
+    AT_BLE_CHIP_ENABLE,
+    AT_BLE_EXTERNAL_WAKEUP
+} at_ble_gpio_pin_t;
+typedef enum
+{
+    AT_BLE_LOW,
+    AT_BLE_HIGH
+} at_ble_gpio_status_t;
+typedef at_ble_err_status_t at_ble_status_t;
 
+typedef struct platform_api_list_tag
+{
+    /* Pointer to function that should be used to register new callback function for new one-shout HW timer
+       It should receive callback function as parameter, this function should be registered to the HW timer
+       It should return handler for this timer to be used with start/stop/delete functions
+       This function MUST be implemented and assigned to the pointer, or at_ble_init will fail */
+    void *(*at_ble_create_timer)(void (*)(void *));
+    /* Pointer to function that should be used to release the timer allocated by at_ble_create_timer
+       It should receive timer handle as parameter
+       This function MUST be implemented and assigned to the pointer, or at_ble_init will fail */
+    void (*at_ble_delete_timer)(void *);
+    /* Pointer to function that should be used to start the timer asynchronously for n milliseconds given in the second parameter,
+       Once timeout, the registered callback should be fired
+       The first parameter is the timer handle,
+       The second parameter is time in milliseconds */
+    void (*at_ble_start_timer)(void *, uint32_t);
+    /* Pointer to function that should be used to stop the timer
+       It should receive timer handle as parameter */
+    void (*at_ble_stop_timer)(void *);
+    /* Pointer to function that should be used to block for n milliseconds given as parameter */
+    void (*at_ble_sleep)(uint32_t);
+    /* Pointer to function that provides GPIO set value
+       The function should receive at_ble_gpio_pin_t enum value to identify the GPIO pin
+       For AT_BLE_CHIP_ENABLE the function should set the value to chip enable pin (BTLC1000 pin 10)
+       For AT_BLE_EXTERNAL_WAKEUP it should set the value to external wakeup pin (BTLC1000 pin 6)
+       The function should receive at_ble_gpio_status_t to set the value */
+    void (*at_ble_gpio_set)(at_ble_gpio_pin_t, at_ble_gpio_status_t);
+    /* Pointer to function that provides synchronous send from the library to the BTLC1000,
+       The function should block until transmission done */
+    void (*at_ble_send_sync)(uint8_t *, uint32_t);
+    /* Pointer to function that provides asynchronous receive byte from the BTLC1000 to the library,
+       The function should return immediately.
+       The function should receive a callback function to be called on receiving new byte
+       Once a byte received from BTLC1000 callback function should be called with this byte as parameter.
+       This function should be called for each byte in order to receive it and propagate it to the library,
+       If at_ble_recv_async didn’t be called platform should not read from the HW
+	   And flow control mechanism should stop data transfer from BTLC1000 side */
+    void (*at_ble_recv_async)(void (*)(uint8_t));
+    /* Pointer to function that should be used to reconfigure the UART during FW patching
+       This function is temporary function,
+       For now we are using this function to switch the default UART to another UART to enable flow control,
+       It should be removed after HW fix */
+    void (*at_ble_reconfigure_usart)(void);
+} at_ble_platform_api_list_t;
 typedef struct
 {
     uint8_t *memStartAdd;   /**< Memory pool start address*/
     uint32_t memSize;       /**< Assigned memory size*/
 } at_ble_mempool_t;
-
 typedef struct
 {
-    at_ble_mempool_t memPool; /**< Memory pool that library can use for storing data base related data */
-    void *plf_config; /**< Platform Configuration*/
+    /// One of @ref interface_type; either @ref AT_BLE_UART or @ref AT_BLE_SPI
+    uint8_t bus_type;
+    /// In case of using @ref AT_BLE_UART as interface this is used to enable/disable flow control, true or false
+    uint8_t bus_flow_control_enabled;
+} at_ble_bus_info_t;
+typedef struct
+{
+    at_ble_mempool_t           memPool;          /**< Memory pool that library can use for storing data base related data */
+    at_ble_platform_api_list_t platform_api_list; /* platform APIs */
+    at_ble_bus_info_t          bus_info;         /**< Bus info */
 } at_ble_init_config_t;
 
 /**
@@ -172,9 +234,14 @@ typedef uint16_t at_ble_handle_t;
 *                                   Enumerations                                                                    *
 ****************************************************************************************/
 
-/// Enumeration for BLE Status
-typedef at_ble_err_status_t at_ble_status_t;
 
+enum at_ble_bus_type_tag
+{
+    /// UART Interface is used [Default]
+    AT_BLE_UART = 1,
+    /// SPI interface is used
+    AT_BLE_SPI
+};
 
 /// Enumeration for GAP Parameters
 typedef enum
@@ -234,17 +301,14 @@ typedef enum
     ///Byte value for advertising channel map for channel 37 enable
     AT_BLE_ADV_CHNL_37_EN                = 0x01,
     ///Byte value for advertising channel map for channel 38 enable
-    AT_BLE_ADV_CHNL_38_EN,
-	///Byte value for advertising channel map for channel 37 and 38 enable
-	AT_BLE_ADV_CHNL_37_38_EN,
+    AT_BLE_ADV_CHNL_38_EN                = 0x02,
     ///Byte value for advertising channel map for channel 39 enable
-    AT_BLE_ADV_CHNL_39_EN,
-	///Byte value for advertising channel map for channel 37 and 39 enable
-	AT_BLE_ADV_CHNL_37_39_EN,
-	///Byte value for advertising channel map for channel 38 and 39 enable
-	AT_BLE_ADV_CHNL_38_39_EN,
+    AT_BLE_ADV_CHNL_39_EN                = 0x04,
+    AT_BLE_ADV_CHNL_37_38_EN             = AT_BLE_ADV_CHNL_37_EN | AT_BLE_ADV_CHNL_38_EN,
+    AT_BLE_ADV_CHNL_37_39_EN             = AT_BLE_ADV_CHNL_37_EN | AT_BLE_ADV_CHNL_39_EN,
+    AT_BLE_ADV_CHNL_38_39_EN             = AT_BLE_ADV_CHNL_38_EN | AT_BLE_ADV_CHNL_39_EN,
     ///Byte value for advertising channel map for channel 37, 38 and 39 enable
-    AT_BLE_ADV_ALL_CHNLS_EN,
+    AT_BLE_ADV_ALL_CHNLS_EN              = 0x07,
     ///Enumeration end value for advertising channels enable value check
     AT_BLE_ADV_CHNL_END
 } at_ble_adv_channel_map_t;
@@ -299,8 +363,7 @@ typedef enum
      */
     AT_BLE_CONNECTED,
     /** peer device connection terminated. \n
-     *  Refer to @ref at_ble_disconnected_t and @ref at_ble_disconnect_reason_t for reason of disconnection.
-     *  If returned reason is not one of @ref at_ble_disconnect_reason_t, so check for error code @ref at_ble_status_t
+     *  Refer to @ref at_ble_disconnected_t , for reason of disconnection (see Bluetooth error code in Bluetooth core spec)
      */
     AT_BLE_DISCONNECTED,
     /** connection parameters updated. It is requires to call @ref at_ble_conn_update_reply function to send response back if needed.\n
@@ -421,7 +484,7 @@ typedef enum
       */
     AT_BLE_SERVICE_CHANGED_INDICATION_SENT,
     /** The peer asks for a write Authorization. \n
-      * Refer to @ref at_ble_write_authorize_request_t
+      * Refer to @ref at_ble_characteristic_write_request_t
       */
     AT_BLE_WRITE_AUTHORIZE_REQUEST,
     /**  peer sends an indication of the new MTU. \n
@@ -437,7 +500,7 @@ typedef enum
      */
     AT_BLE_CHARACTERISTIC_WRITE_CMD_CMP,
     /** The peer asks for a read Authorization. \n
-     * Refer to @ref at_ble_read_authorize_request_t
+     * Refer to @ref at_ble_characteristic_read_req_t 
      */
     AT_BLE_READ_AUTHORIZE_REQUEST,
 
@@ -545,12 +608,20 @@ typedef enum
 */
 typedef enum
 {
+    /** indicates that pairing or authentication failed due to incorrect results in the pairing or authentication procedure.
+    This could be due to an incorrect PIN or link key. */
     AT_BLE_AUTH_FAILURE = 0x05,
+    /** indicates that the user on the remote device terminated the connection. */
     AT_BLE_TERMINATED_BY_USER = 0x13,
+    /** indicates that the remote device terminated the connection because of low resources. */
     AT_BLE_REMOTE_DEV_TERM_LOW_RESOURCES,
+    /** indicates that the remote device terminated the connection because the device is about to power off. */
     AT_BLE_REMOTE_DEV_POWER_OFF,
+    /** indicates that the remote device does not support the feature associated with the issue command. */
     AT_BLE_UNSUPPORTED_REMOTE_FEATURE = 0x1A,
+    /** indicates that it was not possible to pair as a unit key was requested and it is not supported. */
     AT_BLE_PAIRING_WITH_UNIT_KEY_NOT_SUP = 0x29,
+    /** indicates that the remote device terminated the connection because of an unacceptable connection interval. */
     AT_BLE_UNACCEPTABLE_INTERVAL = 0x3B,
 } at_ble_disconnect_reason_t;
 
@@ -699,15 +770,42 @@ typedef enum
 
 typedef uint8_t at_ble_attr_permissions_t;
 
+/* bit[0-1] : read permission (0 = disable , 1 = enable , 2= UNAUTH , 3 = AUTH)
+   bit[3] : read authorization required
+   bit[4-5]: write permission (0 = disable , 1 = enable , 2= UNAUTH , 3 = AUTH)
+   bit[6] : encryption key size must be 16
+   bit[7]: write authorization required
+*/
+
 #define AT_BLE_ATTR_NO_PERMISSIONS               0x00
+/** @brief Read enable. */
 #define AT_BLE_ATTR_READABLE_NO_AUTHN_NO_AUTHR   0x01
-#define AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR  0x02
-#define AT_BLE_ATTR_READABLE_NO_AUTHN_REQ_AUTHR  0x03
-#define AT_BLE_ATTR_READABLE_REQ_AUTHN_REQ_AUTHR 0x04
+/** @brief	Read operation require MITM protected encrypted link & no authorization. */
+#define AT_BLE_ATTR_READABLE_REQ_AUTHN_NO_AUTHR  0x03
+/** @brief	Read operation require Authorization & no encryption. */
+#define AT_BLE_ATTR_READABLE_NO_AUTHN_REQ_AUTHR  0x09
+/** @brief  Read operation require MITM protected encrypted link & authorization. */
+#define AT_BLE_ATTR_READABLE_REQ_AUTHN_REQ_AUTHR 0x0B
+/** @brief Read operation require encrypted link , MITM protection not necessary & No authorization. */
+#define AT_BLE_ATTR_READABLE_REQ_ENC_NO_AUTHN_NO_AUTHR  0x02
+/** @brief Read operation require encrypted link, MITM protection not necessary & authorization. */
+#define AT_BLE_ATTR_READABLE_REQ_ENC_NO_AUTHN_REQ_AUTHR  0x0A
+
+/** @brief Write enable. */
 #define AT_BLE_ATTR_WRITABLE_NO_AUTHN_NO_AUTHR   0x10
-#define AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR  0x20
-#define AT_BLE_ATTR_WRITABLE_NO_AUTHN_REQ_AUTHR  0x30
-#define AT_BLE_ATTR_WRITABLE_REQ_AUTHN_REQ_AUTHR 0x40
+/** @brief	Write operation require MITM protected encrypted link & no authorization. */
+#define AT_BLE_ATTR_WRITABLE_REQ_AUTHN_NO_AUTHR  0x30
+/** @brief	Write operation require Authorization & no encryption. */
+#define AT_BLE_ATTR_WRITABLE_NO_AUTHN_REQ_AUTHR  0x90
+/** @brief  Write operation require MITM protected encrypted link & authorization. */
+#define AT_BLE_ATTR_WRITABLE_REQ_AUTHN_REQ_AUTHR 0xB0
+/** @brief Write operation require encrypted link , MITM protection not necessary & No authorization. */
+#define AT_BLE_ATTR_WRITABLE_REQ_ENC_NO_AUTHN_NO_AUTHR 0x20
+/** @brief Write operation require encrypted link, MITM protection not necessary & authorization. */
+#define AT_BLE_ATTR_WRITABLE_REQ_ENC_NO_AUTHN_REQ_AUTHR 0xA0
+/** @brief  Encryption key Size must be 16 bytes. */
+#define AT_BLE_ENC_KEY_SIZE_PERM 0X40
+
 
 typedef enum
 {
@@ -1224,17 +1322,17 @@ typedef struct
 */
 typedef struct
 {
-    /// Minimum of connection interval
+    /// Minimum connection interval N (Value Time = N *1.25 ms)
     uint16_t             con_intv_min;
-    /// Maximum of connection interval
+    /// Maximum connection interval N (Value Time = N *1.25 ms)
     uint16_t             con_intv_max;
-    /// Connection latency
+    /// Connection latency (number of events)
     uint16_t             con_latency;
-    /// Link supervision time-out
+    /// Link supervision time-out N (Value Time = N * 10 ms)
     uint16_t             superv_to;
-    /// Minimum CE length
+    /// Minimum CE length N (Value Time = N * 0.625 ms)
     uint16_t             ce_len_min;
-    /// Maximum CE length
+    /// Maximum CE length N (Value Time = N * 0.625 ms)
     uint16_t             ce_len_max;
 
 } at_ble_connection_params_t;
@@ -1553,7 +1651,9 @@ typedef struct
 {
     ///connection handle
     at_ble_handle_t handle;
-    ///disconnection reason, refer to @ref at_ble_disconnect_reason_t
+   /// status of the operation
+    at_ble_status_t status;
+    ///disconnection reason (see Bluetooth error code in Bluetooth core spec)
     uint8_t reason;
 } at_ble_disconnected_t;
 
@@ -2674,8 +2774,7 @@ at_ble_status_t at_ble_set_channel_map(at_ble_channel_map_t *map);
  * @param[in] reason disconnection reason, more info at @ref at_ble_disconnect_reason_t
  *
  * @note
- * - At @ref AT_BLE_DISCONNECTED event, if returned reason is not one of @ref at_ble_disconnect_reason_t,
- *   so check the reason against error codes @ref at_ble_status_t because this means something wrong was happened
+ * - At @ref AT_BLE_DISCONNECTED event, for reason of disconnection see Bluetooth error code at Bluetooth core specification
  *
  * @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS, Otherwise the function shall return @ref at_ble_status_t
  */
@@ -2851,7 +2950,7 @@ at_ble_status_t at_ble_random_address_resolve(uint8_t nb_key, at_ble_addr_t *ran
 /** @ingroup gap_misc_group
  *@brief Sets TX power value
  *
- * @param[in] power  TX power value @ref at_ble_tx_power_level_t
+ * @param[in] power  TX power value @ref at_ble_tx_power_level_t. Default is 0 dBm.
  *
  * @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS, Otherwise the function shall return @ref at_ble_status_t
  */
@@ -2863,7 +2962,7 @@ at_ble_status_t at_ble_tx_power_set(at_ble_tx_power_level_t power);
 /** @ingroup gap_misc_group
  *@brief Gets TX power value
  *
- * @param[in] power TX power value @ref at_ble_tx_power_level_t
+ * @param[in] power TX power value @ref at_ble_tx_power_level_t. Default is 0 dBm.
  *
  * @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS, Otherwise the function shall return @ref at_ble_status_t
  */
@@ -3708,6 +3807,52 @@ at_ble_status_t at_ble_dtm_stop_test(void);
 uint8_t at_ble_uuid_type2len(at_ble_uuid_type_t type);
 at_ble_uuid_type_t at_ble_uuid_len2type(uint8_t len);
 
+/**
+* @defgroup calib_group Calibration APIs
+* @brief This group includes all the Calibration related APIs.
+* @{
+*/
+/** @}*/
+
+/** @ingroup calib_group
+*  @brief       Configures periodic Vbat/Vtemp calibration: enable/disable, number of ADC samples needed for averaging, frequency of the calibration in seconds
+*  @param[in]   calib_enable enables calibration if set to 1 and disables it if set to 0. Calibration is enabled by default.
+*  @param[in]   no_samples number of ADC samples needed to calculate the average ADC output, recommended range from 1 to 16 sample. Default number of samples is 2.
+*  @param[in]   cal_freq frequency of the calibration in seconds, recommended range from 1 to 60 seconds. Default frequency is 2s.
+*
+* @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS,
+* Otherwise the function shall return @ref at_ble_status_t
+*/
+///@cond IGNORE_DOXYGEN
+AT_BLE_API
+///@endcond
+at_ble_status_t at_ble_calib_config(int calib_enable, uint32_t no_samples, uint32_t cal_freq);
+
+/** @ingroup calib_group
+*  @brief       Retrieves voltage value in volts
+*
+*  @param[in]   voltage variable passed to the function to store the retrieved voltage value
+*
+* @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS,
+* Otherwise the function shall return @ref at_ble_status_t
+*/
+///@cond IGNORE_DOXYGEN
+AT_BLE_API
+///@endcond
+at_ble_status_t at_ble_calib_get_voltage(float *voltage);
+
+/** @ingroup calib_group
+*  @brief       Retrieves temperature value in Celsius
+*
+*  @param[in]   temp variable passed to the function to store the retrieved temperature value
+*
+* @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS,
+* Otherwise the function shall return @ref at_ble_status_t
+*/
+///@cond IGNORE_DOXYGEN
+AT_BLE_API
+///@endcond
+at_ble_status_t at_ble_calib_get_temp(int *temperature);
 #ifdef __cplusplus
 }
 #endif  //__cplusplus

@@ -136,11 +136,11 @@ extern void uhi_vendor_uninstall(uhc_device_t* dev);
  *
  * When the transfer is finished or aborted (stall, reset, ...), the \a callback
  * is called.
- * The \a callback returns the transfer status and eventually the number of byte
+ * The \a callback returns the transfer status and eventually the number of bytes
  * transferred.
  *
- * \param[out] buf           Buffer on Internal RAM to send or fill.
- *                      It must be align, then use COMPILER_WORD_ALIGNED.
+ * \param[out] buf          Buffer on Internal RAM to send or fill.
+ *                          It must be align, then use COMPILER_WORD_ALIGNED.
  * \param[in] buf_size      Buffer size to send or fill
  * \param[in] callback      NULL or function to call at the end of transfer
  *

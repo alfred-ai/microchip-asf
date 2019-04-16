@@ -3,7 +3,7 @@
  *
  * \brief GMAC (Gigabit MAC) driver for lwIP.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -390,6 +390,9 @@ static void gmac_low_level_init(struct netif *netif)
 		LWIP_DEBUGF(NETIF_DEBUG, ("gmac_low_level_init: set link ERROR!\n"));
 		return;
 	}
+
+	/* Set link up*/
+	netif->flags |= NETIF_FLAG_LINK_UP;
 }
 
 /**

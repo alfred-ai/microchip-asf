@@ -50,7 +50,6 @@
 
 #  define CONF_SPI_MASTER_ENABLE     false
 #  define CONF_SPI_SLAVE_ENABLE      true
-#  define CONF_SPI_TIMEOUT           10000
 
 #  define CONF_SPI_TRANSFER_MODE     SPI_TRANSFER_MODE_0
 

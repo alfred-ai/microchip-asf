@@ -65,7 +65,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_PIN_RESET				IOPORT_CREATE_PIN(PIOA, 24)
+#define CONF_WILC_PIN_RESET				IOPORT_CREATE_PIN(PIOA, 18)
 #define CONF_WILC_PIN_CHIP_ENABLE		IOPORT_CREATE_PIN(PIOA, 6)
 #define CONF_WILC_PIN_WAKE				IOPORT_CREATE_PIN(PIOA, 25)
 

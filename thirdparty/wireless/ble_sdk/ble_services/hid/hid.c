@@ -3,7 +3,7 @@
  *
  * \brief HID Service
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -227,12 +227,12 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 
 #ifdef ENABLE_PTS
 		uint8_t i=0;
-		DBG_LOG("Input Report Characteristic Value");
+		DBG_LOG_PTS("Input Report Characteristic Value");
 		for (i=0; i<hid_inst[servinst].serv_chars[id + 1].char_val.len; i++)
 		{
-			printf(" 0x%02X ", hid_inst[servinst].serv_chars[id + 1].char_val.init_value[i]);
+			DBG_LOG_PTS(" 0x%02X ", hid_inst[servinst].serv_chars[id + 1].char_val.init_value[i]);
 		}
-		printf("\r\n");
+		DBG_LOG_PTS("\r\n");
 #endif // _DEBUG			
 			hid_inst[servinst].serv_chars[id + 1].char_val.properties = (AT_BLE_CHAR_READ|AT_BLE_CHAR_NOTIFY);
 			
@@ -313,13 +313,13 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 		
 #ifdef ENABLE_PTS
 	uint8_t i=0;
-	DBG_LOG("Boot Mouse Input Report Characteristic Value");
+	DBG_LOG_PTS("Boot Mouse Input Report Characteristic Value");
 		
 	for (i=0; i<sizeof(mouse_in_report); i++)
 	{
-		printf(" 0x%02X ", mouse_in_report[i]);
+		DBG_LOG_PTS(" 0x%02X ", mouse_in_report[i]);
 	}
-	printf("\r\n");
+	DBG_LOG_PTS("\r\n");
 #endif // _DEBUG
 		
 		/*Configure HID Boot Mouse Input Report Characteristic : Value related info*/
@@ -370,13 +370,13 @@ void hid_serv_init(uint8_t servinst, uint8_t device, uint8_t *mode, uint8_t repo
 
 #ifdef ENABLE_PTS
 	uint8_t i=0;
-	DBG_LOG("Boot Keyboard Input Report Characteristic Value");
+	DBG_LOG_PTS("Boot Keyboard Input Report Characteristic Value");
 
 	for (i=0; i<sizeof(keyb_in_report); i++)	
 	{
-		printf(" 0x%02X ", keyb_in_report[i]);
+		DBG_LOG_PTS(" 0x%02X ", keyb_in_report[i]);
 	}
-	printf("\r\n");
+	DBG_LOG_PTS("\r\n");
 	
 	DBG_LOG("Boot Keyboard Output Report Characteristic Value");
 

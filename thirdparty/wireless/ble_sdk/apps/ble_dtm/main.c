@@ -3,7 +3,7 @@
  *
  * \brief BLE DTM
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,11 +54,13 @@
 #include <asf.h>
 #include "platform.h"
 #include "at_ble_api.h"
+#include "at_ble_trace.h"
 #include "console_serial.h"
 #include "serial_fifo.h"
 #include "conf_serialdrv.h"
 #include "serial_bridge.h"
 #include "conf_extint.h"
+#include "serial_drv.h"
 			
 /* Initialize the BLE */
 static void ble_init(void);
@@ -69,6 +71,8 @@ static void ble_dtm_init(void);
 static void ble_critical_alert(void);
 
 volatile bool button_pressed = false;
+
+at_ble_init_config_t pf_cfg;
 
 /* Alert the user when something is failed */
 static void ble_critical_alert(void)
@@ -91,21 +95,44 @@ void button_cb(void)
 /* Initialize the BLE */
 static void ble_init(void)
 {
-	at_ble_init_config_t pf_cfg;
-	platform_config busConfig;
-	
-	/*Memory allocation required by GATT Server DB*/
 	pf_cfg.memPool.memSize = 0;
 	pf_cfg.memPool.memStartAdd = NULL;
+
 	/*Bus configuration*/
-	busConfig.bus_type = AT_BLE_UART;
-	pf_cfg.plf_config = &busConfig;
+	pf_cfg.bus_info.bus_type = AT_BLE_UART;
+
+	#if UART_FLOWCONTROL_6WIRE_MODE == true
+	/* Enable Hardware Flow-control on BTLC1000 */
+	pf_cfg.bus_info.bus_flow_control_enabled = true; // enable flow control
+	#else
+	/* Disable Hardware Flow-control on BTLC1000 */
+	pf_cfg.bus_info.bus_flow_control_enabled = false; // Disable flow control
+	#endif
+
+	/* Register Platform callback API's */
+	pf_cfg.platform_api_list.at_ble_create_timer = platform_create_timer;
+	pf_cfg.platform_api_list.at_ble_delete_timer = platform_delete_timer;
+	pf_cfg.platform_api_list.at_ble_start_timer = platform_start_timer;
+	pf_cfg.platform_api_list.at_ble_stop_timer = platform_stop_timer;
+	pf_cfg.platform_api_list.at_ble_sleep = platform_sleep;
+	pf_cfg.platform_api_list.at_ble_gpio_set = platform_gpio_set;
+	pf_cfg.platform_api_list.at_ble_send_sync = platform_send_sync;
+	pf_cfg.platform_api_list.at_ble_recv_async = platform_recv_async;
+	pf_cfg.platform_api_list.at_ble_reconfigure_usart = platform_configure_hw_fc_uart;
 	
-	/* Init BLE device */
+	platform_init(pf_cfg.bus_info.bus_type, pf_cfg.bus_info.bus_flow_control_enabled);
+	
+	/*Trace Logs*/
+	trace_set_level(TRACE_LVL_DISABLE);
+	
+	/* Initialize BLE device */
 	if(at_ble_init(&pf_cfg) != AT_BLE_SUCCESS)
 	{
 		ble_critical_alert();
 	}
+	
+	/* Change the UART Rx Callback Pointer */
+	platform_recv_async(platform_dtm_interface_receive);
 }
 
 /* Initialize the direct test mode */
@@ -120,7 +147,7 @@ static void ble_dtm_init(void)
 int main (void)
 {	
 
-#if SAMG55
+#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();
@@ -134,12 +161,26 @@ int main (void)
 	/* DTM Initialization */
 	ble_dtm_init();
 	
-	platform_wakeup();
+	platform_stop_timer(NULL);
+	
+	pf_cfg.platform_api_list.at_ble_create_timer = NULL;
+	pf_cfg.platform_api_list.at_ble_delete_timer = NULL;
+	pf_cfg.platform_api_list.at_ble_start_timer = NULL;
+	pf_cfg.platform_api_list.at_ble_stop_timer = NULL;
+	pf_cfg.platform_api_list.at_ble_sleep = NULL;
+	pf_cfg.platform_api_list.at_ble_gpio_set = NULL;
+	pf_cfg.platform_api_list.at_ble_send_sync = NULL;
+	pf_cfg.platform_api_list.at_ble_recv_async = NULL;
+	pf_cfg.platform_api_list.at_ble_reconfigure_usart = NULL;
+	
+	platform_gpio_set(AT_BLE_EXTERNAL_WAKEUP, AT_BLE_HIGH);	
 	
 	/* Initialize serial bridge */
 	serial_bridge_init();
 	
-	/* Task hadle in while loop */
+	platfrom_start_rx();
+	
+	/* Task handle in while loop */
 	while(1)
 	{
 		/* Serial bridge task */ 

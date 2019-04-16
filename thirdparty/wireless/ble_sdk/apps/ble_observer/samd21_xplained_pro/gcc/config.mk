@@ -183,6 +183,7 @@ CPPFLAGS = \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \

@@ -169,6 +169,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>__SAML21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
@@ -503,6 +504,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>__SAML21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
@@ -1196,6 +1198,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>__SAML21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
@@ -1530,6 +1533,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>__SAML21J18A__</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>

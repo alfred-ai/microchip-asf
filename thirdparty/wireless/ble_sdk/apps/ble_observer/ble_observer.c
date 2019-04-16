@@ -3,7 +3,7 @@
  *
  * \brief BLE Observer application
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -64,6 +64,7 @@
 #include "ble_manager.h"
 
 extern uint8_t scan_response_count;
+uint8_t scan_device_count;
 
 /*Initialization function for Ble Observer */
 
@@ -80,7 +81,7 @@ static void ble_observer_init(void)
 
 	/* Initialize the scanning procedure */
 	scan_status = gap_dev_scan();
-
+	scan_device_count = 0;
 	/* Check for scan status */
 	if (scan_status == AT_BLE_SUCCESS) {
 		DBG_LOG("Scanning process initiated");
@@ -123,6 +124,11 @@ at_ble_status_t ble_observer_scan_info_handler(void * param)
 	default:
 		DBG_LOG_CONT("\r\n Unknown");
 		break;
+	}
+	
+	if(scan_info_data->type != AT_BLE_ADV_TYPE_SCAN_RESPONSE)
+	{
+		scan_device_count++;
 	}
 
 	/*Device Adress Type */
@@ -220,7 +226,6 @@ at_ble_status_t ble_observer_scan_info_handler(void * param)
 			case INCOMPLETE_LIST_16BIT_SERV_UUIDS:
 			{
 				uint16_t uuid_16;
-				uint16_t temp_uuid16;
 				/* passing the length of data type */
 				uint8_t adv_type_size = adv_element_p->len;
 				/* actual size of the data */
@@ -237,9 +242,8 @@ at_ble_status_t ble_observer_scan_info_handler(void * param)
 				}
 				DBG_LOG_CONT(":  ");
 				while (adv_type_size) {
-					memcpy(&temp_uuid16, adv_element_p->data,
+					memcpy(&uuid_16, adv_element_p->data,
 							AT_BLE_UUID_16_LEN);
-					uuid_16 = ((temp_uuid16 << 8) | (temp_uuid16 >> 8));
 					adv_element_p->data
 						+= AT_BLE_UUID_16_LEN;
 					adv_type_size -= AT_BLE_UUID_16_LEN;
@@ -467,7 +471,7 @@ at_ble_status_t ble_observer_scan_info_handler(void * param)
 			break;
 
 			default:
-				DBG_LOG("Unknown ad type");
+				DBG_LOG_DEV("Unknown ad type");
 			}
 			index += (adv_element_data.len + 1);
 			adv_element_data.len += 1;
@@ -480,7 +484,7 @@ at_ble_status_t ble_observer_scan_info_handler(void * param)
 /* Handler for AT_BLE_SCAN_REPORT event from stack */
 at_ble_status_t ble_observer_scan_data_handler(void *param)
 {
-	DBG_LOG("Scan Complete. Total No.of device scanned:%d", scan_response_count);
+	DBG_LOG("Scan Complete. Total No.of device scanned:%d", scan_device_count);
 	ble_observer_init();
 	ALL_UNUSED(param);
 	return AT_BLE_SUCCESS;
@@ -511,7 +515,7 @@ static const ble_event_callback_t observer_app_gap_cb[] = {
 
 int main(void )
 {
-	#if SAMG55
+	#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();

@@ -59,7 +59,7 @@
 // From module: DUALTIMER - Dualtimer for SAMB
 #include <dualtimer.h>
 
-// From module: GPIO - GPIO Pin Control for SAMB
+// From module: GPIO - GPIO Pin Control for SAMB (Callback APIs)
 #include <gpio.h>
 
 // From module: Generic board support

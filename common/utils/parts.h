@@ -3,7 +3,7 @@
  *
  * \brief Atmel part identification macros
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -425,6 +425,7 @@
 		AVR8_PART_IS_DEFINED(ATmega164PA) || \
 		AVR8_PART_IS_DEFINED(ATmega324A)  || \
 		AVR8_PART_IS_DEFINED(ATmega324PA) || \
+		AVR8_PART_IS_DEFINED(ATmega324PB) || \
 		AVR8_PART_IS_DEFINED(ATmega644)   || \
 		AVR8_PART_IS_DEFINED(ATmega644A)  || \
 		AVR8_PART_IS_DEFINED(ATmega644PA) || \

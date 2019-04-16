@@ -165,12 +165,12 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>__SAMG55J19__</state>
 					<state>TIP_CLIENT</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
 					<state>ARM_MATH_CM4=true</state>
@@ -495,12 +495,12 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>__SAMG55J19__</state>
 					<state>TIP_CLIENT</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
 					<state>ARM_MATH_CM4=true</state>
@@ -1150,12 +1150,12 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>__SAMG55J19__</state>
 					<state>TIP_CLIENT</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
 					<state>ARM_MATH_CM4=true</state>
@@ -1480,12 +1480,12 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>REFERENCE_TIME_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>__SAMG55J19__</state>
 					<state>TIP_CLIENT</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
 					<state>TP_ANDROID</state>
 					<state>ARM_MATH_CM4=true</state>

@@ -3,7 +3,7 @@
  *
  * \brief Blood Pressure Sensor Application
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -309,6 +309,7 @@ static at_ble_status_t app_indication_confirmation_handler(void *params)
 		DBG_LOG_DEV("App Indication successfully sent over the air");
 		indication_sent = true;
 		user_request_flag = false;
+		timer_count = 0;
 		DBG_LOG("\r\nPress the button to receive the blood pressure parameters");
 	} else {
 		DBG_LOG_DEV("Sending indication over the air failed reason %x ",
@@ -637,7 +638,7 @@ bool app_exec = true;
  */
 int main(void)
 {
-	#if SAMG55
+	#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();
@@ -721,13 +722,14 @@ int main(void)
 						
 							/* Send a indication */
 							blp_char_indication();
+							timer_count++;
 						} else {
 							DBG_LOG("Previous indication is failed and device is disconnecting");
 							blp_disconnection();
 						}
 					} 
-						timer_count = 0;
-						user_request_flag = 0;
+						//timer_count = 0;
+						//user_request_flag = 0;
 				}
 		}
 	}

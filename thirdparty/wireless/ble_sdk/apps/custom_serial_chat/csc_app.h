@@ -3,7 +3,7 @@
  *
  * \brief Custom Serial Chat Application declarations
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,6 +61,12 @@
 
 /**@brief Enter button press to send data */
 #define ENTER_BUTTON_PRESS (13)
+
+/**@brief Entered backspace button */
+#define BACKSPACE_BUTTON_PRESS (8)
+
+/**@brief Space bar */
+#define SPACE_BAR (32)
 
 
 /**

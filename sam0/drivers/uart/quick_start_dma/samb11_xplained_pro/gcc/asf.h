@@ -59,7 +59,7 @@
 // From module: DMAC - Direct Memory Access Controller
 #include <dma_sam_b.h>
 
-// From module: GPIO - GPIO Pin Control for SAMB
+// From module: GPIO - GPIO Pin Control for SAMB (Callback APIs)
 #include <gpio.h>
 
 // From module: Generic board support

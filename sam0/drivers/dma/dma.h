@@ -442,11 +442,11 @@ enum dma_event_output_selection {
 /** DMA trigger action type. */
 enum dma_transfer_trigger_action{
 	/** Perform a block transfer when triggered. */
-	DMA_TRIGGER_ACTON_BLOCK = DMAC_CHCTRLB_TRIGACT_BLOCK_Val,
+	DMA_TRIGGER_ACTION_BLOCK = DMAC_CHCTRLB_TRIGACT_BLOCK_Val,
 	/** Perform a beat transfer when triggered. */
-	DMA_TRIGGER_ACTON_BEAT = DMAC_CHCTRLB_TRIGACT_BEAT_Val,
+	DMA_TRIGGER_ACTION_BEAT = DMAC_CHCTRLB_TRIGACT_BEAT_Val,
 	/** Perform a transaction when triggered. */
-	DMA_TRIGGER_ACTON_TRANSACTION = DMAC_CHCTRLB_TRIGACT_TRANSACTION_Val,
+	DMA_TRIGGER_ACTION_TRANSACTION = DMAC_CHCTRLB_TRIGACT_TRANSACTION_Val,
 };
 
 /**

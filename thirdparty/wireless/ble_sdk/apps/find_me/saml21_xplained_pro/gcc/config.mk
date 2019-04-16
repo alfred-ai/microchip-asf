@@ -191,6 +191,7 @@ CPPFLAGS = \
        -D FIND_ME_TARGET                                  \
        -D IAS_GATT_SERVER                                 \
        -D IMMEDIATE_ALERT_SERVICE                         \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \

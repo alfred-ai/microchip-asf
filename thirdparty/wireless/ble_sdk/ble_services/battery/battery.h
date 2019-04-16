@@ -4,7 +4,7 @@
  *
  * \brief Battery Service declarations
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -68,7 +68,7 @@
 #define BAT_CHAR_PRESENTATION_FORMAT_NAMESPACE 0x01
 
 /**  @brief Characteristic presentation format descriptor */
-#define BAT_CHAR_PRESENTATION_FORMAT_DESCRIPTOR 0x0000
+#define BAT_CHAR_PRESENTATION_FORMAT_DESCRIPTOR 0x1000
 
 typedef struct bat_gatt_service_handler
 {

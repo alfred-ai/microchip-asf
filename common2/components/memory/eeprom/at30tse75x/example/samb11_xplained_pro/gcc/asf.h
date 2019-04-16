@@ -59,7 +59,7 @@
 // From module: EEPROM AT30TSE75X
 #include <at30tse75x.h>
 
-// From module: GPIO - GPIO Pin Control for SAMB
+// From module: GPIO - GPIO Pin Control for SAMB (Callback APIs)
 #include <gpio.h>
 
 // From module: Generic board support

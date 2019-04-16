@@ -3,7 +3,7 @@
  *
  * \brief Chip-specific system clock management functions
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -143,7 +143,7 @@ enum power_red_id {
 #if !MEGA_UNSPECIFIED
 #define PRTIM0_bm                       1 << PRTIM0
 #define PRTIM2_bm                       1 << PRTIM2
-#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#if AVR8_PART_IS_DEFINED(ATmega328PB) || AVR8_PART_IS_DEFINED(ATmega324PB)
 #define PRTWI_bm                        1 << PRTWI0
 #else
 #define PRTWI_bm                        1 << PRTWI
@@ -441,7 +441,7 @@ static inline void sysclk_enable_peripheral_clock(const volatile void *module)
 		sysclk_enable_module(POWER_RED_REG0, PRTIM0_bm);
 	} else if (module == &TCCR2A) {
 		sysclk_enable_module(POWER_RED_REG0, PRTIM2_bm);
-#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#if AVR8_PART_IS_DEFINED(ATmega328PB) || AVR8_PART_IS_DEFINED(ATmega324PB)
 	} else if (module == &TWBR0) {
 		sysclk_enable_module(POWER_RED_REG0, PRTWI_bm);
 	}
@@ -512,7 +512,7 @@ static inline void sysclk_disable_peripheral_clock(const volatile void *module)
 		sysclk_disable_module(POWER_RED_REG0, PRTIM0_bm);
 	} else if (module == &TCCR2A) {
 		sysclk_disable_module(POWER_RED_REG0, PRTIM2_bm);
-#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#if AVR8_PART_IS_DEFINED(ATmega328PB) || AVR8_PART_IS_DEFINED(ATmega324PB)
 	} else if (module == &TWBR0) {
 		sysclk_disable_module(POWER_RED_REG0, PRTWI_bm);
 	}
@@ -656,7 +656,7 @@ static inline uint32_t sysclk_get_peripheral_bus_hz(const volatile void *module)
 		return sysclk_get_source_clock_hz();
 	} else if (module == &UCSR0A) {
 		return sysclk_get_source_clock_hz();
-#if AVR8_PART_IS_DEFINED(ATmega328PB)
+#if AVR8_PART_IS_DEFINED(ATmega328PB) || AVR8_PART_IS_DEFINED(ATmega324PB)
 	} else if (module == &TWBR0) {
 		sysclk_disable_module(POWER_RED_REG0, PRTWI_bm);
 	}

@@ -3,7 +3,7 @@
  *
  * \brief SAM SPI Flash Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -201,12 +201,16 @@ void spi_flash_init(void) ;
 /** \name SPI flash read/write/erase operation
  * @{
  */
-uint32_t spi_flash_read_id(void);
+uint32_t spi_flash_rdid(void);
 void spi_flash_read(uint8_t *read_buf, uint32_t flash_addr, uint32_t size);
 int8_t spi_flash_write(void *write_buf, uint32_t flash_addr, uint32_t size);
+void spi_flash_sector_erase(uint32_t flash_addr);
 uint8_t spi_flash_erase(uint32_t start_offset, uint32_t size);
 void spi_flash_enter_low_power_mode(void);
 void spi_flash_leave_low_power_mode(void);
+void spi_flash_clock_init(void);
+void spi_flash_turn_off(void);
+void spi_flash_turn_on(void);
 /** @}*/
 
 /** @}*/

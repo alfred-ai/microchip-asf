@@ -453,7 +453,7 @@ enum system_clock_dfll_quick_lock {
 /**
  * \brief Available clock sources in the system.
  *
- * Clock sources available to the GCLK generators
+ * Clock sources available to the GCLK generators.
  */
 enum system_clock_source {
 	/** Internal 16MHz RC oscillator */
@@ -902,7 +902,7 @@ uint32_t system_clock_source_get_hz(
  *
  * Sets the clock divider used on the main clock to provide the CPU clock.
  *
- * \param[in] divider  CPU clock divider to set
+ * \param[in] divider  CPU clock divider
  */
 static inline void system_cpu_clock_set_divider(
 		const enum system_main_clock_div divider)
@@ -915,7 +915,7 @@ static inline void system_cpu_clock_set_divider(
  *
  * Sets the clock divider used on the main clock to provide the CPU clock.
  *
- * \param[in] divider  CPU clock divider to set
+ * \param[in] divider  CPU clock divider
  */
 static inline void system_backup_clock_set_divider(
 		const enum system_main_clock_div divider)
@@ -934,8 +934,7 @@ static inline void system_backup_clock_set_divider(
  */
 static inline uint32_t system_cpu_clock_get_hz(void)
 {
-	return (system_gclk_gen_get_hz(GCLK_GENERATOR_0) >> (MCLK->CPUDIV.reg - 1));
-
+	return (system_gclk_gen_get_hz(GCLK_GENERATOR_0) / MCLK->CPUDIV.reg);
 }
 
 /**
@@ -969,7 +968,7 @@ static inline uint32_t system_backup_clock_get_hz(void)
  * Any bits set to 1 will enable that clock, 0 bits in the mask
  * will be ignored.
  *
- * \param[in] ahb_mask  AHB clock mask to enable
+ * \param[in] ahb_mask  AHB clock mask
  */
 static inline void system_ahb_clock_set_mask(
 		const uint32_t ahb_mask)
@@ -984,7 +983,7 @@ static inline void system_ahb_clock_set_mask(
  * Any bits set to 1 will disable that clock, zero bits in the mask
  * will be ignored.
  *
- * \param[in] ahb_mask  AHB clock mask to disable
+ * \param[in] ahb_mask  AHB clock mask
  */
 static inline void system_ahb_clock_clear_mask(
 		const uint32_t ahb_mask)
@@ -1048,8 +1047,8 @@ static inline enum status_code system_apb_clock_set_mask(
  *
  * \returns Status indicating the result of the clock mask change operation.
  *
- * \retval STATUS_ERR_INVALID_ARG  Invalid bus ID was given.
- * \retval STATUS_OK               The clock mask was changed successfully.
+ * \retval STATUS_ERR_INVALID_ARG  Invalid bus ID was given
+ * \retval STATUS_OK               The clock mask was changed successfully
  */
 static inline enum status_code system_apb_clock_clear_mask(
 		const enum system_clock_apb_bus bus,

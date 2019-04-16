@@ -3,7 +3,7 @@
  *
  * \brief SAM TC - Timer Counter Driver
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -228,8 +228,8 @@ enum status_code tc_init(
 	if ((config->counter_size == TC_COUNTER_SIZE_32BIT) && (instance+1 < TC_INST_NUM))
 	{
 		/* Enable the user interface clock in the MCLK */
-		system_apb_clock_set_mask((enum system_clock_apb_bus)inst_mclk_apbmask[instance*2+1],
-				inst_mclk_apbmask[2*instance+2]);
+		system_apb_clock_set_mask((enum system_clock_apb_bus)inst_mclk_apbmask[(instance+1)*2],
+				inst_mclk_apbmask[(instance+1)*2+1]);
 	}
 
 

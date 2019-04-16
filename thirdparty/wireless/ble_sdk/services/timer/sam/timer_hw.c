@@ -3,7 +3,7 @@
  *
  * \brief Handler timer functionalities
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,7 +49,8 @@
 /* === TYPES =============================================================== */
 uint32_t timeout_count, bus_timeout_count;
 hw_timer_callback_t timer_callback;
-hw_timer_callback_t bus_timer_callback;
+platform_hw_timer_callback_t bus_timer_callback;
+static volatile bool platform_timer_used = false;
 /* === MACROS ============================================================== */
 
 void hw_timer_init(void)
@@ -106,20 +107,29 @@ void hw_timer_stop(void)
 	tc_stop(BLE_APP_TIMER, BLE_APP_TIMER_CHANNEL_ID);
 }
 
-void platform_configure_timer(hw_timer_callback_t bus_tc_cb_ptr)
+void *platform_configure_timer(platform_hw_timer_callback_t bus_tc_cb_ptr)
 {
-	bus_timer_callback = bus_tc_cb_ptr;
-	sysclk_enable_peripheral_clock(BUS_TIMER_ID);
-	// Init timer counter  channel.
-	tc_init(BUS_TIMER, BUS_TIMER_CHANNEL_ID,
-	TC_CMR_TCCLKS_TIMER_CLOCK4 |
-	TC_CMR_WAVSEL_UP);
+	Disable_global_interrupt();
+	if (platform_timer_used == false)
+	{
+		platform_timer_used = true;
+		bus_timer_callback = bus_tc_cb_ptr;
+		sysclk_enable_peripheral_clock(BUS_TIMER_ID);
+		// Init timer counter channel.
+		tc_init(BUS_TIMER, BUS_TIMER_CHANNEL_ID,
+		TC_CMR_TCCLKS_TIMER_CLOCK4 |
+		TC_CMR_WAVSEL_UP);
 		
-	tc_write_rc(BUS_TIMER, BUS_TIMER_CHANNEL_ID, UINT16_MAX);
-	tc_get_status(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
-	tc_enable_interrupt(BUS_TIMER, BUS_TIMER_CHANNEL_ID, TC_IER_CPCS);
-	NVIC_EnableIRQ(TC1_IRQn);
-	Platform_stop_bus_timer();
+		tc_write_rc(BUS_TIMER, BUS_TIMER_CHANNEL_ID, UINT16_MAX);
+		tc_get_status(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
+		tc_enable_interrupt(BUS_TIMER, BUS_TIMER_CHANNEL_ID, TC_IER_CPCS);
+		NVIC_EnableIRQ(TC1_IRQn);
+		tc_stop(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
+		Enable_global_interrupt();
+		return (void *)bus_timer_callback;
+	}
+	Enable_global_interrupt();
+	return NULL;	
 }
 
 void TC1_Handler(void)
@@ -129,29 +139,38 @@ void TC1_Handler(void)
 	ul_status = tc_get_status(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
 	ul_status &= tc_get_interrupt_mask(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
 	
-	/* ovf callback */
+	/* RC Compare callback */
 	if (TC_SR_CPCS == (ul_status & TC_SR_CPCS))
 	{
-		Platform_stop_bus_timer();
-		bus_timer_callback();		
+		tc_stop(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
+		bus_timer_callback(BUS_TIMER);		
 	}
 }
 
-void Platform_start_bus_timer(uint32_t timeout)
+void platform_start_bus_timer(void *timer_handle, uint32_t ms)
 {
-	bus_timeout_count = (timeout*TIMER_OVF_COUNT_1MSEC) + tc_read_cv(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
+	(void) timer_handle;
+	if (ms > 65)
+	{
+		/* handle using software timer. currently not supported by hardware timer for more than 65536ms */
+		while(1);
+	}
+	bus_timeout_count = (ms*TIMER_OVF_COUNT_1MSEC) + tc_read_cv(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
 	tc_write_rc(BUS_TIMER, BUS_TIMER_CHANNEL_ID, bus_timeout_count);
-	tc_start(BUS_TIMER, BUS_TIMER_CHANNEL_ID);	
+	tc_start(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
 }
 
-void Platform_stop_bus_timer(void)
+void platform_delete_bus_timer(void *timer_handle)
 {
+	(void) timer_handle;
 	tc_stop(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
 }
 
-void platform_reset_bus_timer(void)
+
+void platform_stop_bus_timer(void *timer_handle)
 {
-	Platform_stop_bus_timer();
-	Platform_start_bus_timer(5);
+	(void) timer_handle;
+	tc_stop(BUS_TIMER, BUS_TIMER_CHANNEL_ID);
 }
+
 /* EOF */

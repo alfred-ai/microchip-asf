@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM I2C Common Driver
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -136,8 +136,15 @@ extern "C" {
  *		<td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21</td>
  *	</tr>
  * </table>
- * \note The specific features are only available in the driver when the
- * selected device supports those features.
+ * \note The specific features are only available in the driver when the selected
+ * device supports those features. 
+ * \note When using the I2C high-speed mode for off-board communication,
+ * there are various high frequency interference, which can lead to distortion of the signals 
+ * and communication failure. When using Xplained Pro boards in order to test I2C high-speed 
+ * communication, the following recommendation should be followed:
+ * - Use the SDA-line on PA08 and SCL-line on PA09 for both boards. This will provide stronger
+ * pull-ups on both SDA and SCL.
+ * - The SCL should not be higher than 1.5MHz.
  *
  * \subsection asfdoc_sam0_sercom_i2c_functional_desc Functional Description
  * The I<SUP>2</SUP>C provides a simple two-wire bidirectional bus consisting of a
@@ -513,7 +520,7 @@ enum i2c_transfer_direction {
  * applications for \ref asfdoc_sam0_sercom_i2c_group. QSGs are simple examples with
  * step-by-step instructions to configure and use this driver in a selection of
  * use cases. Note that a QSG can be compiled as a standalone application or be
- * added to the user application.
+ * added to the user application.  
  *
  * \if I2C_MASTER_MODE
  * - \subpage asfdoc_sam0_sercom_i2c_master_basic_use_case "Quick Start Guide for the I2C Master module - Basic Use Case"

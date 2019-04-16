@@ -102,8 +102,8 @@
 #include <spi.h>
 
 // From module: SPI - XMEGA implementation
-#include <spi_master.h>
-#include <spi_master.h>
+#include <usart_spi.h>
+#include <xmega_usart_spi/usart_spi.h>
 
 // From module: Sleep Controller driver
 #include <sleep.h>

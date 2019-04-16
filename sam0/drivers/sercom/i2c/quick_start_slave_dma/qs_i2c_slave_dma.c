@@ -112,7 +112,7 @@ void configure_dma_resource(struct dma_resource *resource)
 
 	//! [dma_setup_3]
 	config.peripheral_trigger = CONF_I2C_DMA_TRIGGER;
-	config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
+	config.trigger_action = DMA_TRIGGER_ACTION_BEAT;
 	//! [dma_setup_3]
 
 	//! [dma_setup_4]

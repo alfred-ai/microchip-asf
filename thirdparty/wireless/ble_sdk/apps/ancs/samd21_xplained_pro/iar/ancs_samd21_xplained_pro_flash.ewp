@@ -178,6 +178,7 @@
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>ANP_GATT_CLIENT</state>
+					<state>NENABLE_PTS=false</state>
 					<state>__SAMD21J18A__</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
@@ -511,6 +512,7 @@
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>ANP_GATT_CLIENT</state>
+					<state>NENABLE_PTS=false</state>
 					<state>__SAMD21J18A__</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
@@ -1203,6 +1205,7 @@
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>ANP_GATT_CLIENT</state>
+					<state>NENABLE_PTS=false</state>
 					<state>__SAMD21J18A__</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
@@ -1536,6 +1539,7 @@
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>ANP_GATT_CLIENT</state>
+					<state>NENABLE_PTS=false</state>
 					<state>__SAMD21J18A__</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>

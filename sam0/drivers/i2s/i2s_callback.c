@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief SAM I2S - Inter-IC Sound Controller
+ * \brief SAM I<SUP>2</SUP>S - Inter-IC Sound Controller
  *
  * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
  *
@@ -187,14 +187,14 @@ static void _i2s_interrupt_handler(const uint8_t instance)
 
 }
 
-/** Interrupt handler for the I2S module */
+/** Interrupt handler for the I<SUP>2</SUP>S module */
 void I2S_Handler(void)
 {
 	_i2s_interrupt_handler(0);
 }
 
 /**
- * \brief Write buffer to the specified Serializer of I2S module
+ * \brief Write buffer to the specified Serializer of I<SUP>2</SUP>S module
  *
  * \param[in]  module_inst   Pointer to the software module instance struct
  * \param[in]  serializer    The serializer to write to
@@ -263,7 +263,7 @@ enum status_code i2s_serializer_write_buffer_job(
 }
 
 /**
- * \brief Read from the specified Serializer of I2S module to a buffer
+ * \brief Read from the specified Serializer of I<SUP>2</SUP>S module to a buffer
  *
  * \param[in]  module_inst   Pointer to the software module instance struct
  * \param[in]  serializer    The serializer to write to

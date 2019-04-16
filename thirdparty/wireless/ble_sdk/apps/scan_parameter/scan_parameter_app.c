@@ -3,7 +3,7 @@
 *
 * \brief Scan parameters Service - Application
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -204,7 +204,7 @@ static const ble_event_callback_t ble_scan_param_app_gatt_server_cb[] = {
 int main(void)
 {
 	
-	#if SAMG55
+	#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();

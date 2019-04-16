@@ -3,7 +3,7 @@
  *
  * \brief SAM TIMER Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -181,6 +181,9 @@ static void timer_isr_handler(void)
  */
 void timer_init(const struct timer_config *config)
 {
+	/* Global reset */
+	system_peripheral_reset(PERIPHERAL_TIMER);
+
 	TIMER0->CTRL.reg = config->interrupt_enable << TIMER_CTRL_INTERRUPT_ENABLE_Pos;
 	TIMER0->RELOAD.reg = config->reload_value;
 	

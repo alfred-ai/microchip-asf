@@ -3,7 +3,7 @@
  *
  * \brief SAM L21 serial driver configuration.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -71,21 +71,10 @@
 #define BLE_UART_RTS_PIN			(EXT1_PIN_16)
 #define BLE_UART_CTS_PIN			(EXT1_PIN_18)
 
-/* BTLC1000 50ms Reset Duration */
-#define BTLC1000_RESET_MS			(50)
-
 /* set port pin high */
 #define IOPORT_PIN_LEVEL_HIGH		(true)
 /* Set port pin low */
 #define IOPORT_PIN_LEVEL_LOW		(false)
-
-void serial_rx_callback(void);
-void serial_tx_callback(void);
-
-#define SERIAL_DRV_RX_CB serial_rx_callback
-#define SERIAL_DRV_TX_CB serial_tx_callback
-#define SERIAL_DRV_TX_CB_ENABLE  true
-#define SERIAL_DRV_RX_CB_ENABLE  true
 
 #define BLE_MAX_RX_PAYLOAD_SIZE 1024
 #define BLE_MAX_TX_PAYLOAD_SIZE 1024
@@ -140,18 +129,8 @@ static inline void ble_configure_control_pin(void)
 	pin_conf.input_pull = PORT_PIN_PULL_DOWN;
 	
 	port_pin_set_config(BTLC1000_WAKEUP_PIN, &pin_conf);
-	/* set wakeup pin to low */
-	ble_wakeup_pin_set_high();
-	
 	port_pin_set_config(BTLC1000_CHIP_ENABLE_PIN, &pin_conf);
-	/* set chip enable to low */
-	ble_enable_pin_set_low();
-	
-	/* Delay for 50ms */
-	delay_ms(BTLC1000_RESET_MS);
-	
-	/* set chip enable to high */
-	ble_enable_pin_set_high();
+
 #if (UART_FLOWCONTROL_6WIRE_MODE == true) || (UART_FLOWCONTROL_4WIRE_MODE == true)
 	port_get_config_defaults(&pin_conf);
 	pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
@@ -166,22 +145,6 @@ static inline void ble_configure_control_pin(void)
 #warning "Flow Control Disabled in the project"
 #endif //UART_FLOW_CONTROL_ENABLED
 	
-}
-
-static inline void ble_reset(void)
-{
-	/* BTLC1000 Reset Sequence @Todo */
-	ble_enable_pin_set_high();
-	ble_wakeup_pin_set_high();
-	delay_ms(BTLC1000_RESET_MS);
-	
-	ble_enable_pin_set_low();
-	ble_wakeup_pin_set_low();
-	delay_ms(BTLC1000_RESET_MS);
-	
-	ble_enable_pin_set_high();
-	ble_wakeup_pin_set_high();
-	delay_ms(BTLC1000_RESET_MS);
 }
 
 #endif /* CONF_SERIALDRV_H_INCLUDED */

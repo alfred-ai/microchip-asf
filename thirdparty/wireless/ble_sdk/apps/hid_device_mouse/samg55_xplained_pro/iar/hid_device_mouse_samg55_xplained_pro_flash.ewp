@@ -165,6 +165,7 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>HID_SERVICE</state>
 					<state>NENABLE_PTS</state>
 					<state>ATT_DB_MEMORY</state>
@@ -175,7 +176,6 @@
 					<state>HID_DEVICE</state>
 					<state>__SAMG55J19__</state>
 					<state>ARM_MATH_CM4=true</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -495,6 +495,7 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>HID_SERVICE</state>
 					<state>NENABLE_PTS</state>
 					<state>ATT_DB_MEMORY</state>
@@ -505,7 +506,6 @@
 					<state>HID_DEVICE</state>
 					<state>__SAMG55J19__</state>
 					<state>ARM_MATH_CM4=true</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1150,6 +1150,7 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>HID_SERVICE</state>
 					<state>NENABLE_PTS</state>
 					<state>ATT_DB_MEMORY</state>
@@ -1160,7 +1161,6 @@
 					<state>HID_DEVICE</state>
 					<state>__SAMG55J19__</state>
 					<state>ARM_MATH_CM4=true</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>
@@ -1480,6 +1480,7 @@
 					<state>BOARD=SAMG55_XPLAINED_PRO</state>
 					<state>DEVICE_INFORMATION_SERVICE</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>HID_SERVICE</state>
 					<state>NENABLE_PTS</state>
 					<state>ATT_DB_MEMORY</state>
@@ -1490,7 +1491,6 @@
 					<state>HID_DEVICE</state>
 					<state>__SAMG55J19__</state>
 					<state>ARM_MATH_CM4=true</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 				</option>
 				<option>

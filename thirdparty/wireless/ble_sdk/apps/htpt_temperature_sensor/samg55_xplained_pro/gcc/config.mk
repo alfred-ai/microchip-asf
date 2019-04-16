@@ -76,6 +76,8 @@ CSRCS = \
        sam/utils/cmsis/samg/samg55/source/templates/system_samg55.c \
        sam/utils/syscalls/gcc/syscalls.c                  \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor/htpt_app.c \
+       thirdparty/wireless/ble_sdk/ble_services/ble_mgr/ble_manager.c \
+       thirdparty/wireless/ble_sdk/ble_services/device_infomation/device_info.c \
        thirdparty/wireless/ble_sdk/services/console/sam/console_serial.c \
        thirdparty/wireless/ble_sdk/services/serial/uart/sam/serial_drv.c \
        thirdparty/wireless/ble_sdk/services/serial_fifo/serial_fifo.c \
@@ -120,6 +122,8 @@ INC_PATH = \
        thirdparty/CMSIS/Lib/GCC                           \
        thirdparty/wireless/ble_sdk/apps/config/samg55     \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor \
+       thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
+       thirdparty/wireless/ble_sdk/ble_services/device_infomation \
        thirdparty/wireless/ble_sdk/inc                    \
        thirdparty/wireless/ble_sdk/services/console       \
        thirdparty/wireless/ble_sdk/services/serial/uart   \
@@ -182,11 +186,16 @@ CFLAGS =  \
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
+       -D ATT_DB_MEMORY                                   \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D BOARD_AT30TSE_DEVICE_ADDR=0x0                   \
+       -D DEVICE_INFORMATION_SERVICE                      \
        -D ENABLE_POWER_SAVE                               \
+       -D HTPT_SERVICE                                    \
+       -D NENABLE_PTS=false                               \
        -D NEW_EVT_HANDLER                                 \
-       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_4WIRE_MODE=true                \
        -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \

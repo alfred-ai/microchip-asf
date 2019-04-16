@@ -3,7 +3,7 @@
 *
 * \brief Phone Alert Status Application
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -227,10 +227,10 @@ bool appp_exec = true;
 int main(void)
 {	
 	at_ble_status_t status;
-	#if PTS
+	#ifdef ENABLE_PTS
 	uint8_t function_selector;
 	#endif
-	#if SAMG55
+	#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();
@@ -283,14 +283,14 @@ int main(void)
 			/* button debounce delay */
 			delay_ms(350);
 			flag = false;
-			#if PTS
-			DBG_LOG("To choose the functionality enter the index of the functionality displayed");
-			DBG_LOG("\t 1.Set Device to Silent");
-			DBG_LOG("\t 2.Set Device to Mute Once");
-			DBG_LOG("\t 3.Set Device to Cancel Mute");
-			DBG_LOG("\t 4.Read Alert Status");
-			DBG_LOG("\t 5.Read Ringer Setting");
-			DBG_LOG("\t 6.Start Service Discovery");
+			#ifdef ENABLE_PTS
+			DBG_LOG_PTS("To choose the functionality enter the index of the functionality displayed");
+			DBG_LOG_PTS("\t 1.Set Device to Silent");
+			DBG_LOG_PTS("\t 2.Set Device to Mute Once");
+			DBG_LOG_PTS("\t 3.Set Device to Cancel Mute");
+			DBG_LOG_PTS("\t 4.Read Alert Status");
+			DBG_LOG_PTS("\t 5.Read Ringer Setting");
+			DBG_LOG_PTS("\t 6.Start Service Discovery");
 			function_selector = getchar();
 			function_selector = function_selector - 48;
 			DBG_LOG("The option chosen is %d",function_selector);

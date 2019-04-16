@@ -195,7 +195,7 @@
  *
  * \subsection asfdoc_sam0_pac_code_run_away Run-away Code
  * Run-away code can be caused by the MCU being operated outside its
- * specification, faulty code or EMI issues. If a runaway code occurs, it is
+ * specification, faulty code, or EMI issues. If a runaway code occurs, it is
  * favorable to catch the issue as soon as possible. With a correct
  * implementation of the PAC, the runaway code can potentially be stopped.
  *
@@ -982,7 +982,7 @@ static inline void system_pac_disable_event(void)
  *	<tr>
  *		<td>42107F</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, and SAM DA1</td>
+ *		<td>Added support for SAM L21/L22, SAM C20/C21, SAM D09, and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>42107E</td>

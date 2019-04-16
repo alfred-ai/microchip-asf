@@ -277,7 +277,7 @@ void dma_get_config_defaults(struct dma_resource_config *config)
 	/* Only software/event trigger */
 	config->peripheral_trigger = 0;
 	/* Transaction trigger */
-	config->trigger_action = DMA_TRIGGER_ACTON_TRANSACTION;
+	config->trigger_action = DMA_TRIGGER_ACTION_TRANSACTION;
 
 	/* Event configurations, no event input/output */
 	config->event_config.input_action = DMA_EVENT_INPUT_NOACT;

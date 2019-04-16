@@ -249,4 +249,44 @@ status_code_t spi_read_packet(Spi *p_spi, uint8_t *data, size_t len)
 	return STATUS_OK;
 }
 
+/**
+ * \brief Send and receive a sequence of bytes from an SPI device.
+ *
+ * \param p_spi     Base address of the SPI instance.
+ * \param tx_data   Data buffer to send.
+ * \param rx_data   Data buffer to read.
+ * \param len       Length of data to be read.
+ *
+ * \pre SPI device must be selected with spi_select_device() first.
+ */
+status_code_t spi_transceive_packet(Spi *p_spi, uint8_t *tx_data, uint8_t *rx_data, size_t len)
+{
+	uint32_t timeout = SPI_TIMEOUT;
+	uint8_t val;
+	uint32_t i = 0;
+
+	while (len) {
+		timeout = SPI_TIMEOUT;
+		while (!spi_is_tx_ready(p_spi)) {
+			if (!timeout--) {
+				return ERR_TIMEOUT;
+			}
+		}
+		spi_write_single(p_spi, tx_data[i]);
+
+		timeout = SPI_TIMEOUT;
+		while (!spi_is_rx_ready(p_spi)) {
+			if (!timeout--) {
+				return ERR_TIMEOUT;
+			}
+		}
+		spi_read_single(p_spi, &val);
+
+		rx_data[i] = val;
+		i++;
+		len--;
+	}
+
+	return STATUS_OK;
+}
 //! @}

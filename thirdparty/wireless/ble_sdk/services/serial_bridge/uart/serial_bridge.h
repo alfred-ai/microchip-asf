@@ -3,7 +3,7 @@
  *
  * \brief Handles Serial bridge driver functionalities
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -71,5 +71,6 @@ uint8_t serial_bridge_init(void);
  */
 void serial_bridge_task(void);
 
+void platform_dtm_interface_receive(uint8_t rx_data);
 
 #endif /* __SERIAL_BRIDGE_H__ */

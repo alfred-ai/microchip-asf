@@ -77,6 +77,8 @@ CSRCS = \
        sam0/utils/stdio/write.c                           \
        sam0/utils/syscalls/gcc/syscalls.c                 \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor/htpt_app.c \
+       thirdparty/wireless/ble_sdk/ble_services/ble_mgr/ble_manager.c \
+       thirdparty/wireless/ble_sdk/ble_services/device_infomation/device_info.c \
        thirdparty/wireless/ble_sdk/services/console/sam0/console_serial.c \
        thirdparty/wireless/ble_sdk/services/serial/uart/sam0/serial_drv.c \
        thirdparty/wireless/ble_sdk/services/serial_fifo/serial_fifo.c \
@@ -126,6 +128,8 @@ INC_PATH = \
        thirdparty/wireless/ble_sdk/apps/config/saml21     \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor \
        thirdparty/wireless/ble_sdk/apps/htpt_temperature_sensor/saml21_xplained_pro_b \
+       thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
+       thirdparty/wireless/ble_sdk/ble_services/device_infomation \
        thirdparty/wireless/ble_sdk/inc                    \
        thirdparty/wireless/ble_sdk/services/console       \
        thirdparty/wireless/ble_sdk/services/serial/uart   \
@@ -184,10 +188,15 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D AT30TSE_TEMPERATURE_TWI_ADDR=0x48               \
+       -D ATT_DB_MEMORY                                   \
+       -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BOARD=SAML21_XPLAINED_PRO                       \
+       -D DEVICE_INFORMATION_SERVICE                      \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D HTPT_SERVICE                                    \
        -D I2C_MASTER_CALLBACK_MODE=false                  \
+       -D NENABLE_PTS=false                               \
        -D NEW_EVT_HANDLER                                 \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \

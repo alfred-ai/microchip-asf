@@ -87,7 +87,7 @@ static void adp_interface_transceive(uint8_t *tx_data, uint8_t *rx_data, uint16_
 * \brief Initialize EDBG SPI communication for SAM0
 *
 */
-bool adp_interface_init(void)
+enum status_code adp_interface_init(void)
 {
 	enum status_code return_value;
 
@@ -142,7 +142,7 @@ void adp_interface_transceive_procotol(uint8_t* tx_buf, uint16_t length, uint8_t
 * \param[in]  length  The length of the read data
 * \param[out] rx_buf  Pointer to store the received SPI character
 */
-bool adp_interface_read_response(uint8_t* rx_buf, uint16_t length)
+enum status_code adp_interface_read_response(uint8_t* rx_buf, uint16_t length)
 {
 	bool status;
 

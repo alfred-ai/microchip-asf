@@ -3,7 +3,7 @@
  *
  * \brief Platform Abstraction layer for BLE applications
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -53,202 +53,41 @@
 #include <string.h>
 #include "at_ble_api.h"
 
-
-/**
- *@defgroup	platform_group_datatypes Data types
- *@ingroup	platform_group
- *@brief	This group includes Macros defined to be used.
- * @{
- */
-/** @}*/
-
-/**
- *@defgroup	platform_group_functions Functions
- *@ingroup	platform_group
- *@brief	This group includes all function prototypes required to be used. 
- * @{
- */
-/** @}*/
-
-/// Time waiting for initialization bus response
-#define BUS_RSP_TIMEOUT_VAL_IN_SEC	2
-
-/**@enum	interface_type
- * @ingroup platform_group_datatypes
- * @brief	This enumeration used by @ref platform_config to select @ref platform_config::bus_type
- * 			either @ref UART or @ref SPI
- */
-enum interface_type {
-	/// UART Interface is used [Default]
-	AT_BLE_UART = 1,
-	/// SPI interface is used
-	AT_BLE_SPI
-};
-
-typedef enum hw_flow_control
-{
-	ENABLE_HW_FC_PATCH = 1,
-	DISABLE_HW_FC_PATCH
-}hw_flow_control_t;
-
-
-/**@struct	platform_config
- * @ingroup platform_group_datatypes
- * @brief	This platform structure used to define bus type and 
- *			info required to initialize bus interface
- * @var		platform_config::bus_type
- * @var		platform_config::bus_info
- */
-typedef struct {
-	/// One of @ref interface_type; either @ref UART or @ref SPI
-	uint8_t bus_type;
-	/// In case of using @ref UART as interface this is used to save COM port value [1 - 255]
-	uint8_t bus_info;
-}platform_config;
-
-typedef struct{
-	uint8_t (*wr_api32) (uint32_t memAddr,uint32_t* data,uint8_t size);
-	uint8_t (*wr_api32_reset) (uint32_t memAddr,uint32_t* data,uint8_t size);
-}wr_apis;
-
-typedef enum tenuTransportState{
-	PLATFORM_TRANSPORT_SLAVE_DISCONNECTED=0,
-	PLATFORM_TRANSPORT_SLAVE_PATCH_DOWNLOAD,
-	PLATFORM_TRANSPORT_SLAVE_CONNECTED
-}tenuTransportState_t;
-
-enum transfer_mode
-{
-	TX_MODE = 1,
-	RX_MODE
-};
-
-#define BLE_SERIAL_START_BYTE (0x05)
-
-#define BLE_SERIAL_HEADER_LEN (0x09)
-
  /**@ingroup platform_group_functions
   * @brief implements platform-specific initialization
   *
-  * @param[in] platform_params platform specific parameters, this pointer is passed from the 
-  * at_ble_init function and interpreted by the platform 
+  * @param[in] bus_type bus type can be UART or SPI
+  * @param[in] bus_flow_control_enabled bus type can have flow control Enable/Disable option
   *
   * @return Upon successful completion the function shall return @ref AT_BLE_SUCCESS, Otherwise the function shall return @ref at_ble_status_t 
   */
-at_ble_status_t platform_init(void* platform_params);
+at_ble_status_t platform_init(uint8_t bus_type, uint8_t bus_flow_control_enabled);
 
  /**@ingroup platform_group_functions
-  * @brief sends a message over the platform-specific bus
+  * @brief sends a message over the platform-specific bus and blocks until Tx Completes
   *
-  * Sends a message over the platform-specific bus that might be UART, SPI or other
-  * if the BTLC1000 external wakeup signal is used, it is up to this function implementation
-  * to assert/de-assert it appropriately
+  * Sends a message over the platform-specific bus that might be UART, SPI
   *
-  * @param[in] if_type interface bus type
   * @param[in] data data to send over the interface
   * @param[in] len length of data
   *
   */
-at_ble_status_t platform_interface_send(uint8_t if_type, uint8_t *data, uint32_t len);
+void platform_send_sync(uint8_t *data, uint32_t len);
 
-///@cond IGNORE_DOXYGEN 
+void platform_gpio_set(at_ble_gpio_pin_t pin, at_ble_gpio_status_t status);
 
- /** @brief sends wakeup signal over platform-specific bus
-  *
-  */
-int platform_interface_send_wakeup(void);
+void platform_recv_async(void (*recv_async_callback)(uint8_t));
 
- /** @brief sends sleep signal over the platform-specific bus
-  *
-  */
-int platform_interface_send_sleep(void);
+void platform_sleep(uint32_t ms);
+bool platform_wakeup_pin_status(void);
+void plaform_ble_rx_callback(void);
 
-///@endcond 
-
- /**@ingroup platform_group_functions
-  * @brief recv a message over the platform-specific bus
-  *
-  * receive a message over the platform-specific bus that might be UART, SPI or other
-  * if the BTLC1000 external wakeup signal is used, it is up to this function implementation
-  * to assert/de-assert it appropriately
-  *
-  * @param[in] if_type interface bus type
-  * @param[in] data data to send over the interface
-  * @param[in] len length of data
-  *
-  */
-int platform_interface_recv(uint8_t if_type, uint8_t* data, uint32_t len);
-
- /**@ingroup platform_group_functions
-  * @brief the callback to upper layers to process received packets
-  *
-  * This function is implemented by the upper layers (the event loop) and it is up
-  * to the platform implementation to call it whenever data are received from the interface
-  *
-  * @param[in] data data received from the interface
-  * @param[in] len length of data
-  *
-  */
-void platform_interface_callback(uint8_t* data, uint32_t len);
-
-void fw_patch_download_cb(uint8_t *pu8data, uint8_t length);
-at_ble_status_t patch_init(void);
-
- /**@ingroup platform_group_functions
-  * @brief fires the comand-complete signal
-  *  @note more details at the platform porting guide
-  *
-  */
-void platform_cmd_cmpl_signal(void);
-
- /**@ingroup platform_group_functions
-  * @brief blocks until the command-complete signal is fired
-  *  @note more details at the platform porting guide
-  *
-  * @param[out] timeout a flag that indicates if waiting timed out
-  */
-void platform_cmd_cmpl_wait(bool* timeout);
-
- /**@ingroup platform_group_functions
-  * @brief fires the event signal
-  *  @note more details at the platform porting guide
-  *
-  */
-void platform_event_signal(void);
-
- /**@ingroup platform_group_functions
-  * @brief blocks until the event signal is fired
-  *  @note more details at the platform porting guide
-  *
-  * @param[in] timeout timeout in ms passed by user
-  *
-  */
-at_ble_status_t platform_event_wait(uint32_t timeout);
-
-uint8_t platform_sleep(uint32_t sleepms);
-
- /** @brief receives the bytes from platform driver
-  *  @note more details at the platform porting guide
-  *
-  * @param[out] at_ble_status_t AT_BLE_SUCCESS or AT_BLE_FAILURE
-  *
-  */
-at_ble_status_t platform_ble_event_data(void);
-
- /** @}*/
-
-void platform_start_timer(uint32_t timeout); 
-void platform_wakeup(void);
-void platform_set_sleep(void);
-void platform_enter_critical_section(void);
-void platform_leave_critical_section(void);
-void platform_cleanup(void);
-void start_timer(uint32_t timeout);
-uint32_t timer_done(void);
-void stop_timer(void);
-void bus_activity_timer_callback(void);
-void check_and_assert_ext_wakeup(uint8_t mode);
+void *platform_create_timer(void (*timer_cb)(void *));
+void platform_delete_timer(void *timer_handle);
+void platform_stop_timer(void *timer_handle);
+void platform_start_timer(void *timer_handle, uint32_t ms);
 void platform_configure_hw_fc_uart(void);
-#define UNREFERENCED_PARAMETER(x) ((void)x)
+void platform_process_rxdata(uint8_t t_rx_data);
 void platform_dma_process_rxdata(uint8_t *buf, uint16_t len);
+
 #endif // __PLATFORM_H__

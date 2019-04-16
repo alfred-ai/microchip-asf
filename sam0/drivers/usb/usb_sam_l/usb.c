@@ -3,7 +3,7 @@
  *
  * \brief SAM USB Driver.
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -1184,7 +1184,7 @@ enum status_code usb_device_endpoint_register_callback(
 	module_inst->device_endpoint_callback[ep_num][callback_type] = callback_func;
 
 	/* Set the bit corresponding to the callback_type */
-	module_inst->deivce_endpoint_registered_callback_mask[ep_num] |= _usb_endpoint_irq_bits[callback_type];
+	module_inst->device_endpoint_registered_callback_mask[ep_num] |= _usb_endpoint_irq_bits[callback_type];
 
 	return STATUS_OK;
 }
@@ -1214,7 +1214,7 @@ enum status_code usb_device_endpoint_unregister_callback(
 	module_inst->device_endpoint_callback[ep_num][callback_type] = NULL;
 
 	/* Clear the bit corresponding to the callback_type */
-	module_inst->deivce_endpoint_registered_callback_mask[ep_num] &= ~_usb_endpoint_irq_bits[callback_type];
+	module_inst->device_endpoint_registered_callback_mask[ep_num] &= ~_usb_endpoint_irq_bits[callback_type];
 
 	return STATUS_OK;
 }
@@ -1739,7 +1739,7 @@ static void _usb_device_interrupt_handler(void)
 				flags = _usb_instances->hw->DEVICE.DeviceEndpoint[i].EPINTFLAG.reg;
 				flags_run = flags &
 						_usb_instances->device_endpoint_enabled_callback_mask[i] &
-						_usb_instances->deivce_endpoint_registered_callback_mask[i];
+						_usb_instances->device_endpoint_registered_callback_mask[i];
 
 				// endpoint transfer stall interrupt
 				if (flags & USB_DEVICE_EPINTFLAG_STALL_Msk) {
@@ -2022,7 +2022,7 @@ enum status_code usb_init(struct usb_module *module_inst, Usb *const hw,
 	module_inst->device_registered_callback_mask = 0;
 	module_inst->device_enabled_callback_mask = 0;
 	for (j = 0; j < USB_EPT_NUM; j++) {
-		module_inst->deivce_endpoint_registered_callback_mask[j] = 0;
+		module_inst->device_endpoint_registered_callback_mask[j] = 0;
 		module_inst->device_endpoint_enabled_callback_mask[j] = 0;
 	}
 

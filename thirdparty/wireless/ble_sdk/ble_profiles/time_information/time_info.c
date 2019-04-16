@@ -3,7 +3,7 @@
 *
 * \brief Time Information Profile
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -412,12 +412,6 @@ at_ble_status_t time_info_discovery_complete_handler(void *param)
 		
 		if (discover_char_flag) {
 			DBG_LOG("GATT characteristic discovery completed");
-			if(ble_send_slave_sec_request(discover_status->conn_handle) 
-										  == AT_BLE_SUCCESS) {
-				DBG_LOG_DEV("Successfully send Slave Security Request");
-			} else {
-				DBG_LOG("Fail to send Slave Security Request");
-			}
 		}
 	} else {
 		DBG_LOG("discover complete failure %d",discover_status->status);

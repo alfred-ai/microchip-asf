@@ -3,7 +3,7 @@
  *
  * \brief Simple Broadcaster Application declarations
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -63,8 +63,8 @@
 /* 1000 ms */
 #define APP_BROADCAST_FAST_ADV                  (1600)
 
-/* 100 Secs */
-#define APP_BROADCAST_ADV_TIMEOUT               (1000)
+/* 10 min */
+#define APP_BROADCAST_ADV_TIMEOUT               (655)
 
 /* maximum length of advertisement data */
 #define MAX_ADV_LEN								(28)

@@ -6,7 +6,7 @@
  * This file includes the appropriate board header file according to the
  * defined board (parameter BOARD).
  *
- * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -155,6 +155,7 @@ extern "C" {
 #define SAML22_XPLAINED_PRO_B      87  //!< SAM L22 Xplained Pro board.
 #define SAMR21ZLL_EK               88  //!< SAMR21ZLL-EK board.
 #define ATMEGA168PB_XPLAINED_MINI  89  //!< ATMEGA168PB Xplained MINI board.
+#define ATMEGA324PB_XPLAINED_PRO   90  //!< ATMEGA324PB Xplained Pro board.
 #define SIMULATOR_XMEGA_A1         97  //!< Simulator for XMEGA A1 devices.
 #define AVR_SIMULATOR_UC3          98  //!< Simulator for the AVR UC3 device family.
 #define USER_BOARD                 99  //!< User-reserved board (if any).
@@ -363,6 +364,8 @@ extern "C" {
 #  include "same70_xplained/same70_xplained.h"
 #elif BOARD == ATMEGA168PB_XPLAINED_MINI
 #  include "atmega168pb_xplained_mini/atmega168pb_xplained_mini.h"
+#elif BOARD == ATMEGA324PB_XPLAINED_PRO
+#  include "atmega324pb_xplained_pro/atmega324pb_xplained_pro.h"
 #elif BOARD == SIMULATOR_XMEGA_A1
 #  include "simulator/xmega_a1/simulator_xmega_a1.h"
 #elif BOARD == AVR_SIMULATOR_UC3

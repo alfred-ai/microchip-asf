@@ -3,7 +3,7 @@
  *
  * \brief Time Information Profile declarations
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -65,12 +65,13 @@
 //  <id> tip_fast_adv
 #define APP_TP_FAST_ADV								(1600)		//1000 ms
 
-/**@brief Advertisement Timeout*/
-//  <o> Advertisement Timeout <1000-10000:50>
-//  <i> Defines inteval at which advertisement timout in ms.
-//  <i> Default: 1000
+/** @brief APP_TP_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x028F in 
+ *seconds, 0x0000 disables time-out.*/
+//	<o> Advertisement Timeout <1-655>
+//	<i> Defines interval at which advertisement timeout in sec.
+//	<i> Default: 655
 //  <id> tip_adv_timeout
-#define APP_TP_ADV_TIMEOUT							(1000)		// 100 Secs
+#define APP_TP_ADV_TIMEOUT							(655)		// 10 min
 
 /**@brief Scan Response length*/
 //  <o> Scan Response Buffer <1-20>

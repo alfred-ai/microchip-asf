@@ -565,7 +565,7 @@ enum status_code tsens_read(int32_t *result);
  *
  *
  * \section asfdoc_sam0_tsens_extra_errata Errata
- * Errata reference: 14476:
+ * Errata reference: 14476.
  *
  * The magnitude of the temperature measurement value decreases with increasing
  * temperature, i.e. it has a negative temperature coefficient.

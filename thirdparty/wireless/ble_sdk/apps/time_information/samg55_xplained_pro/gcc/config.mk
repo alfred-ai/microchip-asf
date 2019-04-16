@@ -197,7 +197,7 @@ CPPFLAGS = \
        -D REFERENCE_TIME_SERVICE                          \
        -D TIP_CLIENT                                      \
        -D TP_ANDROID                                      \
-       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_4WIRE_MODE=true                \
        -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \

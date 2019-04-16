@@ -3,7 +3,7 @@
  *
  * \brief SAM GPIO Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -242,6 +242,11 @@ struct gpio_config {
 	 *  \note All other configurations will be ignored, the pin will be disabled
 	 */
 	bool powersave;
+	/** Enable AON_GPIOs to wakeup MCU from ULP mode 
+	 *
+	 *  \note Only AON_GPIO_0, AON_GPIO_1, and AON_GPIO_2 could enable this feature
+	 */
+	bool aon_wakeup;
 };
 
 /**

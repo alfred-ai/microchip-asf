@@ -186,6 +186,7 @@ CPPFLAGS = \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D SCAN_PARAM_SERVICE                              \
        -D SYSTICK_MODE                                    \

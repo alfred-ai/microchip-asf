@@ -3,7 +3,7 @@
  *
  * \brief SAM G55 serial driver configuration.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -100,12 +100,9 @@ Pin moved to EXT1 PIN 4 and BTLC1000 Chip Enable Pin moved to ETX1 PIN10"
 /** Stop bits setting */
 #define CONF_UART_STOP_BITS    US_MR_NBSTOP_1_BIT
 
-void serial_rx_callback(void);
-void serial_tx_callback(void);
-
-#define SERIAL_DRV_RX_CB serial_rx_callback
-#define SERIAL_DRV_TX_CB serial_tx_callback
-#define SERIAL_DRV_TX_CB_ENABLE  true
+#define SERIAL_DRV_RX_CB plaform_ble_rx_callback
+#define SERIAL_DRV_TX_CB NULL
+#define SERIAL_DRV_TX_CB_ENABLE  false
 #define SERIAL_DRV_RX_CB_ENABLE  true
 
 #define BLE_MAX_RX_PAYLOAD_SIZE 1024
@@ -157,22 +154,10 @@ static inline void ble_configure_control_pin(void)
 	ioport_reset_pin_mode(BTLC1000_WAKEUP_PIN);
 	ioport_enable_pin(BTLC1000_WAKEUP_PIN);
 	ioport_set_pin_dir(BTLC1000_WAKEUP_PIN, IOPORT_DIR_OUTPUT);
-	
-	/* set wakeup pin to low */
-	ble_wakeup_pin_set_high();
 
 	ioport_reset_pin_mode(BTLC1000_CHIP_ENABLE_PIN);
 	ioport_enable_pin(BTLC1000_CHIP_ENABLE_PIN);
 	ioport_set_pin_dir(BTLC1000_CHIP_ENABLE_PIN, IOPORT_DIR_OUTPUT);
-	
-	/* set chip enable to low */
-	ble_enable_pin_set_low();
-	
-	/* Delay for 50ms */
-	delay_ms(BTLC1000_RESET_MS);
-	
-	/* set chip enable to high */
-	ble_enable_pin_set_high();
 }
 
 #endif /* CONF_SERIALDRV_H_INCLUDED */

@@ -3,7 +3,7 @@
  *
  * \brief Handles Serial driver functionalities
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -60,14 +60,8 @@ static void serial_drv_write_cb(struct usart_module *const usart_module);
 /* === GLOBALS ========================================================== */
 struct usart_module usart_instance;
 
-ser_fifo_desc_t ble_usart_rx_fifo;
-uint8_t ble_usart_rx_buf[BLE_MAX_RX_PAYLOAD_SIZE];
-
-uint16_t g_txdata;
 static uint16_t rx_data;
 
-static volatile uint16_t ble_txbyte_count = 0;
-static volatile uint8_t *ble_txbuf_ptr = NULL;
 
 /* === IMPLEMENTATION ====================================================== */
 static inline void usart_configure_flowcontrol(void)
@@ -91,8 +85,6 @@ static inline void usart_configure_flowcontrol(void)
 
 	usart_enable(&usart_instance);
 	
-	ser_fifo_init(&ble_usart_rx_fifo, ble_usart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
-
 	/* register and enable usart callbacks */
 	usart_register_callback(&usart_instance,
 	serial_drv_read_cb, USART_CALLBACK_BUFFER_RECEIVED);
@@ -123,8 +115,6 @@ uint8_t configure_serial_drv(void)
 
 	usart_enable(&usart_instance);
 	
-	ser_fifo_init(&ble_usart_rx_fifo, ble_usart_rx_buf, BLE_MAX_RX_PAYLOAD_SIZE);
-
 	/* register and enable usart callbacks */
 	usart_register_callback(&usart_instance,
 		serial_drv_read_cb, USART_CALLBACK_BUFFER_RECEIVED);
@@ -147,42 +137,27 @@ void configure_usart_after_patch(void)
 
 uint16_t serial_drv_send(uint8_t* data, uint16_t len)
 {  
-  system_interrupt_enter_critical_section();
-  ble_txbuf_ptr = data;
-  ble_txbyte_count = len;
-  system_interrupt_leave_critical_section();
-  
-  if(ble_txbyte_count)
-  {
-	  g_txdata = *ble_txbuf_ptr;
-	  while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
-	  if(--ble_txbyte_count)
-	  {
-		  ++ble_txbuf_ptr;
-	  }
-  }
-  /* Wait for ongoing transmission complete */
-  while(ble_txbyte_count); 
-  return STATUS_OK;
+	while (STATUS_OK != usart_write_buffer_job(&usart_instance, data, len));
+	/* Wait for ongoing transmission complete */
+	while (STATUS_OK != usart_get_job_status(&usart_instance, USART_TRANSCEIVER_TX));
+	
+	return STATUS_OK;
 }
 
-extern void platform_process_rxdata(uint32_t t_rx_data);
+extern void platform_process_rxdata(uint8_t t_rx_data);
 static void serial_drv_read_cb(struct usart_module *const module)
-{
-	 do
-	 {		 
-		 platform_process_rxdata((uint8_t)rx_data);
-	 }while(serial_read_byte(&rx_data) == STATUS_BUSY);
- 
-	 //call callback
-	 #if SERIAL_DRV_RX_CB_ENABLE == true
-		SERIAL_DRV_RX_CB();
-	 #endif
+{	 
+	platform_process_rxdata((uint8_t)rx_data);
 }
 
 uint8_t serial_read_data(uint8_t* data, uint16_t max_len)
 {
  return usart_read_buffer_job(&usart_instance, data, max_len);
+}
+
+void platfrom_start_rx(void)
+{
+	serial_read_byte(&rx_data);
 }
 
 uint8_t serial_read_byte(uint16_t* data)
@@ -192,32 +167,22 @@ uint8_t serial_read_byte(uint16_t* data)
 
 static void serial_drv_write_cb(struct usart_module *const usart_module)
 {
-	/* USART Tx callback */
-	if(ble_txbyte_count)
-	{
-		g_txdata = *ble_txbuf_ptr;
-		while(STATUS_OK != usart_write_job(&usart_instance, &g_txdata));
-		if(--ble_txbyte_count)
-		{
-			++ble_txbuf_ptr;
-		}
-	}
-	else
-	{
-		#if SERIAL_DRV_TX_CB_ENABLE == true
-			SERIAL_DRV_TX_CB();
-		#endif
-	}		
-}
-
-uint32_t platform_set_serial_drv_tx_status(void)
-{
-	return true;
+	/* USART Tx callback */	
 }
 
 uint32_t platform_serial_drv_tx_status(void)
 {
 	return(usart_get_job_status(&usart_instance, USART_TRANSCEIVER_TX));
+}
+
+void platform_enter_critical_section(void)
+{
+	system_interrupt_enter_critical_section();
+}
+
+void platform_leave_critical_section(void)
+{
+	system_interrupt_leave_critical_section();
 }
 
 /* EOF */

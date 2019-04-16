@@ -195,11 +195,12 @@ CPPFLAGS = \
        -D IMMEDIATE_ALERT_SERVICE                         \
        -D LINK_LOSS_SERVICE                               \
        -D LLS_GATT_SERVER                                 \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D PROXIMITY_REPORTER                              \
        -D TXPS_GATT_SERVER                                \
        -D TX_POWER_SERVICE                                \
-       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_4WIRE_MODE=true                \
        -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \

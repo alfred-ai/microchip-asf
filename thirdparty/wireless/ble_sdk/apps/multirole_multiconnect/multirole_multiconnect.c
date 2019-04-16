@@ -3,7 +3,7 @@
 *
 * \brief Multi-Role/Multi-Connect Application
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -479,7 +479,7 @@ int main(void)
 {	
 	uint8_t status;
 	
-	#if SAMG55
+	#if SAMG55 || SAM4S
 	/* Initialize the SAM system. */
 	sysclk_init();
 	board_init();
@@ -569,6 +569,7 @@ int main(void)
 				at_ble_disconnected_t pxp_connect_request_fail;
 				pxp_connect_request_fail.reason
 					= AT_BLE_TERMINATED_BY_USER;
+				pxp_connect_request_fail.handle = ble_dev_info[0].conn_info.handle;
 				pxp_connect_request_flag = PXP_DEV_UNCONNECTED;
 				if (at_ble_connect_cancel() == AT_BLE_SUCCESS) {
 					DBG_LOG("Connection Timeout");

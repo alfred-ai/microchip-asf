@@ -169,6 +169,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_OBSERVER</state>
@@ -497,6 +498,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_OBSERVER</state>
@@ -1184,6 +1186,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_OBSERVER</state>
@@ -1512,6 +1515,7 @@
 					<state>SYSTICK_MODE</state>
 					<state>NEW_EVT_HANDLER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
+					<state>NENABLE_PTS</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_OBSERVER</state>

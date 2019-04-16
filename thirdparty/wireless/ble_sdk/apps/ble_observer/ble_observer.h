@@ -1,12 +1,9 @@
-
-
-
 /**
 * \file
 *
 * \brief BLE Observer Application
 *
-* Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *

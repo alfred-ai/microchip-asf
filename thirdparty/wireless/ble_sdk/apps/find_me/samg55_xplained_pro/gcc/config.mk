@@ -190,8 +190,9 @@ CPPFLAGS = \
        -D FIND_ME_TARGET                                  \
        -D IAS_GATT_SERVER                                 \
        -D IMMEDIATE_ALERT_SERVICE                         \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
-       -D UART_FLOWCONTROL_4WIRE_MODE=false               \
+       -D UART_FLOWCONTROL_4WIRE_MODE=true                \
        -D UART_FLOWCONTROL_6WIRE_MODE=false               \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \

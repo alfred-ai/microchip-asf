@@ -3,7 +3,7 @@
 *
 * \brief Alert Notification Profile
 *
-* Copyright (c) 2015 Atmel Corporation. All rights reserved.
+* Copyright (c) 2016 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -92,23 +92,22 @@ connected_callback_t connected_cb;
 uint8_t start_notification = 0;
 at_ble_handle_t anp_conn_handle = 0;
 
-
 static const ble_event_callback_t anp_gap_handle[] = {
 	NULL,
 	NULL,
 	NULL,
 	NULL,
 	NULL,
-	anp_info_service_discover,
+	anp_info_connect_handler,
 	anp_client_disconnected_event_handler,
 	NULL,
 	NULL,
-	anp_client_security_done_handler,
+	anp_info_service_discover,
 	NULL,
 	NULL,
 	NULL,
 	NULL,
-	anp_client_security_done_handler,
+	anp_info_service_discover,
 	NULL,
 	NULL,
 	NULL,
@@ -215,18 +214,32 @@ at_ble_status_t alert_service_discovery(void)
 }
 
 /**
+ * @brief Connection handler callback
+ * @param[in] at_ble_connected_t which consists of connection handle
+ * @return at_ble_status_t which return AT_BLE_SUCCESS on success
+ */
+at_ble_status_t anp_info_connect_handler(void *params)
+{
+	at_ble_connected_t *conn_params = (at_ble_connected_t *)params;
+	if (conn_params->conn_status != AT_BLE_SUCCESS) {
+		DBG_LOG("conn_params->conn_status %x",conn_params->conn_status);
+		return conn_params->conn_status;
+	}
+	anp_conn_handle = conn_params->handle;
+	connected_cb(true);
+	#if !BLE_PAIR_ENABLE
+		alert_service_discovery();
+	#endif
+	return AT_BLE_SUCCESS;
+}
+
+/**
  * @brief Discovering the services of Alert Notification
  * @param[in] at_ble_connected_t which consists of connection handle
  * @return at_ble_status_t which return AT_BLE_SUCCESS on success
  */
 at_ble_status_t anp_info_service_discover(void *params)
 {	
-	at_ble_connected_t *conn_params = (at_ble_connected_t *)params;
-	if (conn_params->conn_status != AT_BLE_SUCCESS) {
-		return conn_params->conn_status;
-	}
-	anp_conn_handle = conn_params->handle;
-	connected_cb(true);
 	return alert_service_discovery();
 }
 
@@ -289,18 +302,9 @@ at_ble_status_t anp_client_discovery_complete_handler(void *params)
 				at_ble_disconnect(ble_dev_info[0].conn_info.handle, AT_BLE_TERMINATED_BY_USER);
 			}
 			
-			if (discover_char_flag) {
+			if (!discover_char_flag) {
 				DBG_LOG("GATT characteristic discovery completed");
-				#if BLE_PAIR_ENABLE
-				if(ble_send_slave_sec_request(ble_dev_info[0].conn_info.handle) == AT_BLE_SUCCESS) {
-					DBG_LOG_DEV("Sending slave security request");
-				}
-				else {
-					DBG_LOG_DEV("Security Procedure not successful");
-				}
-				#else
-					anp_client_security_done_handler(NULL);
-				#endif
+				anp_client_security_done_handler(NULL);
 			}
 		}
 		return AT_BLE_SUCCESS;
@@ -327,9 +331,9 @@ at_ble_status_t anp_client_service_found_handler(void *params)
 			anp_handle.end_handle = primary_service_params->end_handle;
 			/* make it DBG_LOG_DEV */
 			DBG_LOG("Alert Notification service discovered");
-			DBG_LOG_DEV("Alert Notification service discovered %04X %04X",
+			DBG_LOG_PTS("Alert Notification service discovered %04X %04X",
 						 anp_handle.start_handle, anp_handle.end_handle);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",primary_service_params->service_uuid.uuid[1],
+			DBG_LOG_PTS("UUID : 0x%02x%02x",primary_service_params->service_uuid.uuid[1],
 						primary_service_params->service_uuid.uuid[0]);
 			anp_handle.char_discovery= AT_BLE_SUCCESS;
 		}
@@ -359,16 +363,16 @@ at_ble_status_t anp_client_characteristic_found_handler(void *params)
 		{
 			anp_handle.supp_new_char_handle = characteristic_found->value_handle;
 			DBG_LOG("Supported new alert category characteristic discovered");
-			DBG_LOG_DEV("Supported New Alert Category characteristics "
+			DBG_LOG_PTS("Supported New Alert Category characteristics "
 						"%04X",anp_handle.supp_new_char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : "
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : "
 						"Char handle 0x%02x : Value handle : 0x%02x :"
 						" Properties : 0x%02x",
 						characteristic_found->conn_handle,
 						characteristic_found->char_handle,
 						characteristic_found->value_handle,
 						characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],
+			DBG_LOG_PTS("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],
 						characteristic_found->char_uuid.uuid[0]);
 		}
 		break;
@@ -378,15 +382,15 @@ at_ble_status_t anp_client_characteristic_found_handler(void *params)
 		{
 			anp_handle.new_alert_char_handle = characteristic_found->value_handle;
 			DBG_LOG("New alert category characteristic discovered");
-			DBG_LOG_DEV("New Alert characteristics %04X",anp_handle.new_alert_char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : "
+			DBG_LOG_PTS("New Alert characteristics %04X",anp_handle.new_alert_char_handle);
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : "
 						"Char handle 0x%02x : Value handle : 0x%02x"
 						" : Properties : 0x%02x",
 						characteristic_found->conn_handle,
 						characteristic_found->char_handle,
 						characteristic_found->value_handle,
 						characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",
+			DBG_LOG_PTS("UUID : 0x%02x%02x",
 						characteristic_found->char_uuid.uuid[1],
 						characteristic_found->char_uuid.uuid[0]);
 		}
@@ -397,15 +401,15 @@ at_ble_status_t anp_client_characteristic_found_handler(void *params)
 		{
 			anp_handle.supp_unread_char_handle = characteristic_found->value_handle;
 			DBG_LOG("Supported unread alert characteristic discovered");
-			DBG_LOG_DEV("Supported Unread Alert Category characteristics "
+			DBG_LOG_PTS("Supported Unread Alert Category characteristics "
 						"%04X",anp_handle.supp_unread_char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x"
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x"
 						" : Value handle : 0x%02x : Properties : 0x%02x",
 						characteristic_found->conn_handle,
 						characteristic_found->char_handle,
 						characteristic_found->value_handle,
 						characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],
+			DBG_LOG_PTS("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],
 											characteristic_found->char_uuid.uuid[0]);
 		}
 		break;
@@ -415,15 +419,15 @@ at_ble_status_t anp_client_characteristic_found_handler(void *params)
 		{
 			anp_handle.unread_alert_char_handle = characteristic_found->value_handle;
 			DBG_LOG("Unread alert status characteristic discovered");
-			DBG_LOG_DEV("Unread Alert status characteristics "
+			DBG_LOG_PTS("Unread Alert status characteristics "
 						"%04X",anp_handle.unread_alert_char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x :"
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x :"
 						" Char handle 0x%02x : Value handle : 0x%02x : Properties : 0x%02x",
 						characteristic_found->conn_handle,
 						characteristic_found->char_handle,
 						characteristic_found->value_handle,
 						characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],
+			DBG_LOG_PTS("UUID : 0x%02x%02x",characteristic_found->char_uuid.uuid[1],
 						characteristic_found->char_uuid.uuid[0]);
 		}
 		break;
@@ -433,15 +437,15 @@ at_ble_status_t anp_client_characteristic_found_handler(void *params)
 		{
 			anp_handle.alert_np_char_handle = characteristic_found->value_handle;
 			DBG_LOG("Alert Notification control characteristic discovered");
-			DBG_LOG_DEV("Alert Notification Control Point"
+			DBG_LOG_PTS("Alert Notification Control Point"
 						" characteristics %04X",anp_handle.alert_np_char_handle);
-			DBG_LOG_DEV("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x :"
+			DBG_LOG_PTS("Characteristic Info ConnHandle 0x%02x : Char handle 0x%02x :"
 						" Value handle : 0x%02x : Properties : 0x%02x",
 						characteristic_found->conn_handle,
 						characteristic_found->char_handle,
 						characteristic_found->value_handle,
 						characteristic_found->properties);
-			DBG_LOG_DEV("UUID : 0x%02x%02x",
+			DBG_LOG_PTS("UUID : 0x%02x%02x",
 						characteristic_found->char_uuid.uuid[1],
 						characteristic_found->char_uuid.uuid[0]);
 		}
@@ -468,7 +472,7 @@ at_ble_status_t anp_client_descriptor_found_handler(void *params)
 					 (descriptor_found->desc_handle < (anp_handle.new_alert_char_handle+2))) {
 					DBG_LOG("Client characteristic configuration descriptor for"
 							" new alert discovered");
-					DBG_LOG_DEV("\r\nClient Characteristics Configuration "
+					DBG_LOG_PTS("\r\nClient Characteristics Configuration "
 								"Descriptor for new alert found"
 								" handle %x",descriptor_found->desc_handle);
 					anp_handle.new_alert_desc_handle = descriptor_found->desc_handle;
@@ -478,7 +482,7 @@ at_ble_status_t anp_client_descriptor_found_handler(void *params)
 							(anp_handle.unread_alert_char_handle+2))) {
 					DBG_LOG("Client characteristic configuration descriptor"
 							" for unread alert discovered");
-					DBG_LOG_DEV("\r\nClient Characteristics Configuration "
+					DBG_LOG_PTS("\r\nClient Characteristics Configuration "
 								"Descriptor for unread alert status found "
 								"handle %x ",descriptor_found->desc_handle);
 					anp_handle.unread_alert_desc_handle = descriptor_found->desc_handle;

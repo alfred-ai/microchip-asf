@@ -196,6 +196,7 @@ CPPFLAGS = \
        -D IMMEDIATE_ALERT_SERVICE                         \
        -D LINK_LOSS_SERVICE                               \
        -D LLS_GATT_SERVER                                 \
+       -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
        -D PROXIMITY_REPORTER                              \
        -D SYSTICK_MODE                                    \

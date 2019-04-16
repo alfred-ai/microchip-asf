@@ -148,7 +148,7 @@ static void configure_dma_acm(void)
 	dma_get_config_defaults(&acm_config);
 
 	acm_config.peripheral_trigger = SLCD_DMAC_ID_ACMDRDY;
-	acm_config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
+	acm_config.trigger_action = DMA_TRIGGER_ACTION_BEAT;
 
 	dma_allocate(&example_resource_acm, &acm_config);
 
@@ -181,7 +181,7 @@ static void configure_dma_abm(void)
 	struct dma_resource_config abm_config;
 	dma_get_config_defaults(&abm_config);
 	abm_config.peripheral_trigger = SLCD_DMAC_ID_ABMDRDY;
-	abm_config.trigger_action = DMA_TRIGGER_ACTON_BEAT;
+	abm_config.trigger_action = DMA_TRIGGER_ACTION_BEAT;
 
 	dma_allocate(&example_resource_abm, &abm_config);
 

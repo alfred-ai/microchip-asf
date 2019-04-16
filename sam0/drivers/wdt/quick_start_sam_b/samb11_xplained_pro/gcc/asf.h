@@ -56,7 +56,7 @@
 #include <compiler.h>
 #include <status_codes.h>
 
-// From module: GPIO - GPIO Pin Control for SAMB
+// From module: GPIO - GPIO Pin Control for SAMB (Callback APIs)
 #include <gpio.h>
 
 // From module: Generic board support
