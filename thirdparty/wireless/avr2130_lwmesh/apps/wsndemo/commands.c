@@ -47,7 +47,7 @@
 #include "sysTimer.h"
 #include "commands.h"
 #include "wsndemo.h"
-#if !(SAMD || SAMR21)
+#if !(SAMD || SAMR21||SAML21)
 #if (LED_COUNT > 0)
 #include "led.h"
 #endif

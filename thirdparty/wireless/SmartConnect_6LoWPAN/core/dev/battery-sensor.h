@@ -35,13 +35,14 @@
  *           $Revision: 1.1 $
  */
 
-#ifndef BATTERY_SENSOR_H_
-#define BATTERY_SENSOR_H_
+#ifndef _BATTERY_SENSOR_H_
+#define _BATTERY_SENSOR_H_
 
 #include "lib/sensors.h"
-
+/*---------------------------------------------------------------------------*/
 extern const struct sensors_sensor battery_sensor;
 
-#define BATTERY_SENSOR "Battery"
-
-#endif /* BATTERY_SENSOR_H_ */
+#define BATTERY_SENSOR "Battery sensor"
+void battery_sensor_init(void);
+/*---------------------------------------------------------------------------*/
+#endif  /* _BUTTON_SENSOR_H_ */

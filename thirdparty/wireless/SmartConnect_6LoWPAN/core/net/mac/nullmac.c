@@ -36,7 +36,7 @@
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
-
+#if (MAC == NULLMAC)
 #include "net/mac/nullmac.h"
 #include "net/netstack.h"
 #include "net/ip/uip.h"
@@ -90,3 +90,4 @@ const struct mac_driver nullmac_driver = {
   channel_check_interval,
 };
 /*---------------------------------------------------------------------------*/
+#endif /* (MAC == NULLMAC) */

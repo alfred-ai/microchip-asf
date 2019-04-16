@@ -2034,13 +2034,13 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/dmac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/nvmctrl.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/tc5.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/tc3.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/pm.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/sercom3.h</name>
@@ -2085,9 +2085,6 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/rtc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/pm.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/mtb.h</name>
 							</file>
 							<file>
@@ -2095,6 +2092,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/sysctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/nvmctrl.h</name>
 							</file>
 						</group>
 						<group>
@@ -2186,9 +2186,18 @@
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
 						</group>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21g18a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e16a.h</name>
@@ -2198,9 +2207,6 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e18a.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21g16a.h</name>
@@ -2359,15 +2365,15 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../drivers/system/pinmux/pinmux.c</name>
 					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../drivers/system/pinmux/pinmux.h</name>
+					</file>
 					<group>
 						<name>quick_start</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../drivers/system/pinmux/quick_start/qs_pinmux_basic.h</name>
 						</file>
 					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../drivers/system/pinmux/pinmux.h</name>
-					</file>
 				</group>
 				<group>
 					<name>interrupt</name>

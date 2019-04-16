@@ -37,20 +37,21 @@
 #include "temp-sensor.h"
 #include "voltage-sensor.h"
 #include "button-sensor.h"
+#include "battery-sensor.h"
 #include "sam0-sensors.h"
 /*---------------------------------------------------------------------------*/
 //static int first_init = 0;
 //static struct adc_module adc_instance;
-void samd20_sensors_init(void);
-/* This defines the set of sensors used in the SAM D20 X-plained board. */
-//SENSORS(&temp_sensor, &button_sensor, &voltage_sensor);
-SENSORS(&button_sensor);
+void sam0_sensors_init(void);
+/* This defines the set of sensors used in the SAMD20/D21/R21 Xplained boards. */
+
+SENSORS(&button_sensor,&battery_sensor);
 /*---------------------------------------------------------------------------*/
 /**
- * \brief      Initiate the sensors and ADC on the SAM D20 X-plained board.
+ * \brief      Initiate the sensors and ADC on the SAM D20/D21/R21 X-plained board.
  */
 void
-samd20_sensors_init(void)
+sam0_sensors_init(void)
 {
 #if 0
   if(first_init == 0) {
@@ -72,14 +73,14 @@ samd20_sensors_init(void)
  * \brief      Set ADC input channel
  * \param input    ADC input channel
  *            This function sets the channel to use for the ADC. The result can
- *            be read with samd20_sensors_read();
+ *            be read with sam0_sensors_read();
  */
 #if 0
 void
-samd20_sensors_set_input(enum samd20_sensor_input input)
+sam0_sensors_set_input(enum sam0_sensor_input input)
 {
   /* turn on internal temp sensor if necessary */
-  if(input == SAMD20_SENSOR_ADC_TEMP) {
+  if(input == sam0_SENSOR_ADC_TEMP) {
     REG_SYSCTRL_VREF |= 1 << 1;
   } else {
     REG_SYSCTRL_VREF &= ~(1 << 1);
@@ -91,11 +92,11 @@ samd20_sensors_set_input(enum samd20_sensor_input input)
 }
 /*---------------------------------------------------------------------------*/
 /**
- * \brief      Read the sensor previously selected with samd20_sensors_set_input()
+ * \brief      Read the sensor previously selected with sam0_sensors_set_input()
  * \return     Sensor value.
  */
 uint16_t
-samd20_sensors_read(void)
+sam0_sensors_read(void)
 {
   uint16_t result = 0;
   adc_enable(&adc_instance);

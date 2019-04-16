@@ -48,6 +48,7 @@ INCLUDES
 
 #include "common/include/nm_common.h"
 #include "driver/include/m2m_types.h"
+#include "driver/source/nmdrv.h"
 
 #ifdef CONF_MGMT
 
@@ -1347,8 +1348,8 @@ NMI_API sint8 m2m_wifi_wps_disable(void);
 		if(!m2m_wifi_init(&param))
 		{
 			// Trigger P2P
-			m2m_wifi_p2p(1);
-
+			m2m_wifi_p2p(M2M_WIFI_CH_1);
+			
 			while(1)
 			{
 				m2m_wifi_handle_events(NULL);
@@ -1579,56 +1580,52 @@ NMI_API sint8 m2m_wifi_enable_dhcp(uint8  u8DhcpEn );
 
 /*!
 @fn	\
-	sint8 m2m_wifi_set_scan_options(uint8 u8NumOfSlot,uint8 u8SlotTime)
+	sint8 m2m_wifi_set_scan_options(tstrM2MScanOption* ptstrM2MScanOption)
 
-@param [in]	u8NumOfSlot;
-	The minimum number of slots is 2 for every channel,
-	For every slot the SoC will send Probe Request on air, and wait/listen for PROBE RESP/BEACONS for the u8slotTime in ms
+@param [in]	ptstrM2MScanOption;
+	Pointer to the structure holding the Scan Parameters.
 
-@param [in]	 u8SlotTime;
-		The time in ms that the Soc will wait on every channel listening for the frames on air
-		when that time increases the number of APs will increase in the scan results
-		Minimum time is 10 ms and the maximum is 250 ms
 @see
 	tenuM2mScanCh
 	m2m_wifi_request_scan
-
+	tstrM2MScanOption
+	
 @return
 	The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
 */
-NMI_API sint8 m2m_wifi_set_scan_options(uint8 u8NumOfSlot,uint8 u8SlotTime);
+NMI_API sint8 m2m_wifi_set_scan_options(tstrM2MScanOption* ptstrM2MScanOption);
  /**@}*/
 /** @defgroup WifiSetScanRegionFn m2m_wifi_set_scan_region
  *   @ingroup WLANAPI
  *  Synchronous wi-fi scan region setting function.
- *   This function sets the scan region, which will affect the range of possible scan channels.
+ *   This function sets the scan region, which will affect the range of possible scan channels. 
  *   For 2.5GHz supported in the current release, the requested scan region can't exceed the maximum number of channels (14).
  *@{*/
 /*!
 @fn	\
-	sint8 m2m_wifi_set_scan_region(uint8 ScanRegion)
+	sint8 m2m_wifi_set_scan_region(uint16 ScanRegion)
 
 @param [in]	ScanRegion;
-		ASIA = 14
-		NORTH_AMERICA = 11
+		ASIA
+		NORTH_AMERICA
 @see
 	tenuM2mScanCh
 	m2m_wifi_request_scan
-
+	
 @return
 	The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
 
 */
-NMI_API sint8 m2m_wifi_set_scan_region(uint8  ScanRegion);
+NMI_API sint8 m2m_wifi_set_scan_region(uint16  ScanRegion);
  /**@}*/
 /** @defgroup WifiRequestScanFn m2m_wifi_request_scan
 *   @ingroup WLANAPI
 *    Asynchronous wi-fi scan request on the given channel. The scan status is delivered in the wi-fi event callback and then the application
-*    is to read the scan results sequentially.
+*    is to read the scan results sequentially. 
 *    The number of  APs found (N) is returned in event @ref M2M_WIFI_RESP_SCAN_DONE with the number of found
 *     APs.
 *	The application could read the list of APs by calling the function @ref m2m_wifi_req_scan_result N times.
-*
+* 
 *@{*/
 /*!
 @fn	\
@@ -2497,7 +2494,14 @@ sint8 m2m_wifi_enable_firmware_logs(uint8 u8Enable);
 @warning	
 */
 sint8 m2m_wifi_set_battery_voltage(uint16 u16BattVoltx100);
-
+/**
+*	@fn		m2m_wifi_get_firmware_version(tstrM2mRev* M2mRev)
+*	@brief	Get Firmware version info
+*	@param [out]	M2mRev
+*			    pointer holds address of structure "tstrM2mRev" that contains the firmware version parameters
+*	@version	1.0
+*/
+sint8 m2m_wifi_get_firmware_version(tstrM2mRev *M2mRev);
 /**@}*/
 #ifdef ETH_MODE
 /** @defgroup WifiEnableMacMcastFn m2m_wifi_enable_mac_mcast

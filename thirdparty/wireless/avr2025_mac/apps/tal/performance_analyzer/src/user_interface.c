@@ -50,7 +50,7 @@
 #include "tal.h"
 # include "app_init.h"
 #if (LED_COUNT > 0)
-#if !(SAMD ||  SAMR21)
+#if !(SAMD ||  SAMR21 || SAML21)
 # include "led.h"
 #endif
 #endif
@@ -204,7 +204,7 @@ bool app_debounce_button(void)
  */
 bool button_pressed(void)
 {
-#if SAMD || SAMR21
+#if SAMD || SAMR21 || SAML21
 	if (port_pin_get_input_level(SW0_PIN)) {
 		return false;
 	} else {

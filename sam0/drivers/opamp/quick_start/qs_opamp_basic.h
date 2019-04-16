@@ -47,9 +47,7 @@
  * In this use case, the OPAMP0 is configured as "Non-Inverting PGA" mode,
  * refer to the second mode of "Built-in Modes" in the device datasheet.
  *
- * This use case sets up the OPAMP0 to invert the input signal in OA0NEG
- * pin, and output it to the OA0OUT pin.
- * You can give a signal on OA0NEG and watch the output on OA0OUT
+ * You can give a signal on OA0POS and watch the output on OA0OUT
  * through an oscilloscope.
  *
  * \section asfdoc_sam0_opamp_basic_use_case_setup Setup
@@ -84,7 +82,7 @@
  *          values that have been altered from the default settings are taken
  *          into account by the user application.
  *
- * -# Set up OA0NEG pin and OA0OUT pin.
+ * -# Set up OA0POS pin and OA0OUT pin.
  *    \snippet qs_opamp_basic.c setup_5
  *
  * -# Write OPAMP0 configuration to the hardware module.

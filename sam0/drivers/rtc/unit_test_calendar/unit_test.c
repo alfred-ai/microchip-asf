@@ -74,6 +74,7 @@
  *  - SAM R21 Xplained Pro board
  *  - SAM DA1 Xplained Pro board
  *  - SAM C21 Xplained Pro board
+ *  - SAM D20 Xplained Pro board
  *
  * \section asfdoc_sam0_rtc_unit_test_setup Setup
  *

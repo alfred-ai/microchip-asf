@@ -36,7 +36,7 @@
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
-
+#if (MAC == CSMAMAC)
 #include "net/mac/csma.h"
 #include "net/packetbuf.h"
 #include "net/queuebuf.h"
@@ -446,3 +446,4 @@ const struct mac_driver csma_driver = {
   channel_check_interval,
 };
 /*---------------------------------------------------------------------------*/
+#endif /* (MAC == CSMAMAC) */

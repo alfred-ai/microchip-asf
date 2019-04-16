@@ -595,7 +595,7 @@ uint32_t usart_init_iso7816(Usart *p_usart,
 		if (p_usart_opt->bit_order || p_usart_opt->max_iterations) {
 			return 1;
 		}
-		
+
 		/* Set USART mode to ISO7816, T=1, and always uses 1 stop bit. */
 		ul_reg_val |= US_MR_USART_MODE_IS07816_T_1 | US_MR_NBSTOP_1_BIT;
 	} else {
@@ -839,7 +839,7 @@ uint32_t usart_init_spi_slave(Usart *p_usart,
 	return 0;
 }
 
-#if (SAM3XA || SAM4L || SAMG55)
+#if (SAM3XA || SAM4L || SAMG55 || SAMV71 || SAMV70 || SAME70 || SAMS70)
 
 /**
  * \brief Configure USART to work in LIN mode and act as a LIN master.
@@ -1116,6 +1116,272 @@ uint8_t usart_lin_get_data_length(Usart *usart)
 	}
 }
 
+#endif
+
+#if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+/**
+ * \brief Get identifier send status.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \return
+ * 0:  No LIN identifier has been sent since the last RSTSTA.
+ * 1: :At least one LIN identifier has been sent since the last RSTSTA.
+ */
+uint8_t usart_lin_identifier_send_complete(Usart *usart)
+{
+	return (usart->US_CSR & US_CSR_LINID) > 0;
+}
+
+/**
+ * \brief Get identifier received status.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \return
+ * 0:  No LIN identifier has been reveived since the last RSTSTA.
+ * 1: At least one LIN identifier has been received since the last RSTSTA.
+ */
+uint8_t usart_lin_identifier_reception_complete(Usart *usart)
+{
+	return (usart->US_CSR & US_CSR_LINID) > 0;
+}
+
+/**
+ * \brief Get transmission status.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \return
+ * 0: The USART is idle or a LIN transfer is ongoing.
+ * 1: A LIN transfer has been completed since the last RSTSTA.
+ */
+uint8_t usart_lin_tx_complete(Usart *usart)
+{
+	return (usart->US_CSR & US_CSR_LINTC) > 0;
+}
+
+/**
+ * \brief Configure USART to work in LON mode.
+ *
+ * \note By default, the transmitter and receiver aren't enabled.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param ul_baudrate Baudrate to be used.
+ * \param ul_mck USART module input clock frequency.
+ *
+ * \retval 0 on success.
+ * \retval 1 on failure.
+ */
+uint32_t usart_init_lon(Usart *p_usart,uint32_t ul_baudrate,
+		uint32_t ul_mck)
+{
+	/* Reset the USART and shut down TX and RX. */
+	usart_reset(p_usart);
+
+	/* Set up the baudrate. */
+	if (usart_set_async_baudrate(p_usart, ul_baudrate, ul_mck)) {
+		return 1;
+	}
+
+	/* Set LIN master mode. */
+	p_usart->US_MR = (p_usart->US_MR & ~US_MR_USART_MODE_Msk) |
+			US_MR_USART_MODE_LON;
+
+	usart_enable_rx(p_usart);
+	usart_enable_tx(p_usart);
+
+	return 0;
+}
+
+/**
+ * \brief set LON parameter value.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_type 0: LON comm_type = 1 mode,
+ *  1: LON comm_type = 2 mode
+ */
+void  usart_lon_set_comm_type(Usart *p_usart, uint8_t uc_type)
+{
+	p_usart->US_LONMR = (p_usart->US_LONMR & ~US_LONMR_COMMT) |
+			 (uc_type << 0);
+}
+
+/**
+ * \brief Disable  LON Collision Detection Feature.
+ *
+ * \param p_usart Pointer to a USART instance.
+ */
+void usart_lon_disable_coll_detection(Usart *p_usart)
+{
+	p_usart->US_LONMR |= US_LONMR_COLDET;
+}
+
+/**
+ * \brief Enable LON Collision Detection Feature.
+ *
+ * \param p_usart Pointer to a USART instance.
+ */
+void usart_lon_enable_coll_detection(Usart *p_usart)
+{
+	p_usart->US_LONMR &= ~US_LONMR_COLDET;
+}
+
+/**
+ * \brief set Terminate Frame upon Collision Notification.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_type 0:  Do not terminate the frame in LON comm_type = 1 mode upon collision detection.
+ * 1:Terminate the frame in LON comm_type = 1 mode upon collision detection if possible.
+ */
+void  usart_lon_set_tcol(Usart *p_usart, uint8_t uc_type)
+{
+	p_usart->US_LONMR = (p_usart->US_LONMR & ~US_LONMR_TCOL) |
+			 (uc_type << 2);
+}
+
+/**
+ * \brief set  LON Collision Detection on Frame Tail.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_type 0: Detect collisions after CRC has been sent but prior end of transmission in LON comm_type = 1 mode.
+ * 1: Ignore collisions after CRC has been sent but prior end of transmission in LON comm_type = 1 mode.
+ */
+void  usart_lon_set_cdtail(Usart *p_usart, uint8_t uc_type)
+{
+	p_usart->US_LONMR = (p_usart->US_LONMR & ~US_LONMR_CDTAIL) |
+			 (uc_type << 3);
+}
+
+/**
+ * \brief set  LON DMA Mode.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_type 0: The LON data length register US_LONDL is not written by the DMA.
+ * 1: The LON data length register US_LONDL is written by the DMA.
+ */
+void  usart_lon_set_dmam(Usart *p_usart, uint8_t uc_type)
+{
+	p_usart->US_LONMR = (p_usart->US_LONMR & ~US_LONMR_DMAM) |
+			 (uc_type << 4);
+}
+
+/**
+ * \brief set LON Beta1 Length after Transmission.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param ul_len 1-16777215: LON beta1 length after transmission in tbit
+ */
+void  usart_lon_set_beta1_tx_len(Usart *p_usart, uint32_t ul_len)
+{
+	p_usart->US_LONB1TX = US_LONB1TX_BETA1TX(ul_len);
+}
+
+/**
+ * \brief set LON Beta1 Length after Reception.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param ul_len 1-16777215: LON beta1 length after reception in tbit.
+ */
+void  usart_lon_set_beta1_rx_len(Usart *p_usart, uint32_t ul_len)
+{
+	p_usart->US_LONB1RX = US_LONB1RX_BETA1RX(ul_len);
+}
+
+/**
+ * \brief set  LON Priority.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_psnb 0 -127: LON Priority Slot Number.
+ * \param uc_nps  0 -127: LON Node Priority Slot.
+ */
+void  usart_lon_set_priority(Usart *p_usart, uint8_t uc_psnb, uint8_t uc_nps)
+{
+	p_usart->US_LONPRIO = US_LONPRIO_PSNB(uc_psnb) | US_LONPRIO_NPS(uc_nps);
+}
+
+/**
+ * \brief set LON Indeterminate Time after Transmission.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param ul_time 1-16777215: LON Indeterminate Time after Transmission (comm_type = 1 mode only).
+ */
+void  usart_lon_set_tx_idt(Usart *p_usart, uint32_t ul_time)
+{
+	p_usart->US_IDTTX = US_IDTTX_IDTTX(ul_time);
+}
+
+/**
+ * \brief set LON Indeterminate Time after Reception.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param ul_time 1-16777215: LON Indeterminate Time after Reception (comm_type = 1 mode only).
+ */
+void  usart_lon_set_rx_idt(Usart *p_usart, uint32_t ul_time)
+{
+	p_usart->US_IDTRX = US_IDTRX_IDTRX(ul_time);
+}
+
+/**
+ * \brief set LON Preamble Length.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param ul_len 1-16383: LON preamble length in tbit(without byte-sync).
+ */
+void  usart_lon_set_pre_len(Usart *p_usart, uint32_t ul_len)
+{
+	p_usart->US_LONPR = US_LONPR_LONPL(ul_len);
+}
+
+/**
+ * \brief set LON  Data Length.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_len 0-255: LON data length is LONDL+1 bytes.
+ */
+void  usart_lon_set_data_len(Usart *p_usart, uint8_t uc_len)
+{
+	p_usart->US_LONDL = US_LONDL_LONDL(uc_len);
+}
+
+/**
+ * \brief set  LON Priority.
+ *
+ * \param p_usart Pointer to a USART instance.
+ * \param uc_bli   LON Backlog Increment.
+ * \param uc_altp LON Alternate Path Bit.
+ * \param uc_pb   LON Priority Bit.
+ */
+void  usart_lon_set_l2hdr(Usart *p_usart, uint8_t uc_bli, uint8_t uc_altp, uint8_t uc_pb)
+{
+	p_usart->US_LONL2HDR = US_LONL2HDR_BLI(uc_bli) | (uc_altp << 6) | (uc_pb << 7);
+}
+
+/**
+ * \brief Check if LON Transmission End.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \retval 1  At least one transmission has been performed since the last RSTSTA.
+ * \retval 0  Transmission on going or no transmission occurred since the last RSTSTA.
+ */
+uint32_t usart_lon_is_tx_end(Usart *p_usart)
+{
+	return (p_usart->US_CSR & US_CSR_LTXD) > 0;
+}
+
+/**
+ * \brief Check if LON Reception End.
+ *
+ * \param p_usart Pointer to a USART instance.
+ *
+ * \retval 1  At least one Reception has been performed since the last RSTSTA.
+ * \retval 0  Reception on going or no Reception occurred since the last RSTSTA.
+ */
+uint32_t usart_lon_is_rx_end(Usart *p_usart)
+{
+	return (p_usart->US_CSR & US_CSR_LRXD) > 0;
+}
 #endif
 
 /**

@@ -52,6 +52,16 @@ pause
 exit
 )
 
+:: Write fuse bit to boot from flash for SAM4/G.
+set needfuse=false
+IF "%MCU_ALIAS%" == "SAMG53" (set needfuse=true)
+IF "%MCU_ALIAS%" == "SAMG55" (set needfuse=true)
+IF "%MCU_ALIAS%" == "SAM4S"  (set needfuse=true)
+IF "%MCU_ALIAS%" == "SAM4E"  (set needfuse=true)
+IF "%needfuse%" == "true" (
+	"%atprogPath%" -t %TOOL% -i SWD -d %MCU% write -fs --values 02
+)
+
 :: Program serial bridge.
 "%atprogPath%" -t %TOOL% -i SWD -d %MCU% program -f %IMAGE_FILE%
 IF %ERRORLEVEL% NEQ 0 ( echo Fail

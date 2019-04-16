@@ -2216,6 +2216,12 @@
 							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi/quick_start_slave/qs_spi_slave_basic.h</name>
 						</file>
 					</group>
+					<group>
+						<name>quick_start_master</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi/quick_start_master/qs_spi_master_basic.h</name>
+						</file>
+					</group>
 					<file>
 						<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi/spi.h</name>
 					</file>
@@ -2223,12 +2229,6 @@
 						<name>quick_start_master_callback</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi/quick_start_master_callback/qs_spi_master_callback.h</name>
-						</file>
-					</group>
-					<group>
-						<name>quick_start_master</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/drivers/sercom/spi/quick_start_master/qs_spi_master_basic.h</name>
 						</file>
 					</group>
 					<group>
@@ -2461,9 +2461,6 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/ac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/adc.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/mtb.h</name>
 							</file>
 							<file>
@@ -2519,6 +2516,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/sercom4.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/adc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/pac2.h</name>
@@ -2626,6 +2626,9 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g16a.h</name>
 							</file>
 							<file>
@@ -2637,6 +2640,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21g18a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e18a.h</name>

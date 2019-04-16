@@ -99,7 +99,7 @@ typedef struct {
  */
 typedef struct {
 	uint8_t param_type;
-	uint8_t param_value;
+	uint16_t param_value;
 } set_parm_req_t;
 
 /**

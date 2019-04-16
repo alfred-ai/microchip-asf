@@ -90,7 +90,11 @@
 #define DATA_PKT_SZ_1K			1024
 #define DATA_PKT_SZ_4K			(4 * 1024)
 #define DATA_PKT_SZ_8K			(8 * 1024)
+#ifdef SAMG55
+#define DATA_PKT_SZ				DATA_PKT_SZ_1K
+#else
 #define DATA_PKT_SZ				DATA_PKT_SZ_8K
+#endif
 
 static uint8 	gu8Crc_off	=   0;
 

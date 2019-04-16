@@ -71,7 +71,7 @@
  * -# Create an AC device instance struct, which will be associated with an
  *    Analog Comparator peripheral hardware instance.
  *    \snippet qs_ac_callback.c setup_1
- *    \note Device instance structures shall \b never go out of scope when in
+ *    \note Device instance structures shall \i never go out of scope when in
  *          use.
  *
  * -# Define a macro to select the comparator channel that will be sampled, for

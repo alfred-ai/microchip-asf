@@ -43,6 +43,7 @@
 #define _NM_COMMON_H_
 
 #include "bsp/include/nm_bsp.h"
+#include "common/include/nm_debug.h"
 
 /**@defgroup  CommonDefines CommonDefines
  * @ingroup WlanDefines
@@ -115,77 +116,6 @@ Invalid argument
 #define NBIT2				(0x00000004)
 #define NBIT1				(0x00000002)
 #define NBIT0				(0x00000001)
-
-
-#define M2M_LOG_NONE									0
-#define M2M_LOG_ERROR									1
-#define M2M_LOG_INFO									2
-#define M2M_LOG_REQ										3
-#define M2M_LOG_DBG										4
-
-#if (defined __APP_APS3_CORTUS__)
-#define M2M_LOG_LEVEL									M2M_LOG_ERROR
-#else
-#ifdef TIME_PROFILE
-#define M2M_LOG_LEVEL									M2M_LOG_NONE
-#else
-#define M2M_LOG_LEVEL									M2M_LOG_REQ
-#endif
-#endif
-
-/**/
-#if !((defined __MSP430FR5739)||(defined __MCF964548__))
-
-#define M2M_ERR(...)
-#define M2M_INFO(...)
-#define M2M_REQ(...)
-#define M2M_DBG(...)
-
-#if (CONF_WINC_DEBUG == 1)
-#define M2M_PRINT(...)							do{CONF_WINC_PRINTF(__VA_ARGS__);CONF_WINC_PRINTF("\r");}while(0)
-	#if (M2M_LOG_LEVEL >= M2M_LOG_ERROR)
-	#undef M2M_ERR
-	#define M2M_ERR(...)							do{CONF_WINC_PRINTF("(APP)(ERR)[%s][%d]",__FUNCTION__,__LINE__); CONF_WINC_PRINTF(__VA_ARGS__);CONF_WINC_PRINTF("\r");}while(0)
-		#if (M2M_LOG_LEVEL >= M2M_LOG_INFO)
-		#undef M2M_INFO
-		#define M2M_INFO(...)							do{CONF_WINC_PRINTF("(APP)(INFO)"); CONF_WINC_PRINTF(__VA_ARGS__);CONF_WINC_PRINTF("\r");}while(0)
-			#if (M2M_LOG_LEVEL >= M2M_LOG_REQ)
-			#undef M2M_REQ
-			#define M2M_REQ(...)							do{CONF_WINC_PRINTF("(APP)(R)"); CONF_WINC_PRINTF(__VA_ARGS__);CONF_WINC_PRINTF("\r");}while(0)
-				#if (M2M_LOG_LEVEL >= M2M_LOG_DBG)
-				#undef M2M_DBG
-				#define M2M_DBG(...)							do{CONF_WINC_PRINTF("(APP)(DBG)[%s][%d]",__FUNCTION__,__LINE__); CONF_WINC_PRINTF(__VA_ARGS__);CONF_WINC_PRINTF("\r");}while(0)
-				#endif
-			#endif
-		#endif
-	#endif
-#else
-#define M2M_ERR(...)
-#define M2M_DBG(...)
-#define M2M_INFO(...)
-#define M2M_PRINT(...)
-#endif
-#else
-#if (!defined  __MCF964548__)||(!defined __SAMD21J18A__)
-static void M2M_ERR(const char *_format, ...) //__attribute__ ((__format__ (M2M_ERR, 1, 2)))
-{
-}
-static void M2M_DBG(const char *_format, ...) //__attribute__ ((__format__ (M2M_DBG, 1, 2)))
-{
-}
-static void M2M_INFO(const char *_format, ...) // __attribute__ ((__format__ (M2M_INFO, 1, 2)))
-{
-
-}
-static void M2M_PRINT(const char *_format, ...) // __attribute__ ((__format__ (M2M_INFO, 1, 2)))
-{
-
-}
-static void CONF_WINC_PRINTF(const char *_format, ...)
-{
-}
-#endif
-#endif
 
 #define M2M_MAX(A,B)					((A) > (B) ? (A) : (B))
 #define M2M_SEL(x,m1,m2,m3)				((x>1)?((x>2)?(m3):(m2)):(m1))

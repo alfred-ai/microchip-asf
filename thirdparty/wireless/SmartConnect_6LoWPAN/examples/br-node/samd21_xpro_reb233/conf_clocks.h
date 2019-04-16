@@ -47,7 +47,11 @@
 
 /* System clock bus configuration */
 #  define CONF_CLOCK_CPU_CLOCK_FAILURE_DETECT     false
-#  define CONF_CLOCK_FLASH_WAIT_STATES            0
+#if(F_CPU==48000000ul)
+#  define CONF_CLOCK_FLASH_WAIT_STATES            2
+#else
+#  define CONF_CLOCK_FLASH_WAIT_STATES            0	
+#endif	
 #  define CONF_CLOCK_CPU_DIVIDER                  SYSTEM_MAIN_CLOCK_DIV_1
 #  define CONF_CLOCK_APBA_DIVIDER                 SYSTEM_MAIN_CLOCK_DIV_1
 #  define CONF_CLOCK_APBB_DIVIDER                 SYSTEM_MAIN_CLOCK_DIV_1
@@ -139,6 +143,8 @@ SYSTEM_CLOCK_SOURCE_DPLL_FILTER_DEFAULT
 #  define CONF_CLOCK_GCLK_0_PRESCALER             3
 #elif(F_CPU==8000000ul)
 #  define CONF_CLOCK_GCLK_0_PRESCALER             6
+#elif(F_CPU==48000000ul)
+#  define CONF_CLOCK_GCLK_0_PRESCALER             1
 #endif
 #  define CONF_CLOCK_GCLK_0_OUTPUT_ENABLE         false
 

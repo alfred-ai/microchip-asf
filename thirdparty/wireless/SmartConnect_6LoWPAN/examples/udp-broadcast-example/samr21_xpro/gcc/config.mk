@@ -106,7 +106,6 @@ CSRCS = \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/lib/random.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/lib/ringbuf.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/lib/sensors.c \
-       thirdparty/wireless/SmartConnect_6LoWPAN/core/lib/settings.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/lib/trickle-timer.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/ip/dhcpc.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/ip/psock.c \
@@ -137,6 +136,7 @@ CSRCS = \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/ipv6/uip-nd6.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/ipv6/uip6.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/linkaddr.c \
+       thirdparty/wireless/SmartConnect_6LoWPAN/core/net/mac/contikimac/contikimac.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/mac/csma.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/mac/frame802154.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/mac/framer-802154.c \
@@ -176,12 +176,14 @@ CSRCS = \
        thirdparty/wireless/SmartConnect_6LoWPAN/examples/udp-broadcast-example/broadcast-example-main.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/examples/udp-broadcast-example/broadcast-example.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/examples/udp-broadcast-example/symbols.c \
+       thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/battery-sensor.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/button-sensor.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/edbg-eui.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/flash.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/leds-arch.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/node-id.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/sam0-sensors.c \
+       thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/sam0_sensors.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/temp-sensor.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/voltage-sensor.c \
        thirdparty/wireless/SmartConnect_6LoWPAN/services/sam0/watchdog.c \
@@ -251,6 +253,7 @@ INC_PATH = \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/ipv6 \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/ipv6/multicast \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/mac \
+       thirdparty/wireless/SmartConnect_6LoWPAN/core/net/mac/contikimac \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/rime \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/net/rpl \
        thirdparty/wireless/SmartConnect_6LoWPAN/core/sys  \
@@ -313,12 +316,12 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D AUTOSTART_ENABLE=1                              \
        -D BOARD=SAMR21_XPLAINED_PRO                       \
-       -D ENABLE_CONTIKIMAC=0                             \
-       -D ENABLE_DROWSIE=0                                \
        -D ENABLE_LEDCTRL=1                                \
        -D EXTINT_CALLBACK_MODE=true                       \
+       -D HW_ACK=1                                        \
        -D I2C_MASTER_CALLBACK_MODE=false                  \
-       -D NULLRDC_CONF_802154_AUTOACK_HW=0                \
+       -D MAC=NULLMAC                                     \
+       -D RDC=NULLRDC                                     \
        -D RTC_COUNT_ASYNC=true                            \
        -D SPI_CALLBACK_MODE=false                         \
        -D SYSTICK_MODE                                    \

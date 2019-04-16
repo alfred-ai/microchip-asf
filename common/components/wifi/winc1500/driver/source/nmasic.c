@@ -106,6 +106,8 @@ sint8 nm_clkless_wake(void)
 {
 	sint8 ret = M2M_SUCCESS;
 	uint32 reg, clk_status_reg,trials = 0;
+	/* wait 1ms, spi data read */
+	nm_bsp_sleep(1);
 	ret = nm_read_reg_with_ret(0x1, &reg);
 	if(ret != M2M_SUCCESS) {
 		M2M_ERR("Bus error (1). Wake up failed\n");
@@ -120,6 +122,8 @@ sint8 nm_clkless_wake(void)
 	{
 		/* Set bit 1 */
 		nm_write_reg(0x1, reg | (1 << 1));
+		/* wait 1ms, spi data read */
+		nm_bsp_sleep(1);
 		// Check the clock status
 		ret = nm_read_reg_with_ret(clk_status_reg_adr, &clk_status_reg);
 		if( (ret != M2M_SUCCESS) || ((ret == M2M_SUCCESS) && (clk_status_reg == 0)) ) {
@@ -128,6 +132,8 @@ sint8 nm_clkless_wake(void)
 			 * then the chip is A0.
 			 */
 			clk_status_reg_adr = 0xe;
+			/* wait 1ms, spi data read */
+			nm_bsp_sleep(1);
 			ret = nm_read_reg_with_ret(clk_status_reg_adr, &clk_status_reg);
 			if(ret != M2M_SUCCESS) {
 				M2M_ERR("Bus error (2). Wake up failed\n");
@@ -141,7 +147,7 @@ sint8 nm_clkless_wake(void)
 		while( ((clk_status_reg & 0x4) == 0) && (((++trials) %3) == 0))
 		{
 			/* Wait for the chip to stabilize*/
-			nm_bsp_sleep(1);
+			nm_bsp_sleep(2);
 
 			// Make sure chip is awake. This is an extra step that can be removed
 			// later to avoid the bus access overhead
@@ -413,73 +419,6 @@ sint8 chip_reset(void)
 #endif
 	return ret;
 }
-//#define __ROM_TEST__
-#ifdef __ROM_TEST__
-#include <stdlib.h>
-#define ROM_FIRMWARE_FILE	"../../../firmware/dram_lib/Debug/wifi_release.bin"
-#define ROM_DATA_FILE	"../../../firmware/dram_lib/Debug/wifi_release_data.bin"
-
-#define CODE_SZ		(6 * 1024 - 256)
-#define CODE_BASE	(0x30100ul)
-#define DATA_BASE	(0xd0000 + CODE_SZ)
-
-void rom_test()
-{
-	uint8	*pu8TextSec;
-	FILE	*fp;
-	uint32	u32CodeSize = 0;
-
-	nm_bsp_sleep(1000);
-
-	/* Read text section.
-	*/
-	fp = fopen(ROM_FIRMWARE_FILE,"rb");
-	if(fp)
-	{
-		/* Get the code size.
-		*/
-		fseek(fp, 0L, SEEK_END);
-		u32CodeSize = ftell(fp);
-		fseek(fp, 0L, SEEK_SET);
-		pu8TextSec = (uint8*)malloc(u32CodeSize);
-		if(pu8TextSec != NULL)
-		{
-			M2M_INFO("Code Size %f\n",u32CodeSize / 1024.0);
-			fread(pu8TextSec, u32CodeSize, 1, fp);
-			nm_write_block(CODE_BASE, pu8TextSec, (uint16)u32CodeSize);
-			//nm_read_block(CODE_BASE, tmpv, sz);
-			fclose(fp);
-			free(pu8TextSec);
-		}
-	}
-#if 0
-	uint8	*pu8DataSec;
-	uint32	u32DataSize = 0;
-	/* Read data section.
-	*/
-	fp = fopen(ROM_DATA_FILE,"rb");
-	if(fp)
-	{
-		/* Get the data size.
-		*/
-		fseek(fp, 0L, SEEK_END);
-		u32DataSize = ftell(fp);
-		fseek(fp, 0L, SEEK_SET);
-		pu8DataSec = (uint8*)malloc(u32DataSize);
-		if(pu8DataSec != NULL)
-		{
-			M2M_INFO("Data Size %f\n",u32DataSize / 1024.0);
-			fread(pu8DataSec, u32DataSize, 1, fp);
-			nm_write_block(DATA_BASE, pu8DataSec, (uint16)u32DataSize);
-			fclose(fp);
-		}
-		free(pu8DataSec);
-	}
-#endif
-	nm_write_reg(0x108c, 0xdddd);
-
-}
-#endif /* __ROM_TEST__ */
 
 sint8 wait_for_bootrom(uint8 arg)
 {

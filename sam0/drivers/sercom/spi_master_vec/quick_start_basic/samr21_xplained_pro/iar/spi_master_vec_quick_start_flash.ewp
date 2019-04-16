@@ -2150,6 +2150,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21g17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
 							<file>
@@ -2170,6 +2173,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21g18a.h</name>
@@ -2229,12 +2235,6 @@
 					<file>
 						<name>$PROJ_DIR$/../../../../spi/spi_interrupt.h</name>
 					</file>
-					<group>
-						<name>quick_start_master</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../spi/quick_start_master/qs_spi_master_basic.h</name>
-						</file>
-					</group>
 					<file>
 						<name>$PROJ_DIR$/../../../../spi/spi.h</name>
 					</file>
@@ -2254,6 +2254,12 @@
 						<name>quick_start_slave_callback</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../spi/quick_start_slave_callback/qs_spi_slave_callback.h</name>
+						</file>
+					</group>
+					<group>
+						<name>quick_start_master</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../spi/quick_start_master/qs_spi_master_basic.h</name>
 						</file>
 					</group>
 				</group>

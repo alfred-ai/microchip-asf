@@ -35,11 +35,15 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <string.h>
-#include "rf212b.h"
+#include "thsq-conf-const.h"
 /* 
- * This is the platform configuration file for Atmel SAM R21 platform.
+ * This is the platform configuration file for Atmel SAM D21 platform.
  */
+#if RDC==CONTIKIMAC
 #define F_CPU                           8000000ul
+#else
+#define F_CPU                           48000000ul
+#endif
 
 #define CLOCK_CONF_SECOND               128
 #define RTIMER_ARCH_SECOND              31250

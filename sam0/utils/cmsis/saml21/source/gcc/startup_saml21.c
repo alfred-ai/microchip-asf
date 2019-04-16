@@ -3,7 +3,7 @@
  *
  * \brief gcc starttup file for SAML21
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -39,9 +39,6 @@
  *
  * \asf_license_stop
  *
- */
-/*
- * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
 #include "saml21.h"
@@ -123,9 +120,6 @@ void AES_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler
 #endif
 #ifdef ID_TRNG
 void TRNG_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#endif
-#ifdef ID_PICOP
-void PICOP_Handler           ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 
 /* Exception Table */
@@ -224,11 +218,7 @@ const DeviceVectors exception_table = {
 #else
         (void*) (0UL), /* Reserved */
 #endif
-#ifdef ID_PICOP
-        (void*) PICOP_Handler           /* 28 PicoProcessor */
-#else
         (void*) (0UL)  /* Reserved */
-#endif
 };
 
 /**
@@ -258,11 +248,11 @@ void Reset_Handler(void)
         pSrc = (uint32_t *) & _sfixed;
         SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
 
-        /* Initialize the C library */
-        __libc_init_array();
-
         /* Overwriting the default value of the NVMCTRL.CTRLB.MANW bit (errata reference 13134) */
         NVMCTRL->CTRLB.bit.MANW = 1;
+
+        /* Initialize the C library */
+        __libc_init_array();
 
         /* Branch to main function */
         main();

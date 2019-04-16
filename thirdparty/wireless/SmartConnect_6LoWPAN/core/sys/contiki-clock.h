@@ -71,7 +71,7 @@
 #include "contiki-conf.h"
 
 /**
- * A second, measured in system clock time.
+ * A second, measured in GCLK generator 5 clock source.
  *
  * \hideinitializer
  */

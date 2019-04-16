@@ -71,7 +71,7 @@
 #elif defined(__SAMD21G18A__) || defined(__ATSAMD21G18A__)
   #include "samd21g18a.h"
 #elif defined (__SAMD21G18AU__) || defined(__ATSAMD21G18AU__)
-	#include "samd21g18au.h"
+  #include "samd21g18au.h"
 #elif defined(__SAMD21J15A__) || defined(__ATSAMD21J15A__)
   #include "samd21j15a.h"
 #elif defined(__SAMD21J16A__) || defined(__ATSAMD21J16A__)
@@ -94,8 +94,12 @@
   #include "samd21e16l.h"
 #elif defined(__SAMD21G15B__) || defined(__ATSAMD21G15B__)
   #include "samd21g15b.h"
+#elif defined(__SAMD21G15L__) || defined(__ATSAMD21G15L__)
+  #include "samd21g15l.h"
 #elif defined(__SAMD21G16B__) || defined(__ATSAMD21G16B__)
   #include "samd21g16b.h"
+#elif defined(__SAMD21G16L__) || defined(__ATSAMD21G16L__)
+  #include "samd21g16l.h"
 #elif defined(__SAMD21J15B__) || defined(__ATSAMD21J15B__)
   #include "samd21j15b.h"
 #elif defined(__SAMD21J16B__) || defined(__ATSAMD21J16B__)

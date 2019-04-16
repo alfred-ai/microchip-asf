@@ -51,9 +51,19 @@
     #define STATE_RX_AACK_ON        (0x16)
     #define STATE_TX_ARET_ON        (0x19)
     #define STATE_TRANSITION        (0x1F)
-#define RF233_REG_TRX_STATE       (0x02)
-  #define TRX_STATE_TRAC_STATUS     (0xE0)  /* result of transaction in extended mode */
-  #define SR_MAX_FRAME_RETRIES   0x2C, 0xF0, 4
+	#define RF233_REG_TRX_STATE       (0x02)
+	/** Access parameters for sub-register RX_PDT_DIS in register @ref RG_RX_SYN */
+	#define SR_RX_PDT_DIS   0x15, 0x80, 7
+	/** Constant RX_ENABLE for sub-register @ref SR_RX_PDT_DIS in register RX_SYN */
+	#define RX_ENABLE   (0)
+	/** Access parameters for sub-register RND_VALUE in register @ref RG_PHY_RSSI */
+	#define SR_RND_VALUE   0x06, 0x60, 5	
+	/** Access parameters for sub-register MAX_FRAME_RETRIES in register @ref RG_XAH_CTRL_0 */
+    #define SR_MAX_FRAME_RETRIES   0x2C, 0xF0, 4
+	/** Access parameters for sub-register MAX_CSMA_RETRIES in register @ref RG_XAH_CTRL_0 */
+    #define  SR_MAX_CSMA_RETRIES	   0x2C, 0X0E, 1
+		
+    #define TRX_STATE_TRAC_STATUS     (0xE0)  /* result of transaction in extended mode */
     #define TRAC_SUCCESS              (0 << 5)
     #define TRAC_SUCCESS_DATA_PENDING (1 << 5)
     #define TRAC_SUCCESS_WAIT_FOR_ACK (2 << 5)

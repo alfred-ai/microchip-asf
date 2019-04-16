@@ -37,7 +37,7 @@
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
-
+#if (MAC == CSMAMAC)
 #ifndef CSMA_H_
 #define CSMA_H_
 
@@ -49,3 +49,4 @@
 const struct mac_driver *csma_init(const struct mac_driver *r);
 
 #endif /* CSMA_H_ */
+#endif /* (MAC == CSMAMAC) */

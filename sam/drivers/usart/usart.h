@@ -82,6 +82,11 @@ extern "C" {
 #define SPI_MODE_2  (SPI_CPOL)
 #define SPI_MODE_3  (SPI_CPOL | SPI_CPHA)
 
+/**micro definition for LIN mode of SAMV71*/
+#if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+#define US_MR_USART_MODE_LIN_MASTER  0x0A
+#define US_MR_USART_MODE_LIN_SLAVE   0x0B
+#endif
 /* Input parameters when initializing RS232 and similar modes. */
 typedef struct {
 	/* Set baud rate of the USART (unused in slave modes). */
@@ -236,7 +241,7 @@ uint32_t usart_init_spi_master(Usart *p_usart,
 		const usart_spi_opt_t *p_usart_opt, uint32_t ul_mck);
 uint32_t usart_init_spi_slave(Usart *p_usart,
 		const usart_spi_opt_t *p_usart_opt);
-#if (SAM3XA || SAM4L || SAMG55)
+#if (SAM3XA || SAM4L || SAMG55 || SAMV71 || SAMV70 || SAME70 || SAMS70)
 uint32_t usart_init_lin_master(Usart *p_usart, uint32_t ul_baudrate,
 		uint32_t ul_mck);
 uint32_t usart_init_lin_slave(Usart *p_usart, uint32_t ul_baudrate,
@@ -259,6 +264,28 @@ void usart_lin_enable_pdc_mode(Usart *p_usart);
 void usart_lin_set_tx_identifier(Usart *p_usart, uint8_t uc_id);
 uint8_t usart_lin_read_identifier(Usart *p_usart);
 uint8_t usart_lin_get_data_length(Usart *usart);
+#endif
+#if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+uint8_t usart_lin_identifier_send_complete(Usart *usart);
+uint8_t usart_lin_identifier_reception_complete(Usart *usart);
+uint8_t usart_lin_tx_complete(Usart *usart);
+uint32_t usart_init_lon(Usart *p_usart, uint32_t ul_baudrate, uint32_t ul_mck);
+void  usart_lon_set_comm_type(Usart *p_usart, uint8_t uc_type);
+void usart_lon_disable_coll_detection(Usart *p_usart);
+void usart_lon_enable_coll_detection(Usart *p_usart);
+void  usart_lon_set_tcol(Usart *p_usart, uint8_t uc_type);
+void  usart_lon_set_cdtail(Usart *p_usart, uint8_t uc_type);
+void  usart_lon_set_dmam(Usart *p_usart, uint8_t uc_type);
+void  usart_lon_set_beta1_tx_len(Usart *p_usart, uint32_t ul_len);
+void  usart_lon_set_beta1_rx_len(Usart *p_usart, uint32_t ul_len);
+void  usart_lon_set_priority(Usart *p_usart, uint8_t uc_psnb, uint8_t uc_nps);
+void  usart_lon_set_tx_idt(Usart *p_usart, uint32_t ul_time);
+void  usart_lon_set_rx_idt(Usart *p_usart, uint32_t ul_time);
+void  usart_lon_set_pre_len(Usart *p_usart, uint32_t ul_len);
+void  usart_lon_set_data_len(Usart *p_usart, uint8_t uc_len);
+void  usart_lon_set_l2hdr(Usart *p_usart, uint8_t uc_bli, uint8_t uc_altp, uint8_t uc_pb);
+uint32_t usart_lon_is_tx_end(Usart *p_usart);
+uint32_t usart_lon_is_rx_end(Usart *p_usart);
 #endif
 void usart_enable_tx(Usart *p_usart);
 void usart_disable_tx(Usart *p_usart);
@@ -304,7 +331,7 @@ Pdc *usart_get_pdc_base(Usart *p_usart);
 void usart_enable_writeprotect(Usart *p_usart);
 void usart_disable_writeprotect(Usart *p_usart);
 uint32_t usart_get_writeprotect_status(Usart *p_usart);
-#if (SAM3S || SAM4S || SAM3U || SAM3XA || SAM4L || SAM4E || SAM4C || SAM4CP || SAM4CM)
+#if (SAM3S || SAM4S || SAM3U || SAM3XA || SAM4L || SAM4E || SAM4C || SAM4CP || SAM4CM || SAMV70 || SAMV71 || SAMS70 || SAME70)
 void usart_man_set_tx_pre_len(Usart *p_usart, uint8_t uc_len);
 void usart_man_set_tx_pre_pattern(Usart *p_usart, uint8_t uc_pattern);
 void usart_man_set_tx_polarity(Usart *p_usart, uint8_t uc_polarity);
@@ -322,7 +349,7 @@ uint32_t usart_get_version(Usart *p_usart);
 #if SAMG55
 void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
 		bool cmpmode, bool cmppar, uint8_t ul_high_value);
-#endif		
+#endif
 
 /// @cond 0
 /**INDENT-OFF**/
@@ -400,9 +427,9 @@ void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
 	    };
     #if SAM4L
       sysclk_enable_peripheral_clock(USART_SERIAL);
-    #else  
+    #else
 	    sysclk_enable_peripheral_clock(USART_SERIAL_ID);
-    #endif 
+    #endif
 	    usart_init_rs232(USART_SERIAL, &usart_console_settings,
 	            sysclk_get_main_hz());
 	    usart_enable_tx(USART_SERIAL);
@@ -442,9 +469,9 @@ void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
  *   \code
 	  #if SAM4L
       sysclk_enable_peripheral_clock(USART_SERIAL);
-    #else  
+    #else
 	    sysclk_enable_peripheral_clock(USART_SERIAL_ID);
-    #endif 
+    #endif
 \endcode
  * -# Initialize the USART module in RS232 mode:
  *   \code
@@ -523,9 +550,9 @@ void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
 
     #if SAM4L
       sysclk_enable_peripheral_clock(USART_SERIAL);
-    #else  
+    #else
 	    sysclk_enable_peripheral_clock(USART_SERIAL_ID);
-    #endif 
+    #endif
 
 	    usart_init_rs232(USART_SERIAL, &usart_console_settings,
 	            sysclk_get_main_hz());
@@ -566,9 +593,9 @@ void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
  *   \code
     #if SAM4L
       sysclk_enable_peripheral_clock(USART_SERIAL);
-    #else  
+    #else
 	    sysclk_enable_peripheral_clock(USART_SERIAL_ID);
-    #endif   
+    #endif
 \endcode
  * -# Initialize the USART module in RS232 mode:
  *   \code
@@ -654,9 +681,9 @@ void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
 
     #if SAM4L
       sysclk_enable_peripheral_clock(USART_SERIAL);
-    #else  
+    #else
 	    sysclk_enable_peripheral_clock(USART_SERIAL_ID);
-    #endif 
+    #endif
 
 	    usart_init_rs232(USART_SERIAL, &usart_console_settings,
 	            sysclk_get_main_hz());
@@ -700,9 +727,9 @@ void usart_set_sleepwalking(Usart *p_uart, uint8_t ul_low_value,
  *   \code
     #if SAM4L
       sysclk_enable_peripheral_clock(USART_SERIAL);
-    #else  
+    #else
 	    sysclk_enable_peripheral_clock(USART_SERIAL_ID);
-    #endif 
+    #endif
 \endcode
  * -# Initialize the USART module in RS232 mode:
  *   \code

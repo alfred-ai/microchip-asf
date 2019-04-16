@@ -552,10 +552,14 @@ static void test_standby_mode_static_power_sleepwalking(void)
 
 	struct system_standby_config config;
 	system_standby_get_config_defaults(&config);
-	config.enable_dpgpd0 = false;
-	config.enable_dpgpd1 = false;
-	config.power_domain = SYSTEM_POWER_DOMAIN_DEFAULT;
+	config.enable_dpgpd0       = false;
+	config.enable_dpgpd1       = false;
+	config.power_domain        = SYSTEM_POWER_DOMAIN_DEFAULT;
+#if (SAML21XXXB)
+	config.vregs_mode          = SYSTEM_SYSTEM_VREG_SWITCH_AUTO;
+#else
 	config.disable_avregsd     = false;
+#endif
 	config.linked_power_domain = SYSTEM_LINKED_POWER_DOMAIN_DEFAULT;
 	config.hmcramchs_back_bias = SYSTEM_RAM_BACK_BIAS_STANDBY_OFF;
 	config.hmcramclp_back_bias = SYSTEM_RAM_BACK_BIAS_STANDBY_OFF;

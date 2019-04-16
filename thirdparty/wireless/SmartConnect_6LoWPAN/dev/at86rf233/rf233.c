@@ -79,9 +79,6 @@
 #include "rf233.h"
 #include "delay.h"
 #include "system_interrupt.h"
-#if SAMD
-#include "node-id-samd21.h"
-#endif
 #define RF233_STATUS()                    rf233_status()
 /*---------------------------------------------------------------------------*/
 PROCESS(rf233_radio_process, "RF233 radio driver");
@@ -90,14 +87,16 @@ static int  off(void);
 #if !NULLRDC_CONF_802154_AUTOACK_HW
 static void radiocore_hard_recovery(void);
 #endif
+static void rf_generate_random_seed(void);
 static void flush_buffer(void);
 static uint8_t flag_transmit = 0;
+#if NULLRDC_CONF_802154_AUTOACK_HW
+static uint8_t ack_status = 0;
+#endif
 static volatile int radio_is_on = 0;
 static volatile int pending_frame = 0;
 static volatile int sleep_on = 0;
-void SetPanId(uint16_t panId);
-void SetShortAddr(uint16_t addr);
-void SetIEEEAddr(uint8_t *ieee_addr);
+
 /*---------------------------------------------------------------------------*/
 int rf233_init(void);
 int rf233_prepare(const void *payload, unsigned short payload_len);
@@ -235,7 +234,13 @@ rf233_init(void)
   /* init SPI and GPIOs, wake up from sleep/power up. */
   //rf233_arch_init();
   trx_spi_init();
-  ENABLE_TRX_IRQ();
+ 
+  /* reset will put us into TRX_OFF state */
+  /* reset the radio core */
+  port_pin_set_output_level(AT86RFX_RST_PIN, false);
+  delay_cycles_ms(1);
+  port_pin_set_output_level(AT86RFX_RST_PIN, true);
+  
   port_pin_set_output_level(AT86RFX_SLP_PIN, false); /*wakeup from sleep*/
 
   /* before enabling interrupts, make sure we have cleared IRQ status */
@@ -246,20 +251,12 @@ rf233_init(void)
 
   if(radio_state == STATE_P_ON) {
 	  trx_reg_write(RF233_REG_TRX_STATE, TRXCMD_TRX_OFF);
-	  } else {
-	  /* reset will put us into TRX_OFF state */
-	  /* reset the radio core */
-	  port_pin_set_output_level(AT86RFX_RST_PIN, false);
-	  delay_cycles_ms(10);
-	  port_pin_set_output_level(AT86RFX_RST_PIN, true);
-	  delay_cycles_ms(2);  /* datasheet: max 1 ms */
-	  /* Radio is now in state TRX_OFF */
-  }
-  system_interrupt_enable_global();
-  PRINTF("REB233 radio configured to use EXT%u\n", REB233XPRO_HEADER);
+	  } 
   /* Assign regtemp to regtemp to avoid compiler warnings */
   regtemp = regtemp;
   trx_irq_init((FUNC_PTR)rf233_interrupt_poll);
+  ENABLE_TRX_IRQ();  
+  system_interrupt_enable_global();
   /* Configure the radio using the default values except these. */
   trx_reg_write(RF233_REG_TRX_CTRL_1,      RF233_REG_TRX_CTRL_1_CONF);
   trx_reg_write(RF233_REG_PHY_CC_CCA,      RF233_REG_PHY_CC_CCA_CONF);
@@ -267,14 +264,17 @@ rf233_init(void)
   trx_reg_write(RF233_REG_TRX_CTRL_2,      RF233_REG_TRX_CTRL_2_CONF);
   trx_reg_write(RF233_REG_IRQ_MASK,        RF233_REG_IRQ_MASK_CONF);
   // trx_reg_write(0x17, 0x02);
+#if HW_CSMA_FRAME_RETRIES
+  trx_bit_write(SR_MAX_FRAME_RETRIES, 3);
+  trx_bit_write(SR_MAX_CSMA_RETRIES, 4);
+#else  
   trx_bit_write(SR_MAX_FRAME_RETRIES, 0);
+  trx_bit_write(SR_MAX_CSMA_RETRIES, 7);
+#endif  
   SetPanId(IEEE802154_CONF_PANID);
- #if SAMD
-  SetIEEEAddr(node_mac);
-#else
-  SetIEEEAddr(eui64);
-#endif
-
+  
+  rf_generate_random_seed();
+  
   for(uint8_t i=0;i<8;i++)
   {
 	  regtemp =trx_reg_read(0x24+i);
@@ -283,11 +283,77 @@ rf233_init(void)
   /* 11_09_rel */
   trx_reg_write(RF233_REG_TRX_RPC,0xFF); /* Enable RPC feature by default */
   // regtemp = trx_reg_read(RF233_REG_PHY_TX_PWR);
-
+  
   /* start the radio process */
   process_start(&rf233_radio_process, NULL);
   return 0;
 }
+
+/*
+ * \brief Generates a 16-bit random number used as initial seed for srand()
+ *
+ */
+static void rf_generate_random_seed(void)
+{
+	uint16_t seed = 0;
+	uint8_t cur_random_val = 0;
+
+	/*
+	 * We need to disable TRX IRQs while generating random values in RX_ON,
+	 * we do not want to receive frames at this point of time at all.
+	 */
+	ENTER_TRX_REGION();
+
+	do
+	{
+		trx_reg_write(RF233_REG_TRX_STATE, TRXCMD_TRX_OFF);
+		
+	} while (TRXCMD_TRX_OFF != rf233_status());
+
+	do
+	{
+		/* Ensure that PLL has locked and receive mode is reached. */
+		trx_reg_write(RF233_REG_TRX_STATE, TRXCMD_PLL_ON);
+		
+	} while (TRXCMD_PLL_ON != rf233_status());
+	do
+	{
+		trx_reg_write(RF233_REG_TRX_STATE, TRXCMD_RX_ON);
+		
+	} while (TRXCMD_RX_ON != rf233_status());
+
+	/* Ensure that register bit RX_PDT_DIS is set to 0. */
+	trx_bit_write(SR_RX_PDT_DIS, RX_ENABLE);
+
+	/*
+	 * The 16-bit random value is generated from various 2-bit random
+	 * values.
+	 */
+	for (uint8_t i = 0; i < 8; i++) {
+		/* Now we can safely read the 2-bit random number. */
+		cur_random_val = trx_bit_read(SR_RND_VALUE);
+		seed = seed << 2;
+		seed |= cur_random_val;
+		delay_us(1); /* wait that the random value gets updated */
+	}
+
+	do
+	{
+		/* Ensure that PLL has locked and receive mode is reached. */
+		trx_reg_write(RF233_REG_TRX_STATE, TRXCMD_TRX_OFF);		
+	} while (TRXCMD_TRX_OFF != rf233_status());
+	/*
+	 * Now we need to clear potential pending TRX IRQs and
+	 * enable the TRX IRQs again.
+	 */
+	trx_reg_read(RF233_REG_IRQ_STATUS);
+	trx_irq_flag_clr();
+	LEAVE_TRX_REGION();
+
+	/* Set the seed for the random number generator. */
+	srand(seed);
+}
+
 /*---------------------------------------------------------------------------*/
 /**
  * \brief      prepare a frame and the radio for immediate transmission 
@@ -438,6 +504,21 @@ rf233_transmit(unsigned short payload_len)
     return RADIO_TX_ERR;
   }
   RF233_COMMAND(TRXCMD_RX_ON);
+#else
+	BUSYWAIT_UNTIL(ack_status == 1, 10 * RTIMER_SECOND/1000);
+	if((ack_status))
+	{
+	//	printf("\r\nrf233 sent\r\n ");
+		ack_status=0;
+	//	printf("\nACK received");
+		return RADIO_TX_OK;
+	}
+	else
+	{
+	//	printf("\nNOACK received");		
+		return RADIO_TX_NOACK;
+	}
+	
 #endif
 
   PRINTF("RF233: tx ok\n");
@@ -847,6 +928,9 @@ rf233_interrupt_poll(void)
 			 flag_transmit=0;
 			 interrupt_callback_in_progress = 0;
 			 #if NULLRDC_CONF_802154_AUTOACK_HW
+			//printf("Status %x",trx_reg_read(RF233_REG_TRX_STATE) & TRX_STATE_TRAC_STATUS);
+			if(!(trx_reg_read(RF233_REG_TRX_STATE) & TRX_STATE_TRAC_STATUS))
+			ack_status = 1;
 			 RF233_COMMAND(TRXCMD_RX_AACK_ON);
 			 #endif
 			 return 0;

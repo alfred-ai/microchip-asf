@@ -45,6 +45,7 @@
 
 #include "driver/source/nmuart.h"
 #include "bus_wrapper/include/nm_bus_wrapper.h"
+
 #define HDR_SZ  12
 
 static uint8 get_cs(uint8* b, uint8 sz){

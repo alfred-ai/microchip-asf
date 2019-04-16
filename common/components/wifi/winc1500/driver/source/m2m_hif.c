@@ -284,7 +284,6 @@ sint8 hif_deinit(void * arg)
 	pfOtaCb = NULL;
 	pfHifCb = NULL;
 
-
 	return ret;
 }
 /**

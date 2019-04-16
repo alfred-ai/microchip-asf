@@ -2144,17 +2144,11 @@
 					</group>
 					<group>
 						<name>include</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21g18au.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21e16bu.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21g16a.h</name>
-						</file>
 						<group>
 							<name>pio</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21g16l.h</name>
+							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21j15a.h</name>
 							</file>
@@ -2181,6 +2175,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e16b.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21g15l.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21g15b.h</name>
@@ -2228,6 +2225,18 @@
 								<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/pio/samd21e15bu.h</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21g18au.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21e16bu.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21g16a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21g15l.h</name>
+						</file>
 						<group>
 							<name>component</name>
 							<file>
@@ -2464,6 +2473,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21j16b.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21g16l.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../../../sam0/utils/cmsis/samd21/include/samd21e16l.h</name>

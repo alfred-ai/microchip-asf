@@ -54,14 +54,14 @@
 #include "port.h"
 #include "asf.h"
 #include "mqtt.h"
-#include "adc.h"
-
+#include "battery-sensor.h"
+#include "sam0_sensors.h"
 #define SEND_INTERVAL		(60 * CLOCK_SECOND)
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 static struct mqtt_connection conn;
 static struct mqtt_message* msg_ptr = 0;
-static struct etimer light_sense_timer;
+static struct etimer sensor_timer;
 static struct etimer reconnect_timer;
 //static uint16_t random_topic;
 static char clientid[16];
@@ -70,9 +70,10 @@ static char str_topic_sensor[30];
 static char str_topic_led[30];
 static char app_buffer[128];
 
-/* IO1-XPro Board details */
+
+static char batt_str[8];
+static const struct sensors_sensor *battery = NULL;
 static char temp_str[8];
-static char light_str[8];
 static char mac_adr_str[18];
 static uint16_t nodeid;
 
@@ -103,11 +104,7 @@ static uip_ipaddr_t google_ipv4_dns_server = {
 #define PRIORITY      "p0"
 #define UUID	        "atmeld"
 
-//
-// Function prototypes
-//
-void configure_adc(void);
-uint16_t measure_light(void);
+
 
 
 /*---------------------------------------------------------------------------*/
@@ -115,40 +112,7 @@ uint16_t measure_light(void);
 PROCESS(mqtt_example_process, "MQTT Example");
 AUTOSTART_PROCESSES(&mqtt_example_process);
 
-struct adc_module adc_instance;
 
-void configure_adc(void)
-{
-	struct adc_config config_adc;
-	
-	adc_get_config_defaults(&config_adc);
-  
-//
-// Any update to the default settings can be done here:
-//  
-	config_adc.clock_source                  = GCLK_GENERATOR_3;
-	//config_adc.reference                     = ADC_REFERENCE_INT1V;
-	config_adc.reference                     = ADC_REFERENCE_INTVCC1;
-#if SAMR21
-  config_adc.positive_input               = ADC_POSITIVE_INPUT_PIN6 ;
-#elif SAMD
-  config_adc.positive_input               = ADC_POSITIVE_INPUT_PIN8 ;
-#endif
-	
-	adc_init(&adc_instance, ADC, &config_adc);
-	adc_enable(&adc_instance);
-}
-
-uint16_t measure_light(void)
-{
-	uint16_t result;
-	adc_start_conversion(&adc_instance);
-	
-	do {
-		/* Wait for conversion to be done and read out result */
-	} while (adc_read(&adc_instance, &result) == STATUS_BUSY);
-	return result;
-}
 
 
 /*---------------------------------------------------------------------------*/
@@ -229,15 +193,17 @@ PROCESS_THREAD(mqtt_example_process, ev, data)
 {
     PROCESS_BEGIN();
 	static unsigned long  timestmp;
-	volatile uint16_t light;
 	volatile uip_ds6_addr_t *lladdr;
-  // ("%s%x%s%x","Node id: ",ipaddr," Count: ",count)
+	volatile uint16_t battery_v;
+	volatile sensor_result_t temp;
 
-  
+
+
+
 
   timestmp = clock_time();
 
-  configure_adc();
+  
 
   lladdr = uip_ds6_get_link_local(-1);
   sprintf(mac_adr_str,"%02x%02x%02x%02x%02x%02x%02x%02x",lladdr ->ipaddr.u8[8],lladdr->ipaddr.u8[9],lladdr->ipaddr.u8[10],lladdr->ipaddr.u8[11],lladdr->ipaddr.u8[12],lladdr->ipaddr.u8[13],lladdr->ipaddr.u8[14],lladdr->ipaddr.u8[15]);
@@ -264,30 +230,22 @@ PROCESS_THREAD(mqtt_example_process, ev, data)
   /* At the moment it is up to the user to provide the underlying input and
    * output buffer.
    */
-  etimer_set(&light_sense_timer, CLOCK_SECOND*5);
+  etimer_set(&sensor_timer, CLOCK_SECOND*5);
   sprintf(clientid, "/%s/%x",UUID,nodeid);
   printf("\r\nMQTT Client ID : %s",clientid);
   mqtt_register(&conn, &mqtt_example_process, clientid, mqtt_event);
 
   mqtt_set_last_will(&conn, str_topic_state, "offline", MQTT_QOS_LEVEL_0);
   
-  /* IO1 Xpro Board initilization */
+
   static struct etimer et;
   etimer_set(&et, CLOCK_SECOND);
-  at30tse_init();
-  volatile uint16_t thigh = 0;
-  thigh = at30tse_read_register(AT30TSE_THIGH_REG,
-  AT30TSE_NON_VOLATILE_REG, AT30TSE_THIGH_REG_SIZE);
-   volatile uint16_t tlow = 0;
-   tlow = at30tse_read_register(AT30TSE_TLOW_REG,
-   AT30TSE_NON_VOLATILE_REG, AT30TSE_TLOW_REG_SIZE);
-   at30tse_write_config_register(
-   AT30TSE_CONFIG_RES(AT30TSE_CONFIG_RES_12_bit));
-  //etimer_set(&periodic_timer, CLOCK_SECOND*20);8
-   /* To keep compiler happy */
-   thigh = thigh;
-   tlow = tlow;
-   temp_C = at30tse_read_temperature();
+  
+ 
+	battery = sensors_find(BATTERY_SENSOR);
+	battery_sensor_init();
+	
+	
   
   /* Reconnect from here */
 
@@ -357,42 +315,31 @@ PROCESS_THREAD(mqtt_example_process, ev, data)
       }
 
 
-      if(etimer_expired(&light_sense_timer) && mqtt_ready(&conn)) {
+      if(etimer_expired(&sensor_timer) && mqtt_ready(&conn)) {
 	  button_sensor_value++;
         /* Send sensor data and blink led */
 		//leds_toggle(LEDS_RED);
 
 		// get timestamp
 		timestmp = clock_time();
-		
-		// read temperature sensor
-		temp_C = at30tse_read_temperature();	// Measure temp ( result in deg C
-		// convert to Fahrenheit
-		//temp_F = (temp_C*9.0+2.0)/5.0 +32.0;  // convert result to deg F ( add 2 for better rounding )
-		temp_F = (temp_C*9.0)/5.0 +32.0;		// convert result to deg F
-		int d1 = temp_F;						// Get the integer part .
-		float f2 = temp_F - d1;					// Get fractional part
-		//int d2 = trunc(f2 * 10000);			// Turn into integer
-		int d2 = (int)(f2 * 10000);				// Or this one: Turn into integer.
-		d2 = d2/100;
 
-		// Print as parts, note that you need 0-padding for fractional bit.
-		sprintf (temp_str, "%d.%d", d1, d2);
-		//printf("%s\r\n",str);
+		if(battery != NULL)
+		battery_v = battery->value(0);
+		get_sensor_value(TEMPERATURE,(sensor_result_t *) &temp);
+		sprintf (batt_str, "%d", battery_v);
+		temp.sensor_value*=100;
+		sprintf(temp_str, "%d.%d", ((int)temp.sensor_value/100), ((int)temp.sensor_value%100));
 		
-		// measure light intensity
-		light = measure_light();
-		sprintf(light_str,"%d", light);
+		/* 
+		* \" is escape sequence for Double Quotes.
+		*/	
+		sprintf(app_buffer,"%s%lu%s%s%s%s%s%s%s","{\"timestamp\": \"",timestmp,
+			"\",\"BATTERY\": \"",
+			batt_str,"\",\"TEMP\": \"", temp_str, "\",\"sender_id\": \"",
+		mac_adr_str,"\"}");
+		printf("\r\nAPP - Sending Battery sensor value %s Temp Sensor value %s  app buffer size %d\n",batt_str, temp_str, strlen(app_buffer));
+	
 		
-		// create payload for mqtt message
-		sprintf(app_buffer,"%s%lu%s%s%s%s%s%s%s","{\x22timestamp\x22: \x22",timestmp,
-			"\x22,\x22SENS_TEMPERATURE\x22: \x22",
-			temp_str,"\x22,\x22SENS_LIGHT_LEVEL\x22: \x22",
-			light_str,"\x22,\x22sender_id\x22: \x22",
-		mac_adr_str,"\x22}");        
-        //sprintf(app_buffer,"%s%s%s%s","temp: ",temp_str);
-		printf("\r\nAPP - Sending Light sensor value %s Temp sensor value %s app buffer size %d\n",light_str,temp_str,strlen(app_buffer));
-
         mqtt_publish(&conn,
                NULL,
                str_topic_sensor,
@@ -400,7 +347,8 @@ PROCESS_THREAD(mqtt_example_process, ev, data)
                strlen(app_buffer),
                MQTT_QOS_LEVEL_0,
                MQTT_RETAIN_OFF);
-        etimer_restart(&light_sense_timer);
+        etimer_restart(&sensor_timer);
+		
       }
     }
   }

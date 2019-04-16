@@ -37,7 +37,7 @@
  *         Adam Dunkels <adam@sics.se>
  *         Niclas Finne <nfi@sics.se>
  */
-
+#if (RDC == NULLRDC)
 #ifndef NULLRDC_H_
 #define NULLRDC_H_
 
@@ -46,3 +46,4 @@
 //extern const struct rdc_driver nullrdc_driver;
 
 #endif /* NULLRDC_H_ */
+#endif /* (RDC == NULLRDC) */

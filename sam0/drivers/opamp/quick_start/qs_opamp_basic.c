@@ -74,13 +74,13 @@ void configure_non_inverting_pga_opamp0(void)
 	conf.config_common.r2_out = true;
 	//! [setup_4]
 
-	/* Set up OA0NEG pin and OA0OUT pin. */
+	/* Set up OA0POS pin and OA0OUT pin. */
 	//! [setup_5]
-	struct system_pinmux_config opamp0_neg_pin_conf;
-	system_pinmux_get_config_defaults(&opamp0_neg_pin_conf);
-	opamp0_neg_pin_conf.direction    = SYSTEM_PINMUX_PIN_DIR_INPUT;
-	opamp0_neg_pin_conf.mux_position = MUX_PA06B_OPAMP_OAPOS0;
-	system_pinmux_pin_set_config(PIN_PA06B_OPAMP_OAPOS0, &opamp0_neg_pin_conf);
+	struct system_pinmux_config opamp0_pos_pin_conf;
+	system_pinmux_get_config_defaults(&opamp0_pos_pin_conf);
+	opamp0_pos_pin_conf.direction    = SYSTEM_PINMUX_PIN_DIR_INPUT;
+	opamp0_pos_pin_conf.mux_position = MUX_PA06B_OPAMP_OAPOS0;
+	system_pinmux_pin_set_config(PIN_PA06B_OPAMP_OAPOS0, &opamp0_pos_pin_conf);
 	struct system_pinmux_config opamp0_out_pin_conf;
 	system_pinmux_get_config_defaults(&opamp0_out_pin_conf);
 	opamp0_out_pin_conf.direction    = SYSTEM_PINMUX_PIN_DIR_OUTPUT;

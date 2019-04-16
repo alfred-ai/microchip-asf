@@ -78,22 +78,6 @@
 #define rHAVE_LEGACY_RF_SETTINGS    (NBIT5)
 #define rHAVE_LOGS_DISABLED_BIT		(NBIT6)
 
-/**
-*  @struct		tstrM2mWifiGetRevision
-*  @brief		Structure holding firmware version parameters
-*  @sa			M2M_WIFI_AUTH_WEB, M2M_WIFI_AUTH_WPA, M2M_WIFI_AUTH_WPA2
-*/
-typedef struct {
-	uint8 u8FirmwareMajor; /* Version Major Number which represents the official release base */
-	uint8 u8FirmwareMinor; /* Version Minor Number which represents the engineering release base */
-	uint8 u8FirmwarePatch;	/* Version pathc Number which represents the pathces release base */
-	uint8 u8DriverMajor; /* Version Major Number which represents the official release base */
-	uint8 u8DriverMinor; /* Version Minor Number which represents the engineering release base */
-	uint8 u8DriverPatch; /* Version Patch Number which represents the pathces release base */
-	uint8 BuildDate[sizeof(__DATE__)];
-	uint8 BuildTime[sizeof(__TIME__)];
-	uint32 u32Chipid; /* HW revision which will be basically the chip ID */
-} tstrM2mRev;
 
 #ifdef __cplusplus
      extern "C" {

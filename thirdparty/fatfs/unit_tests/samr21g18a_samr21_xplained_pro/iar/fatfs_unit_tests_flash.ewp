@@ -2559,9 +2559,30 @@
 								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/instance/pac0.h</name>
 							</file>
 						</group>
-						<file>
-							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e17a.h</name>
-						</file>
+						<group>
+							<name>pio</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e16a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e18a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g17a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e17a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g16a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g18a.h</name>
+							</file>
+						</group>
 						<group>
 							<name>component</name>
 							<file>
@@ -2634,29 +2655,14 @@
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e16a.h</name>
 						</file>
-						<group>
-							<name>pio</name>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e18a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e16a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g17a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21e17a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g16a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/pio/samr21g18a.h</name>
-							</file>
-						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21g18a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../sam0/utils/cmsis/samr21/include/samr21e18a.h</name>

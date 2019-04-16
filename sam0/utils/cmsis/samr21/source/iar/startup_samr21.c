@@ -103,7 +103,6 @@ void Dummy_Handler(void);
 #ifdef       ID_PTC
 #pragma weak PTC_Handler              = Dummy_Handler
 #endif
-#pragma weak I2S_Handler              = Dummy_Handler
 
 /* Exception Table */
 #pragma language = extended
@@ -197,8 +196,8 @@ const DeviceVectors __vector_table[] = {
 #else
         (void*) (0UL), /* Reserved*/
 #endif
-        (void*) I2S_Handler,            /* 27 Inter-IC Sound Interface */
-        (void*) (0UL), /* Reserved */
+        (void*) (0UL), /* Reserved*/
+        (void*) (0UL)  /* Reserved */
 };
 
 /**------------------------------------------------------------------------------

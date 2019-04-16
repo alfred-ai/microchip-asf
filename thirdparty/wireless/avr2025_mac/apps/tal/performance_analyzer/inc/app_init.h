@@ -50,9 +50,10 @@
 #ifndef APP_INIT_H
 #define APP_INIT_H
 
-# include "tal.h"
+#include "tal.h"
 #include "string.h"
-# include "app_config.h"
+#include "app_config.h"
+#include "user_interface.h"
 
 /**
  * \defgroup group_perf_analyzer Performance Analyzer Application
@@ -73,7 +74,7 @@
 
 /* === Macros =============================================================== */
 /* Version of the software */
-#define FIRMWARE_VERSION   3.0f
+#define FIRMWARE_VERSION   3.2
 
 #if ((TAL_TYPE == AT86RF212) || (TAL_TYPE == AT86RF212B))
 #define DEFAULT_CHANNEL         (1)

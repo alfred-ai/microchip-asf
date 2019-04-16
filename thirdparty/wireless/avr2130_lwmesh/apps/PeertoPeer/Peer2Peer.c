@@ -55,7 +55,7 @@
 #include <string.h>
 #include "config.h"
 #include "sys.h"
-#if SAMD || SAMR21
+#if SAMD || SAMR21 || SAML21
 #include "system.h"
 #else
 #include "led.h"
@@ -208,7 +208,7 @@ static void APP_TaskHandler(void)
 int main(void)
 {
 	irq_initialize_vectors();
-	#if SAMD || SAMR21
+	#if SAMD || SAMR21 || SAML21
 	system_init();
 	delay_init();
 	#else

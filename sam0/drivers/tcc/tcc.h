@@ -2007,8 +2007,10 @@ static inline void tcc_dma_trigger_command(
 			/* Wait for sync */
 	}
 
+#if (SAML21XXXB)
 	/* Write command to execute */
-	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD_DMATRG;
+	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD_DMAOS;
+#endif
 }
 /** @} */
 #endif

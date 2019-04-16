@@ -1376,6 +1376,7 @@ packet_sent(void *ptr, int status, int transmissions)
   }
   last_tx_status = status;
   PRINTF ("Last TX status = %d", last_tx_status);
+  
 }
 /*--------------------------------------------------------------------*/
 /**
@@ -1580,7 +1581,7 @@ output(const uip_lladdr_t *localdest)
      // Temporary WA until MAC HW_ACK feature works.
      //  Safety delay between fragments - to account for
      // the receiver processing and acknowledging time for previous frag.
-     delay_ms (5);
+     delay_ms (15);
 
     /* set processed_ip_out_len to what we already sent from the IP payload*/
     processed_ip_out_len = tx_payload_len + uncomp_hdr_len;
@@ -1636,7 +1637,7 @@ output(const uip_lladdr_t *localdest)
       // Temporary WA until MAC HW_ACK feature works.
       //  Safety delay between fragments - to account for
       // the receiver processing and acknowledging time for previous frag.
-      delay_ms (5);
+      delay_ms (15);
 
     }
 #else /* SICSLOWPAN_CONF_FRAG */

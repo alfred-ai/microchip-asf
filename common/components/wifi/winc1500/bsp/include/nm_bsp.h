@@ -46,16 +46,12 @@
 #define _NM_BSP_H_
 
 #define NMI_API
-/*!<
+/*!< 
 *        Attribute used to define memory section to map Functions in host memory.
 */
-
-#ifdef __MCF964548__
-#define CONST code
-#else
 #define CONST const
-#endif
-/*!<
+
+/*!< 
 *     Used for code portability.
 */
 
@@ -251,8 +247,8 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr);
  * @fn           void nm_bsp_interrupt_ctrl(uint8);
  * @brief        Enable/Disable interrupts
  * @param [in]   u8Enable
- *               '0' disable interrupts. '1' enable interrupts
- * @see          tpfNmBspIsr
+ *               '0' disable interrupts. '1' enable interrupts 
+ * @see          tpfNmBspIsr           
  * @note         Implementation of this function is host dependent and called by HIF layer.
  * @return       None
 
@@ -264,62 +260,6 @@ void nm_bsp_interrupt_ctrl(uint8 u8Enable);
 }
 #endif
 
-#endif
-
-#ifdef WIN32
-#include "nm_bsp_win32.h"
-#endif
-
-#ifdef __K20D50M__
-#include "nm_bsp_k20d50m.h"
-#endif
-
-#ifdef __MSP430FR5739__
-#include "bsp_msp430fr5739.h"
-#endif
-
-#ifdef _FREESCALE_MCF51CN128_
-#include "bsp/include/nm_bsp_mcf51cn128.h"
-#endif
-
-#ifdef __MCF964548__
-#include "bsp/include/nm_bsp_mc96f4548.h"
-#endif
-
-#ifdef __APP_APS3_CORTUS__
-#include "nm_bsp_aps3_cortus.h"
-#endif
-
-#if (defined __SAML21J18A__)
-#include "bsp/include/nm_bsp_saml21.h"
-#endif
-
-#if (defined __SAMD21J18A__) || (defined __SAMD21G18A__)
-#include "bsp/include/nm_bsp_samd21.h"
-#endif
-
-#if (defined __SAM4S16C__) || (defined __SAM4SD32C__)
-#include "bsp/include/nm_bsp_sam4s.h"
-#endif
-
-#ifdef __SAMG53N19__
-#include "bsp/include/nm_bsp_samg53.h"
-#endif
-
-#ifdef __SAMG55J19__
-#include "bsp/include/nm_bsp_samg55.h"
-#endif
-
-#ifdef CORTUS_APP
-#include "crt_iface.h"
-#endif
-
-#ifdef NRF51
-#include "nm_bsp_nrf51822.h"
-#endif
-
-#ifdef _ARDUINO_UNO_
-#include "bsp/include/nm_bsp_arduino_uno.h"
 #endif
 
 #ifdef _NM_BSP_BIG_END

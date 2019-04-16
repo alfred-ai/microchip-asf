@@ -212,6 +212,8 @@ const DeviceVectors __vector_table[] = {
 #endif
 #ifdef ID_AC1
         (void*) AC1_Handler             /* 28 Analog Comparators 1 */
+#else
+        (void*) (0UL)  /* Reserved*/
 #endif
 };
 

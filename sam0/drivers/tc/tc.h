@@ -475,7 +475,10 @@
 #  define FEATURE_TC_READ_SYNC
 /** IO pin edge capture. */
 #  define FEATURE_TC_IO_CAPTURE
-/** Generate DMA triggers. */
+#endif
+
+#if (SAML21XXXB) || defined(__DOXYGEN__)
+/** Generate DMA triggers*/
 #  define FEATURE_TC_GENERATE_DMA_TRIGGER
 #endif
 /*@}*/
@@ -504,7 +507,11 @@
 
 /** TC Instance MAX ID Number. */
 #if SAMD20E || SAMD21G || SAMD21E || SAMR21
-#define TC_INST_MAX_ID  5
+#  if SAMD21GXXL
+#    define TC_INST_MAX_ID  7
+#  else
+#    define TC_INST_MAX_ID  5
+#  endif
 #elif SAML21 || SAMC20 || SAMC21
 #define TC_INST_MAX_ID  4
 #elif SAMD10 || SAMD11
@@ -1449,11 +1456,7 @@ static inline void tc_dma_trigger_command(
 		/* Wait for sync */
 	}
 
-#if SAML21
-	/* Write command to execute */
-	tc_module->CTRLBSET.reg = TC_CTRLBSET_CMD(TC_CTRLBSET_CMD_DMATRG_Val);
-#endif
-#if (SAMC20) || (SAMC21)
+#if (SAMC20) || (SAMC21) || (SAML21XXXB)
 	/* Write command to execute */
 	tc_module->CTRLBSET.reg = TC_CTRLBSET_CMD(TC_CTRLBSET_CMD_DMAOS_Val);
 #endif

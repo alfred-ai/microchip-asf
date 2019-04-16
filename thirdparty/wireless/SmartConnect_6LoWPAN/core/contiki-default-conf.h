@@ -239,5 +239,9 @@
 #define CONTIKIMAC_CONF_WITH_PHASE_OPTIMIZATION 0
 #endif /* CONTIKIMAC_CONF_WITH_PHASE_OPTIMIZATION */
 
+/* HW_CSMA_FRAME_RETRIES enables HW CSMA and frame retries using Transceiver Hw accelerators*/
+#ifndef HW_CSMA_FRAME_RETRIES
+#define HW_CSMA_FRAME_RETRIES 0
+#endif
 
 #endif /* CONTIKI_DEFAULT_CONF_H */

@@ -55,7 +55,7 @@
 /* === Includes ============================================================ */
 #include "compiler.h"
 
-#if (SAMD || SAMR21 || SAM4L || SAM4S || SAM4E)
+#if (SAMD || SAMR21 || SAML21 || SAM4L || SAM4S || SAM4E)
  #define __PACK__RST_DATA__  COMPILER_PACK_RESET()
  #define __PACK__DATA__          COMPILER_PACK_SET(1)
 #if (SAM4L || SAM4S || SAM4E)

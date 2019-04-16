@@ -36,6 +36,13 @@
 
 #include "asf.h"
 
+#if _DEBUG_
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
+#endif
+
 
   /*
     4.3.1 Information Interface
@@ -90,6 +97,7 @@ uint8_t*  edbg_eui_read_eui64(void);
 #define SLAVE_ADDRESS 0x28
 
 #define TIMEOUT 1000
+#define SLAVE_WAIT_TIMEOUT 10
 struct i2c_master_module i2c_master_instance;
 
 /* Must read out the full 256 bytes of memory from the EDBG, otherwise
@@ -101,9 +109,9 @@ uint8_t readbuf[LEN_EUI];
 uint8_t *
 edbg_eui_read_eui64(void)
 {
-  //int i;
-  int timeout = 0;
-
+  int timeout=0,timeout2 = 0;
+  bool random_mac_address = false;
+  uint8_t edbg_status = 0xFF;
   struct i2c_master_config config_i2c_master;
   i2c_master_get_config_defaults(&config_i2c_master);
   config_i2c_master.pinmux_pad0  = EDBG_I2C_SERCOM_PINMUX_PAD0;
@@ -121,33 +129,53 @@ edbg_eui_read_eui64(void)
     .high_speed      = false,
     .hs_master_code  = 0x0,
   };
-
-  while(i2c_master_write_packet_wait_no_stop(&i2c_master_instance, &packet) !=
-         STATUS_OK) {
-    /* Increment timeout counter and check if timed out. */
-    if(timeout++ == TIMEOUT) {
-      printf("Timeout 1\n");
-      break;
-    }
-  }
-
+   
+    do
+    {
+	    edbg_status = i2c_master_write_packet_wait_no_stop(&i2c_master_instance, &packet);
+	    if(edbg_status==STATUS_ERR_BAD_ADDRESS)
+		{
+			if(timeout2++ == SLAVE_WAIT_TIMEOUT)
+			{				
+				PRINTF("I2C Slave Not Available");
+				random_mac_address = true;
+				break;
+			}
+		}
+		if(timeout++ == TIMEOUT) {
+		PRINTF("Timeout 1\n");
+		random_mac_address = true;		
+		break;
+		}
+    } while (edbg_status!=STATUS_OK && edbg_status!=0xFF);
+	
   packet.data = readbuf;
   packet.data_length = sizeof(readbuf);
-  while(i2c_master_read_packet_wait(&i2c_master_instance, &packet) !=
-         STATUS_OK) {
-    /* Increment timeout counter and check if timed out. */
-    if(timeout++ == TIMEOUT) {
-      printf("Timeout 2\n");
-      break;
-    }
-  }
 
-  /*  for(i = 0; i < LEN_EUI; i++) {
-    printf("0x%02x ", readbuf[i]);
-  }
-  
-  printf("\n");*/
+  do 
+  {
+	  edbg_status = i2c_master_read_packet_wait(&i2c_master_instance, &packet) ;
+	    if(edbg_status==STATUS_ERR_BAD_ADDRESS)
+	    {			
+			PRINTF("I2C Slave Not Available");
+			random_mac_address = true;	
+		    break;
+	    }
+		if(timeout++ == TIMEOUT) {
+			random_mac_address = true;	
+			PRINTF("Timeout 2\n");
+			break;
+		}		
+  } while (edbg_status!=STATUS_OK && edbg_status!=0xFF);
+
   i2c_master_reset(&i2c_master_instance);
+  if(random_mac_address)
+  {
+	  for (uint8_t i = 0; i < 8; i++) {
+		  *(readbuf+i) = rand();
+	  }
+	  
+  }
   return readbuf;
 }
 /*---------------------------------------------------------------------------*/

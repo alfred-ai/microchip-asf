@@ -568,7 +568,7 @@ enum status_code rtc_calendar_set_alarm(
 /**
  * \brief Get the current alarm time of specified alarm.
  *
- * Retrieves the current alarm time for the alarm specified.
+ * Retrieves the current alarm time for the specified alarm.
  *
  * \param[in, out] module  Pointer to the software instance struct
  * \param[out] alarm  Pointer to the struct that will be filled with alarm

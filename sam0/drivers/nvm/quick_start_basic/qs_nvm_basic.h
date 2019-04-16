@@ -53,7 +53,7 @@
  *  \li No protected bootloader section
  *
  * This use case sets up the NVM controller to write a page of data to flash,
- * and the read it back into the same buffer.
+ * and then read it back into the same buffer.
  *
  * \section asfdoc_sam0_nvm_basic_use_case_setup Setup
  *
@@ -77,10 +77,10 @@
  *    \note This should always be performed before using the configuration
  *          struct to ensure that all values are initialized to known default
  *          settings.
- * -# Enable automatic page write mode, The new data will be write to NVM automatic.
+ * -# Enable automatic page write mode. The new data will be written to NVM automaticly.
  *    \snippet qs_nvm_basic.c setup_3
  *    \note If automatic page write mode is disabled, the data will not write to NVM
- *    		until the nvm write command was been invoked. For safe use NVM module,
+ *    		until the NVM write command was been invoked. For safe use NVM module,
  *    		disable automatic page write mode and use write command to commit data is
  *    		recommended.
  *

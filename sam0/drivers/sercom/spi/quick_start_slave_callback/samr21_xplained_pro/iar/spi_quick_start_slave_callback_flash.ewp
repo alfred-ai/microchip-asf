@@ -2044,7 +2044,7 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/sercom3.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/tc3.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/evsys.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/adc.h</name>
@@ -2074,10 +2074,10 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/eic.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/evsys.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/nvmctrl.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/nvmctrl.h</name>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/tc3.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/instance/usb.h</name>
@@ -2146,6 +2146,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21g17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
 							<file>
@@ -2166,6 +2169,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21g18a.h</name>

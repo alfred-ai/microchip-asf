@@ -45,5 +45,8 @@ int rf_set_channel(uint8_t ch);
 int rf233_get_txp(void);
 int rf233_set_txp(uint8_t txp);
 uint8_t rf233_status(void);
+void SetIEEEAddr(uint8_t *ieee_addr);
+void SetPanId(uint16_t panId);
+void SetShortAddr(uint16_t addr);
 /*---------------------------------------------------------------------------*/
 #endif  /* _RF233_H_ */

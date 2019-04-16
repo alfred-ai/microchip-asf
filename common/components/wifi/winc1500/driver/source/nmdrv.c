@@ -44,6 +44,7 @@
 #include "bsp/include/nm_bsp.h"
 #include "driver/source/nmdrv.h"
 #include "driver/source/nmasic.h"
+#include "driver/include/m2m_types.h"
 
 #ifdef CONF_WINC_USE_SPI
 #include "driver/source/nmspi.h"
@@ -59,7 +60,7 @@
 *   @date		27 MARCH 2013
 *	@version	1.0
 */
-static sint8 nm_get_firmware_info(tstrM2mRev* M2mRev)
+sint8 nm_get_firmware_info(tstrM2mRev* M2mRev)
 {
 	uint16  curr_drv_ver, min_req_drv_ver,curr_firm_ver;
 	uint32	reg = 0;
@@ -106,7 +107,7 @@ static sint8 nm_get_firmware_info(tstrM2mRev* M2mRev)
 sint8 nm_drv_init_download_mode()
 {
 	sint8 ret = M2M_SUCCESS;
-	
+
 	ret = nm_bus_iface_init(NULL);
 	if (M2M_SUCCESS != ret) {
 		M2M_ERR("[nmi start]: fail init bus\n");
@@ -114,13 +115,13 @@ sint8 nm_drv_init_download_mode()
 	}
 
 
-#ifdef USE_SPI
+#ifdef CONF_WINC_USE_SPI
 	/* Must do this after global reset to set SPI data packet size. */
 	nm_spi_init();
 #endif
 
 	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
-	
+
 	/*disable all interrupt in ROM (to disable uart) in 2b0 chip*/
 	nm_write_reg(0x20300,0);
 
@@ -181,7 +182,7 @@ sint8 nm_drv_init(void * arg)
 	}
 #endif
 	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
-#ifdef USE_SPI
+#ifdef CONF_WINC_USE_SPI
 	/* Must do this after global reset to set SPI data packet size. */
 	nm_spi_init();
 #endif
@@ -221,19 +222,17 @@ sint8 nm_drv_init(void * arg)
 	M2M_INFO("Firmware ver   : %u.%u.%u\n", strtmp.u8FirmwareMajor, strtmp.u8FirmwareMinor, strtmp.u8FirmwarePatch);
 	M2M_INFO("Min driver ver : %u.%u.%u\n", strtmp.u8DriverMajor, strtmp.u8DriverMinor, strtmp.u8DriverPatch);
 	M2M_INFO("Curr driver ver: %u.%u.%u\n", M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
-	
+
 	if(strtmp.u8FirmwareMajor != M2M_DRIVER_VERSION_MAJOR_NO
 			|| strtmp.u8FirmwareMinor != M2M_DRIVER_VERSION_MINOR_NO)
 	{
 		ret = M2M_ERR_FW_VER_MISMATCH;
-		M2M_ERR("Mismatch Firmawre Version\n");
+		M2M_ERR("Firmware version mismatch!\n");
 	}
-
-
 	return ret;
 ERR2:
 	nm_bus_iface_deinit();
-ERR1:	
+ERR1:
 	return ret;
 }
 
@@ -244,10 +243,10 @@ ERR1:
 *	@date	17 July 2012
 *	@version	1.0
 */
-sint8 nm_drv_deinit(void * arg) 
+sint8 nm_drv_deinit(void * arg)
 {
 	sint8 ret;
-	
+
 	ret = chip_deinit();
 	if (M2M_SUCCESS != ret) {
 		M2M_ERR("[nmi stop]: chip_deinit fail\n");
@@ -259,7 +258,7 @@ sint8 nm_drv_deinit(void * arg)
 		M2M_ERR("[nmi stop]: fail init bus\n");
 		goto ERR1;
 	}
-#ifdef USE_SPI
+#ifdef CONF_WINC_USE_SPI
 	/* Must do this after global reset to set SPI data packet size. */
 	nm_spi_deinit();
 #endif

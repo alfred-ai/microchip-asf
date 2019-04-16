@@ -36,7 +36,7 @@
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
-
+#if (RDC == CONTIKIMAC)
 #ifndef CONTIKIMAC_H
 #define CONTIKIMAC_H
 
@@ -47,3 +47,4 @@
 extern const struct rdc_driver contikimac_driver;
 
 #endif /* CONTIKIMAC_H */
+#endif /* (RDC == CONTIKIMAC) */

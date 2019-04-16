@@ -36,7 +36,7 @@
  * \author
  *         Adam Dunkels <adam@sics.se>
  */
-
+#if (MAC == NULLMAC)
 #ifndef NULLMAC_H_
 #define NULLMAC_H_
 
@@ -47,3 +47,4 @@ extern const struct mac_driver nullmac_driver;
 
 
 #endif /* NULLMAC_H_ */
+#endif /* (MAC == NULLMAC) */

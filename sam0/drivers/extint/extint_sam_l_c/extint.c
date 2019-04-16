@@ -313,13 +313,14 @@ void extint_chan_set_config(
 			~((EIC_CONFIG_SENSE0_Msk | EIC_CONFIG_FILTEN0) << config_pos)) |
 			(new_config << config_pos);
 
+#if (SAML21XXXB)
 	/* Config asynchronous edge detection */
 	if (config->enable_async_edge_detection) {
-		EIC_module->EIC_ASYNCH.reg |= (1UL << channel);
+		EIC_module->ASYNCH.reg |= (1UL << channel);
 	} else {
-		EIC_module->EIC_ASYNCH.reg &= (EIC_EIC_ASYNCH_MASK & (~(1UL << channel)));
+		EIC_module->ASYNCH.reg &= (EIC_ASYNCH_MASK & (~(1UL << channel)));
 	}
-
+#endif
 	_extint_enable();
 }
 
@@ -372,11 +373,13 @@ enum status_code extint_nmi_set_config(
 		new_config |= EIC_NMICTRL_NMIFILTEN;
 	}
 
+#if (SAML21XXXB)
 	/* Enable asynchronous edge detection if requested in the config */
 	if (config->enable_async_edge_detection) {
 		new_config |= EIC_NMICTRL_NMIASYNCH;
 	}
-
+#endif
+	
 	/* Disable EIC and general clock to configure NMI */
 	_extint_disable();
 #if(EXTINT_CLOCK_SELECTION == EXTINT_CLK_GCLK)

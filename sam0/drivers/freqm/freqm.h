@@ -50,7 +50,7 @@
 /**
  * \defgroup asfdoc_sam0_freqm_group SAM Frequency Meter (FREQM) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
  * and management of the device's Frequency Meter functionality.
  *
  * The following driver API modes are covered by this manual:
@@ -59,7 +59,7 @@
  * - Callback APIs
  * \endif
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - FREQM (Frequency Meter)
  *
  * The following devices can use this module:
@@ -90,7 +90,7 @@
  * \f]
  * Ratio can be measured with 24-bit accuracy.
  *
- * The FREQM has one interrupt source, which generates when a frequency measurement 
+ * The FREQM has one interrupt source, which generates when a frequency measurement
  * is done. It can be used to wake up the device from sleep modes.
  *
  * This driver provides an interface for the FREQM functions on the device.
@@ -419,8 +419,8 @@ enum freqm_status freqm_get_result_value(
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>06/2015</td>
+ *		<td>42506A</td>
+ *		<td>08/2015</td>
  *		<td>Initial document release</td>
  *	</tr>
  * </table>

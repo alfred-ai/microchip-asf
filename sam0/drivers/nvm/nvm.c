@@ -273,7 +273,7 @@ enum status_code nvm_execute_command(
 	/* Set command */
 	nvm_module->CTRLA.reg = command | NVMCTRL_CTRLA_CMDEX_KEY;
 
-	/* Wait for the nvm controller to become ready */
+	/* Wait for the NVM controller to become ready */
 	while (!nvm_is_ready()) {
 	}
 
@@ -403,11 +403,11 @@ enum status_code nvm_update_buffer(
  *       row should be erased (via \ref nvm_erase_row()) before attempting to
  *       write new data to the page.
  *
- * \note For SAMD21 RWW devices, see \c SAMD21_64K, command \c NVM_COMMAND_RWWEE_WRITE_PAGE
+ * \note For SAM D21 RWW devices, see \c SAMD21_64K, command \c NVM_COMMAND_RWWEE_WRITE_PAGE
  * must be executed before any other commands after writing a page,
  * refer to errata 13588.
  *
- * \note If manual write mode is enable, write command must be executed after
+ * \note If manual write mode is enabled, the write command must be executed after
  * this function, otherwise the data will not write to NVM from page buffer.
  *
  * \return Status of the attempt to write a page.
@@ -672,7 +672,7 @@ enum status_code nvm_erase_row(
 /**
  * \brief Reads the parameters of the NVM controller.
  *
- * Retrieves the page size, number of pages and other configuration settings
+ * Retrieves the page size, number of pages, and other configuration settings
  * of the NVM region.
  *
  * \param[out] parameters    Parameter structure, which holds page size and

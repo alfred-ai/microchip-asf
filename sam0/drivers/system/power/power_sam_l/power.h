@@ -125,6 +125,22 @@ enum system_linked_power_domain {
 	SYSTEM_LINKED_POWER_DOMAIN_PD012     = PM_STDBYCFG_LINKPD_PD012_Val,
 };
 
+#if (SAML21XXXB)
+/**
+ * \brief VREG switching mode.
+ *
+ * List of VREG switching modes.
+ */
+enum system_vreg_switch_mode {
+	/** Automatic mode. */
+	SYSTEM_SYSTEM_VREG_SWITCH_AUTO = 0,
+	/** Performance oriented. */
+	SYSTEM_SYSTEM_VREG_SWITCH_PERFORMANCE,
+	/** Low Power consumption oriented. */
+	SYSTEM_SYSTEM_VREG_SWITCH_LP,
+};
+#endif
+
 /**
  * \brief Power domain.
  *
@@ -251,8 +267,13 @@ struct system_standby_config {
 	bool enable_dpgpd0;
 	/** Enable dynamic power gating for power domain 1 */
 	bool enable_dpgpd1;
-	/** Automatic VREG switching disable */
+#if (SAML21XXXA)
+	/** Automatic VREG switching disable. */
 	bool disable_avregsd;
+#else
+	/** VREG switching mode */
+	enum system_vreg_switch_mode vregs_mode;
+#endif
 	/** Linked power domain */
 	enum system_linked_power_domain linked_power_domain;
 	/** Back bias for HMCRAMCHS */
@@ -350,7 +371,9 @@ static inline void system_voltage_regulator_set_config(
 	SUPC->VREG.bit.VSVSTEP  = config->voltage_scale_step;
 	SUPC->VREG.bit.RUNSTDBY = config->run_in_standby;
 	SUPC->VREG.bit.SEL      = config->regulator_sel;
+#if (SAML21XXXB)
 	SUPC->VREG.bit.LPEFF    = config->low_power_efficiency;
+#endif
 	while(!(SUPC->STATUS.reg & SUPC_STATUS_VREGRDY)) {
 		;
 	}
@@ -819,7 +842,11 @@ static inline void system_standby_get_config_defaults(
 	config->power_domain        = SYSTEM_POWER_DOMAIN_DEFAULT;
 	config->enable_dpgpd0       = false;
 	config->enable_dpgpd1       = false;
+#if (SAML21XXXB)
+	config->vregs_mode          = SYSTEM_SYSTEM_VREG_SWITCH_AUTO;
+#else
 	config->disable_avregsd     = false;
+#endif
 	config->linked_power_domain = SYSTEM_LINKED_POWER_DOMAIN_DEFAULT;
 	config->hmcramchs_back_bias = SYSTEM_RAM_BACK_BIAS_RETENTION;
 	config->hmcramclp_back_bias = SYSTEM_RAM_BACK_BIAS_RETENTION;
@@ -840,7 +867,11 @@ static inline void system_standby_set_config(
 	PM->STDBYCFG.reg = PM_STDBYCFG_PDCFG(config->power_domain)
 					 | (config->enable_dpgpd0 << PM_STDBYCFG_DPGPD0_Pos)
 					 | (config->enable_dpgpd1 << PM_STDBYCFG_DPGPD1_Pos)
+#if (SAML21XXXB)
+					 | PM_STDBYCFG_VREGSMOD(config->vregs_mode)
+#else
 					 | (config->disable_avregsd << PM_STDBYCFG_AVREGSD_Pos)
+#endif
 					 | PM_STDBYCFG_LINKPD(config->linked_power_domain)
 					 | PM_STDBYCFG_BBIASHS(config->hmcramchs_back_bias)
 					 | PM_STDBYCFG_BBIASLP(config->hmcramclp_back_bias);

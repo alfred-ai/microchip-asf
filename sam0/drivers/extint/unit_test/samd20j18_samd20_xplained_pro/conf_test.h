@@ -56,7 +56,7 @@
 #define CONF_STDIO_BAUDRATE       38400
 
 /* GPIO pin used for testing the interrupts */
-#define GPIO_TEST_PIN_EXTINT  EXT1_PIN_10
+#define GPIO_TEST_PIN_EXTINT  EXT1_PIN_11
 
 #define EIC_TEST_CHANNEL      EXT1_IRQ_INPUT
 #define EIC_TEST_PIN          EXT1_IRQ_PIN

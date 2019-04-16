@@ -157,18 +157,12 @@ enum system_interrupt_vector {
 	SYSTEM_INTERRUPT_MODULE_ADC        = ADC_IRQn,
 	/** Interrupt vector index for a Digital-to-Analog peripheral interrupt. */
 	SYSTEM_INTERRUPT_MODULE_DAC        = DAC_IRQn,
-	/** Interrupt vector index for a Peripheral Touch Controller peripheral
-	 *  interrupt. */
+	/** Interrupt vector index for a Peripheral Touch Controller peripheral interrupt. */
 	SYSTEM_INTERRUPT_MODULE_PTC        = PTC_IRQn,
-	/** Interrupt vector index for a AES peripheral
-	 *  interrupt. */
+	/** Interrupt vector index for a AES peripheral interrupt. */
 	SYSTEM_INTERRUPT_MODULE_AES        = AES_IRQn,
-	/** Interrupt vector index for a TRNG peripheral
-	 *  interrupt. */
+	/** Interrupt vector index for a TRNG peripheral interrupt. */
 	SYSTEM_INTERRUPT_MODULE_TRNG       = TRNG_IRQn,
-	/** Interrupt vector index for a PICOP peripheral
-	 *  interrupt. */
-	SYSTEM_INTERRUPT_MODULE_PICOP      = PICOP_IRQn,
 };
 
 /** @} */

@@ -2164,6 +2164,9 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/tc3.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/pm.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/sercom3.h</name>
 							</file>
 							<file>
@@ -2206,9 +2209,6 @@
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/rtc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/pm.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/instance/mtb.h</name>
 							</file>
 							<file>
@@ -2228,9 +2228,6 @@
 							<name>component</name>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/component/tcc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/component/hmatrixb.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/component/usb.h</name>
@@ -2264,6 +2261,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/component/rfctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/component/hmatrixb.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/component/sercom.h</name>
@@ -2313,9 +2313,15 @@
 							<file>
 								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
 						</group>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../utils/cmsis/samr21/include/samr21g18a.h</name>

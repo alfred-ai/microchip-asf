@@ -57,18 +57,30 @@ MACROS
 #define rInterrupt_CORTUS_1				(0x10ac)
 #define rInterrupt_CORTUS_2				(0x10b0)
 
-#define rBurstTx_NMI_TX_RATE			(0x161d00)
-#define rBurstTx_NMI_NUM_TX_FRAMES		(0x161d04)
-#define rBurstTx_NMI_TX_FRAME_LEN		(0x161d08)
-#define rBurstTx_NMI_TX_CW_PARAM		(0x161d0c)
-#define rBurstTx_NMI_TX_GAIN			(0x161d10)
-#define rBurstTx_NMI_TX_DPD_CTRL		(0x161d14)
-#define rBurstTx_NMI_USE_PMU			(0x161d18)
-#define rBurstTx_NMI_TEST_CH			(0x161d1c)
-#define rBurstTx_NMI_TX_PHY_CONT		(0x161d20)
-#define rBurstTx_NMI_TX_CW_MODE			(0x161d24)
-#define rBurstTx_NMI_TEST_XO_OFF		(0x161d28)
-#define rBurstTx_NMI_USE_EFUSE_XO_OFF   (0x161d2c)
+#define rBurstTx_NMI_TX_RATE				(0x161d00)
+#define rBurstTx_NMI_NUM_TX_FRAMES			(0x161d04)
+#define rBurstTx_NMI_TX_FRAME_LEN			(0x161d08)
+#define rBurstTx_NMI_TX_CW_PARAM			(0x161d0c)
+#define rBurstTx_NMI_TX_GAIN				(0x161d10)
+#define rBurstTx_NMI_TX_DPD_CTRL			(0x161d14)
+#define rBurstTx_NMI_USE_PMU				(0x161d18)
+#define rBurstTx_NMI_TEST_CH				(0x161d1c)
+#define rBurstTx_NMI_TX_PHY_CONT			(0x161d20)
+#define rBurstTx_NMI_TX_CW_MODE				(0x161d24)
+#define rBurstTx_NMI_TEST_XO_OFF			(0x161d28)
+#define rBurstTx_NMI_USE_EFUSE_XO_OFF 		(0x161d2c)
+
+#define rBurstTx_NMI_MAC_FILTER_ENABLE_DA 	(0x161d30)
+#define rBurstTx_NMI_MAC_ADDR_LO_PEER 		(0x161d34)
+#define rBurstTx_NMI_MAC_ADDR_LO_SELF 		(0x161d38)
+#define rBurstTx_NMI_MAC_ADDR_HI_PEER 		(0x161d3c)
+#define rBurstTx_NMI_MAC_ADDR_HI_SELF		(0x161d40)
+#define rBurstTx_NMI_RX_PKT_CNT_SUCCESS 	(0x161d44)
+#define rBurstTx_NMI_RX_PKT_CNT_FAIL 		(0x161d48)
+#define rBurstTx_NMI_SET_SELF_MAC_ADDR 		(0x161d4c)
+#define rBurstTx_NMI_MAC_ADDR_LO_SA 		(0x161d50)
+#define rBurstTx_NMI_MAC_ADDR_HI_SA 		(0x161d54)
+#define rBurstTx_NMI_MAC_FILTER_ENABLE_SA 	(0x161d58)
 
 #define rBurstRx_NMI_RX_ALL_PKTS_CONT	(0x9898)
 #define rBurstRx_NMI_RX_ERR_PKTS_CONT	(0x988c)
@@ -296,8 +308,10 @@ sint8 m2m_ate_get_tx_status(void)
 */
 sint8 m2m_ate_start_tx(tstrM2mAteTx * strM2mAteTx)
 {
-	sint8	s8Ret = M2M_SUCCESS;
+	sint8		s8Ret = M2M_SUCCESS;
 	uint8	u8LoopCntr = 0;
+	uint32_t 	val32;
+
 	
 	if(NULL == strM2mAteTx) 
 	{
@@ -371,7 +385,17 @@ sint8 m2m_ate_start_tx(tstrM2mAteTx * strM2mAteTx)
 	s8Ret += nm_write_reg(rBurstTx_NMI_TX_CW_MODE, strM2mAteTx->cw_tx);
 	s8Ret += nm_write_reg(rBurstTx_NMI_TEST_XO_OFF, strM2mAteTx->xo_offset_x1000);
 	s8Ret += nm_write_reg(rBurstTx_NMI_USE_EFUSE_XO_OFF, strM2mAteTx->use_efuse_xo_offset);
+
+	val32	 = strM2mAteTx->peer_mac_addr[5]   << 0;
+	val32	|= strM2mAteTx->peer_mac_addr[4]  << 8;
+	val32	|= strM2mAteTx->peer_mac_addr[3]  << 16;
+	nm_write_reg(rBurstTx_NMI_MAC_ADDR_LO_PEER, val32 );
 	
+	val32	 = strM2mAteTx->peer_mac_addr[2]  << 0;
+	val32	|= strM2mAteTx->peer_mac_addr[1] << 8;
+	val32	|= strM2mAteTx->peer_mac_addr[0] << 16;
+	nm_write_reg(rBurstTx_NMI_MAC_ADDR_HI_PEER, val32 );
+
 	if(M2M_SUCCESS == s8Ret) 
 	{
 		s8Ret += nm_write_reg(rInterrupt_CORTUS_0, 1);	/*Interrupt Cortus*/
@@ -442,7 +466,7 @@ sint8 m2m_ate_get_rx_status(void)
 sint8 m2m_ate_start_rx(tstrM2mAteRx * strM2mAteRxStr)
 {
 	sint8	s8Ret = M2M_SUCCESS;
-	
+	uint32  	val32;
 	if(NULL == strM2mAteRxStr) 
 	{
 		s8Ret = M2M_ATE_ERR_VALIDATE;
@@ -475,6 +499,36 @@ sint8 m2m_ate_start_rx(tstrM2mAteRx * strM2mAteRxStr)
 	s8Ret += nm_write_reg(rBurstTx_NMI_USE_PMU, strM2mAteRxStr->use_pmu);
 	s8Ret += nm_write_reg(rBurstTx_NMI_TEST_XO_OFF, strM2mAteRxStr->xo_offset_x1000);
 	s8Ret += nm_write_reg(rBurstTx_NMI_USE_EFUSE_XO_OFF, strM2mAteRxStr->use_efuse_xo_offset);
+
+	if(strM2mAteRxStr->override_self_mac_addr)
+	{
+		val32	 = strM2mAteRxStr->self_mac_addr[5] << 0;
+		val32	|= strM2mAteRxStr->self_mac_addr[4] << 8;
+		val32	|= strM2mAteRxStr->self_mac_addr[3] << 16;
+		nm_write_reg(rBurstTx_NMI_MAC_ADDR_LO_SELF, val32 );
+
+		val32	 = strM2mAteRxStr->self_mac_addr[2] << 0;
+		val32	|= strM2mAteRxStr->self_mac_addr[1] << 8;
+		val32	|= strM2mAteRxStr->self_mac_addr[0] << 16;
+		nm_write_reg(rBurstTx_NMI_MAC_ADDR_HI_SELF, val32 );
+	}
+	
+	if(strM2mAteRxStr->mac_filter_en_sa)
+	{
+		val32	 = strM2mAteRxStr->peer_mac_addr[5] << 0;
+		val32	|= strM2mAteRxStr->peer_mac_addr[4] << 8;
+		val32	|= strM2mAteRxStr->peer_mac_addr[3] << 16;
+		nm_write_reg(rBurstTx_NMI_MAC_ADDR_LO_SA, val32 );
+	
+		val32	 = strM2mAteRxStr->peer_mac_addr[2] << 0;
+		val32	|= strM2mAteRxStr->peer_mac_addr[1] << 8;
+		val32	|= strM2mAteRxStr->peer_mac_addr[0] << 16;
+		nm_write_reg(rBurstTx_NMI_MAC_ADDR_HI_SA, val32 );
+	}
+	
+	nm_write_reg(rBurstTx_NMI_MAC_FILTER_ENABLE_DA, strM2mAteRxStr->mac_filter_en_da);
+	nm_write_reg(rBurstTx_NMI_MAC_FILTER_ENABLE_SA, strM2mAteRxStr->mac_filter_en_sa);
+	nm_write_reg(rBurstTx_NMI_SET_SELF_MAC_ADDR, strM2mAteRxStr->override_self_mac_addr);
 	
 	if(M2M_SUCCESS == s8Ret) 
 	{
@@ -535,11 +589,190 @@ sint8 m2m_ate_read_rx_status(tstrM2mAteRxStatus *strM2mAteRxStatus)
 		s8Ret = M2M_ATE_ERR_TX_ALREADY_RUNNING;
 		goto __EXIT;
 	}
-	
-	strM2mAteRxStatus->num_rx_pkts  = nm_read_reg(rBurstRx_NMI_RX_ALL_PKTS_CONT);
-	strM2mAteRxStatus->num_err_pkts = nm_read_reg(rBurstRx_NMI_RX_ERR_PKTS_CONT);
-	
+
+	if (nm_read_reg(rBurstTx_NMI_MAC_FILTER_ENABLE_DA) || nm_read_reg(rBurstTx_NMI_MAC_FILTER_ENABLE_SA)) 
+	{
+		strM2mAteRxStatus->num_rx_pkts 		= 		nm_read_reg(rBurstTx_NMI_RX_PKT_CNT_SUCCESS) + nm_read_reg(rBurstTx_NMI_RX_PKT_CNT_FAIL);
+		strM2mAteRxStatus->num_good_pkts 	= 		nm_read_reg(rBurstTx_NMI_RX_PKT_CNT_SUCCESS);
+		strM2mAteRxStatus->num_err_pkts 	= 		nm_read_reg(rBurstTx_NMI_RX_PKT_CNT_FAIL);
+	} 
+	else
+	{
+		strM2mAteRxStatus->num_rx_pkts = nm_read_reg(rBurstRx_NMI_RX_ALL_PKTS_CONT) + nm_read_reg(0x989c);
+		strM2mAteRxStatus->num_err_pkts = nm_read_reg(rBurstRx_NMI_RX_ERR_PKTS_CONT);
+		strM2mAteRxStatus->num_good_pkts = strM2mAteRxStatus->num_rx_pkts - strM2mAteRxStatus->num_err_pkts;
+	}
+
 __EXIT:
 	return s8Ret;
 }
+/*!
+@fn	\
+	sint8 m2m_ate_set_dig_gain(double dGaindB)
+
+@brief
+	This function is used to set the digital gain
+
+@param [in]	double dGaindB
+		The digital gain value required to be set.
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+sint8 m2m_ate_set_dig_gain(double dGaindB)
+{
+	uint32_t dGain, val32;
+	dGain = (uint32_t)(pow(10, dGaindB/20.0) * 1024.0);
+
+	val32 = nm_read_reg(0x160cd0);
+	val32 &= ~(0x1ffful << 0);
+	val32 |= (((uint32_t)dGain) << 0);
+	nm_write_reg(0x160cd0, val32);
+	return M2M_SUCCESS;
+}
+/*!
+@fn	\
+	sint8 m2m_ate_get_dig_gain(double * dGaindB)
+
+@brief
+	This function is used to get the digital gain
+
+@param [out]	double * dGaindB
+		The retrieved digital gain value obtained from HW registers in dB.
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+sint8 m2m_ate_get_dig_gain(double * dGaindB)
+{
+	uint32 dGain, val32;
+	
+	if(!dGaindB) return M2M_ERR_INVALID_ARG;
+	
+	val32 = nm_read_reg(0x160cd0);
+	
+	dGain = (val32 >> 0) & 0x1ffful;
+	*dGaindB = 20.0*log10((double)dGain / 1024.0);
+	
+	return M2M_SUCCESS;
+}
+/*!
+@fn	\
+	sint8 m2m_ate_get_pa_gain(double *paGaindB)
+
+@brief
+	This function is used to get the PA gain
+
+@param [out]	double *paGaindB
+		The retrieved PA gain value obtained from HW registers in dB.
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+sint8 m2m_ate_get_pa_gain(double *paGaindB)
+{
+	uint32 val32, paGain;
+	uint32 m_cmbPAGainStep;
+	
+	if(!paGaindB) 
+		return M2M_ERR_INVALID_ARG;
+	
+	val32 = nm_read_reg(0x1e9c);
+	
+	paGain = (val32 >> 8) & 0x3f;
+	
+	switch(paGain){
+		case 0x1:
+		m_cmbPAGainStep = 5;
+		break;
+		case 0x3:
+		m_cmbPAGainStep = 4;
+		break;
+		case 0x7:
+		m_cmbPAGainStep = 3;
+		break;
+		case 0xf:
+		m_cmbPAGainStep = 2;
+		break;
+		case 0x1f:
+		m_cmbPAGainStep = 1;
+		break;
+		case 0x3f:
+		m_cmbPAGainStep = 0;
+		break;
+		default:
+		m_cmbPAGainStep = 0;
+		break;
+	}
+	
+	*paGaindB = 18 - m_cmbPAGainStep*3;
+
+	return M2M_SUCCESS;
+}
+/*!
+@fn	\
+	sint8 m2m_ate_get_ppa_gain(double * ppaGaindB)
+
+@brief
+	This function is used to get the PPA gain
+
+@param [out]	uint32 * ppaGaindB
+		The retrieved PPA gain value obtained from HW registers in dB.
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+sint8 m2m_ate_get_ppa_gain(double * ppaGaindB)
+{
+	uint32 val32, ppaGain, m_cmbPPAGainStep;
+	
+	if(!ppaGaindB) return M2M_ERR_INVALID_ARG;
+
+	val32 = nm_read_reg(0x1ea0);
+		
+	ppaGain = (val32 >> 5) & 0x7;
+	
+	switch(ppaGain){
+		case 0x1:
+		m_cmbPPAGainStep = 2;
+		break;
+		case 0x3:
+		m_cmbPPAGainStep = 1;
+		break;
+		case 0x7:
+		m_cmbPPAGainStep = 0;
+		break;
+		default:
+		m_cmbPPAGainStep = 3;
+		break;
+	}
+	
+	*ppaGaindB = 9 - m_cmbPPAGainStep*3;
+			
+	
+	return M2M_SUCCESS;
+}
+/*!
+@fn	\
+	sint8 m2m_ate_get_tot_gain(double * totGaindB)
+
+@brief
+	This function is used to calculate the total gain
+
+@param [out]	double * totGaindB
+		The retrieved total gain value obtained from calculations made based on the digital gain, PA and PPA gain values.
+@return
+	The function SHALL return 0 for success and a negative value otherwise.
+*/
+sint8 m2m_ate_get_tot_gain(double * totGaindB)
+{
+	double dGaindB, paGaindB, ppaGaindB;	
+	
+	if(!totGaindB) return M2M_ERR_INVALID_ARG;
+	
+	m2m_ate_get_pa_gain(&paGaindB);
+	m2m_ate_get_ppa_gain(&ppaGaindB);
+	m2m_ate_get_dig_gain(&dGaindB);
+	
+	*totGaindB = dGaindB + paGaindB + ppaGaindB;
+	
+	return M2M_SUCCESS;
+}
+
 #endif //_M2M_ATE_FW_

@@ -61,7 +61,7 @@
 #include "app_per_mode.h"
 #include "conf_board.h"
 #include "perf_api.h"
-#if !(SAMD || SAMR21)
+#if !(SAMD || SAMR21 || SAML21)
 #include "led.h"
 #endif
 

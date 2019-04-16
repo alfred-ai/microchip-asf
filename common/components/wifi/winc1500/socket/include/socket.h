@@ -651,7 +651,31 @@ typedef void (*tpfAppSocketCb) (SOCKET sock, uint8 u8Msg, void * pvMsg);
 				Server IPv4 address encoded in NW byte order format. If it is Zero, then the DNS resolution failed.
 */
 typedef void (*tpfAppResolveCb) (uint8* pu8DomainName, uint32 u32ServerIP);
- /**@}*/
+
+/*!
+@typedef \
+	tpfPingCb
+
+@brief	PING Callback
+
+	The function delivers the ping statistics for the sent ping triggered by calling 
+	m2m_ping_req.
+
+@param [in]	u32IPAddr
+				Destination IP.
+
+@param [in]	u32RTT
+				Round Trip Time.
+
+@param [in]	u8ErrorCode
+				Ping error code. It may be one of:
+				- PING_ERR_SUCCESS
+				- PING_ERR_DEST_UNREACH
+				- PING_ERR_TIMEOUT
+*/
+typedef void (*tpfPingCb)(uint32 u32IPAddr, uint32 u32RTT, uint8 u8ErrorCode);
+ 
+ /**@}*/ 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 FUNCTION PROTOTYPES
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
@@ -662,7 +686,7 @@ FUNCTION PROTOTYPES
 /** @defgroup SocketInitalizationFn socketInit
  *  @ingroup SocketAPI
  *     The function performs the necessary initializations for the socket library through the following steps:
-	- A check made by the global variable gbSocketInit, ensuring that initialzation for sockets is performed only once,
+	- A check made by the global variable gbSocketInit, ensuring that initialzation for sockets is performed only once, 
 	 in-order to prevent reseting the socket instances already created in the global socket array (gastrSockets).
 	- Zero initializations to the global socket array (gastrSockets), which holds the list of TCP sockets.
 	- Registers the socket (Host Interface)hif callback function through the call to the hif_register_cb function.
@@ -865,7 +889,6 @@ socket operations. Socket creation is dependent on the socket type.
 @endcode
 */
 NMI_API SOCKET socket(uint16 u16Domain, uint8 u8Type, uint8 u8Flags);
-NMI_API sint8 sslSetSockOpt(SOCKET sock, uint8  u8Opt, const void *pvOptVal, uint16 u16OptLen);
 /** @} */
 /** @defgroup BindFn bind
  *  @ingroup SocketAPI
@@ -1623,13 +1646,14 @@ NMI_API uint32 nmi_inet_addr(char *pcIpAddr);
 @warning
 	Successful completion of a call to gethostbyname() does not guarantee success of the DNS request,
 	a negative return value indicates only locally-detected errors
-
-@return
+	
+@return		
 	- [SOCK_ERR_NO_ERROR](@ref SOCK_ERR_NO_ERROR)
 	- [SOCK_ERR_INVALID_ARG](@ref SOCK_ERR_INVALID_ARG)
 */
-
 NMI_API sint8 gethostbyname(uint8 * pcHostName);
+
+NMI_API sint8 sslSetSockOpt(SOCKET sock, uint8  u8Opt, const void *pvOptVal, uint16 u16OptLen);
 /** @} */
 
 /** @defgroup SetSocketOptionFn setsockopt
@@ -1711,6 +1735,34 @@ NMI_API sint8 setsockopt(SOCKET socket, uint8 u8Level, uint8 option_name,
 */
 NMI_API sint8 getsockopt(SOCKET sock, uint8 u8Level, uint8 u8OptName, const void *pvOptValue, uint8* pu8OptLen);
 /** @} */
+
+/**@}*/
+/** @defgroup PingFn m2m_ping_req
+ *   @ingroup SocketAPI
+ *  	The function request to send ping request to the given IP Address.
+ */
+ /**@{*/
+/*!
+ * @fn             NMI_API sint8 m2m_ping_req(uint32 u32DstIP, uint8 u8TTL);
+ * @param [in]  u32DstIP
+ *					Target Destination IP Address for the ping request. It must be represented in Network
+ *					byte order.
+ *					The function nmi_inet_addr could be used to translate the dotted decimal notation IP
+ *					to its Network bytes order integer represntative.
+ * 
+ * @param [in]	u8TTL
+ *					IP TTL value for the ping request. If set to ZERO, the dfault value SHALL be used.
+ *
+ * @param [in]	fpPingCb
+ *					Callback will be called to deliver the ping statistics.
+ *
+ * @see           nmi_inet_addr       
+ * @return        The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
+ */
+NMI_API sint8 m2m_ping_req(uint32 u32DstIP, uint8 u8TTL, tpfPingCb fpPingCb);
+/**@}*/
+
+
 #ifdef  __cplusplus
 }
 #endif /* __cplusplus */

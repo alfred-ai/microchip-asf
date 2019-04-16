@@ -58,7 +58,7 @@
 #include "app_range_mode.h"
 #include "perf_api_serial_handler.h"
 #include "app_config.h"
-#if SAMD || SAMR21
+#if SAMD || SAMR21 || SAML21
 #include "system.h"
 #else
 #if (LED_COUNT > 0)

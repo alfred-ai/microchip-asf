@@ -29,6 +29,39 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+ /**
+* Copyright (c) 2015 Atmel Corporation and 2012 – 2013, Thingsquare, http://www.thingsquare.com/. All rights reserved. 
+*  
+* Redistribution and use in source and binary forms, with or without 
+* modification, are permitted provided that the following conditions are met:
+* 
+* 1. Redistributions of source code must retain the above copyright notice, this
+* list of conditions and the following disclaimer.
+* 
+* 2. Redistributions in binary form must reproduce the above copyright notice, 
+* this list of conditions and the following disclaimer in the documentation 
+* and/or other materials provided with the distribution.
+* 
+* 3. Neither the name of Atmel nor the name of Thingsquare nor the names of its contributors may be used to endorse or promote products derived 
+* from this software without specific prior written permission.  
+* 
+* 4. This software may only be redistributed and used in connection with an 
+* Atmel microcontroller or Atmel wireless product.
+* 
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+* GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+* STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY 
+* OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+* 
+* 
+* 
+*/
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -54,9 +87,15 @@
 PROCESS(rf212_radio_process, "RF212 radio driver");
 static int  on(void);
 static int  off(void);
+#if !NULLRDC_CONF_802154_AUTOACK_HW
 static void radiocore_hard_recovery(void);
+#endif
+static void rf_generate_random_seed(void);
 static void flush_buffer(void);
 static uint8_t flag_transmit = 0;
+#if NULLRDC_CONF_802154_AUTOACK_HW
+static uint8_t ack_status = 0;
+#endif
 static volatile int radio_is_on = 0;
 static volatile int pending_frame = 0;
 static volatile int sleep_on = 0;
@@ -143,10 +182,6 @@ rf_set_channel(uint8_t ch)
   /*if(ch > 10 || ch < 1) {
     return -1;
   }*/
-  temp = trx_reg_read(RF212_REG_TRX_CTRL_2);
-//  temp &=~ 0x3f;//channel page
-  temp |=0x0c;
-  //rf212_arch_write_reg(RF212_REG_TRX_CTRL_2, temp);
  // rf212_arch_write_reg(RF212_REG_CC_CTRL_1, 0x00);
   /* read-modify-write to conserve other settings */
   temp = trx_reg_read(RF212_REG_PHY_CC_CCA);
@@ -202,7 +237,13 @@ rf212_init(void)
   /* init SPI and GPIOs, wake up from sleep/power up. */
   //rf212_arch_init();
   trx_spi_init();
-  ENABLE_TRX_IRQ();
+ 
+  /* reset will put us into TRX_OFF state */
+  /* reset the radio core */
+  port_pin_set_output_level(AT86RFX_RST_PIN, false);
+  delay_cycles_ms(1);
+  port_pin_set_output_level(AT86RFX_RST_PIN, true);
+  
   port_pin_set_output_level(AT86RFX_SLP_PIN, false); /*wakeup from sleep*/
 
   /* before enabling interrupts, make sure we have cleared IRQ status */
@@ -215,17 +256,10 @@ rf212_init(void)
   regtemp = regtemp;
 if(radio_state == STATE_P_ON) {
 	trx_reg_write(RF212_REG_TRX_STATE, TRXCMD_TRX_OFF);
-	} else {
-	/* reset will put us into TRX_OFF state */
-	/* reset the radio core */
-	port_pin_set_output_level(AT86RFX_RST_PIN, false);
-	delay_cycles_ms(10);
-	port_pin_set_output_level(AT86RFX_RST_PIN, true);
-	delay_cycles_ms(2);  /* datasheet: max 1 ms */
-	/* Radio is now in state TRX_OFF */
-}
-trx_irq_init((FUNC_PTR)rf212_interrupt_poll);
-system_interrupt_enable_global();
+	}  
+  trx_irq_init((FUNC_PTR)rf212_interrupt_poll);
+  ENABLE_TRX_IRQ();  
+  system_interrupt_enable_global();
   /* Configure the radio using the default values except these. */
   trx_reg_write(RF212_REG_TRX_CTRL_1,      RF212_REG_TRX_CTRL_1_CONF);
   trx_reg_write(RF212_REG_PHY_CC_CCA,      RF212_REG_PHY_CC_CCA_CONF);
@@ -233,11 +267,85 @@ system_interrupt_enable_global();
   //temp = rf212_arch_read_reg(RF212_REG_TRX_CTRL_2);
   trx_reg_write(RF212_REG_TRX_CTRL_2, RF212_REG_TRX_CTRL_2_CONF);
   trx_reg_write(RF212_REG_IRQ_MASK,        RF212_REG_IRQ_MASK_CONF);
-  
+#if HW_CSMA_FRAME_RETRIES
+  trx_bit_write(SR_MAX_FRAME_RETRIES, 3);
+  trx_bit_write(SR_MAX_CSMA_RETRIES, 4);
+#else  
+  trx_bit_write(SR_MAX_FRAME_RETRIES, 0);
+  trx_bit_write(SR_MAX_CSMA_RETRIES, 7);
+#endif  
+  SetPanId(IEEE802154_CONF_PANID);
+  rf_generate_random_seed();
   /* start the radio process */
   process_start(&rf212_radio_process, NULL);
   return 0;
 }
+
+/*
+ * \brief Generates a 16-bit random number used as initial seed for srand()
+ *
+ */
+static void rf_generate_random_seed(void)
+{
+	uint16_t seed = 0;
+	uint8_t cur_random_val = 0;
+
+	/*
+	 * We need to disable TRX IRQs while generating random values in RX_ON,
+	 * we do not want to receive frames at this point of time at all.
+	 */
+	ENTER_TRX_REGION();
+
+	do 
+	{
+		trx_reg_write(RF212_REG_TRX_STATE, TRXCMD_TRX_OFF);
+		
+	} while (TRXCMD_TRX_OFF != rf212_status());
+
+	do
+	{
+		/* Ensure that PLL has locked and receive mode is reached. */
+		trx_reg_write(RF212_REG_TRX_STATE, TRXCMD_PLL_ON);
+		
+	} while (TRXCMD_PLL_ON != rf212_status());
+	do
+	{
+		trx_reg_write(RF212_REG_TRX_STATE, TRXCMD_RX_ON);
+		
+	} while (TRXCMD_RX_ON != rf212_status());	
+
+	/* Ensure that register bit RX_PDT_DIS is set to 0. */
+	trx_bit_write(SR_RX_PDT_DIS, RX_ENABLE);
+
+	/*
+	 * The 16-bit random value is generated from various 2-bit random
+	 * values.
+	 */
+	for (uint8_t i = 0; i < 8; i++) {
+		/* Now we can safely read the 2-bit random number. */
+		cur_random_val = trx_bit_read(SR_RND_VALUE);
+		seed = seed << 2;
+		seed |= cur_random_val;
+		delay_us(1); /* wait that the random value gets updated */
+	}
+
+	do
+	{
+		/* Ensure that PLL has locked and receive mode is reached. */
+		trx_reg_write(RF212_REG_TRX_STATE, TRXCMD_TRX_OFF);		
+	} while (TRXCMD_TRX_OFF != rf212_status());
+	/*
+	 * Now we need to clear potential pending TRX IRQs and
+	 * enable the TRX IRQs again.
+	 */
+	trx_reg_read(RF212_REG_IRQ_STATUS);
+	trx_irq_flag_clr();
+	LEAVE_TRX_REGION();
+
+	/* Set the seed for the random number generator. */
+	srand(seed);
+}
+
 /* Put the Radio in sleep mode */
 
 int
@@ -302,8 +410,13 @@ memcpy(&data[1],payload,templen);
 
   /* check that the FIFO is clear to access */
   radio_status = rf212_status();
-  if(radio_status == STATE_BUSY_RX || radio_status == STATE_BUSY_TX) {
-    PRINTF("RF212: TRX buffer unavailable: prep when %s\n", radio_status == STATE_BUSY_RX ? "rx" : "tx");
+  #if NULLRDC_CONF_802154_AUTOACK_HW
+  if(radio_status == STATE_BUSY_RX_AACK || radio_status == STATE_BUSY_TX_ARET) {
+	  PRINTF("RF212B: TRX buffer unavailable: prep when %s\n", radio_status == STATE_BUSY_RX_AACK ? "rx" : "tx");
+  #else
+   if(radio_status == STATE_BUSY_RX || radio_status == STATE_BUSY_TX) {
+	   PRINTF("RF212B: TRX buffer unavailable: prep when %s\n", radio_status == STATE_BUSY_RX? "rx" : "tx");
+  #endif
     return RADIO_TX_ERR;
   }
 
@@ -326,7 +439,11 @@ rf212_transmit(unsigned short payload_len)
 
   /* prepare for TX */
   status_now = rf212_status();
+  #if NULLRDC_CONF_802154_AUTOACK_HW
+  if(status_now == STATE_BUSY_RX_AACK || status_now == STATE_BUSY_TX_ARET) {
+  #else
   if(status_now == STATE_BUSY_RX || status_now == STATE_BUSY_TX) {
+  #endif
     PRINTF("RF212: collision, was receiving\n");
     /* NOTE: to avoid loops */
     return RADIO_TX_ERR;
@@ -357,8 +474,13 @@ rf212_transmit(unsigned short payload_len)
   /* perform transmission */
   ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
   ENERGEST_ON(ENERGEST_TYPE_TRANSMIT);
+#if NULLRDC_CONF_802154_AUTOACK_HW
+  RF212_COMMAND(TRXCMD_TX_ARET_ON);
+#endif  
   RF212_COMMAND(TRXCMD_TX_START);
   flag_transmit=1;
+
+#if !NULLRDC_CONF_802154_AUTOACK_HW  
   BUSYWAIT_UNTIL(RF212_STATUS() == STATE_BUSY_TX, RTIMER_SECOND/2000);
   BUSYWAIT_UNTIL(RF212_STATUS() != STATE_BUSY_TX, 10 * RTIMER_SECOND/1000);
   #if (DATA_RATE==BPSK_20||BPSK_40||OQPSK_SIN_RC_100)
@@ -366,8 +488,10 @@ rf212_transmit(unsigned short payload_len)
   BUSYWAIT_UNTIL(RF212_STATUS() != STATE_BUSY_TX, 10 * RTIMER_SECOND/1000);
   BUSYWAIT_UNTIL(RF212_STATUS() != STATE_BUSY_TX, 10 * RTIMER_SECOND/1000);
   #endif
+#endif  
   ENERGEST_OFF(ENERGEST_TYPE_TRANSMIT);
   ENERGEST_ON(ENERGEST_TYPE_LISTEN);
+#if !NULLRDC_CONF_802154_AUTOACK_HW  
   if(RF212_STATUS() != STATE_PLL_ON) {
     /* something has failed */
     printf("RF212: radio fatal err after tx\n");
@@ -375,8 +499,25 @@ rf212_transmit(unsigned short payload_len)
 	return RADIO_TX_ERR;
   }
  // printf("#RTIMER_SECOND");
- PRINTF("RF212: tx ok\n");
   RF212_COMMAND(TRXCMD_RX_ON);
+#else
+	BUSYWAIT_UNTIL(ack_status == 1, 10 * RTIMER_SECOND/1000);
+	if((ack_status))
+	{
+	//	printf("\r\nrf233 sent\r\n ");
+		ack_status=0;
+	//	printf("\nACK received");
+		return RADIO_TX_OK;
+	}
+	else
+	{
+	//	printf("\nNOACK received");		
+		return RADIO_TX_NOACK;
+	}
+	
+#endif  
+
+ PRINTF("RF212: tx ok\n");
   return RADIO_TX_OK;
 }
 void
@@ -561,7 +702,11 @@ rf212_channel_clear(void)
   if(was_off) {
     RF212_COMMAND(TRXCMD_TRX_OFF);
   }
-
+  #if NULLRDC_CONF_802154_AUTOACK_HW 
+  else{
+	  RF212_COMMAND(TRXCMD_RX_AACK_ON);
+  }
+  #endif
   /* check CCA */
   if((regsave & TRX_CCA_DONE) && (regsave & TRX_CCA_STATUS)) {
     PRINTF("RF212: CCA 1\n");
@@ -579,11 +724,18 @@ rf212_channel_clear(void)
 static int
 rf212_receiving_packet(void)
 {
-  if(rf212_status() == STATE_BUSY_RX) {
-    PRINTF("RF212: Receiving frame\n");
+  uint8_t trx_state;
+  trx_state=rf212_status();
+  #if NULLRDC_CONF_802154_AUTOACK_HW
+  if(trx_state == STATE_BUSY_RX_AACK) {
+  #else 
+  if(trx_state == STATE_BUSY_RX) {
+  #endif
+  
+    PRINTF("RF22B: Receiving frame\n");
     return 1;
   }
-  PRINTF("RF212: not Receiving frame\n");
+  PRINTF("RF212B: not Receiving frame\n");
   return 0;
 }
 /*---------------------------------------------------------------------------*/
@@ -622,20 +774,66 @@ rf212_off(void)
   off();
   return 0;
 }
+
+
+void SetIEEEAddr(uint8_t *ieee_addr)
+{
+	uint8_t *ptr_to_reg = ieee_addr;
+	//for (uint8_t i = 0; i < 8; i++) {
+	trx_reg_write((0x2b), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x2a), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x29), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x28), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x27), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x26), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x25), *ptr_to_reg);
+	ptr_to_reg++;
+	trx_reg_write((0x24), *ptr_to_reg);
+	ptr_to_reg++;
+	//}
+}
+void SetPanId(uint16_t panId)
+{
+	uint8_t *d = (uint8_t *)&panId;
+
+	trx_reg_write(0x22, d[0]);
+	trx_reg_write(0x23, d[1]);
+}
+void SetShortAddr(uint16_t addr)
+{
+	uint8_t *d = (uint8_t *)&addr;
+	trx_reg_write(0x20, d[0]);
+	trx_reg_write(0x21, d[1]);
+}
+
 /*---------------------------------------------------------------------------*/
 /* switch the radio on */
 static int
 on(void)
 {
   uint8_t state_now = RF212_STATUS();
-  if(state_now != STATE_PLL_ON && state_now != STATE_TRX_OFF) {
+  if(state_now != STATE_PLL_ON && state_now != STATE_TRX_OFF 
+#if NULLRDC_CONF_802154_AUTOACK_HW
+  && state_now != STATE_TX_ARET_ON
+#endif
+  ) {
     /* fail, we need the radio transceiver to be in either of those states */
     return -1;
   }
 
   /* go to RX_ON state */
   ENERGEST_ON(ENERGEST_TYPE_LISTEN);
-  RF212_COMMAND(TRXCMD_RX_ON);
+  #if NULLRDC_CONF_802154_AUTOACK_HW
+  RF212_COMMAND(TRXCMD_RX_AACK_ON);
+  #else
+  RF212_COMMAND(TRXCMD_RX_ON); 
+  #endif
   radio_is_on = 1;
   return 0;
 }
@@ -644,7 +842,11 @@ on(void)
 static int
 off(void)
 {
-  if(RF212_STATUS() != STATE_RX_ON) {
+  #if NULLRDC_CONF_802154_AUTOACK_HW
+  if(rf212_status() != STATE_RX_AACK_ON ) {
+  #else
+  if(rf212_status() != STATE_RX_ON) {
+  #endif
     /* fail, we need the radio transceiver to be in this state */
     return -1;
   }
@@ -708,6 +910,12 @@ rf212_interrupt_poll(void)
 		 {
 			 flag_transmit=0;
 			 interrupt_callback_in_progress = 0;
+			 #if NULLRDC_CONF_802154_AUTOACK_HW
+			//printf("Status %x",trx_reg_read(RF233_REG_TRX_STATE) & TRX_STATE_TRAC_STATUS);
+			if(!(trx_reg_read(RF212_REG_TRX_STATE) & TRX_STATE_TRAC_STATUS))
+			ack_status = 1;
+			 RF212_COMMAND(TRXCMD_RX_AACK_ON);
+			 #endif			 
 			 return 0;
 		 }
   if(interrupt_callback_in_progress) {
@@ -763,6 +971,8 @@ rf212_interrupt_poll(void)
   interrupt_callback_in_progress = 0;
   return 0;
 }
+
+#if !NULLRDC_CONF_802154_AUTOACK_HW
 /*---------------------------------------------------------------------------*/
 /* 
  * Hard, brute reset of radio core and re-init due to it being in unknown,
@@ -775,6 +985,7 @@ radiocore_hard_recovery(void)
 	printf("hardcore recovery\n");//
   rf212_init();
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /* 
  * Crude way of flushing the Tx/Rx FIFO: write the first byte as 0, indicating

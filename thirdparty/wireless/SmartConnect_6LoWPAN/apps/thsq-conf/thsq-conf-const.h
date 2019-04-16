@@ -38,5 +38,8 @@
 #define THSQ_CONF_AES                  (1 << 3)
 #define THSQ_CONF_CSL                  (1 << 4)
 
-
+#define NULLMAC		0
+#define NULLRDC		1
+#define CONTIKIMAC	2
+#define CSMAMAC		3
 #endif /* THSQ_CONF_CONST_H */

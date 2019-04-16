@@ -360,6 +360,7 @@ typedef struct {
   __IO NVMCTRL_LOCK_Type         LOCK;        /**< \brief Offset: 0x20 (R/W 16) Lock Section */
 } Nvmctrl;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
+#define SECTION_NVMCTRL_AUX3
 #define SECTION_NVMCTRL_CAL
 #define SECTION_NVMCTRL_LOCKBIT
 #define SECTION_NVMCTRL_OTP1
@@ -464,6 +465,26 @@ typedef struct {
 #define FUSES_ROOM_TEMP_VAL_INT_Pos 0            /**< \brief (NVMCTRL_TEMP_LOG) Integer part of room temperature in oC */
 #define FUSES_ROOM_TEMP_VAL_INT_Msk (0xFFul << FUSES_ROOM_TEMP_VAL_INT_Pos)
 #define FUSES_ROOM_TEMP_VAL_INT(value) ((FUSES_ROOM_TEMP_VAL_INT_Msk & ((value) << FUSES_ROOM_TEMP_VAL_INT_Pos)))
+
+#define FUSES_SERIAL_NUMBER_0_ADDR  (NVMCTRL_AUX3 + 64)
+#define FUSES_SERIAL_NUMBER_0_Pos   0            /**< \brief (NVMCTRL_AUX3) Serial Number words 2-0 bits 31:0 */
+#define FUSES_SERIAL_NUMBER_0_Msk   (0xFFFFFFFFul << FUSES_SERIAL_NUMBER_0_Pos)
+#define FUSES_SERIAL_NUMBER_0(value) (FUSES_SERIAL_NUMBER_0_Msk & ((value) << FUSES_SERIAL_NUMBER_0_Pos))
+
+#define FUSES_SERIAL_NUMBER_1_ADDR  (NVMCTRL_AUX3 + 68)
+#define FUSES_SERIAL_NUMBER_1_Pos   0            /**< \brief (NVMCTRL_AUX3) Serial Number words 2-0 bits 63:32 */
+#define FUSES_SERIAL_NUMBER_1_Msk   (0xFFFFFFFFul << FUSES_SERIAL_NUMBER_1_Pos)
+#define FUSES_SERIAL_NUMBER_1(value) (FUSES_SERIAL_NUMBER_1_Msk & ((value) << FUSES_SERIAL_NUMBER_1_Pos))
+
+#define FUSES_SERIAL_NUMBER_2_ADDR  (NVMCTRL_AUX3 + 72)
+#define FUSES_SERIAL_NUMBER_2_Pos   0            /**< \brief (NVMCTRL_AUX3) Serial Number words 2-0 bits 95:64 */
+#define FUSES_SERIAL_NUMBER_2_Msk   (0xFFFFFFFFul << FUSES_SERIAL_NUMBER_2_Pos)
+#define FUSES_SERIAL_NUMBER_2(value) (FUSES_SERIAL_NUMBER_2_Msk & ((value) << FUSES_SERIAL_NUMBER_2_Pos))
+
+#define FUSES_SERIAL_NUMBER_3_ADDR  (NVMCTRL_AUX3 + 12)
+#define FUSES_SERIAL_NUMBER_3_Pos   0            /**< \brief (NVMCTRL_AUX3) Serial Number word 3 */
+#define FUSES_SERIAL_NUMBER_3_Msk   (0xFFFFFFFFul << FUSES_SERIAL_NUMBER_3_Pos)
+#define FUSES_SERIAL_NUMBER_3(value) (FUSES_SERIAL_NUMBER_3_Msk & ((value) << FUSES_SERIAL_NUMBER_3_Pos))
 
 #define NVMCTRL_FUSES_BOOTPROT_ADDR NVMCTRL_USER
 #define NVMCTRL_FUSES_BOOTPROT_Pos  0            /**< \brief (NVMCTRL_USER) Bootloader Size */

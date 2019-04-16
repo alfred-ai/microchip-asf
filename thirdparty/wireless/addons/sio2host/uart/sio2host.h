@@ -103,7 +103,7 @@ void sio2host_putchar(uint8_t);
  */
 int sio2host_getchar_nowait(void);
 
-#if SAMD || SAMR21
+#if SAMD || SAMR21 || SAML21
 void USART_HOST_ISR_VECT(uint8_t instance);
 
 #endif

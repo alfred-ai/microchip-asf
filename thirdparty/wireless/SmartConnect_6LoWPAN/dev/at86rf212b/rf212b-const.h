@@ -182,6 +182,22 @@
 #define RF212_REG_ADDR_MIN        (0x00)  /* lowest register address */
 #define RF212_REG_ADDR_MAX        (0x3D)  /* highest register address */
 
+/** Access parameters for sub-register RND_VALUE in register @ref RG_PHY_RSSI */
+#define SR_RND_VALUE                    0x06, 0x60, 5
+
+/** Access parameters for sub-register RX_PDT_DIS in register @ref RG_RX_SYN */
+#define SR_RX_PDT_DIS                   0x15, 0x80, 7
+
+/** Constant RX_DISABLE for sub-register @ref SR_RX_PDT_DIS in register RX_SYN
+**/
+#define RX_DISABLE                      (1)
+/** Constant RX_ENABLE for sub-register @ref SR_RX_PDT_DIS in register RX_SYN */
+#define RX_ENABLE                       (0)
+
+#define SR_MAX_FRAME_RETRIES   0x2C, 0xF0, 4
+
+#define  SR_MAX_CSMA_RETRIES	   0x2C, 0X0E, 1	
+   
 /* datasheet 6.3, SPI access and first SPI byte */
 /* 
  * Following Atmel nomenclature,

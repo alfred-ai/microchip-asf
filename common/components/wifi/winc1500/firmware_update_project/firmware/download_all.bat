@@ -41,7 +41,7 @@ IF %FMode%==debug_ota (echo Creating Image...
 cd Tools\image_builder\debug\
 @ECHO off
 image_builder -no_wait -ota_img ../../../ota_firmware/m2m_ota_2b0.bin -fw_path ../../../firmware/wifi_v111/ASIC_2B0/wifi_firmware.bin -op_path ../../../firmware/m2m_aio_2b0.bin -ate_img ../../../ate_firmware/m2m_ate.bin 
-image_builder -no_wait -ota_img  ../../../ota_firmware/m2m_ota_3a0.bin -fw_path ../../../firmware/wifi_v111/ASIC_3A0/wifi_firmware.bin -op_path ../../../firmware/m2m_aio_3a0.bin -ate_img ../../../ate_firmware/m2m_ate.bin 
+image_builder -1003A0 -no_wait -ota_img  ../../../ota_firmware/m2m_ota_3a0.bin -fw_path ../../../firmware/wifi_v111/ASIC_3A0/wifi_firmware.bin -op_path ../../../firmware/m2m_aio_3a0.bin -ate_img ../../../ate_firmware/m2m_ate.bin 
 echo OK
 goto END
 )
@@ -68,7 +68,7 @@ for %%X in (..\crt\*.cer) do (
 	set /a c+=1
 	@set seq=!seq! %%X
 )
-root_certificate_downloader.exe -n %c% %seq% -no_wait -port %PORT_NUM%
+root_certificate_downloader.exe -n %c% %seq% -no_wait -port %PORT_NUM% -e
 :END
 IF %ERRORLEVEL% NEQ  0 ( echo Fail
 echo     #######################################################################

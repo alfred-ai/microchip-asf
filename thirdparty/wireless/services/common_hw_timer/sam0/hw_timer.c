@@ -44,7 +44,7 @@
 #include "tc.h"
 #include "tc_interrupt.h"
 #include "hw_timer.h"
-#if SAMD || SAMR21
+#if SAMD || SAMR21 || SAML21
 #include "clock.h"
 #include <system_interrupt.h>
 #else

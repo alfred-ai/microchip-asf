@@ -106,7 +106,7 @@
 	NVIC_EnableIRQ(USART_NCP_IRQn);
 #endif /* (SAM && !SAMD20) */
 /* ! @} */
-#if SAMD || SAMR21
+#if SAMD || SAMR21 || SAML21
 #define USART_NCP                 SERCOM4
 
 /** Baudrate setting */

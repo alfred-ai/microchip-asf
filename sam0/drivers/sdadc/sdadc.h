@@ -50,10 +50,10 @@
 /**
  * \defgroup asfdoc_sam0_sdadc_group SAM Sigma-Delta Analog-to-Digital Converter (SDADC) Driver
  *
- * This driver for Atmel&reg; | SMART SAM devices provides an interface for the configuration
- * and management of the device's Configurable Custom Logic functionality.
+ * This driver for Atmel&reg; | SMART ARM&reg;-based microcontrollers provides an interface for the configuration
+ * and management of the device's SDADC functionality.
  *
- * The following peripherals are used by this module:
+ * The following peripheral is used by this module:
  *  - SDADC (Sigma-Delta Analog-to-Digital Converter)
  *
  * The following devices can use this module:
@@ -83,8 +83,8 @@
  * The SDADC provides up to 16-bit resolution at about 1000 samples per second (1KSPS)
  * and sized 24 bits signed result to handle filtering and gain correction without overflow.
  * The SDADC measurements can be started by either application software or an incoming
- * event from another peripheral in the device. 
- * 
+ * event from another peripheral in the device.
+ *
  * The conversion is performed on a full range between 0V and the reference voltage.
  * Both internal and external reference voltages can be selected, reference range
  * must be set to match the voltage of the reference used. Analog inputs between
@@ -628,7 +628,7 @@ static inline void sdadc_clear_status(
  *
  * \param[in]   module_inst   Pointer to the SDADC software instance struct
  * \param[out]  seq_state     Identifies the last conversion done in the sequence
- * 
+ *
  * \return Status of the SDADC sequence conversion.
  *
  * \retval true  When the sequence start
@@ -1141,8 +1141,8 @@ static inline void sdadc_disable_interrupt(struct sdadc_module *const module_ins
  *		<th>Comments</td>
  *	</tr>
  *	<tr>
- *		<td>A</td>
- *		<td>06/2015</td>
+ *		<td>42496A</td>
+ *		<td>08/2015</td>
  *		<td>Initial document release</td>
  *	</tr>
  * </table>

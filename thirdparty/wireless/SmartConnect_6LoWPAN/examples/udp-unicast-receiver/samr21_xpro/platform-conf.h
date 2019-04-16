@@ -32,14 +32,19 @@
 #ifndef PLATFORM_CONF_H
 #define PLATFORM_CONF_H
 
+
 #include <stdint.h>
 #include <inttypes.h>
 #include <string.h>
-
+#include "thsq-conf-const.h"
 /* 
  * This is the platform configuration file for Atmel SAM R21 platform.
  */
+#if RDC==CONTIKIMAC
 #define F_CPU                           8000000ul
+#else
+#define F_CPU                           48000000ul
+#endif
 
 #define CLOCK_CONF_SECOND               128
 #define RTIMER_ARCH_SECOND              31250
@@ -72,9 +77,9 @@ void
 clock_adjust_ticks(clock_time_t howmany);
 
 
-#include "rf233.h"
-#define MULTICHAN_CONF_SET_CHANNEL(x)     rf_set_channel(x)
-#define MULTICHAN_CONF_READ_RSSI(x)       0
+//#include "rf233.h"
+//#define MULTICHAN_CONF_SET_CHANNEL(x)     rf_set_channel(x)
+//#define MULTICHAN_CONF_READ_RSSI(x)       0
 
 /*---------------------------------------------------------------------------*/
 #define EXT_HEADER_1   1

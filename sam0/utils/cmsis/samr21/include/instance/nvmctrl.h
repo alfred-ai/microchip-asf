@@ -76,7 +76,6 @@
 #define NVMCTRL_FACTORY_WORD_IMPLEMENTED_MASK 0xC0000007FFFFFFFF
 #define NVMCTRL_FLASH_SIZE          262144  
 #define NVMCTRL_LOCKBIT_ADDRESS     0x00802000
-#define NVMCTRL_PAGES               4096    
 #define NVMCTRL_PAGE_HW             32      
 #define NVMCTRL_PAGE_SIZE           64      
 #define NVMCTRL_PAGE_W              16      

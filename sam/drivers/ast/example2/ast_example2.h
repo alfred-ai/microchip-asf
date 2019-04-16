@@ -48,7 +48,7 @@
 #define AST_EXAMPLE2_H_INCLUDED 
 
 /**
- * \page asfdoc_sam_drivers_ast_example2 Asynchronous Timer (AST) -  Example 2 Alarm wakeup
+ * \page asfdoc_sam_drivers_ast_example2 Asynchronous Timer (AST) -  Example 2 Alarm Wakeup
  *
  * \section asfdoc_sam_drivers_ast_example2_purpose Purpose
  * This example demonstrates how to use the AST driver with the 32kHz

@@ -2105,30 +2105,126 @@
 					<group>
 						<name>include</name>
 						<group>
-							<name>instance</name>
+							<name>pio</name>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc1.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21e18a.h</name>
 							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21j18a.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21g18a.h</name>
+							</file>
+						</group>
+						<group>
+							<name>component</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/oscctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/adc_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/sercom.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/wdt.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/ccl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/rstc_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/opamp.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/ac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/usb.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/pm_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/dmac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/gclk_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/port.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/eic_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/aes.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/pac_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/rtc_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/evsys.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/tcc_200.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/tal.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/dsu.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/osc32kctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/tc_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/supc_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/mclk_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/nvmctrl_301.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/trng.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/dac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/mtb.h</name>
+							</file>
+						</group>
+						<group>
+							<name>instance</name>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/trng.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tcc2.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc3.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/adc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tcc0.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/mclk_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/ccl.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/rtc_100.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom2.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc1_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/wdt.h</name>
@@ -2143,70 +2239,76 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/opamp.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc4.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc3_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom4.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/supc.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/port.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/nvmctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/pm.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/gclk_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom1.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/pac_100.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/ac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/pac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/gclk.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/mclk.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/oscctrl.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/evsys.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/rstc.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc0_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom5.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/dac.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/sercom3.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/eic.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc4_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tal.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/aes.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/eic_100.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/rtc.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/adc_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/nvmctrl_301.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/pm_100.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/aes.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/dsu.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc0.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tcc1_200.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc2.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tcc0_200.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tcc2_200.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/osc32kctrl.h</name>
@@ -2215,167 +2317,29 @@
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/usb.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/dac.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/supc_100.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tcc1.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/rstc_100.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/dmac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/oscctrl.h</name>
+								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/instance/tc2_100.h</name>
 							</file>
 						</group>
-						<group>
-							<name>component</name>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/oscctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/sercom.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/ccl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/opamp.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/wdt.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/eic.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/ac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/pm.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/usb.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/mclk.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/adc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/dmac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/nvmctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/port.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/aes.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/tc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/gclk.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/evsys.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/tcc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/tal.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/pac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/dsu.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/rstc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/osc32kctrl.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/trng.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/dac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/mtb.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/supc.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/component/rtc.h</name>
-							</file>
-						</group>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21e16a.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g16a.h</name>
-						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g18a.h</name>
 						</file>
-						<group>
-							<name>pio</name>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21j17a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21j16a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21j18a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21e16a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21g18a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21e15a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21e17a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21g16a.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/pio/saml21g17a.h</name>
-							</file>
-						</group>
 						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21g17a.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21e17a.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21j17a.h</name>
+							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21e18a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21j18a.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21e15a.h</name>
-						</file>
-						<file>
 							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../utils/cmsis/saml21/include/saml21j16a.h</name>
 						</file>
 					</group>
 				</group>

@@ -73,7 +73,7 @@
 
 /* === Macros =============================================================== */
 /* Version of the software */
-#define FIRMWARE_VERSION    3.0f
+#define FIRMWARE_VERSION    3.2
 
 #define DEFAULT_CHANNEL_RF09         (1)
 #define DEFAULT_CHANNEL_RF24         (21)

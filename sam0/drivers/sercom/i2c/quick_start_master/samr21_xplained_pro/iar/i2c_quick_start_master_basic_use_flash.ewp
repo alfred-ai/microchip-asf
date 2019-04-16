@@ -1979,13 +1979,13 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/hmatrixb.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/sercom.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/wdt.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/ac.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/sercom.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/dmac.h</name>
@@ -2150,6 +2150,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21g17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
 							<file>
@@ -2170,6 +2173,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21g18a.h</name>

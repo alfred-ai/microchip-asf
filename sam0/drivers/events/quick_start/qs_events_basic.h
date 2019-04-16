@@ -52,7 +52,7 @@
  *  \li One user attached to the configured event channel
  *  \li No hardware event generator attached to the channel
  *
- * This use case allocates an event channel, this channel is not connected to any
+ * This use case allocates an event channel. This channel is not connected to any
  * hardware event generator, events are software triggered. One user is connected
  * to the allocated and configured event channel.
  *
@@ -101,9 +101,9 @@
  *          struct to ensure that all values are initialized to known default
  *          settings.
  *
- * -# Adjust the configuration struct to request that the channel be attached
+ * -# Adjust the configuration struct to request that the channel is to be attached
  *    to the specified event generator, that rising edges of the event signal
- *    be detected on the channel and that the synchronous event path be used.
+ *    be detected on the channel, and that the synchronous event path is to be used.
  *    \snippet qs_events_basic.c setup_3
  *    \br
  *
@@ -113,7 +113,7 @@
  *          values that have been altered from the default settings are taken
  *          into account by the user application.
  *
- * -# Attach an user to the channel.
+ * -# Attach a user to the channel.
  *    \snippet qs_events_basic.c setup_5
  *    \br
  *

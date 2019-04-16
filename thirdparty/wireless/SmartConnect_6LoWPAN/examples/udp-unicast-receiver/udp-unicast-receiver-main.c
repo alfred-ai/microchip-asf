@@ -48,7 +48,6 @@
 #include "lib/random.h"
 #include "lib/sensors.h"
 #include "temp-sensor.h"
-//#include "button-sensor.h"
 #include "voltage-sensor.h"
 
 #include "netstack-aes.h"
@@ -74,7 +73,6 @@
 #include "ledctrl.h"
 #endif
 
-//SENSORS(&button_sensor);
 /*---------------------------------------------------------------------------*/
 #define _DEBUG_ 0
 #if _DEBUG_
@@ -104,17 +102,11 @@ PROCINIT(&etimer_process);
     while(!(cond) && RTIMER_CLOCK_LT(RTIMER_NOW(), t0 + (max_time)));   \
   } while(0)
 /*---------------------------------------------------------------------------*/
-//static struct usart_module usart_instance;
-//static uint8_t data[SERIAL_RX_BUF_SIZE_HOST];
-//static uint8_t data_length = 0;
-//static uint8_t rx_index = 0;
 
 
 static void print_reset_causes(void);
 static void print_processes(struct process * const processes[]);
 static void set_link_addr(void);
-//static unsigned char uart_rx_buf[SERIAL_RX_BUF_SIZE_HOST];
-//static void init_serial(void);
 extern void configure_tc3(void); 
 void watchdog_early_warning_callback(void);
 void configure_gclock_generator(void);
@@ -131,27 +123,26 @@ static uint8_t data_length = 0;
 static uint8_t rx_index = 0;
 void serial_data_handler(void);
 #endif
+
+#if BOARD == SAMR21_XPLAINED_PRO
 uint8_t *edbg_eui_read_eui64(void);
+#endif
 
 /*---------------------------------------------------------------------------*/
 
 int
 main(int argc, char *argv[])
 {
-  /* init system: clocks, board etc */
-
-  system_init();
   node_id_restore();
-  //init_serial();
+  /* init system: clocks, board etc */
+  system_init();
   sio2host_init();
 
   leds_init();
   leds_on(LEDS_ALL);
 
   system_interrupt_enable_global();
-  //system_set_sleepmode(SYSTEM_SLEEPMODE_IDLE_0); //sleepmode 2 for rtc
   flash_init();
-
   delay_init();
 
   /* Initialize Contiki and our processes. */
@@ -162,14 +153,9 @@ main(int argc, char *argv[])
   clock_init();
   #endif
 
-  ctimer_init();
- 
-
-  rtimer_init();
- //printf("\r\n B4 Watchdog init");
-  
- //printf("\r\n Aft Watchdog init");
   process_init();
+  ctimer_init();
+  rtimer_init();
   process_start(&etimer_process, NULL);
 
   /* Set MAC address and node ID */
@@ -183,22 +169,21 @@ main(int argc, char *argv[])
 
   printf("\r\n\n\n\n Starting the SmartConnect-6LoWPAN \r\n Platform : Atmel IoT device \r\n");
   print_reset_causes();
-#if SAMR21 
+  netstack_init();  
+    
+#if BOARD == SAMR21_XPLAINED_PRO
   eui64 = edbg_eui_read_eui64();
+  SetIEEEAddr(eui64);
+#else
+  SetIEEEAddr(node_mac);  
 #endif
-
+ 
   set_link_addr();
 
-  random_init(node_id);
-
-  netstack_init();
   rf_set_channel(RF_CHANNEL);
   printf("\r\n Configured RF channel: %d\r\n", rf_get_channel());
   leds_off(LEDS_ALL);
-  /*  temp_sensor_init();
-      voltage_sensor_init();*/
- // button_sensor_init();
- process_start(&sensors_process, NULL);
+  process_start(&sensors_process, NULL);
   energest_init();
 
   ENERGEST_ON(ENERGEST_TYPE_CPU);
@@ -249,9 +234,9 @@ main(int argc, char *argv[])
     printf("%02x%02x\r\n",
            ipaddr.u8[7 * 2], ipaddr.u8[7 * 2 + 1]);
   }
- // printf("\r\n Before print process");
+
   print_processes(autostart_processes);
-  //delay_ms(100);
+
   /* set up AES key */
 #if ((THSQ_CONF_NETSTACK) & THSQ_CONF_AES)
 #ifndef NETSTACK_AES_KEY
@@ -270,8 +255,7 @@ main(int argc, char *argv[])
   ledctrl_init();
 #endif
   autostart_start(autostart_processes);
-  //watchdog_start();
-  // watchdog_init();
+
 
   while(1){
     int r = 0;
@@ -279,29 +263,12 @@ main(int argc, char *argv[])
 	serial_data_handler();
 #endif
   do {
-      //printf(".");
+
      
      r = process_run();
-	//  wdt_reset_count();
-	 // if(r <= 0) printf("\n PRVN No process to run\n");
+
     } while(r > 0);
-    /* sleep*/
-   // watchdog_stop();
-    ENERGEST_OFF(ENERGEST_TYPE_CPU);
-    ENERGEST_ON(ENERGEST_TYPE_LPM);
-	//#ifdef LOW_POWER_MODE
-	//printf("\n PRVN Before sleep\n");
-	//sleep_system();
-	//#else
-	//printf("\n PRVN After sleep\n");
-    //system_sleep();
-	//#endif
-    //watchdog_start();
 
-
-    /* woke up */
-    ENERGEST_OFF(ENERGEST_TYPE_LPM);
-    ENERGEST_ON(ENERGEST_TYPE_CPU);
   }
 }
 
@@ -309,9 +276,7 @@ main(int argc, char *argv[])
 void watchdog_early_warning_callback(void)
 {
 	port_pin_toggle_output_level(LED_0_PIN);
-	//watchdog_periodic();
-	// wdt_reset_count();
-	// printf("watchdog warning_callback\n\r");
+
 		
 }
 
@@ -359,23 +324,6 @@ void configure_gclock_generator(void)
 	system_gclk_gen_enable(GCLK_GENERATOR_4);
 	//! [setup_5]
 }
-
-/*
-void rtc_overflow_callback(void)
-{
-	//! [overflow_act]
-	/ * Do something on RTC overflow here * /
-	port_pin_toggle_output_level(LED_0_PIN);
-	PRINTF("rtc_overflow_callback\n\r");
-	ready_to_sleep=1;
-	rtc_count_enable(&rtc_instance);
-	
-	//! [overflow_act]
-}*/
-
-//! [initialize_rtc]
-
-//! [setup_callback]
 
 
 /*---------------------------------------------------------------------------*/
@@ -440,37 +388,6 @@ puts(const char* str)
 }
 #endif /* PUTS_ON_ENC */
 /*---------------------------------------------------------------------------*/
-/* Init UART and stdio for printf's over the EDBG virtual COM port. */
-/*
-static void
-init_serial(void)
-{
-  //  return;
-  / * by default, SERCOM3 is used - defined in samr21_xplained_pro.h * /
-  struct usart_config cdc_uart_config;
-  usart_get_config_defaults(&cdc_uart_config);
-
-  / * Configure the USART settings and initialize the standard I/O library * /
-  cdc_uart_config.baudrate    = 115200;
-  cdc_uart_config.mux_setting = EDBG_CDC_SERCOM_MUX_SETTING;
-  cdc_uart_config.pinmux_pad0 = EDBG_CDC_SERCOM_PINMUX_PAD0;
-  cdc_uart_config.pinmux_pad1 = EDBG_CDC_SERCOM_PINMUX_PAD1;
-  cdc_uart_config.pinmux_pad2 = EDBG_CDC_SERCOM_PINMUX_PAD2;
-  cdc_uart_config.pinmux_pad3 = EDBG_CDC_SERCOM_PINMUX_PAD3;
-
-  stdio_serial_init(&usart_instance, EDBG_CDC_MODULE, &cdc_uart_config);
-  usart_enable(&usart_instance);
-  usart_enable_transceiver(&usart_instance, USART_TRANSCEIVER_TX);
-}*/
-/*---------------------------------------------------------------------------*/
-/* 
- * This seems needed for libc init array. We get compilation errors if removed.
- */
-/*
-void
-_init(void)
-{
-}*/
 /*---------------------------------------------------------------------------*/
 #define REG_RCAUSE     (0x40000438U)
 /**
@@ -507,28 +424,6 @@ print_reset_causes(void)
 void serial_data_handler(void)
 {
       uint8_t i, j;     // for test only
-      
-     
-      //if (data_length == 0) {
-            /// * No data to process, read the stream IO * /
-            ////rx_index = 0;
-            //data_length = sio2host_rx(data, 156); / * @ToDo 20 ?,
-                                                               // * different
-                                                             // * values for
-                                                               // * USB and
-                                                              // * UART ? * /
-            //
-            //
-      //} else { / * Data has been received, process the data * /
-            //printf("Receiving file..\n");
-            //data_length--;
-            //rx_index++;
-            //if(rx_index ==99)
-            //{
-                  //printf("Received File!!!!!!!!!!\n");
-            //}
-      //}
- 
       data_length = sio2host_rx(data, SERIAL_RX_BUF_SIZE_HOST);     // Get input from UART
      
       if (data_length != 0)   // UART data has been received
@@ -560,20 +455,4 @@ void serial_data_handler(void)
 }
 #endif
 /*---------------------------------------------------------------------------*/
-#if 0
-void
-Default_Handler()
-{
-  errcode = 8;
 
-  /* flip around a pin that can be seen on a logic analyzer for example */
-  while (1)
-  {
-    LED_ON();
-    LED_OFF();
-    FLIP_ON();
-    FLIP_OFF();
-  }
-}
-#endif
-/*---------------------------------------------------------------------------*/

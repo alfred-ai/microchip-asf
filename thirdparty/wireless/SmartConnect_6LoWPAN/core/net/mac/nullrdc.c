@@ -37,7 +37,7 @@
  *         Adam Dunkels <adam@sics.se>
  *         Niclas Finne <nfi@sics.se>
  */
-
+#if (RDC == NULLRDC)
 #include "net/mac/mac-sequence.h"
 #include "net/mac/nullrdc.h"
 #include "net/packetbuf.h"
@@ -369,3 +369,4 @@ const struct rdc_driver nullrdc_driver = {
   channel_check_interval,
 };
 /*---------------------------------------------------------------------------*/
+#endif /* (RDC == NULLRDC) */

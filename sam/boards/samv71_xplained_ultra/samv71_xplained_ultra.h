@@ -100,6 +100,23 @@
 #define USART1_TXD_GPIO   PIO_PB4_IDX
 #define USART1_TXD_FLAGS  IOPORT_MODE_MUX_D
 
+/** USART0 pins definitions, PB0,PB1. */
+#define USART0_RXD_GPIO   PIO_PB0_IDX
+#define USART0_RXD_FLAGS  IOPORT_MODE_MUX_C
+#define USART0_TXD_GPIO   PIO_PB1_IDX
+#define USART0_TXD_FLAGS  IOPORT_MODE_MUX_C
+
+#define PIN_USART0_SCK_IDX    (PIO_PB13_IDX)
+#define PIN_USART0_SCK_FLAGS  (IOPORT_MODE_MUX_C)
+
+/** USART0 pin CTS */
+#define PIN_USART0_CTS_IDX    (PIO_PB2_IDX)
+#define PIN_USART0_CTS_FLAGS  (IOPORT_MODE_MUX_C)
+
+/** USART0 pin RTS */
+#define PIN_USART0_RTS_IDX    (PIO_PB3_IDX)
+#define PIN_USART0_RTS_FLAGS  (IOPORT_MODE_MUX_C)
+
 
 //! \name LED definitions
 //@{
@@ -319,6 +336,29 @@
 #define PIN_PWM_LED1_GPIO    PIO_PA24_IDX
 #define PIN_PWM_LED1_FLAGS   (IOPORT_MODE_MUX_B)
 #define PIN_PWM_LED1_CHANNEL PWM_CHANNEL_1
+
+/*----------------------------------------------------------------------------*/
+/** GMAC HW configurations */
+#define BOARD_GMAC_PHY_ADDR 1
+
+#define PIN_GMAC_RESET_MASK   PIO_PC10
+#define PIN_GMAC_RESET_PIO    PIOC
+#define PIN_GMAC_INT_MASK     PIO_PA19
+#define PIN_GMAC_INT_PIO      PIOA
+#define PIN_GMAC_SIGDET_MASK  PIO_PA29
+#define PIN_GMAC_SIGDET_PIO   PIOA
+#define PIN_GMAC_PERIPH  PIO_PERIPH_A
+#define PIN_GMAC_PIO     PIOD
+#define PIN_GMAC_MASK   (PIO_PD0A_GTXCK | PIO_PD1A_GTXEN | PIO_PD2A_GTX0 | \
+						 PIO_PD3A_GTX1 | PIO_PD4A_GRXDV | PIO_PD5A_GRX0 |  \
+						 PIO_PD6A_GRX1 | PIO_PD7A_GRXER | PIO_PD8A_GMDC | \
+						 PIO_PD9A_GMDIO)
+
+/** Board configuration of the AT24MAC EEPROM */
+#define BOARD_AT24MAC_TWIHS_INSTANCE      TWIHS0
+#define BOARD_AT24MAC_ADDRESS             (0xAE >> 1)
+#define BOARD_CLK_TWIHS_EEPROM            0
+#define BOARD_CLK_TWIHS_MUX_EEPROM        0
 
 /*----------------------------------------------------------------------------*/
 #endif   /* _SAMV71_XLTRA_H_ */

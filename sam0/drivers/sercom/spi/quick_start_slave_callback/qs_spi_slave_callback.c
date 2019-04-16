@@ -168,11 +168,11 @@ int main(void)
 	}
 //! [transf_complete]
 //! [compare]
-for (uint8_t i = 0; i < BUF_LENGTH; i++) {
-	if(buffer_rx[i] != buffer_expect[i]) {
-		result++;
+	for (uint8_t i = 0; i < BUF_LENGTH; i++) {
+		if(buffer_rx[i] != buffer_expect[i]) {
+			result++;
+		}
 	}
-}
 //! [compare]
 
 //! [inf_loop]

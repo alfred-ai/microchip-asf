@@ -2336,6 +2336,9 @@
 								<name>$PROJ_DIR$/../../../../../../../utils/cmsis/samr21/include/pio/samr21e17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
 						</group>
@@ -2347,6 +2350,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../utils/cmsis/samr21/include/samr21g18a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../utils/cmsis/samr21/include/samr21g17a.h</name>

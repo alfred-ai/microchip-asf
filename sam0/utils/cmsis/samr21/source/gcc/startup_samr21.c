@@ -116,7 +116,6 @@ void DAC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler
 #ifdef ID_PTC
 void PTC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
-void I2S_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 
 /* Exception Table */
 __attribute__ ((section(".vectors")))
@@ -205,8 +204,8 @@ const DeviceVectors exception_table = {
 #else
         (void*) (0UL), /* Reserved */
 #endif
-        (void*) I2S_Handler,            /* 27 Inter-IC Sound Interface */
         (void*) (0UL), /* Reserved */
+        (void*) (0UL)  /* Reserved */
 };
 
 /**

@@ -72,10 +72,10 @@ enum samd20_sensor_input {
   SAMD20_SENSOR_ADC_DAC = ADC_POSITIVE_INPUT_DAC,        /* DAC input */
 };
 /*---------------------------------------------------------------------------*/
-void      samd20_sensors_init(void);
-void      samd20_sensors_set_input(enum samd20_sensor_input input);
-int       samd20_sensors_busy(void);
-uint16_t  samd20_sensors_read(void);
+void      samd0_sensors_init(void);
+void      samd0_sensors_set_input(enum samd0_sensor_input input);
+int       samd0_sensors_busy(void);
+uint16_t  samd0_sensors_read(void);
 #endif
 /*---------------------------------------------------------------------------*/
 #endif  /* _SAMD20_SENSORS_H_ */

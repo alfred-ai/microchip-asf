@@ -138,4 +138,33 @@ void board_init(void)
 	/* Configure PWM LED1 pin */
 	ioport_set_pin_peripheral_mode(PIN_PWM_LED1_GPIO, PIN_PWM_LED1_FLAGS);
 #endif
+
+
+#ifdef CONF_BOARD_USART_RXD
+/* Configure USART RXD pin */
+ioport_set_pin_peripheral_mode(USART0_RXD_GPIO,
+USART0_RXD_FLAGS);
+#endif
+
+#ifdef CONF_BOARD_USART_TXD
+/* Configure USART TXD pin */
+ioport_set_pin_peripheral_mode(USART0_TXD_GPIO,
+USART0_TXD_FLAGS);
+#endif
+
+#ifdef CONF_BOARD_USART_SCK
+/* Configure USART synchronous communication SCK pin */
+ioport_set_pin_peripheral_mode(PIN_USART0_SCK_IDX,PIN_USART0_SCK_FLAGS);
+#endif
+
+#ifdef CONF_BOARD_USART_CTS
+/* Configure USART synchronous communication CTS pin */
+ioport_set_pin_peripheral_mode(PIN_USART0_CTS_IDX,PIN_USART0_CTS_FLAGS);
+#endif
+
+#ifdef CONF_BOARD_USART_RTS
+/* Configure USART RTS pin */
+ioport_set_pin_peripheral_mode(PIN_USART0_RTS_IDX,
+PIN_USART0_RTS_FLAGS);
+#endif
 }

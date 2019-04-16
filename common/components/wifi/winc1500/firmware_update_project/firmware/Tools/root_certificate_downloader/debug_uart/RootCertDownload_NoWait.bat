@@ -8,4 +8,4 @@ for %%X in (..\crt\*.cer) do (
 	@set seq=!seq! %%X
 )
 
-root_certificate_downloader -n %c% %seq% -no_wait -port 0
+root_certificate_downloader -n %c% %seq% -no_wait -port 0 -e

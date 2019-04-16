@@ -2222,15 +2222,15 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../../port/port.c</name>
 				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../port/port.h</name>
-				</file>
 				<group>
 					<name>quick_start</name>
 					<file>
 						<name>$PROJ_DIR$/../../../../../port/quick_start/qs_port_basic.h</name>
 					</file>
 				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../port/port.h</name>
+				</file>
 			</group>
 		</group>
 		<group>
@@ -2304,9 +2304,6 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/pac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/adc.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/nvmctrl.h</name>
 							</file>
 							<file>
@@ -2329,6 +2326,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/tcc.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/adc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/component/tc.h</name>
@@ -2454,6 +2454,9 @@
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21g17a.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e19a.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/pio/samr21e16a.h</name>
 							</file>
 							<file>
@@ -2474,6 +2477,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e17a.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21e19a.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../utils/cmsis/samr21/include/samr21g18a.h</name>
