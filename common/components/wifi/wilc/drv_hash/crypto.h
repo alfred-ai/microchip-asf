@@ -39,8 +39,8 @@
  *
  */
 
-#ifndef CRYPTO_H_INCLUDED
-#define CRYPTO_H_INCLUDED
+#ifndef __CRYPTO_H__
+#define __CRYPTO_H__
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 INCLUDES

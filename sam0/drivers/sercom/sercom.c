@@ -3,7 +3,7 @@
  *
  * \brief SAM Serial Peripheral Interface Driver
  *
- * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -143,7 +143,7 @@ enum status_code _sercom_get_async_baud_val(
 	uint64_t baud_calculated = 0;
 	uint8_t baud_fp;
 	uint32_t baud_int = 0;
-	uint64_t temp1, temp2;
+	uint64_t temp1;
 
 	/* Check if the baudrate is outside of valid range */
 	if ((baudrate * sample_num) > peripheral_clock) {
@@ -158,19 +158,13 @@ enum status_code _sercom_get_async_baud_val(
 		scale = ((uint64_t)1 << SHIFT) - ratio;
 		baud_calculated = (65536 * scale) >> SHIFT;
 	} else if(mode == SERCOM_ASYNC_OPERATION_MODE_FRACTIONAL) {
-		for(baud_fp = 0; baud_fp < BAUD_FP_MAX; baud_fp++) {
-			temp1 = BAUD_FP_MAX * (uint64_t)peripheral_clock;
-			temp2 = ((uint64_t)baudrate * sample_num);
-			baud_int = long_division(temp1, temp2);
-			baud_int -= baud_fp;
-			baud_int = baud_int / BAUD_FP_MAX;
-			if(baud_int < BAUD_INT_MAX) {
-				break;
-			}
+		temp1 = ((uint64_t)baudrate * sample_num);
+		baud_int = long_division( peripheral_clock, temp1);
+		if(baud_int > BAUD_INT_MAX) {
+				return STATUS_ERR_BAUDRATE_UNAVAILABLE;
 		}
-		if(baud_fp == BAUD_FP_MAX) {
-			return STATUS_ERR_BAUDRATE_UNAVAILABLE;
-		}
+		temp1 = long_division( 8 * (uint64_t)peripheral_clock, temp1);
+		baud_fp = temp1 - 8 * baud_int;
 		baud_calculated = baud_int | (baud_fp << 13);
 	}
 

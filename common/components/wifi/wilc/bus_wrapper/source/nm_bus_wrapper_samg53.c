@@ -130,7 +130,7 @@ sint8 nm_bus_init(void *pvinit)
 	/* TODO: implement I2C. */
 	result = M2M_ERR;
 
-#elif CONF_WILC_USE_SPI
+#elif defined CONF_WILC_USE_SPI
 	/* Configure SPI pins. */
 	ioport_set_pin_mode(CONF_WILC_SPI_MISO_GPIO, CONF_WILC_SPI_MISO_FLAGS);
 	ioport_set_pin_mode(CONF_WILC_SPI_MOSI_GPIO, CONF_WILC_SPI_MOSI_FLAGS);
@@ -203,7 +203,7 @@ sint8 nm_bus_ioctl(uint8 u8Cmd, void* pvParameter)
 			s8Ret = nm_i2c_write_special(pstrParam->pu8Buf1, pstrParam->u16Sz1, pstrParam->pu8Buf2, pstrParam->u16Sz2);
 		}
 		break;
-#elif CONF_WILC_USE_SPI
+#elif defined CONF_WILC_USE_SPI
 		case NM_BUS_IOCTL_RW: {
 			tstrNmSpiRw *pstrParam = (tstrNmSpiRw *)pvParameter;
 			s8Ret = spi_rw(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);

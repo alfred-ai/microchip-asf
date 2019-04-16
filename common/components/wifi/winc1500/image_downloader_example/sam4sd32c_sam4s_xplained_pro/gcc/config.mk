@@ -60,6 +60,7 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/m2m_hif.c \
        common/components/wifi/winc1500/driver/source/m2m_ota.c \
        common/components/wifi/winc1500/driver/source/m2m_periph.c \
+       common/components/wifi/winc1500/driver/source/m2m_ssl.c \
        common/components/wifi/winc1500/driver/source/m2m_wifi.c \
        common/components/wifi/winc1500/driver/source/nmasic.c \
        common/components/wifi/winc1500/driver/source/nmbus.c \
@@ -68,10 +69,6 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/nmspi.c \
        common/components/wifi/winc1500/driver/source/nmuart.c \
        common/components/wifi/winc1500/image_downloader_example/main.c \
-       common/components/wifi/winc1500/image_downloader_example/root_cert/root_setup.c \
-       common/components/wifi/winc1500/image_downloader_example/root_cert/x509/asn1.c \
-       common/components/wifi/winc1500/image_downloader_example/root_cert/x509/hash.c \
-       common/components/wifi/winc1500/image_downloader_example/root_cert/x509/x509_cert.c \
        common/components/wifi/winc1500/socket/source/socket.c \
        common/components/wifi/winc1500/spi_flash/source/spi_flash.c \
        common/services/clock/sam4s/sysclk.c               \

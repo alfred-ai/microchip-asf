@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAMD21 BSP APIs declarations.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,6 +43,7 @@
 #define _NM_BSP_SAMD21_H_
 
 #include "conf_winc.h"
+#include "math.h"
 
 #define NM_EDGE_INTERRUPT		(1)
 

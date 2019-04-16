@@ -61,7 +61,10 @@ CSRCS = \
        common/components/wifi/wilc/driver/source/nmasic.c \
        common/components/wifi/wilc/driver/source/nmbus.c  \
        common/components/wifi/wilc/driver/source/nmdrv.c  \
+       common/components/wifi/wilc/driver/source/nmi2c.c  \
+       common/components/wifi/wilc/driver/source/nmsdio.c \
        common/components/wifi/wilc/driver/source/nmspi.c  \
+       common/components/wifi/wilc/driver/source/nmuart.c \
        common/components/wifi/wilc/driver/source/spi_flash.c \
        common/components/wifi/wilc/drv_hash/PMK.c         \
        common/components/wifi/wilc/iperf_wilc1000_example/iperf.c \

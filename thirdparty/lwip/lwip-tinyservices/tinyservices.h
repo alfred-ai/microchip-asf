@@ -51,7 +51,7 @@
 #define DHCP_OPTION_VENDOR_SPECIFIC_INFO 43
 
 /** Handle slightly smaller response than standard implementations */
-#define DHCP_RESPONSE_DEFAULT_SIZE (1024)
+#define DHCP_RESPONSE_DEFAULT_SIZE (512)
 
 /** DNS client port is set to 53000 */
 #define DNS_CLIENT_PORT (53000)

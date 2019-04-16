@@ -51,7 +51,6 @@ static volatile uint8 gu8ChNum;
 static volatile uint8 gu8scanInProgress = 0;
 tpfAppWifiCb gpfAppWifiCb = NULL;
 
-
 #ifdef ETH_MODE
 static tpfAppEthCb  gpfAppEthCb  = NULL;
 static uint8* 	        gau8ethRcvBuf=NULL;
@@ -218,7 +217,7 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint32 u32Addr)
 	{
 		if(hif_receive(u32Addr, rx_buf ,sizeof(tstrM2mIpRsvdPkt), 0) == M2M_SUCCESS)
 		{
-			tstrM2mIpRsvdPkt * pstrM2MIpRxPkt = (void *)rx_buf;
+			tstrM2mIpRsvdPkt * pstrM2MIpRxPkt = (tstrM2mIpRsvdPkt*)rx_buf;
 			tstrM2mIpCtrlBuf  strM2mIpCtrlBuf;
 			uint16 u16Offset = pstrM2MIpRxPkt->u16PktOffset;
 			#ifdef M2M_WILC1000
@@ -531,6 +530,7 @@ sint8 m2m_wifi_request_dhcp_server(uint8* addr)
 */
 sint8 m2m_wifi_set_lsn_int(tstrM2mLsnInt* pstrM2mLsnInt)
 {
+	pstrM2mLsnInt->u16LsnInt = NM_BSP_B_L_16(pstrM2mLsnInt->u16LsnInt);
 	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_LSN_INT, (uint8*)pstrM2mLsnInt, sizeof(tstrM2mLsnInt), NULL, 0, 0);
 }
 
@@ -744,8 +744,8 @@ sint8 m2m_wifi_enable_ap(CONST tstrM2MAPConfig* pstrM2MAPConfig)
 		m2m_memcpy((uint8 *)&strTempM2MAPConfig, (uint8 *)pstrM2MAPConfig, sizeof(tstrM2MAPConfig));
 			
 		strTempM2MAPConfig.u8IsPMKUsed = 1;
-		pbkdf2_sha1((uint8 *)pstrM2MAPConfig->au8PSK,m2m_strlen((uint8 *)pstrM2MAPConfig->au8PSK),
-			(uint8 *)pstrM2MAPConfig->au8SSID,m2m_strlen((uint8 *)pstrM2MAPConfig->au8SSID),strTempM2MAPConfig.au8PMK);
+		pbkdf2_sha1((uint8 *)pstrM2MAPConfig->uniAuth.au8PSK,m2m_strlen((uint8 *)pstrM2MAPConfig->uniAuth.au8PSK),
+			(uint8 *)pstrM2MAPConfig->au8SSID,m2m_strlen((uint8 *)pstrM2MAPConfig->au8SSID),strTempM2MAPConfig.uniAuth.au8PMK);
 		pstrM2MAPConfig = &strTempM2MAPConfig;
 	}
 #elif defined(M2M_WILC1000) && !defined(COMPUTE_PMK_IN_HOST)
@@ -805,8 +805,8 @@ sint8 m2m_wifi_send_ethernet_pkt(uint8* pu8Packet,uint16 u16PacketSize)
 	{
 		tstrM2MWifiTxPacketInfo		strTxPkt;
 
-		strTxPkt.u16PacketSize		= u16PacketSize;
-		strTxPkt.u16HeaderLength	= M2M_ETHERNET_HDR_LEN;
+		strTxPkt.u16PacketSize		= NM_BSP_B_L_16(u16PacketSize);
+		strTxPkt.u16HeaderLength	= NM_BSP_B_L_16(M2M_ETHERNET_HDR_LEN);
 #ifdef M2M_WILC1000
 		strTxPkt.u8IfcId			= INTERFACE_1;
 #endif
@@ -960,7 +960,7 @@ sint8 m2m_wifi_request_sleep(uint32 u32SlpReqTime)
 	if(psType == M2M_PS_MANUAL)
 	{
 		tstrM2mSlpReqTime strPs;
-		strPs.u32SleepTime = u32SlpReqTime;
+		strPs.u32SleepTime = NM_BSP_B_L_32(u32SlpReqTime);
 		ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_DOZE, (uint8*) &strPs,sizeof(tstrM2mSlpReqTime), NULL, 0, 0);
 	}
 	ret = hif_chip_sleep();
@@ -1028,8 +1028,8 @@ sint8 m2m_wifi_send_wlan_pkt(uint8 *pu8WlanPacket, uint16 u16WlanHeaderLength, u
 	{
 		tstrM2MWifiTxPacketInfo		strTxPkt;
 
-		strTxPkt.u16PacketSize		= u16WlanPktSize;
-		strTxPkt.u16HeaderLength	= u16WlanHeaderLength;
+		strTxPkt.u16PacketSize		= NM_BSP_B_L_16(u16WlanPktSize);
+		strTxPkt.u16HeaderLength	= NM_BSP_B_L_16(u16WlanHeaderLength);
 		s8Ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SEND_WIFI_PACKET | M2M_REQ_DATA_PKT,
 		(uint8*)&strTxPkt, sizeof(tstrM2MWifiTxPacketInfo), pu8WlanPacket, u16WlanPktSize, sizeof(tstrM2MWifiTxPacketInfo));
 	}
@@ -1167,7 +1167,8 @@ sint8 m2m_wifi_download_cert(uint8* pCertData,uint32 u32CertSize)
 				(uint8 *)pChunk, u32ChunkSize,sizeof(u32CertSize));
 		u32CertSize -= u32ChunkSize;
 	}
-	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_CERT_DOWNLOAD_DONE, NULL, 0, NULL, 0, 0);	
+	s8Ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_CERT_DOWNLOAD_DONE, NULL, 0, NULL, 0, 0);	
+	return s8Ret;
 }
 #endif
 #if defined(M2M_WILC1000) && defined(CONCURRENT_INTERFACES)
@@ -1190,8 +1191,8 @@ sint8 m2m_wifi_send_ethernet_pkt_ifc1(uint8* pu8Packet,uint16 u16PacketSize)
 	{
 		tstrM2MWifiTxPacketInfo		strTxPkt;
 
-		strTxPkt.u16PacketSize		= u16PacketSize;
-		strTxPkt.u16HeaderLength	= M2M_ETHERNET_HDR_LEN;
+		strTxPkt.u16PacketSize		= NM_BSP_B_L_16(u16PacketSize);
+		strTxPkt.u16HeaderLength	= NM_BSP_B_L_16(M2M_ETHERNET_HDR_LEN);
 		strTxPkt.u8IfcId			= INTERFACE_2;
 		s8Ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SEND_ETHERNET_PACKET | M2M_REQ_DATA_PKT,
 		(uint8*)&strTxPkt, sizeof(tstrM2MWifiTxPacketInfo), pu8Packet, u16PacketSize,  M2M_ETHERNET_HDR_OFFSET - M2M_HIF_HDR_OFFSET);

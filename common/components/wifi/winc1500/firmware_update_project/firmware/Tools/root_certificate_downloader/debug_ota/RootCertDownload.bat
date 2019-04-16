@@ -1,9 +1,9 @@
 @ECHO off
-@TITLE	Root Certificate Downloader - Atmel Corporation
+@TITLE	Root Certificate Downloader
 setlocal EnableDelayedExpansion
 set /a c=0
 set seq=
-for %%X in (..\crt\*.cer) do (
+for %%X in (..\binary\*.cer) do (
 	set /a c+=1
 	@set seq=!seq! %%X
 )

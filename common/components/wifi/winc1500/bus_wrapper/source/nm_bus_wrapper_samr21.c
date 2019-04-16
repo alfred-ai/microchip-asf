@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -125,16 +125,17 @@ static sint8 spi_rw(uint8* pu8Mosi, uint8* pu8Miso, uint16 u16Sz)
 	uint16_t txd_data = 0;
 	uint16_t rxd_data = 0;
 
-	if (!pu8Mosi) {
+	if(((pu8Miso == NULL) && (pu8Mosi == NULL)) ||(u16Sz == 0)) {
+		return M2M_ERR_INVALID_ARG;
+	}
+
+	if (pu8Mosi == NULL) {
 		pu8Mosi = &u8Dummy;
 		u8SkipMosi = 1;
 	}
-	else if(!pu8Miso) {
+	if(pu8Miso == NULL) {
 		pu8Miso = &u8Dummy;
 		u8SkipMiso = 1;
-	}
-	else {
-		return M2M_ERR_BUS_FAIL;
 	}
 
 	spi_select_slave(&master, &slave_inst, true);
@@ -288,9 +289,20 @@ sint8 nm_bus_deinit(void)
 
 #ifdef CONF_WINC_USE_I2C
 	i2c_master_disable(&i2c_master_instance);
+	port_pin_set_config(CONF_WINC_I2C_SCL, &pin_conf);
+	port_pin_set_config(CONF_WINC_I2C_SDA, &pin_conf);
 #endif /* CONF_WINC_USE_I2C */
 #ifdef CONF_WINC_USE_SPI
 	spi_disable(&master);
+	port_pin_set_config(CONF_WINC_SPI_MOSI, &pin_conf);
+	port_pin_set_config(CONF_WINC_SPI_MISO, &pin_conf);
+	port_pin_set_config(CONF_WINC_SPI_SCK,  &pin_conf);
+	port_pin_set_config(CONF_WINC_SPI_SS,   &pin_conf);
+	
+	//port_pin_set_output_level(CONF_WINC_SPI_MOSI, false);
+	//port_pin_set_output_level(CONF_WINC_SPI_MISO, false);
+	//port_pin_set_output_level(CONF_WINC_SPI_SCK,  false);
+	//port_pin_set_output_level(CONF_WINC_SPI_SS,   false);
 #endif /* CONF_WINC_USE_SPI */
 	return result;
 }
@@ -301,9 +313,6 @@ sint8 nm_bus_deinit(void)
 *	@param [in]	void *config
 *					re-init configuration data
 *	@return		M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
-*	@author		Dina El Sissy
-*	@date		19 Sept 2012
-*	@version	1.0
 */
 sint8 nm_bus_reinit(void* config)
 {

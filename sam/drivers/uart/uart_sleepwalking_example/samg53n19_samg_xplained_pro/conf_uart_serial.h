@@ -3,7 +3,7 @@
  *
  * \brief USART Serial Configuration
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -50,7 +50,7 @@
 /** UART Interface */
 #define CONF_UART            CONSOLE_UART
 /** Baudrate setting */
-#define CONF_UART_BAUDRATE   115200
+#define CONF_UART_BAUDRATE   19200
 /** Parity setting */
 #define CONF_UART_PARITY     UART_MR_PAR_NO
 

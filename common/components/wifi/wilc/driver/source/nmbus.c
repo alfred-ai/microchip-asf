@@ -41,12 +41,10 @@
 #ifndef CORTUS_APP
 
 #include "nmbus.h"
-#if defined (CONF_WILC_USE_SPI)
+#include "nmi2c.h"
 #include "nmspi.h"
-#endif
-#if defined (CONF_WILC_USE_SDIO)
 #include "nmsdio.h"
-#endif
+#include "nmuart.h"
 
 #define MAX_TRX_CFG_SZ		8
 
@@ -76,7 +74,7 @@ sint8 nm_bus_iface_init(void *pvInitVal)
 */ 
 sint8 nm_bus_iface_deinit(void)
 {
-	sint8 ret;
+	sint8 ret = M2M_SUCCESS;
 	ret = nm_bus_deinit();
 
 	return ret;

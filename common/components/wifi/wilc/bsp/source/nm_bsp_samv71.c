@@ -154,3 +154,27 @@ void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 		pio_disable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
 	}
 }
+
+/*
+*	@fn		nm_bsp_malloc
+*	@brief	Allocate memory
+*	@param [in]   u32Size
+*               Size of the requested memory 
+*	@return       Pointer to the allocated buffer, or NULL otherwise
+*/
+void* nm_bsp_malloc(uint32 u32Size)
+{
+	return malloc(u32Size);
+}
+
+/*
+*	@fn		nm_bsp_free
+*	@brief	Free memory
+*	@param [in]   pvMemBuffer
+*               Pointer to the buffer to be freed 
+*/
+void nm_bsp_free(void* pvMemBuffer)
+{
+	free(pvMemBuffer);
+}
+

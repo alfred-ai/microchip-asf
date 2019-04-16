@@ -3,7 +3,7 @@
  *
  * \brief MAIN configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -59,9 +59,9 @@ extern "C" {
 
 /*
  * A MQTT broker server which was connected.
- * test.mosquitto.org is public MQTT broker.
+ * m2m.eclipse.org is public MQTT broker.
  */
-static const char main_mqtt_broker[] = "test.mosquitto.org";
+static const char main_mqtt_broker[] = "m2m.eclipse.org";
 
 /** Wi-Fi Settings */
 #define MAIN_WLAN_SSID        "DEMO_AP" /* < Destination SSID */

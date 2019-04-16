@@ -60,6 +60,7 @@
 	#define WILC_CLK_STATUS_REG 		0xf0
 	#define WILC_WAKEUP_BIT 			NBIT0
 	#define WILC_CLK_STATUS_BIT 		NBIT4
+	#define WILC_FROM_INTERFACE_TO_WF_REG		0xFA
 
 	#define WILC_INT_STATUS_REG 	0xFE
 	#define WILC_INT_CLEAR_REG 		0xFE
@@ -68,6 +69,7 @@
 	#define WILC_CLK_STATUS_REG 		0x13
 	#define WILC_WAKEUP_BIT 			NBIT1
 	#define WILC_CLK_STATUS_BIT 		NBIT2
+	#define WILC_FROM_INTERFACE_TO_WF_REG		0x0E
 
 	#define WILC_INT_STATUS_REG 	0x40
 	#define WILC_INT_CLEAR_REG 		0x44
@@ -79,17 +81,20 @@
 	#define WILC_WAKEUP_REG 			0xf0
 	#define WILC_CLK_STATUS_REG 		0xf1
 	#define WILC_WAKEUP_BIT  		NBIT0
-	#define WILC_CLK_STATUS_BIT 		NBIT1
+	#define WILC_CLK_STATUS_BIT 				NBIT0
+	#define WILC_FROM_INTERFACE_TO_WF_REG		0xFA
 
 	#define WILC_INT_STATUS_REG 	0xF8
 	#define WILC_INT_CLEAR_REG 		0xFE
 #else
 	#define WILC_WAKEUP_REG 			0x1
+	static uint32 WILC_CLK_STATUS_REG =			0xf; /* Assume initially it is B0 chip */
 	#define WILC_WAKEUP_BIT 			NBIT1
 	#define WILC_CLK_STATUS_BIT 		NBIT2
 
 	#define WILC_INT_STATUS_REG 	0x40
 	#define WILC_INT_CLEAR_REG 		0x44
+	#define WILC_FROM_INTERFACE_TO_WF_REG		0x0B
 
 #endif /* WILC_SDIO */
 #endif /* CONF_WILC_USE_3000_REV_A*/
@@ -116,7 +121,6 @@
 #define ISNMC1500(id)   (((id & 0xfffff000) == 0x150000) ? 1 : 0)
 #define REV(id)         ( ((id) & 0x00000fff ) )
 #define EFUSED_MAC(value) (value & 0xffff0000)
-
 
 #ifdef CONF_WILC_USE_3000_REV_A
 

@@ -64,8 +64,15 @@ static int sdio_set_func0_block_size(uint32_t block_size);
 static int sdio_set_func1_block_size(uint32_t block_size);
 static int sdio_int_enable(void);
 
+#define SDIO_ALGN_USE_STATIC_BUFFER
+
+#ifdef SDIO_ALGN_USE_STATIC_BUFFER
+static uint8 gpu8AlignedBuf[INIT_RX_ALIGNED_BUF_SIZE];
+static uint32 gu32AlignedBufSize = INIT_RX_ALIGNED_BUF_SIZE;
+#else
 static uint8* gpu8AlignedBuf = NULL;
 static uint32 gu32AlignedBufSize = INIT_RX_ALIGNED_BUF_SIZE;
+#endif
 
 
 static int sdio_write_reg(uint32_t addr, uint32_t data)
@@ -490,7 +497,6 @@ sint8 nm_sdio_init(void)
 	tstrNmSdioCmd52 cmd;
 	int loop;
 	uint32_t chipid;
-	uint32 reg =0;
 
 	/*
 	 * function 0 csa enable
@@ -581,6 +587,7 @@ sint8 nm_sdio_init(void)
 	M2M_DBG("[nmi sdio]: chipid (%08x)\n", (unsigned int)chipid);
 	sdio_int_enable();
 
+#ifndef SDIO_ALGN_USE_STATIC_BUFFER
 	gpu8AlignedBuf = nm_bsp_malloc(INIT_RX_ALIGNED_BUF_SIZE);
 	if(gpu8AlignedBuf == NULL){
 		M2M_ERR("Failed to allocate buffer");
@@ -588,6 +595,7 @@ sint8 nm_sdio_init(void)
 		return M2M_ERR_MEM_ALLOC;
 	}
 	gu32AlignedBufSize = INIT_RX_ALIGNED_BUF_SIZE;
+#endif
 	return M2M_SUCCESS;
 }
 
@@ -601,10 +609,12 @@ sint8 nm_sdio_init(void)
 */ 
 sint8 nm_sdio_deinit(void)
 {
+#ifndef SDIO_ALGN_USE_STATIC_BUFFER
 	if(gpu8AlignedBuf != NULL)
 		nm_bsp_free(gpu8AlignedBuf);
 	gpu8AlignedBuf = NULL;
 	gu32AlignedBufSize = 0;
+#endif
 	
 	return M2M_SUCCESS;
 }
@@ -693,6 +703,7 @@ sint8 nm_sdio_read_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 	}
 	else{	
 		if(gu32AlignedBufSize < u16Sz){
+		#ifndef SDIO_ALGN_USE_STATIC_BUFFER
 			uint32 u32AlignedSize = (u16Sz+3) & (~0x3);
 			nm_bsp_free(gpu8AlignedBuf);
 			gpu8AlignedBuf = nm_bsp_malloc(u32AlignedSize);
@@ -702,6 +713,10 @@ sint8 nm_sdio_read_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 				return M2M_ERR_MEM_ALLOC;
 			}
 			gu32AlignedBufSize = u32AlignedSize;
+		#else
+			M2M_ERR("SDIO buffer too small. req %d bytes", u16Sz);
+			return M2M_ERR_MEM_ALLOC;
+		#endif
 		}
 		s8Ret = sdio_read(u32Addr, gpu8AlignedBuf, u16Sz);
 		m2m_memcpy(puBuf, gpu8AlignedBuf, u16Sz);
@@ -727,13 +742,13 @@ sint8 nm_sdio_write_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 {
 	sint8 s8Ret;
 	sint8 rem = 4 - (((uint32)puBuf) %4);
-	uint32 u32Reg=0;
 
 	if (rem== 4){
 		s8Ret = sdio_write(u32Addr, puBuf, u16Sz);
 	}
 	else{
 		if(gu32AlignedBufSize < u16Sz){
+		#ifndef SDIO_ALGN_USE_STATIC_BUFFER
 			uint32 u32AlignedSize = (u16Sz+3) & (~0x3);
 			nm_bsp_free(gpu8AlignedBuf);
 			gpu8AlignedBuf = nm_bsp_malloc(u32AlignedSize);
@@ -743,6 +758,9 @@ sint8 nm_sdio_write_block(uint32 u32Addr, uint8 *puBuf, uint16 u16Sz)
 				return M2M_ERR_MEM_ALLOC;
 			}
 			gu32AlignedBufSize = u32AlignedSize;
+		#else
+			M2M_ERR("SDIO buffer too small. req %d bytes", u16Sz);
+		#endif
 		} 		
 		m2m_memcpy(gpu8AlignedBuf, puBuf, u16Sz);
 		s8Ret = sdio_write(u32Addr, gpu8AlignedBuf, u16Sz);

@@ -6,7 +6,7 @@
  *
  * This file defines a useful set of functions for DSU CRC32 on SAM devices.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -47,6 +47,8 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
+#include <system_interrupt.h>
+#include <pac.h>
 #include <crc32.h>
 
 /**
@@ -74,6 +76,9 @@ enum status_code dsu_crc32_cal(const uint32_t addr, const uint32_t len, uint32_t
 		return STATUS_ERR_BAD_ADDRESS;
 	}
 
+	system_interrupt_disable_global();
+	system_peripheral_unlock(SYSTEM_PERIPHERAL_ID(DSU), ~SYSTEM_PERIPHERAL_ID(DSU));
+
 	DSU->DATA.reg = *pcrc32;
 	DSU->ADDR.reg = addr;
 	DSU->LENGTH.reg = len;
@@ -83,11 +88,15 @@ enum status_code dsu_crc32_cal(const uint32_t addr, const uint32_t len, uint32_t
 	}
 
 	if (DSU->STATUSA.reg & DSU_STATUSA_BERR) {
+		system_peripheral_lock(SYSTEM_PERIPHERAL_ID(DSU), ~SYSTEM_PERIPHERAL_ID(DSU));
+		system_interrupt_enable_global();
 		return STATUS_ERR_IO;
 	}
 
 	*pcrc32 = DSU->DATA.reg;
 	DSU->STATUSA.reg = DSU_STATUSA_DONE;
 
+	system_peripheral_lock(SYSTEM_PERIPHERAL_ID(DSU), ~SYSTEM_PERIPHERAL_ID(DSU));
+	system_interrupt_enable_global();
 	return STATUS_OK;
 }

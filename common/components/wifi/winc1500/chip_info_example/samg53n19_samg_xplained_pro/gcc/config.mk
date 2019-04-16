@@ -61,6 +61,7 @@ CSRCS = \
        common/components/wifi/winc1500/driver/source/m2m_hif.c \
        common/components/wifi/winc1500/driver/source/m2m_ota.c \
        common/components/wifi/winc1500/driver/source/m2m_periph.c \
+       common/components/wifi/winc1500/driver/source/m2m_ssl.c \
        common/components/wifi/winc1500/driver/source/m2m_wifi.c \
        common/components/wifi/winc1500/driver/source/nmasic.c \
        common/components/wifi/winc1500/driver/source/nmbus.c \

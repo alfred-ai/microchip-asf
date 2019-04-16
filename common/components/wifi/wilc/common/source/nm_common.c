@@ -94,6 +94,10 @@ uint8 m2m_strncmp(uint8 *pcS1, uint8 *pcS2, uint16 u16Len)
     return 0;
 }
 
+/* Finds the occurance of pcStr in pcIn. 
+If pcStr is part of pcIn it returns a valid pointer to the start of pcStr within pcIn.
+Otherwise a NULL Pointer is returned.
+*/
 uint8 * m2m_strstr(uint8 *pcIn, uint8 *pcStr)
 {
     uint8 u8c;
@@ -101,7 +105,7 @@ uint8 * m2m_strstr(uint8 *pcIn, uint8 *pcStr)
 
     u8c = *pcStr++;
     if (!u8c)
-        return (uint8 *) pcIn;
+        return (uint8 *) pcIn;	// Trivial empty string case
 
     u16StrLen = m2m_strlen(pcStr);
     do {

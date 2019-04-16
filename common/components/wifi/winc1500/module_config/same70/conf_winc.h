@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -84,6 +84,11 @@ extern "C" {
 /** SPI delay before SPCK and between consecutive transfer. */
 #define CONF_WINC_SPI_DLYBS				(0)
 #define CONF_WINC_SPI_DLYBCT 			(0)
+
+#define CONF_WINC_SPI_MISO				EXT1_PIN_SPI_MISO
+#define CONF_WINC_SPI_MOSI				EXT1_PIN_SPI_MOSI
+#define CONF_WINC_SPI_SCK				EXT1_PIN_SPI_SCK
+#define CONF_WINC_SPI_SS				EXT1_PIN_SPI_SS_0
 
 /** SPI interrupt pin. */
 #define CONF_WINC_SPI_INT_PIN			IOPORT_CREATE_PIN(PIOD, 28)

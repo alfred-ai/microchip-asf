@@ -65,8 +65,8 @@ static enum status_code _ac_set_config(
  	 * GCLK_ADC1 must be used to configure the clock for AC as GCLK_AC is not 
  	 * functional. Errata reference: 13404 
  	 */
-	system_gclk_chan_set_config(ADC1_GCLK_ID, &gclk_chan_conf);
-	system_gclk_chan_enable(ADC1_GCLK_ID);
+	system_gclk_chan_set_config(34, &gclk_chan_conf);
+	system_gclk_chan_enable(34);
 #else
 	system_gclk_chan_set_config(AC_GCLK_ID, &gclk_chan_conf);
 	system_gclk_chan_enable(AC_GCLK_ID);

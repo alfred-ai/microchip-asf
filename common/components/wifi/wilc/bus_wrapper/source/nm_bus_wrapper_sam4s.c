@@ -133,7 +133,7 @@ sint8 nm_bus_init(void *pvinit)
 	/* TODO: implement I2C. */
 	result = M2M_ERR;
 
-#elif CONF_WILC_USE_SPI
+#elif defined CONF_WILC_USE_SPI
 	/* Configure SPI pins. */
 	gpio_configure_pin(CONF_WILC_SPI_MISO_GPIO, CONF_WILC_SPI_MISO_FLAGS);
 	gpio_configure_pin(CONF_WILC_SPI_MOSI_GPIO, CONF_WILC_SPI_MOSI_FLAGS);

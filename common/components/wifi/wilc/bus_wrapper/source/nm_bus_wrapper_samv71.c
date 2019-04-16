@@ -139,7 +139,7 @@ sint8 nm_bus_init(void *pvinit)
 #ifdef CONF_WILC_USE_I2C
 	/* TODO: implement I2C. */
 
-#elif CONF_WILC_USE_SPI
+#elif defined CONF_WILC_USE_SPI
 	/* Configure SPI pins. */
 	ioport_set_pin_mode(CONF_WILC_SPI_MISO_GPIO, CONF_WILC_SPI_MISO_FLAGS);
 	ioport_disable_pin(CONF_WILC_SPI_MISO_GPIO);

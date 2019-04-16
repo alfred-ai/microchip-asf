@@ -75,7 +75,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_USE_SPI				(1)
+#define CONF_WILC_USE_SPI				
 
 /** SPI pin and instance settings. */
 #define CONF_WILC_SPI					EXT1_SPI_MODULE

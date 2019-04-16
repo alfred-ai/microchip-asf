@@ -330,7 +330,7 @@ enum status_code pwm_init(enum pwm_device_select device_select, \
 {
 	uint32_t reg_value = 0;
 
-	if ((device_select == 0) || (device_select > PWM3)) {
+	if (device_select > PWM3) {
 		return STATUS_ERR_UNSUPPORTED_DEV;
 	}
 

@@ -46,7 +46,7 @@
 
 #define ETH_MODE
 #define M2M_WILC1000
-//#define COMPUTE_PMK_IN_HOST
+#define COMPUTE_PMK_IN_HOST
 #define CONCURRENT_INTERFACES
 //#define INT_BASED_TX
 #define CONF_MGMT

@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAMD21 BSP APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -68,6 +68,8 @@ static void init_chip_pins(void)
 	port_pin_set_config(CONF_WINC_PIN_RESET, &pin_conf);
 	port_pin_set_config(CONF_WINC_PIN_CHIP_ENABLE, &pin_conf);
 	port_pin_set_config(CONF_WINC_PIN_WAKE, &pin_conf);
+	port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
+	port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
 }
 
 /*
@@ -124,9 +126,9 @@ void nm_bsp_reset(void)
 	port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
 	nm_bsp_sleep(100);
 	port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, true);
-	nm_bsp_sleep(10);
+	nm_bsp_sleep(100);
 	port_pin_set_output_level(CONF_WINC_PIN_RESET, true);
-	nm_bsp_sleep(10);
+	nm_bsp_sleep(100);
 }
 
 /*

@@ -1,4 +1,4 @@
-/**
+/** \defgroup nm_bsp BSP
  *
  * \file
  *
@@ -22,6 +22,9 @@
  *
  * 3. The name of Atmel may not be used to endorse or promote products derived
  *    from this software without specific prior written permission.
+ *
+ * 4. This software may only be redistributed and used in connection with an
+ *    Atmel microcontroller product.
  *
  * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -61,7 +64,7 @@
 
 /*!
  * @typedef      void (*tpfNmBspIsr) (void);
- * @brief           Pointer to function.
+ * @brief           Pointer to function.\n
  *                     Used as a data type of ISR function registered by \ref nm_bsp_register_isr
  * @return         None
  */
@@ -153,9 +156,9 @@ extern "C"{
  /**@{*/
 /*!
  * @fn           sint8 nm_bsp_init(void);
- * @brief        Initialization for bsp (\e Board \e Support \e Package) such as Reset and Chip Enable Pins for WINC, delays, register ISR, enable/disable IRQ for WINC, ...etc.
+ * @brief        Initialization for bsp (\e Board \e Support \e Package) such as Reset and Chip Enable Pins for WINC, delays, register ISR, enable/disable IRQ for WINC, ...etc.\n
  *                   You must use this function in the head of your application to enable WINC and Host Driver communicate each other.
- * @warning      Missing use will lead to unavailability of host communication.
+ * @warning      Missing use will lead to unavailability of host communication.\n
  *  @note        Implementation of this function is host dependent.
  * @return       The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
 
@@ -172,7 +175,7 @@ sint8 nm_bsp_init(void);
 /*!
  * @fn           sint8 nm_bsp_deinit(void);
  * @pre          Initialize \ref nm_bsp_init first
- * @warning      Missing use may lead to unknown behavior in case of soft reset.
+ * @warning      Missing use may lead to unknown behavior in case of soft reset.\n
  * @note         Implementation of this function is host dependent.
  * @see          nm_bsp_init               
  * @return      The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
@@ -204,7 +207,7 @@ void nm_bsp_reset(void);
  
 /** @defgroup NmBspSleepFn nm_bsp_sleep
 *     @ingroup BSPAPI
-*     Sleep in units of milliseconds.
+*     Sleep in units of milliseconds.\n
 *    This function used by HIF Layer according to different situations. 
 */
 /**@{*/
@@ -214,7 +217,7 @@ void nm_bsp_reset(void);
  * @param [in]   u32TimeMsec
  *               Time unit in milliseconds
  * @pre          Initialize \ref nm_bsp_init first
- * @warning      Maximum value must nor exceed 4294967295 milliseconds which is equal to 4294967.295 seconds.
+ * @warning      Maximum value must nor exceed 4294967295 milliseconds which is equal to 4294967.295 seconds.\n
  * @note         Implementation of this function is host dependent.
  * @see           nm_bsp_init               
  * @return       None
@@ -260,6 +263,40 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr);
 void nm_bsp_interrupt_ctrl(uint8 u8Enable);
   /**@}*/
 
+ /** @defgroup NmBspMalloc nm_bsp_malloc
+*     @ingroup BSPAPI
+*    Synchrnonous memory allocate API
+*/
+/**@{*/
+/*!
+ * @fn           void* nm_bsp_malloc(uint32);
+ * @brief        Allocate memory
+ * @param [in]   u32Size
+ *               Size of the requested memory 
+ * @note         Implementation of this function is host dependent and called by HIF layer.
+ * @return       Pointer to the allocated buffer, or NULL otherwise
+
+ */
+void* nm_bsp_malloc(uint32 u32Size);
+  /**@}*/
+
+ /** @defgroup NmBspFree nm_bsp_free
+*     @ingroup BSPAPI
+*    Synchrnonous memory free API
+*/
+/**@{*/
+/*!
+ * @fn           void nm_bsp_free(void*);
+ * @brief        Free memory
+ * @param [in]   pvMemBuffer
+ *               Pointer to the buffer to be freed 
+ * @note         Implementation of this function is host dependent and called by HIF layer.
+ * @return       None
+
+ */
+void nm_bsp_free(void* pvMemBuffer);
+  /**@}*/
+  
 #ifdef __cplusplus
 }
 #endif
@@ -268,58 +305,76 @@ void nm_bsp_interrupt_ctrl(uint8 u8Enable);
 
 #ifdef WIN32
 #include "nm_bsp_win32.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef __K20D50M__
 #include "nm_bsp_k20d50m.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef __MSP430FR5739__
 #include "bsp_msp430fr5739.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef _FREESCALE_MCF51CN128_
 #include "bsp/include/nm_bsp_mcf51cn128.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef __MCF964548__
 #include "bsp/include/nm_bsp_mc96f4548.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef __APP_APS3_CORTUS__
 #include "nm_bsp_aps3_cortus.h"
+#define __M2M_DMA_BUF_ATT__
+#endif
+
+#ifdef __KERNEL__
+#include "bsp\include\nm_bsp_linux.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #if (defined __SAMD21J18A__) || (defined __SAMD21G18A__)
 #include "bsp/include/nm_bsp_samd21.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #if (defined __SAM4S16C__) || (defined __SAM4SD32C__)
 #include "bsp/include/nm_bsp_sam4s.h"
+#define __M2M_DMA_BUF_ATT__		__attribute__((aligned(32)))
+#endif
+#if (defined __SAMV71Q21__) || (defined __SAMS70N21__)
+#include "bsp/include/nm_bsp_samv71.h"
+#define __M2M_DMA_BUF_ATT__		COMPILER_ALIGNED(32)
 #endif
 
 #ifdef __SAMG53N19__
 #include "bsp/include/nm_bsp_samg53.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef __SAMG55J19__
 #include "bsp/include/nm_bsp_samg55.h"
-#endif
-
-#ifdef __SAMV71Q21__
-#include "bsp/include/nm_bsp_samv71.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef CORTUS_APP
 #include "crt_iface.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef NRF51 
 #include "nm_bsp_nrf51822.h"
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 #ifdef _ARDUINO_UNO_
 #include <bsp/include/nm_bsp_arduino_uno.h>
+#define __M2M_DMA_BUF_ATT__
 #endif
 
 

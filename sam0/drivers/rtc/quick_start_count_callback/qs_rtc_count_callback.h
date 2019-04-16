@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Count Quick Start
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -55,12 +55,12 @@
  * you are using the System Clock driver, this may be done via \c conf_clocks.h.
  *
  * \subsection asfdoc_sam0_rtc_count_callback_use_case_setup_clocks Clocks and Oscillators
- * The \c conf_clock.h file needs to be changed with the following values to
- * configure the clocks and oscillators for the module.
+ * The \c conf_clock.h file needs to be changed with the different values to
+ * configure the clocks and oscillators for the module according to the used device.
  *
- * The following oscillator settings are needed:
+ * For example, the following oscillator settings are needed for SAMD21:
  * \snippet conf_clocks.h oscillator_settings
- * The following generic clock settings are needed:
+ * The following generic clock settings are needed for SAMD21:
  * \snippet conf_clocks.h gclk_settings
  *
  * \section asfdoc_sam0_rtc_count_callback_use_case_setup Setup

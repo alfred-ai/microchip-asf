@@ -88,7 +88,7 @@ exit
 echo Please wait...
 ping 192.0.0.1 -w 1000 > NUL
 
-download_all.bat UART
+download_all.bat UART %MCU_ALIAS%  0
 IF %ERRORLEVEL% NEQ 0 ( echo Fail
 echo     #######################################################################
 echo     ##                                                                   ##

@@ -326,7 +326,7 @@ static sint8 nm_get_firmware_info(tstrM2mRev* M2mRev)
 	
 	curr_drv_ver    = MAKE_VERSION(M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
 	min_req_drv_ver = MAKE_VERSION(M2mRev->u8DriverMajor, M2mRev->u8DriverMinor,M2mRev->u8DriverPatch);
-	if(curr_drv_ver <  min_req_drv_ver) {
+	if((curr_drv_ver <  min_req_drv_ver) || M2mRev->u8DriverMajor == 18 ) {
 		ret = M2M_ERR_FW_VER_MISMATCH;
 	}
 	return ret;

@@ -227,13 +227,7 @@ sint8 hif_chip_sleep(void)
 			{
 				reg &=~WILC_WAKEUP_BIT;
 				ret = nm_write_reg(WILC_WAKEUP_REG, reg);
-			#if (defined CONF_WILC_USE_1000_REV_A || defined CONF_WILC_USE_1000_REV_B)
-			#ifdef CONF_WILC_USE_SPI
-				nm_write_reg(0x0b,0);
-			#else
-				nm_write_reg(0xFA,0);
-			#endif
-			#endif
+				nm_write_reg(WILC_FROM_INTERFACE_TO_WF_REG, 0);
 			}
 		}
 		else
@@ -378,7 +372,7 @@ sint8 hif_send(uint8 u8Gid,uint8 u8Opcode,uint8 *pu8CtrlBuf,uint16 u16CtrlBufSiz
 		}
 		else
 		{
-			M2M_DBG("Failed to alloc rx size\n");
+			M2M_DBG("Failed to alloc rx size\r");
 			ret =  M2M_ERR_MEM_ALLOC;
 			goto ERR1;
 		}
@@ -460,7 +454,7 @@ static sint8 hif_isr(void)
 					{
 						if((size - strHif.u16Length) > 4)
 						{
-							M2M_ERR("(hif) Corrupted packet Address: %08, xSize = %u <L = %u, G = %u, OP = %02X>\n",
+							M2M_ERR("(hif) Corrupted packet Address: %08x, xSize = %u <L = %u, G = %u, OP = %02X>\n",
 								address, size, strHif.u16Length, strHif.u8Gid, strHif.u8Opcode);
 							nm_bsp_interrupt_ctrl(1);
 							ret = M2M_ERR_BUS_FAIL;

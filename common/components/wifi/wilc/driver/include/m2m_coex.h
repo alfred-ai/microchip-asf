@@ -1,4 +1,4 @@
-/**
+/** \defgroup m2m_coex WLAN
  *
  * \file
  *
@@ -42,7 +42,7 @@
 #ifndef __M2M_COEX_H__
 #define __M2M_COEX_H__
 
-#ifdef CONF_WILC_USE_3000
+#ifdef CONF_WILC_USE_3000_REV_A
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 INCLUDES
@@ -117,6 +117,6 @@ NMI_API sint8  m2m_coex_set_mode(tenuCoexMode enuCoexMode);
 #ifdef __cplusplus
 }
 
-#endif /* CONF_WILC_USE_3000*/
+#endif /* CONF_WILC_USE_3000_REV_A*/
 #endif
 #endif /* __M2M_COEX_H__ */

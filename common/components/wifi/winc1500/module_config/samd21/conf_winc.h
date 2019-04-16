@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,8 +51,7 @@ extern "C" {
 #if BOARD == SAMW25_XPLAINED_PRO
 
 /* This configuration files comes with empty settings! */
-/* Default settings for SAMW25 Xplained Pro with WINC on EXT1 are */
-/* available in comments for reference. */
+/* Default settings for SAMW25 Xplained Pro. */
 #warning Please modify conf_winc.h for WINC module settings!
 
 /*
@@ -81,6 +80,11 @@ extern "C" {
 #define CONF_WINC_SPI_PINMUX_PAD2		0 /* PINMUX_UNUSED */ /* cs driven from software */
 #define CONF_WINC_SPI_PINMUX_PAD3		0 /* PINMUX_PA15C_SERCOM2_PAD3 */ /* in  */
 #define CONF_WINC_SPI_CS_PIN			0 /* PIN_PA14 */
+
+#define CONF_WINC_SPI_MOSI				0 /* PIN_PA12 */
+#define CONF_WINC_SPI_SCK				0 /* PIN_PA13 */
+#define CONF_WINC_SPI_SS				0 /* PIN_PA14 */
+#define CONF_WINC_SPI_MISO				0 /* PIN_PA15 */
 
 /** SPI interrupt pin. */
 #define CONF_WINC_SPI_INT_PIN			0 /* PIN_PB09A_EIC_EXTINT9 */
@@ -134,6 +138,11 @@ extern "C" {
 #define CONF_WINC_SPI_PINMUX_PAD2		0 /* PINMUX_PA16C_SERCOM1_PAD2 */ /* out */
 #define CONF_WINC_SPI_PINMUX_PAD3		0 /* PINMUX_PA16C_SERCOM1_PAD3 */ /* sck */
 #define CONF_WINC_SPI_CS_PIN			0 /* PIN_PA17 */
+
+#define CONF_WINC_SPI_MISO				0 /* EXT1_PIN_SPI_MISO */
+#define CONF_WINC_SPI_MOSI				0 /* EXT1_PIN_SPI_MOSI */
+#define CONF_WINC_SPI_SCK				0 /* EXT1_PIN_SPI_SCK */
+#define CONF_WINC_SPI_SS				0 /* EXT1_PIN_SPI_SS_0 */
 
 /** SPI interrupt pin. */
 #define CONF_WINC_SPI_INT_PIN			0 /* PIN_PA20A_EIC_EXTINT4 */

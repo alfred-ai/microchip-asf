@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -125,17 +125,20 @@ static sint8 spi_rw(uint8* pu8Mosi, uint8* pu8Miso, uint16 u16Sz)
 	uint16_t txd_data = 0;
 	uint16_t rxd_data = 0;
 
-	if (!pu8Mosi) {
+	
+	if(((pu8Miso == NULL) && (pu8Mosi == NULL)) || (u16Sz == 0)) {
+		return M2M_ERR_INVALID_ARG;
+	}
+
+	if (pu8Mosi == NULL) {
 		pu8Mosi = &u8Dummy;
 		u8SkipMosi = 1;
 	}
-	else if(!pu8Miso) {
+	if(pu8Miso == NULL) {
 		pu8Miso = &u8Dummy;
 		u8SkipMiso = 1;
 	}
-	else {
-		return M2M_ERR_BUS_FAIL;
-	}
+
 
 	spi_select_slave(&master, &slave_inst, true);
 

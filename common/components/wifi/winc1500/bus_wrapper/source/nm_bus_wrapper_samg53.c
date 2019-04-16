@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -95,6 +95,9 @@ static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
 {
 	pdc_packet_t pdc_spi_tx_packet, pdc_spi_rx_packet;
 
+	if(((pu8Miso == NULL) && (pu8Mosi == NULL)) || (u16Sz == 0)) {
+		return M2M_ERR_INVALID_ARG;
+	}
 	pdc_spi_tx_packet.ul_addr = (uint32_t)pu8Mosi;;
 	pdc_spi_rx_packet.ul_addr = (uint32_t)pu8Miso;
 	pdc_spi_tx_packet.ul_size = u16Sz;
@@ -104,14 +107,15 @@ static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
 		pdc_spi_rx_packet.ul_addr = (uint32_t)0x400000;
 	}
 
-	/* Trigger SPI PDC transfer. */
-	SPI_ASSERT_CS();
 	pdc_tx_init(g_p_pdc_spi, &pdc_spi_tx_packet, NULL);
 	pdc_rx_init(g_p_pdc_spi, &pdc_spi_rx_packet, NULL);
+	/* Trigger SPI PDC transfer. */
+	SPI_ASSERT_CS();
 	g_p_pdc_spi->PERIPH_PTCR = PERIPH_PTCR_RXTEN | PERIPH_PTCR_TXTEN;
 	while ((CONF_WINC_SPI->SPI_SR & SPI_SR_RXBUFF) == 0)
 		;
 	SPI_DEASSERT_CS();
+
 	g_p_pdc_spi->PERIPH_PTCR = PERIPH_PTCR_TXTDIS | PERIPH_PTCR_RXTDIS;
 
 	return M2M_SUCCESS;
@@ -119,10 +123,10 @@ static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
 #endif
 
 /*
-*	@fn		nm_bus_init
-*	@brief	Initialize the bus wrapper
-*	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
-*/
+ *	@fn		nm_bus_init
+ *	@brief	Initialize the bus wrapper
+ *	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
+ */
 sint8 nm_bus_init(void *pvinit)
 {
 	sint8 result = M2M_SUCCESS;
@@ -155,7 +159,7 @@ sint8 nm_bus_init(void *pvinit)
 	spi_set_clock_phase(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_PHA);
 	spi_set_bits_per_transfer(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
 	spi_set_baudrate_div(CONF_WINC_SPI, CONF_WINC_SPI_NPCS,
-			(sysclk_get_cpu_hz() / CONF_WINC_SPI_CLOCK));
+			spi_calc_baudrate_div(CONF_WINC_SPI_CLOCK, sysclk_get_cpu_hz()));
 	spi_set_transfer_delay(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_DLYBS,
 			CONF_WINC_SPI_DLYBCT);
 	spi_enable(CONF_WINC_SPI);
@@ -171,15 +175,15 @@ sint8 nm_bus_init(void *pvinit)
 }
 
 /*
-*	@fn		nm_bus_ioctl
-*	@brief	send/receive from the bus
-*	@param[IN]	u8Cmd
-*					IOCTL command for the operation
-*	@param[IN]	pvParameter
-*					Arbitrary parameter depenging on IOCTL
-*	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
-*	@note	For SPI only, it's important to be able to send/receive at the same time
-*/
+ *	@fn		nm_bus_ioctl
+ *	@brief	send/receive from the bus
+ *	@param[IN]	u8Cmd
+ *					IOCTL command for the operation
+ *	@param[IN]	pvParameter
+ *					Arbitrary parameter depenging on IOCTL
+ *	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
+ *	@note	For SPI only, it's important to be able to send/receive at the same time
+ */
 sint8 nm_bus_ioctl(uint8 u8Cmd, void* pvParameter)
 {
 	sint8 s8Ret = 0;
@@ -218,10 +222,19 @@ sint8 nm_bus_ioctl(uint8 u8Cmd, void* pvParameter)
 }
 
 /*
-*	@fn		nm_bus_deinit
-*	@brief	De-initialize the bus wrapper
-*/
+ *	@fn		nm_bus_deinit
+ *	@brief	De-initialize the bus wrapper
+ */
 sint8 nm_bus_deinit(void)
 {
-	return M2M_SUCCESS;
+	sint8 result = M2M_SUCCESS;
+
+#ifdef CONF_WINC_USE_SPI
+	spi_disable(CONF_WINC_SPI);
+	ioport_set_pin_dir(CONF_WINC_SPI_MOSI_GPIO, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(CONF_WINC_SPI_MISO_GPIO, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(CONF_WINC_SPI_CLK_GPIO, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(CONF_WINC_SPI_CS_GPIO, IOPORT_DIR_INPUT);
+#endif /* CONF_WINC_USE_SPI */
+	return result;
 }

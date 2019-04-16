@@ -40,7 +40,7 @@
  */
  #include "common/include/nm_common.h"
  
-#ifdef CONF_WILC_USE_3000
+#ifdef CONF_WILC_USE_3000_REV_A
 
 #include "driver/include/m2m_coex.h"
 #include "nmasic.h"

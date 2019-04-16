@@ -3,7 +3,7 @@
  *
  * \brief MAIN configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -50,7 +50,7 @@ extern "C" {
 #define MAIN_WLAN_AUTH        M2M_WIFI_SEC_WPA_PSK /* < Security manner */
 #define MAIN_WLAN_PSK         "12345678" /* < Password for Destination SSID */
 
-#define MAIN_OTA_URL          "http://192.168.0.4/winc1500_ota.bin"
+#define MAIN_OTA_URL          "http://192.168.1.2/m2m_ota_3a0.bin"
 
 #ifdef __cplusplus
 }

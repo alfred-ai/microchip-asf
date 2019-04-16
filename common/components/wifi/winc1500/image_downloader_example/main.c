@@ -4,7 +4,7 @@
  *
  * \brief Image Downloader Example.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -77,19 +77,6 @@
  *    main: programming firmware...
  *    main: verifying firmware image from flash...
  *    main: done.
- *    main: programming certificates...
- *    
- *    ...
- *    
- *    >Root certificate verified OK.
- *    
- *    >Start erasing...
- *    Done
- *    >Writing the certificate to SPI flash...
- *    Done
- *    main: reading certificates from flash...
- *    main: done.
- *    
  *    
  *    All task completed successfully.
  * \endcode
@@ -104,22 +91,15 @@
  */
 
 #include <string.h>
-#include "common/include/nm_common.h"
+#include "spi_flash/include/spi_flash_map.h"
+#include "programmer/programmer_apis.h"
 #include "driver/include/m2m_wifi.h"
-#include "driver/include/m2m_periph.h"
-#include "driver/include/m2m_ota.h"
-#include "programmer/programmer.h"
-#include "root_cert/root_setup.h"
 #include "stdio_serial.h"
-#include "binaries/DigiCert_Root.h"
-#include "binaries/DigiCertSHA2_Root.h"
-#include "binaries/GeoTrustGlobalCA_Root.h"
-#include "binaries/Radius_Root.h"
-#include "binaries/VeriSign_Root.h"
 
-/** Select one of below firmware image (2b0 is Rev A, 3a0 is Rev B). */
+
+/** the firmware image to be updated. */
 #include "binaries/m2m_aio_3a0.h"
-//#include "binaries/m2m_aio_2b0.bin"
+
 
 #define STRING_EOL    "\r\n"
 #define STRING_HEADER "-- Image downloader example --"STRING_EOL \
@@ -141,48 +121,6 @@ static void configure_console(void)
 	/* Configure UART console. */
 	sysclk_enable_peripheral_clock(CONSOLE_UART_ID);
 	stdio_serial_init(CONF_UART, &uart_serial_options);
-}
-
-/**
- * \brief Program root certificates to WINC1500 memory.
- *
- * \param certFiles String array containing file names of root
- * certificates to program.
- * \param numOfCert Number of root certificates to program.
- *
- * \return M2M_SUCCESS on success, error code otherwise.
- */
-static sint8 burn_certificates(void)
-{
-	sint8 ret = 0;
-
-	/* Write certificate file to WINC1500 memory. */
-	ret += WriteRootCertificate((char *)"DigiCert_Root", (char *)DigiCert_Root, DigiCert_Root_size); //eg: facebook.com
-	ret += WriteRootCertificate((char *)"DigiCertSHA2_Root", (char *)DigiCertSHA2_Root, DigiCertSHA2_Root_size); //eg: facebook.com SHA256
-	ret += WriteRootCertificate((char *)"GeoTrustGlobalCA_Root", (char *)GeoTrustGlobalCA_Root, GeoTrustGlobalCA_Root_size); //eg:google.com
-	ret += WriteRootCertificate((char *)"Radius_Root", (char *)Radius_Root, Radius_Root_size);
-	ret += WriteRootCertificate((char *)"VeriSign_Root", (char *)VeriSign_Root, VeriSign_Root_size); //eg:amazon.com
-
-	return ret;
-}
-
-/**
- * \brief Dump WINC1500 certificates memory section to a file on
- * SD/MMC card.
- *
- * \return M2M_SUCCESS on success, error code otherwise.
- */
-static sint8 dump_certificate_section(void)
-{
-	uint8 flash_content[FLASH_SECTOR_SZ] = {0};
-
-	/* Dump entire root certificate memory region. */
-	if (programmer_read_cert_image(flash_content) != M2M_SUCCESS) {
-		printf("dump_certificate_section: read access failed on certificate section!\r\n");
-		return M2M_ERR_FAIL;
-	}
-
-	return M2M_SUCCESS;
 }
 
 /**
@@ -283,19 +221,6 @@ int main(void)
 	printf("main: verifying firmware image from flash...\r\n");
 	if (dump_firmware_section() != M2M_SUCCESS) {
 		printf("main: failed to verify firmware section!\r\n");
-		while (1);
-	}
-	printf("main: done.\r\n");
-	
-	/* Program and read the certificates on the WINC1500 flash. */
-	printf("main: programming certificates...\r\n");
-	if (burn_certificates() != M2M_SUCCESS) {
-		printf("main: error while writing certificates!\r\n");
-		while (1);
-	}
-	printf("main: reading certificates from flash...\r\n");
-	if (dump_certificate_section() != M2M_SUCCESS) {
-		printf("main: failed to dump certificate section!\r\n");
 		while (1);
 	}
 	printf("main: done.\r\n");

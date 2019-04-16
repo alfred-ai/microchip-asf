@@ -42,10 +42,6 @@
 #ifndef _M2M_HIF_
 #define _M2M_HIF_
 
-#if !(defined CONF_WILC_USE_1000_REV_A || defined CONF_WILC_USE_1000_REV_B || defined CONF_WILC_USE_3000_REV_A)
-#error "Please define eith CONF_WILC_USE_1000_REV_A, CONF_WILC_USE_1000_REV_B or CONF_WILC_USE_3000_REV_A before compiling the host driver"
-#endif
-
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 INCLUDES
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
@@ -54,6 +50,10 @@ INCLUDES
 /*!< Include depends on UNO Board is used or not*/
 #ifdef ENABLE_UNO_BOARD
 #include "m2m_uno_hif.h"
+#endif
+
+#if !(defined CONF_WILC_USE_1000_REV_A || defined CONF_WILC_USE_1000_REV_B || defined CONF_WILC_USE_3000_REV_A)
+#error "Please define eith CONF_WILC_USE_1000_REV_A, CONF_WILC_USE_1000_REV_B or CONF_WILC_USE_3000_REV_A before compiling the host driver"
 #endif
 
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*

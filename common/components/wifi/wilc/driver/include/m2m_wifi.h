@@ -1,6 +1,4 @@
-/**
- *
- * \file
+/** \defgroup m2m_wifi WLAN
  *
  * \brief NMC1500 IoT Application Interface.
  *

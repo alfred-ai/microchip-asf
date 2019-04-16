@@ -54,12 +54,6 @@
 #define TIMEOUT				(2000)
 #define M2M_DISABLE_PS        0xD0UL
 
-#if (defined CONF_WILC_USE_1000_REV_A || defined CONF_WILC_USE_1000_REV_B)
-#ifndef CONF_WILC_USE_SDIO
-static uint32 WILC_CLK_STATUS_REG = 0xf; /* Assume initially it is B0 chip */
-#endif
-#endif
-
 /**
 *	@fn		nm_clkless_wake
 *	@brief	Wakeup the chip using clockless registers
@@ -85,13 +79,7 @@ sint8 nm_clkless_wake(void)
 	 */
 	do
 	{
-	#if (defined CONF_WILC_USE_1000_REV_A || defined CONF_WILC_USE_1000_REV_B)
-	#ifdef CONF_WILC_USE_SPI
-		nm_write_reg(0x0b,1);
-	#else
-		nm_write_reg(0xFA,1);
-	#endif
-	#endif
+		nm_write_reg(WILC_FROM_INTERFACE_TO_WF_REG, 1);
 		/* Set bit 1 */
 		nm_write_reg(WILC_WAKEUP_REG, reg | WILC_WAKEUP_BIT);
 		nm_bsp_sleep(1);
@@ -115,7 +103,7 @@ sint8 nm_clkless_wake(void)
 		// in case of clocks off, wait 2ms, and check it again.
 		// if still off, wait for another 2ms, for a total wait of 6ms.
 		// If still off, redo the wake up sequence
-		while( ((clk_status_reg & WILC_CLK_STATUS_BIT) == 0) && (((++trials) %3) == 0))
+		while( ((clk_status_reg & WILC_CLK_STATUS_BIT) == 0) && ((trials %3) != 0))
 		{
 			/* Wait for the chip to stabilize*/
 			nm_bsp_sleep(1);
@@ -128,6 +116,7 @@ sint8 nm_clkless_wake(void)
 			{
 				M2M_ERR("clocks still OFF. Wake up failed\n");
 			}
+			trials++;
 		}
 		// in case of failure, Reset the wakeup bit to introduce a new edge on the next loop
 		if((clk_status_reg & WILC_CLK_STATUS_BIT) == 0)
@@ -570,12 +559,12 @@ void* linux_wlan_malloc(uint32_t sz);
 #endif
 
 #ifdef CONF_WILC_USE_1000_REV_A
-#error "Firmware for rev A is no longer supported!"
+#include "driver/include/wifi_firmware_1000a.h"
 #elif defined CONF_WILC_USE_1000_REV_B
 #include "driver/include/wifi_firmware_1000b.h"
 #elif defined CONF_WILC_USE_3000_REV_A
 #include "driver/include/wifi_firmware_3000.h"
-#ifdef CONF_WILC_USE_BLE_ONLY
+#ifdef CONF_BT_MODE_BLE_ONLY
 #include "driver/include/ble_firmware_3000.h"
 #else
 #include "driver/include/bt_firmware_3000.h"
@@ -634,7 +623,7 @@ sint8 firmware_download_bt(void)
 	nm_write_reg(0x3b0090, 1);
 	nm_write_reg(0x4f0000, 0x71);
 
-#ifdef CONF_WILC_USE_BLE_ONLY
+#ifdef CONF_BT_MODE_BLE_ONLY
 	pu8FirmwareBuffer = (uint8_t *)firmware_ble;
 	u32SecSize = sizeof(firmware_ble);
 #else
@@ -898,7 +887,7 @@ _EXIT_ERR:
 
 sint8 nmi_coex_init(void)
 {
-	uint32_t ret = M2M_SUCCESS;
+		sint8 ret = M2M_SUCCESS;
 	uint32_t u32Val, u32NULLDuration = 1000;
 
 	/* Configure Coexistance */
@@ -1017,6 +1006,7 @@ sint8 nmi_coex_init(void)
 	nm_write_reg(rCOEXIST_CTL, u32Val);
 	return ret;
 }
+
 
 sint8 nmi_coex_set_mode(tenuNmiCoexMode enuCoexMode)
 {

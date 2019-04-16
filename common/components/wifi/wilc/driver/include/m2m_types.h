@@ -73,7 +73,7 @@ MACROS
 */
 
 
-#define M2M_FIRMWARE_VERSION_MINOR_NO					(5)
+#define M2M_FIRMWARE_VERSION_MINOR_NO					(6)
 /*!< Firmware Minor release version number.
 */
 
@@ -85,16 +85,16 @@ MACROS
   SUPPORTED DRIVER VERSION NO INFO
  *======*======*======*======*/
 
-#define M2M_DRIVER_VERSION_MAJOR_NO 					(18)
+#define M2M_DRIVER_VERSION_MAJOR_NO 					(3)
 /*!< Driver Major release version number.
 */
 
 
-#define M2M_DRIVER_VERSION_MINOR_NO						(0)
+#define M2M_DRIVER_VERSION_MINOR_NO						(6)
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO						(14)
+#define M2M_DRIVER_VERSION_PATCH_NO						(0)
 /*!< Driver patch release version number.
 */
 
@@ -743,17 +743,6 @@ typedef enum {
 	M2M_NO_PS,
 	/*!< Power save is disabled.
 	*/
-	M2M_PS_AUTOMATIC,
-	/*!< Power save is done automatically by the WINC.
-		This mode doesn't disable all of the WINC modules and 
-		use higher amount of power thant the H_AUTOMATIC and 
-		the DEEP_AUTOMATIC modes..
-	*/
-	M2M_PS_H_AUTOMATIC,
-	/*!< Power save is done automatically by the WINC.
-		Achieve higher power save than the AUTOMATIC mode
-		by shutiing down more parts of the WINC board.
-	*/
 	M2M_PS_DEEP_AUTOMATIC,
 	/*!< Power save is done automatically by the WINC.
 		Achieve the highest possible power save.
@@ -1387,30 +1376,8 @@ typedef struct {
 	uint8 	u8ListenChannel; 
 	/*!< Wi-Fi RF Channel which the AP will operate on
 	*/
-	uint8	u8KeyIndx; 
-	/*!< Wep key Index
-	*/
-	uint8	u8KeySz;
-#ifdef M2M_WILC1000
-	
 	uint8				u8IsPMKUsed;
 	/*!< set to true if the PMK is calculated on the host .
-	*/
-	
-	union
-	{		
-		uint8				au8PSK[M2M_MAX_PSK_LEN];
-		/*!< WPA key 
-		*/
-		uint8				au8PMK[M2M_MAX_PMK_LEN];
-		/*!< PMK if used , used by the driver only not by user 
-		*/
-	};
-#endif
-	/*!< Wep key Size 
-	*/
-	uint8	au8WepKey[WEP_104_KEY_STRING_SIZE + 1]; 
-	/*!< Wep key 
 	*/
 	uint8 	u8SecType; 
 	/*!< Security type: Open or WEP only in the current implementation
@@ -1421,11 +1388,12 @@ typedef struct {
 	uint8	au8DHCPServerIP[4];
 	/*!< Ap IP server address
 	*/
-#ifdef M2M_WILC1000
-	uint8	__PAD24__[1];
-#else
-	uint8	__PAD24__[3];
-#endif
+	tuniM2MWifiAuth 	uniAuth;
+	/*!< Union holding all possible authentication parameters corresponding the current security types.
+	*/
+
+	#define __PADDING__		(4 - ((sizeof(tuniM2MWifiAuth) + 1) % 4))
+	uint8				__PAD__[__PADDING__];
 	/*!< Padding bytes for forcing alignment
 	*/
 }tstrM2MAPConfig;

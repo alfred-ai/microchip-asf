@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -74,6 +74,11 @@ extern "C" {
 #define CONF_WINC_SPI_PINMUX_PAD2		EXT1_SPI_SERCOM_PINMUX_PAD2 /* out */
 #define CONF_WINC_SPI_PINMUX_PAD3		EXT1_SPI_SERCOM_PINMUX_PAD3 /* sck */
 #define CONF_WINC_SPI_CS_PIN			EXT1_PIN_SPI_SS_0
+
+#define CONF_WINC_SPI_MISO				EXT1_PIN_SPI_MISO
+#define CONF_WINC_SPI_MOSI				EXT1_PIN_SPI_MOSI
+#define CONF_WINC_SPI_SCK				EXT1_PIN_SPI_SCK
+#define CONF_WINC_SPI_SS				EXT1_PIN_SPI_SS_0
 
 /** SPI interrupt pin. */
 #define CONF_WINC_SPI_INT_PIN			EXT1_IRQ_PIN

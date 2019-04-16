@@ -3,7 +3,7 @@
  *
  * \brief SAM CRC32 Driver Quick Start
  *
- * Copyright (C) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,7 +48,7 @@
 COMPILER_ALIGNED(4)
 static const uint32_t crc_data[10] = {
 	0x00000000, 0x11111111, 0x22222222, 0x33333333, 0x44444444,
-	0x55555555, 0x66666666, 0x77777777, 0x88888888,0x99999999
+	0x55555555, 0x66666666, 0x77777777, 0x88888888, 0x99999999
 };
 const uint32_t expected_crc = 0xf8ee400b;
 static 	uint32_t crc_result;
@@ -58,9 +58,6 @@ int main(void)
 	enum status_code status;
 
 	system_init();
-	system_peripheral_unlock(SYSTEM_PERIPHERAL_ID(DSU),
-			~SYSTEM_PERIPHERAL_ID(DSU));
-
 	dsu_crc32_init();
 
 	crc_result = 0xFFFFFFFF;

@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,7 +46,18 @@
 #include "asf.h"
 #include "conf_winc.h"
 
-#define NM_BUS_MAX_TRX_SZ 4096
+#define xSPI_ASSERT_CS()				{gpio_set_pin_low(CONF_WINC_SPI_CS_GPIO);}
+#define xSPI_DEASSERT_CS()				{gpio_set_pin_high(CONF_WINC_SPI_CS_GPIO);}
+	
+#define SPI_ASSERT_CS()					do {p_pio->PIO_CODR = 1 << (CONF_WINC_SPI_CS_GPIO & 0x1F);}while(0)
+#define SPI_DEASSERT_CS()				do {p_pio->PIO_SODR = 1 << (CONF_WINC_SPI_CS_GPIO & 0x1F);}while(0)
+
+#ifdef CONF_WINC_USE_SPI
+/** Pointer to Pdc data structure. */
+static Pdc *g_p_spim_pdc;
+#endif
+
+#define NM_BUS_MAX_TRX_SZ	4096
 
 tstrNmBusCapabilities egstrNmBusCapabilities =
 {
@@ -82,39 +93,139 @@ static sint8 nm_i2c_write_special(uint8 *wb1, uint16 sz1, uint8 *wb2, uint16 sz2
 
 #ifdef CONF_WINC_USE_SPI
 /** PIO instance used by CS. */
-Pio *p_pio_cs;
-
-/** Fast CS macro. */
-#define SPI_ASSERT_CS()		do {p_pio_cs->PIO_CODR = 1 << (CONF_WINC_SPI_CS_GPIO & 0x1F);} while(0)
-#define SPI_DEASSERT_CS()	do {p_pio_cs->PIO_SODR = 1 << (CONF_WINC_SPI_CS_GPIO & 0x1F);} while(0)
-
-/** Pointer to PDC SPI data structure. */
-static Pdc *g_p_pdc_spi;
-
-static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
+Pio *p_pio;
+static sint8 spi_rw(uint8* pu8Mosi, uint8* pu8Miso, uint16 u16Sz)
 {
-	pdc_packet_t pdc_spi_tx_packet, pdc_spi_rx_packet;
+#ifdef DMA_SPI
+	pdc_packet_t pdc_spi_tx_packet,pdc_spi_rx_packet;
 
-	pdc_spi_tx_packet.ul_addr = (uint32_t)pu8Mosi;;
-	pdc_spi_rx_packet.ul_addr = (uint32_t)pu8Miso;
+	p_pio = (Pio *)((uint32_t)PIOA + (PIO_DELTA * (CONF_WINC_SPI_CS_GPIO >> 5)));
+
+	pdc_spi_tx_packet.ul_addr = NULL;
+	pdc_spi_rx_packet.ul_addr = NULL;
 	pdc_spi_tx_packet.ul_size = u16Sz;
 	pdc_spi_rx_packet.ul_size = u16Sz;
-
-	if (pu8Miso == 0) {
-		pdc_spi_rx_packet.ul_addr = (uint32_t)0x400000;
+		
+	if (pu8Mosi) {
+		pdc_spi_tx_packet.ul_addr = (uint32_t)pu8Mosi;
 	}
 
-	/* Trigger SPI PDC transfer. */
+	if(pu8Miso) {
+		pdc_spi_rx_packet.ul_addr = (uint32_t)pu8Miso;
+	}
+
+	pdc_tx_init(g_p_spim_pdc, &pdc_spi_tx_packet, NULL);
+	pdc_rx_init(g_p_spim_pdc, &pdc_spi_rx_packet, NULL);
+
+	/*Assert CS*/
 	SPI_ASSERT_CS();
-	pdc_tx_init(g_p_pdc_spi, &pdc_spi_tx_packet, NULL);
-	pdc_rx_init(g_p_pdc_spi, &pdc_spi_rx_packet, NULL);
-	g_p_pdc_spi->PERIPH_PTCR = PERIPH_PTCR_RXTEN | PERIPH_PTCR_TXTEN;
-	while ((CONF_WINC_SPI->SPI_SR & SPI_SR_RXBUFF) == 0)
-		;
+	/* Enable the RX and TX PDC transfer requests */
+	g_p_spim_pdc->PERIPH_PTCR = PERIPH_PTCR_RXTEN|PERIPH_PTCR_TXTEN;
+
+	/* Waiting transfer done*/
+	while((CONF_WINC_SPI->SPI_SR & SPI_SR_RXBUFF) == 0);
+
+	/*DEASSERT CS*/
 	SPI_DEASSERT_CS();
-	g_p_pdc_spi->PERIPH_PTCR = PERIPH_PTCR_TXTDIS | PERIPH_PTCR_RXTDIS;
+	
+	/* Disable the RX and TX PDC transfer requests */
+	g_p_spim_pdc->PERIPH_PTCR = PERIPH_PTCR_TXTDIS|PERIPH_PTCR_RXTDIS;
+	
+	
+	return M2M_SUCCESS;
+		
+#elif (defined LOW_DELAY)
+
+
+uint8 u8Dummy = 0;
+uint8 u8SkipMosi = 0, u8SkipMiso = 0;
+uint8_t uc_pcs = 0;
+
+p_pio = (Pio *)((uint32_t)PIOA + (PIO_DELTA * (CONF_WINC_SPI_CS_GPIO >> 5)));
+
+if (!pu8Mosi) {
+	pu8Mosi = &u8Dummy;
+	u8SkipMosi = 1;
+}
+else if(!pu8Miso) {
+	/*RX must be zero*/
+	pu8Miso = &u8Dummy;
+	u8SkipMiso = 1;
+}
+else {
+	return M2M_ERR_BUS_FAIL;
+}
+
+/*TX path*/
+if(!u8SkipMosi)
+{
+	SPI_ASSERT_CS();
+	while (u16Sz--)
+	{
+		CONF_WINC_SPI->SPI_TDR = SPI_TDR_TD((uint16)*pu8Mosi);
+		while (!(CONF_WINC_SPI->SPI_SR & SPI_SR_TDRE));
+		pu8Mosi++;
+	}
+	SPI_DEASSERT_CS();
+}
+/*RX path*/
+if(!u8SkipMiso)
+{
+	uc_pcs = 0;
+	SPI_ASSERT_CS();
+	while (u16Sz--)
+	{
+		
+		CONF_WINC_SPI->SPI_TDR = SPI_TDR_TD((uint16)*pu8Mosi);
+		while (!(CONF_WINC_SPI->SPI_SR & SPI_SR_TDRE));
+		while (!(CONF_WINC_SPI->SPI_SR & (SPI_SR_RDRF)));
+		*pu8Miso = (uint16_t) ((CONF_WINC_SPI->SPI_RDR) & SPI_RDR_RD_Msk);
+		pu8Miso++;
+	}
+	SPI_DEASSERT_CS();
+}
+return M2M_SUCCESS;
+
+#else
+	uint8 u8Dummy = 0;
+	uint8 u8SkipMosi = 0, u8SkipMiso = 0;
+	uint16_t txd_data = 0;
+	uint16_t rxd_data = 0;
+	uint8_t uc_pcs = 0;
+
+	p_pio = (Pio *)((uint32_t)PIOA + (PIO_DELTA * (CONF_WINC_SPI_CS_GPIO >> 5)));
+
+	if (!pu8Mosi) {
+		pu8Mosi = &u8Dummy;
+		u8SkipMosi = 1;
+	}
+	else if(!pu8Miso) {
+		pu8Miso = &u8Dummy;
+		u8SkipMiso = 1;
+	}
+	else {
+		return M2M_ERR_BUS_FAIL;
+	}
+	SPI_ASSERT_CS();
+	while (u16Sz) {
+		txd_data = *pu8Mosi;
+
+		spi_write(CONF_WINC_SPI, txd_data, 0, 0);
+		spi_read(CONF_WINC_SPI, &rxd_data, &uc_pcs);
+
+		*pu8Miso = rxd_data;
+			
+		u16Sz--;
+		if (!u8SkipMiso)
+			pu8Miso++;
+		if (!u8SkipMosi)
+			pu8Mosi++;
+	}
+	SPI_DEASSERT_CS();
 
 	return M2M_SUCCESS;
+	#endif
+
 }
 #endif
 
@@ -134,9 +245,6 @@ sint8 nm_bus_init(void *pvinit)
 	gpio_configure_pin(CONF_WINC_SPI_MOSI_GPIO, CONF_WINC_SPI_MOSI_FLAGS);
 	gpio_configure_pin(CONF_WINC_SPI_CLK_GPIO, CONF_WINC_SPI_CLK_FLAGS);
 	gpio_configure_pin(CONF_WINC_SPI_CS_GPIO, CONF_WINC_SPI_CS_FLAGS);
-
-	/* Get the PIO instance used for CS. */
-	p_pio_cs = (Pio *)((uint32_t)PIOA + (PIO_DELTA * (CONF_WINC_SPI_CS_GPIO >> 5)));
 	SPI_DEASSERT_CS();
 
 	/* Configure SPI module. */
@@ -153,17 +261,21 @@ sint8 nm_bus_init(void *pvinit)
 
 	spi_set_clock_polarity(CONF_WINC_SPI,
 			CONF_WINC_SPI_NPCS, CONF_WINC_SPI_POL);
+
 	spi_set_clock_phase(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_PHA);
+
 	spi_set_bits_per_transfer(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
+
+	//printf("sys clk %d\r\n",sysclk_get_cpu_hz());
 	spi_set_baudrate_div(CONF_WINC_SPI, CONF_WINC_SPI_NPCS,
-			div_ceil(sysclk_get_peripheral_hz(), CONF_WINC_SPI_CLOCK));
+		(sysclk_get_cpu_hz() / CONF_WINC_SPI_CLOCK));
 	spi_set_transfer_delay(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_DLYBS,
 			CONF_WINC_SPI_DLYBCT);
 	spi_enable(CONF_WINC_SPI);
 
 	/* Get pointer to SPI master PDC register base. */
-	g_p_pdc_spi = spi_get_pdc_base(CONF_WINC_SPI);
-	pdc_disable_transfer(g_p_pdc_spi, PERIPH_PTCR_RXTDIS | PERIPH_PTCR_TXTDIS);
+	g_p_spim_pdc = spi_get_pdc_base(CONF_WINC_SPI);
+	pdc_disable_transfer(g_p_spim_pdc, PERIPH_PTCR_RXTDIS | PERIPH_PTCR_TXTDIS);
 
 	nm_bsp_reset();
 	SPI_DEASSERT_CS();

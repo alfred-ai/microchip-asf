@@ -160,7 +160,6 @@ typedef struct
 /*!< Bus capabilities. This structure must be declared at platform specific bus wrapper */
 extern tstrNmBusCapabilities egstrNmBusCapabilities;
 
-
 #ifdef __cplusplus
      extern "C" {
  #endif
