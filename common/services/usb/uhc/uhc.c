@@ -3,7 +3,7 @@
  *
  * \brief USB Host Controller (UHC)
  *
- * Copyright (C) 2011-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -966,7 +966,8 @@ static void uhc_remotewakeup(bool b_enable)
 
 	dev = &g_uhc_device_root;
 	while(1) {
-		if (dev->conf_desc->bmAttributes & USB_CONFIG_ATTR_REMOTE_WAKEUP) {
+		if (dev->conf_desc &&
+				dev->conf_desc->bmAttributes & USB_CONFIG_ATTR_REMOTE_WAKEUP) {
 			if (b_enable) {
 				req.bRequest = USB_REQ_SET_FEATURE;
 			} else {
@@ -1255,6 +1256,9 @@ char *uhc_dev_get_string(uhc_device_t * dev, uint8_t str_id)
 
 uint16_t uhc_dev_get_power(uhc_device_t* dev)
 {
+	if (NULL == dev->conf_desc) {
+		return 0;
+	}
 	return dev->conf_desc->bMaxPower * 2;
 }
 

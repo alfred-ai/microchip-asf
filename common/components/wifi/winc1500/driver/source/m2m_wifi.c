@@ -4,7 +4,7 @@
  *
  * \brief This module contains M2M Wi-Fi APIs implementation.
  *
- * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,7 +51,7 @@
 
 static volatile uint8 gu8ChNum;
 static volatile uint8 gu8scanInProgress = 0;
-static tpfAppWifiCb gpfAppWifiCb = NULL;
+tpfAppWifiCb gpfAppWifiCb = NULL;
 
 
 #ifdef ETH_MODE

@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Analog-to-Digital Converter Driver
  *
- * Copyright (C) 2012-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -284,6 +284,16 @@ static inline void _adc_configure_ain_pin(uint32_t pin)
 			PIN_PB06B_ADC_AIN14, PIN_PB07B_ADC_AIN15,
 			PIN_PA08B_ADC_AIN16, PIN_PA09B_ADC_AIN17,
 			PIN_PA10B_ADC_AIN18, PIN_PA11B_ADC_AIN19,
+#elif (SAMHA1E)
+			PIN_PA02B_ADC_AIN0,  PIN_PA03B_ADC_AIN1,
+			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+			PIN_PA06B_ADC_AIN6,  PIN_PA07B_ADC_AIN7,
+			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+			PIN_PA08B_ADC_AIN16, PIN_PA09B_ADC_AIN17,
 #else
 #  error ADC pin mappings are not defined for this device.
 #endif
@@ -327,7 +337,7 @@ static enum status_code _adc_set_config(
 	uint32_t resolution = ADC_RESOLUTION_16BIT;
 	enum adc_accumulate_samples accumulate = ADC_ACCUMULATE_DISABLE;
 #if SAMD20
-	uint8_t revision_num = ((REG_DSU_DID & DSU_DID_DIE_Msk) >> DSU_DID_DIE_Pos);
+	uint8_t revision_num = ((REG_DSU_DID & DSU_DID_REVISION_Msk) >> DSU_DID_REVISION_Pos);
 #endif
 
 	/* Get the hardware module pointer */

@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -115,6 +115,12 @@ static sint8 nm_i2c_write_special(uint8 *wb1, uint16 sz1, uint8 *wb2, uint16 sz2
 #endif
 
 #ifdef CONF_WINC_USE_SPI
+/** PIO instance used by CS. */
+Pio *p_pio_cs;
+
+/** Fast CS macro. */
+#define SPI_ASSERT_CS()		do {p_pio_cs->PIO_CODR = 1 << (CONF_WINC_SPI_CS_GPIO & 0x1F);} while(0)
+#define SPI_DEASSERT_CS()	do {p_pio_cs->PIO_SODR = 1 << (CONF_WINC_SPI_CS_GPIO & 0x1F);} while(0)
 
 static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
 {
@@ -136,6 +142,7 @@ static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
 		return M2M_ERR_BUS_FAIL;
 	}
 
+	SPI_ASSERT_CS();
 	while (u16Sz) {
 		txd_data = *pu8Mosi;
 		spi_write(CONF_WINC_SPI, txd_data, 0, 0);
@@ -150,6 +157,7 @@ static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
 		if (!u8SkipMosi)
 			pu8Mosi++;
 	}
+	SPI_DEASSERT_CS();
 
 	return M2M_SUCCESS;
 }
@@ -189,7 +197,12 @@ sint8 nm_bus_init(void *pvinit)
 	ioport_disable_pin(CONF_WINC_SPI_MISO_GPIO);
 	ioport_disable_pin(CONF_WINC_SPI_MOSI_GPIO);
 	ioport_disable_pin(CONF_WINC_SPI_CLK_GPIO);
-	ioport_disable_pin(CONF_WINC_SPI_CS_GPIO);
+
+	/* Configure CS for manual (GPIO) control. */
+	p_pio_cs = (Pio *)((uint32_t)PIOA + (PIO_DELTA * (CONF_WINC_SPI_CS_GPIO >> 5)));
+	SPI_DEASSERT_CS();
+	ioport_set_pin_dir(CONF_WINC_SPI_CS_GPIO, IOPORT_DIR_OUTPUT);
+	ioport_enable_pin(CONF_WINC_SPI_CS_GPIO);
 
 	spi_enable_clock(CONF_WINC_SPI);
 	spi_disable(CONF_WINC_SPI);
@@ -202,7 +215,7 @@ sint8 nm_bus_init(void *pvinit)
 	spi_set_clock_phase(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_PHA);
 	spi_set_bits_per_transfer(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
 	spi_set_baudrate_div(CONF_WINC_SPI, CONF_WINC_SPI_NPCS,
-			(sysclk_get_cpu_hz() / CONF_WINC_SPI_CLOCK));
+			(sysclk_get_peripheral_hz() / CONF_WINC_SPI_CLOCK));
 	spi_set_transfer_delay(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_DLYBS,
 			CONF_WINC_SPI_DLYBCT);
 	spi_enable(CONF_WINC_SPI);
@@ -265,5 +278,17 @@ sint8 nm_bus_ioctl(uint8 u8Cmd, void* pvParameter)
  */
 sint8 nm_bus_deinit(void)
 {
-	return M2M_SUCCESS;
+	sint8 result = M2M_SUCCESS;
+
+#ifdef CONF_WINC_USE_I2C
+	//TODO:
+#endif /* CONF_WINC_USE_I2C */
+#ifdef CONF_WINC_USE_SPI
+	spi_disable(CONF_WINC_SPI);
+	ioport_set_pin_dir(CONF_WINC_SPI_MOSI_GPIO, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(CONF_WINC_SPI_MISO_GPIO, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(CONF_WINC_SPI_CLK_GPIO, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(CONF_WINC_SPI_CS_GPIO, IOPORT_DIR_INPUT);
+#endif /* CONF_WINC_USE_SPI */
+	return result;
 }

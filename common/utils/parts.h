@@ -3,7 +3,7 @@
  *
  * \brief Atmel part identification macros
  *
- * Copyright (C) 2012-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -1136,6 +1136,15 @@
 		SAM_PART_IS_DEFINED(SAMHA1G16AB) \
 	)
 
+#define SAMHA1E ( \
+		SAM_PART_IS_DEFINED(SAMHA1E14A) || \
+		SAM_PART_IS_DEFINED(SAMHA1E15A) || \
+		SAM_PART_IS_DEFINED(SAMHA1E16A) || \
+		SAM_PART_IS_DEFINED(SAMHA1E14AB) || \
+		SAM_PART_IS_DEFINED(SAMHA1E15AB) || \
+		SAM_PART_IS_DEFINED(SAMHA1E16AB) \
+	)
+
 /** @} */
 
 /**
@@ -1536,7 +1545,7 @@
 #define SAMDA1 (SAMDA1J || SAMDA1G || SAMDA1E)
 
 /** SAMHA1 Family */
-#define SAMHA1 (SAMHA1G)
+#define SAMHA1 (SAMHA1G || SAMHA1E)
 
 /** SAMD Family */
 #define SAMD   (SAMD20 || SAMD21 || SAMD09 || SAMD10 || SAMD11 || SAMDA1)
