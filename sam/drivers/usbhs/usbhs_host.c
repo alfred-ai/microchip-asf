@@ -1347,8 +1347,10 @@ static void uhd_ctrl_timeout(void)
 	if (uhd_ctrl_request_timeout) {
 		// Setup request on-going
 		if (--uhd_ctrl_request_timeout == 0) {
-			// Stop request
-			uhd_freeze_pipe(0);
+			// Stop request (freezing pipe and reset FIFO)
+			uhd_reset_pipe(0);
+			uhd_enable_stall_interrupt(0);
+			uhd_enable_pipe_error_interrupt(0);
 			uhd_ctrl_request_end(UHD_TRANS_TIMEOUT);
 		}
 	}
@@ -1427,6 +1429,9 @@ static void uhd_sof_interrupt(void)
  */
 static void uhd_ctrl_interrupt(void)
 {
+	bool rxen = Is_uhd_in_received_interrupt_enabled(0);
+	bool txen = Is_uhd_out_ready_interrupt_enabled(0);
+
 	// A setup request is on-going
 	Assert(uhd_ctrl_request_timeout!=0);
 
@@ -1456,7 +1461,7 @@ static void uhd_ctrl_interrupt(void)
 		}
 		return;
 	}
-	if (Is_uhd_in_received(0)) {
+	if (Is_uhd_in_received(0) && rxen) {
 		// In case of low USB speed and with a high CPU frequency,
 		// a ACK from host can be always running on USB line
 		// then wait end of ACK on IN pipe.
@@ -1477,7 +1482,7 @@ static void uhd_ctrl_interrupt(void)
 		}
 		return;
 	}
-	if (Is_uhd_out_ready(0)) {
+	if (Is_uhd_out_ready(0) && txen) {
 		// OUT packet sent
 		uhd_freeze_pipe(0);
 		uhd_ack_out_ready(0);
@@ -1497,6 +1502,10 @@ static void uhd_ctrl_interrupt(void)
 	if (Is_uhd_stall(0)) {
 		// Stall Handshake received
 		uhd_ack_stall(0);
+		// Reset FIFO
+		uhd_reset_pipe(0);
+		uhd_enable_stall_interrupt(0);
+		uhd_enable_pipe_error_interrupt(0);
 		uhd_ctrl_request_end(UHD_TRANS_STALL);
 		return;
 	}

@@ -3,7 +3,7 @@
  *
  * \brief ADP service implementation
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -706,7 +706,7 @@ bool adp_add_cursor_to_graph(struct adp_msg_add_cursor_to_graph *const config, c
 	
 	msg_format.protocol_token = ADP_TOKEN;
 	msg_format.protocol_msg_id = MSG_CONF_CURSOR_TO_GRAPH;
-	msg_format.data_length = MSG_CONF_CURSOR_TO_GRAPH_LEN;
+	msg_format.data_length = MSG_CONF_CURSOR_TO_GRAPH_LEN + label_len;
 	index = adp_add_send_byte((uint8_t*)&msg_format.data, index, (uint8_t*)&config->stream_id, 2);
 	index = adp_add_send_byte((uint8_t*)&msg_format.data, index, (uint8_t*)&config->graph_id, 2);
 	index = adp_add_send_byte((uint8_t*)&msg_format.data, index, (uint8_t*)&config->axis_id, 2);
@@ -785,7 +785,7 @@ bool adp_add_gpio_to_graph(struct adp_msg_conf_gpio_to_graph *const config, \
 }
 
 /**
-* \brief Add a dashboard
+* \brief Add a dashboard MSG_CONF_DASHBOARD
 *
 * \param[in] config    Pointer to dashboard configuration data struct
 * \param[in] label     Dashboard label (0-terminated string)
@@ -1301,10 +1301,13 @@ bool adp_transceive_stream(struct adp_msg_data_stream *const stream_data, uint8_
 	uint16_t data_length;
 	uint16_t index = 0;
 	uint8_t rx_buf[ADP_MAX_PACKET_LENGTH] = {0,};
+	uint16_t actual_bytes = 0;
 	
 	struct adp_msg_format msg_format;
 	
 	index = adp_add_send_byte((uint8_t*)&msg_format.data, index, (uint8_t*)&stream_data->number_of_streams, 1);
+	actual_bytes = 1; /* number of stream */
+
 	/* find packet size */
 	for (stream_num = 0; stream_num < stream_data->number_of_streams; stream_num++) {
 		index = adp_add_send_byte((uint8_t*)&msg_format.data, index, \
@@ -1314,11 +1317,13 @@ bool adp_transceive_stream(struct adp_msg_data_stream *const stream_data, uint8_
 		index = adp_add_send_byte((uint8_t*)&msg_format.data, index, \
 						stream_data->stream[stream_num].data, \
 						stream_data->stream[stream_num].data_size);
+		/* 2 bytes stream.stream_id and 1 byte stream.data_size */
+		actual_bytes += 2 + 1 + stream_data->stream[stream_num].data_size;
 	}
 	
 	msg_format.protocol_token = ADP_TOKEN;
 	msg_format.protocol_msg_id = MSG_DATA_STREAM;
-	msg_format.data_length = index;
+	msg_format.data_length = actual_bytes;
 	data_length = ADP_LENGTH_PACKET_HEADER + index;
 	
 	/* Send the protocol packet data */

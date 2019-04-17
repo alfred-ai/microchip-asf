@@ -3,7 +3,7 @@
  *
  * \brief Instance description for NVMCTRL
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -77,9 +77,11 @@
 #define NVMCTRL_AUX3_ADDRESS        0x0080A000
 #define NVMCTRL_CLK_AHB_ID          4        // Index of AHB Clock in PM.AHBMASK register
 #define NVMCTRL_FACTORY_WORD_IMPLEMENTED_MASK 0xC0000007FFFFFFFF
-#define NVMCTRL_FLASH_SIZE          262144  
+#define NVMCTRL_FLASH_SIZE          262144
+#define NVMCTRL_FLASH_SIZE_VAR_B    65536   
 #define NVMCTRL_LOCKBIT_ADDRESS     0x00802000
-#define NVMCTRL_PAGES               4096    
+#define NVMCTRL_PAGES               4096
+#define NVMCTRL_PAGES_VAR_B         1024     
 #define NVMCTRL_PAGE_HW             32      
 #define NVMCTRL_PAGE_SIZE           64      
 #define NVMCTRL_PAGE_W              16      

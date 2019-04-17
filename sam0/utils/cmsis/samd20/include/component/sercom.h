@@ -3,7 +3,7 @@
  *
  * \brief Component description for SERCOM
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,7 +54,7 @@
 /*@{*/
 
 #define SERCOM_U2201
-#define REV_SERCOM                  0x102
+#define REV_SERCOM                  0x110
 
 /* -------- SERCOM_I2CM_CTRLA : (SERCOM Offset: 0x00) (R/W 32) I2CM I2CM Control A -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
@@ -774,11 +774,11 @@ typedef union {
 
 /* -------- SERCOM_I2CM_INTFLAG : (SERCOM Offset: 0x0E) (R/W  8) I2CM I2CM Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  MB:1;             /*!< bit:      0  Master on Bus                      */
-    uint8_t  SB:1;             /*!< bit:      1  Slave on Bus                       */
-    uint8_t  :6;               /*!< bit:  2.. 7  Reserved                           */
+    __I uint8_t  MB:1;         /*!< bit:      0  Master on Bus                      */
+    __I uint8_t  SB:1;         /*!< bit:      1  Slave on Bus                       */
+    __I uint8_t  :6;           /*!< bit:  2.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } SERCOM_I2CM_INTFLAG_Type;
@@ -795,12 +795,12 @@ typedef union {
 
 /* -------- SERCOM_I2CS_INTFLAG : (SERCOM Offset: 0x0E) (R/W  8) I2CS I2CS Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  PREC:1;           /*!< bit:      0  Stop Received                      */
-    uint8_t  AMATCH:1;         /*!< bit:      1  Address Match                      */
-    uint8_t  DRDY:1;           /*!< bit:      2  Data Ready                         */
-    uint8_t  :5;               /*!< bit:  3.. 7  Reserved                           */
+    __I uint8_t  PREC:1;       /*!< bit:      0  Stop Received                      */
+    __I uint8_t  AMATCH:1;     /*!< bit:      1  Address Match                      */
+    __I uint8_t  DRDY:1;       /*!< bit:      2  Data Ready                         */
+    __I uint8_t  :5;           /*!< bit:  3.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } SERCOM_I2CS_INTFLAG_Type;
@@ -819,12 +819,12 @@ typedef union {
 
 /* -------- SERCOM_SPI_INTFLAG : (SERCOM Offset: 0x0E) (R/W  8) SPI SPI Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  DRE:1;            /*!< bit:      0  Data Register Empty                */
-    uint8_t  TXC:1;            /*!< bit:      1  Transmit Complete                  */
-    uint8_t  RXC:1;            /*!< bit:      2  Receive Complete                   */
-    uint8_t  :5;               /*!< bit:  3.. 7  Reserved                           */
+    __I uint8_t  DRE:1;        /*!< bit:      0  Data Register Empty                */
+    __I uint8_t  TXC:1;        /*!< bit:      1  Transmit Complete                  */
+    __I uint8_t  RXC:1;        /*!< bit:      2  Receive Complete                   */
+    __I uint8_t  :5;           /*!< bit:  3.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } SERCOM_SPI_INTFLAG_Type;
@@ -843,13 +843,13 @@ typedef union {
 
 /* -------- SERCOM_USART_INTFLAG : (SERCOM Offset: 0x0E) (R/W  8) USART USART Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  DRE:1;            /*!< bit:      0  Data Register Empty                */
-    uint8_t  TXC:1;            /*!< bit:      1  Transmit Complete                  */
-    uint8_t  RXC:1;            /*!< bit:      2  Receive Complete                   */
-    uint8_t  RXS:1;            /*!< bit:      3  Receive Start Interrupt            */
-    uint8_t  :4;               /*!< bit:  4.. 7  Reserved                           */
+    __I uint8_t  DRE:1;        /*!< bit:      0  Data Register Empty                */
+    __I uint8_t  TXC:1;        /*!< bit:      1  Transmit Complete                  */
+    __I uint8_t  RXC:1;        /*!< bit:      2  Receive Complete                   */
+    __I uint8_t  RXS:1;        /*!< bit:      3  Receive Start Interrupt            */
+    __I uint8_t  :4;           /*!< bit:  4.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } SERCOM_USART_INTFLAG_Type;

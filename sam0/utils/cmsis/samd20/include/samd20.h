@@ -3,7 +3,7 @@
  *
  * \brief Header file for SAMD20
  *
- * Copyright (c) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -86,6 +86,24 @@
 #include "samd20j17.h"
 #elif defined(__SAMD20J18__) || defined(__ATSAMD20J18__)
 #include "samd20j18.h"
+#elif defined(__SAMD20E14B__) || defined(__ATSAMD20E14B__)
+#include "samd20e14b.h"
+#elif defined(__SAMD20E15B__) || defined(__ATSAMD20E15B__)
+#include "samd20e15b.h"
+#elif defined(__SAMD20E16B__) || defined(__ATSAMD20E16B__)
+#include "samd20e16b.h"
+#elif defined(__SAMD20G14B__) || defined(__ATSAMD20G14B__)
+#include "samd20g14b.h"
+#elif defined(__SAMD20G15B__) || defined(__ATSAMD20G15B__)
+#include "samd20g15b.h"
+#elif defined(__SAMD20G16B__) || defined(__ATSAMD20G16B__)
+#include "samd20g16b.h"
+#elif defined(__SAMD20J14B__) || defined(__ATSAMD20J14B__)
+#include "samd20j14b.h"
+#elif defined(__SAMD20J15B__) || defined(__ATSAMD20J15B__)
+#include "samd20j15b.h"
+#elif defined(__SAMD20J16B__) || defined(__ATSAMD20J16B__)
+#include "samd20j16b.h"
 #else
   #error Library does not support the specified device.
 #endif

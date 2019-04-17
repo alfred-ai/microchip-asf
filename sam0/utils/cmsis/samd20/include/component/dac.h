@@ -3,7 +3,7 @@
  *
  * \brief Component description for DAC
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -188,12 +188,12 @@ typedef union {
 
 /* -------- DAC_INTFLAG : (DAC Offset: 0x6) (R/W  8) Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  UNDERRUN:1;       /*!< bit:      0  Underrun                           */
-    uint8_t  EMPTY:1;          /*!< bit:      1  Data Buffer Empty                  */
-    uint8_t  SYNCRDY:1;        /*!< bit:      2  Synchronization Ready              */
-    uint8_t  :5;               /*!< bit:  3.. 7  Reserved                           */
+    __I uint8_t  UNDERRUN:1;   /*!< bit:      0  Underrun                           */
+    __I uint8_t  EMPTY:1;      /*!< bit:      1  Data Buffer Empty                  */
+    __I uint8_t  SYNCRDY:1;    /*!< bit:      2  Synchronization Ready              */
+    __I uint8_t  :5;           /*!< bit:  3.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } DAC_INTFLAG_Type;

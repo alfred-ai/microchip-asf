@@ -3,7 +3,7 @@
  *
  * \brief Component description for DSU
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -331,6 +331,41 @@ typedef union {
 #define DSU_ENTRY_ADDOFF_Msk        (0xFFFFFul << DSU_ENTRY_ADDOFF_Pos)
 #define DSU_ENTRY_ADDOFF(value)     ((DSU_ENTRY_ADDOFF_Msk & ((value) << DSU_ENTRY_ADDOFF_Pos)))
 #define DSU_ENTRY_MASK              0xFFFFF003ul /**< \brief (DSU_ENTRY) MASK Register */
+/* -------- DSU_ENTRY0 : (DSU Offset: 0x1000) (R/  32) Coresight ROM Table Entry 0 -------- */
+#if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
+typedef union {
+  struct {
+    uint32_t EPRES:1;          /*!< bit:      0  Entry Present                      */
+    uint32_t FMT:1;            /*!< bit:      1  Format                             */
+    uint32_t :10;              /*!< bit:  2..11  Reserved                           */
+    uint32_t ADDOFF:20;        /*!< bit: 12..31  Address Offset                     */
+  } bit;                       /*!< Structure used for bit  access                  */
+  uint32_t reg;                /*!< Type      used for register access              */
+} DSU_ENTRY0_Type;
+#endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
+
+#define DSU_ENTRY0_OFFSET           0x1000       /**< \brief (DSU_ENTRY0 offset) Coresight ROM Table Entry 0 */
+#define DSU_ENTRY0_RESETVALUE       _U_(0x9F9FC002) /**< \brief (DSU_ENTRY0 reset_value) Coresight ROM Table Entry 0 */
+
+#define DSU_ENTRY0_EPRES_Pos        0            /**< \brief (DSU_ENTRY0) Entry Present */
+#define DSU_ENTRY0_EPRES            (_U_(0x1) << DSU_ENTRY0_EPRES_Pos)
+#define DSU_ENTRY0_FMT_Pos          1            /**< \brief (DSU_ENTRY0) Format */
+#define DSU_ENTRY0_FMT              (_U_(0x1) << DSU_ENTRY0_FMT_Pos)
+#define DSU_ENTRY0_ADDOFF_Pos       12           /**< \brief (DSU_ENTRY0) Address Offset */
+#define DSU_ENTRY0_ADDOFF_Msk       (_U_(0xFFFFF) << DSU_ENTRY0_ADDOFF_Pos)
+#define DSU_ENTRY0_ADDOFF(value)    (DSU_ENTRY0_ADDOFF_Msk & ((value) << DSU_ENTRY0_ADDOFF_Pos))
+#define DSU_ENTRY0_MASK             _U_(0xFFFFF003) /**< \brief (DSU_ENTRY0) MASK Register */
+
+/* -------- DSU_ENTRY1 : (DSU Offset: 0x1004) (R/  32) Coresight ROM Table Entry 1 -------- */
+#if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
+typedef union {
+  uint32_t reg;                /*!< Type      used for register access              */
+} DSU_ENTRY1_Type;
+#endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
+
+#define DSU_ENTRY1_OFFSET           0x1004       /**< \brief (DSU_ENTRY1 offset) Coresight ROM Table Entry 1 */
+#define DSU_ENTRY1_RESETVALUE       _U_(0x00000000) /**< \brief (DSU_ENTRY1 reset_value) Coresight ROM Table Entry 1 */
+#define DSU_ENTRY1_MASK             _U_(0xFFFFFFFF) /**< \brief (DSU_ENTRY1) MASK Register */
 
 /* -------- DSU_END : (DSU Offset: 0x1008) (R/  32) Coresight ROM Table End -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
@@ -607,7 +642,8 @@ typedef struct {
        RoReg8                    Reserved2[0xD4];
   __IO DSU_DCFG_Type             DCFG[2];     /**< \brief Offset: 0x00F0 (R/W 32) Device Configuration */
        RoReg8                    Reserved3[0xF08];
-  __I  DSU_ENTRY_Type            ENTRY[2];    /**< \brief Offset: 0x1000 (R/  32) Coresight ROM Table Entry n */
+  __I  DSU_ENTRY0_Type           ENTRY0;      /**< \brief Offset: 0x1000 (R/  32) Coresight ROM Table Entry 0 */
+  __I  DSU_ENTRY1_Type           ENTRY1;      /**< \brief Offset: 0x1004 (R/  32) Coresight ROM Table Entry 1 */
   __I  DSU_END_Type              END;         /**< \brief Offset: 0x1008 (R/  32) Coresight ROM Table End */
        RoReg8                    Reserved4[0xFC0];
   __I  DSU_MEMTYPE_Type          MEMTYPE;     /**< \brief Offset: 0x1FCC (R/  32) Coresight ROM Table Memory Type */

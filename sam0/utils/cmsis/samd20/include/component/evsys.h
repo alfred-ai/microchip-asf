@@ -3,7 +3,7 @@
  *
  * \brief Component description for EVSYS
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -151,7 +151,9 @@ typedef union {
 #define EVSYS_USER_CHANNEL_Pos      8            /**< \brief (EVSYS_USER) Channel Event Selection */
 #define EVSYS_USER_CHANNEL_Msk      (0xFul << EVSYS_USER_CHANNEL_Pos)
 #define EVSYS_USER_CHANNEL(value)   ((EVSYS_USER_CHANNEL_Msk & ((value) << EVSYS_USER_CHANNEL_Pos)))
-#define EVSYS_USER_MASK             0x0F0Ful     /**< \brief (EVSYS_USER) MASK Register */
+#define   EVSYS_USER_CHANNEL_0_Val        _U_(0x0)   /**< \brief (EVSYS_USER) No Channel Output Selected */
+#define EVSYS_USER_CHANNEL_0        (EVSYS_USER_CHANNEL_0_Val      << EVSYS_USER_CHANNEL_Pos)
+#define EVSYS_USER_MASK             _U_(0x0F0F)  /**< \brief (EVSYS_USER) MASK Register */
 
 /* -------- EVSYS_CHSTATUS : (EVSYS Offset: 0x0C) (R/  32) Channel Status -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
@@ -186,6 +188,7 @@ typedef union {
 
 #define EVSYS_CHSTATUS_OFFSET       0x0C         /**< \brief (EVSYS_CHSTATUS offset) Channel Status */
 #define EVSYS_CHSTATUS_RESETVALUE   0x00000000ul /**< \brief (EVSYS_CHSTATUS reset_value) Channel Status */
+#define EVSYS_CHSTATUS_RESETVALUE_VAR_B  _U_(0x000F00FF) /**< \brief (EVSYS_CHSTATUS reset_value) Channel Status */
 
 #define EVSYS_CHSTATUS_USRRDY0_Pos  0            /**< \brief (EVSYS_CHSTATUS) Channel 0 User Ready */
 #define EVSYS_CHSTATUS_USRRDY0      (1 << EVSYS_CHSTATUS_USRRDY0_Pos)
@@ -377,30 +380,30 @@ typedef union {
 
 /* -------- EVSYS_INTFLAG : (EVSYS Offset: 0x18) (R/W 32) Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint32_t OVR0:1;           /*!< bit:      0  Channel 0 Overrun                  */
-    uint32_t OVR1:1;           /*!< bit:      1  Channel 1 Overrun                  */
-    uint32_t OVR2:1;           /*!< bit:      2  Channel 2 Overrun                  */
-    uint32_t OVR3:1;           /*!< bit:      3  Channel 3 Overrun                  */
-    uint32_t OVR4:1;           /*!< bit:      4  Channel 4 Overrun                  */
-    uint32_t OVR5:1;           /*!< bit:      5  Channel 5 Overrun                  */
-    uint32_t OVR6:1;           /*!< bit:      6  Channel 6 Overrun                  */
-    uint32_t OVR7:1;           /*!< bit:      7  Channel 7 Overrun                  */
-    uint32_t EVD0:1;           /*!< bit:      8  Channel 0 Event Detection          */
-    uint32_t EVD1:1;           /*!< bit:      9  Channel 1 Event Detection          */
-    uint32_t EVD2:1;           /*!< bit:     10  Channel 2 Event Detection          */
-    uint32_t EVD3:1;           /*!< bit:     11  Channel 3 Event Detection          */
-    uint32_t EVD4:1;           /*!< bit:     12  Channel 4 Event Detection          */
-    uint32_t EVD5:1;           /*!< bit:     13  Channel 5 Event Detection          */
-    uint32_t EVD6:1;           /*!< bit:     14  Channel 6 Event Detection          */
-    uint32_t EVD7:1;           /*!< bit:     15  Channel 7 Event Detection          */
-    uint32_t :16;              /*!< bit: 16..31  Reserved                           */
+    __I uint32_t OVR0:1;       /*!< bit:      0  Channel 0 Overrun                  */
+    __I uint32_t OVR1:1;       /*!< bit:      1  Channel 1 Overrun                  */
+    __I uint32_t OVR2:1;       /*!< bit:      2  Channel 2 Overrun                  */
+    __I uint32_t OVR3:1;       /*!< bit:      3  Channel 3 Overrun                  */
+    __I uint32_t OVR4:1;       /*!< bit:      4  Channel 4 Overrun                  */
+    __I uint32_t OVR5:1;       /*!< bit:      5  Channel 5 Overrun                  */
+    __I uint32_t OVR6:1;       /*!< bit:      6  Channel 6 Overrun                  */
+    __I uint32_t OVR7:1;       /*!< bit:      7  Channel 7 Overrun                  */
+    __I uint32_t EVD0:1;       /*!< bit:      8  Channel 0 Event Detection          */
+    __I uint32_t EVD1:1;       /*!< bit:      9  Channel 1 Event Detection          */
+    __I uint32_t EVD2:1;       /*!< bit:     10  Channel 2 Event Detection          */
+    __I uint32_t EVD3:1;       /*!< bit:     11  Channel 3 Event Detection          */
+    __I uint32_t EVD4:1;       /*!< bit:     12  Channel 4 Event Detection          */
+    __I uint32_t EVD5:1;       /*!< bit:     13  Channel 5 Event Detection          */
+    __I uint32_t EVD6:1;       /*!< bit:     14  Channel 6 Event Detection          */
+    __I uint32_t EVD7:1;       /*!< bit:     15  Channel 7 Event Detection          */
+    __I uint32_t :16;          /*!< bit: 16..31  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint32_t OVR:8;            /*!< bit:  0.. 7  Channel x Overrun                  */
-    uint32_t EVD:8;            /*!< bit:  8..15  Channel x Event Detection          */
-    uint32_t :16;              /*!< bit: 16..31  Reserved                           */
+    __I uint32_t OVR:8;        /*!< bit:  0.. 7  Channel x Overrun                  */
+    __I uint32_t EVD:8;        /*!< bit:  8..15  Channel x Event Detection          */
+    __I uint32_t :16;          /*!< bit: 16..31  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint32_t reg;                /*!< Type      used for register access              */
 } EVSYS_INTFLAG_Type;

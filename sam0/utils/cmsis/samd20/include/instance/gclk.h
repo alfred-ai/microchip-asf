@@ -3,7 +3,7 @@
  *
  * \brief Instance description for GCLK
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -69,7 +69,6 @@
 #define GCLK_GEN_SOURCE_NUM_MSB     7        // Number of Generic Clock Sources - 1
 #define GCLK_NUM                    28       // Number of Generic Clock Users
 #define GCLK_SOURCE_DFLL48M         7       
-#define GCLK_SOURCE_FDPLL                   
 #define GCLK_SOURCE_GCLKGEN1        2       
 #define GCLK_SOURCE_GCLKIN          1       
 #define GCLK_SOURCE_NUM             8        // Number of Generic Clock Sources

@@ -3,7 +3,7 @@
  *
  * \brief Instance description for SYSCTRL
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -98,8 +98,8 @@
 #define SYSCTRL_VREF_CONTROL_MSB    48
 #define SYSCTRL_VREF_STATUS_MSB     7
 #define SYSCTRL_VREG_LEVEL_MSB      2
-#define SYSCTRL_BOD12_VERSION       0x111
-#define SYSCTRL_BOD33_VERSION       0x111
+#define SYSCTRL_BOD12_VERSION       0x112
+#define SYSCTRL_BOD33_VERSION       0x112
 #define SYSCTRL_DFLL48M_VERSION     0x211   
 #define SYSCTRL_GCLK_VERSION        0x210
 #define SYSCTRL_OSCULP32K_VERSION   0x111

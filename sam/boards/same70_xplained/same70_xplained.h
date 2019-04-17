@@ -3,7 +3,7 @@
  *
  * \brief SAME70-XPLD Board Definition.
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -159,10 +159,10 @@
 #define LED_0_ACTIVE              LED0_ACTIVE_LEVEL
 #define LED_0_INACTIVE            LED0_INACTIVE_LEVEL
 
-#define PIN_LED_0       {PIO_PC8, PIOA, ID_PIOA, PIO_OUTPUT_1, PIO_DEFAULT}
+#define PIN_LED_0       {PIO_PC8, PIOC, ID_PIOC, PIO_OUTPUT_1, PIO_DEFAULT}
 #define PIN_LED_0_MASK  PIO_PC8
-#define PIN_LED_0_PIO   PIOA
-#define PIN_LED_0_ID    ID_PIOA
+#define PIN_LED_0_PIO   PIOC
+#define PIN_LED_0_ID    ID_PIOC
 #define PIN_LED_0_TYPE  PIO_OUTPUT_1
 #define PIN_LED_0_ATTR  PIO_DEFAULT
 //@}

@@ -3,7 +3,7 @@
  *
  * \brief Component description for AC
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -237,19 +237,19 @@ typedef union {
 
 /* -------- AC_INTFLAG : (AC Offset: 0x06) (R/W  8) Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  COMP0:1;          /*!< bit:      0  Comparator 0                       */
-    uint8_t  COMP1:1;          /*!< bit:      1  Comparator 1                       */
-    uint8_t  :2;               /*!< bit:  2.. 3  Reserved                           */
-    uint8_t  WIN0:1;           /*!< bit:      4  Window 0                           */
-    uint8_t  :3;               /*!< bit:  5.. 7  Reserved                           */
+    __I uint8_t  COMP0:1;      /*!< bit:      0  Comparator 0                       */
+    __I uint8_t  COMP1:1;      /*!< bit:      1  Comparator 1                       */
+    __I uint8_t  :2;           /*!< bit:  2.. 3  Reserved                           */
+    __I uint8_t  WIN0:1;       /*!< bit:      4  Window 0                           */
+    __I uint8_t  :3;           /*!< bit:  5.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint8_t  COMP:2;           /*!< bit:  0.. 1  Comparator x                       */
-    uint8_t  :2;               /*!< bit:  2.. 3  Reserved                           */
-    uint8_t  WIN:1;            /*!< bit:      4  Window x                           */
-    uint8_t  :3;               /*!< bit:  5.. 7  Reserved                           */
+    __I uint8_t  COMP:2;       /*!< bit:  0.. 1  Comparator x                       */
+    __I uint8_t  :2;           /*!< bit:  2.. 3  Reserved                           */
+    __I uint8_t  WIN:1;        /*!< bit:      4  Window x                           */
+    __I uint8_t  :3;           /*!< bit:  5.. 7  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } AC_INTFLAG_Type;

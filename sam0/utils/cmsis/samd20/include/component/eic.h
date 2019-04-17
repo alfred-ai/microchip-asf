@@ -3,7 +3,7 @@
  *
  * \brief Component description for EIC
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -359,29 +359,29 @@ typedef union {
 
 /* -------- EIC_INTFLAG : (EIC Offset: 0x10) (R/W 32) Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint32_t EXTINT0:1;        /*!< bit:      0  External Interrupt 0               */
-    uint32_t EXTINT1:1;        /*!< bit:      1  External Interrupt 1               */
-    uint32_t EXTINT2:1;        /*!< bit:      2  External Interrupt 2               */
-    uint32_t EXTINT3:1;        /*!< bit:      3  External Interrupt 3               */
-    uint32_t EXTINT4:1;        /*!< bit:      4  External Interrupt 4               */
-    uint32_t EXTINT5:1;        /*!< bit:      5  External Interrupt 5               */
-    uint32_t EXTINT6:1;        /*!< bit:      6  External Interrupt 6               */
-    uint32_t EXTINT7:1;        /*!< bit:      7  External Interrupt 7               */
-    uint32_t EXTINT8:1;        /*!< bit:      8  External Interrupt 8               */
-    uint32_t EXTINT9:1;        /*!< bit:      9  External Interrupt 9               */
-    uint32_t EXTINT10:1;       /*!< bit:     10  External Interrupt 10              */
-    uint32_t EXTINT11:1;       /*!< bit:     11  External Interrupt 11              */
-    uint32_t EXTINT12:1;       /*!< bit:     12  External Interrupt 12              */
-    uint32_t EXTINT13:1;       /*!< bit:     13  External Interrupt 13              */
-    uint32_t EXTINT14:1;       /*!< bit:     14  External Interrupt 14              */
-    uint32_t EXTINT15:1;       /*!< bit:     15  External Interrupt 15              */
-    uint32_t :16;              /*!< bit: 16..31  Reserved                           */
+    __I uint32_t EXTINT0:1;    /*!< bit:      0  External Interrupt 0               */
+    __I uint32_t EXTINT1:1;    /*!< bit:      1  External Interrupt 1               */
+    __I uint32_t EXTINT2:1;    /*!< bit:      2  External Interrupt 2               */
+    __I uint32_t EXTINT3:1;    /*!< bit:      3  External Interrupt 3               */
+    __I uint32_t EXTINT4:1;    /*!< bit:      4  External Interrupt 4               */
+    __I uint32_t EXTINT5:1;    /*!< bit:      5  External Interrupt 5               */
+    __I uint32_t EXTINT6:1;    /*!< bit:      6  External Interrupt 6               */
+    __I uint32_t EXTINT7:1;    /*!< bit:      7  External Interrupt 7               */
+    __I uint32_t EXTINT8:1;    /*!< bit:      8  External Interrupt 8               */
+    __I uint32_t EXTINT9:1;    /*!< bit:      9  External Interrupt 9               */
+    __I uint32_t EXTINT10:1;   /*!< bit:     10  External Interrupt 10              */
+    __I uint32_t EXTINT11:1;   /*!< bit:     11  External Interrupt 11              */
+    __I uint32_t EXTINT12:1;   /*!< bit:     12  External Interrupt 12              */
+    __I uint32_t EXTINT13:1;   /*!< bit:     13  External Interrupt 13              */
+    __I uint32_t EXTINT14:1;   /*!< bit:     14  External Interrupt 14              */
+    __I uint32_t EXTINT15:1;   /*!< bit:     15  External Interrupt 15              */
+    __I uint32_t :16;          /*!< bit: 16..31  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint32_t EXTINT:16;        /*!< bit:  0..15  External Interrupt x               */
-    uint32_t :16;              /*!< bit: 16..31  Reserved                           */
+    __I uint32_t EXTINT:16;    /*!< bit:  0..15  External Interrupt x               */
+    __I uint32_t :16;          /*!< bit: 16..31  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint32_t reg;                /*!< Type      used for register access              */
 } EIC_INTFLAG_Type;

@@ -3,7 +3,7 @@
  *
  * \brief Component description for TC
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -418,20 +418,20 @@ typedef union {
 
 /* -------- TC_INTFLAG : (TC Offset: 0x0E) (R/W  8) Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  OVF:1;            /*!< bit:      0  Overflow                           */
-    uint8_t  ERR:1;            /*!< bit:      1  Error                              */
-    uint8_t  :1;               /*!< bit:      2  Reserved                           */
-    uint8_t  SYNCRDY:1;        /*!< bit:      3  Synchronization Ready              */
-    uint8_t  MC0:1;            /*!< bit:      4  Match or Capture Channel 0         */
-    uint8_t  MC1:1;            /*!< bit:      5  Match or Capture Channel 1         */
-    uint8_t  :2;               /*!< bit:  6.. 7  Reserved                           */
+    __I uint8_t  OVF:1;        /*!< bit:      0  Overflow                           */
+    __I uint8_t  ERR:1;        /*!< bit:      1  Error                              */
+    __I uint8_t  :1;           /*!< bit:      2  Reserved                           */
+    __I uint8_t  SYNCRDY:1;    /*!< bit:      3  Synchronization Ready              */
+    __I uint8_t  MC0:1;        /*!< bit:      4  Match or Capture Channel 0         */
+    __I uint8_t  MC1:1;        /*!< bit:      5  Match or Capture Channel 1         */
+    __I uint8_t  :2;           /*!< bit:  6.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint8_t  :4;               /*!< bit:  0.. 3  Reserved                           */
-    uint8_t  MC:2;             /*!< bit:  4.. 5  Match or Capture Channel x         */
-    uint8_t  :2;               /*!< bit:  6.. 7  Reserved                           */
+    __I uint8_t  :4;           /*!< bit:  0.. 3  Reserved                           */
+    __I uint8_t  MC:2;         /*!< bit:  4.. 5  Match or Capture Channel x         */
+    __I uint8_t  :2;           /*!< bit:  6.. 7  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } TC_INTFLAG_Type;

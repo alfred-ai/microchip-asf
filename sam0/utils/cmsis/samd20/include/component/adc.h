@@ -3,7 +3,7 @@
  *
  * \brief Component description for ADC
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -489,13 +489,13 @@ typedef union {
 
 /* -------- ADC_INTFLAG : (ADC Offset: 0x18) (R/W  8) Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  RESRDY:1;         /*!< bit:      0  Result Ready                       */
-    uint8_t  OVERRUN:1;        /*!< bit:      1  Overrun                            */
-    uint8_t  WINMON:1;         /*!< bit:      2  Window Monitor                     */
-    uint8_t  SYNCRDY:1;        /*!< bit:      3  Synchronization Ready              */
-    uint8_t  :4;               /*!< bit:  4.. 7  Reserved                           */
+    __I uint8_t  RESRDY:1;     /*!< bit:      0  Result Ready                       */
+    __I uint8_t  OVERRUN:1;    /*!< bit:      1  Overrun                            */
+    __I uint8_t  WINMON:1;     /*!< bit:      2  Window Monitor                     */
+    __I uint8_t  SYNCRDY:1;    /*!< bit:      3  Synchronization Ready              */
+    __I uint8_t  :4;           /*!< bit:  4.. 7  Reserved                           */
   } bit;                       /*!< Structure used for bit  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } ADC_INTFLAG_Type;

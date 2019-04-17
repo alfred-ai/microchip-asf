@@ -3,7 +3,7 @@
  *
  * \brief Component description for RTC
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -629,16 +629,16 @@ typedef union {
 
 /* -------- RTC_MODE0_INTFLAG : (RTC Offset: 0x08) (R/W  8) MODE0 MODE0 Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  CMP0:1;           /*!< bit:      0  Compare 0                          */
-    uint8_t  :5;               /*!< bit:  1.. 5  Reserved                           */
-    uint8_t  SYNCRDY:1;        /*!< bit:      6  Synchronization Ready              */
-    uint8_t  OVF:1;            /*!< bit:      7  Overflow                           */
+    __I uint8_t  CMP0:1;       /*!< bit:      0  Compare 0                          */
+    __I uint8_t  :5;           /*!< bit:  1.. 5  Reserved                           */
+    __I uint8_t  SYNCRDY:1;    /*!< bit:      6  Synchronization Ready              */
+    __I uint8_t  OVF:1;        /*!< bit:      7  Overflow                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint8_t  CMP:1;            /*!< bit:      0  Compare x                          */
-    uint8_t  :7;               /*!< bit:  1.. 7  Reserved                           */
+    __I uint8_t  CMP:1;        /*!< bit:      0  Compare x                          */
+    __I uint8_t  :7;           /*!< bit:  1.. 7  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } RTC_MODE0_INTFLAG_Type;
@@ -660,17 +660,17 @@ typedef union {
 
 /* -------- RTC_MODE1_INTFLAG : (RTC Offset: 0x08) (R/W  8) MODE1 MODE1 Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  CMP0:1;           /*!< bit:      0  Compare 0                          */
-    uint8_t  CMP1:1;           /*!< bit:      1  Compare 1                          */
-    uint8_t  :4;               /*!< bit:  2.. 5  Reserved                           */
-    uint8_t  SYNCRDY:1;        /*!< bit:      6  Synchronization Ready              */
-    uint8_t  OVF:1;            /*!< bit:      7  Overflow                           */
+    __I uint8_t  CMP0:1;       /*!< bit:      0  Compare 0                          */
+    __I uint8_t  CMP1:1;       /*!< bit:      1  Compare 1                          */
+    __I uint8_t  :4;           /*!< bit:  2.. 5  Reserved                           */
+    __I uint8_t  SYNCRDY:1;    /*!< bit:      6  Synchronization Ready              */
+    __I uint8_t  OVF:1;        /*!< bit:      7  Overflow                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint8_t  CMP:2;            /*!< bit:  0.. 1  Compare x                          */
-    uint8_t  :6;               /*!< bit:  2.. 7  Reserved                           */
+    __I uint8_t  CMP:2;        /*!< bit:  0.. 1  Compare x                          */
+    __I uint8_t  :6;           /*!< bit:  2.. 7  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } RTC_MODE1_INTFLAG_Type;
@@ -694,16 +694,16 @@ typedef union {
 
 /* -------- RTC_MODE2_INTFLAG : (RTC Offset: 0x08) (R/W  8) MODE2 MODE2 Interrupt Flag Status and Clear -------- */
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-typedef union {
+typedef union { // __I to avoid read-modify-write on write-to-clear register
   struct {
-    uint8_t  ALARM0:1;         /*!< bit:      0  Alarm 0                            */
-    uint8_t  :5;               /*!< bit:  1.. 5  Reserved                           */
-    uint8_t  SYNCRDY:1;        /*!< bit:      6  Synchronization Ready              */
-    uint8_t  OVF:1;            /*!< bit:      7  Overflow                           */
+    __I uint8_t  ALARM0:1;     /*!< bit:      0  Alarm 0                            */
+    __I uint8_t  :5;           /*!< bit:  1.. 5  Reserved                           */
+    __I uint8_t  SYNCRDY:1;    /*!< bit:      6  Synchronization Ready              */
+    __I uint8_t  OVF:1;        /*!< bit:      7  Overflow                           */
   } bit;                       /*!< Structure used for bit  access                  */
   struct {
-    uint8_t  ALARM:1;          /*!< bit:      0  Alarm x                            */
-    uint8_t  :7;               /*!< bit:  1.. 7  Reserved                           */
+    __I uint8_t  ALARM:1;      /*!< bit:      0  Alarm x                            */
+    __I uint8_t  :7;           /*!< bit:  1.. 7  Reserved                           */
   } vec;                       /*!< Structure used for vec  access                  */
   uint8_t reg;                 /*!< Type      used for register access              */
 } RTC_MODE2_INTFLAG_Type;
@@ -843,7 +843,9 @@ typedef union {
 #define RTC_MODE2_CLOCK_HOUR_Pos    12           /**< \brief (RTC_MODE2_CLOCK) Hour */
 #define RTC_MODE2_CLOCK_HOUR_Msk    (0x1Ful << RTC_MODE2_CLOCK_HOUR_Pos)
 #define RTC_MODE2_CLOCK_HOUR(value) ((RTC_MODE2_CLOCK_HOUR_Msk & ((value) << RTC_MODE2_CLOCK_HOUR_Pos)))
+#define   RTC_MODE2_CLOCK_HOUR_AM_Val     _U_(0x0)   /**< \brief (RTC_MODE2_CLOCK) AM when CLKREP in 12-hour */
 #define   RTC_MODE2_CLOCK_HOUR_PM_Val     0x10ul  /**< \brief (RTC_MODE2_CLOCK) Afternoon Hour */
+#define RTC_MODE2_CLOCK_HOUR_AM     (RTC_MODE2_CLOCK_HOUR_AM_Val   << RTC_MODE2_CLOCK_HOUR_Pos)
 #define RTC_MODE2_CLOCK_HOUR_PM     (RTC_MODE2_CLOCK_HOUR_PM_Val   << RTC_MODE2_CLOCK_HOUR_Pos)
 #define RTC_MODE2_CLOCK_DAY_Pos     17           /**< \brief (RTC_MODE2_CLOCK) Day */
 #define RTC_MODE2_CLOCK_DAY_Msk     (0x1Ful << RTC_MODE2_CLOCK_DAY_Pos)
@@ -937,6 +939,10 @@ typedef union {
 #define RTC_MODE2_ALARM_HOUR_Pos    12           /**< \brief (RTC_MODE2_ALARM) Hour */
 #define RTC_MODE2_ALARM_HOUR_Msk    (0x1Ful << RTC_MODE2_ALARM_HOUR_Pos)
 #define RTC_MODE2_ALARM_HOUR(value) ((RTC_MODE2_ALARM_HOUR_Msk & ((value) << RTC_MODE2_ALARM_HOUR_Pos)))
+#define   RTC_MODE2_ALARM_HOUR_AM_Val     _U_(0x0)   /**< \brief (RTC_MODE2_ALARM) Morning hour */
+#define   RTC_MODE2_ALARM_HOUR_PM_Val     _U_(0x10)   /**< \brief (RTC_MODE2_ALARM) Afternoon hour */
+#define RTC_MODE2_ALARM_HOUR_AM     (RTC_MODE2_ALARM_HOUR_AM_Val   << RTC_MODE2_ALARM_HOUR_Pos)
+#define RTC_MODE2_ALARM_HOUR_PM     (RTC_MODE2_ALARM_HOUR_PM_Val   << RTC_MODE2_ALARM_HOUR_Pos)
 #define RTC_MODE2_ALARM_DAY_Pos     17           /**< \brief (RTC_MODE2_ALARM) Day */
 #define RTC_MODE2_ALARM_DAY_Msk     (0x1Ful << RTC_MODE2_ALARM_DAY_Pos)
 #define RTC_MODE2_ALARM_DAY(value)  ((RTC_MODE2_ALARM_DAY_Msk & ((value) << RTC_MODE2_ALARM_DAY_Pos)))

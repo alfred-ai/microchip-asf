@@ -3,7 +3,7 @@
  *
  * \brief Instance description for EVSYS
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -70,7 +70,7 @@
 #define EVSYS_CHANNELS              8        // Number of Channels
 #define EVSYS_CHANNELS_BITS         3        // Number of bits to select Channel
 #define EVSYS_CHANNELS_MSB          7        // Number of Channels - 1
-#define EVSYS_EXTEVT_NUM                     // Number of External Event Generators
+#define EVSYS_EXTEVT_NUM            0        // Number of External Event Generators
 #define EVSYS_EXT_EVT_MSB           0        // Number of External Event Generators - 1
 #define EVSYS_GCLK_ID_0             4
 #define EVSYS_GCLK_ID_1             5

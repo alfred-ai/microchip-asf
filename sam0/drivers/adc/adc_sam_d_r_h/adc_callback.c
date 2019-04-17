@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Analog-to-Digital Converter Driver
  *
- * Copyright (C) 2012-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -52,32 +52,34 @@ static void _adc_interrupt_handler(const uint8_t instance)
 	struct adc_module *module = _adc_instances[instance];
 
 	/* get interrupt flags and mask out enabled callbacks */
-	uint32_t flags = module->hw->INTFLAG.reg;
+	uint32_t flags = module->hw->INTFLAG.reg & module->hw->INTENSET.reg;
 
 	if (flags & ADC_INTFLAG_RESRDY) {
-		if ((module->enabled_callback_mask & (1 << ADC_CALLBACK_READ_BUFFER)) &&
-				(module->registered_callback_mask & (1 << ADC_CALLBACK_READ_BUFFER))) {
-			/* clear interrupt flag */
-			module->hw->INTFLAG.reg = ADC_INTFLAG_RESRDY;
+		/* clear interrupt flag */
+		module->hw->INTFLAG.reg = ADC_INTFLAG_RESRDY;
 
-			while (adc_is_syncing(module)) {
-				/* Wait for synchronization */
+		while (adc_is_syncing(module)) {
+			/* Wait for synchronization */
+		}
+
+		/* store ADC result in job buffer */
+		*(module->job_buffer++) = module->hw->RESULT.reg;
+
+		if (--module->remaining_conversions > 0) {
+			if (module->software_trigger == true) {
+				adc_start_conversion(module);
 			}
+		} else {
+			adc_disable_interrupt(module, ADC_INTERRUPT_RESULT_READY);
+			if (module->job_status == STATUS_BUSY) {
+				/* job is complete. update status,disable interrupt
+					*and call callback */
+				module->job_status = STATUS_OK;
 
-			/* store ADC result in job buffer */
-			*(module->job_buffer++) = module->hw->RESULT.reg;
-
-			if (--module->remaining_conversions > 0) {
-				if (module->software_trigger == true) {
-					adc_start_conversion(module);
-				}
-			} else {
-				if (module->job_status == STATUS_BUSY) {
-					/* job is complete. update status,disable interrupt
-					 *and call callback */
-					module->job_status = STATUS_OK;
-					adc_disable_interrupt(module, ADC_INTERRUPT_RESULT_READY);
-
+				if ((module->enabled_callback_mask &
+						(1 << ADC_CALLBACK_READ_BUFFER)) &&
+					(module->registered_callback_mask &
+						(1 << ADC_CALLBACK_READ_BUFFER))) {
 					(module->callback[ADC_CALLBACK_READ_BUFFER])(module);
 				}
 			}
