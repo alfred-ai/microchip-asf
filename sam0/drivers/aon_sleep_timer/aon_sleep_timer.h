@@ -3,7 +3,7 @@
  *
  * \brief SAM Always ON Sleep Timer Driver for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -190,7 +190,7 @@ uint32_t aon_sleep_timer_get_current_value(void);
  * \name Callback
  * @{
  */
-void aon_sleep_timer_clear_interrup(void);
+void aon_sleep_timer_clear_interrupt(void);
 bool aon_sleep_timer_sleep_timer_active(void);
 void aon_sleep_timer_register_callback(aon_sleep_timer_callback_t fun);
 void aon_sleep_timer_unregister_callback(void);

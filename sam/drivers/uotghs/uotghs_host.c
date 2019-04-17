@@ -4,7 +4,7 @@
  * \brief USB host driver
  * Compliance with common driver UHD
  *
- * Copyright (C) 2012-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -170,6 +170,11 @@ extern void udc_start(void);
  * Feature to reduce or increase interrupt endpoints buffering (1 to 2).
  * Default value 1.
  *
+ * UHD_BULK_INTERVAL_MIN<br>
+ * Feature to reduce or increase bulk token rate when it's NAKed (0, 1 ...).
+ * To adjust bandwidth usage.
+ * Default value 1.
+ *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodic
  * task. Thereby, the USB events use callbacks to transfer the information.
@@ -205,6 +210,11 @@ extern void udc_start(void);
 #  if (UHD_INTERRUPT_NB_BANK < 1) || (UHD_INTERRUPT_NB_BANK > 2)
 #    error UHD_INTERRUPT_NB_BANK must be define with 1 or 2.
 #  endif
+#endif
+
+#ifndef UHD_BULK_INTERVAL_MIN
+/** Minimal bulk interval value */
+#  define UHD_BULK_INTERVAL_MIN 1
 #endif
 
 /**
@@ -777,7 +787,7 @@ bool uhd_ep0_alloc(usb_add_t add, uint8_t ep_size)
 	return true;
 }
 
-bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t * ep_desc)
+bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t * ep_desc, uhd_speed_t speed)
 {
 	uint8_t ep_addr;
 	uint8_t ep_type;
@@ -799,16 +809,49 @@ bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t * ep_desc)
 		switch(ep_type) {
 		case USB_EP_TYPE_ISOCHRONOUS:
 			bank = UHD_ISOCHRONOUS_NB_BANK;
+#ifdef USB_HOST_HS_SUPPORT
+			if (speed == UHD_SPEED_HIGH) {
+				if (ep_desc->bInterval < 1) {
+					ep_interval = 1;
+				} else if (ep_desc->bInterval >= 8) {
+					ep_interval = 255;
+				} else {
+					ep_interval = 1 << (ep_desc->bInterval - 1);
+				}
+			} else {
+				ep_interval = ep_desc->bInterval;
+			}
+#else
 			ep_interval = ep_desc->bInterval;
+#endif
 			break;
 		case USB_EP_TYPE_INTERRUPT:
 			bank = UHD_INTERRUPT_NB_BANK;
+#ifdef USB_HOST_HS_SUPPORT
+			if (speed == UHD_SPEED_HIGH) {
+				if (ep_desc->bInterval < 1) {
+					ep_interval = 1;
+				} else if (ep_desc->bInterval >= 8) {
+					ep_interval = 255;
+				} else {
+					ep_interval = 1 << (ep_desc->bInterval - 1);
+				}
+			} else {
+				ep_interval = ep_desc->bInterval;
+			}
+#else
 			ep_interval = ep_desc->bInterval;
+#endif
 			break;
 		case USB_EP_TYPE_BULK:
 			bank = UHD_BULK_NB_BANK;
-			// 0 is required by UOTGHS hardware for bulk
-			ep_interval = 0;
+			if (ep_desc->bEndpointAddress & USB_EP_DIR_IN) {
+				ep_interval = 0;
+			} else if (ep_desc->bInterval > UHD_BULK_INTERVAL_MIN) {
+				ep_interval = ep_desc->bInterval;
+			} else {
+				ep_interval = UHD_BULK_INTERVAL_MIN;
+			}
 			break;
 		default:
 			Assert(false);
@@ -995,6 +1038,13 @@ bool uhd_ep_run(usb_add_t add,
 			if (b_shortpacket) {
 				uhd_enable_short_packet_interrupt(pipe);
 			}
+#if UHD_BULK_INTERVAL_MIN
+			// Enable NAK for bandwidth control
+			if (Is_uhd_pipe_bulk(pipe)) {
+				uhd_ack_nak_received(pipe);
+				uhd_enable_nak_received_interrupt(pipe);
+			}
+#endif
 		} else {
 			uhd_disable_bank_interrupt(pipe);
 			uhd_enable_out_ready_interrupt(pipe);
@@ -1007,6 +1057,12 @@ bool uhd_ep_run(usb_add_t add,
 
 #ifdef UHD_PIPE_DMA_SUPPORTED
 	// Request first transfer
+#if UHD_BULK_INTERVAL_MIN
+	if (Is_uhd_pipe_bulk_in(pipe)) {
+		uhd_ack_nak_received(pipe);
+		uhd_enable_nak_received_interrupt(pipe);
+	}
+#endif
 	uhd_pipe_trans_complet(pipe);
 #endif
 	return true;
@@ -1276,7 +1332,27 @@ static void uhd_ctrl_timeout(void)
  */
 static void uhd_sof_interrupt(void)
 {
+	uhd_pipe_job_t *ptr_job;
+	uint8_t pipe;
+
 	uhd_ack_sof();
+
+#if UHD_BULK_INTERVAL_MIN
+	// Start any busy frozen Bulk IN
+	for (pipe = 1; pipe < UOTGHS_EPT_NUM; pipe ++) {
+		ptr_job = &uhd_pipe_job[pipe-1];
+		if (!ptr_job->busy) {
+			continue;
+		}
+		if (!Is_uhd_pipe_bulk_in(pipe)) {
+			continue;
+		}
+		if (!Is_uhd_pipe_frozen(pipe)) {
+			continue;
+		}
+		uhd_unfreeze_pipe(pipe);
+	}
+#endif
 
 	// Manage the micro SOF
 	if (Is_uhd_high_speed_mode()) {
@@ -1306,8 +1382,7 @@ static void uhd_sof_interrupt(void)
 	uhd_ctrl_timeout();
 
 	// Manage the timeouts on endpoint transfer
-	uhd_pipe_job_t *ptr_job;
-	for (uint8_t pipe = 1; pipe < UOTGHS_EPT_NUM; pipe++) {
+	for (pipe = 1; pipe < UOTGHS_EPT_NUM; pipe++) {
 		ptr_job = &uhd_pipe_job[pipe-1];
 		if (ptr_job->busy == true) {
 			if (ptr_job->timeout) {
@@ -1764,6 +1839,7 @@ static void uhd_pipe_in_received(uint8_t pipe)
 	// Finish job on error or short packet
 	if (b_full || b_short) {
 		uhd_freeze_pipe(pipe);
+		uhd_disable_nak_received_interrupt(pipe);
 		uhd_disable_short_packet_interrupt(pipe);
 		uhd_disable_in_received_interrupt(pipe);
 		uhd_disable_pipe_interrupt(pipe);
@@ -1937,6 +2013,8 @@ static void uhd_pipe_trans_complet(uint8_t pipe)
 			uhd_enable_out_ready_interrupt(pipe);
 			return;
 		}
+	} else {
+		uhd_disable_nak_received_interrupt(pipe);
 	}
 	// Call callback to signal end of transfer
 	uhd_pipe_finish_job(pipe, UHD_TRANS_NOERROR);
@@ -2016,6 +2094,18 @@ static void uhd_pipe_interrupt_dma(uint8_t pipe)
  */
 static void uhd_pipe_interrupt(uint8_t pipe)
 {
+#if UHD_BULK_INTERVAL_MIN
+	// for any bulk IN NAK endpoints, freeze to free bandwidth
+	if (Is_uhd_pipe_bulk_in(pipe)
+		&& Is_uhd_nak_received_interrupt_enabled(pipe)
+		&& Is_uhd_nak_received(pipe)) {
+		// Freeze until next frame start
+		uhd_freeze_pipe(pipe);
+		uhd_ack_nak_received(pipe);
+		return;
+	}
+#endif
+
 #ifdef UHD_PIPE_FIFO_SUPPORTED
 	// for none DMA endpoints
 	if (!Is_uhd_pipe_dma_supported(pipe)) {
@@ -2126,6 +2216,8 @@ static void uhd_ep_abort_pipe(uint8_t pipe, uhd_trans_status_t status)
 	uhd_enable_stall_interrupt(pipe);
 	uhd_enable_pipe_error_interrupt(pipe);
 	uhd_disable_out_ready_interrupt(pipe);
+	uhd_disable_in_received_interrupt(pipe);
+	uhd_disable_nak_received_interrupt(pipe);
 
 	uhd_pipe_finish_job(pipe, status);
 }

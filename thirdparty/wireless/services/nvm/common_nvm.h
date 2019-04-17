@@ -108,7 +108,7 @@ typedef enum {
  *
  * \param mem Type of non volatile memory to initialize
  */
-status_code_t nvm_init(mem_type_t mem);
+status_code_genare_t nvm_init(mem_type_t mem);
 
 /**
  * \brief Read single byte of data.
@@ -137,7 +137,7 @@ status_code_t nvm_write_char(mem_type_t mem, uint32_t address, uint8_t data);
  * \param buffer Pointer to destination buffer
  * \param len Number of bytes to read
  */
-status_code_t nvm_read(mem_type_t mem, uint32_t address, void *buffer,
+status_code_genare_t nvm_read(mem_type_t mem, uint32_t address, void *buffer,
 		uint32_t len);
 
 /**

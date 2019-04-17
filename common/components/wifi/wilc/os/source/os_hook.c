@@ -4,7 +4,7 @@
  *
  * \brief
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,7 +93,7 @@ static void os_hif_task(void *pv)
 			} 
 			/* Error. */
 			else {
-				osprintf("Warning: Wrong id  msg id %d \r\n", msg.id);
+				osprintf("Warning: Wrong id  msg id %lu \r\n", msg.id);
 			}
 		}
 	}
@@ -129,7 +129,7 @@ void os_hook_init(void)
 		xSemaphoreTake(hif_notify_sem, portMAX_DELAY);
 		hif_queue = xQueueCreate(32, sizeof(hif_msg_t));
 		
-		xTaskCreate(os_hif_task, (const void *)"WiFiHIF", 1024, NULL, (configMAX_PRIORITIES - 1), &hif_thread);			
+		xTaskCreate(os_hif_task, (const signed char *)"WiFiHIF", 1024, NULL, (configMAX_PRIORITIES - 1), &hif_thread);			
 		has_init = 1;
 	}
 }

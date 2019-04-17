@@ -4,7 +4,7 @@
  *
  * \brief AP Task.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,6 +46,7 @@
 #include "osprintf.h"
 #include "ap.h"
 #include "sta.h"
+#include "driver/include/m2m_types.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -83,6 +84,7 @@ static char webpage[1024];
 
 extern char report[];
 extern uint32_t sta_connected;
+extern tstrM2MAPAssocInfo strApAssocInfo;
 
 /**
  * \brief Core HTTP server function processing the request.
@@ -93,7 +95,9 @@ static void http_request(struct netconn *conn)
 {
 	struct netbuf *rx_buf;
 	char *str;
+	static char tempWebpage[1024];
 	uint16_t len;
+	uint32_t i;
 
 	while (netconn_recv(conn, &rx_buf) != ERR_OK) {
 		vTaskDelay(webSHORT_DELAY);
@@ -115,11 +119,27 @@ static void http_request(struct netconn *conn)
 			webpage_hit++;
 			sprintf(cwebpage_hit, "%d", (int)webpage_hit);
 			strcat(webpage, cwebpage_hit);
-			sprintf(cwebpage_hit, "%d", (int)sta_connected);
+			sprintf(cwebpage_hit, "%d", (int)strApAssocInfo.u8NoConnSta);
 			strcat(webpage, "<br>Nb STA Connected = ");
-			strcat(webpage, cwebpage_hit);	
+			strcat(webpage, cwebpage_hit);
+			if(strApAssocInfo.u8NoConnSta > 0) {
+				strcat(webpage, "<table border=\"1\" bordercolor=\"#2477E6\" style=\"border-collapse:collapse;\"><tr><th>BSSID</th><th>RSSI</th></tr>");
+				strcpy(tempWebpage, webpage);	
+				for(i=0; i<strApAssocInfo.u8NoConnSta; i++) {
+					sprintf(webpage, "%s <tr><td>%02x:%02x:%02x:%02x:%02x:%02x</td><td> %d</td></tr>",
+						tempWebpage, 
+						strApAssocInfo.astrM2MAssocEntryInfo[i].BSSID[0],
+						strApAssocInfo.astrM2MAssocEntryInfo[i].BSSID[1],
+						strApAssocInfo.astrM2MAssocEntryInfo[i].BSSID[2],
+						strApAssocInfo.astrM2MAssocEntryInfo[i].BSSID[3],
+						strApAssocInfo.astrM2MAssocEntryInfo[i].BSSID[4],
+						strApAssocInfo.astrM2MAssocEntryInfo[i].BSSID[5],
+						strApAssocInfo.astrM2MAssocEntryInfo[i].s8RSSI);
+					}
+				strcat(webpage, "</table>");
+			}
 			strcat(webpage, "<p><pre><br>Task          State  Priority  Stack	#<br>************************************************<br>");
-			vTaskList((void *)((char *)webpage + strlen((char *)webpage)));
+			vTaskList((signed char *)webpage + strlen((char *)webpage));
 			strcat(webpage, "<p><pre><p><pre><br><br>Weather Bulletin (via AP ");
 			strcat(webpage, STA_WLAN_SSID);
 			strcat(webpage, ")<br>************************************************<br>");
@@ -127,6 +147,8 @@ static void http_request(struct netconn *conn)
 
 			/* ... Finally the page footer. */
 			strcat(webpage, webHTML_END);
+			if(strlen(webpage) > sizeof(webpage))
+				osprint("ERROR: Webpage buffer exceeded maximum\r\n");
 
 			/* Write out the dynamically generated page. */
 			netconn_write(conn, webpage, strlen(webpage), NETCONN_COPY);
@@ -148,9 +170,6 @@ void ap_task(void *argument)
 	/* Just to avoid compiler warnings. */
 	UNUSED(argument);
 	
-	/* Give time for other thread to initialize lwIP. */
-	vTaskDelay(1000);
-
 	/* Create a new TCP connection handle */
 	conn = netconn_new(NETCONN_TCP);
 	if (conn == NULL) {

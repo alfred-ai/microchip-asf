@@ -3,7 +3,7 @@
  *
  * \brief Android Open Accessory
  *
- * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -224,7 +224,7 @@ uhc_enum_status_t uhi_aoa_install(uhc_device_t *dev)
 			}
 
 			usb_ep_desc_t *ptr_ep = (usb_ep_desc_t *) ptr_iface;
-			if (!uhd_ep_alloc(dev->address, (usb_ep_desc_t*)ptr_iface)) {
+			if (!uhd_ep_alloc(dev->address, (usb_ep_desc_t*)ptr_iface, dev->speed)) {
 				/* Endpoint allocation fail */
 				return UHC_ENUM_HARDWARE_LIMIT;
 			}

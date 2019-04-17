@@ -3,7 +3,7 @@
  *
  * \brief SAM AON Sleep Timer Driver for SAMB11
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,6 +44,9 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 #include "aon_sleep_timer.h"
+
+#define AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_BIT14_Msk (0x4u << AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Pos)
+#define AON_SLEEP_TIMER_CONTROL_SLP_TIMER_CLK_RELOAD_DLY_BIT9_Msk (0x2u << AON_SLEEP_TIMER_CONTROL_SLP_TIMER_CLK_RELOAD_DLY_Pos)
 
 static aon_sleep_timer_callback_t aon_sleep_timer_callback = NULL;
 
@@ -89,8 +92,12 @@ void aon_sleep_timer_disable(void)
 	regval &= ~AON_SLEEP_TIMER_CONTROL_SINGLE_COUNT_ENABLE;
 	AON_SLEEP_TIMER0->CONTROL.reg = regval;
 
-	while (AON_SLEEP_TIMER0->CONTROL.reg & (1 << 14)) {
+	while ((AON_SLEEP_TIMER0->CONTROL.reg & AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_BIT14_Msk) || \
+	(AON_SLEEP_TIMER0->CONTROL.reg & AON_SLEEP_TIMER_CONTROL_SLP_TIMER_CLK_RELOAD_DLY_BIT9_Msk)) {
 	}
+
+	/* Reset the AON Timer to reset the current counter value to zero immediately */
+	system_peripheral_aon_reset(PERIPHERAL_AON_SLEEP_TIMER);
 }
 
 /**
@@ -119,7 +126,7 @@ bool aon_sleep_timer_sleep_timer_active(void)
  * This flag will be cleared automatically once the IRQ
  * has been seen on the sleep clock.
  */
-void aon_sleep_timer_clear_interrup(void)
+void aon_sleep_timer_clear_interrupt(void)
 {
 	AON_SLEEP_TIMER0->CONTROL.reg |= AON_SLEEP_TIMER_CONTROL_IRQ_CLEAR;
 }
@@ -127,23 +134,27 @@ void aon_sleep_timer_clear_interrup(void)
 /**
  * \brief Registers a callback.
  *
- * Registers and enable a callback function which is implemented by the user.
+ * Registers the user callback and enables the interrupt
  *
  * \param[in]     callback_func Pointer to callback function
  */
 void aon_sleep_timer_register_callback(aon_sleep_timer_callback_t fun)
 {
 	aon_sleep_timer_callback = fun;
+
+	NVIC_EnableIRQ(AON_SLEEP_TIMER0_IRQn);
 }
 
 /**
  * \brief Unregisters a callback.
  *
- * Unregisters and disable a callback function implemented by the user.
+ * Unregisters the user callback and disables the interrupt.
  *
  */
 void aon_sleep_timer_unregister_callback(void)
 {
+	NVIC_DisableIRQ(AON_SLEEP_TIMER0_IRQn);
+
 	aon_sleep_timer_callback = NULL;
 }
 
@@ -155,7 +166,7 @@ void aon_sleep_timer_unregister_callback(void)
  */
 static void aon_sleep_timer_isr_handler(void)
 {
-	aon_sleep_timer_clear_interrup();
+	aon_sleep_timer_clear_interrupt();
 
 	if (aon_sleep_timer_callback) {
 		aon_sleep_timer_callback();
@@ -181,16 +192,20 @@ void aon_sleep_timer_init(const struct aon_sleep_timer_config *config)
 				AON_PWR_SEQ_AON_ST_WAKEUP_CTRL_ARM_ENABLE |
 				AON_PWR_SEQ_AON_ST_WAKEUP_CTRL_BLE_ENABLE;
 	} else if (config->wakeup == AON_SLEEP_TIMER_WAKEUP_ARM) {
+		AON_PWR_SEQ0->AON_ST_WAKEUP_CTRL.reg &=
+				~AON_PWR_SEQ_AON_ST_WAKEUP_CTRL_BLE_ENABLE;
 		AON_PWR_SEQ0->AON_ST_WAKEUP_CTRL.reg |=
 				AON_PWR_SEQ_AON_ST_WAKEUP_CTRL_ARM_ENABLE;
 	}
 
+	system_clock_peripheral_aon_enable(PERIPHERAL_AON_SLEEP_TIMER);
+
 	aon_st_ctrl = AON_SLEEP_TIMER0->CONTROL.reg;
-	while (aon_st_ctrl & ((1UL << 31) - 1)) {
+	while (aon_st_ctrl & ~(AON_SLEEP_TIMER_CONTROL_SLEEP_TIMER_NOT_ACTIVE_Msk)) {
 		AON_SLEEP_TIMER0->CONTROL.reg = 0;
 		delay_cycle(3);
 		while (aon_st_ctrl & ((config->mode == AON_SLEEP_TIMER_RELOAD_MODE) ?
-				(1 << 9) : (1 << 14))) {
+				(AON_SLEEP_TIMER_CONTROL_SLP_TIMER_CLK_RELOAD_DLY_BIT9_Msk) : (AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_BIT14_Msk))) {
 			aon_st_ctrl = AON_SLEEP_TIMER0->CONTROL.reg;
 		}
 		aon_st_ctrl = AON_SLEEP_TIMER0->CONTROL.reg;
@@ -210,6 +225,13 @@ void aon_sleep_timer_init(const struct aon_sleep_timer_config *config)
 		while ((AON_SLEEP_TIMER0->CONTROL.reg &
 				AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Msk)
 				!= AON_SLEEP_TIMER_CONTROL_SLP_TIMER_SINGLE_COUNT_ENABLE_DLY_Msk) {
+		}
+	}
+
+	if (config->mode == AON_SLEEP_TIMER_RELOAD_MODE) {
+		while ((AON_SLEEP_TIMER0->CONTROL.reg &
+				AON_SLEEP_TIMER_CONTROL_SLP_TIMER_CLK_RELOAD_DLY_Msk)
+				!= AON_SLEEP_TIMER_CONTROL_SLP_TIMER_CLK_RELOAD_DLY_Msk) {
 		}
 	}
 

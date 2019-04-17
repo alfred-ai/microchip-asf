@@ -3,7 +3,7 @@
 *
 * \brief BLE Manager declarations
 *
-* Copyright (c) 2017 Atmel Corporation. All rights reserved.
+* Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
 *
 * \asf_license_start
 *
@@ -236,6 +236,10 @@ typedef enum
 #define TOTAL_CHARATERISTIC_NUM     3
 #endif
 
+#if defined GLUCOSE_SERVICE
+#undef TOTAL_CHARATERISTIC_NUM
+#define TOTAL_CHARATERISTIC_NUM     4
+#endif
 
 /** @brief Service UUID's */
 
@@ -284,6 +288,9 @@ typedef enum
 /* Current time service UUID */
 #define CURRENT_TIME_SERVICE_UUID				(0x1805)
 
+/*Glucose service UUID*/
+#define GLUCOSE_SERVICE_UUID				(0x1808)
+
 /* Heart rate service UUID */
 #define HEART_RATE_SERVICE_UUID				(0x180D)
 
@@ -315,6 +322,17 @@ typedef enum
 /** Heart Rate Control Point characteristic uuid */
 #define HEART_RATE_CONTROL_POINT_CHAR_UUID	(0x2A39)
 
+/** Glucose measurement characteristic uuid */
+#define GLUCOSE_MEASUREMENT_CHAR_UUID		(0x2A18)
+
+/** Glucose measurement context characteristic uuid */
+#define GLUCOSE_MEASUREMENT_CONTEXT_CHAR_UUID		(0x2A34)
+
+/** Glucose feature characteristic uuid */
+#define GLUCOSE_FEATURE_CHAR_UUID		(0x2A51)
+
+/** Record Access Control Point characteristic uuid */
+#define RECORD_ACCESS_CONTROL_POINT_CHAR_UUID		(0x2A52)
 
 /* device information service characteristics uuids */
 #define DIS_CHAR_SYSTEM_ID_UUID					(0x2A23)

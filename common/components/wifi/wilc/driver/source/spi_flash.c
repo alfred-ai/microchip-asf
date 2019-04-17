@@ -4,7 +4,7 @@
  *
  * \brief NMC1500 stack SPI Flash internal APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -77,7 +77,7 @@ static uint32 spi_flash_rdid(void)
 	nm_write_reg(SPI_FLASH_CMD_CNT, 1 | (1<<7));
 	while(nm_read_reg(SPI_FLASH_TR_DONE) != 1);
 	reg = nm_read_reg(DUMMY_REGISTER);
-	M2M_PRINT("Flash id %x \n",reg);
+	M2M_PRINT("Flash id %lx \n",reg);
 	return reg;
 }
 
@@ -120,7 +120,7 @@ uint32 spi_flash_get_size(void)
 			u32FlashPwr = ((u32FlashId>>16)&0xff) - 0x11; /*2MBIT is the min*/
 			/*That number power 2 to get the flash size*/
 			gu32InernalFlashSize = 1<<u32FlashPwr;
-			M2M_INFO("Flash Size %d MBit\n",gu32InernalFlashSize);
+			M2M_INFO("Flash Size %lu MBit\n",gu32InernalFlashSize);
 		}
 		else
 		{

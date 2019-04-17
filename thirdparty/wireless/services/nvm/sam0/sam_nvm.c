@@ -46,7 +46,7 @@
 #include "system_interrupt.h"
 #include "string.h"
 
-static status_code_t nvm_sam0_read(mem_type_t mem, uint32_t address,
+static status_code_genare_t nvm_sam0_read(mem_type_t mem, uint32_t address,
 		uint8_t *const buffer,
 		uint32_t len);
 static enum status_code nvm_memcpy(
@@ -59,23 +59,23 @@ static enum status_code nvm_memcpy(
  * \internal Pointer to the NVM MEMORY region start address
  */
 #define NVM_MEMORY        ((volatile uint16_t *)FLASH_ADDR)
-status_code_t nvm_read(mem_type_t mem, uint32_t address, void *buffer,
+status_code_genare_t nvm_read(mem_type_t mem, uint32_t address, void *buffer,
 		uint32_t len)
 {
 	nvm_sam0_read(mem, address, buffer, len);
 	return STATUS_OK;
 }
 
-status_code_t nvm_sam0_read(mem_type_t mem, uint32_t address,
+status_code_genare_t nvm_sam0_read(mem_type_t mem, uint32_t address,
 		uint8_t *const buffer,
 		uint32_t len)
 {
 	switch (mem) {
-		/* Get a pointer to the module hardware instance */
-		Nvmctrl *const nvm_module = NVMCTRL;
 
 	case INT_FLASH:
-
+          {
+		/* Get a pointer to the module hardware instance */
+		Nvmctrl *const nvm_module = NVMCTRL;
 		/* Check if the module is busy */
 		if (!nvm_is_ready()) {
 			return STATUS_BUSY;
@@ -104,11 +104,12 @@ status_code_t nvm_sam0_read(mem_type_t mem, uint32_t address,
 				buffer[i + 1] = (data >> 8);
 			}
 		}
+          }
 
 		break;
 
 	default:
-		return ERR_INVALID_ARG;
+		return STATUS_ERR_INVALID_ARG;
 	}
 
 	return STATUS_OK;
@@ -213,11 +214,9 @@ status_code_t nvm_write(mem_type_t mem, uint32_t address, void *buffer,
 	default:
 		return ERR_INVALID_ARG;
 	}
-
-	return STATUS_OK;
 }
 
-status_code_t nvm_init(mem_type_t mem)
+status_code_genare_t nvm_init(mem_type_t mem)
 {
 	if (INT_FLASH == mem) {
 		struct nvm_config config;
@@ -236,5 +235,5 @@ status_code_t nvm_init(mem_type_t mem)
 		return STATUS_OK;
 	}
 
-	return ERR_INVALID_ARG;
+	return STATUS_ERR_INVALID_ARG;
 }

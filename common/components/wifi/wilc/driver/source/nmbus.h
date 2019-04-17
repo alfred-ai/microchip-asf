@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -64,6 +64,14 @@ sint8 nm_bus_iface_init(void *);
 *	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
 */ 
 sint8 nm_bus_iface_deinit(void);
+
+/**
+*	@fn		nm_bus_reset
+*	@brief	reset bus interface
+*	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
+*	@version	1.0
+*/
+sint8 nm_bus_reset(void);
 
 /**
 *	@fn		nm_bus_iface_reconfigure

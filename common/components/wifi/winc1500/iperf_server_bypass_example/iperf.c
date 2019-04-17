@@ -217,6 +217,12 @@ static void iperf_udp_recv(struct netconn *conn)
 
 				/* Send report to client. */
 				netconn_sendto(conn, nbuf2, &udp_client_ip, udp_client_port);
+				osprintf("========= UDP receive status =========\r\n");
+				osprintf("test run for %ld seconds\r\n",test_time);
+				osprintf("%ld bytes(%f MB) received\r\n",stats.udp_rx_total_size, (float)stats.udp_rx_total_size/(float)(1024*1024));
+				osprintf("%ld datagrams lost out of %ld datagrams\r\n",stats.udp_rx_lost, stats.udp_rx_seq);
+				osprintf("%ld datagrams received out of order\r\n",stats.udp_rx_outorder);
+				osprintf("======================================\r\n");
 				vTaskDelay(1);
 				netconn_sendto(conn, nbuf2, &udp_client_ip, udp_client_port);
 				done = 1;
@@ -281,6 +287,11 @@ static void iperf_udp_send(struct netconn *conn)
 					netconn_sendto(conn, nbuf, &udp_client_ip, IPERF_PORT);
 					netbuf_delete(nbuf);
 				}
+				osprintf("========== UDP send status =========\r\n");
+				osprintf("test run for %ld seconds\r\n", test_time / 1000);
+				osprintf("sent %ld datagrams\r\n", datagramID);
+				osprintf("sent %ld bytes(%f MB)\r\n", IPERF_WIFI_UDP_BUFFER_SIZE * datagramID , (float)(IPERF_WIFI_UDP_BUFFER_SIZE * datagramID)/(float)(1024 * 1024));
+				osprintf("====================================\r\n");	
 				break;
 			}
 		}
@@ -327,6 +338,7 @@ static void iperf_tcp_recv(struct netconn *conn)
 	struct netbuf *inbuf = 0;
 	char *buf;
 	u16_t buflen;
+	uint32_t received_bytes = 0;
 
 	/* Read as much data as possible from the server. */
 	while (ERR_OK == netconn_recv(conn, &inbuf)) {
@@ -353,11 +365,14 @@ static void iperf_tcp_recv(struct netconn *conn)
 			}
 
 		}
-
+		received_bytes += inbuf->p->tot_len;
 		/* Free input resource. */
 		netbuf_delete(inbuf);
 	}
-
+	osprintf("========  TCP receive status =======\r\n");
+	osprintf("Received data for %ld seconds\r\n", (uint32_t)iperf.chdr.mAmount/1000);
+	osprintf("Received %ld bytes(%f MB)\r\n", received_bytes , (float)received_bytes/(float)(1024 * 1024));
+	osprintf("====================================\r\n");
 	/* Delete connection. */
 	netconn_delete(conn);
 	iperf.status = E_CLOSED;
@@ -367,6 +382,7 @@ static void iperf_tcp_send(ip_addr_t *local_ip, ip_addr_t *remote_ip)
 {
 	struct netconn *conn = netconn_new(NETCONN_TCP);
 	uint32_t start_time = 0;
+	uint32_t data_count = 0;
 
 	osprintf("------------------------------------------------------------\n");
 	osprintf("Client connecting to %s, TCP port 5001\n", ipaddr_ntoa(remote_ip));
@@ -392,7 +408,12 @@ static void iperf_tcp_send(ip_addr_t *local_ip, ip_addr_t *remote_ip)
 			osprintf("iperf_tcp_send: write failed\n");
 			break;
 		}
+		data_count++;
 	}
+	osprintf("========= TCP send status =========\r\n");
+	osprintf("Sent data for %ld seconds\r\n", (uint32_t)iperf.chdr.mAmount/1000);
+	osprintf("sent %ld bytes(%f MB)\r\n", BUFSIZE * data_count , (float)(BUFSIZE * data_count)/(float)(1024 * 1024));
+	osprintf("===================================\r\n");
 
 	/* Close connection. */
 	netconn_close(conn);
@@ -464,7 +485,6 @@ void iperf_tcp_task(void *v)
 			osprintf("[  0] local %s port %d ", ipaddr_ntoa(&local_ip), port);
 			netconn_getaddr(conn, &remote_ip, &port, 0);
 			osprintf("connected with %s port %d\n", ipaddr_ntoa(&remote_ip), port);
-
 			/* Test connection for receiving. */
 			iperf_tcp_recv(conn);
 

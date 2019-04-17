@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 AP provision example.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -185,7 +185,8 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 	case SOCKET_MSG_RECV:
 	{
 		tstrSocketRecvMsg *pstrRecv = (tstrSocketRecvMsg *)pvMsg;
-
+		tstrM2mWifiWepParams wep_parameters;
+		
 		if (pstrRecv && pstrRecv->s16BufferSize > 0) {
 			char *p;
 
@@ -208,12 +209,20 @@ static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
 				if (p) {
 					strcpy(str_pw, p);
 				}
-
+				if(sec_type == M2M_WIFI_SEC_WEP){
+					wep_parameters.u8KeyIndx=1;
+					wep_parameters.u8KeySz = strlen(str_pw)+1;
+					m2m_memcpy(wep_parameters.au8WepKey,str_pw,wep_parameters.u8KeySz);
+				}
 				printf("Disable to AP.\r\n");
 				m2m_wifi_disable_ap();
 				nm_bsp_sleep(500);
 				printf("Connecting to %s.\r\n", (char *)str_ssid);
-				m2m_wifi_connect((char *)str_ssid, strlen((char *)str_ssid), sec_type, str_pw, M2M_WIFI_CH_ALL);
+				if(sec_type == M2M_WIFI_SEC_WEP){
+					m2m_wifi_connect((char *)str_ssid, strlen((char *)str_ssid), sec_type, &wep_parameters, M2M_WIFI_CH_ALL);
+				}
+				else
+					m2m_wifi_connect((char *)str_ssid, strlen((char *)str_ssid), sec_type, str_pw, M2M_WIFI_CH_ALL);
 				break;
 			}
 		} else {

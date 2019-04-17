@@ -4,7 +4,7 @@
  *
  * \brief This module contains common APIs declarations.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -22,6 +22,9 @@
  *
  * 3. The name of Atmel may not be used to endorse or promote products derived
  *    from this software without specific prior written permission.
+ *
+ * 4. This software may only be redistributed and used in connection with an
+ *    Atmel microcontroller product.
  *
  * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -44,10 +47,9 @@
 
 #include "bsp/include/nm_bsp.h"
 
-#define ETH_MODE
-#define M2M_WILC1000
+#ifdef CONF_WILC_USE_3000_REV_A
 #define COMPUTE_PMK_IN_HOST
-#define CONCURRENT_INTERFACES
+#endif
 //#define INT_BASED_TX
 #define CONF_MGMT
 
@@ -190,7 +192,7 @@ static void NM_BSP_PRINTF(const char *_format, ...)
 
 #define DATA_PKT_OFFSET	4
 
-#ifndef BIG_ENDIAN
+#ifndef CONF_WILC_BIG_ENDIAN
 #define BYTE_0(word)   					((uint8)(((word) >> 0 	) & 0x000000FFUL))
 #define BYTE_1(word)  	 				((uint8)(((word) >> 8 	) & 0x000000FFUL))
 #define BYTE_2(word)   					((uint8)(((word) >> 16) & 0x000000FFUL))
@@ -204,7 +206,7 @@ static void NM_BSP_PRINTF(const char *_format, ...)
 
 
 typedef enum{
-	M2M_REQ_GRP_MAIN = 0, M2M_REQ_GRP_WIFI, M2M_REQ_GRP_IP, M2M_REQ_GRP_HIF, M2M_REQ_GRP_OTA
+	M2M_REQ_GRP_MAIN = 0, M2M_REQ_GRP_WIFI, M2M_REQ_GRP_HIF
 }tenuM2mReqGrp;
 
 

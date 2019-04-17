@@ -3,7 +3,7 @@
  *
  * \brief SAM D21/R21/DA/HA Clock Driver
  *
- * Copyright (C) 2013-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2013-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -202,13 +202,15 @@ uint32_t system_clock_source_get_hz(
 		/* Make sure that the DFLL module is ready */
 		_system_dfll_wait_for_sync();
 
-		/* Check if operating in closed loop mode */
-		if (_system_clock_inst.dfll.control & SYSCTRL_DFLLCTRL_MODE) {
+		/* Check if operating in closed loop (USB) mode */
+		switch(_system_clock_inst.dfll.control &
+				(SYSCTRL_DFLLCTRL_MODE | SYSCTRL_DFLLCTRL_USBCRM)) {
+		case SYSCTRL_DFLLCTRL_MODE:
 			return system_gclk_chan_get_hz(SYSCTRL_GCLK_ID_DFLL48) *
 					(_system_clock_inst.dfll.mul & 0xffff);
+		default:
+			return 48000000UL;
 		}
-
-		return 48000000UL;
 
 #ifdef FEATURE_SYSTEM_CLOCK_DPLL
 	case SYSTEM_CLOCK_SOURCE_DPLL:
@@ -293,20 +295,17 @@ void system_clock_source_xosc_set_config(
 
 	temp.bit.AMPGC = config->auto_gain_control;
 
-	/* Set gain if automatic gain control is not selected */
-	if (!config->auto_gain_control) {
-		if (config->frequency <= 2000000) {
-			temp.bit.GAIN = 0;
-		} else if (config->frequency <= 4000000) {
-			temp.bit.GAIN = 1;
-		} else if (config->frequency <= 8000000) {
-			temp.bit.GAIN = 2;
-		} else if (config->frequency <= 16000000) {
-			temp.bit.GAIN = 3;
-		} else if (config->frequency <= 32000000) {
-			temp.bit.GAIN = 4;
-		}
-
+	/* Set gain */
+	if (config->frequency <= 2000000) {
+		temp.bit.GAIN = 0;
+	} else if (config->frequency <= 4000000) {
+		temp.bit.GAIN = 1;
+	} else if (config->frequency <= 8000000) {
+		temp.bit.GAIN = 2;
+	} else if (config->frequency <= 16000000) {
+		temp.bit.GAIN = 3;
+	} else if (config->frequency <= 32000000) {
+		temp.bit.GAIN = 4;
 	}
 
 	temp.bit.ONDEMAND = config->on_demand;
@@ -790,13 +789,17 @@ void system_clock_init(void)
 
 	xosc_conf.external_clock    = CONF_CLOCK_XOSC_EXTERNAL_CRYSTAL;
 	xosc_conf.startup_time      = CONF_CLOCK_XOSC_STARTUP_TIME;
-	xosc_conf.auto_gain_control = CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL;
 	xosc_conf.frequency         = CONF_CLOCK_XOSC_EXTERNAL_FREQUENCY;
-	xosc_conf.on_demand         = CONF_CLOCK_XOSC_ON_DEMAND;
 	xosc_conf.run_in_standby    = CONF_CLOCK_XOSC_RUN_IN_STANDBY;
 
 	system_clock_source_xosc_set_config(&xosc_conf);
 	system_clock_source_enable(SYSTEM_CLOCK_SOURCE_XOSC);
+	while(!system_clock_source_is_ready(SYSTEM_CLOCK_SOURCE_XOSC));
+	if (CONF_CLOCK_XOSC_ON_DEMAND || CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL) {
+		SYSCTRL->XOSC.reg |=
+			(CONF_CLOCK_XOSC_ON_DEMAND << SYSCTRL_XOSC_ONDEMAND_Pos) |
+			(CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL << SYSCTRL_XOSC_AMPGC_Pos);
+	}
 #endif
 
 
@@ -826,7 +829,7 @@ void system_clock_init(void)
 	/* OSCK32K */
 #if CONF_CLOCK_OSC32K_ENABLE == true
 	SYSCTRL->OSC32K.bit.CALIB =
-			((*(uint32_t *)SYSCTRL_FUSES_OSC32K_ADDR >> 
+			((*(uint32_t *)SYSCTRL_FUSES_OSC32K_ADDR >>
 			SYSCTRL_FUSES_OSC32K_Pos) & 0x7Ful);
 
 	struct system_clock_source_osc32k_config osc32k_conf;
@@ -851,7 +854,7 @@ void system_clock_init(void)
 	dfll_conf.loop_mode      = CONF_CLOCK_DFLL_LOOP_MODE;
 	dfll_conf.on_demand      = false;
 
-	/* Using DFLL48M COARSE CAL value from NVM Software Calibration Area Mapping 
+	/* Using DFLL48M COARSE CAL value from NVM Software Calibration Area Mapping
 	   in DFLL.COARSE helps to output a frequency close to 48 MHz.*/
 #define NVM_DFLL_COARSE_POS    58 /* DFLL48M Coarse calibration value bit position.*/
 #define NVM_DFLL_COARSE_SIZE   6  /* DFLL48M Coarse calibration value bit size.*/
@@ -902,7 +905,7 @@ void system_clock_init(void)
 	dfll_conf.fine_max_step   = CONF_CLOCK_DFLL_MAX_FINE_STEP_SIZE;
 
 	if (CONF_CLOCK_DFLL_LOOP_MODE == SYSTEM_CLOCK_DFLL_LOOP_MODE_USB_RECOVERY) {
-		dfll_conf.fine_max_step   = 10; 
+		dfll_conf.fine_max_step   = 10;
 		dfll_conf.fine_value   = 0x1ff;
 		dfll_conf.quick_lock = SYSTEM_CLOCK_DFLL_QUICK_LOCK_ENABLE;
 		dfll_conf.stable_tracking = SYSTEM_CLOCK_DFLL_STABLE_TRACKING_TRACK_AFTER_LOCK;

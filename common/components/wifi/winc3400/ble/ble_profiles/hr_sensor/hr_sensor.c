@@ -3,7 +3,7 @@
  *
  * \brief Heart Rate Sensor Profile
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -66,7 +66,9 @@ static  gatt_service_handler_t heart_rate_serv_handler;
 /** @brief Scan response data*/
 static const uint8_t SCAN_RESP_DATA[SCAN_RESP_LEN] = {0x09,0xff, 0x00, 0x06, 0xd6, 0xb2, 0xf0, 0x05, 0xf0, 0xf8};
 
+#if (defined __SAMD21J18A__)
 static uint8_t led_toggle;
+#endif
 
 uint8_t activity = 0; /*!< activiy which will determine the */
 uint16_t energy_expended_val = ENERGY_EXP_NORMAL; /*!< to count the energy expended*/
@@ -129,7 +131,9 @@ at_ble_status_t ble_heart_rate_start_advertise(void)
 
 static void ble_heart_rate_value_init(void)
 {
+#if (defined __SAMD21J18A__)	
 	led_toggle = true;
+#endif
 	
 	activity = second_counter / 40;
 
@@ -182,10 +186,12 @@ static void ble_heart_rate_value_init(void)
 
 static void ble_heart_rate_handle_timer_event(void)
 {
+#if (defined __SAMD21J18A__)	
 	if (led_toggle == true)
 	port_pin_toggle_output_level(LED0_PIN);
 	else
 	port_pin_set_output_level(LED0_PIN, true);	// LED OFF
+#endif
 
 	timer_cb_done = true;
 	

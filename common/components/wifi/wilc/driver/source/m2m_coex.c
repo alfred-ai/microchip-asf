@@ -4,7 +4,7 @@
  *
  * \brief This module contains WILC Coexistence APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,22 +43,46 @@
 #ifdef CONF_WILC_USE_3000_REV_A
 
 #include "driver/include/m2m_coex.h"
+#include "driver/include/m2m_wifi.h"
+#include "driver/source/m2m_hif.h"
 #include "nmasic.h"
+
+extern tuCtrlStruct guCtrlStruct;
 
 NMI_API sint8  m2m_coex_set_mode(tenuCoexMode enuCoexMode)
 {
 	sint8 ret = M2M_SUCCESS;
+	tstrM2mCoexMode* pstrM2mCoexMode = &guCtrlStruct.strM2mCoexMode;
+	tstrM2mCoexNullFramesMode* pstrM2mCoexNullFramesMode = &guCtrlStruct.strM2mCoexNullFramesMode;
 
 	switch(enuCoexMode)
 	{
 		case M2M_COEX_MODE_WIFI:
-			ret = nmi_coex_set_mode(NMI_COEX_MODE_WIFI);
+			pstrM2mCoexMode->enuNmiCoexMode = NMI_COEX_MODE_WIFI;
+			ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_COEX_MODE, (uint8*)pstrM2mCoexMode,sizeof(tstrM2mCoexMode), NULL, 0, 0);
+			if(ret == M2M_SUCCESS)
+			{
+				pstrM2mCoexNullFramesMode->enuNmiCoexNullFramesMode = NMI_COEX_NULL_FRAMES_OFF;
+				ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_COEX_NULL_FRAMES_MODE, (uint8*)pstrM2mCoexNullFramesMode,sizeof(tstrM2mCoexNullFramesMode), NULL, 0, 0);
+			}			
 			break;
 		case M2M_COEX_MODE_BT:
-			ret = nmi_coex_set_mode(NMI_COEX_MODE_BT);
+			pstrM2mCoexMode->enuNmiCoexMode = NMI_COEX_MODE_BT;
+			ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_COEX_MODE, (uint8*)pstrM2mCoexMode,sizeof(tstrM2mCoexMode), NULL, 0, 0);
+			if(ret == M2M_SUCCESS)
+			{
+				pstrM2mCoexNullFramesMode->enuNmiCoexNullFramesMode = NMI_COEX_NULL_FRAMES_OFF;
+				ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_COEX_NULL_FRAMES_MODE, (uint8*)pstrM2mCoexNullFramesMode,sizeof(tstrM2mCoexNullFramesMode), NULL, 0, 0);
+			}			
 			break;
 		case M2M_COEX_MODE_COMBO:
-			ret = nmi_coex_set_mode(NMI_COEX_MODE_COMBO);
+			pstrM2mCoexMode->enuNmiCoexMode = NMI_COEX_MODE_COMBO;
+			ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_COEX_MODE, (uint8*)pstrM2mCoexMode,sizeof(tstrM2mCoexMode), NULL, 0, 0);
+			if(ret == M2M_SUCCESS)
+			{
+				pstrM2mCoexNullFramesMode->enuNmiCoexNullFramesMode = NMI_COEX_NULL_FRAMES_ON;
+				ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_COEX_NULL_FRAMES_MODE, (uint8*)pstrM2mCoexNullFramesMode,sizeof(tstrM2mCoexNullFramesMode), NULL, 0, 0);
+			}			
 			break;
 	}
 

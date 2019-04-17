@@ -3,7 +3,7 @@
  *
  * \brief SAM C2x Clock Driver
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -641,10 +641,10 @@ struct system_clock_source_osc32k_config {
  * external oscillator module:
  *   - External Crystal
  *   - Startup time of 16384 external clock cycles
- *   - Automatic crystal gain control mode enabled
+ *   - Automatic crystal gain control mode disabled
  *   - Frequency of 12MHz
  *   - Don't run in STANDBY sleep mode
- *   - Run only when requested by peripheral (on demand)
+ *   - Run when it's enabled (not on demand)
  *   - Clock failure detector prescaler is 1
  *   - Clock failure detector event outut is disabled
  *   - Clock failure detector is disabled
@@ -659,10 +659,10 @@ static inline void system_clock_source_xosc_get_config_defaults(
 
 	config->external_clock    = SYSTEM_CLOCK_EXTERNAL_CRYSTAL;
 	config->startup_time      = SYSTEM_XOSC_STARTUP_16384;
-	config->auto_gain_control = true;
+	config->auto_gain_control = false;
 	config->frequency         = 12000000UL;
 	config->run_in_standby    = false;
-	config->on_demand         = true;
+	config->on_demand         = false;
 	config->clock_failure_detector_prescaler = SYSTEM_CLOCK_XOSC_FAILURE_DETECTOR_PRESCALER_1;
 	config->enable_clock_failure_detector_event_outut = false;
 	config->enable_clock_failure_detector = false;

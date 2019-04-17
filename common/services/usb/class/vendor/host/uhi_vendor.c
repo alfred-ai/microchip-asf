@@ -3,7 +3,7 @@
  *
  * \brief USB host Vendor Interface driver.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -163,7 +163,7 @@ uhc_enum_status_t uhi_vendor_install(uhc_device_t* dev)
 			if (!b_iface_supported) {
 				break;
 			}
-			if (!uhd_ep_alloc(dev->address, (usb_ep_desc_t*)ptr_iface)) {
+			if (!uhd_ep_alloc(dev->address, (usb_ep_desc_t*)ptr_iface, dev->speed)) {
 				return UHC_ENUM_HARDWARE_LIMIT; // Endpoint allocation fail
 			}
 			switch(((usb_ep_desc_t*)ptr_iface)->bmAttributes & USB_EP_TYPE_MASK) {

@@ -4,7 +4,7 @@
  *
  * \brief This module contains WINC3400 SPI protocol bus APIs implementation.
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -93,7 +93,31 @@
 #define DATA_PKT_SZ				DATA_PKT_SZ_8K
 
 static uint8 	gu8Crc_off	=   0;
+#if (defined __SAMG55J19__) || (defined __SAM4SD32C__) || (defined __SAME70Q21__)
+static sint8 nmi_spi_read(uint8* b, uint16 sz)
+{
+	tstrNmSpiRw spi;
+	spi.pu8InBuf = NULL;
+	spi.pu8OutBuf = b;
+	spi.u16Sz = sz;
+	return nm_bus_ioctl(NM_BUS_IOCTL_RW, &spi);
+}
 
+static sint8 nmi_spi_write(uint8* b, uint16 sz)
+{
+	tstrNmSpiRw spi;
+	spi.pu8InBuf = b;
+	spi.pu8OutBuf = NULL;
+	spi.u16Sz = sz;
+	return nm_bus_ioctl(NM_BUS_IOCTL_RW, &spi);
+}
+
+static sint8 nmi_spi_writeread(uint8* bw, uint8* br, uint16 sz)
+{
+	nmi_spi_write(bw, sz);
+	return nmi_spi_read(br, sz);
+}
+#else
 static inline sint8 nmi_spi_read(uint8* b, uint16 sz)
 {
 	return nm_spi_rw(NULL, b, sz);
@@ -106,7 +130,7 @@ static sint8 nmi_spi_writeread(uint8* bw, uint8* br, uint16 sz)
 {
 	return nm_spi_rw(bw, br, sz);
 }
-
+#endif
 /********************************************
 
 	Crc7

@@ -3,7 +3,7 @@
  *
  * \brief USB peripheral host wrapper for ASF Stack USB Host Driver (UHD)
  *
- * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -156,7 +156,7 @@ enum sleepmgr_mode sleep_mode[] = {
 	SLEEPMGR_IDLE_2,   // UHD_STATE_SUSPEND
 	SLEEPMGR_IDLE_2,   // UHD_STATE_SUSPEND_LPM
 	SLEEPMGR_IDLE_0,   // UHD_STATE_IDLE
-#endif	
+#endif
 };
 
 static enum uhd_usb_state_enum uhd_state = UHD_STATE_OFF;
@@ -730,7 +730,7 @@ static void _uhd_ram_error(struct usb_module *module_inst)
 {
 #ifdef UHC_RAM_ACCESS_ERR_EVENT
 	UHC_RAM_ACCESS_ERR_EVENT();
-#endif	
+#endif
 	dbg_print("!!!! RAM ERR !!!!\n");
 }
 
@@ -1033,7 +1033,7 @@ bool uhd_suspend_lpm(bool b_remotewakeup, uint8_t hird)
 	dbg_print("EXT_LPM\n");
 
 	/* Set the LPM job */
-	usb_host_pipe_lpm_job(&dev, 0, b_remotewakeup, hird);	
+	usb_host_pipe_lpm_job(&dev, 0, b_remotewakeup, hird);
 
 	/* Wait LPM ACK through interrupt */
 	return true;
@@ -1520,12 +1520,13 @@ bool uhd_ep0_alloc(usb_add_t add, uint8_t ep_size)
 	return true;
 }
 
-bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t *ep_desc)
+bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t *ep_desc, uhd_speed_t speed)
 {
 	uint8_t pipe = 1;
 	struct usb_host_pipe_config cfg;
 	uint8_t ep_type;
 	uint8_t ep_interval;
+	(void)speed; // No high speed currently
 
 	for (pipe = 1; pipe < USB_PIPE_NUM; pipe++) {
 		usb_host_pipe_get_config(&dev, pipe, &cfg);
@@ -1535,11 +1536,7 @@ bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t *ep_desc)
 		usb_host_pipe_get_config_defaults(&cfg);
 		/* Enable pipe */
 		ep_type = (ep_desc->bmAttributes & USB_EP_TYPE_MASK) + 1;
-		if (ep_type == USB_HOST_PIPE_TYPE_BULK) {
-			ep_interval = 0; // Ignore bInterval for bulk endpoint
-		} else {
-			ep_interval = ep_desc->bInterval;
-		}
+		ep_interval = ep_desc->bInterval;
 		cfg.device_address = add;
 		cfg.endpoint_address = ep_desc->bEndpointAddress;
 		cfg.pipe_type = (enum usb_host_pipe_type)ep_type;

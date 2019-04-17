@@ -4,7 +4,7 @@
  *
  * \brief This module contains WINC3400 BSP APIs declarations.
  *
- * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -79,8 +79,16 @@
 #include "bsp/include/nm_bsp_sam4s.h"
 #endif
 
+#ifdef __SAMG55J19__
+#include "bsp/include/nm_bsp_samg55.h"
+#endif
+
 #ifdef __SAMG53N19__
 #include "bsp/include/nm_bsp_samg53.h"
+#endif
+
+#ifdef __SAME70Q21__
+#include "bsp/include/nm_bsp_same70.h"
 #endif
 
 #ifdef CORTUS_APP

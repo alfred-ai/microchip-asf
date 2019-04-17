@@ -3,7 +3,7 @@
  *
  * \brief SAM4S Xplained Pro board configuration
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,4 +44,6 @@
 #define CONF_BOARD_SPI
 #define CONF_BOARD_SPI_NPCS0
 
-#endif /* CONF_BOARD_H */
+/** Enable SD MMC interface pins through HSMCI */
+#define CONF_BOARD_SD_MMC_HSMCI
+#endif /* CONF_BOARD_H_INCLUDED */

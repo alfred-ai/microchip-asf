@@ -4,7 +4,7 @@
  *
  * \brief iperf.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -22,9 +22,6 @@
  *
  * 3. The name of Atmel may not be used to endorse or promote products derived
  *    from this software without specific prior written permission.
- *
- * 4. This software may only be redistributed and used in connection with an
- *    Atmel microcontroller product.
  *
  * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -128,6 +125,8 @@ void vApplicationMallocFailedHook(void)
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName);
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 {
+	osprintf("ERROR: STACK OVERFLOW");
+	osprintf(pcTaskName);
 	for (;;) {
 	}
 }
@@ -138,6 +137,7 @@ void hard_fault(uint32_t *args, uint32_t lr);
 void hard_fault(uint32_t *args, uint32_t lr)
 {
 	fault_addr = args[6];
+	osprintf("Hard fault at address 0x%lX\r\n", fault_addr);
 	for (;;) {
 	}
 }
@@ -192,7 +192,7 @@ int main(void)
 	/* Initialize the UART console. */
 	configure_console();
 	puts(STRING_HEADER);
-
+	
 	/* Create main task. */
 	xTaskCreate(iperf_tcp_task, (signed char *)"TestTCP", TASK_DEMO_STACK_SIZE, 0, TASK_DEMO_PRIORITY, 0);
 	xTaskCreate(iperf_udp_task, (signed char *)"TestUDP", TASK_DEMO_STACK_SIZE, 0, TASK_DEMO_PRIORITY, 0);

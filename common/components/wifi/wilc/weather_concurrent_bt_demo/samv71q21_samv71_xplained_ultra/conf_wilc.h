@@ -4,7 +4,7 @@
  *
  * \brief WiFi Settings.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -58,6 +58,16 @@ extern "C" {
 
 /** Select WILC firmware to use. */
 #define CONF_WILC_USE_3000_REV_A
+//#define CONF_WILC_USE_1000_REV_B
+
+
+/*
+   ---------------------------------
+   --------- Bluetooth ---------
+   ---------------------------------
+*/
+//#define CONF_BT_MODE_BTDM		/* Dual mode */
+#define CONF_BT_MODE_BLE_ONLY	/* BLE Only mode */
 
 /*
    ---------------------------------
@@ -65,9 +75,9 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_PIN_RESET				IOPORT_CREATE_PIN(PIOA, 19)
-#define CONF_WILC_PIN_CHIP_ENABLE		IOPORT_CREATE_PIN(PIOA, 5)
-#define CONF_WILC_PIN_WAKE				IOPORT_CREATE_PIN(PIOB, 2)
+#define CONF_WILC_PIN_RESET              IOPORT_CREATE_PIN(PIOD, 26)
+#define CONF_WILC_PIN_CHIP_ENABLE        IOPORT_CREATE_PIN(PIOC,13)
+#define CONF_WILC_PIN_WAKE               IOPORT_CREATE_PIN(PIOB, 2)
 
 /*
    ---------------------------------
@@ -76,6 +86,8 @@ extern "C" {
 */
 
 #define CONF_WILC_USE_SPI				
+//#define CONF_WILC_USE_SDIO				
+//#define CONF_WILC_USE_SDIO_EXT_IRQ				
 
 /** SPI pin and instance settings. */
 #define CONF_WILC_SPI					SPI0
@@ -95,10 +107,10 @@ extern "C" {
 #define CONF_WILC_SPI_DLYBCT 			(0)
 
 /** SPI interrupt pin. */
-#define CONF_WILC_SPI_INT_PIN			IOPORT_CREATE_PIN(PIOD, 28)
-#define CONF_WILC_SPI_INT_PIO			PIOD
-#define CONF_WILC_SPI_INT_PIO_ID		ID_PIOD
-#define CONF_WILC_SPI_INT_MASK			(1 << 28)
+#define CONF_WILC_SPI_INT_PIN           IOPORT_CREATE_PIN(PIOC, 31)
+#define CONF_WILC_SPI_INT_PIO           PIOC
+#define CONF_WILC_SPI_INT_PIO_ID        ID_PIOC
+#define CONF_WILC_SPI_INT_MASK          (1 << 31)
 /** Highest INT priority that can call FreeRTOS FromISR() functions. */
 #define CONF_WILC_SPI_INT_PRIORITY		(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY)
 
@@ -107,7 +119,7 @@ extern "C" {
 #define CONF_WILC_SPI_PHA				(1)
 
 /** SPI clock. */
-#define CONF_WILC_SPI_CLOCK				(48000000)
+#define CONF_WILC_SPI_CLOCK				(40000000)
 
 /*
    ---------------------------------
@@ -129,7 +141,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_DEBUG					(0)
+#define CONF_WILC_DEBUG					(1)
 #define CONF_WILC_PRINTF				osprintf
 
 #ifdef __cplusplus

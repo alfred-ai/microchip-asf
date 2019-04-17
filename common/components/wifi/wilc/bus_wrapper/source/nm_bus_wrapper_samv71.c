@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -40,15 +40,15 @@
  */
 
 #include <stdio.h>
+#include "conf_wilc.h"
 #include "bsp/include/nm_bsp.h"
 #include "common/include/nm_common.h"
 #include "bus_wrapper/include/nm_bus_wrapper.h"
 #include "ioport.h"
 #include "asf.h"
 #ifdef CONF_WILC_USE_SDIO
-#include "sdio_sam4s.h"
+#include "bus_wrapper/include/sdio_samv7.h"
 #endif
-#include "conf_wilc.h"
 
 #define NM_BUS_MAX_TRX_SZ 4096
 
@@ -173,7 +173,7 @@ sint8 nm_bus_init(void *pvinit)
 	SPI_DEASSERT_CS();
 	result = M2M_SUCCESS;
 #elif defined CONF_WILC_USE_SDIO
-	result = sam4s_sdio_init();
+	result = Samv7SDIO_init();
 #endif
 	return result;
 }

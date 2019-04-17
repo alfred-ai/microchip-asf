@@ -4,7 +4,7 @@
  *
  * \brief APIs and data types for cryptographic algorithms.
  *
- * Copyright (c) 2016 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -52,15 +52,15 @@ INCLUDES
 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
  MACROS
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
-#if BIG_ENDIAN==BYTE_ORDER
-#define GETU16(BUF,OFFSET)				(((UWORD16)((BUF)[OFFSET])) | (((UWORD16)((BUF)[OFFSET + 1]) << 8)))
+#ifdef CONF_WILC_BIG_ENDIAN
+#define GETU16(BUF,OFFSET)				(((uint16)((BUF)[OFFSET])) | (((uint16)((BUF)[OFFSET + 1]) << 8)))
 /*!< Retrieve 2 bytes from the given buffer at the given 
 	offset as 16-bit unsigned integer in the Network byte order.
 */
 
 
-#define GETU32(BUF,OFFSET)				(((UWORD32)((BUF)[OFFSET])) | (((UWORD32)((BUF)[OFFSET + 1]) << 8))  | \
-										 (((UWORD32)((BUF)[OFFSET + 2]) << 16)) | (((UWORD32)((BUF)[OFFSET + 3]) << 24)))
+#define GETU32(BUF,OFFSET)				(((uint32)((BUF)[OFFSET])) | (((uint32)((BUF)[OFFSET + 1]) << 8))  | \
+										 (((uint32)((BUF)[OFFSET + 2]) << 16)) | (((uint32)((BUF)[OFFSET + 3]) << 24)))
 /*!< Retrieve 4 bytes from the given buffer at the given 
 	offset as 32-bit unsigned integer in the Network byte order.
 */

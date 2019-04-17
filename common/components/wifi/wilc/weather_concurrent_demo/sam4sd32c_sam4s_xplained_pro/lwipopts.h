@@ -3,7 +3,7 @@
  *
  * \brief LwIP configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -123,7 +123,7 @@ extern int random_number(void);
  * MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP segments.
  * (requires the LWIP_TCP option)
  */
-#define MEMP_NUM_TCP_SEG                27
+#define MEMP_NUM_TCP_SEG                32
 
 /**
  * MEMP_NUM_SYS_TIMEOUT: the number of simultaneously active timeouts.
@@ -133,12 +133,12 @@ extern int random_number(void);
 /**
  * PBUF_POOL_SIZE: the number of buffers in the pbuf pool. 
  */
-#define PBUF_POOL_SIZE                  24
+#define PBUF_POOL_SIZE                  MEMP_NUM_TCP_SEG
 
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               256
+#define PBUF_POOL_BUFSIZE               1600
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,
@@ -196,19 +196,19 @@ extern int random_number(void);
  * TCP_WND: The size of a TCP window.  This must be at least 
  * (2 * TCP_MSS) for things to work well
  */
-#define TCP_WND                         (2 * TCP_MSS)
+#define TCP_WND                         (8 * TCP_MSS)
 
 /**
  * TCP_SND_BUF: TCP sender buffer space (bytes).
  * To achieve good performance, this should be at least 2 * TCP_MSS.
  */
-#define TCP_SND_BUF                     (4 * TCP_MSS)
+#define TCP_SND_BUF                     TCP_WND
 
 /**
  * TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
  * as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work.
  */
-#define TCP_SND_QUEUELEN                ((6 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS))
+#define TCP_SND_QUEUELEN                (4 * TCP_SND_BUF / TCP_MSS)
 
 /*
    ---------------------------------
@@ -296,7 +296,7 @@ extern int random_number(void);
  * The queue size value itself is platform-dependent, but is passed to
  * sys_mbox_new() when tcpip_init is called.
  */
-#define TCPIP_MBOX_SIZE                 6
+#define TCPIP_MBOX_SIZE                 64
 
 /**
  * SLIPIF_THREAD_NAME: The name assigned to the slipif_loop thread.

@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 M2M driver APIs declarations.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,13 +49,6 @@
 #ifdef __cplusplus
      extern "C" {
  #endif
-
-/*
-*	@fn		nm_drv_init
-*	@brief	Initialize NMC1000 driver
-*	@return	ZERO in case of success and Negative error code in case of failure
-*/
-sint8 nm_drv_init_download_mode(void);
 
 /*
 *	@fn		nm_drv_init

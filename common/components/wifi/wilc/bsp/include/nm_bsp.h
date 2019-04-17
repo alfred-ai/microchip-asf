@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 BSP APIs declarations.
  *
- * Copyright (c) 2016 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -156,8 +156,8 @@ extern "C"{
  /**@{*/
 /*!
  * @fn           sint8 nm_bsp_init(void);
- * @brief        Initialization for bsp (\e Board \e Support \e Package) such as Reset and Chip Enable Pins for WINC, delays, register ISR, enable/disable IRQ for WINC, ...etc.\n
- *                   You must use this function in the head of your application to enable WINC and Host Driver communicate each other.
+ * @brief        Initialization for bsp (\e Board \e Support \e Package) such as Reset and Chip Enable Pins for WILC, delays, register ISR, enable/disable IRQ for WILC, ...etc.\n
+ *                   You must use this function in the head of your application to enable WILC and Host Driver communicate each other.
  * @warning      Missing use will lead to unavailability of host communication.\n
  *  @note        Implementation of this function is host dependent.
  * @return       The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
@@ -235,7 +235,7 @@ void nm_bsp_sleep(uint32 u32TimeMsec);
  * @fn           void nm_bsp_register_isr(tpfNmBspIsr);
  * @param [in]   pfIsr
  *               Pointer to ISR handler in HIF
- * @warning      Make sure that ISR for IRQ pin for WINC is disabled by default in your implementation.
+ * @warning      Make sure that ISR for IRQ pin for WILC is disabled by default in your implementation.
  * @note         Implementation of this function is host dependent and called by HIF layer.
   * @see        tpfNmBspIsr
  * @return       None
@@ -296,7 +296,7 @@ void* nm_bsp_malloc(uint32 u32Size);
  */
 void nm_bsp_free(void* pvMemBuffer);
   /**@}*/
-  
+ 
 #ifdef __cplusplus
 }
 #endif
@@ -349,7 +349,7 @@ void nm_bsp_free(void* pvMemBuffer);
 #endif
 #if (defined __SAMV71Q21__) || (defined __SAMS70N21__) || (defined __SAMV71Q21B__)
 #include "bsp/include/nm_bsp_samv71.h"
-#define __M2M_DMA_BUF_ATT__		COMPILER_ALIGNED(32)
+#define __M2M_DMA_BUF_ATT__		__attribute__((aligned(32)))
 #endif
 
 #ifdef __SAMG53N19__

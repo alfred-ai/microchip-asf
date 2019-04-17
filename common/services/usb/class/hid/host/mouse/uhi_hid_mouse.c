@@ -3,7 +3,7 @@
  *
  * \brief USB host Human Interface Device (HID) mouse driver.
  *
- * Copyright (C) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -143,7 +143,7 @@ uhc_enum_status_t uhi_hid_mouse_install(uhc_device_t* dev)
 			if (!b_iface_supported) {
 				break;
 			}
-			if (!uhd_ep_alloc(dev->address, (usb_ep_desc_t*)ptr_iface)) {
+			if (!uhd_ep_alloc(dev->address, (usb_ep_desc_t*)ptr_iface, dev->speed)) {
 				return UHC_ENUM_HARDWARE_LIMIT; // Endpoint allocation fail
 			}
 			Assert(((usb_ep_desc_t*)ptr_iface)->bEndpointAddress & USB_EP_DIR_IN);

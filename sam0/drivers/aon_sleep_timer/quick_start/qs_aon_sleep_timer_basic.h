@@ -3,7 +3,7 @@
  *
  * \brief SAM AON Sleep Timer Driver Quick Start for SAMB11
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -47,7 +47,8 @@
 /**
  * \page asfdoc_samb_aon_sleep_timer_basic_use_case Quick Start Guide for AON Sleep Timer - Basic
  *
- * In this use case, the AON Sleep Timer module is configured for wakeup MCU.
+ * In this use case, the AON Sleep Timer module is configured for wakeup MCU at defined interval 
+ * and set the LED for indication.
  *
  * \section asfdoc_samb_aon_sleep_timer_basic_use_case_setup Setup
  *
@@ -72,7 +73,7 @@
  *   -# Initialize the GPIO configuration struct with the module's default values.
  *    \snippet qs_aon_sleep_timer_basic.c setup_2
  *
- *   -# Configure the GPIO module with the desired settings.
+ *   -# Configure the GPIO module as output.
  *    \snippet qs_aon_sleep_timer_basic.c setup_3
  *
  *   -# Set the GPIO module enable.
@@ -98,8 +99,8 @@
  *   -# Initialize and enable the AON Sleep Timer module.
  *    \snippet qs_aon_sleep_timer_basic.c setup_9
  *
- *   -# Enable the AON Sleep Timer interrupt.
- *    \snippet qs_aon_sleep_timer_basic.c setup_10
+ *   -# Register Enable the AON Sleep Timer callback.
+ *    \snippet qs_aon_sleep_timer_basic.c setup_register_callback
  *
  * -# Waiting for the AON Sleep Timer module active.
  *    \snippet qs_aon_sleep_timer_basic.c timer_active
@@ -107,6 +108,8 @@
  * -# Waiting for the AON Sleep Timer interrupt.
  *    \snippet qs_aon_sleep_timer_basic.c wait_wfi
  *
+ * -# Unregister callback and Disable Timer module.
+ *    \snippet qs_aon_sleep_timer_basic.c timer_disable
  *
  * \section asfdoc_samb_aon_sleep_timer_basic_use_case_basic_implement Implementation
  * Add the following to \c main().

@@ -3,7 +3,7 @@
  *
  * \brief Pulse Width Modulation (PWM) driver for SAM.
  *
- * Copyright (c) 2011-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -282,6 +282,8 @@ uint32_t pwm_channel_init(Pwm *p_pwm, pwm_channel_t *p_channel)
 	p_pwm->PWM_FPE = fault_enable_reg;
 #endif
 #endif
+
+	ch_num = p_channel->channel;
 
 #if SAM4E
 	if (!ch_num) {
@@ -1152,10 +1154,6 @@ void pwm_channel_update_leading_edge(Pwm *p_pwm, pwm_channel_t *p_channel,
 		p_pwm->PWM_LEBR1 = PWM_LEBR1_LEBDELAY(ul_leading_edge_delay) | leading_edge_blanking_mode;
 	} else if (p_channel->channel == 2) {
 		p_pwm->PWM_LEBR2 = PWM_LEBR2_LEBDELAY(ul_leading_edge_delay) | leading_edge_blanking_mode;
-	} else if (p_channel->channel == 3) {
-		p_pwm->PWM_LEBR3 = PWM_LEBR3_LEBDELAY(ul_leading_edge_delay) | leading_edge_blanking_mode;
-	} else if (p_channel->channel == 4) {
-		p_pwm->PWM_LEBR4 = PWM_LEBR4_LEBDELAY(ul_leading_edge_delay) | leading_edge_blanking_mode;
 	}
 }
 #endif
@@ -1186,10 +1184,6 @@ void pwm_set_ext_trigger_mode(Pwm *p_pwm, pwm_channel_t *p_channel, uint32_t ul_
 			p_pwm->PWM_ETRG1 = ul_mode;
 		} else if (p_channel->channel == 2) {
 			p_pwm->PWM_ETRG2 = ul_mode;
-		} else if (p_channel->channel == 3) {
-			p_pwm->PWM_ETRG3 = ul_mode;
-		} else if (p_channel->channel == 4) {
-			p_pwm->PWM_ETRG4 = ul_mode;
 	}
 }
 #endif

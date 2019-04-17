@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -155,10 +155,6 @@
   #define REG_PWM0_ETRG2                     (0x4002044CU) /**< \brief (PWM0) PWM External Trigger Register (trg_num = 2) */
   #define REG_PWM0_LEBR2                     (0x40020450U) /**< \brief (PWM0) PWM Leading-Edge Blanking Register (trg_num = 2) */
   #define REG_PWM0_CMUPD3                    (0x40020460U) /**< \brief (PWM0) PWM Channel Mode Update Register (ch_num = 3) */
-  #define REG_PWM0_ETRG3                     (0x4002046CU) /**< \brief (PWM0) PWM External Trigger Register (trg_num = 3) */
-  #define REG_PWM0_LEBR3                     (0x40020470U) /**< \brief (PWM0) PWM Leading-Edge Blanking Register (trg_num = 3) */
-  #define REG_PWM0_ETRG4                     (0x4002048CU) /**< \brief (PWM0) PWM External Trigger Register (trg_num = 4) */
-  #define REG_PWM0_LEBR4                     (0x40020490U) /**< \brief (PWM0) PWM Leading-Edge Blanking Register (trg_num = 4) */
 #else
   #define REG_PWM0_CLK      (*(__IO uint32_t*)0x40020000U) /**< \brief (PWM0) PWM Clock Register */
   #define REG_PWM0_ENA      (*(__O  uint32_t*)0x40020004U) /**< \brief (PWM0) PWM Enable Register */
@@ -268,10 +264,6 @@
   #define REG_PWM0_ETRG2    (*(__IO uint32_t*)0x4002044CU) /**< \brief (PWM0) PWM External Trigger Register (trg_num = 2) */
   #define REG_PWM0_LEBR2    (*(__IO uint32_t*)0x40020450U) /**< \brief (PWM0) PWM Leading-Edge Blanking Register (trg_num = 2) */
   #define REG_PWM0_CMUPD3   (*(__O  uint32_t*)0x40020460U) /**< \brief (PWM0) PWM Channel Mode Update Register (ch_num = 3) */
-  #define REG_PWM0_ETRG3    (*(__IO uint32_t*)0x4002046CU) /**< \brief (PWM0) PWM External Trigger Register (trg_num = 3) */
-  #define REG_PWM0_LEBR3    (*(__IO uint32_t*)0x40020470U) /**< \brief (PWM0) PWM Leading-Edge Blanking Register (trg_num = 3) */
-  #define REG_PWM0_ETRG4    (*(__IO uint32_t*)0x4002048CU) /**< \brief (PWM0) PWM External Trigger Register (trg_num = 4) */
-  #define REG_PWM0_LEBR4    (*(__IO uint32_t*)0x40020490U) /**< \brief (PWM0) PWM Leading-Edge Blanking Register (trg_num = 4) */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 #endif /* _SAME70_PWM0_INSTANCE_ */

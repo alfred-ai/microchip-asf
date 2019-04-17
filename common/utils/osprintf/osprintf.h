@@ -4,7 +4,7 @@
  *
  * \brief
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,7 +48,7 @@
 #include "compiler.h"
 
 void osprintf_init(void *usart, const void *opt);
-void osprintf(const char *fmt, ...) __attribute__ ((format (gnu_printf, 1, 0)));
+void osprintf(const char *fmt, ...) __attribute__ ((format (gnu_printf, 1, 2)));
 
 void osprint(const char *s);
 void osprint_hex_array(uint8_t *p, int sz);

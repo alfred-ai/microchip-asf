@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -134,12 +134,6 @@ typedef struct {
   __IO uint32_t  PWM_LEBR2;                    /**< \brief (Pwm Offset: 0x450) PWM Leading-Edge Blanking Register (trg_num = 2) */
   __I  uint32_t  Reserved14[3];
   __O  uint32_t  PWM_CMUPD3;                   /**< \brief (Pwm Offset: 0x460) PWM Channel Mode Update Register (ch_num = 3) */
-  __I  uint32_t  Reserved15[2];
-  __IO uint32_t  PWM_ETRG3;                    /**< \brief (Pwm Offset: 0x46C) PWM External Trigger Register (trg_num = 3) */
-  __IO uint32_t  PWM_LEBR3;                    /**< \brief (Pwm Offset: 0x470) PWM Leading-Edge Blanking Register (trg_num = 3) */
-  __I  uint32_t  Reserved16[6];
-  __IO uint32_t  PWM_ETRG4;                    /**< \brief (Pwm Offset: 0x48C) PWM External Trigger Register (trg_num = 4) */
-  __IO uint32_t  PWM_LEBR4;                    /**< \brief (Pwm Offset: 0x490) PWM Leading-Edge Blanking Register (trg_num = 4) */
 } Pwm;
 #endif /* !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /* -------- PWM_CLK : (PWM Offset: 0x00) PWM Clock Register -------- */
@@ -665,56 +659,6 @@ typedef struct {
 /* -------- PWM_CMUPD3 : (PWM Offset: 0x460) PWM Channel Mode Update Register (ch_num = 3) -------- */
 #define PWM_CMUPD3_CPOLUP (0x1u << 9) /**< \brief (PWM_CMUPD3) Channel Polarity Update */
 #define PWM_CMUPD3_CPOLINVUP (0x1u << 13) /**< \brief (PWM_CMUPD3) Channel Polarity Inversion Update */
-/* -------- PWM_ETRG3 : (PWM Offset: 0x46C) PWM External Trigger Register (trg_num = 3) -------- */
-#define PWM_ETRG3_MAXCNT_Pos 0
-#define PWM_ETRG3_MAXCNT_Msk (0xffffffu << PWM_ETRG3_MAXCNT_Pos) /**< \brief (PWM_ETRG3) Maximum Counter value */
-#define PWM_ETRG3_MAXCNT(value) ((PWM_ETRG3_MAXCNT_Msk & ((value) << PWM_ETRG3_MAXCNT_Pos)))
-#define PWM_ETRG3_TRGMODE_Pos 24
-#define PWM_ETRG3_TRGMODE_Msk (0x3u << PWM_ETRG3_TRGMODE_Pos) /**< \brief (PWM_ETRG3) External Trigger Mode */
-#define PWM_ETRG3_TRGMODE(value) ((PWM_ETRG3_TRGMODE_Msk & ((value) << PWM_ETRG3_TRGMODE_Pos)))
-#define   PWM_ETRG3_TRGMODE_OFF (0x0u << 24) /**< \brief (PWM_ETRG3) External trigger is not enabled. */
-#define   PWM_ETRG3_TRGMODE_MODE1 (0x1u << 24) /**< \brief (PWM_ETRG3) External PWM Reset Mode */
-#define   PWM_ETRG3_TRGMODE_MODE2 (0x2u << 24) /**< \brief (PWM_ETRG3) External PWM Start Mode */
-#define   PWM_ETRG3_TRGMODE_MODE3 (0x3u << 24) /**< \brief (PWM_ETRG3) Cycle-by-cycle Duty Mode */
-#define PWM_ETRG3_TRGEDGE (0x1u << 28) /**< \brief (PWM_ETRG3) Edge Selection */
-#define   PWM_ETRG3_TRGEDGE_FALLING_ZERO (0x0u << 28) /**< \brief (PWM_ETRG3) TRGMODE = 1: TRGINx event detection on falling edge.TRGMODE = 2, 3: TRGINx active level is 0 */
-#define   PWM_ETRG3_TRGEDGE_RISING_ONE (0x1u << 28) /**< \brief (PWM_ETRG3) TRGMODE = 1: TRGINx event detection on rising edge.TRGMODE = 2, 3: TRGINx active level is 1 */
-#define PWM_ETRG3_TRGFILT (0x1u << 29) /**< \brief (PWM_ETRG3) Filtered input */
-#define PWM_ETRG3_TRGSRC (0x1u << 30) /**< \brief (PWM_ETRG3) Trigger Source */
-#define PWM_ETRG3_RFEN (0x1u << 31) /**< \brief (PWM_ETRG3) Recoverable Fault Enable */
-/* -------- PWM_LEBR3 : (PWM Offset: 0x470) PWM Leading-Edge Blanking Register (trg_num = 3) -------- */
-#define PWM_LEBR3_LEBDELAY_Pos 0
-#define PWM_LEBR3_LEBDELAY_Msk (0x7fu << PWM_LEBR3_LEBDELAY_Pos) /**< \brief (PWM_LEBR3) Leading-Edge Blanking Delay for TRGINx */
-#define PWM_LEBR3_LEBDELAY(value) ((PWM_LEBR3_LEBDELAY_Msk & ((value) << PWM_LEBR3_LEBDELAY_Pos)))
-#define PWM_LEBR3_PWMLFEN (0x1u << 16) /**< \brief (PWM_LEBR3) PWML Falling Edge Enable */
-#define PWM_LEBR3_PWMLREN (0x1u << 17) /**< \brief (PWM_LEBR3) PWML Rising Edge Enable */
-#define PWM_LEBR3_PWMHFEN (0x1u << 18) /**< \brief (PWM_LEBR3) PWMH Falling Edge Enable */
-#define PWM_LEBR3_PWMHREN (0x1u << 19) /**< \brief (PWM_LEBR3) PWMH Rising Edge Enable */
-/* -------- PWM_ETRG4 : (PWM Offset: 0x48C) PWM External Trigger Register (trg_num = 4) -------- */
-#define PWM_ETRG4_MAXCNT_Pos 0
-#define PWM_ETRG4_MAXCNT_Msk (0xffffffu << PWM_ETRG4_MAXCNT_Pos) /**< \brief (PWM_ETRG4) Maximum Counter value */
-#define PWM_ETRG4_MAXCNT(value) ((PWM_ETRG4_MAXCNT_Msk & ((value) << PWM_ETRG4_MAXCNT_Pos)))
-#define PWM_ETRG4_TRGMODE_Pos 24
-#define PWM_ETRG4_TRGMODE_Msk (0x3u << PWM_ETRG4_TRGMODE_Pos) /**< \brief (PWM_ETRG4) External Trigger Mode */
-#define PWM_ETRG4_TRGMODE(value) ((PWM_ETRG4_TRGMODE_Msk & ((value) << PWM_ETRG4_TRGMODE_Pos)))
-#define   PWM_ETRG4_TRGMODE_OFF (0x0u << 24) /**< \brief (PWM_ETRG4) External trigger is not enabled. */
-#define   PWM_ETRG4_TRGMODE_MODE1 (0x1u << 24) /**< \brief (PWM_ETRG4) External PWM Reset Mode */
-#define   PWM_ETRG4_TRGMODE_MODE2 (0x2u << 24) /**< \brief (PWM_ETRG4) External PWM Start Mode */
-#define   PWM_ETRG4_TRGMODE_MODE3 (0x3u << 24) /**< \brief (PWM_ETRG4) Cycle-by-cycle Duty Mode */
-#define PWM_ETRG4_TRGEDGE (0x1u << 28) /**< \brief (PWM_ETRG4) Edge Selection */
-#define   PWM_ETRG4_TRGEDGE_FALLING_ZERO (0x0u << 28) /**< \brief (PWM_ETRG4) TRGMODE = 1: TRGINx event detection on falling edge.TRGMODE = 2, 3: TRGINx active level is 0 */
-#define   PWM_ETRG4_TRGEDGE_RISING_ONE (0x1u << 28) /**< \brief (PWM_ETRG4) TRGMODE = 1: TRGINx event detection on rising edge.TRGMODE = 2, 3: TRGINx active level is 1 */
-#define PWM_ETRG4_TRGFILT (0x1u << 29) /**< \brief (PWM_ETRG4) Filtered input */
-#define PWM_ETRG4_TRGSRC (0x1u << 30) /**< \brief (PWM_ETRG4) Trigger Source */
-#define PWM_ETRG4_RFEN (0x1u << 31) /**< \brief (PWM_ETRG4) Recoverable Fault Enable */
-/* -------- PWM_LEBR4 : (PWM Offset: 0x490) PWM Leading-Edge Blanking Register (trg_num = 4) -------- */
-#define PWM_LEBR4_LEBDELAY_Pos 0
-#define PWM_LEBR4_LEBDELAY_Msk (0x7fu << PWM_LEBR4_LEBDELAY_Pos) /**< \brief (PWM_LEBR4) Leading-Edge Blanking Delay for TRGINx */
-#define PWM_LEBR4_LEBDELAY(value) ((PWM_LEBR4_LEBDELAY_Msk & ((value) << PWM_LEBR4_LEBDELAY_Pos)))
-#define PWM_LEBR4_PWMLFEN (0x1u << 16) /**< \brief (PWM_LEBR4) PWML Falling Edge Enable */
-#define PWM_LEBR4_PWMLREN (0x1u << 17) /**< \brief (PWM_LEBR4) PWML Rising Edge Enable */
-#define PWM_LEBR4_PWMHFEN (0x1u << 18) /**< \brief (PWM_LEBR4) PWMH Falling Edge Enable */
-#define PWM_LEBR4_PWMHREN (0x1u << 19) /**< \brief (PWM_LEBR4) PWMH Rising Edge Enable */
 
 /*@}*/
 

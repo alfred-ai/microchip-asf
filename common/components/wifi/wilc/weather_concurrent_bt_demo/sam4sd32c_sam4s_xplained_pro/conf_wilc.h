@@ -4,7 +4,7 @@
  *
  * \brief WiFi Settings.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -58,14 +58,18 @@ extern "C" {
 
 /** Select WILC firmware to use. */
 #define CONF_WILC_USE_3000_REV_A
+//#define CONF_WILC_USE_1000_REV_B
 
+// Bluetooth Mode
+//#define CONF_BT_MODE_BTDM		/* Dual mode */
+#define CONF_BT_MODE_BLE_ONLY	/* BLE Only mode */
 /*
    ---------------------------------
    ---------- PIN settings ---------
    ---------------------------------
 */
 
-#define CONF_WILC_PIN_RESET				IOPORT_CREATE_PIN(PIOA, 18)
+#define CONF_WILC_PIN_RESET				IOPORT_CREATE_PIN(PIOA, 24)
 #define CONF_WILC_PIN_CHIP_ENABLE		IOPORT_CREATE_PIN(PIOA, 6)
 #define CONF_WILC_PIN_WAKE				IOPORT_CREATE_PIN(PIOA, 25)
 
@@ -75,7 +79,9 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_USE_SPI				
+//#define CONF_WILC_USE_SPI
+#define CONF_WILC_USE_SDIO
+#define CONF_WILC_USE_SDIO_EXT_IRQ
 
 /** SPI pin and instance settings. */
 #define CONF_WILC_SPI					SPI
@@ -107,7 +113,9 @@ extern "C" {
 #define CONF_WILC_SPI_PHA				(1)
 
 /** SPI clock. */
-#define CONF_WILC_SPI_CLOCK				(48000000)
+#define CONF_WILC_SPI_CLOCK				(40000000)
+
+//#define CONF_WILC_FW_IN_FLASH
 
 /*
    ---------------------------------
@@ -129,7 +137,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_DEBUG					(0)
+#define CONF_WILC_DEBUG					(1)
 #define CONF_WILC_PRINTF				osprintf
 
 #ifdef __cplusplus

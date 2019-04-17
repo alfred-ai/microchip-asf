@@ -4,7 +4,7 @@
  *
  * \brief Weather concurrent demo.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -67,7 +67,19 @@
  *    #define STA_WLAN_SSID         "DEMO_AP"
  *    #define STA_WLAN_AUTH         M2M_WIFI_SEC_WPA_PSK
  *    #define STA_WLAN_PSK          "12345678"
+ *    #define WEP_KEY_INDEX	    	M2M_WIFI_WEP_KEY_INDEX_1
+ *    #define WEP_KEY	    		"1234567890"
+ *    #define WEP_AUTH_TYPE	    	WEP_ANY
  * \endcode
+  * -# Configure below defines in sta.h to specify WILC AP mode to start with.
+  * \code
+  *    #define AP_WLAN_SSID         "WILC1000_AP"
+  *    #define AP_WLAN_AUTH         M2M_WIFI_SEC_WEP
+  *    #define AP_WLAN_PSK          "12345678"
+ *    #define WEP_KEY_INDEX	    	M2M_WIFI_WEP_KEY_INDEX_1
+ *    #define WEP_KEY	    		"1234567890"
+ *    #define WEP_AUTH_TYPE	    	WEP_ANY
+  * \endcode
  * -# Build the program and download it into the board.
  * -# On the computer, open and configure a terminal application as the follows.
  * \code
@@ -139,6 +151,10 @@ void vApplicationMallocFailedHook(void)
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName);
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 {
+	/*TRACE("ERROR: STACK OVERFLOW");
+	TRACE(pcTaskName);*/
+	M2M_ERR("ERROR: STACK OVERFLOW");
+	M2M_ERR(pcTaskName);
 	for (;;) {
 	}
 }
@@ -149,6 +165,7 @@ void hard_fault(uint32_t *args, uint32_t lr);
 void hard_fault(uint32_t *args, uint32_t lr)
 {
 	fault_addr = args[6];
+	osprintf("Hard fault at address 0x%lX\r\n", fault_addr);
 	for (;;) {
 	}
 }

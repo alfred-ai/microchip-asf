@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,7 +51,7 @@ void iperf_udp_task(void *argument);
 
 #define IPERF_WIFI_SERVER_PORT			    (5001)
 #define IPERF_WIFI_TCP_BUFFER_SIZE			(1400)
-#define IPERF_WIFI_UDP_BUFFER_SIZE			(1400)
+#define IPERF_WIFI_UDP_BUFFER_SIZE			(1700)
 
 /** iPerf Settings */
 #define HEADER_VERSION1						0x80000000

@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 ASIC specific internal APIs.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -41,7 +41,7 @@
 #ifndef _NMASIC_H_
 #define _NMASIC_H_
 
-#include "common/include/nm_common.h"
+#include "../../common/include/nm_common.h"
 
 #define NMI_PERIPH_REG_BASE     0x1000
 #define NMI_CHIPID	            (NMI_PERIPH_REG_BASE)
@@ -56,45 +56,57 @@
 
 #ifdef CONF_WILC_USE_3000_REV_A
 #ifdef CONF_WILC_USE_SDIO
-	#define WILC_WAKEUP_REG 			0xf0
-	#define WILC_CLK_STATUS_REG 		0xf0
-	#define WILC_WAKEUP_BIT 			NBIT0
-	#define WILC_CLK_STATUS_BIT 		NBIT4
+	#define WILC_WAKEUP_REG 					0xf0
+	#define WILC_CLK_STATUS_REG 				0xf0
+	#define WILC_WAKEUP_BIT 					NBIT0
+	#define WILC_CLK_STATUS_BIT 				NBIT4
 	#define WILC_FROM_INTERFACE_TO_WF_REG		0xFA
+	#define WILC_FROM_INTERFACE_TO_WF_BIT		NBIT0
+	#define WILC_TO_INTERFACE_FROM_WF_REG		0xFC
+	#define WILC_TO_INTERFACE_FROM_WF_BIT		NBIT0
 
-	#define WILC_INT_STATUS_REG 	0xFE
-	#define WILC_INT_CLEAR_REG 		0xFE
+	#define WILC_INT_STATUS_REG 				0xFE
+	#define WILC_INT_CLEAR_REG 					0xFE
 #else
-	#define WILC_WAKEUP_REG 			0x1
-	#define WILC_CLK_STATUS_REG 		0x13
-	#define WILC_WAKEUP_BIT 			NBIT1
-	#define WILC_CLK_STATUS_BIT 		NBIT2
+	#define WILC_WAKEUP_REG 					0x1
+	#define WILC_CLK_STATUS_REG 				0x13
+	#define WILC_WAKEUP_BIT 					NBIT1
+	#define WILC_CLK_STATUS_BIT 				NBIT2
 	#define WILC_FROM_INTERFACE_TO_WF_REG		0x0E
+	#define WILC_FROM_INTERFACE_TO_WF_BIT		NBIT0
+	#define WILC_TO_INTERFACE_FROM_WF_REG		0x14 
+	#define WILC_TO_INTERFACE_FROM_WF_BIT		NBIT0
 
-	#define WILC_INT_STATUS_REG 	0x40
-	#define WILC_INT_CLEAR_REG 		0x44
+	#define WILC_INT_STATUS_REG 				0x40
+	#define WILC_INT_CLEAR_REG 					0x44
 
 #endif /* WILC_SDIO */
 
-#elif (defined CONF_WILC_USE_1000_REV_A || defined CONF_WILC_USE_1000_REV_B)
+#elif defined CONF_WILC_USE_1000_REV_B
 #ifdef CONF_WILC_USE_SDIO
-	#define WILC_WAKEUP_REG 			0xf0
-	#define WILC_CLK_STATUS_REG 		0xf1
-	#define WILC_WAKEUP_BIT  		NBIT0
+	#define WILC_WAKEUP_REG 					0xf0
+	#define WILC_CLK_STATUS_REG 				0xf1
+	#define WILC_WAKEUP_BIT  					NBIT0
 	#define WILC_CLK_STATUS_BIT 				NBIT0
 	#define WILC_FROM_INTERFACE_TO_WF_REG		0xFA
+	#define WILC_FROM_INTERFACE_TO_WF_BIT		NBIT0
+	#define WILC_TO_INTERFACE_FROM_WF_REG		0xFC
+	#define WILC_TO_INTERFACE_FROM_WF_BIT		NBIT0 
 
-	#define WILC_INT_STATUS_REG 	0xF8
-	#define WILC_INT_CLEAR_REG 		0xFE
+	#define WILC_INT_STATUS_REG 				0xF7
+	#define WILC_INT_CLEAR_REG 					0xF8
 #else
-	#define WILC_WAKEUP_REG 			0x1
-	static uint32 WILC_CLK_STATUS_REG =			0xf; /* Assume initially it is B0 chip */
-	#define WILC_WAKEUP_BIT 			NBIT1
-	#define WILC_CLK_STATUS_BIT 		NBIT2
+	#define WILC_WAKEUP_REG 					0x1
+	#define WILC_CLK_STATUS_REG					0xf /* Assume initially it is B0 chip */ 
+	#define WILC_WAKEUP_BIT 					NBIT1
+	#define WILC_CLK_STATUS_BIT 				NBIT2
 
-	#define WILC_INT_STATUS_REG 	0x40
-	#define WILC_INT_CLEAR_REG 		0x44
+	#define WILC_INT_STATUS_REG 				0x40
+	#define WILC_INT_CLEAR_REG 					0x44
 	#define WILC_FROM_INTERFACE_TO_WF_REG		0x0B
+	#define WILC_FROM_INTERFACE_TO_WF_BIT		NBIT0
+	#define WILC_TO_INTERFACE_FROM_WF_REG		0x10
+	#define WILC_TO_INTERFACE_FROM_WF_BIT		NBIT0
 
 #endif /* WILC_SDIO */
 #endif /* CONF_WILC_USE_3000_REV_A*/
@@ -190,16 +202,6 @@
 #endif
 
 /**
-*  @enum		tenuNmiCoexMode
-*  @brief		enum holding coexistence modes
-*/
-typedef enum{
-	NMI_COEX_MODE_WIFI,
-	NMI_COEX_MODE_BT,
-	NMI_COEX_MODE_COMBO,	
-}tenuNmiCoexMode;
-
-/**
 *  @struct		tstrM2mWifiGetRevision
 *  @brief		Structure holding firmware version parameters
 *  @sa			M2M_WIFI_AUTH_WEB, M2M_WIFI_AUTH_WPA, M2M_WIFI_AUTH_WPA2
@@ -219,19 +221,16 @@ typedef struct {
 #ifdef __cplusplus
      extern "C" {
  #endif
-/**
-*	@fn		nm_clkless_wake
-*	@brief	Wakeup the chip using clockless registers
-*	@return	ZERO in case of success and M2M_ERR_BUS_FAIL in case of failure
-*	@author	Samer Sarhan
-*/
-sint8 nm_clkless_wake(void);
+ 
 
 sint8 chip_wake(void);
-
+/*
+*	@fn		chip_sleep
+*	@brief	
+*/
+sint8 chip_sleep(void);
 void chip_idle(void);
 
-void enable_rf_blocks(void);
 
 sint8 enable_interrupts(void);
 
@@ -249,8 +248,6 @@ void nmi_set_sys_clk_src_to_xo(void);
 
 sint8 chip_reset(void);
 
-sint8 wait_for_bootrom(void);
-
 sint8 firmware_download(void);
 
 #ifdef CONF_WILC_USE_3000_REV_A
@@ -260,6 +257,7 @@ sint8 firmware_download_bt(void);
 
 
 sint8 wait_for_firmware_start(void);
+sint8 wait_for_bootrom(void);
 
 sint8 chip_deinit(void);
 
@@ -276,12 +274,6 @@ sint8 pullup_ctrl(uint32 pinmask, uint8 enable);
 sint8 nmi_get_otp_mac_address(uint8 *pu8MacAddr, uint8 * pu8IsValid);
 
 sint8 nmi_get_mac_address(uint8 *pu8MacAddr);
-
-#ifdef CONF_WILC_USE_3000_REV_A
-sint8 nmi_coex_init(void);
-
-sint8 nmi_coex_set_mode(tenuNmiCoexMode enuCoexMode);
-#endif
 
 #ifdef __cplusplus
 	 }

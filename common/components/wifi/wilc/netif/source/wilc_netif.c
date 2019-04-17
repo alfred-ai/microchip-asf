@@ -4,7 +4,7 @@
  *
  * \brief WILC Network Interface Driver for lwIP.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -59,7 +59,7 @@
 void wilc_netif_tx_from_queue(hif_msg_t *msg);
 void wilc_netif_rx_callback(uint8 msg_type, void * msg, void *ctrl_buf);
 err_t wilc_netif_init(struct netif *netif);
-void winc_fill_callback_info(tstrEthInitParam *info);
+void wilc_fill_callback_info(tstrEthInitParam *info);
 
 /** Queue used by HIF task. */
 extern xQueueHandle hif_queue;
@@ -74,10 +74,10 @@ extern xQueueHandle hif_queue;
 /** Network link speed. */
 #define NET_LINK_SPEED  100000000
 
-#define WINC_TX_BUF_SIZE (1536)
-static uint8_t tx_buf[WINC_TX_BUF_SIZE];
-#define WINC_RX_BUF_SZ	(PBUF_POOL_BUFSIZE - ETH_PAD_SIZE)
-static uint8_t rx_buf[WINC_RX_BUF_SZ];
+#define WILC_TX_BUF_SIZE (PBUF_POOL_BUFSIZE - M2M_ETHERNET_HDR_OFFSET)
+static uint8_t tx_buf[WILC_TX_BUF_SIZE] __attribute__ ((aligned (4)));
+#define WILC_RX_BUF_SZ	(PBUF_POOL_BUFSIZE - M2M_ETHERNET_HDR_OFFSET)
+static uint8_t rx_buf[WILC_RX_BUF_SZ] __attribute__ ((aligned (4)));
 static struct pbuf *rx_first;
 static struct pbuf *rx_last;
 
@@ -92,11 +92,23 @@ struct netif wilc_netif_c_mode;
  */
 static void wilc_netif_low_level_init(struct netif *netif)
 {
-	static uint8_t mac[6];
+	static uint8_t mac0[6];
+	static uint8_t mac1[6];
 
-	m2m_wifi_get_mac_address(mac);
-	netif->hwaddr_len = sizeof(mac);
-	memcpy(netif->hwaddr, mac, sizeof(mac));
+	/*STA - g_mac_1*/
+	if(netif->num == 0)
+	{
+		m2m_wifi_get_mac_address(mac0, mac1);
+		netif->hwaddr_len = sizeof(mac1);
+		memcpy(netif->hwaddr, mac1, sizeof(mac1));
+	}
+	/*AP - g_mac*/
+	else
+	{
+		netif->hwaddr_len = sizeof(mac0);
+		memcpy(netif->hwaddr, mac0, sizeof(mac0));
+	}
+
 	netif->mtu = NET_MTU;
 	netif->flags |= NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP
 #if LWIP_IGMP
@@ -113,7 +125,7 @@ static err_t wilc_netif_tx(struct netif *netif, struct pbuf *p)
 	struct pbuf *q = 0;
 	hif_msg_t msg;
 	uint8_t *bufptr = tx_buf;
-	if (p->tot_len > WINC_TX_BUF_SIZE) {
+	if (p->tot_len > WILC_TX_BUF_SIZE) {
 		return ERR_BUF;
 	}
 	if (netif == &wilc_netif_sta)
@@ -121,23 +133,27 @@ static err_t wilc_netif_tx(struct netif *netif, struct pbuf *p)
 	else
 		msg.id = MSG_TX_AP;
 
+
+	pbuf_header(p, M2M_ETHERNET_HDR_OFFSET);
+
+
 	if (p->tot_len == p->len) {
 		msg.pbuf = (void *) p;
-		msg.payload_size = p->len - ETH_PAD_SIZE;
-		msg.payload = (void *) &(((uint8 *)p->payload)[ETH_PAD_SIZE]);
-	} else {		
+		msg.payload_size = p->len - ETH_PAD_SIZE - M2M_ETHERNET_HDR_OFFSET;
+		msg.payload = p->payload;
+	} else {
 		for (q = p; q != NULL; q = q->next) {
 			memcpy(bufptr, q->payload, q->len);
 			bufptr += q->len;
 		}
 		msg.pbuf = NULL;
-		msg.payload = &tx_buf[ETH_PAD_SIZE];
-		msg.payload_size = (uint16_t)(bufptr - tx_buf - ETH_PAD_SIZE); 
+		msg.payload = tx_buf;
+		msg.payload_size = (uint16_t)(bufptr - tx_buf - ETH_PAD_SIZE - M2M_ETHERNET_HDR_OFFSET);
 	}
 
 	if (msg.pbuf)
 		pbuf_ref(p);
-
+		
 	xQueueSend(hif_queue, (void *)&msg, portMAX_DELAY); 
 
 	LINK_STATS_INC(link.xmit);
@@ -150,18 +166,16 @@ static err_t wilc_netif_tx(struct netif *netif, struct pbuf *p)
 void wilc_netif_tx_from_queue(hif_msg_t *msg)
 {
 	struct pbuf *p = (struct pbuf *)msg->pbuf;
-	void *payload = msg->payload;
-	uint32_t len = msg->payload_size;
 	uint32_t tries = 0;
 	sint8 err;
 
 	for (;;) {
 		/* Try to send packet on corresponding interface. */
 		if (msg->id == MSG_TX_STA) {
-			err = m2m_wifi_send_ethernet_pkt(payload, len);
-		} else {
-			err = m2m_wifi_send_ethernet_pkt_ifc1(payload, len);
-		}
+			err = m2m_wifi_send_ethernet_pkt((uint8*)(msg->payload), msg->payload_size, STATION_INTERFACE);
+			} else {
+			err = m2m_wifi_send_ethernet_pkt((uint8*)(msg->payload), msg->payload_size, AP_INTERFACE);
+	    }
 		if (M2M_SUCCESS == err) {
 			break;
 		} else {
@@ -174,53 +188,53 @@ void wilc_netif_tx_from_queue(hif_msg_t *msg)
 
 	/* Free packet after transmission. */
 	if (p)
-		pbuf_free(p);	
+		pbuf_free(p);
 }
+
 
 /**
  * \brief Receive packets from the WILC under HIF thread context.
  */
 void wilc_netif_rx_callback(uint8 msg_type, void * msg, void *ctrl_buf)
 {
-	uint16_t sz;
-	uint16_t rem;
 	struct pbuf *p;
 	uint8_t *b;
-	tstrM2mIpCtrlBuf *ctrl = (tstrM2mIpCtrlBuf *)ctrl_buf;
+	tstrM2MDataBufCtrl *ctrl = (tstrM2MDataBufCtrl *)ctrl_buf;
+	uint16_t sz = ctrl->u16DataSize + ctrl->u8DataOffset;
+	uint16_t rem = ctrl->u16RemainigDataSize;
 
 	if (msg_type == M2M_WIFI_RESP_ETHERNET_RX_PACKET) {
-		sz = ctrl->u16DataSize;
-		rem = ctrl->u16RemainigDataSize;
+		
 		if (!rx_first) {
-			rx_first = rx_last = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_POOL);
+			rx_first = rx_last = pbuf_alloc(PBUF_RAW, WILC_RX_BUF_SZ, PBUF_POOL);
 			if (rx_first == NULL) {
 				LINK_STATS_INC(link.memerr);
 				LINK_STATS_INC(link.drop);
 				m2m_wifi_set_receive_buffer_ex(rx_buf, sizeof(rx_buf));
 				return;
 			}
-			memcpy(((uint8_t *)rx_first->payload) + ETH_PAD_SIZE, rx_buf, sz);
+			memcpy((uint8_t*) rx_first->payload, rx_buf, sz);
 		}
-		p = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_POOL);
+		p = pbuf_alloc(PBUF_RAW, WILC_RX_BUF_SZ, PBUF_POOL);
 		if (rx_first == rx_last) {
-#if ETH_PAD_SIZE
-			sz += ETH_PAD_SIZE;
-#endif // #if ETH_PAD_SIZE
 			rx_last->tot_len = sz + rem;
 		}
 		rx_last->len = sz;
 		
+		pbuf_header(rx_first, -(ctrl->u8DataOffset - ETH_PAD_SIZE));
+
 		/* When packet is complete, send it to the right lwIP interface. */
 		if (!rem) {
+			err_t error;
 			if (ctrl->u8IfcId == 1) {
-				//osprintf("<- STA %x\n", wilc_netif_sta.ip_addr.addr);
-				if (ERR_OK != wilc_netif_sta.input(rx_first, &wilc_netif_sta)) {
+				if (ERR_OK != (error = wilc_netif_sta.input(rx_first, &wilc_netif_sta))) {
+					osprintf("STA error sending to stack %d.\r\n", error);
 					pbuf_free(rx_first);
 				}
 			}
 			else {
-				//osprintf("<- AP\n");
-				if (ERR_OK != wilc_netif_c_mode.input(rx_first, &wilc_netif_c_mode)) {
+				if (ERR_OK != (error = wilc_netif_c_mode.input(rx_first, &wilc_netif_c_mode))) {
+					osprintf("AP error sending to stack %d.\r\n", error);
 					pbuf_free(rx_first);
 				}
 			}
@@ -243,18 +257,16 @@ void wilc_netif_rx_callback(uint8 msg_type, void * msg, void *ctrl_buf)
 		}
 		rx_last = p;
 		if (rx_first == rx_last) {
-			sz = PBUF_POOL_BUFSIZE - ETH_PAD_SIZE;
 			if (rx_first) {
-				b = ((uint8_t *)p->payload) + ETH_PAD_SIZE;
+				b = (uint8_t*) p->payload;
 			} else {
 				b = rx_buf;
 			}
 		} else {
 			b = p->payload;
-			sz = PBUF_POOL_BUFSIZE;
 		}
 		/* Reload memory buffer for further incoming packets. */
-		m2m_wifi_set_receive_buffer_ex(b, sz);
+		m2m_wifi_set_receive_buffer_ex(b, WILC_RX_BUF_SZ);
 	}
 }
 
@@ -316,7 +328,7 @@ err_t wilc_netif_init(struct netif *netif)
 /**
  * \brief Configure RX callback and buffer.
  */
-void winc_fill_callback_info(tstrEthInitParam *info)
+void wilc_fill_callback_info(tstrEthInitParam *info)
 {
 	info->pfAppEthCb = wilc_netif_rx_callback;
 	info->au8ethRcvBuf = rx_buf;

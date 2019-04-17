@@ -4,7 +4,7 @@
  *
  * \brief
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -89,7 +89,7 @@ static void status_callback(struct netif *netif)
 		strIpConfig.u8StaticIPv6 = (uint8_t *)netif->ip6_addr;
 #endif
 		if (gpfAppWifiCb && (netif == &wilc_netif_sta)) {
-			gpfAppWifiCb(M2M_WIFI_REQ_DHCP_CONF, &strIpConfig);		
+			gpfAppWifiCb(NET_IF_REQ_DHCP_CONF, &strIpConfig);		
 		}
 	}
 }

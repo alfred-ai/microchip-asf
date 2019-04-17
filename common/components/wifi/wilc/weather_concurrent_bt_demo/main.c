@@ -4,7 +4,7 @@
  *
  * \brief Weather concurrent and BT demo.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -139,6 +139,8 @@ void vApplicationMallocFailedHook(void)
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName);
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 {
+	M2M_ERR("ERROR: STACK OVERFLOW");
+	M2M_ERR(pcTaskName);
 	for (;;) {
 	}
 }
@@ -149,6 +151,7 @@ void hard_fault(uint32_t *args, uint32_t lr);
 void hard_fault(uint32_t *args, uint32_t lr)
 {
 	fault_addr = args[6];
+	osprintf("Hard fault at address 0x%X\r\n", fault_addr);
 	for (;;) {
 	}
 }
@@ -205,11 +208,11 @@ int main(void)
 	puts(STRING_HEADER);
 	
 	/* Create main task. */
-	xTaskCreate(sta_task, (const void *)"WiFiSTA", TASK_STA_STACK_SIZE, 0,
+	xTaskCreate(sta_task, (signed char *)"WiFiSTA", TASK_STA_STACK_SIZE, 0,
 			TASK_STA_PRIORITY, 0);
 			
 	/* Create main task. */
-	xTaskCreate(ap_task, (const void *)"WiFiAP", TASK_AP_STACK_SIZE, 0,
+	xTaskCreate(ap_task, (signed char *)"WiFiAP", TASK_AP_STACK_SIZE, 0,
 			TASK_AP_PRIORITY, 0);
 
 	vTaskStartScheduler();

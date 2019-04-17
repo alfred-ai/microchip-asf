@@ -3,7 +3,7 @@
  *
  * \brief Common API for USB Host Drivers (UHD)
  *
- * Copyright (C) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -282,10 +282,11 @@ bool uhd_ep0_alloc(usb_add_t add, uint8_t ep_size);
  *
  * \param add              USB address of endpoint
  * \param ep_desc          Endpoint descriptor
+ * \param speed            Endpoint working speed
  *
  * \return \c 1 if the endpoint is enabled, otherwise \c 0.
  */
-bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t *ep_desc);
+bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t *ep_desc, uhd_speed_t speed);
 
 /**
  * \brief Disables an endpoint or all endpoint of a device
@@ -316,10 +317,17 @@ void uhd_ep_free(usb_add_t add, usb_ep_t endp);
  * \param callback      NULL or function to call at the end of transfer
  *
  * \warning About \a b_shortpacket, for OUT endpoint it means that
- * a short packet or a Zero Length Packet must be sent to the USB line
+ * a short packet or a Zero Length Packet (ZLP) must be sent to the USB line
  * to properly close the USB transfer at the end of the data transfer.
  * For Bulk and Interrupt IN endpoint, it will automatically stop the transfer
  * at the end of the data transfer (received short packet).
+ *
+ * \warning About \a buf_size, for OUT endpoint the data is sent packet by
+ * packet until size is achieved. If the size is multiple of endpoint size
+ * ZLP may be sent according to the \a b_shortpacket setting. For IN endpoint
+ * the data is received packet by packet, if the last packet exceeds the buffer
+ * size, the overflow data will be discarded. So for IN endpoint it's better
+ * to allocate buffer size aligned to endpoint size so no returned data is lost.
  *
  * \warning About \a timeout, for BULK endpoint with \a timeout set to zero,
  * it means that the transfer will never be stopped before transfer done. Since

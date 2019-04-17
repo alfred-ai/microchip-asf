@@ -4,7 +4,7 @@
  * \brief USBC host driver
  * Compliance with common driver UHD
  *
- * Copyright (C) 2014-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -94,6 +94,11 @@ extern void udc_start(void);
 # define udc_start()
 #endif
 
+#ifndef UHD_BULK_INTERVAL_MIN
+// Minimal bulk interval value
+#  define UHD_BULK_INTERVAL_MIN 1
+#endif
+
 // Optional UHC callbacks
 #ifndef UHC_MODE_CHANGE
 # define UHC_MODE_CHANGE(arg)
@@ -125,6 +130,11 @@ extern void udc_start(void);
  *
  * UHD_USB_INT_FUN<br>
  * Option to fit interrupt function to what defined in exception table.
+ *
+ * UHD_BULK_INTERVAL_MIN<br>
+ * Feature to reduce or increase bulk token rate when it's NAKed (0, 1 ...).
+ * To adjust bandwidth usage.
+ * Default value 1.
  *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodic
@@ -780,12 +790,14 @@ bool uhd_ep0_alloc(
 
 bool uhd_ep_alloc(
 		usb_add_t add,
-		usb_ep_desc_t *ep_desc)
+		usb_ep_desc_t *ep_desc,
+		uhd_speed_t speed)
 {
 	uint8_t ep_addr;
 	uint8_t ep_type;
 	uint8_t ep_dir;
 	uint8_t ep_interval;
+	(void)speed; // No high speed currently
 
 	for (uint8_t pipe = 1; pipe < UHD_PEP_NB; pipe++) {
 		if (Is_uhd_pipe_enabled(pipe)) {
@@ -801,11 +813,19 @@ bool uhd_ep_alloc(
 				USBC_UPCFG0_PTOKEN_IN >> USBC_UPCFG0_PTOKEN_Pos:
 				USBC_UPCFG0_PTOKEN_OUT >> USBC_UPCFG0_PTOKEN_Pos;
 		ep_type = ep_desc->bmAttributes & USB_EP_TYPE_MASK;
+#if UHD_BULK_INTERVAL_MIN
 		if (ep_type == USB_EP_TYPE_BULK) {
-			ep_interval = 0; // Ignore bInterval for bulk endpoint
+			if (ep_desc->bInterval > UHD_BULK_INTERVAL_MIN) {
+				ep_interval = ep_desc->bInterval;
+			} else {
+				ep_interval = UHD_BULK_INTERVAL_MIN;
+			}
 		} else {
 			ep_interval = ep_desc->bInterval;
 		}
+#else
+		ep_interval = ep_desc->bInterval;
+#endif
 		uhd_configure_pipe(pipe, ep_interval, ep_addr, ep_type, ep_dir,
 				le16_to_cpu(ep_desc->wMaxPacketSize),
 				0);

@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 M2M driver APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -39,7 +39,6 @@
  *
  */
 
-#include "common/include/nm_common.h"
 #include "driver/source/nmbus.h"
 #include "bsp/include/nm_bsp.h"
 #include "driver/source/nmdrv.h"
@@ -54,10 +53,8 @@
 #define rNMI_GP_REG_1          (0x14a0)
 
 #define rHAVE_SDIO_IRQ_GPIO_BIT     (NBIT0)
-#define rHAVE_USE_PMU_BIT           (NBIT1)
 #define rHAVE_SLEEP_CLK_SRC_RTC_BIT (NBIT2)
 #define rHAVE_SLEEP_CLK_SRC_XO_BIT  (NBIT3)
-#define rHAVE_EXT_PA_INV_TX_RX      (NBIT4)
 #define rHAVE_LEGACY_RF_SETTINGS    (NBIT5)
 
 
@@ -72,16 +69,11 @@ static void chip_apply_conf(void)
 	
 	uint32 val32;
 	val32 = 0;
-#ifdef __ENABLE_PMU__
-	val32 |= rHAVE_USE_PMU_BIT;
-#endif
+
 #ifdef __ENABLE_SLEEP_CLK_SRC_RTC__
 	val32 |= rHAVE_SLEEP_CLK_SRC_RTC;
 #elif defined __ENABLE_SLEEP_CLK_SRC_XO__
 	val32 |= rHAVE_SLEEP_CLK_SRC_XO;
-#endif
-#ifdef __ENABLE_EXT_PA_INV_TX_RX__
-	val32 |= rHAVE_EXT_PA_INV_TX_RX;
 #endif
 #ifdef __ENABLE_LEGACY_RF_SETTINGS__
 	val32 |= rHAVE_LEGACY_RF_SETTINGS;
@@ -105,41 +97,6 @@ static void chip_apply_conf(void)
 }
 
 /*
-*	@fn		nm_drv_init_download_mode
-*	@brief	Initialize NMC1000 driver
-*	@return	M2M_SUCCESS in case of success and Negative error code in case of failure
-*   @param [in]	arg
-*				Generic argument
-*	@author	Viswanathan Murugesan
-*	@date	10 Oct 2014
-*	@version	1.0
-*/
-sint8 nm_drv_init_download_mode()
-{
-	sint8 ret = M2M_SUCCESS;
-	
-	ret = nm_bus_iface_init(NULL);
-	if (M2M_SUCCESS != ret) {
-		M2M_ERR("[nmi start]: fail init bus\n");
-		goto ERR1;
-	}
-
-
-#ifdef CONF_WILC_USE_SPI
-	/* Must do this after global reset to set SPI data packet size. */
-	nm_spi_init();
-#endif
-
-	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
-	
-	/*disable all interrupt in ROM (to disable uart) in 2b0 chip*/
-	nm_write_reg(0x20300,0);
-
-ERR1:
-	return ret;
-}
-
-/*
 *	@fn		nm_drv_init
 *	@brief	Initialize NMC1000 driver
 *	@return	M2M_SUCCESS in case of success and Negative error code in case of failure
@@ -151,7 +108,6 @@ ERR1:
 */
 sint8 nm_drv_init(void * arg)
 {
-	uint32 chipid =0;
 	tstrM2mRev strtmp;
 	sint8 ret = M2M_SUCCESS;
 	
@@ -164,81 +120,50 @@ sint8 nm_drv_init(void * arg)
 #ifdef BUS_ONLY
 	return;
 #endif
-#ifdef __KERNEL__
+
 #ifdef CONF_WILC_USE_SPI
-		ret = chip_reset();
-
-		/* Must do this after global reset to set SPI data packet size. */
-		nm_spi_init();
-#endif
-#endif
-
-#ifdef CONF_WILC_USE_SDIO
+	nm_spi_init();
+#elif defined CONF_WILC_USE_SDIO
 	nm_sdio_init();
 #endif
 
 	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
-
-	if((nm_read_reg_with_ret(0x1000, &chipid)) != M2M_SUCCESS) {
-		chipid = 0;
-		//return 0;
-	}
-	
-	//ret = chip_wake();
-	//nm_bsp_sleep(10);
-	if (M2M_SUCCESS != ret) {
-		M2M_ERR("[nmi start]: fail chip_wakeup\n");
-		goto ERR2;
-	}
-	/**
-	Go...
-	**/
-	/*ret = chip_reset();
-	if (M2M_SUCCESS != ret) {
-		goto ERR2;
-	}*/
-
-#ifdef CONF_WILC_USE_SPI
-	/* Must do this after global reset to set SPI data packet size. */
-	nm_spi_init();
-#endif
-	/*return power save to default value*/
-	//chip_idle();
-	M2M_INFO("Chip ID %x\n", (unsigned int)nmi_get_chipid());
-#ifdef M2M_WILC1000
+#ifndef CONF_WILC_FW_IN_FLASH
 	ret = firmware_download();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#endif	
-
+#endif /* CONF_WILC_FW_IN_FLASH */
 	chip_apply_conf();
 
 	ret = cpu_start();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#ifndef M2M_WILC1000
+
+#ifdef CONF_WILC_FW_IN_FLASH
 	ret = wait_for_bootrom();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#endif
+#endif /*CONF_WILC_FW_IN_FLASH */
 	ret = wait_for_firmware_start();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
 
 #ifdef CONF_WILC_USE_3000_REV_A
+	#ifndef CONF_WILC_FW_IN_FLASH
 	ret = firmware_download_bt();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
+	#endif /* CONF_WILC_FW_IN_FLASH */
 	ret = cpu_start_bt();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#endif
+#endif /*CONF_WILC_USE_3000_REV_A*/
 	ret = enable_interrupts();
 	if (M2M_SUCCESS != ret) {
 		M2M_ERR("failed to enable interrupts..\n");
@@ -254,10 +179,6 @@ sint8 nm_drv_init(void * arg)
 		M2M_INFO("Curr driver ver: %u.%u.%u\n", M2M_DRIVER_VERSION_MAJOR_NO, M2M_DRIVER_VERSION_MINOR_NO, M2M_DRIVER_VERSION_PATCH_NO);
 	}
 
-#ifdef CONF_WILC_USE_3000_REV_A
-	nmi_coex_init();
-	nmi_coex_set_mode(NMI_COEX_MODE_COMBO);
-#endif
 	return ret;
 ERR2:
 #ifdef CONF_WILC_USE_SDIO

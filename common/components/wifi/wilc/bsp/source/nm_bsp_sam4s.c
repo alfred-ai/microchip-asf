@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAM4S BSP APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -23,6 +23,9 @@
  * 3. The name of Atmel may not be used to endorse or promote products derived
  *    from this software without specific prior written permission.
  *
+ * 4. This software may only be redistributed and used in connection with an
+ *    Atmel microcontroller product.
+ *
  * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
@@ -40,7 +43,9 @@
  */
 
 #include "bsp/include/nm_bsp.h"
+#include "sam4s.h"
 #include "common/include/nm_common.h"
+#include "component/component_cmcc.h"
 #include "asf.h"
 #include "conf_wilc.h"
 
@@ -83,6 +88,11 @@ sint8 nm_bsp_init(void)
 {
 	gpfIsr = NULL;
 
+	#if !defined (__SAM4S16C__)
+	/* Enable CPU cache*/
+	CMCC->CMCC_CTRL = CMCC_CTRL_CEN;
+	#endif
+	
 	/* Initialize chip IOs. */
 	init_chip_pins();
 
@@ -137,6 +147,8 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 	pio_pull_up(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK, PIO_PULLUP);
 //	pio_set_debounce_filter(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK, 10);
 	pio_handler_set_pin(CONF_WILC_SPI_INT_PIN, PIO_IT_LOW_LEVEL, chip_isr);
+	/* The status register of the PIO controller is cleared prior to enabling the interrupt */
+	pio_get_interrupt_status(CONF_WILC_SPI_INT_PIO);
 	pio_enable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
 	pio_handler_set_priority(CONF_WILC_SPI_INT_PIO, (IRQn_Type)CONF_WILC_SPI_INT_PIO_ID,
 			CONF_WILC_SPI_INT_PRIORITY);
@@ -151,6 +163,8 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 {
 	if (u8Enable) {
+		/* The status register of the PIO controller is cleared prior to enabling the interrupt */
+		pio_get_interrupt_status(CONF_WILC_SPI_INT_PIO);
 		pio_enable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
 	}
 	else {

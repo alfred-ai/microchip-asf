@@ -4,7 +4,7 @@
  *
  * \brief WiFi Settings.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -75,7 +75,9 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_USE_SPI				
+//#define CONF_WILC_USE_SPI				
+#define CONF_WILC_USE_SDIO
+#define CONF_WILC_USE_SDIO_EXT_IRQ
 
 /** SPI pin and instance settings. */
 #define CONF_WILC_SPI					SPI

@@ -3,7 +3,7 @@
  *
  * \brief SAM C2x Clock Driver
  *
- * Copyright (C) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -236,20 +236,17 @@ void system_clock_source_xosc_set_config(
 
 	temp.bit.AMPGC = config->auto_gain_control;
 
-	/* Set gain if automatic gain control is not selected */
-	if (!config->auto_gain_control) {
-		if (config->frequency <= 2000000) {
-			temp.bit.GAIN = 0;
-		} else if (config->frequency <= 4000000) {
-			temp.bit.GAIN = 1;
-		} else if (config->frequency <= 8000000) {
-			temp.bit.GAIN = 2;
-		} else if (config->frequency <= 16000000) {
-			temp.bit.GAIN = 3;
-		} else if (config->frequency <= 32000000) {
-			temp.bit.GAIN = 4;
-		}
-
+	/* Set gain */
+	if (config->frequency <= 2000000) {
+		temp.bit.GAIN = 0;
+	} else if (config->frequency <= 4000000) {
+		temp.bit.GAIN = 1;
+	} else if (config->frequency <= 8000000) {
+		temp.bit.GAIN = 2;
+	} else if (config->frequency <= 16000000) {
+		temp.bit.GAIN = 3;
+	} else if (config->frequency <= 32000000) {
+		temp.bit.GAIN = 4;
 	}
 
 	temp.bit.ONDEMAND = config->on_demand;
@@ -638,18 +635,22 @@ void system_clock_init(void)
 
 	xosc_conf.external_clock    = CONF_CLOCK_XOSC_EXTERNAL_CRYSTAL;
 	xosc_conf.startup_time      = CONF_CLOCK_XOSC_STARTUP_TIME;
-	xosc_conf.auto_gain_control = CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL;
 	xosc_conf.frequency         = CONF_CLOCK_XOSC_EXTERNAL_FREQUENCY;
-	xosc_conf.on_demand         = CONF_CLOCK_XOSC_ON_DEMAND;
 	xosc_conf.run_in_standby    = CONF_CLOCK_XOSC_RUN_IN_STANDBY;
 	xosc_conf.clock_failure_detector_prescaler = CONF_CLOCK_XOSC_FAILURE_DETECTOR_PRE;
 	xosc_conf.enable_clock_failure_detector    = CONF_CLOCK_XOSC_FAILURE_DETECTOR_ENABLE;
 	xosc_conf.enable_clock_failure_detector_event_outut =
-											CONF_CLOCK_XOSC_FAILURE_DETECTOR_EVENT_OUTPUT_ENABLE;
+		CONF_CLOCK_XOSC_FAILURE_DETECTOR_EVENT_OUTPUT_ENABLE;
 	xosc_conf.enable_clock_switch_back = CONF_CLOCK_XOSC_FAILURE_SWITCH_BACK_ENABLE;
 
 	system_clock_source_xosc_set_config(&xosc_conf);
 	system_clock_source_enable(SYSTEM_CLOCK_SOURCE_XOSC);
+	while(!system_clock_source_is_ready(SYSTEM_CLOCK_SOURCE_XOSC));
+	if (CONF_CLOCK_XOSC_ON_DEMAND || CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL) {
+		OSCCTRL->XOSCCTRL.reg |=
+			(CONF_CLOCK_XOSC_ON_DEMAND << OSCCTRL_XOSCCTRL_ONDEMAND_Pos) |
+			(CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL << OSCCTRL_XOSCCTRL_AMPGC_Pos);
+	}
 #endif
 
 	/* XOSC32K */

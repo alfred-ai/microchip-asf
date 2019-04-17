@@ -3,7 +3,7 @@
  *
  * \brief SAM AON Sleep Timer Driver Quick Start for SAMB11
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -84,6 +84,8 @@ static void configure_aon_sleep_timer(void)
 //! [setup_7]
 //! [setup_8]
 	config_aon_sleep_timer.counter = CONF_AON_SLEEP_COUNTER;
+	config_aon_sleep_timer.mode = AON_SLEEP_TIMER_SINGLE_MODE;
+	config_aon_sleep_timer.wakeup = AON_SLEEP_TIMER_WAKEUP_ARM_BLE;
 //! [setup_8]
 //! [setup_9]
 	aon_sleep_timer_init(&config_aon_sleep_timer);
@@ -96,10 +98,6 @@ static void configure_aon_sleep_timer_callback(void)
 	//! [setup_register_callback]
 	aon_sleep_timer_register_callback(aon_sleep_timer_callback);
 	//! [setup_register_callback]
-
-	//! [enable_IRQ]
-	NVIC_EnableIRQ(AON_SLEEP_TIMER0_IRQn);
-	//! [enable_IRQ]
 }
 
 //! [setup]
@@ -130,9 +128,16 @@ int main(void)
 	while(!aon_sleep_timer_sleep_timer_active());
 	//! [timer_active]
 	//! [wait_wfi]
+	/* wait for interrupt is just for demo application purpose. 
+	It is not mandatory to add this instruction in actual application*/
 	asm volatile ("wfi");
 	asm volatile ("nop");
 	//! [wait_wfi]
+
+	//! [timer_disable]
+	aon_sleep_timer_unregister_callback();
+	aon_sleep_timer_disable();
+	//! [timer_disable]
 
 	//! [main_imp]
 	//! [main_loop]

@@ -3,7 +3,7 @@
  *
  * \brief AON Sleep Timer Quick Start configuration
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,6 +44,7 @@
 #ifndef CONF_QUICK_START_H_INCLUDED
 #define CONF_QUICK_START_H_INCLUDED
 
-#define CONF_AON_SLEEP_COUNTER      320000    /* About 10s */
+#define CONF_AON_SLEEP_COUNTER      320000   
+ /* About 10s  (CONF_AON_SLEEP_COUNTER/ PCLK=320000/32000)*/
 
 #endif /* CONF_QUICK_START_H_INCLUDED */

@@ -4,7 +4,7 @@
  *
  * \brief STA Task.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -46,10 +46,26 @@
 extern "C" {
 #endif
 
-/** Wi-Fi Settings. */
+/** Wi-Fi Settings - STA mode. */
 #define STA_WLAN_SSID                "DEMO_AP" /* < Destination SSID */
-#define STA_WLAN_AUTH                M2M_WIFI_SEC_WPA_PSK /* < Security manner */
-#define STA_WLAN_PSK                 "12345678" /* < Password for Destination SSID */
+#define STA_WLAN_AUTH                M2M_WIFI_SEC_OPEN/* < Security manner */
+#define STA_WLAN_PSK                 "1234567890" /* < Password for Destination SSID */
+
+/** WEP security setting for STA mode and/or AP mode */
+#define WEP_KEY_INDEX            M2M_WIFI_WEP_KEY_INDEX_1
+#define WEP_KEY                  "1234567890"
+#define WEP_KEY_SIZE             sizeof(WEP_KEY)
+#define WEP_AUTH_TYPE            WEP_ANY
+#define WEP_CONN_PARAM           {WEP_KEY_INDEX, WEP_KEY_SIZE, WEP_KEY, WEP_AUTH_TYPE}
+/* Note : In case of using WEP security on both STA and AP interfaces, the same
+password should be used for both interfaces. In addition to that, the same
+WEP authentication type (OPEN, SHARED, or ANY) should be used for both
+STA and AP interfaces.*/
+
+/** Wi-Fi Settings - AP mode. */
+#define AP_WLAN_SSID                "DEMO_AP" /* < WILC SSID */
+#define AP_WLAN_AUTH                M2M_WIFI_SEC_OPEN/* < Security manner M2M_WIFI_SEC_OPEN, M2M_WIFI_SEC_WPA_PSK*/
+#define AP_WLAN_PSK                 "1234567890" /* < Password for WILC SSID */
 
 /** Send buffer of TCP socket. */
 #define STA_PREFIX_BUFFER            "GET /data/2.5/weather?q="

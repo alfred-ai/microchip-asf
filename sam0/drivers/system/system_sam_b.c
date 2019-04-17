@@ -3,7 +3,7 @@
  *
  * \brief SAM System related functionality
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -805,10 +805,10 @@ enum status_code system_clock_peripheral_freq_config( \
  */
 void system_global_reset(void)
 {
-	LPMCU_MISC_REGS0->LPMCU_GLOBAL_RESET_0.reg &= \
-		~LPMCU_MISC_REGS_LPMCU_GLOBAL_RESET_0_GLOBAL_RSTN;
-	LPMCU_MISC_REGS0->LPMCU_GLOBAL_RESET_0.reg |= \
-		LPMCU_MISC_REGS_LPMCU_GLOBAL_RESET_0_GLOBAL_RSTN;
+	AON_GP_REGS0->AON_GLOBAL_RESET.reg &= \
+		~AON_GP_REGS_AON_GLOBAL_RESET_GLOBAL_RSTN;
+	AON_GP_REGS0->AON_GLOBAL_RESET.reg |= \
+			AON_GP_REGS_AON_GLOBAL_RESET_GLOBAL_RSTN;
 };
 
 /**
@@ -1518,6 +1518,35 @@ enum status_code system_clock_peripheral_aon_disable(enum system_peripheral_aon 
 
 		default:
 			return STATUS_ERR_INVALID_ARG;
+	}
+	return STATUS_OK;
+}
+
+/**
+ * \brief System aon peripheral reset
+ *
+ * Use this function to reset system aon peripheral.
+ *
+ * \param[in]  peripheral_aon    Selection peripheral
+ *
+ * \return Status of operation.
+ * \retval STATUS_OK               aon peripheral reset correctly
+ * \retval STATUS_ERR_INVALID_ARG  If data is invalid
+ */
+enum status_code system_peripheral_aon_reset(enum system_peripheral_aon peripheral_aon)
+{
+	switch (peripheral_aon) {
+		case PERIPHERAL_AON_SLEEP_TIMER:
+			AON_GP_REGS0->AON_GLOBAL_RESET.reg &= \
+				~AON_GP_REGS_AON_GLOBAL_RESET_SLEEP_TIMER_RSTN;
+			/* wait until sleep timer is not active */
+			while (!AON_SLEEP_TIMER0->CONTROL.bit.SLEEP_TIMER_NOT_ACTIVE);
+			AON_GP_REGS0->AON_GLOBAL_RESET.reg |= \
+				AON_GP_REGS_AON_GLOBAL_RESET_SLEEP_TIMER_RSTN;
+		break;
+
+		default:
+		return STATUS_ERR_INVALID_ARG;
 	}
 	return STATUS_OK;
 }

@@ -3,7 +3,7 @@
  *
  * \brief SAM GPIO Driver for SAMB11
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -80,8 +80,20 @@
  * is required. This driver provides an easy-to-use interface to the physical
  * pin input samplers and output drivers, so that pins can be read from or
  * written to for general purpose external hardware control.
+ * The GPIO I/O lines are differentiated based on whether digital or analog 
+ * functionalities are enabled, whether the pins are capable of waking-up the core
+ * from sleep into 3 groups called LP_GPIO_x, AO_GPIO_z, GPIO_MSy
  *
- * There are the different peripheral functions that are Software selectable
+ * The GPIO module also allows all GPIO pins (LP_GPIO_x, GPIO_MSy, AO_GPIO_z) to be
+ * configured as interrupt lines. Each interrupt line can be individually 
+ * masked and can generate an interrupt to CPU on rising, falling, or on high or 
+ * low levels.
+ *
+ * Only AO_GPIO_z pin can wakeup the ARM Subsystem as well as BLE Subsystem from ULP mode. 
+ * Along with wakeup configuration enabling as an external interrupt will wakeup ARM and
+ * generate interrupt request
+ *
+ * There are different peripheral functions that are Software selectable
  * on a per pin basis. This allows for maximum flexibility of mapping desired
  * interfaces on GPIO pins. MUX1 option allows for any MEGAMUX option to be
  * assigned to a GPIO.
@@ -171,6 +183,8 @@ enum gpio_pin_pull {
  *  \brief GPIO pinmux selection enum.
  *
  *  Enum for the pinmux settings of the GPIO pin configuration.
+ *  PINMUX = 0 to 3 is for AO_GPIO_z, PINMUX = 0 to 7 for LP_GPIO_x
+ *  PINMUX = 0,1 for GPIO_MSy
  */
 enum gpio_pinmux_sel {
 	/** PINMUX selection 0 */
@@ -237,14 +251,10 @@ struct gpio_config {
 	/** GPIO pull-up/pull-down for input pins */
 	enum gpio_pin_pull input_pull;
 
-	/** Enable lowest possible powerstate on the pin
-	 *
-	 *  \note All other configurations will be ignored, the pin will be disabled
-	 */
-	bool powersave;
 	/** Enable AON_GPIOs to wakeup MCU from ULP mode 
 	 *
-	 *  \note Only AON_GPIO_0, AON_GPIO_1, and AON_GPIO_2 could enable this feature
+	 *  \note Only AO_GPIO_0, could enable this feature as per current ROM firmware code
+	 *		Restrict to use only AO_GPIO_0 for waking up BLE and MCU
 	 */
 	bool aon_wakeup;
 };
@@ -289,12 +299,13 @@ bool gpio_pin_get_input_level(const uint8_t gpio_pin);
 bool gpio_pin_get_output_level(const uint8_t gpio_pin);
 void gpio_pin_set_output_level(const uint8_t gpio_pin, const bool level);
 void gpio_pin_toggle_output_level(const uint8_t gpio_pin);
+enum status_code gpio_pin_invert_output_level(const uint8_t gpio_pin, const bool invert);
 /** @} */
 
-/** \name PINMUX selection configuration
+/** \name PINMUX and MEGAMUX selection configuration.
  * @{
  */
-void gpio_pinmux_cofiguration(const uint8_t gpio_pin, uint16_t pinmux_sel);
+void gpio_pinmux_cofiguration(const uint8_t gpio_pin, uint16_t pinmux_megamux_sel);
 /** @}*/
 
 /** \name GPIO callback config
@@ -369,6 +380,7 @@ void gpio_init(void);
  * added to the user application.
  *
  *  - \subpage asfdoc_samb_gpio_basic_use_case
+ *  - \subpage asfdoc_samb_gpio_callback_use_case
  *
  * \page asfdoc_samb_gpio_document_revision_history Document Revision History
  *

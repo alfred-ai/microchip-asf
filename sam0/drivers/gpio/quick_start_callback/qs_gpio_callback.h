@@ -3,7 +3,7 @@
  *
  * \brief GPIO Quick Start Guide with Callbacks for SAMB11
  *
- * Copyright (C) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,12 +43,12 @@
  * \page asfdoc_samb_gpio_callback_use_case Quick Start Guide for GPIO - Callback
  *
  * In this use case, the GPIO module is configured for:
- *  \li One pin in input mode, with pull-up enabled
- *  \li One pin in output mode
+ *  \li One pin as an external interrupt with rising edge
+ *  \li UART to print message on getting the interrupt
  *
- * This use case sets up the AON GPIO to wakeup the MCU in low power sleep mode, if user
- * want to use in the ULP mode, must add platform driver related API: acquire_sleep_lock(),
- * release_sleep_lock(), register_resume_callback(cb).
+ * The GPIO Controller also allows all GPIO pins (LP_GPIO_x, GPIO_MSy, AO_GPIO_z) to 
+ * be configured as interrupt lines. Each interrupt line can be individually masked 
+ * and can generate an interrupt to CPU on rising, falling, or on high or low levels. 
  *
  * \subsection asfdoc_samb_gpio_callback_use_case_setup_code Code
  * Copy-paste the following setup code to your user application:
@@ -80,21 +80,19 @@
  *          struct to ensure that all values are initialized to known default
  *          settings.
  *
- * -# Adjust the configuration struct to request an input pin and enable AON wakeup.
+ * -# Adjust the configuration struct to request an input pin.
  *    \snippet qs_gpio_callback.c setup_gpio_2
  *
- * -# Configure AON GPIO pin with the initialized pin configuration struct.
+ * -# Configure GPIO pin with the initialized pin configuration struct.
  *    \snippet qs_gpio_callback.c setup_gpio_3
  *
- * -# Ini AON GPIO pin with the initialized pin configuration struct.
- *    \snippet qs_gpio_callback.c setup_gpio_3
- *
- * -# Initialize callback function.
+ * -# Initialize callback function. This assigns the GPIO ISR handler address in
+ *    interrupt vector table.
  *    \snippet qs_gpio_callback.c callback_init
  *
  * -# Register callback function.
  *    \snippet qs_gpio_callback.c callback_reg
- * -# Enable callback function.
+ * -# Enable callback function. This enables the interrupt
  *    \snippet qs_gpio_callback.c callback_en 
  * 
  * \section asfdoc_samb_gpio_callback_use_case_use_main Use Case
@@ -104,6 +102,6 @@
  * \snippet qs_gpio_callback.c main
  *
  * \subsection asfdoc_samb_gpio_callback_use_case_flow Workflow
- * -# Infinit loop.
+ * -# Infinite loop.
  *    \snippet qs_gpio_callback.c main
  */

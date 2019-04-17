@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAMG53 BSP APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -129,6 +129,8 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 	pio_pull_up(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK, PIO_PULLUP);
 //	pio_set_debounce_filter(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK, 10);
 	pio_handler_set_pin(CONF_WILC_SPI_INT_PIN, PIO_IT_LOW_LEVEL, chip_isr);
+	/* The status register of the PIO controller is cleared prior to enabling the interrupt */
+	pio_get_interrupt_status(CONF_WILC_SPI_INT_PIO);
 	pio_enable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
 	pio_handler_set_priority(CONF_WILC_SPI_INT_PIO, (IRQn_Type)CONF_WILC_SPI_INT_PIO_ID,
 			CONF_WILC_SPI_INT_PRIORITY);
@@ -143,6 +145,8 @@ void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 {
 	if (u8Enable) {
+		/* The status register of the PIO controller is cleared prior to enabling the interrupt */
+		pio_get_interrupt_status(CONF_WILC_SPI_INT_PIO);
 		pio_enable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
 	}
 	else {

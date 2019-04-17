@@ -3,7 +3,7 @@
  *
  * \brief SAM USB Driver.
  *
- * Copyright (C) 2014-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -45,6 +45,11 @@
  */
 #include <string.h>
 #include "usb.h"
+
+#ifndef UHD_BULK_INTERVAL_MIN
+/** Minimal bulk interval value */
+#  define UHD_BULK_INTERVAL_MIN 1
+#endif
 
 /** Fields definition from a LPM TOKEN  */
 #define  USB_LPM_ATTRIBUT_BLINKSTATE_MASK      (0xF << 0)
@@ -355,8 +360,21 @@ enum status_code usb_host_pipe_set_config(struct usb_module *module_inst, uint8_
 	/* set pipe config */
 	module_inst->hw->HOST.HostPipe[pipe_num].PCFG.bit.BK = 0;
 	module_inst->hw->HOST.HostPipe[pipe_num].PCFG.bit.PTYPE = ep_config->pipe_type;
+#if UHD_BULK_INTERVAL_MIN
+	if (ep_config->pipe_type == USB_HOST_PIPE_TYPE_BULK &&
+		!(ep_config->endpoint_address & 0x80)) {
+		module_inst->hw->HOST.HostPipe[pipe_num].BINTERVAL.reg =
+			max(ep_config->binterval, UHD_BULK_INTERVAL_MIN);
+	} else if (ep_config->pipe_type == USB_HOST_PIPE_TYPE_BULK) {
+		module_inst->hw->HOST.HostPipe[pipe_num].BINTERVAL.reg = 0;
+	} else {
+		module_inst->hw->HOST.HostPipe[pipe_num].BINTERVAL.reg =
+			ep_config->binterval;
+	}
+#else
 	module_inst->hw->HOST.HostPipe[pipe_num].BINTERVAL.reg =
 			ep_config->binterval;
+#endif
 	if (ep_config->endpoint_address == 0) {
 		module_inst->hw->HOST.HostPipe[pipe_num].PCFG.bit.PTOKEN =
 				USB_HOST_PIPE_TOKEN_SETUP;
@@ -659,17 +677,17 @@ enum status_code usb_host_pipe_read_job(struct usb_module *module_inst,
 	Assert(module_inst->hw);
 	Assert(pipe_num < USB_PIPE_NUM);
 
+	if (module_inst->hw->HOST.HostPipe[pipe_num].PCFG.bit.PTYPE ==
+			USB_HOST_PIPE_TYPE_DISABLE) {
+		return STATUS_ERR_NOT_INITIALIZED;
+	}
+
 	if (host_pipe_job_busy_status & (1 << pipe_num)) {
 		return STATUS_BUSY;
 	}
 
 	/* Set busy status */
 	host_pipe_job_busy_status |= 1 << pipe_num;
-
-	if (module_inst->hw->HOST.HostPipe[pipe_num].PCFG.bit.PTYPE ==
-			USB_HOST_PIPE_TYPE_DISABLE) {
-		return STATUS_ERR_NOT_INITIALIZED;
-	}
 
 	/* get pipe config from setting register */
 	usb_descriptor_table.usb_pipe_table[pipe_num].HostDescBank[0].ADDR.reg = (uint32_t)buf;
@@ -877,11 +895,44 @@ static void _usb_host_interrupt_handler(void)
 
 		/* host pipe transfer fail interrupt */
 		if (flags & USB_HOST_PINTFLAG_TRFAIL) {
-			/* Clear busy status */
-			host_pipe_job_busy_status &= ~(1 << pipe_int);
-			/* clear the flag */
-			_usb_instances->hw->HOST.HostPipe[pipe_int].PINTFLAG.reg =
-					USB_HOST_PINTFLAG_TRFAIL;
+			/* For ISO IN, check CRC error */
+			if (_usb_instances->hw->HOST.HostPipe[pipe_int].PCFG.bit.PTYPE == USB_HOST_PIPE_TYPE_ISO &&
+					_usb_instances->hw->HOST.HostPipe[pipe_int].PCFG.bit.PTOKEN == USB_HOST_PIPE_TOKEN_IN &&
+					usb_descriptor_table.usb_pipe_table[pipe_int].HostDescBank[0].STATUS_BK.bit.CRCERR) {
+				/* Clear busy status */
+				host_pipe_job_busy_status &= ~(1 << pipe_int);
+				/* clear the flag */
+				usb_descriptor_table.usb_pipe_table[pipe_int].HostDescBank[0].STATUS_BK.reg = 0;
+				_usb_instances->hw->HOST.HostPipe[pipe_int].PINTFLAG.reg =
+						USB_HOST_PINTFLAG_TRFAIL;
+				if(_usb_instances->host_pipe_enabled_callback_mask[pipe_int] &
+						(1 << USB_HOST_PIPE_CALLBACK_ERROR)) {
+					pipe_callback_para.pipe_num = pipe_int;
+					#define USB_STATUS_PIPE_CRC16ER   (1 << 4)
+					pipe_callback_para.pipe_error_status = USB_STATUS_PIPE_CRC16ER;
+					(_usb_instances->host_pipe_callback[pipe_int]
+							[USB_HOST_PIPE_CALLBACK_ERROR])(_usb_instances, &pipe_callback_para);
+				}
+			}
+#if UHD_BULK_INTERVAL_MIN
+			/* For Bulk IN, check flow error */
+			else if (_usb_instances->hw->HOST.HostPipe[pipe_int].PCFG.bit.PTYPE == USB_HOST_PIPE_TYPE_BULK &&
+					_usb_instances->hw->HOST.HostPipe[pipe_int].PCFG.bit.PTOKEN == USB_HOST_PIPE_TOKEN_IN) {
+				/* clear the flag */
+				usb_descriptor_table.usb_pipe_table[pipe_int].HostDescBank[0].STATUS_BK.reg = 0;
+				_usb_instances->hw->HOST.HostPipe[pipe_int].PINTFLAG.reg =
+						USB_HOST_PINTFLAG_TRFAIL;
+				/* Freeze until next SOF */
+				_usb_instances->hw->HOST.HostPipe[pipe_int].PSTATUSSET.reg = USB_HOST_PSTATUS_PFREEZE;
+			}
+#endif
+			/* Clear flag anyway */
+			else {
+				/* clear the flag */
+				usb_descriptor_table.usb_pipe_table[pipe_int].HostDescBank[0].STATUS_BK.reg = 0;
+				_usb_instances->hw->HOST.HostPipe[pipe_int].PINTFLAG.reg =
+						USB_HOST_PINTFLAG_TRFAIL;
+			}
 		}
 
 		/* host pipe error interrupt */
@@ -942,6 +993,20 @@ static void _usb_host_interrupt_handler(void)
 		if (flags & USB_HOST_INTFLAG_HSOF) {
 			/* clear the flag */
 			_usb_instances->hw->HOST.INTFLAG.reg = USB_HOST_INTFLAG_HSOF;
+#if UHD_BULK_INTERVAL_MIN
+			/* Start Bulk IN */
+			for (pipe_int = 1; pipe_int < USB_PIPE_NUM; pipe_int ++) {
+				if (!(host_pipe_job_busy_status & (1 << pipe_int))) {
+					continue;
+				}
+				if (_usb_instances->hw->HOST.HostPipe[pipe_int].PCFG.bit.PTYPE != USB_HOST_PIPE_TYPE_BULK ||
+					_usb_instances->hw->HOST.HostPipe[pipe_int].PCFG.bit.PTOKEN != USB_HOST_PIPE_TOKEN_IN) {
+					continue;
+				}
+				/* Continue */
+				_usb_instances->hw->HOST.HostPipe[pipe_int].PSTATUSCLR.reg = USB_HOST_PSTATUS_PFREEZE;
+			}
+#endif
 			if(_usb_instances->host_enabled_callback_mask & (1 << USB_HOST_CALLBACK_SOF)) {
 				(_usb_instances->host_callback[USB_HOST_CALLBACK_SOF])(_usb_instances);
 			}

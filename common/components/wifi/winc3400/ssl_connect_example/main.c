@@ -4,7 +4,7 @@
  *
  * \brief SSL Example.
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -122,6 +122,9 @@ static bool gbHostIpByName = false;
 
 /** Server host name. */
 static char server_host_name[] = MAIN_HOST_NAME;
+
+/** Secure socket connection start variable. */
+static bool gbSocketConnectInit = false;
 
 /**
  * \brief Configure UART console.
@@ -249,6 +252,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: DISCONNECTED\r\n");
 			gbConnectedWifi = false;
 			gbHostIpByName = false;
+			gbSocketConnectInit = false;
 			m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID),
 					MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 		}
@@ -267,6 +271,14 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		/* Obtain the IP Address by network name */
 		gethostbyname((uint8_t *)server_host_name);
 		break;
+	}
+	
+	case M2M_WIFI_RESP_GET_SYS_TIME:
+	{	
+		/* When the WINC connects to an AP it will automatically try to get the time
+		 by contacting various NTP servers, and when it gets a response, the M2M_WIFI_RESP_GET_SYS_TIME
+		 event is received on the host. Only when get this event should you try to connect on a secure socket.*/
+		gbSocketConnectInit = true;
 	}
 
 	default:
@@ -322,7 +334,7 @@ int main(void)
 	while (1) {
 		m2m_wifi_handle_events(NULL);
 
-		if (gbConnectedWifi && gbHostIpByName) {
+		if (gbConnectedWifi && gbHostIpByName && gbSocketConnectInit) {
 			if (gu8SocketStatus == SocketInit) {
 				if (tcp_client_socket < 0) {
 					gu8SocketStatus = SocketWaiting;

@@ -3,7 +3,7 @@
  *
  * \brief SAM System related functionality
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -167,6 +167,23 @@ enum ram_isr_table_index {
 	RAM_ISR_TABLE_BLE_WAKEUP_LP_INDEX      = 45,
 	RAM_ISR_TABLE_RXTX_SEQ_SLEEP_INDEX     = 46,
 	RAM_ISR_TABLE_BLE_CORE_INDEX           = 47,
+};
+
+/**
+ * \brief Table of possible system interrupt/exception vector priorities.
+ *
+ * Table of all possible interrupt and exception vector priorities within the
+ * device.
+ */
+enum system_interrupt_priority_level {
+	/** Priority level 0, the highest possible interrupt priority */
+	SYSTEM_INTERRUPT_PRIORITY_LEVEL_0  = 0,
+	/** Priority level 1 */
+	SYSTEM_INTERRUPT_PRIORITY_LEVEL_1  = 1,
+	/** Priority level 2 */
+	SYSTEM_INTERRUPT_PRIORITY_LEVEL_2  = 2,
+	/** Priority level 3, the lowest possible interrupt priority */
+	SYSTEM_INTERRUPT_PRIORITY_LEVEL_3  = 3,
 };
 
 /**
@@ -482,6 +499,7 @@ enum status_code system_clock_peripheral_freq_config( \
  */
 void system_global_reset(void);
 enum status_code system_peripheral_reset(enum system_peripheral peripheral);
+enum status_code system_peripheral_aon_reset(enum system_peripheral_aon peripheral_aon);
 /** @} */
 
 /**

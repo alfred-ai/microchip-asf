@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -23,6 +23,9 @@
  * 3. The name of Atmel may not be used to endorse or promote products derived
  *    from this software without specific prior written permission.
  *
+ * 4. This software may only be redistributed and used in connection with an
+ *    Atmel microcontroller product.
+ *
  * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
@@ -40,14 +43,14 @@
  */
 
 #include <stdio.h>
+#include "conf_wilc.h"
 #include "bsp/include/nm_bsp.h"
-#include "common/include/nm_common.h"
 #include "bus_wrapper/include/nm_bus_wrapper.h"
 #include "asf.h"
 #ifdef CONF_WILC_USE_SDIO
-#include "sdio_sam4s.h"
+#include "bus_wrapper/include/sdio_sam4s.h"
 #endif
-#include "conf_wilc.h"
+
 
 #define NM_BUS_MAX_TRX_SZ 4096
 
@@ -131,7 +134,7 @@ sint8 nm_bus_init(void *pvinit)
 	sint8 result = M2M_SUCCESS;
 #ifdef CONF_WILC_USE_I2C
 	/* TODO: implement I2C. */
-	result = M2M_ERR;
+	result = M2M_ERR_INIT;
 
 #elif defined CONF_WILC_USE_SPI
 	/* Configure SPI pins. */
@@ -160,6 +163,9 @@ sint8 nm_bus_init(void *pvinit)
 			CONF_WILC_SPI_NPCS, CONF_WILC_SPI_POL);
 	spi_set_clock_phase(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_PHA);
 	spi_set_bits_per_transfer(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
+	if (sysclk_get_cpu_hz() % CONF_WILC_SPI_CLOCK != 0) {
+		M2M_ERR("Warning: non-integer SPI clock divider not allowed, was floored to %lu.\r\n", sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK);
+	}
 	spi_set_baudrate_div(CONF_WILC_SPI, CONF_WILC_SPI_NPCS,
 			(sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK));
 	spi_set_transfer_delay(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_DLYBS,

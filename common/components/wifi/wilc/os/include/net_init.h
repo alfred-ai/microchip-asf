@@ -4,7 +4,7 @@
  *
  * \brief
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,6 +49,8 @@
 #define NET_MODE_AP				0x4
 #define NET_MODE_USE_LINK_LOCAL	0x8
 #define NET_MODE_USE_DHCP_SVR	0x10
+
+#define NET_IF_REQ_DHCP_CONF (M2M_P2P_CMD_BASE + 100)
 
 typedef struct {
 	uint8_t	*u8StaticIP;

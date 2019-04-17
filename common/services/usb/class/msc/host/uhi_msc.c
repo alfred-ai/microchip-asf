@@ -3,7 +3,7 @@
  *
  * \brief USB host Mass Storage Class interface.
  *
- * Copyright (C) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -64,7 +64,7 @@
  * \ingroup uhi_msc_group
  * \defgroup uhi_msc_group_internal Implementation of UHI Mass Storage Class
  *
- * Class internal implementation 
+ * Class internal implementation
  * @{
  */
 
@@ -273,7 +273,7 @@ uhc_enum_status_t uhi_msc_install(uhc_device_t * dev)
 				// A bad endpoint interrupt may be present on no compliance U-disk
 				break;
 			}
-			if (!uhd_ep_alloc(dev->address, ptr_ep)) {
+			if (!uhd_ep_alloc(dev->address, ptr_ep, dev->speed)) {
 				return UHC_ENUM_HARDWARE_LIMIT; // Endpoint allocation fail
 			}
 			if (ptr_ep->bEndpointAddress & USB_EP_DIR_IN) {

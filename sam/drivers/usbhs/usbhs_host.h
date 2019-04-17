@@ -3,7 +3,7 @@
  *
  * \brief USB Host Driver header file for USBHS.
  *
- * Copyright (C) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -234,6 +234,8 @@ extern "C" {
 #define uhd_get_pipe_type(p)                     (Rd_bits(USBHS->USBHS_HSTPIPCFG[p], USBHS_HSTPIPCFG_PTYPE_Msk))
 #define Is_uhd_pipe_int(p)  ((USBHS->USBHS_HSTPIPCFG[p] & USBHS_HSTPIPCFG_PTYPE_Msk)==USBHS_HSTPIPCFG_PTYPE_INTRPT)
 #define Is_uhd_pipe_iso(p)  ((USBHS->USBHS_HSTPIPCFG[p] & USBHS_HSTPIPCFG_PTYPE_Msk)==USBHS_HSTPIPCFG_PTYPE_ISO)
+#define Is_uhd_pipe_bulk(p) ((USBHS->USBHS_HSTPIPCFG[p] & USBHS_HSTPIPCFG_PTYPE_Msk)==USBHS_HSTPIPCFG_PTYPE_BLK)
+#define Is_uhd_pipe_bulk_in(p) ((USBHS->USBHS_HSTPIPCFG[p] & (USBHS_HSTPIPCFG_PTYPE_Msk|USBHS_HSTPIPCFG_PTOKEN_Msk))==(USBHS_HSTPIPCFG_PTYPE_BLK|USBHS_HSTPIPCFG_PTOKEN_IN))
 #define uhd_enable_pipe_bank_autoswitch(p)       (Set_bits(USBHS->USBHS_HSTPIPCFG[p], USBHS_HSTPIPCFG_AUTOSW))
 #define uhd_disable_pipe_bank_autoswitch(p)      (Clr_bits(USBHS->USBHS_HSTPIPCFG[p], USBHS_HSTPIPCFG_AUTOSW))
 #define Is_uhd_pipe_bank_autoswitch_enabled(p)   (Tst_bits(USBHS->USBHS_HSTPIPCFG[p], USBHS_HSTPIPCFG_AUTOSW))

@@ -6,7 +6,7 @@
  * This file defines various status codes returned by functions,
  * indicating success or failure as well as what kind of failure.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -52,7 +52,7 @@
 
 /* Note: this is a local workaround to avoid a pre-processor clash due to the
  * lwIP macro ERR_TIMEOUT. */
-#if defined(__LWIP_ERR_H__) && defined(ERR_TIMEOUT)
+#if (defined(LWIP_HDR_ERR_H) || defined(__LWIP_ERR_H__)) && defined(ERR_TIMEOUT)
 #if (ERR_TIMEOUT != -3)
 
 /* Internal check to make sure that the later restore of lwIP's ERR_TIMEOUT
@@ -106,7 +106,7 @@ enum status_code {
 
 typedef enum status_code status_code_t;
 
-#if defined(__LWIP_ERR_H__)
+#if defined(LWIP_HDR_ERR_H)
 #define ERR_TIMEOUT -3
 #endif
 

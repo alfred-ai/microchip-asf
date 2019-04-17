@@ -3,7 +3,7 @@
  *
  * \brief GPIO Quick Start Guide with Callbacks for SAMB
  *
- * Copyright (C) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -49,20 +49,11 @@ struct uart_module uart_instance;
 //! [module_inst]
 
 //! [callback_func]
-static void aon_gpio_0_callback(void)
+static void gpio_callback(void)
 {
-	puts("AO_GPIO_0 callback\r\n"); 
+	puts("GPIO callback\r\n"); 
 }
 
-static void aon_gpio_1_callback(void)
-{
-	puts("AO_GPIO_1 callback\r\n");
-}
-
-static void aon_gpio_2_callback(void)
-{
-	puts("AO_GPIO_2 callback\r\n");
-}
 //! [callback_func]
 
 //! [setup]
@@ -101,12 +92,10 @@ static void configure_gpio(void)
 	//! [setup_gpio_2]
 	config_gpio_pin.direction  = GPIO_PIN_DIR_INPUT;
 	config_gpio_pin.input_pull = GPIO_PIN_PULL_NONE;
-	config_gpio_pin.aon_wakeup = true;
+	config_gpio_pin.aon_wakeup = false;	
 	//! [setup_gpio_2]
 	//! [setup_gpio_3]
-	gpio_pin_set_config(PIN_AO_GPIO_0, &config_gpio_pin);
-	gpio_pin_set_config(PIN_AO_GPIO_1, &config_gpio_pin);
-	gpio_pin_set_config(PIN_AO_GPIO_2, &config_gpio_pin);
+	gpio_pin_set_config(BUTTON_0_PIN, &config_gpio_pin);
 	//! [setup_gpio_3]
 }
 
@@ -117,17 +106,11 @@ static void configure_gpio_callbacks(void)
 	gpio_init();
 //! [callback_init]
 	//! [callback_reg]
-	gpio_register_callback(PIN_AO_GPIO_0, aon_gpio_0_callback,
-			GPIO_CALLBACK_RISING);
-	gpio_register_callback(PIN_AO_GPIO_1, aon_gpio_1_callback,
-			GPIO_CALLBACK_RISING);
-	gpio_register_callback(PIN_AO_GPIO_2, aon_gpio_2_callback,
+	gpio_register_callback(BUTTON_0_PIN, gpio_callback,
 			GPIO_CALLBACK_RISING);
 	//! [callback_reg]
 	//! [callback_en]
-	gpio_enable_callback(PIN_AO_GPIO_0);
-	gpio_enable_callback(PIN_AO_GPIO_1);
-	gpio_enable_callback(PIN_AO_GPIO_2);
+	gpio_enable_callback(BUTTON_0_PIN);
 	//! [callback_en]
 }
 //! [setup]
