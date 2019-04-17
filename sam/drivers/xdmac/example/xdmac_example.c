@@ -3,7 +3,7 @@
  *
  * \brief SAM Direct Memory Access Controller driver example.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -227,11 +227,17 @@ int main(void)
 
 	xdmac_enable_interrupt(XDMAC, XDMA_CH);
 	xdmac_channel_enable_interrupt(XDMAC, XDMA_CH, XDMAC_CIE_BIE);
+#ifdef CONF_BOARD_ENABLE_CACHE
+	SCB_CleanDCache();
+#endif
 	xdmac_channel_enable(XDMAC, XDMA_CH);
 
 	/* Wait transfer finish */
 	while (!g_xfer_done) {
 	}
+#ifdef CONF_BOARD_ENABLE_CACHE
+	SCB_InvalidateDCache();
+#endif
 
 	/* Verify the transferred data */
 	for (i = 0; i < BUFFER_SIZE; i++) {

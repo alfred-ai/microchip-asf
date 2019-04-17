@@ -3,7 +3,7 @@
  *
  * \brief BLE Transparent Service Application Implementations
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -303,50 +303,65 @@ void ble_trans_service_send_buf(void)
 	uint16_t ind = 0;
 	uint16_t len = 0;
 	uint8_t buff = 0;
+	uint8_t len_to_send = 20, tx_offset=0;	
 	len = sio2host_rx(&buff, 1);
 
-	if (len){
+	if (len)
+	{
 		for (ind = 0; ind < len; ind++)
-              {
-		    if(buff != ENTER_BUTTON_PRESS)
-                  {
-		        if (!send_length)
-			 {
-				DBG_LOG("TX:");
-                      }                  
-			sio2host_putchar(buff);
-			if (buff == BACKSPACE_BUTTON_PRESS)
-			{
-				sio2host_putchar(SPACE_BAR);
+        {
+			if(buff != ENTER_BUTTON_PRESS)
+            {
+				if (!send_length)
+				{
+					DBG_LOG("TX:");
+                }                  
 				sio2host_putchar(buff);
-				if(send_length)
+				if (buff == BACKSPACE_BUTTON_PRESS)
+				{
+					sio2host_putchar(SPACE_BAR);
+					sio2host_putchar(buff);
+					if(send_length)
 					send_length--;
-			}
-				  
-			if(send_length < APP_TX_BUF_SIZE)
-                     {
-				if(buff != BACKSPACE_BUTTON_PRESS)
+				}
+				if(send_length < APP_TX_BUF_SIZE)
+                {
+					if(buff != BACKSPACE_BUTTON_PRESS)
 					send_data[send_length++] = buff;
-			 }
-                      else
-                      {
+				}
+                else
+                {
 					//csc_prf_send_data(&send_data[0], send_length);
-                                trans_update_tx_char_value(&trans_service_handler, &send_data[0], send_length);
-				    send_length = 0;
-			 }
-		    }
-                  else
-                  { // User press enter to send data
+					while(send_length > 0)
+					{	
+						if(send_length < len_to_send)
+							len_to_send = send_length;
+						trans_update_tx_char_value(&trans_service_handler, &send_data[tx_offset], len_to_send);
+						tx_offset += len_to_send;
+						send_length -= len_to_send;
+					}
+					send_length = 0;
+			    }
+		    }//end if(buff != ENTER_BUTTON_PRESS)
+            else
+            { // User press enter to send data
 				if(send_length){
 					ind = send_length;
-					send_length = 0;
 					//csc_prf_send_data(&send_data[0], ind);
-                                   trans_update_tx_char_value(&trans_service_handler, &send_data[0], ind);
+					while(send_length > 0)
+					{	
+						if(send_length < len_to_send)
+						len_to_send = send_length;
+						trans_update_tx_char_value(&trans_service_handler, &send_data[tx_offset], len_to_send);
+						tx_offset += len_to_send;
+						send_length -= len_to_send;
+					}
 					DBG_LOG("\r\n");
+					send_length = 0;					
 				}
-		    }
-		}
-	}
+		    }//end else
+		}//end for (ind = 0; ind < len; ind++)
+	}//end if (len)
 }
 
 static void ble_trans_service_handle_disconnect_event(at_ble_handle_t conn_handle)

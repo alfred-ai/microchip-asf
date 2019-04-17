@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -359,6 +359,10 @@ typedef struct {
 #define PMC_IMR_PCKRDY0 (0x1u << 8) /**< \brief (PMC_IMR) Programmable Clock Ready 0 Interrupt Mask */
 #define PMC_IMR_PCKRDY1 (0x1u << 9) /**< \brief (PMC_IMR) Programmable Clock Ready 1 Interrupt Mask */
 #define PMC_IMR_PCKRDY2 (0x1u << 10) /**< \brief (PMC_IMR) Programmable Clock Ready 2 Interrupt Mask */
+#define PMC_IMR_PCKRDY3 (0x1u << 11) /**< \brief (PMC_IMR) Programmable Clock Ready 3 Interrupt Mask */
+#define PMC_IMR_PCKRDY4 (0x1u << 12) /**< \brief (PMC_IMR) Programmable Clock Ready 4 Interrupt Mask */
+#define PMC_IMR_PCKRDY5 (0x1u << 13) /**< \brief (PMC_IMR) Programmable Clock Ready 5 Interrupt Mask */
+#define PMC_IMR_PCKRDY6 (0x1u << 14) /**< \brief (PMC_IMR) Programmable Clock Ready 6 Interrupt Mask */
 #define PMC_IMR_MOSCSELS (0x1u << 16) /**< \brief (PMC_IMR) Main Oscillator Selection Status Interrupt Mask */
 #define PMC_IMR_MOSCRCS (0x1u << 17) /**< \brief (PMC_IMR) Main On-Chip RC Status Interrupt Mask */
 #define PMC_IMR_CFDEV (0x1u << 18) /**< \brief (PMC_IMR) Clock Failure Detector Event Interrupt Mask */

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -107,13 +107,13 @@ typedef enum IRQn
   TC1_IRQn             = 24, /**< 24 SAMS70N20 Timer/Counter 1 (TC1) */
   TC2_IRQn             = 25, /**< 25 SAMS70N20 Timer/Counter 2 (TC2) */
   AFEC0_IRQn           = 29, /**< 29 SAMS70N20 Analog Front End 0 (AFEC0) */
+  DACC_IRQn            = 30, /**< 30 SAMS70N20 Digital To Analog Converter (DACC) */
   PWM0_IRQn            = 31, /**< 31 SAMS70N20 Pulse Width Modulation 0 (PWM0) */
   ICM_IRQn             = 32, /**< 32 SAMS70N20 Integrity Check Monitor (ICM) */
   ACC_IRQn             = 33, /**< 33 SAMS70N20 Analog Comparator (ACC) */
   USBHS_IRQn           = 34, /**< 34 SAMS70N20 USB Host / Device Controller (USBHS) */
   AFEC1_IRQn           = 40, /**< 40 SAMS70N20 Analog Front End 1 (AFEC1) */
   TWIHS2_IRQn          = 41, /**< 41 SAMS70N20 Two Wire Interface 2 HS (TWIHS2) */
-  SPI1_IRQn            = 42, /**< 42 SAMS70N20 Serial Peripheral Interface 1 (SPI1) */
   QSPI_IRQn            = 43, /**< 43 SAMS70N20 Quad I/O Serial Peripheral Interface (QSPI) */
   UART2_IRQn           = 44, /**< 44 SAMS70N20 UART 2 (UART2) */
   UART3_IRQn           = 45, /**< 45 SAMS70N20 UART 3 (UART3) */
@@ -126,10 +126,11 @@ typedef enum IRQn
   XDMAC_IRQn           = 58, /**< 58 SAMS70N20 DMA (XDMAC) */
   ISI_IRQn             = 59, /**< 59 SAMS70N20 Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAMS70N20 Pulse Width Modulation 1 (PWM1) */
-  RSWDT_IRQn           = 63, /**< 63 SAMS70N20 Reinforced Secure Watchdog Timer (RSWDT) */
-  ARM_IRQn             = 68, /**< 68 SAMS70N20 Floating Point Unit - IXC (ARM) */
-  I2SC0_IRQn           = 69, /**< 69 SAMS70N20 Inter-IC Sound controller (I2SC0) */
-  I2SC1_IRQn           = 70, /**< 70 SAMS70N20 Inter-IC Sound controller (I2SC1) */
+  FPU_IRQn             = 61, /**< 61 SAMS70N20 Floating Point Unit Registers (FPU) */
+  RSWDT_IRQn           = 63, /**< 63 SAMS70N20 Reinforced Safety Watchdog Timer (RSWDT) */
+  CCW_IRQn             = 64, /**< 64 SAMS70N20 System Control Registers (SystemControl) */
+  CCF_IRQn             = 65, /**< 65 SAMS70N20 System Control Registers (SystemControl) */
+  IXC_IRQn             = 68, /**< 68 SAMS70N20 Floating Point Unit Registers (FPU) */
 
   PERIPH_COUNT_IRQn    = 71  /**< Number of peripheral IDs */
 } IRQn_Type;
@@ -187,7 +188,7 @@ typedef struct _DeviceVectors
   void* pvReserved27;
   void* pvReserved28;
   void* pfnAFEC0_Handler;  /* 29 Analog Front End 0 */
-  void* pvReserved30;
+  void* pfnDACC_Handler;   /* 30 Digital To Analog Converter */
   void* pfnPWM0_Handler;   /* 31 Pulse Width Modulation 0 */
   void* pfnICM_Handler;    /* 32 Integrity Check Monitor */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
@@ -199,7 +200,7 @@ typedef struct _DeviceVectors
   void* pvReserved39;
   void* pfnAFEC1_Handler;  /* 40 Analog Front End 1 */
   void* pfnTWIHS2_Handler; /* 41 Two Wire Interface 2 HS */
-  void* pfnSPI1_Handler;   /* 42 Serial Peripheral Interface 1 */
+  void* pvReserved42;
   void* pfnQSPI_Handler;   /* 43 Quad I/O Serial Peripheral Interface */
   void* pfnUART2_Handler;  /* 44 UART 2 */
   void* pfnUART3_Handler;  /* 45 UART 3 */
@@ -218,16 +219,16 @@ typedef struct _DeviceVectors
   void* pfnXDMAC_Handler;  /* 58 DMA */
   void* pfnISI_Handler;    /* 59 Camera Interface */
   void* pfnPWM1_Handler;   /* 60 Pulse Width Modulation 1 */
-  void* pvReserved61;
+  void* pfnFPU_Handler;    /* 61 Floating Point Unit Registers (FPU) */
   void* pvReserved62;
-  void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
-  void* pvReserved64;
-  void* pvReserved65;
+  void* pfnRSWDT_Handler;  /* 63 Reinforced Safety Watchdog Timer (RSWDT) */
+  void* pfnCCW_Handler;    /* 64 System Control Registers (SystemControl) */
+  void* pfnCCF_Handler;    /* 65 System Control Registers (SystemControl) */
   void* pvReserved66;
   void* pvReserved67;
-  void* pfnARM_Handler;    /* 68 Floating Point Unit - IXC */
-  void* pfnI2SC0_Handler;  /* 69 Inter-IC Sound controller */
-  void* pfnI2SC1_Handler;  /* 70 Inter-IC Sound controller */
+  void* pfnIXC_Handler;    /* 68 Floating Point Unit Registers (FPU) */
+  void* pvReserved69;
+  void* pvReserved70;
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -247,13 +248,15 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
-void ARM_Handler        ( void );
+void CCF_Handler        ( void );
+void CCW_Handler        ( void );
+void DACC_Handler       ( void );
 void EFC_Handler        ( void );
+void FPU_Handler        ( void );
 void HSMCI_Handler      ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
-void I2SC0_Handler      ( void );
-void I2SC1_Handler      ( void );
+void IXC_Handler        ( void );
 void PIOA_Handler       ( void );
 void PIOB_Handler       ( void );
 void PIOD_Handler       ( void );
@@ -266,7 +269,6 @@ void RSWDT_Handler      ( void );
 void RTC_Handler        ( void );
 void RTT_Handler        ( void );
 void SPI0_Handler       ( void );
-void SPI1_Handler       ( void );
 void SSC_Handler        ( void );
 void SUPC_Handler       ( void );
 void TC0_Handler        ( void );
@@ -305,6 +307,7 @@ void XDMAC_Handler      ( void );
 #define __DTCM_PRESENT         1      /**< SAMS70N20 does provide a Data TCM           */
 #define __ITCM_PRESENT         1      /**< SAMS70N20 does provide an Instruction TCM   */
 #define __Vendor_SysTickConfig 0      /**< Set to 1 if different SysTick Config is used */
+#define __SAM_M7_REVB		   0	  /**< SAMS70N20 Revision A */
 
 /*
  * \brief CMSIS includes
@@ -327,10 +330,10 @@ void XDMAC_Handler      ( void );
 #include "component/aes.h"
 #include "component/afec.h"
 #include "component/chipid.h"
+#include "component/dacc.h"
 #include "component/efc.h"
 #include "component/gpbr.h"
 #include "component/hsmci.h"
-#include "component/i2sc.h"
 #include "component/icm.h"
 #include "component/isi.h"
 #include "component/matrix.h"
@@ -374,11 +377,11 @@ void XDMAC_Handler      ( void );
 #include "instance/usart2.h"
 #include "instance/usbhs.h"
 #include "instance/afec0.h"
+#include "instance/dacc.h"
 #include "instance/acc.h"
 #include "instance/icm.h"
 #include "instance/isi.h"
 #include "instance/tc3.h"
-#include "instance/spi1.h"
 #include "instance/pwm1.h"
 #include "instance/twihs2.h"
 #include "instance/afec1.h"
@@ -387,8 +390,6 @@ void XDMAC_Handler      ( void );
 #include "instance/xdmac.h"
 #include "instance/qspi.h"
 #include "instance/matrix.h"
-#include "instance/i2sc0.h"
-#include "instance/i2sc1.h"
 #include "instance/utmi.h"
 #include "instance/pmc.h"
 #include "instance/uart0.h"
@@ -440,13 +441,13 @@ void XDMAC_Handler      ( void );
 #define ID_TC1    (24) /**< \brief Timer/Counter 1 (TC1) */
 #define ID_TC2    (25) /**< \brief Timer/Counter 2 (TC2) */
 #define ID_AFEC0  (29) /**< \brief Analog Front End 0 (AFEC0) */
+#define ID_DACC   (30) /**< \brief Digital To Analog Converter (DACC) */
 #define ID_PWM0   (31) /**< \brief Pulse Width Modulation 0 (PWM0) */
 #define ID_ICM    (32) /**< \brief Integrity Check Monitor (ICM) */
 #define ID_ACC    (33) /**< \brief Analog Comparator (ACC) */
 #define ID_USBHS  (34) /**< \brief USB Host / Device Controller (USBHS) */
 #define ID_AFEC1  (40) /**< \brief Analog Front End 1 (AFEC1) */
 #define ID_TWIHS2 (41) /**< \brief Two Wire Interface 2 HS (TWIHS2) */
-#define ID_SPI1   (42) /**< \brief Serial Peripheral Interface 1 (SPI1) */
 #define ID_QSPI   (43) /**< \brief Quad I/O Serial Peripheral Interface (QSPI) */
 #define ID_UART2  (44) /**< \brief UART 2 (UART2) */
 #define ID_UART3  (45) /**< \brief UART 3 (UART3) */
@@ -460,9 +461,7 @@ void XDMAC_Handler      ( void );
 #define ID_ISI    (59) /**< \brief Camera Interface (ISI) */
 #define ID_PWM1   (60) /**< \brief Pulse Width Modulation 1 (PWM1) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
-#define ID_ARM    (68) /**< \brief Floating Point Unit - IXC (ARM) */
-#define ID_I2SC0  (69) /**< \brief Inter-IC Sound controller (I2SC0) */
-#define ID_I2SC1  (70) /**< \brief Inter-IC Sound controller (I2SC1) */
+#define ID_IXC    (68) /**< \brief Floating Point Unit - IXC (ARM) */
 
 #define ID_PERIPH_COUNT (71) /**< \brief Number of peripheral IDs */
 /*@}*/
@@ -486,11 +485,11 @@ void XDMAC_Handler      ( void );
 #define USART2 (0x4002C000U) /**< \brief (USART2) Base Address */
 #define USBHS  (0x40038000U) /**< \brief (USBHS ) Base Address */
 #define AFEC0  (0x4003C000U) /**< \brief (AFEC0 ) Base Address */
+#define DACC   (0x40040000U) /**< \brief (DACC  ) Base Address */
 #define ACC    (0x40044000U) /**< \brief (ACC   ) Base Address */
 #define ICM    (0x40048000U) /**< \brief (ICM   ) Base Address */
 #define ISI    (0x4004C000U) /**< \brief (ISI   ) Base Address */
 #define TC3    (0x40054000U) /**< \brief (TC3   ) Base Address */
-#define SPI1   (0x40058000U) /**< \brief (SPI1  ) Base Address */
 #define PWM1   (0x4005C000U) /**< \brief (PWM1  ) Base Address */
 #define TWIHS2 (0x40060000U) /**< \brief (TWIHS2) Base Address */
 #define AFEC1  (0x40064000U) /**< \brief (AFEC1 ) Base Address */
@@ -499,8 +498,6 @@ void XDMAC_Handler      ( void );
 #define XDMAC  (0x40078000U) /**< \brief (XDMAC ) Base Address */
 #define QSPI   (0x4007C000U) /**< \brief (QSPI  ) Base Address */
 #define MATRIX (0x40088000U) /**< \brief (MATRIX) Base Address */
-#define I2SC0  (0x4008C000U) /**< \brief (I2SC0 ) Base Address */
-#define I2SC1  (0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   (0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    (0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  (0x400E0800U) /**< \brief (UART0 ) Base Address */
@@ -533,11 +530,11 @@ void XDMAC_Handler      ( void );
 #define USART2 ((Usart  *)0x4002C000U) /**< \brief (USART2) Base Address */
 #define USBHS  ((Usbhs  *)0x40038000U) /**< \brief (USBHS ) Base Address */
 #define AFEC0  ((Afec   *)0x4003C000U) /**< \brief (AFEC0 ) Base Address */
+#define DACC   ((Dacc   *)0x40040000U) /**< \brief (DACC  ) Base Address */
 #define ACC    ((Acc    *)0x40044000U) /**< \brief (ACC   ) Base Address */
 #define ICM    ((Icm    *)0x40048000U) /**< \brief (ICM   ) Base Address */
 #define ISI    ((Isi    *)0x4004C000U) /**< \brief (ISI   ) Base Address */
 #define TC3    ((Tc     *)0x40054000U) /**< \brief (TC3   ) Base Address */
-#define SPI1   ((Spi    *)0x40058000U) /**< \brief (SPI1  ) Base Address */
 #define PWM1   ((Pwm    *)0x4005C000U) /**< \brief (PWM1  ) Base Address */
 #define TWIHS2 ((Twihs  *)0x40060000U) /**< \brief (TWIHS2) Base Address */
 #define AFEC1  ((Afec   *)0x40064000U) /**< \brief (AFEC1 ) Base Address */
@@ -546,8 +543,6 @@ void XDMAC_Handler      ( void );
 #define XDMAC  ((Xdmac  *)0x40078000U) /**< \brief (XDMAC ) Base Address */
 #define QSPI   ((Qspi   *)0x4007C000U) /**< \brief (QSPI  ) Base Address */
 #define MATRIX ((Matrix *)0x40088000U) /**< \brief (MATRIX) Base Address */
-#define I2SC0  ((I2sc   *)0x4008C000U) /**< \brief (I2SC0 ) Base Address */
-#define I2SC1  ((I2sc   *)0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   ((Utmi   *)0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    ((Pmc    *)0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  ((Uart   *)0x400E0800U) /**< \brief (UART0 ) Base Address */
@@ -597,11 +592,6 @@ void XDMAC_Handler      ( void );
 #define IROM_ADDR      (0x00800000u) /**< Internal ROM base address */
 #define DTCM_ADDR      (0x20000000u) /**< Data Tightly Coupled Memory base address */
 #define IRAM_ADDR      (0x20400000u) /**< Internal RAM base address */
-#define EBI_CS0_ADDR   (0x60000000u) /**< EBI Chip Select 0 base address */
-#define EBI_CS1_ADDR   (0x61000000u) /**< EBI Chip Select 1 base address */
-#define EBI_CS2_ADDR   (0x62000000u) /**< EBI Chip Select 2 base address */
-#define EBI_CS3_ADDR   (0x63000000u) /**< EBI Chip Select 3 base address */
-#define SDRAM_CS_ADDR  (0x70000000u) /**< SDRAM Chip Select base address */
 #define USBHS_RAM_ADDR (0xA0100000u) /**< USBHS Chip Select base address */
 
 /* ************************************************************************** */

@@ -3,7 +3,7 @@
  *
  * \brief LwIP configuration.
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,6 +44,8 @@
 
 extern int random_number(void);
 #define LWIP_RAND						random_number
+
+#define WINC1500_ETH_MODE //For Pbuf Issue in LwIp Module
 
 /*
    -----------------------------------------------

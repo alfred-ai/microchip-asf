@@ -118,9 +118,9 @@
 #ifdef __SAM4SD32C__
 #include "bsp/include/nm_bsp_sam4s_app.h"
 #endif //#ifdef __SAM4SD32C__
-#ifdef __SAME70Q21__
+#if (defined __SAME70Q21__) || (defined __SAME70Q21B__)
 #include "bsp/include/nm_bsp_same70_app.h"
-#endif //#ifdef __SAME70Q21__
+#endif //#if (defined __SAME70Q21__) || (defined __SAME70Q21B__)
 
 #include <asf.h>
 #include "driver/include/m2m_wifi.h"

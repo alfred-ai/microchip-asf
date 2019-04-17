@@ -3,7 +3,7 @@
  *
  * \brief Main functions for USB Device vendor example
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -306,7 +306,7 @@ void main_vendor_iso_out_received(udd_ep_status_t status,
  * After loading firmware, connect the board
  * (EVKxx,Xplain,...) to the USB Host. A Host application developed
  * on libusb library is provided with application note AVR4901.
-
+ *
  * \note
  * When the application is connected for the first time to the PC,
  * the operating system will detect a new peripheral:
@@ -314,9 +314,10 @@ void main_vendor_iso_out_received(udd_ep_status_t status,
  * - Choose "No, not this time" to connect to Windows Update for this installation
  * - click "Next"
  * - When requested to search the INF file, browse the avr4901\drivers\ folder
- *   provided package of the AVR4901 application note.
+ *   provided package of the AVR4901 http://ww1.microchip.com/downloads/en/appnotes/doc8481.pdf
+ *   application note.
  * - click "Next"
-*
+ *
  * \copydoc UI
  *
  * \section example About example

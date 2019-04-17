@@ -74,8 +74,8 @@ typedef struct {
 #define XDMACCHID_NUMBER 24
 typedef struct {
   __I  uint32_t  XDMAC_GTYPE;                  /**< \brief (Xdmac Offset: 0x00) Global Type Register */
-  __I  uint32_t  XDMAC_GCFG;                   /**< \brief (Xdmac Offset: 0x04) Global Configuration Register */
-  __I  uint32_t  XDMAC_GWAC;                   /**< \brief (Xdmac Offset: 0x08) Global Weighted Arbiter Configuration Register */
+  __IO uint32_t  XDMAC_GCFG;                   /**< \brief (Xdmac Offset: 0x04) Global Configuration Register */
+  __IO uint32_t  XDMAC_GWAC;                   /**< \brief (Xdmac Offset: 0x08) Global Weighted Arbiter Configuration Register */
   __O  uint32_t  XDMAC_GIE;                    /**< \brief (Xdmac Offset: 0x0C) Global Interrupt Enable Register */
   __O  uint32_t  XDMAC_GID;                    /**< \brief (Xdmac Offset: 0x10) Global Interrupt Disable Register */
   __I  uint32_t  XDMAC_GIM;                    /**< \brief (Xdmac Offset: 0x14) Global Interrupt Mask Register */

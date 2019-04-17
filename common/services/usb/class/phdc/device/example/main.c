@@ -3,7 +3,7 @@
  *
  * \brief Main functions
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -124,7 +124,7 @@ void main_phdc_disable(void)
  * \section intro Introduction
  * This example shows how to implement a USB Device PHDC
  * on Atmel MCU with USB module.
- * This example uses a IEEEE11073 stack skeleton which has the minimum to
+ * This example uses a IEEE11073 stack skeleton which has the minimum to
  * pass USB Command Verifier 2.0 Tool (CV2.0) tests from usb.org.
  * Note: No USB driver is provided by Atmel for PHDC, but it is not required
  * to execute CV2.0 PHDC tests.
@@ -149,7 +149,7 @@ void main_phdc_disable(void)
  *      <br>initializes clock
  *      <br>initializes interrupt
  *      <br>manages UI
- *    - ieee11073_skeleton.c, IEEEE11073 stack skeleton
+ *    - ieee11073_skeleton.c, IEEE11073 stack skeleton
  *    - specific implementation for each target "./examples/product_board/":
  *       - conf_foo.h   configuration of each module
  *       - ui.c        implement of user's interface (buttons, leds)

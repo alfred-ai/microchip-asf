@@ -3,7 +3,7 @@
  *
  * \brief USB host driver for Mass Storage Class interface.
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,7 +54,7 @@
  *
  * For more details for Atmel&reg; Software Framework (ASF) USB Host Stack,
  * refer to following application note:
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8486.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8486.pdf">
  *   AVR4950: ASF - USB Host Stack</a>
  *
  * \section asfdoc_uhi_msc_api_overview API Overview

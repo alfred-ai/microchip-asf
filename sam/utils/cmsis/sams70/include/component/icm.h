@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -56,7 +56,7 @@
 typedef struct {
   __IO uint32_t ICM_CFG;       /**< \brief (Icm Offset: 0x00) Configuration Register */
   __O  uint32_t ICM_CTRL;      /**< \brief (Icm Offset: 0x04) Control Register */
-  __O  uint32_t ICM_SR;        /**< \brief (Icm Offset: 0x08) Status Register */
+  __I  uint32_t ICM_SR;        /**< \brief (Icm Offset: 0x08) Status Register */
   __I  uint32_t Reserved1[1];
   __O  uint32_t ICM_IER;       /**< \brief (Icm Offset: 0x10) Interrupt Enable Register */
   __O  uint32_t ICM_IDR;       /**< \brief (Icm Offset: 0x14) Interrupt Disable Register */

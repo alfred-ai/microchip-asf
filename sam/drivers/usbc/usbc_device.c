@@ -4,7 +4,7 @@
  * \brief USB Device driver
  * Compliance with common driver UDD
  *
- * Copyright (c) 2012-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -91,6 +91,12 @@
  *
  * UDD_USB_INT_FUN<br>
  * Option to fit interrupt function to what defined in exception table.
+ *
+ * UDD_NO_SLEEP_MGR<br>
+ * Feature to work without sleep manager module.
+ * Default not defined.
+ * Note that with this feature defined sleep manager must not be used in
+ * application.
  *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodic

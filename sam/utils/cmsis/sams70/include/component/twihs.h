@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -144,11 +144,8 @@ typedef struct {
 #define TWIHS_CWGR_CKDIV_Pos 16
 #define TWIHS_CWGR_CKDIV_Msk (0x7u << TWIHS_CWGR_CKDIV_Pos) /**< \brief (TWIHS_CWGR) Clock Divider */
 #define TWIHS_CWGR_CKDIV(value) ((TWIHS_CWGR_CKDIV_Msk & ((value) << TWIHS_CWGR_CKDIV_Pos)))
-#define TWIHS_CWGR_CKSRC (0x1u << 20) /**< \brief (TWIHS_CWGR) Transfer Rate Clock Source */
-#define   TWIHS_CWGR_CKSRC_PERIPH_CK (0x0u << 20) /**< \brief (TWIHS_CWGR) Peripheral clock is used to generate the TWIHS baud rate. */
-#define   TWIHS_CWGR_CKSRC_PMC_PCK (0x1u << 20) /**< \brief (TWIHS_CWGR) PMC_PCKx is used to generate the TWIHS baud rate. */
 #define TWIHS_CWGR_HOLD_Pos 24
-#define TWIHS_CWGR_HOLD_Msk (0x1fu << TWIHS_CWGR_HOLD_Pos) /**< \brief (TWIHS_CWGR) TWD Hold Time Versus TWCK Falling */
+#define TWIHS_CWGR_HOLD_Msk (0x3fu << TWIHS_CWGR_HOLD_Pos) /**< \brief (TWIHS_CWGR) TWD Hold Time Versus TWCK Falling */
 #define TWIHS_CWGR_HOLD(value) ((TWIHS_CWGR_HOLD_Msk & ((value) << TWIHS_CWGR_HOLD_Pos)))
 /* -------- TWIHS_SR : (TWIHS Offset: 0x20) Status Register -------- */
 #define TWIHS_SR_TXCOMP (0x1u << 0) /**< \brief (TWIHS_SR) Transmission Completed (cleared by writing TWIHS_THR) */

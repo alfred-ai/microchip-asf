@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -117,8 +117,10 @@ typedef enum IRQn
   ICM_IRQn             = 32, /**< 32 SAMV70Q19 Integrity Check Monitor (ICM) */
   ACC_IRQn             = 33, /**< 33 SAMV70Q19 Analog Comparator (ACC) */
   USBHS_IRQn           = 34, /**< 34 SAMV70Q19 USB Host / Device Controller (USBHS) */
-  MCAN0_IRQn           = 35, /**< 35 SAMV70Q19 MCAN Controller 0 (MCAN0) */
-  MCAN1_IRQn           = 37, /**< 37 SAMV70Q19 MCAN Controller 1 (MCAN1) */
+  MCAN0_INT0_IRQn      = 35, /**< 35 SAMV70Q19 Controller Area Network (MCAN0) */
+  MCAN0_INT1_IRQn      = 36, /**< 36 SAMV70Q19 Controller Area Network (MCAN0) */
+  MCAN1_INT0_IRQn      = 37, /**< 37 SAMV70Q19 Controller Area Network (MCAN1) */
+  MCAN1_INT1_IRQn      = 38, /**< 38 SAMV70Q19 Controller Area Network (MCAN1) */
   AFEC1_IRQn           = 40, /**< 40 SAMV70Q19 Analog Front End 1 (AFEC1) */
   TWIHS2_IRQn          = 41, /**< 41 SAMV70Q19 Two Wire Interface 2 HS (TWIHS2) */
   SPI1_IRQn            = 42, /**< 42 SAMV70Q19 Serial Peripheral Interface 1 (SPI1) */
@@ -138,10 +140,14 @@ typedef enum IRQn
   XDMAC_IRQn           = 58, /**< 58 SAMV70Q19 DMA (XDMAC) */
   ISI_IRQn             = 59, /**< 59 SAMV70Q19 Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAMV70Q19 Pulse Width Modulation 1 (PWM1) */
+  FPU_IRQn             = 61, /**< 61 SAMV70Q19 Floating Point Unit Registers (FPU) */
   SDRAMC_IRQn          = 62, /**< 62 SAMV70Q19 SDRAM Controller (SDRAMC) */
-  RSWDT_IRQn           = 63, /**< 63 SAMV70Q19 Reinforced Secure Watchdog Timer (RSWDT) */
+  RSWDT_IRQn           = 63, /**< 63 SAMV70Q19 Reinforced Safety Watchdog Timer (RSWDT) */
+  CCW_IRQn             = 64, /**< 64 SAMV70Q19 System Control Registers (SystemControl) */
+  CCF_IRQn             = 65, /**< 65 SAMV70Q19 System Control Registers (SystemControl) */
+  IXC_IRQn             = 68, /**< 68 SAMV70Q19 Floating Point Unit Registers (FPU) */
 
-  PERIPH_COUNT_IRQn    = 64  /**< Number of peripheral IDs */
+  PERIPH_COUNT_IRQn    = 71  /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -202,10 +208,10 @@ typedef struct _DeviceVectors
   void* pfnICM_Handler;    /* 32 Integrity Check Monitor */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
   void* pfnUSBHS_Handler;  /* 34 USB Host / Device Controller */
-  void* pfnMCAN0_Handler;  /* 35 MCAN Controller 0 */
-  void* pvReserved36;
-  void* pfnMCAN1_Handler;  /* 37 MCAN Controller 1 */
-  void* pvReserved38;
+  void* pfnMCAN0_INT0_Handler;      /* 35  SAMV70Q19 Controller Area Network (MCAN0) */
+  void* pfnMCAN0_INT1_Handler;      /* 36  SAMV70Q19 Controller Area Network (MCAN0) */
+  void* pfnMCAN1_INT0_Handler;      /* 37  SAMV70Q19 Controller Area Network (MCAN1) */
+  void* pfnMCAN1_INT1_Handler;      /* 38  SAMV70Q19 Controller Area Network (MCAN1) */
   void* pvReserved39;
   void* pfnAFEC1_Handler;  /* 40 Analog Front End 1 */
   void* pfnTWIHS2_Handler; /* 41 Two Wire Interface 2 HS */
@@ -228,9 +234,16 @@ typedef struct _DeviceVectors
   void* pfnXDMAC_Handler;  /* 58 DMA */
   void* pfnISI_Handler;    /* 59 Camera Interface */
   void* pfnPWM1_Handler;   /* 60 Pulse Width Modulation 1 */
-  void* pvReserved61;
-  void* pfnSDRAMC_Handler; /* 62 SDRAM Controller */
-  void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
+  void* pfnFPU_Handler;    /* 61 Floating Point Unit Registers (FPU) */
+  void* pfnSDRAMC_Handler; /* 62 SDRAM Controller (SDRAMC) */
+  void* pfnRSWDT_Handler;  /* 63 Reinforced Safety Watchdog Timer (RSWDT) */
+  void* pfnCCW_Handler;    /* 64 System Control Registers (SystemControl) */
+  void* pfnCCF_Handler;    /* 65 System Control Registers (SystemControl) */
+  void* pvReserved66;
+  void* pvReserved67;
+  void* pfnIXC_Handler;    /* 68 Floating Point Unit Registers (FPU) */
+  void* pvReserved69;
+  void* pvReserved70;
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -250,13 +263,19 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
+void CCF_Handler        ( void );
+void CCW_Handler        ( void );
 void DACC_Handler       ( void );
 void EFC_Handler        ( void );
+void FPU_Handler        ( void );
 void HSMCI_Handler      ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
-void MCAN0_Handler      ( void );
-void MCAN1_Handler      ( void );
+void IXC_Handler        ( void );
+void MCAN0_INT0_Handler ( void );
+void MCAN0_INT1_Handler ( void );
+void MCAN1_INT0_Handler ( void );
+void MCAN1_INT1_Handler ( void );
 void MLB_Handler        ( void );
 void PIOA_Handler       ( void );
 void PIOB_Handler       ( void );
@@ -318,6 +337,7 @@ void XDMAC_Handler      ( void );
 #define __DTCM_PRESENT         1      /**< SAMV70Q19 does provide a Data TCM           */
 #define __ITCM_PRESENT         1      /**< SAMV70Q19 does provide an Instruction TCM   */
 #define __Vendor_SysTickConfig 0      /**< Set to 1 if different SysTick Config is used */
+#define __SAM_M7_REVB		   0	  /**< SAMV70Q19 Revision A */
 
 /*
  * \brief CMSIS includes
@@ -450,7 +470,7 @@ void XDMAC_Handler      ( void );
 #define ID_EFC    ( 6) /**< \brief Enhanced Embedded Flash Controller (EFC) */
 #define ID_UART0  ( 7) /**< \brief UART 0 (UART0) */
 #define ID_UART1  ( 8) /**< \brief UART 1 (UART1) */
-#define ID_SMC    ( 9) /**< \brief Static Memory Controller (SMC) */
+#define ID_SMC    ( 9) /**< \brief  (SMC) */
 #define ID_PIOA   (10) /**< \brief Parallel I/O Controller A (PIOA) */
 #define ID_PIOB   (11) /**< \brief Parallel I/O Controller B (PIOB) */
 #define ID_PIOC   (12) /**< \brief Parallel I/O Controller C (PIOC) */
@@ -500,7 +520,7 @@ void XDMAC_Handler      ( void );
 #define ID_SDRAMC (62) /**< \brief SDRAM Controller (SDRAMC) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
 
-#define ID_PERIPH_COUNT (64) /**< \brief Number of peripheral IDs */
+#define ID_PERIPH_COUNT (71) /**< \brief Number of peripheral IDs */
 /*@}*/
 
 /* ************************************************************************** */

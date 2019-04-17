@@ -3,7 +3,7 @@
  *
  * \brief USB device driver for Human Interface Device (HID) keyboard interface.
  *
- * Copyright (C) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,13 +54,13 @@
  *
  * For more details for Atmel&reg; Software Framework (ASF) USB Device Stack and
  * USB Device HID keyboard, refer to following application notes:
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8360.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8460.pdf">
  *   AVR4900: ASF - USB Device Stack</a>
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8446.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8446.pdf">
  *   AVR4904: ASF - USB Device HID Keyboard Application</a>
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8410.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8410.pdf">
  *   AVR4920: ASF - USB Device Stack - Compliance and Performance Figures</a>
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8411.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8411.pdf">
  *   AVR4921: ASF - USB Device Stack Differences between ASF V1 and V2</a>
  *
  * \section asfdoc_udi_hid_keyboard_api_overview API Overview
@@ -304,7 +304,7 @@ bool udi_hid_kbd_down(uint8_t key_id);
  * another "Composite Device" module, like "USB MSC (Composite Device)".
  *
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8445.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8445.pdf">
  * AVR4902 ASF - USB Composite Device</A>.
  *
  * \section udi_hid_keyboard_use_case_composite_setup Setup Steps

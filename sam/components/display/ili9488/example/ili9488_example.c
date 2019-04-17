@@ -3,7 +3,7 @@
  *
  * \brief lcd controller ili9488 example.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -61,6 +61,7 @@
  *
  * \section Usage
  *
+ * -# Connect mXT143E Xplained(ILI9488 LCD Controller) to EXT2 on SAME70 Xplained Pro Kit using 20 pin connector.
  * -# Build the program and download it inside the evaluation board.
  * -# Some text, image and basic shapes should be displayed on the LCD.
  *

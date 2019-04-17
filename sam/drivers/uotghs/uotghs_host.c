@@ -175,6 +175,12 @@ extern void udc_start(void);
  * To adjust bandwidth usage.
  * Default value 1.
  *
+ * UHD_NO_SLEEP_MGR<br>
+ * Feature to work without sleep manager module.
+ * Default not defined.
+ * Note that with this feature defined sleep manager must not be used in
+ * application.
+ *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodic
  * task. Thereby, the USB events use callbacks to transfer the information.
@@ -435,7 +441,7 @@ ISR(UHD_USB_INT_FUN)
 	bool b_mode_device;
 
 	pmc_enable_periph_clk(ID_UOTGHS);
-
+#ifndef UHD_NO_SLEEP_MGR
 	/* For fast wakeup clocks restore
 	 * In WAIT mode, clocks are switched to FASTRC.
 	 * After wakeup clocks should be restored, before that ISR should not
@@ -445,7 +451,7 @@ ISR(UHD_USB_INT_FUN)
 		cpu_irq_disable();
 		return;
 	}
-
+#endif
 #ifdef USB_ID_GPIO
 	if (Is_otg_id_transition()) {
 		while (!Is_otg_clock_usable());

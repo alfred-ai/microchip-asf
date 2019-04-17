@@ -45,6 +45,8 @@
 extern int random_number(void);
 #define LWIP_RAND						random_number
 
+#define WINC1500_ETH_MODE //For Pbuf Issue in LwIp Module
+
 /*
    -----------------------------------------------
    ---------- Platform specific locking ----------

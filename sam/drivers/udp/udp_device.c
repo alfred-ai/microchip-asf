@@ -3,7 +3,7 @@
  *
  * \brief USB Device Driver for UDP. Compliant with common UDD driver.
  *
- * Copyright (c) 2012-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2012-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -79,7 +79,13 @@
  *
  * UDD_USB_INT_FUN<br>
  * Option to fit interrupt function to what defined in exception table.
- * 
+ *
+ * UDD_NO_SLEEP_MGR<br>
+ * Feature to work without sleep manager module.
+ * Default not defined.
+ * Note that with this feature defined sleep manager must not be used in
+ * application.
+ *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodic
  * task. Thereby, the USB events use callbacks to transfer the information.
@@ -444,6 +450,7 @@ static bool udd_ep_interrupt(void);
  */
 ISR(UDD_USB_INT_FUN)
 {
+#ifndef UDD_NO_SLEEP_MGR
 	/* For fast wakeup clocks restore
 	 * In WAIT mode, clocks are switched to FASTRC.
 	 * After wakeup clocks should be restored, before that ISR should not
@@ -453,7 +460,7 @@ ISR(UDD_USB_INT_FUN)
 		cpu_irq_disable();
 		return;
 	}
-
+#endif
 	/* The UDP peripheral clock in the Power Management Controller (PMC)
 	   must be enabled before any read/write operations to the UDP registers
 	   including the UDP_TXVC register. */
@@ -1343,7 +1350,7 @@ static void udd_ep_finish_job(udd_ep_job_t * ptr_job, int status,
 	}
 	if (Is_udd_endpoint_type_in(ep_num)) {
 		ep_num |= USB_EP_DIR_IN;
-	}	
+	}
 	ptr_job->call_trans((status == UDD_EP_TRANSFER_ABORT) ?
 		UDD_EP_TRANSFER_ABORT : UDD_EP_TRANSFER_OK, ptr_job->buf_size, ep_num);
 }

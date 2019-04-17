@@ -93,7 +93,7 @@
 #define DATA_PKT_SZ				DATA_PKT_SZ_8K
 
 static uint8 	gu8Crc_off	=   0;
-#if (defined __SAMG55J19__) || (defined __SAM4SD32C__) || (defined __SAME70Q21__)
+#if (defined __SAMG55J19__) || (defined __SAM4SD32C__) || (defined __SAME70Q21__) || (defined __SAME70Q21B__)
 static sint8 nmi_spi_read(uint8* b, uint16 sz)
 {
 	tstrNmSpiRw spi;

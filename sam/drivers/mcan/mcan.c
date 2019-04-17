@@ -3,7 +3,7 @@
  *
  * \brief SAM Control Area Network (MCAN) Low Level Driver
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -160,6 +160,24 @@ static void _mcan_message_memory_init(Mcan *hw)
  */
 static void _mcan_set_configuration(Mcan *hw, struct mcan_config *config)
 {
+#if (SAMV71B || SAME70B || SAMV70B)
+	/* Timing setting for Rev B */
+	hw->MCAN_NBTP = MCAN_NBTP_NBRP(CONF_MCAN_NBTP_NBRP_VALUE) |
+			MCAN_NBTP_NSJW(CONF_MCAN_NBTP_NSJW_VALUE) |
+			MCAN_NBTP_NTSEG1(CONF_MCAN_NBTP_NTSEG1_VALUE) |
+			MCAN_NBTP_NTSEG2(CONF_MCAN_NBTP_NTSEG2_VALUE);
+	hw->MCAN_DBTP = MCAN_DBTP_DBRP(CONF_MCAN_FBTP_FBRP_VALUE) |
+			MCAN_DBTP_DSJW(CONF_MCAN_FBTP_FSJW_VALUE) |
+			MCAN_DBTP_DTSEG1(CONF_MCAN_FBTP_FTSEG1_VALUE) |
+			MCAN_DBTP_DTSEG2(CONF_MCAN_FBTP_FTSEG2_VALUE);
+
+	hw->MCAN_TDCR = MCAN_TDCR_TDCO(config->delay_compensation_offset) |
+		    MCAN_TDCR_TDCF(config->delay_compensation_filter_window_length);
+
+	if (config->tdc_enable) {
+		hw->MCAN_DBTP |= MCAN_DBTP_TDC_ENABLED;
+	}
+#else
 	/* Timing setting. */
 	hw->MCAN_BTP = MCAN_BTP_BRP(CONF_MCAN_NBTP_NBRP_VALUE) |
 			MCAN_BTP_SJW(CONF_MCAN_NBTP_NSJW_VALUE) |
@@ -174,7 +192,7 @@ static void _mcan_set_configuration(Mcan *hw, struct mcan_config *config)
 	if (config->tdc_enable) {
 		hw->MCAN_FBTP |= MCAN_FBTP_TDC_ENABLED;
 	}
-	
+#endif
 	hw->MCAN_RWD |= MCAN_RWD_WDC(config->watchdog_configuration);
 
 	if (config->transmit_pause) {
@@ -297,11 +315,17 @@ void mcan_set_baudrate(Mcan *hw, uint32_t baudrate)
 	gclk_mcan_value = sysclk_get_peripheral_hz();
 
 	mcan_nbtp_nbrp_value = gclk_mcan_value / baudrate / (3 + mcan_nbtp_ntseg1_value + mcan_nbtp_ntseg2_value);
-	
+#if (SAMV71B || SAME70B || SAMV70B)
+	hw->MCAN_NBTP = MCAN_NBTP_NBRP(mcan_nbtp_nbrp_value) |
+			MCAN_NBTP_NSJW(mcan_nbtp_nsgw_value) |
+			MCAN_NBTP_NTSEG1(mcan_nbtp_ntseg1_value) |
+			MCAN_NBTP_NTSEG2(mcan_nbtp_ntseg2_value);
+#else
 	hw->MCAN_BTP = MCAN_BTP_BRP(mcan_nbtp_nbrp_value) |
 			MCAN_BTP_SJW(mcan_nbtp_nsgw_value) |
 			MCAN_BTP_TSEG1(mcan_nbtp_ntseg1_value) |
 			MCAN_BTP_TSEG2(mcan_nbtp_ntseg2_value);
+#endif
 }
 
 /**
@@ -319,11 +343,17 @@ void mcan_fd_set_baudrate(Mcan *hw, uint32_t baudrate)
 	gclk_mcan_fd_value = sysclk_get_peripheral_hz();
 	
 	mcan_fd_dbtp_dbrp_value = gclk_mcan_fd_value / baudrate / (3 + mcan_fd_dbtp_dtseg1_value + mcan_fd_dbtp_dtseg2_value);
-	
+#if (SAMV71B || SAME70B || SAMV70B)
+	hw->MCAN_DBTP = MCAN_DBTP_DBRP(mcan_fd_dbtp_dbrp_value) |
+			MCAN_DBTP_DSJW(mcan_fd_dbtp_dsgw_value) |
+			MCAN_DBTP_DTSEG1(mcan_fd_dbtp_dtseg1_value) |
+			MCAN_DBTP_DTSEG2(mcan_fd_dbtp_dtseg2_value);
+#else
 	hw->MCAN_FBTP = MCAN_FBTP_FBRP(mcan_fd_dbtp_dbrp_value) |
 			MCAN_FBTP_FSJW(mcan_fd_dbtp_dsgw_value) |
 			MCAN_FBTP_FTSEG1(mcan_fd_dbtp_dtseg1_value) |
 			MCAN_FBTP_FTSEG2(mcan_fd_dbtp_dtseg2_value);
+#endif
 }
 
 /**
@@ -364,9 +394,13 @@ void mcan_enable_fd_mode(struct mcan_module *const module_inst)
 	/* Wait for the sync. */
 	while (!(module_inst->hw->MCAN_CCCR & MCAN_CCCR_INIT));
 	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CCE;
-
+#if (SAMV71B || SAME70B || SAMV70B)
+	module_inst->hw->MCAN_CCCR |= (MCAN_CCCR_FDOE | MCAN_CCCR_BRSE);
+#else
 	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CME(2);
 	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CMR(2);
+#endif
+
 }
 
 /** 
@@ -377,7 +411,15 @@ void mcan_enable_fd_mode(struct mcan_module *const module_inst)
  */
 void mcan_disable_fd_mode(struct mcan_module *const module_inst)
 {
+	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_INIT;
+	/* Wait for the sync. */
+	while (!(module_inst->hw->MCAN_CCCR & MCAN_CCCR_INIT));
+	module_inst->hw->MCAN_CCCR |= MCAN_CCCR_CCE;
+#if (SAMV71B || SAME70B || SAMV70B)
+	module_inst->hw->MCAN_CCCR &= MCAN_CCCR_FDOE;
+#else
 	module_inst->hw->MCAN_CCCR &= MCAN_CCCR_CME(MCAN_CCCR_CME_ISO11898_1);
+#endif
 }
 
 /**

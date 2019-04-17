@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -117,8 +117,10 @@ typedef enum IRQn
   ICM_IRQn             = 32, /**< 32 SAMV71Q20B Integrity Check Monitor (ICM) */
   ACC_IRQn             = 33, /**< 33 SAMV71Q20B Analog Comparator (ACC) */
   USBHS_IRQn           = 34, /**< 34 SAMV71Q20B USB Host / Device Controller (USBHS) */
-  MCAN0_IRQn           = 35, /**< 35 SAMV71Q20B MCAN Controller 0 (MCAN0) */
-  MCAN1_IRQn           = 37, /**< 37 SAMV71Q20B MCAN Controller 1 (MCAN1) */
+  MCAN0_INT0_IRQn      = 35, /**< 35 SAMV71Q20B Controller Area Network (MCAN0) */
+  MCAN0_INT1_IRQn      = 36, /**< 36 SAMV71Q20B Controller Area Network (MCAN0) */
+  MCAN1_INT0_IRQn      = 37, /**< 37 SAMV71Q20B Controller Area Network (MCAN1) */
+  MCAN1_INT1_IRQn      = 38, /**< 38 SAMV71Q20B Controller Area Network (MCAN1) */
   GMAC_IRQn            = 39, /**< 39 SAMV71Q20B Ethernet MAC (GMAC) */
   AFEC1_IRQn           = 40, /**< 40 SAMV71Q20B Analog Front End 1 (AFEC1) */
   TWIHS2_IRQn          = 41, /**< 41 SAMV71Q20B Two Wire Interface 2 HS (TWIHS2) */
@@ -139,12 +141,21 @@ typedef enum IRQn
   XDMAC_IRQn           = 58, /**< 58 SAMV71Q20B DMA (XDMAC) */
   ISI_IRQn             = 59, /**< 59 SAMV71Q20B Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAMV71Q20B Pulse Width Modulation 1 (PWM1) */
+  FPU_IRQn             = 61, /**< 61 SAMV71Q20B Floating Point Unit Registers (FPU) */
   SDRAMC_IRQn          = 62, /**< 62 SAMV71Q20B SDRAM Controller (SDRAMC) */
-  RSWDT_IRQn           = 63, /**< 63 SAMV71Q20B Reinforced Secure Watchdog Timer (RSWDT) */
-  I2SC0_IRQn           = 69, /**< 69 SAMV71Q20B Inter-IC Sound controller (I2SC0) */
+  RSWDT_IRQn           = 63, /**< 63 SAMV71Q20B Reinforced Safety Watchdog Timer (RSWDT) */
+  CCW_IRQn             = 64, /**< 64 SAMV71Q20B System Control Registers (SystemControl) */
+  CCF_IRQn             = 65, /**< 65 SAMV71Q20B System Control Registers (SystemControl) */
+  GMAC_Q1_IRQn         = 66, /**< 66 SAMV71Q20B Gigabit Ethernet MAC (GMAC) */
+  GMAC_Q2_IRQn         = 67, /**< 67 SAMV71Q20B Gigabit Ethernet MAC (GMAC) */
+  IXC_IRQn             = 68, /**< 68 SAMV71Q20B Floating Point Unit Registers (FPU) */
+  I2SC0_IRQn           = 69, /**< 69 SAMV71Q20B Inter-IC Sound Controller (I2SC0) */
   I2SC1_IRQn           = 70, /**< 70 SAMV71Q20B Inter-IC Sound controller (I2SC1) */
+  GMAC_Q3_IRQn         = 71, /**< 71 SAMV71Q20B Gigabit Ethernet MAC (GMAC) */
+  GMAC_Q4_IRQn         = 72, /**< 72 SAMV71Q20B Gigabit Ethernet MAC (GMAC) */
+  GMAC_Q5_IRQn         = 73, /**< 73 SAMV71Q20B Gigabit Ethernet MAC (GMAC) */
 
-  PERIPH_COUNT_IRQn    = 71  /**< Number of peripheral IDs */
+  PERIPH_COUNT_IRQn    = 74  /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -205,10 +216,10 @@ typedef struct _DeviceVectors
   void* pfnICM_Handler;    /* 32 Integrity Check Monitor */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
   void* pfnUSBHS_Handler;  /* 34 USB Host / Device Controller */
-  void* pfnMCAN0_Handler;  /* 35 MCAN Controller 0 */
-  void* pvReserved36;
-  void* pfnMCAN1_Handler;  /* 37 MCAN Controller 1 */
-  void* pvReserved38;
+  void* pfnMCAN0_INT0_Handler;     /* 35  Controller Area Network (MCAN0) */
+  void* pfnMCAN0_INT1_Handler;     /* 36  Controller Area Network (MCAN0) */
+  void* pfnMCAN1_INT0_Handler;     /* 37  Controller Area Network (MCAN1) */
+  void* pfnMCAN1_INT1_Handler;     /* 38  Controller Area Network (MCAN1) */
   void* pfnGMAC_Handler;   /* 39 Ethernet MAC */
   void* pfnAFEC1_Handler;  /* 40 Analog Front End 1 */
   void* pfnTWIHS2_Handler; /* 41 Two Wire Interface 2 HS */
@@ -231,16 +242,19 @@ typedef struct _DeviceVectors
   void* pfnXDMAC_Handler;  /* 58 DMA */
   void* pfnISI_Handler;    /* 59 Camera Interface */
   void* pfnPWM1_Handler;   /* 60 Pulse Width Modulation 1 */
-  void* pvReserved61;
+  void* pfnFPU_Handler;    /* 61 Floating Point Unit Registers (FPU) */
   void* pfnSDRAMC_Handler; /* 62 SDRAM Controller */
-  void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
-  void* pvReserved64;
-  void* pvReserved65;
-  void* pvReserved66;
-  void* pvReserved67;
-  void* pvReserved68;
-  void* pfnI2SC0_Handler;  /* 69 Inter-IC Sound controller */
+  void* pfnRSWDT_Handler;  /* 63 Reinforced Safety Watchdog Timer (RSWDT) */
+  void* pfnCCW_Handler;    /* 64 System Control Registers (SystemControl) */
+  void* pfnCCF_Handler;    /* 65 System Control Registers (SystemControl) */
+  void* pfnGMAC_Q1_Handler;/* 66 Gigabit Ethernet MAC (GMAC) */
+  void* pfnGMAC_Q2_Handler;/* 67 Gigabit Ethernet MAC (GMAC) */
+  void* pfnIXC_Handler;    /* 68 Floating Point Unit Registers (FPU) */
+  void* pfnI2SC0_Handler;  /* 69 Inter-IC Sound Controller (I2SC0) */
   void* pfnI2SC1_Handler;  /* 70 Inter-IC Sound controller */
+  void* pfnGMAC_Q3_Handler;/* 71 Gigabit Ethernet MAC (GMAC) */
+  void* pfnGMAC_Q4_Handler;/* 72 Gigabit Ethernet MAC (GMAC) */
+  void* pfnGMAC_Q5_Handler;/* 73 Gigabit Ethernet MAC (GMAC) */
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -260,16 +274,22 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
+void CCF_Handler        ( void );
+void CCW_Handler        ( void );
 void DACC_Handler       ( void );
 void EFC_Handler        ( void );
+void FPU_Handler        ( void );
 void GMAC_Handler       ( void );
 void HSMCI_Handler      ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
 void I2SC0_Handler      ( void );
 void I2SC1_Handler      ( void );
-void MCAN0_Handler      ( void );
-void MCAN1_Handler      ( void );
+void IXC_Handler        ( void );
+void MCAN0_INT0_Handler ( void );
+void MCAN0_INT1_Handler ( void );
+void MCAN1_INT0_Handler ( void );
+void MCAN1_INT1_Handler ( void );
 void MLB_Handler        ( void );
 void PIOA_Handler       ( void );
 void PIOB_Handler       ( void );
@@ -279,6 +299,11 @@ void PIOE_Handler       ( void );
 void PMC_Handler        ( void );
 void PWM0_Handler       ( void );
 void PWM1_Handler       ( void );
+void GMAC_Q1_Handler    ( void );
+void GMAC_Q2_Handler    ( void );
+void GMAC_Q3_Handler    ( void );
+void GMAC_Q4_Handler    ( void );
+void GMAC_Q5_Handler    ( void );
 void QSPI_Handler       ( void );
 void RSTC_Handler       ( void );
 void RSWDT_Handler      ( void );
@@ -331,6 +356,7 @@ void XDMAC_Handler      ( void );
 #define __DTCM_PRESENT         1      /**< SAMV71Q20B does provide a Data TCM           */
 #define __ITCM_PRESENT         1      /**< SAMV71Q20B does provide an Instruction TCM   */
 #define __Vendor_SysTickConfig 0      /**< Set to 1 if different SysTick Config is used */
+#define __SAM_M7_REVB		   1	  /**< SAMV71Q20 Revision B */
 
 /*
  * \brief CMSIS includes
@@ -521,7 +547,7 @@ void XDMAC_Handler      ( void );
 #define ID_I2SC0  (69) /**< \brief Inter-IC Sound controller (I2SC0) */
 #define ID_I2SC1  (70) /**< \brief Inter-IC Sound controller (I2SC1) */
 
-#define ID_PERIPH_COUNT (71) /**< \brief Number of peripheral IDs */
+#define ID_PERIPH_COUNT (74) /**< \brief Number of peripheral IDs */
 /*@}*/
 
 /* ************************************************************************** */

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -116,8 +116,10 @@ typedef enum IRQn
   ICM_IRQn             = 32, /**< 32 SAME70Q19 Integrity Check Monitor (ICM) */
   ACC_IRQn             = 33, /**< 33 SAME70Q19 Analog Comparator (ACC) */
   USBHS_IRQn           = 34, /**< 34 SAME70Q19 USB Host / Device Controller (USBHS) */
-  MCAN0_IRQn           = 35, /**< 35 SAME70Q19 MCAN Controller 0 (MCAN0) */
-  MCAN1_IRQn           = 37, /**< 37 SAME70Q19 MCAN Controller 1 (MCAN1) */
+  MCAN0_INT0_IRQn      = 35, /**< 35 SAME70Q19 Controller Area Network (MCAN0) */
+  MCAN0_INT1_IRQn      = 36, /**< 36 SAME70Q19 Controller Area Network (MCAN0) */
+  MCAN1_INT0_IRQn      = 37, /**< 37 SAME70Q19 Controller Area Network (MCAN1) */
+  MCAN1_INT1_IRQn      = 38, /**< 38 SAME70Q19 Controller Area Network (MCAN1) */
   GMAC_IRQn            = 39, /**< 39 SAME70Q19 Ethernet MAC (GMAC) */
   AFEC1_IRQn           = 40, /**< 40 SAME70Q19 Analog Front End 1 (AFEC1) */
   TWIHS2_IRQn          = 41, /**< 41 SAME70Q19 Two Wire Interface 2 HS (TWIHS2) */
@@ -137,13 +139,16 @@ typedef enum IRQn
   XDMAC_IRQn           = 58, /**< 58 SAME70Q19 DMA (XDMAC) */
   ISI_IRQn             = 59, /**< 59 SAME70Q19 Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAME70Q19 Pulse Width Modulation 1 (PWM1) */
+  FPU_IRQn             = 61, /**< 61 SAME70Q19 Floating Point Unit Registers (FPU) */
   SDRAMC_IRQn          = 62, /**< 62 SAME70Q19 SDRAM Controller (SDRAMC) */
-  RSWDT_IRQn           = 63, /**< 63 SAME70Q19 Reinforced Secure Watchdog Timer (RSWDT) */
-  ARM_IRQn             = 68, /**< 68 SAME70Q19 Floating Point Unit - IXC (ARM) */
-  I2SC0_IRQn           = 69, /**< 69 SAME70Q19 Inter-IC Sound controller (I2SC0) */
-  I2SC1_IRQn           = 70, /**< 70 SAME70Q19 Inter-IC Sound controller (I2SC1) */
+  RSWDT_IRQn           = 63, /**< 63 SAME70Q19 Reinforced Safety Watchdog Timer (RSWDT) */
+  CCW_IRQn             = 64, /**< 64 SAME70Q19 System Control Registers (SystemControl) */
+  CCF_IRQn             = 65, /**< 65 SAME70Q19 System Control Registers (SystemControl) */
+  GMAC_Q1_IRQn         = 66, /**< 66 SAME70Q19 Gigabit Ethernet MAC (GMAC) */
+  GMAC_Q2_IRQn         = 67, /**< 67 SAME70Q19 Gigabit Ethernet MAC (GMAC) */
+  IXC_IRQn             = 68, /**< 68 SAME70Q19 Floating Point Unit Registers (FPU) */
 
-  PERIPH_COUNT_IRQn    = 71  /**< Number of peripheral IDs */
+  PERIPH_COUNT_IRQn    = 74  /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -204,10 +209,10 @@ typedef struct _DeviceVectors
   void* pfnICM_Handler;    /* 32 Integrity Check Monitor */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
   void* pfnUSBHS_Handler;  /* 34 USB Host / Device Controller */
-  void* pfnMCAN0_Handler;  /* 35 MCAN Controller 0 */
-  void* pvReserved36;
-  void* pfnMCAN1_Handler;  /* 37 MCAN Controller 1 */
-  void* pvReserved38;
+  void* pfnMCAN0_INT0_Handler;     /* 35  Controller Area Network (MCAN0) */
+  void* pfnMCAN0_INT1_Handler;     /* 36  Controller Area Network (MCAN0) */
+  void* pfnMCAN1_INT0_Handler;     /* 37  Controller Area Network (MCAN1) */
+  void* pfnMCAN1_INT1_Handler;     /* 38  Controller Area Network (MCAN1) */
   void* pfnGMAC_Handler;   /* 39 Ethernet MAC */
   void* pfnAFEC1_Handler;  /* 40 Analog Front End 1 */
   void* pfnTWIHS2_Handler; /* 41 Two Wire Interface 2 HS */
@@ -230,16 +235,19 @@ typedef struct _DeviceVectors
   void* pfnXDMAC_Handler;  /* 58 DMA */
   void* pfnISI_Handler;    /* 59 Camera Interface */
   void* pfnPWM1_Handler;   /* 60 Pulse Width Modulation 1 */
-  void* pvReserved61;
-  void* pfnSDRAMC_Handler; /* 62 SDRAM Controller */
-  void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
-  void* pvReserved64;
-  void* pvReserved65;
-  void* pvReserved66;
-  void* pvReserved67;
-  void* pfnARM_Handler;    /* 68 Floating Point Unit - IXC */
-  void* pfnI2SC0_Handler;  /* 69 Inter-IC Sound controller */
-  void* pfnI2SC1_Handler;  /* 70 Inter-IC Sound controller */
+  void* pfnFPU_Handler;    /* 61 Floating Point Unit Registers (FPU) */
+  void* pfnSDRAMC_Handler; /* 62 SDRAM Controller (SDRAMC) */
+  void* pfnRSWDT_Handler;  /* 63 Reinforced Safety Watchdog Timer (RSWDT) */
+  void* pfnCCW_Handler;    /* 64 System Control Registers (SystemControl) */
+  void* pfnCCF_Handler;    /* 65 System Control Registers (SystemControl) */
+  void* pfnGMAC_Q1_Handler;/* 66 Gigabit Ethernet MAC (GMAC) */
+  void* pfnGMAC_Q2_Handler;/* 67 Gigabit Ethernet MAC (GMAC) */
+  void* pfnIXC_Handler;    /* 68 Floating Point Unit Registers (FPU) */
+  void* pvReserved69;
+  void* pvReserved70;
+  void* pvReserved71;
+  void* pvReserved72;
+  void* pvReserved73;
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -259,17 +267,20 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
-void ARM_Handler        ( void );
+void CCF_Handler        ( void );
+void CCW_Handler        ( void );
 void DACC_Handler       ( void );
 void EFC_Handler        ( void );
+void FPU_Handler        ( void );
 void GMAC_Handler       ( void );
 void HSMCI_Handler      ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
-void I2SC0_Handler      ( void );
-void I2SC1_Handler      ( void );
-void MCAN0_Handler      ( void );
-void MCAN1_Handler      ( void );
+void IXC_Handler        ( void );
+void MCAN0_INT0_Handler ( void );
+void MCAN0_INT1_Handler ( void );
+void MCAN1_INT0_Handler ( void );
+void MCAN1_INT1_Handler ( void );
 void PIOA_Handler       ( void );
 void PIOB_Handler       ( void );
 void PIOC_Handler       ( void );
@@ -278,6 +289,8 @@ void PIOE_Handler       ( void );
 void PMC_Handler        ( void );
 void PWM0_Handler       ( void );
 void PWM1_Handler       ( void );
+void GMAC_Q1_Handler    ( void );
+void GMAC_Q2_Handler    ( void );
 void QSPI_Handler       ( void );
 void RSTC_Handler       ( void );
 void RSWDT_Handler      ( void );
@@ -330,6 +343,7 @@ void XDMAC_Handler      ( void );
 #define __DTCM_PRESENT         1      /**< SAME70Q19 does provide a Data TCM           */
 #define __ITCM_PRESENT         1      /**< SAME70Q19 does provide an Instruction TCM   */
 #define __Vendor_SysTickConfig 0      /**< Set to 1 if different SysTick Config is used */
+#define __SAM_M7_REVB		   0	  /**< SAME70Q19 Revision A */
 
 /*
  * \brief CMSIS includes
@@ -357,7 +371,6 @@ void XDMAC_Handler      ( void );
 #include "component/gmac.h"
 #include "component/gpbr.h"
 #include "component/hsmci.h"
-#include "component/i2sc.h"
 #include "component/icm.h"
 #include "component/isi.h"
 #include "component/matrix.h"
@@ -425,8 +438,6 @@ void XDMAC_Handler      ( void );
 #include "instance/smc.h"
 #include "instance/sdramc.h"
 #include "instance/matrix.h"
-#include "instance/i2sc0.h"
-#include "instance/i2sc1.h"
 #include "instance/utmi.h"
 #include "instance/pmc.h"
 #include "instance/uart0.h"
@@ -514,11 +525,9 @@ void XDMAC_Handler      ( void );
 #define ID_PWM1   (60) /**< \brief Pulse Width Modulation 1 (PWM1) */
 #define ID_SDRAMC (62) /**< \brief SDRAM Controller (SDRAMC) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
-#define ID_ARM    (68) /**< \brief Floating Point Unit - IXC (ARM) */
-#define ID_I2SC0  (69) /**< \brief Inter-IC Sound controller (I2SC0) */
-#define ID_I2SC1  (70) /**< \brief Inter-IC Sound controller (I2SC1) */
+#define ID_IXC    (68) /**< \brief Floating Point Unit - IXC (ARM) */
 
-#define ID_PERIPH_COUNT (64) /**< \brief Number of peripheral IDs */
+#define ID_PERIPH_COUNT (74) /**< \brief Number of peripheral IDs */
 /*@}*/
 
 /* ************************************************************************** */
@@ -561,8 +570,6 @@ void XDMAC_Handler      ( void );
 #define SMC    (0x40080000U) /**< \brief (SMC   ) Base Address */
 #define SDRAMC (0x40084000U) /**< \brief (SDRAMC) Base Address */
 #define MATRIX (0x40088000U) /**< \brief (MATRIX) Base Address */
-#define I2SC0  (0x4008C000U) /**< \brief (I2SC0 ) Base Address */
-#define I2SC1  (0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   (0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    (0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  (0x400E0800U) /**< \brief (UART0 ) Base Address */
@@ -618,8 +625,6 @@ void XDMAC_Handler      ( void );
 #define SMC    ((Smc    *)0x40080000U) /**< \brief (SMC   ) Base Address */
 #define SDRAMC ((Sdramc *)0x40084000U) /**< \brief (SDRAMC) Base Address */
 #define MATRIX ((Matrix *)0x40088000U) /**< \brief (MATRIX) Base Address */
-#define I2SC0  ((I2sc   *)0x4008C000U) /**< \brief (I2SC0 ) Base Address */
-#define I2SC1  ((I2sc   *)0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   ((Utmi   *)0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    ((Pmc    *)0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  ((Uart   *)0x400E0800U) /**< \brief (UART0 ) Base Address */

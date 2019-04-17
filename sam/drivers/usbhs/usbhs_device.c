@@ -3,7 +3,7 @@
  *
  * \brief USB Device Driver for USBHS. Compliant with common UDD driver.
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -224,6 +224,12 @@ static void _dcache_invalidate(void *addr, uint32_t dsize)
  * UDD_INTERRUPT_NB_BANK(ep)<br>
  * Feature to reduce or increase interrupt endpoints buffering (1 to 2).
  * Default value 1.
+ *
+ * UDD_NO_SLEEP_MGR<br>
+ * Feature to work without sleep manager module.
+ * Default not defined.
+ * Note that with this feature defined sleep manager must not be used in
+ * application.
  *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodique
@@ -659,6 +665,7 @@ void udd_interrupt(void)
 ISR(UDD_USB_INT_FUN)
 #endif
 {
+#ifndef UDD_NO_SLEEP_MGR
 	/* For fast wakeup clocks restore
 	 * In WAIT mode, clocks are switched to FASTRC.
 	 * After wakeup clocks should be restored, before that ISR should not
@@ -668,7 +675,7 @@ ISR(UDD_USB_INT_FUN)
 		cpu_irq_disable();
 		return;
 	}
-
+#endif
 	if (Is_udd_sof()) {
 		udd_ack_sof();
 		if (Is_udd_full_speed_mode()) {

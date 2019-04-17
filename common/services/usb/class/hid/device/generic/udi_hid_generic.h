@@ -3,7 +3,7 @@
  *
  * \brief USB Device Human Interface Device (HID) generic interface.
  *
- * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -168,7 +168,7 @@ bool udi_hid_generic_send_report_in(uint8_t *data);
  * the steps for usage can be copied into, e.g., the main application function.
  * 
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8499.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8499.pdf">
  * AVR4905: ASF - USB Device HID Generic Application</A>.
  *
  * \section udi_hid_generic_basic_use_case Basic use case
@@ -297,7 +297,7 @@ bool udi_hid_generic_send_report_in(uint8_t *data);
  * another "Composite Device" module, like "USB MSC (Composite Device)".
  * 
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8445.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8445.pdf">
  * AVR4902 ASF - USB Composite Device</A>.
  *
  * \section udi_hid_generic_use_case_composite_setup Setup steps

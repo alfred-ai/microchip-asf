@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -157,18 +157,18 @@
   #define REG_GMAC_RXLPITIME                  (0x40050274U) /**< \brief (GMAC) Received LPI Time */
   #define REG_GMAC_TXLPI                      (0x40050278U) /**< \brief (GMAC) Transmit LPI Transitions */
   #define REG_GMAC_TXLPITIME                  (0x4005027CU) /**< \brief (GMAC) Transmit LPI Time */
-  #define REG_GMAC_ISRPQ                      (0x40050400U) /**< \brief (GMAC) Interrupt Status Register Priority Queue (index = 1) */
-  #define REG_GMAC_TBQBAPQ                    (0x40050440U) /**< \brief (GMAC) Transmit Buffer Queue Base Address Register Priority Queue (index = 1) */
-  #define REG_GMAC_RBQBAPQ                    (0x40050480U) /**< \brief (GMAC) Receive Buffer Queue Base Address Register Priority Queue (index = 1) */
-  #define REG_GMAC_RBSRPQ                     (0x400504A0U) /**< \brief (GMAC) Receive Buffer Size Register Priority Queue (index = 1) */
+  #define REG_GMAC_ISRPQ                      (0x400503FCU) /**< \brief (GMAC) Interrupt Status Register Priority Queue (index = 1) */
+  #define REG_GMAC_TBQBAPQ                    (0x4005043CU) /**< \brief (GMAC) Transmit Buffer Queue Base Address Register Priority Queue (index = 1) */
+  #define REG_GMAC_RBQBAPQ                    (0x4005047CU) /**< \brief (GMAC) Receive Buffer Queue Base Address Register Priority Queue (index = 1) */
+  #define REG_GMAC_RBSRPQ                     (0x4005049CU) /**< \brief (GMAC) Receive Buffer Size Register Priority Queue (index = 1) */
   #define REG_GMAC_CBSCR                      (0x400504BCU) /**< \brief (GMAC) Credit-Based Shaping Control Register */
   #define REG_GMAC_CBSISQA                    (0x400504C0U) /**< \brief (GMAC) Credit-Based Shaping IdleSlope Register for Queue A */
   #define REG_GMAC_CBSISQB                    (0x400504C4U) /**< \brief (GMAC) Credit-Based Shaping IdleSlope Register for Queue B */
   #define REG_GMAC_ST1RPQ                     (0x40050500U) /**< \brief (GMAC) Screening Type 1 Register Priority Queue (index = 0) */
   #define REG_GMAC_ST2RPQ                     (0x40050540U) /**< \brief (GMAC) Screening Type 2 Register Priority Queue (index = 0) */
-  #define REG_GMAC_IERPQ                      (0x40050600U) /**< \brief (GMAC) Interrupt Enable Register Priority Queue (index = 1) */
-  #define REG_GMAC_IDRPQ                      (0x40050620U) /**< \brief (GMAC) Interrupt Disable Register Priority Queue (index = 1) */
-  #define REG_GMAC_IMRPQ                      (0x40050640U) /**< \brief (GMAC) Interrupt Mask Register Priority Queue (index = 1) */
+  #define REG_GMAC_IERPQ                      (0x400505FCU) /**< \brief (GMAC) Interrupt Enable Register Priority Queue (index = 1) */
+  #define REG_GMAC_IDRPQ                      (0x4005061CU) /**< \brief (GMAC) Interrupt Disable Register Priority Queue (index = 1) */
+  #define REG_GMAC_IMRPQ                      (0x4005063CU) /**< \brief (GMAC) Interrupt Mask Register Priority Queue (index = 1) */
   #define REG_GMAC_ST2ER                      (0x400506E0U) /**< \brief (GMAC) Screening Type 2 Ethertype Register (index = 0) */
   #define REG_GMAC_ST2CW00                    (0x40050700U) /**< \brief (GMAC) Screening Type 2 Compare Word 0 Register (index = 0) */
   #define REG_GMAC_ST2CW10                    (0x40050704U) /**< \brief (GMAC) Screening Type 2 Compare Word 1 Register (index = 0) */
@@ -329,18 +329,18 @@
   #define REG_GMAC_RXLPITIME (*(__I  uint32_t*)0x40050274U) /**< \brief (GMAC) Received LPI Time */
   #define REG_GMAC_TXLPI     (*(__I  uint32_t*)0x40050278U) /**< \brief (GMAC) Transmit LPI Transitions */
   #define REG_GMAC_TXLPITIME (*(__I  uint32_t*)0x4005027CU) /**< \brief (GMAC) Transmit LPI Time */
-  #define REG_GMAC_ISRPQ     (*(__I  uint32_t*)0x40050400U) /**< \brief (GMAC) Interrupt Status Register Priority Queue (index = 1) */
-  #define REG_GMAC_TBQBAPQ   (*(__IO uint32_t*)0x40050440U) /**< \brief (GMAC) Transmit Buffer Queue Base Address Register Priority Queue (index = 1) */
-  #define REG_GMAC_RBQBAPQ   (*(__IO uint32_t*)0x40050480U) /**< \brief (GMAC) Receive Buffer Queue Base Address Register Priority Queue (index = 1) */
-  #define REG_GMAC_RBSRPQ    (*(__IO uint32_t*)0x400504A0U) /**< \brief (GMAC) Receive Buffer Size Register Priority Queue (index = 1) */
+  #define REG_GMAC_ISRPQ     (*(__I  uint32_t*)0x400503FCU) /**< \brief (GMAC) Interrupt Status Register Priority Queue (index = 1) */
+  #define REG_GMAC_TBQBAPQ   (*(__IO uint32_t*)0x4005043CU) /**< \brief (GMAC) Transmit Buffer Queue Base Address Register Priority Queue (index = 1) */
+  #define REG_GMAC_RBQBAPQ   (*(__IO uint32_t*)0x4005047CU) /**< \brief (GMAC) Receive Buffer Queue Base Address Register Priority Queue (index = 1) */
+  #define REG_GMAC_RBSRPQ    (*(__IO uint32_t*)0x4005049CU) /**< \brief (GMAC) Receive Buffer Size Register Priority Queue (index = 1) */
   #define REG_GMAC_CBSCR     (*(__IO uint32_t*)0x400504BCU) /**< \brief (GMAC) Credit-Based Shaping Control Register */
   #define REG_GMAC_CBSISQA   (*(__IO uint32_t*)0x400504C0U) /**< \brief (GMAC) Credit-Based Shaping IdleSlope Register for Queue A */
   #define REG_GMAC_CBSISQB   (*(__IO uint32_t*)0x400504C4U) /**< \brief (GMAC) Credit-Based Shaping IdleSlope Register for Queue B */
   #define REG_GMAC_ST1RPQ    (*(__IO uint32_t*)0x40050500U) /**< \brief (GMAC) Screening Type 1 Register Priority Queue (index = 0) */
   #define REG_GMAC_ST2RPQ    (*(__IO uint32_t*)0x40050540U) /**< \brief (GMAC) Screening Type 2 Register Priority Queue (index = 0) */
-  #define REG_GMAC_IERPQ     (*(__O  uint32_t*)0x40050600U) /**< \brief (GMAC) Interrupt Enable Register Priority Queue (index = 1) */
-  #define REG_GMAC_IDRPQ     (*(__O  uint32_t*)0x40050620U) /**< \brief (GMAC) Interrupt Disable Register Priority Queue (index = 1) */
-  #define REG_GMAC_IMRPQ     (*(__IO uint32_t*)0x40050640U) /**< \brief (GMAC) Interrupt Mask Register Priority Queue (index = 1) */
+  #define REG_GMAC_IERPQ     (*(__O  uint32_t*)0x400505FCU) /**< \brief (GMAC) Interrupt Enable Register Priority Queue (index = 1) */
+  #define REG_GMAC_IDRPQ     (*(__O  uint32_t*)0x4005061CU) /**< \brief (GMAC) Interrupt Disable Register Priority Queue (index = 1) */
+  #define REG_GMAC_IMRPQ     (*(__IO uint32_t*)0x4005063CU) /**< \brief (GMAC) Interrupt Mask Register Priority Queue (index = 1) */
   #define REG_GMAC_ST2ER     (*(__IO uint32_t*)0x400506E0U) /**< \brief (GMAC) Screening Type 2 Ethertype Register (index = 0) */
   #define REG_GMAC_ST2CW00   (*(__IO uint32_t*)0x40050700U) /**< \brief (GMAC) Screening Type 2 Compare Word 0 Register (index = 0) */
   #define REG_GMAC_ST2CW10   (*(__IO uint32_t*)0x40050704U) /**< \brief (GMAC) Screening Type 2 Compare Word 1 Register (index = 0) */

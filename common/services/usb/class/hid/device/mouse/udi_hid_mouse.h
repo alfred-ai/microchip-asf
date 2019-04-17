@@ -3,7 +3,7 @@
  *
  * \brief USB Device Human Interface Device (HID) mouse interface.
  *
- * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -223,7 +223,7 @@ bool udi_hid_mouse_btnleft(bool b_state);
  * the steps for usage can be copied into, e.g., the main application function.
  * 
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8409.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8409.pdf">
  * AVR4903: ASF - USB Device HID Mouse Application</A>.
  *
  * \section udi_hid_mouse_basic_use_case Basic use case
@@ -322,7 +322,7 @@ bool udi_hid_mouse_btnleft(bool b_state);
  * another "Composite Device" module, like "USB MSC (Composite Device)".
  * 
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8445.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8445.pdf">
  * AVR4902 ASF - USB Composite Device</A>.
  *
  * \section udi_hid_mouse_use_case_composite_setup Setup steps

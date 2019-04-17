@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -81,15 +81,21 @@ void Dummy_Handler(void);
 #endif /* _SAMV70_PIOC_INSTANCE_ */
 #pragma weak USART0_Handler=Dummy_Handler
 #pragma weak USART1_Handler=Dummy_Handler
+#ifdef _SAMV70_USART2_INSTANCE_
 #pragma weak USART2_Handler=Dummy_Handler
+#endif /* _SAMV70_USART2_INSTANCE_ */
 #pragma weak PIOD_Handler=Dummy_Handler
 #ifdef _SAMV70_PIOE_INSTANCE_
 #pragma weak PIOE_Handler=Dummy_Handler
 #endif /* _SAMV70_PIOE_INSTANCE_ */
+#ifdef _SAMV70_HSMCI_INSTANCE_
 #pragma weak HSMCI_Handler=Dummy_Handler
+#endif /* _SAMV70_HSMCI_INSTANCE_ */
 #pragma weak TWIHS0_Handler=Dummy_Handler
 #pragma weak TWIHS1_Handler=Dummy_Handler
+#ifdef _SAMV70_SPI0_INSTANCE_
 #pragma weak SPI0_Handler=Dummy_Handler
+#endif /* _SAMV70_SPI0_INSTANCE_ */
 #pragma weak SSC_Handler=Dummy_Handler
 #pragma weak TC0_Handler=Dummy_Handler
 #pragma weak TC1_Handler=Dummy_Handler
@@ -111,17 +117,27 @@ void Dummy_Handler(void);
 #pragma weak ICM_Handler=Dummy_Handler
 #pragma weak ACC_Handler=Dummy_Handler
 #pragma weak USBHS_Handler=Dummy_Handler
-#pragma weak MCAN0_Handler=Dummy_Handler
-#pragma weak MCAN1_Handler=Dummy_Handler
+#pragma weak MCAN0_INT0_Handler=Dummy_Handler
+#pragma weak MCAN0_INT1_Handler=Dummy_Handler
+#ifdef _SAMV70_MCAN1_INSTANCE_
+#pragma weak MCAN1_INT0_Handler=Dummy_Handler
+#pragma weak MCAN1_INT1_Handler=Dummy_Handler
+#endif /* _SAMV70_MCAN1_INSTANCE_ */
 #pragma weak AFEC1_Handler=Dummy_Handler
 #ifdef _SAMV70_TWIHS2_INSTANCE_
 #pragma weak TWIHS2_Handler=Dummy_Handler
 #endif /* _SAMV70_TWIHS2_INSTANCE_ */
+#ifdef _SAMV70_SPI1_INSTANCE_
 #pragma weak SPI1_Handler=Dummy_Handler
+#endif /* _SAMV70_SPI1_INSTANCE_ */
 #pragma weak QSPI_Handler=Dummy_Handler
 #pragma weak UART2_Handler=Dummy_Handler
+#ifdef _SAMV70_UART3_INSTANCE_
 #pragma weak UART3_Handler=Dummy_Handler
+#endif /* _SAMV70_UART3_INSTANCE_ */
+#ifdef _SAMV70_UART4_INSTANCE_
 #pragma weak UART4_Handler=Dummy_Handler
+#endif /* _SAMV70_UART4_INSTANCE_ */
 #ifdef _SAMV70_TC2_INSTANCE_
 #pragma weak TC6_Handler=Dummy_Handler
 #endif /* _SAMV70_TC2_INSTANCE_ */
@@ -200,17 +216,29 @@ const DeviceVectors __vector_table = {
 #endif /* _SAMV70_PIOC_INSTANCE_ */
         .pfnUSART0_Handler = (void*) USART0_Handler, /* 13 USART 0 */
         .pfnUSART1_Handler = (void*) USART1_Handler, /* 14 USART 1 */
+#ifdef _SAMV70_USART2_INSTANCE_
         .pfnUSART2_Handler = (void*) USART2_Handler, /* 15 USART 2 */
+#else
+        .pvReserved15      = (void*) (0UL),          /* 15 Reserved */
+#endif /* _SAMV70_USART2_INSTANCE_ */
         .pfnPIOD_Handler   = (void*) PIOD_Handler,   /* 16 Parallel I/O Controller D */
 #ifdef _SAMV70_PIOE_INSTANCE_
         .pfnPIOE_Handler   = (void*) PIOE_Handler,   /* 17 Parallel I/O Controller E */
 #else
         .pvReserved17      = (void*) (0UL),          /* 17 Reserved */
 #endif /* _SAMV70_PIOE_INSTANCE_ */
+#ifdef _SAMV70_HSMCI_INSTANCE_
         .pfnHSMCI_Handler  = (void*) HSMCI_Handler,  /* 18 Multimedia Card Interface */
+#else
+        .pvReserved18      = (void*) (0UL),          /* 18 Reserved */
+#endif /* _SAMV70_HSMCI_INSTANCE_ */
         .pfnTWIHS0_Handler = (void*) TWIHS0_Handler, /* 19 Two Wire Interface 0 HS */
         .pfnTWIHS1_Handler = (void*) TWIHS1_Handler, /* 20 Two Wire Interface 1 HS */
+#ifdef _SAMV70_SPI0_INSTANCE_
         .pfnSPI0_Handler   = (void*) SPI0_Handler,   /* 21 Serial Peripheral Interface 0 */
+#else
+        .pvReserved21      = (void*) (0UL),          /* 21 Reserved */
+#endif /* _SAMV70_SPI0_INSTANCE_ */
         .pfnSSC_Handler    = (void*) SSC_Handler,    /* 22 Synchronous Serial Controller */
         .pfnTC0_Handler    = (void*) TC0_Handler,    /* 23 Timer/Counter 0 */
         .pfnTC1_Handler    = (void*) TC1_Handler,    /* 24 Timer/Counter 1 */
@@ -240,10 +268,15 @@ const DeviceVectors __vector_table = {
         .pfnICM_Handler    = (void*) ICM_Handler,    /* 32 Integrity Check Monitor */
         .pfnACC_Handler    = (void*) ACC_Handler,    /* 33 Analog Comparator */
         .pfnUSBHS_Handler  = (void*) USBHS_Handler,  /* 34 USB Host / Device Controller */
-        .pfnMCAN0_Handler  = (void*) MCAN0_Handler,  /* 35 MCAN Controller 0 */
-        .pvReserved36      = (void*) (0UL),          /* 36 Reserved */
-        .pfnMCAN1_Handler  = (void*) MCAN1_Handler,  /* 37 MCAN Controller 1 */
+        .pfnMCAN0_INT0_Handler  = (void*) MCAN0_INT0_Handler, /* 35 Controller Area Network */
+        .pfnMCAN0_INT1_Handler  = (void*) MCAN0_INT1_Handler, /* 36 Controller Area Network */
+#ifdef _SAMV70_MCAN1_INSTANCE_
+        .pfnMCAN1_INT0_Handler  = (void*) MCAN1_INT0_Handler, /* 37 Controller Area Network */
+        .pfnMCAN1_INT1_Handler  = (void*) MCAN1_INT1_Handler, /* 38 Controller Area Network */
+#else
+        .pvReserved37      = (void*) (0UL),          /* 37 Reserved */
         .pvReserved38      = (void*) (0UL),          /* 38 Reserved */
+#endif /* _SAMV70_MCAN1_INSTANCE_ */
         .pvReserved39      = (void*) (0UL),          /* 39 Reserved */
         .pfnAFEC1_Handler  = (void*) AFEC1_Handler,  /* 40 Analog Front End 1 */
 #ifdef _SAMV70_TWIHS2_INSTANCE_
@@ -251,11 +284,23 @@ const DeviceVectors __vector_table = {
 #else
         .pvReserved41      = (void*) (0UL),          /* 41 Reserved */
 #endif /* _SAMV70_TWIHS2_INSTANCE_ */
+#ifdef _SAMV70_SPI1_INSTANCE_
         .pfnSPI1_Handler   = (void*) SPI1_Handler,   /* 42 Serial Peripheral Interface 1 */
+#else
+        .pvReserved42      = (void*) (0UL),          /* 42 Reserved */
+#endif /* _SAMV70_SPI1_INSTANCE_ */
         .pfnQSPI_Handler   = (void*) QSPI_Handler,   /* 43 Quad I/O Serial Peripheral Interface */
         .pfnUART2_Handler  = (void*) UART2_Handler,  /* 44 UART 2 */
+#ifdef _SAMV70_UART3_INSTANCE_
         .pfnUART3_Handler  = (void*) UART3_Handler,  /* 45 UART 3 */
+#else
+        .pvReserved45      = (void*) (0UL),          /* 45 Reserved */
+#endif /* _SAMV70_UART3_INSTANCE_ */
+#ifdef _SAMV70_UART4_INSTANCE_
         .pfnUART4_Handler  = (void*) UART4_Handler,  /* 46 UART 4 */
+#else
+        .pvReserved46      = (void*) (0UL),          /* 46 Reserved */
+#endif /* _SAMV70_UART4_INSTANCE_ */
 #ifdef _SAMV70_TC2_INSTANCE_
         .pfnTC6_Handler    = (void*) TC6_Handler,    /* 47 Timer/Counter 6 */
 #else

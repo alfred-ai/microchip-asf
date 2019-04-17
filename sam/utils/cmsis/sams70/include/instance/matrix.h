@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -55,6 +55,10 @@
   #define REG_MATRIX_MCFG5                    (0x40088014U) /**< \brief (MATRIX) Master Configuration Register 5 */
   #define REG_MATRIX_MCFG6                    (0x40088018U) /**< \brief (MATRIX) Master Configuration Register 6 */
   #define REG_MATRIX_MCFG8                    (0x40088020U) /**< \brief (MATRIX) Master Configuration Register 8 */
+  #define REG_MATRIX_MCFG9                    (0x40088024U) /**< \brief (MATRIX) Master Configuration Register 9 */
+  #define REG_MATRIX_MCFG10                   (0x40088028U) /**< \brief (MATRIX) Master Configuration Register 10 */
+  #define REG_MATRIX_MCFG11                   (0x4008802CU) /**< \brief (MATRIX) Master Configuration Register 11 */
+  #define REG_MATRIX_MCFG12                   (0x40088030U) /**< \brief (MATRIX) Master Configuration Register 12 */
   #define REG_MATRIX_SCFG                     (0x40088040U) /**< \brief (MATRIX) Slave Configuration Register */
   #define REG_MATRIX_PRAS0                    (0x40088080U) /**< \brief (MATRIX) Priority Register A for Slave 0 */
   #define REG_MATRIX_PRBS0                    (0x40088084U) /**< \brief (MATRIX) Priority Register B for Slave 0 */
@@ -76,6 +80,8 @@
   #define REG_MATRIX_PRBS8                    (0x400880C4U) /**< \brief (MATRIX) Priority Register B for Slave 8 */
   #define REG_MATRIX_MRCR                     (0x40088100U) /**< \brief (MATRIX) Master Remap Control Register */
   #define REG_CCFG_SYSIO                      (0x40088114U) /**< \brief (MATRIX) System I/O Configuration Register */
+  #define REG_CCFG_PCCR                       (0x40088118U) /**< \brief (MATRIX) Peripheral Clock Configuration Register */
+  #define REG_CCFG_DYNCKG                     (0x4008811CU) /**< \brief (MATRIX) Dynamic Clock Gating Register */
   #define REG_CCFG_SMCNFCS                    (0x40088124U) /**< \brief (MATRIX) SMC NAND Flash Chip Select Configuration Register */
   #define REG_MATRIX_WPMR                     (0x400881E4U) /**< \brief (MATRIX) Write Protection Mode Register */
   #define REG_MATRIX_WPSR                     (0x400881E8U) /**< \brief (MATRIX) Write Protection Status Register */
@@ -89,6 +95,10 @@
   #define REG_MATRIX_MCFG5   (*(__IO uint32_t*)0x40088014U) /**< \brief (MATRIX) Master Configuration Register 5 */
   #define REG_MATRIX_MCFG6   (*(__IO uint32_t*)0x40088018U) /**< \brief (MATRIX) Master Configuration Register 6 */
   #define REG_MATRIX_MCFG8   (*(__IO uint32_t*)0x40088020U) /**< \brief (MATRIX) Master Configuration Register 8 */
+  #define REG_MATRIX_MCFG9   (*(__IO uint32_t*)0x40088024U) /**< \brief (MATRIX) Master Configuration Register 9 */
+  #define REG_MATRIX_MCFG10  (*(__IO uint32_t*)0x40088028U) /**< \brief (MATRIX) Master Configuration Register 10 */
+  #define REG_MATRIX_MCFG11  (*(__IO uint32_t*)0x4008802CU) /**< \brief (MATRIX) Master Configuration Register 11 */
+  #define REG_MATRIX_MCFG12  (*(__IO uint32_t*)0x40088030U) /**< \brief (MATRIX) Master Configuration Register 12 */
   #define REG_MATRIX_SCFG    (*(__IO uint32_t*)0x40088040U) /**< \brief (MATRIX) Slave Configuration Register */
   #define REG_MATRIX_PRAS0   (*(__IO uint32_t*)0x40088080U) /**< \brief (MATRIX) Priority Register A for Slave 0 */
   #define REG_MATRIX_PRBS0   (*(__IO uint32_t*)0x40088084U) /**< \brief (MATRIX) Priority Register B for Slave 0 */
@@ -110,6 +120,8 @@
   #define REG_MATRIX_PRBS8   (*(__IO uint32_t*)0x400880C4U) /**< \brief (MATRIX) Priority Register B for Slave 8 */
   #define REG_MATRIX_MRCR    (*(__IO uint32_t*)0x40088100U) /**< \brief (MATRIX) Master Remap Control Register */
   #define REG_CCFG_SYSIO     (*(__IO uint32_t*)0x40088114U) /**< \brief (MATRIX) System I/O Configuration Register */
+  #define REG_CCFG_PCCR      (*(__IO uint32_t*)0x40088118U) /**< \brief (MATRIX) Peripheral Clock Configuration Register */
+  #define REG_CCFG_DYNCKG    (*(__IO uint32_t*)0x4008811CU) /**< \brief (MATRIX) Dynamic Clock Gating Register */
   #define REG_CCFG_SMCNFCS   (*(__IO uint32_t*)0x40088124U) /**< \brief (MATRIX) SMC NAND Flash Chip Select Configuration Register */
   #define REG_MATRIX_WPMR    (*(__IO uint32_t*)0x400881E4U) /**< \brief (MATRIX) Write Protection Mode Register */
   #define REG_MATRIX_WPSR    (*(__I  uint32_t*)0x400881E8U) /**< \brief (MATRIX) Write Protection Status Register */

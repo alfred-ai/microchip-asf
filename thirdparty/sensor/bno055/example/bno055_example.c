@@ -3,7 +3,7 @@
  *
  * \brief BNO055 extension board example for SAME70.
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,7 +51,7 @@
  *
  * \section Requirements
  *
- * This package can be used with SAME70 evaluation kits.
+ * This package can be used with SAME70 evaluation kits, ATBNO055-XPRO Sensor module.
  *
  * \section Description
  *
@@ -60,6 +60,7 @@
  *
  * \section Usage
  *
+ * -# Connect ATBNO055-XPRO Sensor module to EXT1 on SAME70 Xplained Pro kit.
  * -# Build the program and download it into the evaluation board.
  * -# On the computer, open and configure a terminal application
  *     (e.g., HyperTerminal on Microsoft Windows) with these settings:

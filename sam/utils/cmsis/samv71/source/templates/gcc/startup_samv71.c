@@ -94,17 +94,27 @@ void PIOB_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #ifdef _SAMV71_PIOC_INSTANCE_
 void PIOC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_PIOC_INSTANCE_ */
+#ifdef _SAMV71_USART0_INSTANCE_
 void USART0_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_USART0_INSTANCE_ */
+#ifdef _SAMV71_USART1_INSTANCE_
 void USART1_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_USART1_INSTANCE_ */
+#ifdef _SAMV71_USART2_INSTANCE_
 void USART2_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_USART2_INSTANCE_ */
 void PIOD_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #ifdef _SAMV71_PIOE_INSTANCE_
 void PIOE_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_PIOE_INSTANCE_ */
+#ifdef _SAMV71_HSMCI_INSTANCE_
 void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_HSMCI_INSTANCE_ */
 void TWIHS0_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TWIHS1_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#ifdef _SAMV71_SPI0_INSTANCE_
 void SPI0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_SPI0_INSTANCE_ */
 void SSC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TC0_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TC1_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
@@ -126,18 +136,28 @@ void PWM0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ICM_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ACC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void USBHS_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void MCAN0_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void MCAN1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void MCAN0_INT0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void MCAN0_INT1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#ifdef _SAMV71_MCAN1_INSTANCE_
+void MCAN1_INT0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void MCAN1_INT1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_MCAN1_INSTANCE_ */
 void GMAC_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #ifdef _SAMV71_TWIHS2_INSTANCE_
 void TWIHS2_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_TWIHS2_INSTANCE_ */
+#ifdef _SAMV71_SPI1_INSTANCE_
 void SPI1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_SPI1_INSTANCE_ */
 void QSPI_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void UART2_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#ifdef _SAMV71_UART3_INSTANCE_
 void UART3_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_UART3_INSTANCE_ */
+#ifdef _SAMV71_UART4_INSTANCE_
 void UART4_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV71_UART4_INSTANCE_ */
 #ifdef _SAMV71_TC2_INSTANCE_
 void TC6_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_TC2_INSTANCE_ */
@@ -156,17 +176,27 @@ void TRNG_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void XDMAC_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ISI_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void PWM1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void FPU_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #ifdef _SAMV71_SDRAMC_INSTANCE_
 void SDRAMC_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_SDRAMC_INSTANCE_ */
 void RSWDT_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void CCW_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void CCF_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void GMAC_Q1_Handler     ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void GMAC_Q2_Handler     ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void IXC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #ifdef _SAMV71_I2SC0_INSTANCE_
 void I2SC0_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_I2SC0_INSTANCE_ */
 #ifdef _SAMV71_I2SC1_INSTANCE_
 void I2SC1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV71_I2SC1_INSTANCE_ */
-
+#if (__SAM_M7_REVB == 1)
+void GMAC_Q3_Handler     ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void GMAC_Q4_Handler     ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void GMAC_Q5_Handler     ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif
 /* Exception Table */
 __attribute__ ((section(".vectors")))
 const DeviceVectors exception_table = {
@@ -208,19 +238,39 @@ const DeviceVectors exception_table = {
 #else
         .pvReserved12      = (void*) (0UL),          /* 12 Reserved */
 #endif /* _SAMV71_PIOC_INSTANCE_ */
+#ifdef _SAMV71_USART0_INSTANCE_
         .pfnUSART0_Handler = (void*) USART0_Handler, /* 13 USART 0 */
+#else
+        .pvReserved13      = (void*) (0UL),          /* 13 Reserved */ 
+#endif /* _SAMV71_USART0_INSTANCE_ */
+#ifdef _SAMV71_USART1_INSTANCE_
         .pfnUSART1_Handler = (void*) USART1_Handler, /* 14 USART 1 */
+#else
+        .pvReserved14      = (void*) (0UL),          /* 14 Reserved */ 
+#endif /* _SAMV71_USART1_INSTANCE_ */
+#ifdef _SAMV71_USART2_INSTANCE_
         .pfnUSART2_Handler = (void*) USART2_Handler, /* 15 USART 2 */
+#else
+        .pvReserved15      = (void*) (0UL),          /* 15 Reserved */ 
+#endif /* _SAMV71_USART2_INSTANCE_ */
         .pfnPIOD_Handler   = (void*) PIOD_Handler,   /* 16 Parallel I/O Controller D */
 #ifdef _SAMV71_PIOE_INSTANCE_
         .pfnPIOE_Handler   = (void*) PIOE_Handler,   /* 17 Parallel I/O Controller E */
 #else
         .pvReserved17      = (void*) (0UL),          /* 17 Reserved */
 #endif /* _SAMV71_PIOE_INSTANCE_ */
+#ifdef _SAMV71_HSMCI_INSTANCE_
         .pfnHSMCI_Handler  = (void*) HSMCI_Handler,  /* 18 Multimedia Card Interface */
+#else
+        .pvReserved18      = (void*) (0UL),          /* 18 Reserved */
+#endif /* _SAMV71_HSMCI_INSTANCE_ */
         .pfnTWIHS0_Handler = (void*) TWIHS0_Handler, /* 19 Two Wire Interface 0 HS */
         .pfnTWIHS1_Handler = (void*) TWIHS1_Handler, /* 20 Two Wire Interface 1 HS */
+#ifdef _SAMV71_SPI0_INSTANCE_
         .pfnSPI0_Handler   = (void*) SPI0_Handler,   /* 21 Serial Peripheral Interface 0 */
+#else
+        .pvReserved21      = (void*) (0UL),          /* 21 Reserved */
+#endif /* _SAMV71_SPI0_INSTANCE_ */
         .pfnSSC_Handler    = (void*) SSC_Handler,    /* 22 Synchronous Serial Controller */
         .pfnTC0_Handler    = (void*) TC0_Handler,    /* 23 Timer/Counter 0 */
         .pfnTC1_Handler    = (void*) TC1_Handler,    /* 24 Timer/Counter 1 */
@@ -250,10 +300,15 @@ const DeviceVectors exception_table = {
         .pfnICM_Handler    = (void*) ICM_Handler,    /* 32 Integrity Check Monitor */
         .pfnACC_Handler    = (void*) ACC_Handler,    /* 33 Analog Comparator */
         .pfnUSBHS_Handler  = (void*) USBHS_Handler,  /* 34 USB Host / Device Controller */
-        .pfnMCAN0_Handler  = (void*) MCAN0_Handler,  /* 35 MCAN Controller 0 */
-        .pvReserved36      = (void*) (0UL),          /* 36 Reserved */
-        .pfnMCAN1_Handler  = (void*) MCAN1_Handler,  /* 37 MCAN Controller 1 */
+        .pfnMCAN0_INT0_Handler = (void*) MCAN0_INT0_Handler, /* 35 Controller Area Network */
+        .pfnMCAN0_INT1_Handler = (void*) MCAN0_INT1_Handler, /* 36 Controller Area Network */
+#ifdef _SAMV71_MCAN1_INSTANCE_
+        .pfnMCAN1_INT0_Handler = (void*) MCAN1_INT0_Handler, /* 37 Controller Area Network */
+        .pfnMCAN1_INT1_Handler = (void*) MCAN1_INT1_Handler, /* 38 Controller Area Network */
+#else
+        .pvReserved37      = (void*) (0UL),          /* 37 Reserved */
         .pvReserved38      = (void*) (0UL),          /* 38 Reserved */
+#endif /* _SAMV71_MCAN1_INSTANCE_ */
         .pfnGMAC_Handler   = (void*) GMAC_Handler,   /* 39 Ethernet MAC */
         .pfnAFEC1_Handler  = (void*) AFEC1_Handler,  /* 40 Analog Front End 1 */
 #ifdef _SAMV71_TWIHS2_INSTANCE_
@@ -261,11 +316,23 @@ const DeviceVectors exception_table = {
 #else
         .pvReserved41      = (void*) (0UL),          /* 41 Reserved */
 #endif /* _SAMV71_TWIHS2_INSTANCE_ */
+#ifdef _SAMV71_SPI1_INSTANCE_
         .pfnSPI1_Handler   = (void*) SPI1_Handler,   /* 42 Serial Peripheral Interface 1 */
+#else
+        .pvReserved42      = (void*) (0UL),          /* 42 Reserved */
+#endif /* _SAMV71_SPI1_INSTANCE_ */
         .pfnQSPI_Handler   = (void*) QSPI_Handler,   /* 43 Quad I/O Serial Peripheral Interface */
         .pfnUART2_Handler  = (void*) UART2_Handler,  /* 44 UART 2 */
+#ifdef _SAMV71_UART3_INSTANCE_
         .pfnUART3_Handler  = (void*) UART3_Handler,  /* 45 UART 3 */
+#else
+        .pvReserved45      = (void*) (0UL),          /* 45 Reserved */
+#endif /* _SAMV71_UART3_INSTANCE_ */
+#ifdef _SAMV71_UART4_INSTANCE_
         .pfnUART4_Handler  = (void*) UART4_Handler,  /* 46 UART 4 */
+#else
+        .pvReserved46      = (void*) (0UL),          /* 46 Reserved */
+#endif /* _SAMV71_UART4_INSTANCE_ */
 #ifdef _SAMV71_TC2_INSTANCE_
         .pfnTC6_Handler    = (void*) TC6_Handler,    /* 47 Timer/Counter 6 */
 #else
@@ -292,26 +359,37 @@ const DeviceVectors exception_table = {
         .pfnXDMAC_Handler  = (void*) XDMAC_Handler,  /* 58 DMA */
         .pfnISI_Handler    = (void*) ISI_Handler,    /* 59 Camera Interface */
         .pfnPWM1_Handler   = (void*) PWM1_Handler,   /* 60 Pulse Width Modulation 1 */
-        .pvReserved61      = (void*) (0UL),          /* 61 Reserved */
+        .pfnFPU_Handler    = (void*) FPU_Handler,    /* 61 Floating Point Unit Registers */
 #ifdef _SAMV71_SDRAMC_INSTANCE_
         .pfnSDRAMC_Handler = (void*) SDRAMC_Handler, /* 62 SDRAM Controller */
 #else
         .pvReserved62      = (void*) (0UL),          /* 62 Reserved */
 #endif /* _SAMV71_SDRAMC_INSTANCE_ */
         .pfnRSWDT_Handler  = (void*) RSWDT_Handler,  /* 63 Reinforced Secure Watchdog Timer */
-#ifdef _SAMV71_I2SC0_INSTANCE_
-        .pvReserved64      = (void*) (0UL),          /* 64 Reserved */
-        .pvReserved65      = (void*) (0UL),          /* 65 Reserved */
-        .pvReserved66      = (void*) (0UL),          /* 66 Reserved */
-        .pvReserved67      = (void*) (0UL),          /* 67 Reserved */
-        .pvReserved68      = (void*) (0UL),          /* 68 Reserved */
-#endif /* Reserved handlers */
+        .pfnCCW_Handler    = (void*) CCW_Handler,    /* 64 System Control Registers */
+        .pfnCCF_Handler    = (void*) CCF_Handler,    /* 65 System Control Registers */
+        .pfnGMAC_Q1_Handler= (void*) GMAC_Q1_Handler,/* 66 Gigabit Ethernet MAC */
+        .pfnGMAC_Q2_Handler= (void*) GMAC_Q2_Handler,/* 67 Gigabit Ethernet MAC */
+        .pfnIXC_Handler    = (void*) IXC_Handler,    /* 68 Floating Point Unit Registers */
 #ifdef _SAMV71_I2SC0_INSTANCE_
         .pfnI2SC0_Handler  = (void*) I2SC0_Handler,  /* 69 Inter-IC Sound controller */
+#else
+        .pvReserved69      = (void*) (0UL),          /* 69 Reserved */
 #endif /* _SAMV71_I2SC0_INSTANCE_ */
 #ifdef _SAMV71_I2SC1_INSTANCE_
-        .pfnI2SC1_Handler  = (void*) I2SC1_Handler   /* 70 Inter-IC Sound controller */
+        .pfnI2SC1_Handler  = (void*) I2SC1_Handler,  /* 70 Inter-IC Sound controller */
+#else
+        .pvReserved70      = (void*) (0UL),          /* 70 Reserved */
 #endif /* _SAMV71_I2SC1_INSTANCE_ */
+#if (__SAM_M7_REVB == 1)
+        .pfnGMAC_Q3_Handler= (void*) GMAC_Q3_Handler,/* 71 Gigabit Ethernet MAC */
+        .pfnGMAC_Q4_Handler= (void*) GMAC_Q4_Handler,/* 72 Gigabit Ethernet MAC */
+        .pfnGMAC_Q5_Handler= (void*) GMAC_Q5_Handler /* 73 Gigabit Ethernet MAC */
+#else
+        .pvReserved71      = (void*) (0UL),          /* 71 Reserved */
+        .pvReserved72      = (void*) (0UL),          /* 72 Reserved */
+        .pvReserved73      = (void*) (0UL)           /* 73 Reserved */
+#endif
 };
 
 /**
@@ -342,7 +420,7 @@ void Reset_Handler(void)
         SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
 
 #if __FPU_USED
-	fpu_enable();
+        fpu_enable();
 #endif
 
         /* Initialize the C library */
@@ -360,6 +438,6 @@ void Reset_Handler(void)
  */
 void Dummy_Handler(void)
 {
-	while (1) {
-	}
+        while (1) {
+        }
 }

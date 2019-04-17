@@ -3,7 +3,7 @@
  *
  * \brief SAM Control Area Network (MCAN) Low Level Driver
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -155,8 +155,13 @@ typedef union {
 		uint32_t RTR:1;
 		/* bit:  30     Extended Identifier */
 		uint32_t XTD:1;
+#if (SAMV71B || SAME70B || SAMV70B)
+		/* bit:  31     Error State Indicator */
+		uint32_t ESI:1;        
+#else
 		/* bit:  31     Reserved */
 		uint32_t :1;
+#endif        
 	} bit;
 	/* Type used for register access */
   uint32_t reg;
@@ -172,8 +177,10 @@ typedef union {
 #define MCAN_TX_ELEMENT_T0_RTR             (0x1ul << MCAN_TX_ELEMENT_T0_RTR_Pos)
 #define MCAN_TX_ELEMENT_T0_XTD_Pos         30
 #define MCAN_TX_ELEMENT_T0_XTD             (0x1ul << MCAN_TX_ELEMENT_T0_XTD_Pos)
+#if (SAMV71B || SAME70B || SAMV70B)
 #define MCAN_TX_ELEMENT_T0_ESI_Pos         31
 #define MCAN_TX_ELEMENT_T0_ESI             (0x1ul << MCAN_TX_ELEMENT_T0_ESI_Pos)
+#endif 
 
 /* -------- MCAN_TX_ELEMENT_T1 : (MCAN TX element: 0x01) (R/W 32) Tx Element T1 Configuration -------- */
 typedef union {
@@ -182,9 +189,18 @@ typedef union {
 		uint32_t :16;
 		/* bit: 16..19  Data Length Code */
 		uint32_t DLC:4;
+#if (SAMV71B || SAME70B || SAMV70B)
+		/* bit: 20      Bit Rate Switch */
+		uint32_t BRS:1;
+		/* bit: 21      FD Format */
+		uint32_t FDF:1;
+        /* bit: 22  Reserved */
+        uint32_t :1;
+#else
 		/* bit: 20..22  Reserved */
 		uint32_t :3;
-		/* bit: 23      Event FIFO Control */
+#endif	
+    	/* bit: 23      Event FIFO Control */
 		uint32_t EFCC:1;
 		/* bit: 24..31  Message Marker */
 		uint32_t MM:8;
@@ -212,6 +228,12 @@ typedef union {
 #define MCAN_TX_ELEMENT_T1_DLC_DATA48_Val       0xEul
 /**< \brief (MCAN_RXESC) 64 byte data field */
 #define MCAN_TX_ELEMENT_T1_DLC_DATA64_Val       0xFul
+#if (SAMV71B || SAME70B || SAMV70B)
+#define MCAN_TX_ELEMENT_T1_BRS_Pos         20
+#define MCAN_TX_ELEMENT_T1_BRS             (0x1ul << MCAN_TX_ELEMENT_T1_BRS_Pos)
+#define MCAN_TX_ELEMENT_T1_FDF_Pos         21
+#define MCAN_TX_ELEMENT_T1_FDF             (0x1ul << MCAN_TX_ELEMENT_T1_FDF_Pos)
+#endif
 #define MCAN_TX_ELEMENT_T1_EFC_Pos         23
 #define MCAN_TX_ELEMENT_T1_EFC             (0x1ul << MCAN_TX_ELEMENT_T1_EFC_Pos)
 #define MCAN_TX_ELEMENT_T1_MM_Pos          24
@@ -571,6 +593,10 @@ struct mcan_config {
 	bool tdc_enable;
 	/** Transmitter Delay Compensation Offset : 0x0-0x7F */
 	uint8_t delay_compensation_offset;
+#if (SAMV71B || SAME70B || SAMV70B)
+	/** Transmitter Delay Compensation Filter Window Length : 0x0-0x7F */
+	uint8_t delay_compensation_filter_window_length;
+#endif
 	/** Nonmatching frames action for standard frames. */
 	enum mcan_nonmatching_frames_action nonmatching_frames_action_standard;
 	/** Nonmatching frames action for extended frames. */
@@ -653,6 +679,9 @@ static inline void mcan_get_config_defaults(
 	config->timeout_enable = false;
 	config->tdc_enable = false;
 	config->delay_compensation_offset = 0;
+#if (SAMV71B || SAME70B || SAMV70B)
+	config->delay_compensation_filter_window_length = 0;
+#endif
 	config->nonmatching_frames_action_standard = MCAN_NONMATCHING_FRAMES_REJECT;
 	config->nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_REJECT;
 	config->remote_frames_standard_reject = true;

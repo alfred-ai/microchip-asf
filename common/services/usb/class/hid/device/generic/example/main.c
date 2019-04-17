@@ -3,7 +3,7 @@
  *
  * \brief Main functions for Generic example
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -152,7 +152,8 @@ void main_hid_set_feature(uint8_t* report)
  * \section intro Introduction
  * This example shows how to implement a USB Device HID Generic
  * on Atmel MCU with USB module.
- * The application note AVR4905 provides information about this implementation.
+ * The application note AVR4905 http://ww1.microchip.com/downloads/en/AppNotes/doc8499.pdf
+ * provides information about this implementation.
  *
  * \section startup Startup
  * The example uses the buttons or sensors available on the board
@@ -165,9 +166,9 @@ void main_hid_set_feature(uint8_t* report)
  * A Atmel PC tool allows to communicate with the HID generic device.
  * This document gives information on integrating the Atmel USB HID DLL functions.
  * Simple code examples that demonstrate different types of implementation are given.
- * http://www.atmel.com/dyn/resources/prod_documents/doc7645.pdf
+ * http://ww1.microchip.com/downloads/en/AppNotes/doc7645.pdf
  * The PC tool is available here:
- * http://www.atmel.com/dyn/resources/prod_documents/AVR153.zip
+ * http://ww1.microchip.com/downloads/en/AppNotes/AVR153.zip
  * Note: Use the PID 0x2402 in tool graphical interface,
  * and the button Firmware Upgrade only disconnects the USB device.
  *

@@ -3,7 +3,7 @@
  *
  * \brief USB Device Communication Device Class (CDC) interface definitions.
  *
- * Copyright (c) 2009-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -701,7 +701,7 @@ iram_size_t udi_cdc_multi_write_buf(uint8_t port, const void* buf, iram_size_t s
  * another "Composite Device" module, like "USB HID Mouse (Composite Device)".
  *
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8445.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8445.pdf">
  * AVR4902 ASF - USB Composite Device</A>.
  *
  * \section udi_cdc_use_case_composite_setup Setup steps

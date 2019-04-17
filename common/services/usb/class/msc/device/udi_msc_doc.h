@@ -3,7 +3,7 @@
  *
  * \brief USB Device Mass Storage Class (MSC) interface definitions.
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -54,11 +54,11 @@
  *
  * For more details for Atmel&reg; Software Framework (ASF) USB Device Stack,
  * refer to following application notes:
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8360.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8460.pdf">
  *   AVR4900: ASF - USB Device Stack</a>
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8410.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8410.pdf">
  *   AVR4920: ASF - USB Device Stack - Compliance and Performance Figures</a>
- * - <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8411.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/appnotes/doc8411.pdf">
  *   AVR4921: ASF - USB Device Stack Differences between ASF V1 and V2</a>
  *
  * \section asfdoc_udi_msc_api_overview API Overview
@@ -369,7 +369,7 @@ bool udi_msc_trans_block(bool b_read, uint8_t * block, iram_size_t block_size,
  * another "Composite Device" module, like "USB HID Mouse (Composite Device)".
  *
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8445.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/appnotes/doc8445.pdf">
  * AVR4902 ASF - USB Composite Device</A>.
  *
  * \section udi_msc_use_case_composite_setup Setup Steps

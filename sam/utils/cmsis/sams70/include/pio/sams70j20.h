@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -136,13 +136,6 @@
 #define PIO_PB13X1_DAC0           (1u << 13) /**< \brief Dacc signal: DAC0 */
 #define PIO_PD0X1_DAC1            (1u << 0)  /**< \brief Dacc signal: DAC1 */
 #define PIO_PA2C_DATRG            (1u << 2)  /**< \brief Dacc signal: DATRG */
-/* ========== Pio definition for HSMCI peripheral ========== */
-#define PIO_PA28C_MCCDA           (1u << 28) /**< \brief Hsmci signal: MCCDA */
-#define PIO_PA25D_MCCK            (1u << 25) /**< \brief Hsmci signal: MCCK */
-#define PIO_PA30C_MCDA0           (1u << 30) /**< \brief Hsmci signal: MCDA0 */
-#define PIO_PA31C_MCDA1           (1u << 31) /**< \brief Hsmci signal: MCDA1 */
-#define PIO_PA26C_MCDA2           (1u << 26) /**< \brief Hsmci signal: MCDA2 */
-#define PIO_PA27C_MCDA3           (1u << 27) /**< \brief Hsmci signal: MCDA3 */
 /* ========== Pio definition for ISI peripheral ========== */
 #define PIO_PD22D_ISI_D0          (1u << 22) /**< \brief Isi signal: ISI_D0 */
 #define PIO_PD21D_ISI_D1          (1u << 21) /**< \brief Isi signal: ISI_D1 */
@@ -267,26 +260,6 @@
 #define PIO_PA17A_QIO2            (1u << 17) /**< \brief Qspi signal: QIO2 */
 #define PIO_PD31A_QIO3            (1u << 31) /**< \brief Qspi signal: QIO3 */
 #define PIO_PA14A_QSCK            (1u << 14) /**< \brief Qspi signal: QSCK */
-/* ========== Pio definition for SPI0 peripheral ========== */
-#define PIO_PD20B_SPI0_MISO       (1u << 20) /**< \brief Spi0 signal: SPI0_MISO */
-#define PIO_PD21B_SPI0_MOSI       (1u << 21) /**< \brief Spi0 signal: SPI0_MOSI */
-#define PIO_PB2D_SPI0_NPCS0       (1u << 2)  /**< \brief Spi0 signal: SPI0_NPCS0 */
-#define PIO_PA31A_SPI0_NPCS1      (1u << 31) /**< \brief Spi0 signal: SPI0_NPCS1 */
-#define PIO_PD25B_SPI0_NPCS1      (1u << 25) /**< \brief Spi0 signal: SPI0_NPCS1 */
-#define PIO_PD12C_SPI0_NPCS2      (1u << 12) /**< \brief Spi0 signal: SPI0_NPCS2 */
-#define PIO_PD27B_SPI0_NPCS3      (1u << 27) /**< \brief Spi0 signal: SPI0_NPCS3 */
-#define PIO_PD22B_SPI0_SPCK       (1u << 22) /**< \brief Spi0 signal: SPI0_SPCK */
-/* ========== Pio definition for SPI1 peripheral ========== */
-#define PIO_PC26C_SPI1_MISO       (1u << 26) /**< \brief Spi1 signal: SPI1_MISO */
-#define PIO_PC27C_SPI1_MOSI       (1u << 27) /**< \brief Spi1 signal: SPI1_MOSI */
-#define PIO_PC25C_SPI1_NPCS0      (1u << 25) /**< \brief Spi1 signal: SPI1_NPCS0 */
-#define PIO_PC28C_SPI1_NPCS1      (1u << 28) /**< \brief Spi1 signal: SPI1_NPCS1 */
-#define PIO_PD0C_SPI1_NPCS1       (1u << 0)  /**< \brief Spi1 signal: SPI1_NPCS1 */
-#define PIO_PC29C_SPI1_NPCS2      (1u << 29) /**< \brief Spi1 signal: SPI1_NPCS2 */
-#define PIO_PD1C_SPI1_NPCS2       (1u << 1)  /**< \brief Spi1 signal: SPI1_NPCS2 */
-#define PIO_PC30C_SPI1_NPCS3      (1u << 30) /**< \brief Spi1 signal: SPI1_NPCS3 */
-#define PIO_PD2C_SPI1_NPCS3       (1u << 2)  /**< \brief Spi1 signal: SPI1_NPCS3 */
-#define PIO_PC24C_SPI1_SPCK       (1u << 24) /**< \brief Spi1 signal: SPI1_SPCK */
 /* ========== Pio definition for SSC peripheral ========== */
 #define PIO_PA10C_RD              (1u << 10) /**< \brief Ssc signal: RD */
 #define PIO_PD24B_RF              (1u << 24) /**< \brief Ssc signal: RF */
@@ -333,14 +306,6 @@
 /* ========== Pio definition for UART2 peripheral ========== */
 #define PIO_PD25C_URXD2           (1u << 25) /**< \brief Uart2 signal: URXD2 */
 #define PIO_PD26C_UTXD2           (1u << 26) /**< \brief Uart2 signal: UTXD2 */
-/* ========== Pio definition for UART3 peripheral ========== */
-#define PIO_PD28A_URXD3           (1u << 28) /**< \brief Uart3 signal: URXD3 */
-#define PIO_PD30A_UTXD3           (1u << 30) /**< \brief Uart3 signal: UTXD3 */
-#define PIO_PD31B_UTXD3           (1u << 31) /**< \brief Uart3 signal: UTXD3 */
-/* ========== Pio definition for UART4 peripheral ========== */
-#define PIO_PD18C_URXD4           (1u << 18) /**< \brief Uart4 signal: URXD4 */
-#define PIO_PD3C_UTXD4            (1u << 3)  /**< \brief Uart4 signal: UTXD4 */
-#define PIO_PD19C_UTXD4           (1u << 19) /**< \brief Uart4 signal: UTXD4 */
 /* ========== Pio definition for USART0 peripheral ========== */
 #define PIO_PB2C_CTS0             (1u << 2)  /**< \brief Usart0 signal: CTS0 */
 #define PIO_PD0D_DCD0             (1u << 0)  /**< \brief Usart0 signal: DCD0 */
@@ -362,16 +327,6 @@
 #define PIO_PA21A_RXD1            (1u << 21) /**< \brief Usart1 signal: RXD1 */
 #define PIO_PA23A_SCK1            (1u << 23) /**< \brief Usart1 signal: SCK1 */
 #define PIO_PB4D_TXD1             (1u << 4)  /**< \brief Usart1 signal: TXD1 */
-/* ========== Pio definition for USART2 peripheral ========== */
-#define PIO_PD19B_CTS2            (1u << 19) /**< \brief Usart2 signal: CTS2 */
-#define PIO_PD4D_DCD2             (1u << 4)  /**< \brief Usart2 signal: DCD2 */
-#define PIO_PD6D_DSR2             (1u << 6)  /**< \brief Usart2 signal: DSR2 */
-#define PIO_PD5D_DTR2             (1u << 5)  /**< \brief Usart2 signal: DTR2 */
-#define PIO_PD7D_RI2              (1u << 7)  /**< \brief Usart2 signal: RI2 */
-#define PIO_PD18B_RTS2            (1u << 18) /**< \brief Usart2 signal: RTS2 */
-#define PIO_PD15B_RXD2            (1u << 15) /**< \brief Usart2 signal: RXD2 */
-#define PIO_PD17B_SCK2            (1u << 17) /**< \brief Usart2 signal: SCK2 */
-#define PIO_PD16B_TXD2            (1u << 16) /**< \brief Usart2 signal: TXD2 */
 /* ========== Pio indexes ========== */
 #define PIO_PA3_IDX               3
 #define PIO_PA4_IDX               4

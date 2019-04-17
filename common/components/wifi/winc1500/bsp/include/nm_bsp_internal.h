@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1500 BSP APIs declarations.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -99,7 +99,7 @@
 #include "bsp/include/nm_bsp_samg55.h"
 #endif
 
-#if (defined __SAME70Q21__) || (defined __SAMV71Q21__)
+#if (defined __SAME70Q21__) || (defined __SAME70Q21B__) || (defined __SAMV71Q21__)
 #include "bsp/include/nm_bsp_same70.h"
 #endif
 

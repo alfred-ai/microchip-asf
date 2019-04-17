@@ -3,7 +3,7 @@
  *
  * \brief CDC Application Main functions
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -146,8 +146,8 @@ void main_cdc_set_dtr(uint8_t port, bool b_enable)
  * \section intro Introduction
  * This example shows how to implement a USB Device CDC
  * on Atmel MCU with USB module.
- * The application note AVR4907 provides more information
- * about this implementation.
+ * The application note AVR4907 http://ww1.microchip.com/downloads/en/appnotes/doc8447.pdf
+ * provides more information about this implementation.
  *
  * \section desc Description of the Communication Device Class (CDC)
  * The Communication Device Class (CDC) is a general-purpose way to enable all

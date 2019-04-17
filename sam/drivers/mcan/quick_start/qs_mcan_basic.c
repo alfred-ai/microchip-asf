@@ -3,7 +3,7 @@
  *
  * \brief SAM MCAN basic Quick Start
  *
- * Copyright (C) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -171,7 +171,7 @@ static void configure_mcan(void)
 
 	mcan_start(&mcan_instance);
 	/* Enable interrupts for this MCAN module */
-	irq_register_handler(MCAN1_IRQn, 1);
+	irq_register_handler(MCAN1_INT0_IRQn, 1);
 	mcan_enable_interrupt(&mcan_instance, MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 
 
@@ -304,7 +304,7 @@ static void mcan_send_extended_message(uint32_t id_value, uint8_t *data,
  * \brief Interrupt handler for MCAN,
  *   inlcuding RX,TX,ERROR and so on processes.
  */
-void MCAN1_Handler(void)
+void MCAN1_INT0_Handler(void)
 {
 	volatile uint32_t status, i, rx_buffer_index;
 	status = mcan_read_interrupt_status(&mcan_instance);

@@ -136,6 +136,12 @@ extern void udc_start(void);
  * To adjust bandwidth usage.
  * Default value 1.
  *
+ * UHD_NO_SLEEP_MGR<br>
+ * Feature to work without sleep manager module.
+ * Default not defined.
+ * Note that with this feature defined sleep manager must not be used in
+ * application.
+ *
  * \section Callbacks management
  * The USB driver is fully managed by interrupt and does not request periodic
  * task. Thereby, the USB events use callbacks to transfer the information.

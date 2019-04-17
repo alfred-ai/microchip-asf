@@ -1202,11 +1202,14 @@
  * PBUF_LINK_ENCAPSULATION_HLEN: the number of bytes that should be allocated
  * for an additional encapsulation header before ethernet headers (e.g. 802.11)
  */
+#ifndef WINC1500_ETH_MODE
 #if !defined PBUF_LINK_ENCAPSULATION_HLEN
 #define M2M_ETHERNET_HDR_OFFSET							36
 #define PBUF_LINK_ENCAPSULATION_HLEN    M2M_ETHERNET_HDR_OFFSET
 #endif
-
+#else
+#define PBUF_LINK_ENCAPSULATION_HLEN    0
+#endif	
 /*
    ------------------------------------------------
    ---------- Network Interfaces options ----------

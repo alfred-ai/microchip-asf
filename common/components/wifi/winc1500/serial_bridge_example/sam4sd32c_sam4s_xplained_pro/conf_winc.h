@@ -4,7 +4,7 @@
  *
  * \brief WINC1500 configuration.
  *
- * Copyright (c) 2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -94,7 +94,10 @@ extern "C" {
 #define CONF_WINC_SPI_POL				(0)
 #define CONF_WINC_SPI_PHA				(1)
 
-/** SPI clock. */
+/** SPI clock.
+ ** Exact SPI frequency will depend on the CPU clock configuration and it
+ ** will be less than or equal to what is configured in CONF_WINC_SPI_CLOCK
+*/ 
 #define CONF_WINC_SPI_CLOCK				(48000000)
 
 /*

@@ -3,7 +3,7 @@
  *
  * \brief Graphic library example application
  *
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -65,6 +65,8 @@
  * - XMEGA-B1 Xplained with the mXT143E Xplained
  * - XMEGA-A3BU Xplained with the mXT143E Xplained
  * - SAM4S Xplained with the mXT143E Xplained
+ * - SAMV71 Xplained Ultra with the mXT143E Xplained
+ * - SAME70 Xplained with the mXT143E Xplained
  *
  * \section exampledescription Description of the example
  * This example will demonstrate all the graphic primitives available in the
@@ -75,6 +77,11 @@
  * \section dependencies Dependencies
  * Relevant module dependencies for this application are:
  * - \ref gfx_group
+ *
+ * \section Usage
+ *
+ * -# Connect mXT143E Xplained to EXT2 on SAME70 Xplained Pro Kit using 20 pin connector.
+ * -# Build the program and download it into the evaluation board.
  *
  * \section compinfo Compilation info
  * This software was written for the GNU GCC and IAR for AVR. Other compilers

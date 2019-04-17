@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -135,11 +135,12 @@ typedef enum IRQn
   XDMAC_IRQn           = 58, /**< 58 SAMS70Q21 DMA (XDMAC) */
   ISI_IRQn             = 59, /**< 59 SAMS70Q21 Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAMS70Q21 Pulse Width Modulation 1 (PWM1) */
+  FPU_IRQn             = 61, /**< 61 SAMS70Q21 Floating Point Unit Registers (FPU) */
   SDRAMC_IRQn          = 62, /**< 62 SAMS70Q21 SDRAM Controller (SDRAMC) */
-  RSWDT_IRQn           = 63, /**< 63 SAMS70Q21 Reinforced Secure Watchdog Timer (RSWDT) */
-  ARM_IRQn             = 68, /**< 68 SAMS70Q21 Floating Point Unit - IXC (ARM) */
-  I2SC0_IRQn           = 69, /**< 69 SAMS70Q21 Inter-IC Sound controller (I2SC0) */
-  I2SC1_IRQn           = 70, /**< 70 SAMS70Q21 Inter-IC Sound controller (I2SC1) */
+  RSWDT_IRQn           = 63, /**< 63 SAMS70Q21 Reinforced Safety Watchdog Timer (RSWDT) */
+  CCW_IRQn             = 64, /**< 64 SAMS70Q21 System Control Registers (SystemControl) */
+  CCF_IRQn             = 65, /**< 65 SAMS70Q21 System Control Registers (SystemControl) */
+  IXC_IRQn             = 68, /**< 68 SAMS70Q21 Floating Point Unit Registers (FPU) */
 
   PERIPH_COUNT_IRQn    = 71  /**< Number of peripheral IDs */
 } IRQn_Type;
@@ -228,16 +229,16 @@ typedef struct _DeviceVectors
   void* pfnXDMAC_Handler;  /* 58 DMA */
   void* pfnISI_Handler;    /* 59 Camera Interface */
   void* pfnPWM1_Handler;   /* 60 Pulse Width Modulation 1 */
-  void* pvReserved61;
-  void* pfnSDRAMC_Handler; /* 62 SDRAM Controller */
-  void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
-  void* pvReserved64;
-  void* pvReserved65;
+  void* pfnFPU_Handler;    /* 61 Floating Point Unit Registers (FPU) */
+  void* pfnSDRAMC_Handler; /* 62 SDRAM Controller (SDRAMC) */
+  void* pfnRSWDT_Handler;  /* 63 Reinforced Safety Watchdog Timer (RSWDT) */
+  void* pfnCCW_Handler;    /* 64 System Control Registers (SystemControl) */
+  void* pfnCCF_Handler;    /* 65 System Control Registers (SystemControl) */
   void* pvReserved66;
   void* pvReserved67;
-  void* pfnARM_Handler;    /* 68 Floating Point Unit - IXC */
-  void* pfnI2SC0_Handler;  /* 69 Inter-IC Sound controller */
-  void* pfnI2SC1_Handler;  /* 70 Inter-IC Sound controller */
+  void* pfnIXC_Handler;    /* 68 Floating Point Unit Registers (FPU) */
+  void* pvReserved69;
+  void* pvReserved70;
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -257,14 +258,15 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
-void ARM_Handler        ( void );
+void CCF_Handler        ( void );
+void CCW_Handler        ( void );
 void DACC_Handler       ( void );
 void EFC_Handler        ( void );
+void FPU_Handler        ( void );
 void HSMCI_Handler      ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
-void I2SC0_Handler      ( void );
-void I2SC1_Handler      ( void );
+void IXC_Handler        ( void );
 void PIOA_Handler       ( void );
 void PIOB_Handler       ( void );
 void PIOC_Handler       ( void );
@@ -325,6 +327,7 @@ void XDMAC_Handler      ( void );
 #define __DTCM_PRESENT         1      /**< SAMS70Q21 does provide a Data TCM           */
 #define __ITCM_PRESENT         1      /**< SAMS70Q21 does provide an Instruction TCM   */
 #define __Vendor_SysTickConfig 0      /**< Set to 1 if different SysTick Config is used */
+#define __SAM_M7_REVB		   0	  /**< SAMS70Q21 Revision A */
 
 /*
  * \brief CMSIS includes
@@ -351,7 +354,6 @@ void XDMAC_Handler      ( void );
 #include "component/efc.h"
 #include "component/gpbr.h"
 #include "component/hsmci.h"
-#include "component/i2sc.h"
 #include "component/icm.h"
 #include "component/isi.h"
 #include "component/matrix.h"
@@ -415,8 +417,6 @@ void XDMAC_Handler      ( void );
 #include "instance/smc.h"
 #include "instance/sdramc.h"
 #include "instance/matrix.h"
-#include "instance/i2sc0.h"
-#include "instance/i2sc1.h"
 #include "instance/utmi.h"
 #include "instance/pmc.h"
 #include "instance/uart0.h"
@@ -501,9 +501,7 @@ void XDMAC_Handler      ( void );
 #define ID_PWM1   (60) /**< \brief Pulse Width Modulation 1 (PWM1) */
 #define ID_SDRAMC (62) /**< \brief SDRAM Controller (SDRAMC) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
-#define ID_ARM    (68) /**< \brief Floating Point Unit - IXC (ARM) */
-#define ID_I2SC0  (69) /**< \brief Inter-IC Sound controller (I2SC0) */
-#define ID_I2SC1  (70) /**< \brief Inter-IC Sound controller (I2SC1) */
+#define ID_IXC    (68) /**< \brief Floating Point Unit - IXC (ARM) */
 
 #define ID_PERIPH_COUNT (71) /**< \brief Number of peripheral IDs */
 /*@}*/
@@ -545,8 +543,6 @@ void XDMAC_Handler      ( void );
 #define SMC    (0x40080000U) /**< \brief (SMC   ) Base Address */
 #define SDRAMC (0x40084000U) /**< \brief (SDRAMC) Base Address */
 #define MATRIX (0x40088000U) /**< \brief (MATRIX) Base Address */
-#define I2SC0  (0x4008C000U) /**< \brief (I2SC0 ) Base Address */
-#define I2SC1  (0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   (0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    (0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  (0x400E0800U) /**< \brief (UART0 ) Base Address */
@@ -599,8 +595,6 @@ void XDMAC_Handler      ( void );
 #define SMC    ((Smc    *)0x40080000U) /**< \brief (SMC   ) Base Address */
 #define SDRAMC ((Sdramc *)0x40084000U) /**< \brief (SDRAMC) Base Address */
 #define MATRIX ((Matrix *)0x40088000U) /**< \brief (MATRIX) Base Address */
-#define I2SC0  ((I2sc   *)0x4008C000U) /**< \brief (I2SC0 ) Base Address */
-#define I2SC1  ((I2sc   *)0x40090000U) /**< \brief (I2SC1 ) Base Address */
 #define UTMI   ((Utmi   *)0x400E0400U) /**< \brief (UTMI  ) Base Address */
 #define PMC    ((Pmc    *)0x400E0600U) /**< \brief (PMC   ) Base Address */
 #define UART0  ((Uart   *)0x400E0800U) /**< \brief (UART0 ) Base Address */

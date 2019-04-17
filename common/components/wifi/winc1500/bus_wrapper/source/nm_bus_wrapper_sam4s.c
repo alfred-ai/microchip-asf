@@ -4,7 +4,7 @@
  *
  * \brief This module contains NMC1000 bus wrapper APIs implementation.
  *
- * Copyright (c) 2016-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2016-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -240,6 +240,8 @@ sint8 nm_bus_init(void *pvinit)
 #ifdef CONF_WINC_USE_I2C
 
 #elif defined CONF_WINC_USE_SPI
+    uint8_t spi_baudrate_divider;
+	
 	/* Configure SPI pins. */
 	gpio_configure_pin(CONF_WINC_SPI_MISO_GPIO, CONF_WINC_SPI_MISO_FLAGS);
 	gpio_configure_pin(CONF_WINC_SPI_MOSI_GPIO, CONF_WINC_SPI_MOSI_FLAGS);
@@ -267,8 +269,12 @@ sint8 nm_bus_init(void *pvinit)
 	spi_set_bits_per_transfer(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
 
 	//printf("sys clk %d\r\n",sysclk_get_cpu_hz());
-	spi_set_baudrate_div(CONF_WINC_SPI, CONF_WINC_SPI_NPCS,
-		(sysclk_get_cpu_hz() / CONF_WINC_SPI_CLOCK));
+	spi_baudrate_divider = (sysclk_get_cpu_hz() / CONF_WINC_SPI_CLOCK);
+	if ((uint32_t)(spi_baudrate_divider * CONF_WINC_SPI_CLOCK) < sysclk_get_cpu_hz()){
+		++spi_baudrate_divider;
+	}	
+	spi_set_baudrate_div(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, spi_baudrate_divider);
+	
 	spi_set_transfer_delay(CONF_WINC_SPI, CONF_WINC_SPI_NPCS, CONF_WINC_SPI_DLYBS,
 			CONF_WINC_SPI_DLYBCT);
 	spi_enable(CONF_WINC_SPI);

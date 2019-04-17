@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -62,6 +62,24 @@
 #include "same70q20.h"
 #elif defined (__SAME70Q21__)
 #include "same70q21.h"
+#elif defined (__SAME70J19B__)
+#include "same70j19b.h"
+#elif defined (__SAME70J20B__)
+#include "same70j20b.h"
+#elif defined (__SAME70J21B__)
+#include "same70j21b.h"
+#elif defined (__SAME70N19B__)
+#include "same70n19b.h"
+#elif defined (__SAME70N20B__)
+#include "same70n20b.h"
+#elif defined (__SAME70N21B__)
+#include "same70n21b.h"
+#elif defined (__SAME70Q19B__)
+#include "same70q19b.h"
+#elif defined (__SAME70Q20B__)
+#include "same70q20b.h"
+#elif defined (__SAME70Q21B__)
+#include "same70q21b.h"
 #else
   #error Library does not support the specified device.
 #endif

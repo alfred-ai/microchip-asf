@@ -3,7 +3,7 @@
  *
  * \brief GMAC (Gigabit MAC) driver for lwIP.
  *
- * Copyright (c) 2015-2016 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -348,21 +348,22 @@ static void gmac_low_level_init(struct netif *netif)
 	gmac_set_rx_bufsize(GMAC, 0x18);
 
 	/* Clear interrupts */
-	gmac_get_priority_interrupt_status(GMAC, GMAC_QUE_2);
-	gmac_get_priority_interrupt_status(GMAC, GMAC_QUE_1);
+	for(uint8_t i = 1; i < GMAC_QUE_N; i++)
+		gmac_get_priority_interrupt_status(GMAC, (gmac_quelist_t)(GMAC_QUE_0+i));
+
 
 	/* Set Tx Priority */
 	gs_tx_desc_null.addr = (uint32_t)0xFFFFFFFF;
 	gs_tx_desc_null.status.val = GMAC_TXD_WRAP | GMAC_TXD_USED;
-	gmac_set_tx_priority_queue(GMAC, (uint32_t)&gs_tx_desc_null, GMAC_QUE_2);
-	gmac_set_tx_priority_queue(GMAC, (uint32_t)&gs_tx_desc_null, GMAC_QUE_1);
+	for(uint8_t i = 1; i < GMAC_QUE_N; i++)
+		gmac_set_tx_priority_queue(GMAC, (uint32_t)&gs_tx_desc_null, (gmac_quelist_t)(GMAC_QUE_0+i));
 	
 	/* Set Rx Priority */
 	gs_rx_desc_null.addr.val = (uint32_t)0xFFFFFFFF & GMAC_RXD_ADDR_MASK;
 	gs_rx_desc_null.addr.val |= GMAC_RXD_WRAP;
 	gs_rx_desc_null.status.val = 0;
-	gmac_set_rx_priority_queue(GMAC, (uint32_t)&gs_rx_desc_null, GMAC_QUE_2);
-	gmac_set_rx_priority_queue(GMAC, (uint32_t)&gs_rx_desc_null, GMAC_QUE_1);
+	for(uint8_t i = 1; i < GMAC_QUE_N; i++)
+		gmac_set_rx_priority_queue(GMAC, (uint32_t)&gs_rx_desc_null, (gmac_quelist_t)(GMAC_QUE_0+i));
 
 	gmac_rx_init(&gs_gmac_dev);
 	gmac_tx_init(&gs_gmac_dev);

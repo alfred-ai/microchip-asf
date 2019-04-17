@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -51,16 +51,19 @@
   #define REG_MCAN1_ENDN                    (0x40034004U) /**< \brief (MCAN1) Endian Register */
   #define REG_MCAN1_CUST                    (0x40034008U) /**< \brief (MCAN1) Customer Register */
   #define REG_MCAN1_FBTP                    (0x4003400CU) /**< \brief (MCAN1) Fast Bit Timing and Prescaler Register */
+  #define REG_MCAN1_DBTP                    (0x4003400CU) /**< \brief (MCAN1) Data Bit Timing and Prescaler Register */
   #define REG_MCAN1_TEST                    (0x40034010U) /**< \brief (MCAN1) Test Register */
   #define REG_MCAN1_RWD                     (0x40034014U) /**< \brief (MCAN1) RAM Watchdog Register */
   #define REG_MCAN1_CCCR                    (0x40034018U) /**< \brief (MCAN1) CC Control Register */
   #define REG_MCAN1_BTP                     (0x4003401CU) /**< \brief (MCAN1) Bit Timing and Prescaler Register */
+  #define REG_MCAN1_NBTP                    (0x4003401CU) /**< \brief (MCAN1) Nominal Bit Timing and Prescaler Register */
   #define REG_MCAN1_TSCC                    (0x40034020U) /**< \brief (MCAN1) Timestamp Counter Configuration Register */
   #define REG_MCAN1_TSCV                    (0x40034024U) /**< \brief (MCAN1) Timestamp Counter Value Register */
   #define REG_MCAN1_TOCC                    (0x40034028U) /**< \brief (MCAN1) Timeout Counter Configuration Register */
   #define REG_MCAN1_TOCV                    (0x4003402CU) /**< \brief (MCAN1) Timeout Counter Value Register */
   #define REG_MCAN1_ECR                     (0x40034040U) /**< \brief (MCAN1) Error Counter Register */
   #define REG_MCAN1_PSR                     (0x40034044U) /**< \brief (MCAN1) Protocol Status Register */
+  #define REG_MCAN1_TDCR                    (0x40034048U) /**< \brief (MCAN1) Transmit Delay Compensation Register */
   #define REG_MCAN1_IR                      (0x40034050U) /**< \brief (MCAN1) Interrupt Register */
   #define REG_MCAN1_IE                      (0x40034054U) /**< \brief (MCAN1) Interrupt Enable Register */
   #define REG_MCAN1_ILS                     (0x40034058U) /**< \brief (MCAN1) Interrupt Line Select Register */
@@ -98,16 +101,19 @@
   #define REG_MCAN1_ENDN   (*(__I  uint32_t*)0x40034004U) /**< \brief (MCAN1) Endian Register */
   #define REG_MCAN1_CUST   (*(__IO uint32_t*)0x40034008U) /**< \brief (MCAN1) Customer Register */
   #define REG_MCAN1_FBTP   (*(__IO uint32_t*)0x4003400CU) /**< \brief (MCAN1) Fast Bit Timing and Prescaler Register */
+  #define REG_MCAN1_DBTP   (*(__IO uint32_t*)0x4003400CU) /**< \brief (MCAN1) Data Bit Timing and Prescaler Register */
   #define REG_MCAN1_TEST   (*(__IO uint32_t*)0x40034010U) /**< \brief (MCAN1) Test Register */
   #define REG_MCAN1_RWD    (*(__IO uint32_t*)0x40034014U) /**< \brief (MCAN1) RAM Watchdog Register */
   #define REG_MCAN1_CCCR   (*(__IO uint32_t*)0x40034018U) /**< \brief (MCAN1) CC Control Register */
   #define REG_MCAN1_BTP    (*(__IO uint32_t*)0x4003401CU) /**< \brief (MCAN1) Bit Timing and Prescaler Register */
+  #define REG_MCAN1_NBTP   (*(__IO uint32_t*)0x4003401CU) /**< \brief (MCAN1) Nominal Bit Timing and Prescaler Register */
   #define REG_MCAN1_TSCC   (*(__IO uint32_t*)0x40034020U) /**< \brief (MCAN1) Timestamp Counter Configuration Register */
   #define REG_MCAN1_TSCV   (*(__IO uint32_t*)0x40034024U) /**< \brief (MCAN1) Timestamp Counter Value Register */
   #define REG_MCAN1_TOCC   (*(__IO uint32_t*)0x40034028U) /**< \brief (MCAN1) Timeout Counter Configuration Register */
   #define REG_MCAN1_TOCV   (*(__IO uint32_t*)0x4003402CU) /**< \brief (MCAN1) Timeout Counter Value Register */
   #define REG_MCAN1_ECR    (*(__I  uint32_t*)0x40034040U) /**< \brief (MCAN1) Error Counter Register */
   #define REG_MCAN1_PSR    (*(__I  uint32_t*)0x40034044U) /**< \brief (MCAN1) Protocol Status Register */
+  #define REG_MCAN1_TDCR   (*(__IO uint32_t*)0x40034048U) /**< \brief (MCAN1) Transmit Delay Compensation Register */
   #define REG_MCAN1_IR     (*(__IO uint32_t*)0x40034050U) /**< \brief (MCAN1) Interrupt Register */
   #define REG_MCAN1_IE     (*(__IO uint32_t*)0x40034054U) /**< \brief (MCAN1) Interrupt Enable Register */
   #define REG_MCAN1_ILS    (*(__IO uint32_t*)0x40034058U) /**< \brief (MCAN1) Interrupt Line Select Register */

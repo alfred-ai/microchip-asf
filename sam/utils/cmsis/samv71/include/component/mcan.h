@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -57,11 +57,19 @@ typedef struct {
   __I  uint32_t MCAN_CREL;    /**< \brief (Mcan Offset: 0x00) Core Release Register */
   __I  uint32_t MCAN_ENDN;    /**< \brief (Mcan Offset: 0x04) Endian Register */
   __IO uint32_t MCAN_CUST;    /**< \brief (Mcan Offset: 0x08) Customer Register */
+#if (__SAM_M7_REVB == 1)
+  __IO uint32_t MCAN_DBTP;    /**< \brief (Mcan Offset: 0x0C) Data Bit Timing and Prescaler Register */	  
+#else
   __IO uint32_t MCAN_FBTP;    /**< \brief (Mcan Offset: 0x0C) Fast Bit Timing and Prescaler Register */
+#endif
   __IO uint32_t MCAN_TEST;    /**< \brief (Mcan Offset: 0x10) Test Register */
   __IO uint32_t MCAN_RWD;     /**< \brief (Mcan Offset: 0x14) RAM Watchdog Register */
   __IO uint32_t MCAN_CCCR;    /**< \brief (Mcan Offset: 0x18) CC Control Register */
+#if (__SAM_M7_REVB == 1)
+  __IO uint32_t MCAN_NBTP;     /**< \brief (Mcan Offset: 0x1C) Nominal Bit Timing and Prescaler Register */
+#else
   __IO uint32_t MCAN_BTP;     /**< \brief (Mcan Offset: 0x1C) Bit Timing and Prescaler Register */
+#endif
   __IO uint32_t MCAN_TSCC;    /**< \brief (Mcan Offset: 0x20) Timestamp Counter Configuration Register */
   __IO uint32_t MCAN_TSCV;    /**< \brief (Mcan Offset: 0x24) Timestamp Counter Value Register */
   __IO uint32_t MCAN_TOCC;    /**< \brief (Mcan Offset: 0x28) Timeout Counter Configuration Register */
@@ -69,8 +77,12 @@ typedef struct {
   __I  uint32_t Reserved1[4];
   __I  uint32_t MCAN_ECR;     /**< \brief (Mcan Offset: 0x40) Error Counter Register */
   __I  uint32_t MCAN_PSR;     /**< \brief (Mcan Offset: 0x44) Protocol Status Register */
+#if (__SAM_M7_REVB == 1)
   __IO uint32_t MCAN_TDCR;    /**< \brief (Mcan Offset: 0x48) Transmit Delay Compensation Register */
   __I  uint32_t Reserved2[1];
+#else
+  __I  uint32_t Reserved2[2];
+#endif
   __IO uint32_t MCAN_IR;      /**< \brief (Mcan Offset: 0x50) Interrupt Register */
   __IO uint32_t MCAN_IE;      /**< \brief (Mcan Offset: 0x54) Interrupt Enable Register */
   __IO uint32_t MCAN_ILS;     /**< \brief (Mcan Offset: 0x58) Interrupt Line Select Register */
@@ -357,8 +369,6 @@ typedef struct {
 #define MCAN_IR_MRAF (0x1u << 17) /**< \brief (MCAN_IR) Message RAM Access Failure */
 #define MCAN_IR_TOO (0x1u << 18) /**< \brief (MCAN_IR) Timeout Occurred */
 #define MCAN_IR_DRX (0x1u << 19) /**< \brief (MCAN_IR) Message stored to Dedicated Receive Buffer */
-#define MCAN_IR_BEC (0x1u << 20) /**< \brief (MCAN_IR) Bit Error Corrected */
-#define MCAN_IR_BEU (0x1u << 21) /**< \brief (MCAN_IR) Bit Error Uncorrected */
 #define MCAN_IR_ELO (0x1u << 22) /**< \brief (MCAN_IR) Error Logging Overflow */
 #define MCAN_IR_EP (0x1u << 23) /**< \brief (MCAN_IR) Error Passive */
 #define MCAN_IR_EW (0x1u << 24) /**< \brief (MCAN_IR) Warning Status */
@@ -393,8 +403,6 @@ typedef struct {
 #define MCAN_IE_MRAFE (0x1u << 17) /**< \brief (MCAN_IE) Message RAM Access Failure Interrupt Enable */
 #define MCAN_IE_TOOE (0x1u << 18) /**< \brief (MCAN_IE) Timeout Occurred Interrupt Enable */
 #define MCAN_IE_DRXE (0x1u << 19) /**< \brief (MCAN_IE) Message stored to Dedicated Receive Buffer Interrupt Enable */
-#define MCAN_IE_BECE (0x1u << 20) /**< \brief (MCAN_IE) Bit Error Corrected Interrupt Enable */
-#define MCAN_IE_BEUE (0x1u << 21) /**< \brief (MCAN_IE) Bit Error Uncorrected Interrupt Enable */
 #define MCAN_IE_ELOE (0x1u << 22) /**< \brief (MCAN_IE) Error Logging Overflow Interrupt Enable */
 #define MCAN_IE_EPE (0x1u << 23) /**< \brief (MCAN_IE) Error Passive Interrupt Enable */
 #define MCAN_IE_EWE (0x1u << 24) /**< \brief (MCAN_IE) Warning Status Interrupt Enable */
@@ -429,8 +437,6 @@ typedef struct {
 #define MCAN_ILS_MRAFL (0x1u << 17) /**< \brief (MCAN_ILS) Message RAM Access Failure Interrupt Line */
 #define MCAN_ILS_TOOL (0x1u << 18) /**< \brief (MCAN_ILS) Timeout Occurred Interrupt Line */
 #define MCAN_ILS_DRXL (0x1u << 19) /**< \brief (MCAN_ILS) Message stored to Dedicated Receive Buffer Interrupt Line */
-#define MCAN_ILS_BECL (0x1u << 20) /**< \brief (MCAN_ILS) Bit Error Corrected Interrupt Line */
-#define MCAN_ILS_BEUL (0x1u << 21) /**< \brief (MCAN_ILS) Bit Error Uncorrected Interrupt Line */
 #define MCAN_ILS_ELOL (0x1u << 22) /**< \brief (MCAN_ILS) Error Logging Overflow Interrupt Line */
 #define MCAN_ILS_EPL (0x1u << 23) /**< \brief (MCAN_ILS) Error Passive Interrupt Line */
 #define MCAN_ILS_EWL (0x1u << 24) /**< \brief (MCAN_ILS) Warning Status Interrupt Line */

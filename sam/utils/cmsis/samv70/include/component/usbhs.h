@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -177,8 +177,6 @@ typedef struct {
 #define USBHS_DEVISR_PEP_7 (0x1u << 19) /**< \brief (USBHS_DEVISR) Endpoint 7 Interrupt */
 #define USBHS_DEVISR_PEP_8 (0x1u << 20) /**< \brief (USBHS_DEVISR) Endpoint 8 Interrupt */
 #define USBHS_DEVISR_PEP_9 (0x1u << 21) /**< \brief (USBHS_DEVISR) Endpoint 9 Interrupt */
-#define USBHS_DEVISR_PEP_10 (0x1u << 22) /**< \brief (USBHS_DEVISR) Endpoint 10 Interrupt */
-#define USBHS_DEVISR_PEP_11 (0x1u << 23) /**< \brief (USBHS_DEVISR) Endpoint 11 Interrupt */
 #define USBHS_DEVISR_DMA_1 (0x1u << 25) /**< \brief (USBHS_DEVISR) DMA Channel 1 Interrupt */
 #define USBHS_DEVISR_DMA_2 (0x1u << 26) /**< \brief (USBHS_DEVISR) DMA Channel 2 Interrupt */
 #define USBHS_DEVISR_DMA_3 (0x1u << 27) /**< \brief (USBHS_DEVISR) DMA Channel 3 Interrupt */
@@ -227,8 +225,6 @@ typedef struct {
 #define USBHS_DEVIMR_PEP_7 (0x1u << 19) /**< \brief (USBHS_DEVIMR) Endpoint 7 Interrupt Mask */
 #define USBHS_DEVIMR_PEP_8 (0x1u << 20) /**< \brief (USBHS_DEVIMR) Endpoint 8 Interrupt Mask */
 #define USBHS_DEVIMR_PEP_9 (0x1u << 21) /**< \brief (USBHS_DEVIMR) Endpoint 9 Interrupt Mask */
-#define USBHS_DEVIMR_PEP_10 (0x1u << 22) /**< \brief (USBHS_DEVIMR) Endpoint 10 Interrupt Mask */
-#define USBHS_DEVIMR_PEP_11 (0x1u << 23) /**< \brief (USBHS_DEVIMR) Endpoint 11 Interrupt Mask */
 #define USBHS_DEVIMR_DMA_1 (0x1u << 25) /**< \brief (USBHS_DEVIMR) DMA Channel 1 Interrupt Mask */
 #define USBHS_DEVIMR_DMA_2 (0x1u << 26) /**< \brief (USBHS_DEVIMR) DMA Channel 2 Interrupt Mask */
 #define USBHS_DEVIMR_DMA_3 (0x1u << 27) /**< \brief (USBHS_DEVIMR) DMA Channel 3 Interrupt Mask */
@@ -254,8 +250,6 @@ typedef struct {
 #define USBHS_DEVIDR_PEP_7 (0x1u << 19) /**< \brief (USBHS_DEVIDR) Endpoint 7 Interrupt Disable */
 #define USBHS_DEVIDR_PEP_8 (0x1u << 20) /**< \brief (USBHS_DEVIDR) Endpoint 8 Interrupt Disable */
 #define USBHS_DEVIDR_PEP_9 (0x1u << 21) /**< \brief (USBHS_DEVIDR) Endpoint 9 Interrupt Disable */
-#define USBHS_DEVIDR_PEP_10 (0x1u << 22) /**< \brief (USBHS_DEVIDR) Endpoint 10 Interrupt Disable */
-#define USBHS_DEVIDR_PEP_11 (0x1u << 23) /**< \brief (USBHS_DEVIDR) Endpoint 11 Interrupt Disable */
 #define USBHS_DEVIDR_DMA_1 (0x1u << 25) /**< \brief (USBHS_DEVIDR) DMA Channel 1 Interrupt Disable */
 #define USBHS_DEVIDR_DMA_2 (0x1u << 26) /**< \brief (USBHS_DEVIDR) DMA Channel 2 Interrupt Disable */
 #define USBHS_DEVIDR_DMA_3 (0x1u << 27) /**< \brief (USBHS_DEVIDR) DMA Channel 3 Interrupt Disable */
@@ -281,8 +275,6 @@ typedef struct {
 #define USBHS_DEVIER_PEP_7 (0x1u << 19) /**< \brief (USBHS_DEVIER) Endpoint 7 Interrupt Enable */
 #define USBHS_DEVIER_PEP_8 (0x1u << 20) /**< \brief (USBHS_DEVIER) Endpoint 8 Interrupt Enable */
 #define USBHS_DEVIER_PEP_9 (0x1u << 21) /**< \brief (USBHS_DEVIER) Endpoint 9 Interrupt Enable */
-#define USBHS_DEVIER_PEP_10 (0x1u << 22) /**< \brief (USBHS_DEVIER) Endpoint 10 Interrupt Enable */
-#define USBHS_DEVIER_PEP_11 (0x1u << 23) /**< \brief (USBHS_DEVIER) Endpoint 11 Interrupt Enable */
 #define USBHS_DEVIER_DMA_1 (0x1u << 25) /**< \brief (USBHS_DEVIER) DMA Channel 1 Interrupt Enable */
 #define USBHS_DEVIER_DMA_2 (0x1u << 26) /**< \brief (USBHS_DEVIER) DMA Channel 2 Interrupt Enable */
 #define USBHS_DEVIER_DMA_3 (0x1u << 27) /**< \brief (USBHS_DEVIER) DMA Channel 3 Interrupt Enable */
@@ -542,8 +534,6 @@ typedef struct {
 #define USBHS_HSTISR_PEP_7 (0x1u << 15) /**< \brief (USBHS_HSTISR) Pipe 7 Interrupt */
 #define USBHS_HSTISR_PEP_8 (0x1u << 16) /**< \brief (USBHS_HSTISR) Pipe 8 Interrupt */
 #define USBHS_HSTISR_PEP_9 (0x1u << 17) /**< \brief (USBHS_HSTISR) Pipe 9 Interrupt */
-#define USBHS_HSTISR_PEP_10 (0x1u << 18) /**< \brief (USBHS_HSTISR) Pipe 10 Interrupt */
-#define USBHS_HSTISR_PEP_11 (0x1u << 19) /**< \brief (USBHS_HSTISR) Pipe 11 Interrupt */
 #define USBHS_HSTISR_DMA_1 (0x1u << 25) /**< \brief (USBHS_HSTISR) DMA Channel 1 Interrupt */
 #define USBHS_HSTISR_DMA_2 (0x1u << 26) /**< \brief (USBHS_HSTISR) DMA Channel 2 Interrupt */
 #define USBHS_HSTISR_DMA_3 (0x1u << 27) /**< \brief (USBHS_HSTISR) DMA Channel 3 Interrupt */
@@ -592,8 +582,6 @@ typedef struct {
 #define USBHS_HSTIMR_PEP_7 (0x1u << 15) /**< \brief (USBHS_HSTIMR) Pipe 7 Interrupt Enable */
 #define USBHS_HSTIMR_PEP_8 (0x1u << 16) /**< \brief (USBHS_HSTIMR) Pipe 8 Interrupt Enable */
 #define USBHS_HSTIMR_PEP_9 (0x1u << 17) /**< \brief (USBHS_HSTIMR) Pipe 9 Interrupt Enable */
-#define USBHS_HSTIMR_PEP_10 (0x1u << 18) /**< \brief (USBHS_HSTIMR) Pipe 10 Interrupt Enable */
-#define USBHS_HSTIMR_PEP_11 (0x1u << 19) /**< \brief (USBHS_HSTIMR) Pipe 11 Interrupt Enable */
 #define USBHS_HSTIMR_DMA_1 (0x1u << 25) /**< \brief (USBHS_HSTIMR) DMA Channel 1 Interrupt Enable */
 #define USBHS_HSTIMR_DMA_2 (0x1u << 26) /**< \brief (USBHS_HSTIMR) DMA Channel 2 Interrupt Enable */
 #define USBHS_HSTIMR_DMA_3 (0x1u << 27) /**< \brief (USBHS_HSTIMR) DMA Channel 3 Interrupt Enable */
@@ -619,8 +607,6 @@ typedef struct {
 #define USBHS_HSTIDR_PEP_7 (0x1u << 15) /**< \brief (USBHS_HSTIDR) Pipe 7 Interrupt Disable */
 #define USBHS_HSTIDR_PEP_8 (0x1u << 16) /**< \brief (USBHS_HSTIDR) Pipe 8 Interrupt Disable */
 #define USBHS_HSTIDR_PEP_9 (0x1u << 17) /**< \brief (USBHS_HSTIDR) Pipe 9 Interrupt Disable */
-#define USBHS_HSTIDR_PEP_10 (0x1u << 18) /**< \brief (USBHS_HSTIDR) Pipe 10 Interrupt Disable */
-#define USBHS_HSTIDR_PEP_11 (0x1u << 19) /**< \brief (USBHS_HSTIDR) Pipe 11 Interrupt Disable */
 #define USBHS_HSTIDR_DMA_1 (0x1u << 25) /**< \brief (USBHS_HSTIDR) DMA Channel 1 Interrupt Disable */
 #define USBHS_HSTIDR_DMA_2 (0x1u << 26) /**< \brief (USBHS_HSTIDR) DMA Channel 2 Interrupt Disable */
 #define USBHS_HSTIDR_DMA_3 (0x1u << 27) /**< \brief (USBHS_HSTIDR) DMA Channel 3 Interrupt Disable */
@@ -646,8 +632,6 @@ typedef struct {
 #define USBHS_HSTIER_PEP_7 (0x1u << 15) /**< \brief (USBHS_HSTIER) Pipe 7 Interrupt Enable */
 #define USBHS_HSTIER_PEP_8 (0x1u << 16) /**< \brief (USBHS_HSTIER) Pipe 8 Interrupt Enable */
 #define USBHS_HSTIER_PEP_9 (0x1u << 17) /**< \brief (USBHS_HSTIER) Pipe 9 Interrupt Enable */
-#define USBHS_HSTIER_PEP_10 (0x1u << 18) /**< \brief (USBHS_HSTIER) Pipe 10 Interrupt Enable */
-#define USBHS_HSTIER_PEP_11 (0x1u << 19) /**< \brief (USBHS_HSTIER) Pipe 11 Interrupt Enable */
 #define USBHS_HSTIER_DMA_1 (0x1u << 25) /**< \brief (USBHS_HSTIER) DMA Channel 1 Interrupt Enable */
 #define USBHS_HSTIER_DMA_2 (0x1u << 26) /**< \brief (USBHS_HSTIER) DMA Channel 2 Interrupt Enable */
 #define USBHS_HSTIER_DMA_3 (0x1u << 27) /**< \brief (USBHS_HSTIER) DMA Channel 3 Interrupt Enable */

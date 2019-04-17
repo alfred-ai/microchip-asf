@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2017 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -96,12 +96,9 @@ typedef enum IRQn
   PIOB_IRQn            = 11, /**< 11 SAMV70J20B Parallel I/O Controller B (PIOB) */
   USART0_IRQn          = 13, /**< 13 SAMV70J20B USART 0 (USART0) */
   USART1_IRQn          = 14, /**< 14 SAMV70J20B USART 1 (USART1) */
-  USART2_IRQn          = 15, /**< 15 SAMV70J20B USART 2 (USART2) */
   PIOD_IRQn            = 16, /**< 16 SAMV70J20B Parallel I/O Controller D (PIOD) */
-  HSMCI_IRQn           = 18, /**< 18 SAMV70J20B Multimedia Card Interface (HSMCI) */
   TWIHS0_IRQn          = 19, /**< 19 SAMV70J20B Two Wire Interface 0 HS (TWIHS0) */
   TWIHS1_IRQn          = 20, /**< 20 SAMV70J20B Two Wire Interface 1 HS (TWIHS1) */
-  SPI0_IRQn            = 21, /**< 21 SAMV70J20B Serial Peripheral Interface 0 (SPI0) */
   SSC_IRQn             = 22, /**< 22 SAMV70J20B Synchronous Serial Controller (SSC) */
   TC0_IRQn             = 23, /**< 23 SAMV70J20B Timer/Counter 0 (TC0) */
   TC1_IRQn             = 24, /**< 24 SAMV70J20B Timer/Counter 1 (TC1) */
@@ -112,14 +109,11 @@ typedef enum IRQn
   ICM_IRQn             = 32, /**< 32 SAMV70J20B Integrity Check Monitor (ICM) */
   ACC_IRQn             = 33, /**< 33 SAMV70J20B Analog Comparator (ACC) */
   USBHS_IRQn           = 34, /**< 34 SAMV70J20B USB Host / Device Controller (USBHS) */
-  MCAN0_IRQn           = 35, /**< 35 SAMV70J20B MCAN Controller 0 (MCAN0) */
-  MCAN1_IRQn           = 37, /**< 37 SAMV70J20B MCAN Controller 1 (MCAN1) */
+  MCAN0_INT0_IRQn      = 35, /**< 35 SAMV70J20B Controller Area Network (MCAN0) */
+  MCAN0_INT1_IRQn      = 36, /**< 36 SAMV70J20B Controller Area Network (MCAN0) */
   AFEC1_IRQn           = 40, /**< 40 SAMV70J20B Analog Front End 1 (AFEC1) */
-  SPI1_IRQn            = 42, /**< 42 SAMV70J20B Serial Peripheral Interface 1 (SPI1) */
   QSPI_IRQn            = 43, /**< 43 SAMV70J20B Quad I/O Serial Peripheral Interface (QSPI) */
   UART2_IRQn           = 44, /**< 44 SAMV70J20B UART 2 (UART2) */
-  UART3_IRQn           = 45, /**< 45 SAMV70J20B UART 3 (UART3) */
-  UART4_IRQn           = 46, /**< 46 SAMV70J20B UART 4 (UART4) */
   TC9_IRQn             = 50, /**< 50 SAMV70J20B Timer/Counter 9 (TC9) */
   TC10_IRQn            = 51, /**< 51 SAMV70J20B Timer/Counter 10 (TC10) */
   TC11_IRQn            = 52, /**< 52 SAMV70J20B Timer/Counter 11 (TC11) */
@@ -129,9 +123,13 @@ typedef enum IRQn
   XDMAC_IRQn           = 58, /**< 58 SAMV70J20B DMA (XDMAC) */
   ISI_IRQn             = 59, /**< 59 SAMV70J20B Camera Interface (ISI) */
   PWM1_IRQn            = 60, /**< 60 SAMV70J20B Pulse Width Modulation 1 (PWM1) */
-  RSWDT_IRQn           = 63, /**< 63 SAMV70J20B Reinforced Secure Watchdog Timer (RSWDT) */
+  FPU_IRQn             = 61, /**< 61 SAMV70J20B Floating Point Unit Registers (FPU) */
+  RSWDT_IRQn           = 63, /**< 63 SAMV70J20B Reinforced Safety Watchdog Timer (RSWDT) */
+  CCW_IRQn             = 64, /**< 64 SAMV70J20B System Control Registers (SystemControl) */
+  CCF_IRQn             = 65, /**< 65 SAMV70J20B System Control Registers (SystemControl) */
+  IXC_IRQn             = 68, /**< 68 SAMV70J20B Floating Point Unit Registers (FPU) */
 
-  PERIPH_COUNT_IRQn    = 64  /**< Number of peripheral IDs */
+  PERIPH_COUNT_IRQn   = 71 /**< Number of peripheral IDs */
 } IRQn_Type;
 
 typedef struct _DeviceVectors
@@ -172,13 +170,13 @@ typedef struct _DeviceVectors
   void* pvReserved12;
   void* pfnUSART0_Handler; /* 13 USART 0 */
   void* pfnUSART1_Handler; /* 14 USART 1 */
-  void* pfnUSART2_Handler; /* 15 USART 2 */
+  void* pvReserved15;
   void* pfnPIOD_Handler;   /* 16 Parallel I/O Controller D */
   void* pvReserved17;
-  void* pfnHSMCI_Handler;  /* 18 Multimedia Card Interface */
+  void* pvReserved18;
   void* pfnTWIHS0_Handler; /* 19 Two Wire Interface 0 HS */
   void* pfnTWIHS1_Handler; /* 20 Two Wire Interface 1 HS */
-  void* pfnSPI0_Handler;   /* 21 Serial Peripheral Interface 0 */
+  void* pvReserved21;
   void* pfnSSC_Handler;    /* 22 Synchronous Serial Controller */
   void* pfnTC0_Handler;    /* 23 Timer/Counter 0 */
   void* pfnTC1_Handler;    /* 24 Timer/Counter 1 */
@@ -192,18 +190,18 @@ typedef struct _DeviceVectors
   void* pfnICM_Handler;    /* 32 Integrity Check Monitor */
   void* pfnACC_Handler;    /* 33 Analog Comparator */
   void* pfnUSBHS_Handler;  /* 34 USB Host / Device Controller */
-  void* pfnMCAN0_Handler;  /* 35 MCAN Controller 0 */
-  void* pvReserved36;
-  void* pfnMCAN1_Handler;  /* 37 MCAN Controller 1 */
+  void* pfnMCAN0_INT0_Handler;      /* 35  SAMV70J20B Controller Area Network (MCAN0) */
+  void* pfnMCAN0_INT1_Handler;      /* 36  SAMV70J20B Controller Area Network (MCAN0) */
+  void* pvReserved37;
   void* pvReserved38;
   void* pvReserved39;
   void* pfnAFEC1_Handler;  /* 40 Analog Front End 1 */
   void* pvReserved41;
-  void* pfnSPI1_Handler;   /* 42 Serial Peripheral Interface 1 */
+  void* pvReserved42;
   void* pfnQSPI_Handler;   /* 43 Quad I/O Serial Peripheral Interface */
   void* pfnUART2_Handler;  /* 44 UART 2 */
-  void* pfnUART3_Handler;  /* 45 UART 3 */
-  void* pfnUART4_Handler;  /* 46 UART 4 */
+  void* pvReserved45;
+  void* pvReserved46;
   void* pvReserved47;
   void* pvReserved48;
   void* pvReserved49;
@@ -218,16 +216,16 @@ typedef struct _DeviceVectors
   void* pfnXDMAC_Handler;  /* 58 DMA */
   void* pfnISI_Handler;    /* 59 Camera Interface */
   void* pfnPWM1_Handler;   /* 60 Pulse Width Modulation 1 */
-  void* pvReserved61;
+  void* pfnFPU_Handler;    /* 61 Floating Point Unit Registers (FPU) */
   void* pvReserved62;
-  void* pfnRSWDT_Handler;  /* 63 Reinforced Secure Watchdog Timer */
-  void* pvReserved64;      /*  */
-  void* pvReserved65;      /*  */
-  void* pvReserved66;      /*  */
-  void* pvReserved67;      /*  */
-  void* pvReserved68;      /*  */
-  void* pvReserved69;      /* I2SC0 */
-  void* pvReserved70;      /* I2SC1 */
+  void* pfnRSWDT_Handler;  /* 63 Reinforced Safety Watchdog Timer (RSWDT) */
+  void* pfnCCW_Handler;    /* 64 System Control Registers (SystemControl) */
+  void* pfnCCF_Handler;    /* 65 System Control Registers (SystemControl) */
+  void* pvReserved66;
+  void* pvReserved67;
+  void* pfnIXC_Handler;    /* 68 Floating Point Unit Registers (FPU) */
+  void* pvReserved69;
+  void* pvReserved70;
 } DeviceVectors;
 
 /* Cortex-M7 core handlers */
@@ -247,13 +245,16 @@ void ACC_Handler        ( void );
 void AES_Handler        ( void );
 void AFEC0_Handler      ( void );
 void AFEC1_Handler      ( void );
+void CCF_Handler        ( void );
+void CCW_Handler        ( void );
 void DACC_Handler       ( void );
 void EFC_Handler        ( void );
-void HSMCI_Handler      ( void );
+void FPU_Handler        ( void );
 void ICM_Handler        ( void );
 void ISI_Handler        ( void );
-void MCAN0_Handler      ( void );
-void MCAN1_Handler      ( void );
+void IXC_Handler        ( void );
+void MCAN0_INT0_Handler ( void );
+void MCAN0_INT1_Handler ( void );
 void MLB_Handler        ( void );
 void PIOA_Handler       ( void );
 void PIOB_Handler       ( void );
@@ -266,8 +267,6 @@ void RSTC_Handler       ( void );
 void RSWDT_Handler      ( void );
 void RTC_Handler        ( void );
 void RTT_Handler        ( void );
-void SPI0_Handler       ( void );
-void SPI1_Handler       ( void );
 void SSC_Handler        ( void );
 void SUPC_Handler       ( void );
 void TC0_Handler        ( void );
@@ -286,7 +285,6 @@ void UART3_Handler      ( void );
 void UART4_Handler      ( void );
 void USART0_Handler     ( void );
 void USART1_Handler     ( void );
-void USART2_Handler     ( void );
 void USBHS_Handler      ( void );
 void WDT_Handler        ( void );
 void XDMAC_Handler      ( void );
@@ -305,6 +303,7 @@ void XDMAC_Handler      ( void );
 #define __DTCM_PRESENT         1      /**< SAMV70J20B does provide a Data TCM           */
 #define __ITCM_PRESENT         1      /**< SAMV70J20B does provide an Instruction TCM   */
 #define __Vendor_SysTickConfig 0      /**< Set to 1 if different SysTick Config is used */
+#define __SAM_M7_REVB		   1	  /**< SAMV70J20 Revision B */
 
 /*
  * \brief CMSIS includes
@@ -330,7 +329,6 @@ void XDMAC_Handler      ( void );
 #include "component/dacc.h"
 #include "component/efc.h"
 #include "component/gpbr.h"
-#include "component/hsmci.h"
 #include "component/icm.h"
 #include "component/isi.h"
 #include "component/matrix.h"
@@ -344,7 +342,6 @@ void XDMAC_Handler      ( void );
 #include "component/rswdt.h"
 #include "component/rtc.h"
 #include "component/rtt.h"
-#include "component/spi.h"
 #include "component/ssc.h"
 #include "component/supc.h"
 #include "component/tc.h"
@@ -364,18 +361,14 @@ void XDMAC_Handler      ( void );
 /** \addtogroup SAMV70J20B_reg Registers Access Definitions */
 /*@{*/
 
-#include "instance/hsmci.h"
 #include "instance/ssc.h"
-#include "instance/spi0.h"
 #include "instance/tc0.h"
 #include "instance/twihs0.h"
 #include "instance/twihs1.h"
 #include "instance/pwm0.h"
 #include "instance/usart0.h"
 #include "instance/usart1.h"
-#include "instance/usart2.h"
 #include "instance/mcan0.h"
-#include "instance/mcan1.h"
 #include "instance/usbhs.h"
 #include "instance/afec0.h"
 #include "instance/dacc.h"
@@ -383,7 +376,6 @@ void XDMAC_Handler      ( void );
 #include "instance/icm.h"
 #include "instance/isi.h"
 #include "instance/tc3.h"
-#include "instance/spi1.h"
 #include "instance/pwm1.h"
 #include "instance/afec1.h"
 #include "instance/mlb.h"
@@ -409,8 +401,6 @@ void XDMAC_Handler      ( void );
 #include "instance/gpbr.h"
 #include "instance/rswdt.h"
 #include "instance/uart2.h"
-#include "instance/uart3.h"
-#include "instance/uart4.h"
 /*@}*/
 
 /* ************************************************************************** */
@@ -432,12 +422,9 @@ void XDMAC_Handler      ( void );
 #define ID_PIOB   (11) /**< \brief Parallel I/O Controller B (PIOB) */
 #define ID_USART0 (13) /**< \brief USART 0 (USART0) */
 #define ID_USART1 (14) /**< \brief USART 1 (USART1) */
-#define ID_USART2 (15) /**< \brief USART 2 (USART2) */
 #define ID_PIOD   (16) /**< \brief Parallel I/O Controller D (PIOD) */
-#define ID_HSMCI  (18) /**< \brief Multimedia Card Interface (HSMCI) */
 #define ID_TWIHS0 (19) /**< \brief Two Wire Interface 0 HS (TWIHS0) */
 #define ID_TWIHS1 (20) /**< \brief Two Wire Interface 1 HS (TWIHS1) */
-#define ID_SPI0   (21) /**< \brief Serial Peripheral Interface 0 (SPI0) */
 #define ID_SSC    (22) /**< \brief Synchronous Serial Controller (SSC) */
 #define ID_TC0    (23) /**< \brief Timer/Counter 0 (TC0) */
 #define ID_TC1    (24) /**< \brief Timer/Counter 1 (TC1) */
@@ -449,13 +436,9 @@ void XDMAC_Handler      ( void );
 #define ID_ACC    (33) /**< \brief Analog Comparator (ACC) */
 #define ID_USBHS  (34) /**< \brief USB Host / Device Controller (USBHS) */
 #define ID_MCAN0  (35) /**< \brief MCAN Controller 0 (MCAN0) */
-#define ID_MCAN1  (37) /**< \brief MCAN Controller 1 (MCAN1) */
 #define ID_AFEC1  (40) /**< \brief Analog Front End 1 (AFEC1) */
-#define ID_SPI1   (42) /**< \brief Serial Peripheral Interface 1 (SPI1) */
 #define ID_QSPI   (43) /**< \brief Quad I/O Serial Peripheral Interface (QSPI) */
 #define ID_UART2  (44) /**< \brief UART 2 (UART2) */
-#define ID_UART3  (45) /**< \brief UART 3 (UART3) */
-#define ID_UART4  (46) /**< \brief UART 4 (UART4) */
 #define ID_TC9    (50) /**< \brief Timer/Counter 9 (TC9) */
 #define ID_TC10   (51) /**< \brief Timer/Counter 10 (TC10) */
 #define ID_TC11   (52) /**< \brief Timer/Counter 11 (TC11) */
@@ -467,7 +450,7 @@ void XDMAC_Handler      ( void );
 #define ID_PWM1   (60) /**< \brief Pulse Width Modulation 1 (PWM1) */
 #define ID_RSWDT  (63) /**< \brief Reinforced Secure Watchdog Timer (RSWDT) */
 
-#define ID_PERIPH_COUNT (64) /**< \brief Number of peripheral IDs */
+#define ID_PERIPH_COUNT (71) /**< \brief Number of peripheral IDs */
 /*@}*/
 
 /* ************************************************************************** */
@@ -477,18 +460,14 @@ void XDMAC_Handler      ( void );
 /*@{*/
 
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
-#define HSMCI  (0x40000000U) /**< \brief (HSMCI ) Base Address */
 #define SSC    (0x40004000U) /**< \brief (SSC   ) Base Address */
-#define SPI0   (0x40008000U) /**< \brief (SPI0  ) Base Address */
 #define TC0    (0x4000C000U) /**< \brief (TC0   ) Base Address */
 #define TWIHS0 (0x40018000U) /**< \brief (TWIHS0) Base Address */
 #define TWIHS1 (0x4001C000U) /**< \brief (TWIHS1) Base Address */
 #define PWM0   (0x40020000U) /**< \brief (PWM0  ) Base Address */
 #define USART0 (0x40024000U) /**< \brief (USART0) Base Address */
 #define USART1 (0x40028000U) /**< \brief (USART1) Base Address */
-#define USART2 (0x4002C000U) /**< \brief (USART2) Base Address */
 #define MCAN0  (0x40030000U) /**< \brief (MCAN0 ) Base Address */
-#define MCAN1  (0x40034000U) /**< \brief (MCAN1 ) Base Address */
 #define USBHS  (0x40038000U) /**< \brief (USBHS ) Base Address */
 #define AFEC0  (0x4003C000U) /**< \brief (AFEC0 ) Base Address */
 #define DACC   (0x40040000U) /**< \brief (DACC  ) Base Address */
@@ -496,7 +475,6 @@ void XDMAC_Handler      ( void );
 #define ICM    (0x40048000U) /**< \brief (ICM   ) Base Address */
 #define ISI    (0x4004C000U) /**< \brief (ISI   ) Base Address */
 #define TC3    (0x40054000U) /**< \brief (TC3   ) Base Address */
-#define SPI1   (0x40058000U) /**< \brief (SPI1  ) Base Address */
 #define PWM1   (0x4005C000U) /**< \brief (PWM1  ) Base Address */
 #define AFEC1  (0x40064000U) /**< \brief (AFEC1 ) Base Address */
 #define MLB    (0x40068000U) /**< \brief (MLB   ) Base Address */
@@ -522,21 +500,15 @@ void XDMAC_Handler      ( void );
 #define GPBR   (0x400E1890U) /**< \brief (GPBR  ) Base Address */
 #define RSWDT  (0x400E1900U) /**< \brief (RSWDT ) Base Address */
 #define UART2  (0x400E1A00U) /**< \brief (UART2 ) Base Address */
-#define UART3  (0x400E1C00U) /**< \brief (UART3 ) Base Address */
-#define UART4  (0x400E1E00U) /**< \brief (UART4 ) Base Address */
 #else
-#define HSMCI  ((Hsmci  *)0x40000000U) /**< \brief (HSMCI ) Base Address */
 #define SSC    ((Ssc    *)0x40004000U) /**< \brief (SSC   ) Base Address */
-#define SPI0   ((Spi    *)0x40008000U) /**< \brief (SPI0  ) Base Address */
 #define TC0    ((Tc     *)0x4000C000U) /**< \brief (TC0   ) Base Address */
 #define TWIHS0 ((Twihs  *)0x40018000U) /**< \brief (TWIHS0) Base Address */
 #define TWIHS1 ((Twihs  *)0x4001C000U) /**< \brief (TWIHS1) Base Address */
 #define PWM0   ((Pwm    *)0x40020000U) /**< \brief (PWM0  ) Base Address */
 #define USART0 ((Usart  *)0x40024000U) /**< \brief (USART0) Base Address */
 #define USART1 ((Usart  *)0x40028000U) /**< \brief (USART1) Base Address */
-#define USART2 ((Usart  *)0x4002C000U) /**< \brief (USART2) Base Address */
 #define MCAN0  ((Mcan   *)0x40030000U) /**< \brief (MCAN0 ) Base Address */
-#define MCAN1  ((Mcan   *)0x40034000U) /**< \brief (MCAN1 ) Base Address */
 #define USBHS  ((Usbhs  *)0x40038000U) /**< \brief (USBHS ) Base Address */
 #define AFEC0  ((Afec   *)0x4003C000U) /**< \brief (AFEC0 ) Base Address */
 #define DACC   ((Dacc   *)0x40040000U) /**< \brief (DACC  ) Base Address */
@@ -544,7 +516,6 @@ void XDMAC_Handler      ( void );
 #define ICM    ((Icm    *)0x40048000U) /**< \brief (ICM   ) Base Address */
 #define ISI    ((Isi    *)0x4004C000U) /**< \brief (ISI   ) Base Address */
 #define TC3    ((Tc     *)0x40054000U) /**< \brief (TC3   ) Base Address */
-#define SPI1   ((Spi    *)0x40058000U) /**< \brief (SPI1  ) Base Address */
 #define PWM1   ((Pwm    *)0x4005C000U) /**< \brief (PWM1  ) Base Address */
 #define AFEC1  ((Afec   *)0x40064000U) /**< \brief (AFEC1 ) Base Address */
 #define MLB    ((Mlb    *)0x40068000U) /**< \brief (MLB   ) Base Address */
@@ -570,8 +541,6 @@ void XDMAC_Handler      ( void );
 #define GPBR   ((Gpbr   *)0x400E1890U) /**< \brief (GPBR  ) Base Address */
 #define RSWDT  ((Rswdt  *)0x400E1900U) /**< \brief (RSWDT ) Base Address */
 #define UART2  ((Uart   *)0x400E1A00U) /**< \brief (UART2 ) Base Address */
-#define UART3  ((Uart   *)0x400E1C00U) /**< \brief (UART3 ) Base Address */
-#define UART4  ((Uart   *)0x400E1E00U) /**< \brief (UART4 ) Base Address */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 /*@}*/
 
@@ -602,11 +571,6 @@ void XDMAC_Handler      ( void );
 #define IROM_ADDR     (0x00800000u) /**< Internal ROM base address */
 #define DTCM_ADDR     (0x20000000u) /**< Data Tightly Coupled Memory base address */
 #define IRAM_ADDR     (0x20400000u) /**< Internal RAM base address */
-#define EBI_CS0_ADDR  (0x60000000u) /**< EBI Chip Select 0 base address */
-#define EBI_CS1_ADDR  (0x61000000u) /**< EBI Chip Select 1 base address */
-#define EBI_CS2_ADDR  (0x62000000u) /**< EBI Chip Select 2 base address */
-#define EBI_CS3_ADDR  (0x63000000u) /**< EBI Chip Select 3 base address */
-#define SDRAM_CS_ADDR (0x70000000u) /**< SDRAM Chip Select base address */
 
 /* ************************************************************************** */
 /*   MISCELLANEOUS DEFINITIONS FOR SAMV70J20B */

@@ -3,7 +3,7 @@
  *
  * \brief Main functions for Keyboard example
  *
- * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -139,7 +139,8 @@ void main_kbd_disable(void)
  * \section intro Introduction
  * This example shows how to implement a USB Device HID Keyboard
  * on Atmel MCU with USB module.
- * The application note AVR4903 provides information about this implementation.
+ * The application note AVR4904 http://ww1.microchip.com/downloads/en/appnotes/doc8446.pdf
+ * provides information about this implementation.
  *
  * \section startup Startup
  * The example uses the buttons or sensors available on the board

@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015 - 2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -403,7 +403,7 @@
   #define REG_XDMAC_VERSION                    (0x40078FFCU) /**< \brief (XDMAC) XDMAC Version Register */
 #else
   #define REG_XDMAC_GTYPE     (*(__I  uint32_t*)0x40078000U) /**< \brief (XDMAC) Global Type Register */
-  #define REG_XDMAC_GCFG      (*(__I  uint32_t*)0x40078004U) /**< \brief (XDMAC) Global Configuration Register */
+  #define REG_XDMAC_GCFG      (*(__IO uint32_t*)0x40078004U) /**< \brief (XDMAC) Global Configuration Register */
   #define REG_XDMAC_GWAC      (*(__I  uint32_t*)0x40078008U) /**< \brief (XDMAC) Global Weighted Arbiter Configuration Register */
   #define REG_XDMAC_GIE       (*(__O  uint32_t*)0x4007800CU) /**< \brief (XDMAC) Global Interrupt Enable Register */
   #define REG_XDMAC_GID       (*(__O  uint32_t*)0x40078010U) /**< \brief (XDMAC) Global Interrupt Disable Register */

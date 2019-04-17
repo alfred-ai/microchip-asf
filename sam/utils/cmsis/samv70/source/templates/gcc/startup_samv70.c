@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2015-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 - 2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -100,7 +100,9 @@ void PIOE_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void HSMCI_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TWIHS0_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TWIHS1_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#ifdef _SAMV70_SPI0_INSTANCE_
 void SPI0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV70_SPI0_INSTANCE_ */
 void SSC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TC0_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TC1_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
@@ -122,13 +124,19 @@ void PWM0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ICM_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ACC_Handler    ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void USBHS_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void MCAN0_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void MCAN1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void MCAN0_INT0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void MCAN0_INT1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#ifdef _SAMV70_MCAN1_INSTANCE_
+void MCAN1_INT0_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void MCAN1_INT1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV70_MCAN1_INSTANCE_ */
 void AFEC1_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #ifdef _SAMV70_TWIHS2_INSTANCE_
 void TWIHS2_Handler ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif /* _SAMV70_TWIHS2_INSTANCE_ */
+#ifdef _SAMV70_SPI1_INSTANCE_
 void SPI1_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif /* _SAMV70_SPI1_INSTANCE_ */
 void QSPI_Handler   ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void UART2_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void UART3_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
@@ -215,7 +223,11 @@ const DeviceVectors exception_table = {
         .pfnHSMCI_Handler  = (void*) HSMCI_Handler,  /* 18 Multimedia Card Interface */
         .pfnTWIHS0_Handler = (void*) TWIHS0_Handler, /* 19 Two Wire Interface 0 HS */
         .pfnTWIHS1_Handler = (void*) TWIHS1_Handler, /* 20 Two Wire Interface 1 HS */
+#ifdef _SAMV70_SPI0_INSTANCE_
         .pfnSPI0_Handler   = (void*) SPI0_Handler,   /* 21 Serial Peripheral Interface 0 */
+#else
+        .pvReserved21      = (void*) (0UL),          /* 21 Reserved */
+#endif /* _SAMV70_SPI0_INSTANCE_ */
         .pfnSSC_Handler    = (void*) SSC_Handler,    /* 22 Synchronous Serial Controller */
         .pfnTC0_Handler    = (void*) TC0_Handler,    /* 23 Timer/Counter 0 */
         .pfnTC1_Handler    = (void*) TC1_Handler,    /* 24 Timer/Counter 1 */
@@ -245,10 +257,15 @@ const DeviceVectors exception_table = {
         .pfnICM_Handler    = (void*) ICM_Handler,    /* 32 Integrity Check Monitor */
         .pfnACC_Handler    = (void*) ACC_Handler,    /* 33 Analog Comparator */
         .pfnUSBHS_Handler  = (void*) USBHS_Handler,  /* 34 USB Host / Device Controller */
-        .pfnMCAN0_Handler  = (void*) MCAN0_Handler,  /* 35 MCAN Controller 0 */
-        .pvReserved36      = (void*) (0UL),          /* 36 Reserved */
-        .pfnMCAN1_Handler  = (void*) MCAN1_Handler,  /* 37 MCAN Controller 1 */
+        .pfnMCAN0_INT0_Handler = (void*) MCAN0_INT0_Handler, /* 35 Controller Area Network */
+        .pfnMCAN0_INT1_Handler = (void*) MCAN0_INT1_Handler, /* 36 Controller Area Network */
+#ifdef _SAMV70_MCAN1_INSTANCE_
+        .pfnMCAN1_INT0_Handler = (void*) MCAN1_INT0_Handler, /* 37 Controller Area Network */
+        .pfnMCAN1_INT1_Handler = (void*) MCAN1_INT1_Handler, /* 38 Controller Area Network */
+#else
+        .pvReserved37      = (void*) (0UL),          /* 37 Reserved */
         .pvReserved38      = (void*) (0UL),          /* 38 Reserved */
+#endif /* _SAMV70_MCAN1_INSTANCE_ */
         .pvReserved39      = (void*) (0UL),          /* 39 Reserved */
         .pfnAFEC1_Handler  = (void*) AFEC1_Handler,  /* 40 Analog Front End 1 */
 #ifdef _SAMV70_TWIHS2_INSTANCE_
@@ -256,7 +273,11 @@ const DeviceVectors exception_table = {
 #else
         .pvReserved41      = (void*) (0UL),          /* 41 Reserved */
 #endif /* _SAMV70_TWIHS2_INSTANCE_ */
+ #ifdef _SAMV70_SPI1_INSTANCE_
         .pfnSPI1_Handler   = (void*) SPI1_Handler,   /* 42 Serial Peripheral Interface 1 */
+#else
+        .pvReserved42      = (void*) (0UL),          /* 42 Reserved */
+#endif /* _SAMV70_SPI1_INSTANCE_ */
         .pfnQSPI_Handler   = (void*) QSPI_Handler,   /* 43 Quad I/O Serial Peripheral Interface */
         .pfnUART2_Handler  = (void*) UART2_Handler,  /* 44 UART 2 */
         .pfnUART3_Handler  = (void*) UART3_Handler,  /* 45 UART 3 */

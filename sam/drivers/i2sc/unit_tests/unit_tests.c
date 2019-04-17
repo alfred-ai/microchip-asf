@@ -3,7 +3,7 @@
  *
  * \brief Unit tests for I2S driver.
  *
- * Copyright (c) 2013-2017 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2013-2018 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -68,6 +68,9 @@
  * SAM devices with I2SC module can be used.
  * This example has been tested with the following setup:
  * - SAMG53 Xplained Pro
+ * - SAMG55 Xplained Pro
+ * - SAME70 Xplained Pro
+ * - SAMV71 Xplained Ultra
  *
  * \section compinfo Compilation info
  * This software was written for the GNU GCC and IAR for ARM. Other compilers
@@ -343,7 +346,7 @@ int main(void)
 	const usart_serial_options_t usart_serial_options = {
 		.baudrate = CONF_UART_BAUDRATE,
 		.paritytype = CONF_UART_PARITY,
-#if SAMG55 || SAMV71
+#if SAMG55 || SAMV71B || SAMV70B || SAMS70B || SAME70B
 		.charlength = CONF_UART_CHAR_LENGTH,
 		.stopbits = CONF_UART_STOP_BITS,
 #endif
