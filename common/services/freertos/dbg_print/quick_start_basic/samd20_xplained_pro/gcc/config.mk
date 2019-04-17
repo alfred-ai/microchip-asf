@@ -69,14 +69,15 @@ CSRCS = \
        sam0/utils/cmsis/samd20/source/gcc/startup_samd20.c \
        sam0/utils/cmsis/samd20/source/system_samd20.c     \
        sam0/utils/syscalls/gcc/syscalls.c                 \
-       thirdparty/freertos/freertos-8.0.1/Source/croutine.c \
-       thirdparty/freertos/freertos-8.0.1/Source/event_groups.c \
-       thirdparty/freertos/freertos-8.0.1/Source/list.c   \
-       thirdparty/freertos/freertos-8.0.1/Source/portable/GCC/ARM_CM0/port.c \
-       thirdparty/freertos/freertos-8.0.1/Source/portable/MemMang/heap_1.c \
-       thirdparty/freertos/freertos-8.0.1/Source/queue.c  \
-       thirdparty/freertos/freertos-8.0.1/Source/tasks.c  \
-       thirdparty/freertos/freertos-8.0.1/Source/timers.c
+       thirdparty/freertos/freertos-10.0.0/Source/croutine.c \
+       thirdparty/freertos/freertos-10.0.0/Source/event_groups.c \
+       thirdparty/freertos/freertos-10.0.0/Source/list.c  \
+       thirdparty/freertos/freertos-10.0.0/Source/portable/GCC/ARM_CM0/port.c \
+       thirdparty/freertos/freertos-10.0.0/Source/portable/MemMang/heap_1.c \
+       thirdparty/freertos/freertos-10.0.0/Source/queue.c \
+       thirdparty/freertos/freertos-10.0.0/Source/stream_buffer.c \
+       thirdparty/freertos/freertos-10.0.0/Source/tasks.c \
+       thirdparty/freertos/freertos-10.0.0/Source/timers.c
 
 # List of assembler source files.
 ASSRCS = 
@@ -110,8 +111,8 @@ INC_PATH = \
        sam0/utils/preprocessor                            \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
-       thirdparty/freertos/freertos-8.0.1/Source/include  \
-       thirdparty/freertos/freertos-8.0.1/Source/portable/GCC/ARM_CM0 \
+       thirdparty/freertos/freertos-10.0.0/Source/include \
+       thirdparty/freertos/freertos-10.0.0/Source/portable/GCC/ARM_CM0 \
        common/services/freertos/dbg_print/quick_start_basic/samd20_xplained_pro/gcc
 
 # Additional search paths for libraries.

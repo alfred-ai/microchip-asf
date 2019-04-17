@@ -60,17 +60,21 @@
 #include <dbg_print.h>
 #include <quick_start_basic/qs_dbg_print_basic.h>
 
-// From module: FreeRTOS - kernel 8.0.1
+// From module: FreeRTOS - kernel 10.0.0
 #include <FreeRTOS.h>
 #include <StackMacros.h>
 #include <croutine.h>
+#include <deprecated_definitions.h>
 #include <event_groups.h>
 #include <list.h>
+#include <message_buffer.h>
 #include <mpu_wrappers.h>
 #include <portable.h>
 #include <projdefs.h>
 #include <queue.h>
 #include <semphr.h>
+#include <stack_macros.h>
+#include <stream_buffer.h>
 #include <task.h>
 #include <timers.h>
 

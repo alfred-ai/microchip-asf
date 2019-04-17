@@ -5,11 +5,11 @@
  *
  *
  * @author    Atmel Corporation: http://www.atmel.com
- * @author    Support: http://www.atmel.com/design-support/
+ * @author    Support: https://www.microchip.com/support/
  */
 
 /*
- * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
  *
  * Licensed under Atmel's Limited License Agreement --> EULA.txt
  */

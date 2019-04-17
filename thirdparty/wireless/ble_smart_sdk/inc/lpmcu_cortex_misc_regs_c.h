@@ -3,7 +3,7 @@
  
   \brief Includes datatypes and signatures for lpmcu_cortex_misc_regs_c
  
-  Copyright (c) 2016-2017, Atmel Corporation. All rights reserved.
+  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
   Released under NDA
   Licensed under Atmel's Limited License Agreement.
  

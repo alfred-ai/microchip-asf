@@ -1,6 +1,6 @@
 /**
 
- * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 /**
  * \mainpage L2CAP PERIPHERAL Example
@@ -67,7 +67,7 @@
  *- Applications -
  *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=applications
  *- Support and FAQ visit - 
- *		+ <a href="http://www.atmel.com/design-support/">Atmel Support</a>
+ *		+ <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 
 /****************************************************************************************

@@ -57,6 +57,7 @@ CSRCS = \
        sam0/boards/samd21_xplained_pro/board_init.c       \
        sam0/drivers/extint/extint_callback.c              \
        sam0/drivers/extint/extint_sam_d_r_h/extint.c      \
+       sam0/drivers/nvm/nvm.c                             \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
@@ -78,6 +79,8 @@ CSRCS = \
        thirdparty/wireless/ble_sdk/ble_services/battery/battery.c \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr/ble_manager.c \
        thirdparty/wireless/ble_sdk/services/console/sam0/console_serial.c \
+       thirdparty/wireless/ble_sdk/services/pds/pds.c     \
+       thirdparty/wireless/ble_sdk/services/pds/sam0/pds_nvm.c \
        thirdparty/wireless/ble_sdk/services/serial/uart/sam0/serial_drv.c \
        thirdparty/wireless/ble_sdk/services/serial_fifo/serial_fifo.c \
        thirdparty/wireless/ble_sdk/services/timer/sam0/timer_hw.c \
@@ -97,6 +100,7 @@ INC_PATH = \
        sam0/boards/samd21_xplained_pro                    \
        sam0/drivers/extint                                \
        sam0/drivers/extint/extint_sam_d_r_h               \
+       sam0/drivers/nvm                                   \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/usart                          \
@@ -126,6 +130,7 @@ INC_PATH = \
        thirdparty/wireless/ble_sdk/ble_services/ble_mgr   \
        thirdparty/wireless/ble_sdk/inc                    \
        thirdparty/wireless/ble_sdk/services/console       \
+       thirdparty/wireless/ble_sdk/services/pds           \
        thirdparty/wireless/ble_sdk/services/serial/uart   \
        thirdparty/wireless/ble_sdk/services/serial_fifo   \
        thirdparty/wireless/ble_sdk/services/timer         \
@@ -192,6 +197,7 @@ CPPFLAGS = \
        -D HOST_UART_BAUDRATE_CONFIG_VALUE=921600          \
        -D NENABLE_PTS                                     \
        -D NEW_EVT_HANDLER                                 \
+       -D PDS_SERVICE                                     \
        -D SLEEP_WALKING_ENABLED=false                     \
        -D SYSTICK_MODE                                    \
        -D TC_ASYNC=true                                   \

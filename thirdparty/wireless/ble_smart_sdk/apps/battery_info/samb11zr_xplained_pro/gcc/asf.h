@@ -74,14 +74,14 @@
 // From module: Part identification macros
 #include <parts.h>
 
+// From module: SPI flash Control for SAMB
+#include <spi_flash.h>
+
 // From module: SYSTEM - Core System Driver for SAMB
 #include <system_sam_b.h>
 
 // From module: Standard serial I/O (stdio)
 #include <stdio_serial.h>
-
-// From module: TIMER - Timer for SAMB
-#include <timer.h>
 
 // From module: UART - Universal Asynchronous Receiver/Transmitter interface for SAMB
 #include <uart.h>

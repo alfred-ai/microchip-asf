@@ -3,45 +3,35 @@
 *
 * \brief BLE Manager declarations
 *
-* Copyright (c) 2017 Atmel Corporation. All rights reserved.
+* Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
 * \page License
 *
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
+* Subject to your compliance with these terms, you may use Microchip
+* software and any derivatives exclusively with Microchip products.
+* It is your responsibility to comply with third party license terms applicable
+* to your use of third party software (including open source software) that
+* may accompany Microchip software.
 *
-* 1. Redistributions of source code must retain the above copyright notice,
-*    this list of conditions and the following disclaimer.
-*
-* 2. Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*
-* 3. The name of Atmel may not be used to endorse or promote products derived
-*    from this software without specific prior written permission.
-*
-* 4. This software may only be redistributed and used in connection with an
-*    Atmel microcontroller product.
-*
-* THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
-* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
-* EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-* OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-* STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-* ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES,
+* WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
+* INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
+* AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
+* LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
+* LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
+* SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
+* POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT
+* ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
+* RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+* THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *
 * \asf_license_stop
 *
 */
 /*
-* Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
+* Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
 */
 
 // <<< Use Configuration Wizard in Context Menu >>>
@@ -944,7 +934,13 @@ typedef enum
 //	<i> Defines the central to connect maximum number to devices
 //	<i> Default: 1
 //	<id> gap_max_device_connected
-#define BLE_MAX_DEVICE_CONNECTION				(8)			// Maximum No.of device information that BLE-Manager can maintain
+#ifndef BLE_MAX_DEVICE_CONNECTION
+#define BLE_MAX_DEVICE_CONNECTION 		(8) // Maximum No.of device information that BLE-Device can Handle
+#endif
+
+#if ((BLE_MAX_DEVICE_CONNECTION < 1) || (BLE_MAX_DEVICE_CONNECTION > 8))
+#error "BLE Device connection Range is (1 to 8), Invalid BLE_MAX_DEVICE_CONNECTION range defined"
+#endif
 
 /// Maximum event parameter size that receives in \ref at_ble_event_get
 #define BLE_EVENT_PARAM_MAX_SIZE		        524			
@@ -990,6 +986,31 @@ typedef struct ble_connected_dev_info
 	/// Host LTK, refer to \ref at_ble_LTK_t
 	at_ble_LTK_t host_ltk;
 }ble_connected_dev_info_t;
+
+#ifdef PDS_SERVICE
+COMPILER_PACK_SET(1)  /**< \brief Start of compiler pack */
+
+/**   \struct pds_bond_info_t 
+	\brief BLE manager stores the bonding information using PDS
+*/
+typedef struct pds_bond_info{
+	/// Peer device address, Refer to \ref  at_ble_addr_t
+	at_ble_addr_t peer_addr;
+	/// Authorization level , refer to \ref at_ble_auth_t
+	at_ble_auth_t auth;
+	/// Peer LTK, refer to \ref at_ble_LTK_t
+	at_ble_LTK_t peer_ltk;
+	/// CSR Key, refer to \ref at_ble_CSRK_t
+	at_ble_CSRK_t peer_csrk;
+	/// Identity Resolving Key, refer to \ref at_ble_IRK_t
+	at_ble_IRK_t peer_irk;
+	/// Host LTK, refer to \ref at_ble_LTK_t
+	at_ble_LTK_t host_ltk;
+}pds_bond_info_t;
+
+COMPILER_PACK_RESET() /*!< End of compiler pack */
+
+#endif
 
 
 /***************************Advertisement/Scan Response Information configuration *****/
@@ -2232,7 +2253,7 @@ bool ble_mgr_events_callback_handler(ble_mgr_event_cb_t event_cb_type,
 							ble_mgr_event_t event_type,
 							const void *ble_event_handler);
 
-/** \brief ble_sdk_version gets the version of BluSDK and also checks the SDK and Library version compatability  
+/** \brief ble_sdk_version gets the version of BluSDK and also checks the SDK and Library version compatibility  
   *
   * \param[in] None
   *
@@ -2240,6 +2261,74 @@ bool ble_mgr_events_callback_handler(ble_mgr_event_cb_t event_cb_type,
   *
   */
 uint32_t ble_sdk_version(void);
+
+
+#if defined PDS_SERVICE
+
+/**
+ * \brief  Initialize the PDS Module.
+ *
+ *  IInitialize the PDS & NVM Memory 
+ *
+ * \param[in] None
+ *
+ * \return Status of the PDS Module Initialize procedure
+ *
+ * \retval AT_BLE_SUCCESS PDS Module Initialize is completed
+ * 
+ * \retval  AT_BLE_FAILURE PDS Module Initialization Failure
+ * 
+ */
+at_ble_status_t pds_module_init(void);
+
+/**
+ * \brief  Store the bonding information
+ *
+ *
+ * \param[in] None
+ *
+ * \return Status of the PDS bonding information store procedure
+ *
+ * \retval AT_BLE_SUCCESS Stored the bonding information in PDS
+ * 
+ * \retval  AT_BLE_FAILURE Failed to store the bonding information in PDS
+ * 
+ */
+at_ble_status_t ble_store_bonding_info(void *params);
+
+/**
+ * \brief  Restore the bonding information from PDS
+ *
+ *  Restore all the valid bonding information from PDS to device info table
+ *
+ * \param[in] None
+ *
+ * \return Status of the Restore bonding information
+ *
+ * \retval AT_BLE_SUCCESS PDS Restore bonding information is completed.
+ * 
+ * \retval  AT_BLE_FAILURE Restore bonding information failed
+ * 
+ */
+at_ble_status_t ble_restore_bonding_info(void);
+
+/**
+ * \brief  Remove all bonding information from PDS
+ *
+ *  Remove all the valid bonding informations from PDS
+ *
+ * \param[in] None
+ *
+ * \return Status of the Remove bonding information procedure
+ *
+ * \retval AT_BLE_SUCCESS bonding information removed successfully from the PDS
+ * 
+ * \retval  AT_BLE_FAILURE Failed to remove the bonding information from PDS
+ * 
+ */
+at_ble_status_t ble_remove_bonding_info(void);
+
+#endif /* defined PDS_SERVICE */
 
 #endif /*__BLE_MANAGER_H__*/
 // </h>

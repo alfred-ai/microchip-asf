@@ -6,10 +6,10 @@
  * $Id: pb_pairing.h 24049 2010-10-29 14:20:25Z uwalter $
  *
  * @author    Atmel Corporation: http://www.atmel.com
- * @author    Support: http://www.atmel.com/design-support/
+ * @author    Support: https://www.microchip.com/support/
  */
 /*
- * Copyright (c) 2010-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2010-2018 Microchip Technology Inc. and its subsidiaries.
  *
  * 
  */

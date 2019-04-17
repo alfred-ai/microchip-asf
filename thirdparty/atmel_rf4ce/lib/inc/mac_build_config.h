@@ -6,10 +6,10 @@
  * $Id: mac_build_config.h 20215 2010-02-08 12:37:47Z sschneid $
  *
  * @author    Atmel Corporation: http://www.atmel.com
- * @author    Support: http://www.atmel.com/design-support/
+ * @author    Support: https://www.microchip.com/support/
  */
 /*
- * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2018 Microchip Technology Inc. and its subsidiaries.
  *
  * 
  */

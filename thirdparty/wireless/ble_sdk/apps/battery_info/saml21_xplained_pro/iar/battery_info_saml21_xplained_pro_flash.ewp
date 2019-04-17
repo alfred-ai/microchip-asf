@@ -176,6 +176,7 @@
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>PDS_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
@@ -322,6 +323,7 @@
 					<state>$PROJ_DIR$/../../../../ble_services/battery</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../services/timer</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
@@ -334,6 +336,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
+					<state>$PROJ_DIR$/../../../../services/pds</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -512,6 +515,7 @@
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>PDS_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
@@ -625,6 +629,7 @@
 					<state>$PROJ_DIR$/../../../../ble_services/battery</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../services/timer</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
@@ -637,6 +642,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
+					<state>$PROJ_DIR$/../../../../services/pds</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -1207,6 +1213,7 @@
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>PDS_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
@@ -1353,6 +1360,7 @@
 					<state>$PROJ_DIR$/../../../../ble_services/battery</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../services/timer</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
@@ -1365,6 +1373,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
+					<state>$PROJ_DIR$/../../../../services/pds</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -1543,6 +1552,7 @@
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAML21J18A__</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>PDS_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
@@ -1656,6 +1666,7 @@
 					<state>$PROJ_DIR$/../../../../ble_services/battery</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../services/timer</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/boards</state>
@@ -1668,6 +1679,7 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
+					<state>$PROJ_DIR$/../../../../services/pds</state>
 					<state>$PROJ_DIR$/../../../../inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_saml21</state>
@@ -2130,6 +2142,24 @@
 							<name>$PROJ_DIR$/../../../../services/console/console_serial.h</name>
 						</file>
 					</group>
+					<group>
+						<name>pds</name>
+						<group>
+							<name>sam0</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../services/pds/sam0/pds_nvm.c</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../services/pds/pds.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../services/pds/pds.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../services/pds/pds_nvm.h</name>
+						</file>
+					</group>
 				</group>
 				<group>
 					<name>src</name>
@@ -2178,6 +2208,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../config/saml21/conf_board.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../config/saml21/conf_nvm.h</name>
 							</file>
 						</group>
 					</group>
@@ -2730,6 +2763,21 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/sercom_interrupt.h</name>
+				</file>
+			</group>
+			<group>
+				<name>nvm</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm/nvm.c</name>
+				</file>
+				<group>
+					<name>quick_start_basic</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm/quick_start_basic/qs_nvm_basic.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm/nvm.h</name>
 				</file>
 			</group>
 		</group>

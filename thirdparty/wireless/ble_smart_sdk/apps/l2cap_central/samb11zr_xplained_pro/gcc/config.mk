@@ -58,7 +58,6 @@ CSRCS = \
        sam0/drivers/gpio/gpio.c                           \
        sam0/drivers/spi_flash/spi_flash.c                 \
        sam0/drivers/system/system_sam_b.c                 \
-       sam0/drivers/timer/timer.c                         \
        sam0/drivers/uart/uart.c                           \
        sam0/utils/cmsis/samb11/source/gcc/startup_samb11.c \
        sam0/utils/cmsis/samb11/source/system_samb11.c     \
@@ -89,7 +88,6 @@ INC_PATH = \
        sam0/drivers/gpio                                  \
        sam0/drivers/spi_flash                             \
        sam0/drivers/system                                \
-       sam0/drivers/timer                                 \
        sam0/drivers/uart                                  \
        sam0/utils                                         \
        sam0/utils/cmsis/samb11/include                    \

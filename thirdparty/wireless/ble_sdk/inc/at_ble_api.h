@@ -3,7 +3,7 @@
 
   \brief Includes Atmel BLE API related signatures and datatypes for Applications
 
-  Copyright (c) 2017, Atmel Corporation. All rights reserved.
+  * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
   Released under NDA
   Licensed under Atmel's Limited License Agreement.
 
