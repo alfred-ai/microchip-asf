@@ -4,7 +4,7 @@
  * \brief Universal Synchronous Asynchronous Receiver Transmitter (USART) driver
  * for SAM.
  *
- * Copyright (c) 2011-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2011-2017 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -84,8 +84,12 @@ extern "C" {
 
 /**micro definition for LIN mode of SAMV71*/
 #if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+#ifndef US_MR_USART_MODE_LIN_MASTER
 #define US_MR_USART_MODE_LIN_MASTER  0x0A
+#endif
+#ifndef US_MR_USART_MODE_LIN_SLAVE
 #define US_MR_USART_MODE_LIN_SLAVE   0x0B
+#endif
 #endif
 /* Input parameters when initializing RS232 and similar modes. */
 typedef struct {

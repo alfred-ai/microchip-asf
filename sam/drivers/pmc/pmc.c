@@ -1408,6 +1408,7 @@ void pmc_enable_waitmode(void)
 #if !(SAMV71 || SAMV70 || SAME70 || SAMS70)
 	i |= ul_flash_in_wait_mode;
 #else
+	(void)ul_flash_in_wait_mode;
 	i |= PMC_WAIT_MODE_FLASH_IDLE;
 #endif
 	PMC->PMC_FSMR = i;
