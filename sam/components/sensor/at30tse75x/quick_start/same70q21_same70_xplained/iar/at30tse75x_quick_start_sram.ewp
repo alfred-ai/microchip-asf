@@ -97,7 +97,7 @@
 				</option>
 				<option>
 					<name>OGChipSelectEditMenu</name>
-					<state>ATSAME70Q21B	Atmel ATSAME70Q21B</state>
+					<state>ATSAME70Q21xB	Microchip ATSAME70Q21xB</state>
 				</option>
 				<option>
 					<name>GenLowLevelInterface</name>
@@ -1058,7 +1058,7 @@
 				</option>
 				<option>
 					<name>OGChipSelectEditMenu</name>
-					<state>ATSAME70Q21B	Atmel ATSAME70Q21B</state>
+					<state>ATSAME70Q21xB	Microchip ATSAME70Q21xB</state>
 				</option>
 				<option>
 					<name>GenLowLevelInterface</name>

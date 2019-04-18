@@ -237,6 +237,7 @@ static enum status_code _rtc_count_set_config(
 	if (config->continuously_update) {
 		/* Set continuously mode. */
 		rtc_module->MODE0.READREQ.reg |= RTC_READREQ_RCONT;
+		rtc_module->MODE0.READREQ.reg |= RTC_READREQ_RREQ;
 	}
 
 	/* Return status OK if everything was configured. */
@@ -380,7 +381,8 @@ uint32_t rtc_count_get_count(struct rtc_module *const module)
 			/* Wait for synchronization */
 		}
 	} else if (!(rtc_module->MODE0.READREQ.reg & RTC_READREQ_RCONT)){
-		rtc_module->MODE0.READREQ.reg |= RTC_READREQ_RCONT | RTC_READREQ_RREQ;
+		rtc_module->MODE0.READREQ.reg |= RTC_READREQ_RCONT;
+		rtc_module->MODE0.READREQ.reg |= RTC_READREQ_RREQ;
 		 /* wait that the first Read request finishes */
 		while (rtc_count_is_syncing(module)) {
 			/* Wait for synchronization */

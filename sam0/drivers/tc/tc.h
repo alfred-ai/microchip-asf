@@ -1437,6 +1437,10 @@ static inline void tc_sync_read_count(
 
 	/* Write command to execute */
 	tc_module->CTRLBSET.reg = TC_CTRLBSET_CMD(TC_CTRLBSET_CMD_READSYNC_Val);
+#if (SAMC20) || (SAMC21) || (SAML21) || (SAML22) || (SAMR30)
+	/* wait for the CMD bits in CTRLBSET to be cleared, meaning the CMD has been executed */
+	while(tc_module->CTRLBSET.reg & TC_CTRLBSET_CMD_READSYNC);	
+#endif
 }
 /** @} */
 #endif
