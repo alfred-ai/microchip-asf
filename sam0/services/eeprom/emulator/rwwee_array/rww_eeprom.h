@@ -245,7 +245,7 @@
  *
  * \note In the following memory layout example, each physical row stores the
  * contents of one logical RWW EEPROM page. Refer to
- * <a href="http://www.atmel.com/images/atmel-42125-sam-d20-eeprom-emulator-service-eeprom_application-note_at03265.pdf"> 
+ * <a href="http://ww1.microchip.com/downloads/en/AppNotes/Atmel-42125-SAM-EEPROM-Emulator-Service-EEPROM_ApplicationNote_AT03265.pdf"> 
  * "AT03265: SAM EEPROM Emulator Service (EEPROM)"</a> 
  * for the example of two logical EEPROM pages in one row.
  *

@@ -5,7 +5,7 @@
  *
  * $Id: tal_config.h 24720 2011-01-05 15:33:06Z sschneid $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

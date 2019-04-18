@@ -40,7 +40,6 @@
 #include "ota_fw_update/ota_fw_update.h"
 #include "lwip/sockets.h"
 #include "lwip/api.h"
-#include "lwip/netdb.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -101,8 +100,22 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 			if (pstrWifiState->u8IfcId == STATION_INTERFACE) {
 				if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
 					osprintf("Wi-Fi connected\r\n");
-					net_interface_up(NET_IF_STA);
-					m2m_wifi_request_dhcp_client_ex();
+					if(use_static_IP == 1) {
+						ip_addr_t ipaddr, netmask, gw;
+						IP4_ADDR(&netmask, 255,255,255,0);
+						ipaddr.addr = StaticIPcfg.u32StaticIP;
+						gw.addr = StaticIPcfg.u32Gateway;
+						net_set_interface_address(NET_IF_STA,&ipaddr,&netmask,&gw);
+						m2m_wifi_request_static_client_ex();
+						// net_interface_up should not be made common to DHCP & Static IP as use_static_IP = 1 is required inside.
+						net_interface_up(NET_IF_STA); 
+						use_static_IP = 0;
+					}
+					else {
+						m2m_wifi_request_dhcp_client_ex();
+						net_interface_up(NET_IF_STA);
+					}
+
 				} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 					osprintf("Wi-Fi disconnected\r\n");
 					if(gstrAllStatus.u8Sta_status == SERVICE_IS_RUNNING) {
@@ -705,6 +718,13 @@ void wilc_task_1(void *argument)
 			char * host_name = (char *)pvPortMalloc(strlen((char *)temp_cmd_content.au8ParamsList[0]) + 1);
 			strcpy(host_name, (char *)temp_cmd_content.au8ParamsList[0]);
 			http_connection(host_name, port_num);
+			vPortFree(host_name);
+		} else if(strcmp((const char *)temp_cmd_content.au8Cmd,"PING") == 0){
+			uint16 ping_num = atoi((char *)temp_cmd_content.au8ParamsList[1]);
+			char * host_name = (char *)pvPortMalloc(strlen((char *)temp_cmd_content.au8ParamsList[0]) + 1);
+			strcpy(host_name, (char *)temp_cmd_content.au8ParamsList[0]);
+			//M2M_INFO("*** Host name = <%s> ***\r\n",host_name);
+			ping_function(host_name, ping_num);
 			vPortFree(host_name);
 		} else if(strcmp((const char *)temp_cmd_content.au8Cmd,"FILE_DOWNLOAD") == 0){
 			char * fileURL = (char *)pvPortMalloc(strlen((char *)temp_cmd_content.au8ParamsList[0]) + 1);

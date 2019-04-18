@@ -47,6 +47,10 @@
 #include "sio2host.h"
 #endif
 
+#if defined(ENDDEVICE)
+#include "sleep_mgr.h"
+#endif
+
 #if SAMD || SAMR21 || SAML21 || SAMR30
 #include "system.h"
 #else
@@ -58,6 +62,11 @@
 
 #include "asf.h"
 #include "wsndemo.h"
+#if defined(ENABLE_NETWORK_FREEZER)
+#include "pdsMemIds.h"
+#include "pdsDataServer.h"
+#include "wlPdsTaskManager.h"
+#endif
 /*****************************************************************************
 *****************************************************************************/
 #define APP_SCAN_DURATION 10
@@ -132,10 +141,11 @@ static void Connection_Confirm(miwi_status_t status);
 #ifndef PAN_COORDINATOR
 void searchConfim(uint8_t foundScanResults, void* ScanResults);
 void appLinkFailureCallback(void);
-#else
-#if defined(MIWI_MESH_TOPOLOGY_SIMULATION_MODE)
-static void appBroadcastDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer);
 #endif
+
+#if defined(ENABLE_NETWORK_FREEZER)
+bool reconnectStatus = false;
+static void ReconnectionIndication (miwi_status_t status);
 #endif
 /*- Implementations --------------------------------------------------------*/
 
@@ -365,12 +375,43 @@ static void appInit(void)
 #ifndef PAN_COORDINATOR
 	MiApp_SubscribeLinkFailureCallback(appLinkFailureCallback);
 #endif
-#if defined(PAN_COORDINATOR)
-    appState = APP_STATE_START_NETWORK;
-#else
-	appState = APP_STATE_CONNECT_NETWORK;
+
+#if defined(ENABLE_NETWORK_FREEZER)
+     if (reconnectStatus)
+	 {
+		 appState = APP_STATE_SEND;		 
+	 }
+	 else
 #endif
+	 {
+#if defined(PAN_COORDINATOR)
+         appState = APP_STATE_START_NETWORK;
+#else
+         appState = APP_STATE_CONNECT_NETWORK;
+#endif 
+	 }
 }
+
+#if defined(ENABLE_NETWORK_FREEZER)
+static void ReconnectionIndication (miwi_status_t status)
+{
+	if(SUCCESS == status)
+	{
+		reconnectStatus = true;
+#if defined(ENDDEVICE)
+		appState = APP_STATE_SEND;
+#endif
+	}
+	else
+	{
+        reconnectStatus = false;
+#if defined(ENDDEVICE)
+         appState = APP_STATE_CONNECT_NETWORK;
+#endif
+	}
+}
+#endif
+
 
 /*************************************************************************//**
 *****************************************************************************/
@@ -406,57 +447,67 @@ static void APP_TaskHandler(void)
 
 	case APP_STATE_SENDING_DONE:
 	{
+#if defined(ENABLE_SLEEP_FEATURE) && defined(ENDDEVICE) && (CAPABILITY_INFO == CAPABILITY_INFO_ED)
+		appState = APP_STATE_PREPARE_TO_SLEEP;
+#else
 		SYS_TimerStart(&appDataSendingTimer);
 		appState = APP_STATE_WAIT_SEND_TIMER;
+#endif
 	}
 	break;
+#if defined(ENABLE_SLEEP_FEATURE) && defined(ENDDEVICE)
+	case APP_STATE_PREPARE_TO_SLEEP:
+	{
+		uint32_t timeToSleep = 0;
+		if (!SYS_TimerStarted(&appCmdIdentifyDurationTimer) && 
+		    !SYS_TimerStarted(&appCmdIdentifyPeriodTimer) &&
+		    MiApp_ReadyToSleep(&timeToSleep)
+		   )
+		{
+			if (timeToSleep > APP_SENDING_INTERVAL)
+			{
+				timeToSleep = APP_SENDING_INTERVAL;
+			}
+
+			if (timeToSleep > MIN_SLEEP_INTERVAL)
+			{
+				sm_sleep(timeToSleep / 1000);
+				SYS_TimerAdjust_SleptTime(timeToSleep);
+				appState = APP_STATE_WAKEUP;
+			}
+			else
+			{
+				SYS_TimerStart(&appDataSendingTimer);
+		        appState = APP_STATE_WAIT_SEND_TIMER;
+			}
+		}
+	}
+	break;
+
+	case APP_STATE_WAKEUP:
+	{
+		appState = APP_STATE_SEND;
+	}
+	break;
+#endif
+
 	default:
 		break;
 	}
+
+#if defined(ENABLE_NETWORK_FREEZER)
+	/* Read the button level */
+	if (port_pin_get_input_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
+	{
+        MiApp_ResetToFactoryNew();
+	}
+#endif
 
 #if defined(PAN_COORDINATOR)
 	uint16_t bytes;
 	if ((bytes = sio2host_rx(rx_data, APP_RX_BUF_SIZE)) > 0) {
 		UartBytesReceived(bytes, (uint8_t *)&rx_data);
 	}
-#if defined(MIWI_MESH_TOPOLOGY_SIMULATION_MODE)
-
-	/* This section of code tries to simulate and restore the topology
-	*  for testing purposes. When the SW0 is pressed for less than 3secs,
-	*  the PAN coordinator sends out a application data to all the coordinators
-	*  to set its route entry respectively to generate a line topology.	
-	*  After testing when this button is pressed for more than 3secs, it sends
-	*  out a topology reset command, which will bring back the network back to
-	*  mesh state.
-	*/
-
-	/* Read the button level */
-	if (port_pin_get_input_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
-	{
-		uint8_t commandId;
-		uint16_t dstAddr = MESH_BROADCAST_TO_COORDINATORS;
-		uint8_t count = 0;
-		
-		/* Wait for button debounce time */
-		delay_ms(50);
-		/* Check whether button is in default state */
-		while(port_pin_get_input_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
-		{
-			delay_ms(500);
-			count += 1;
-		}
-		if (count > 5)
-		{
-			commandId = APP_COMMAND_ID_TOPOLOGY_SIMULATION_RESET;
-			MiApp_SendData(2, (uint8_t *)&dstAddr, 1, &commandId, 1, false, appBroadcastDataConf);
-		}
-		else
-		{
-			commandId = APP_COMMAND_ID_SIMULATE_LINE_TOPOLOGY;
-			MiApp_SendData(2, (uint8_t *)&dstAddr, 1, &commandId, 2, false, appBroadcastDataConf);
-		}
-	}
-#endif
 #endif
 }
 
@@ -468,7 +519,45 @@ static void APP_TaskHandler(void)
  */
 void wsndemo_init(void)
 {
+	uint8_t i;
+	uint64_t ieeeAddr;
+	uint64_t invalidIEEEAddr;
+
+#if defined(ENABLE_NETWORK_FREEZER)
+    MiApp_SubscribeReConnectionCallback((ReconnectionCallback_t)ReconnectionIndication );
+#endif
 	MiApp_ProtocolInit(&defaultParamsRomOrRam, &defaultParamsRamOnly);
+	/* Check if a valid IEEE address is available. */
+	memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+	memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
+	srand(PHY_RandomReq());
+	/*
+		* This while loop is on purpose, since just in the
+		* rare case that such an address is randomly
+		* generated again, we must repeat this.
+		*/
+	while ((ieeeAddr == 0x0000000000000000) || (ieeeAddr == invalidIEEEAddr))
+	{
+		/*
+			* In case no valid IEEE address is available, a random
+			* IEEE address will be generated to be able to run the
+			* applications for demonstration purposes.
+			* In production code this can be omitted.
+			*/
+		uint8_t* peui64 = (uint8_t *)&myLongAddress;
+		for(i = 0; i<MY_ADDRESS_LENGTH; i++)
+		{
+			*peui64++ = (uint8_t)rand();
+		}
+		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+	}
+	PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
+
+#ifdef ENABLE_SLEEP_FEATURE
+#if defined(ENDDEVICE)
+    sm_init();
+#endif
+#endif
 
 #if defined(PAN_COORDINATOR)
 	sio2host_init();
@@ -530,6 +619,11 @@ static void Connection_Confirm(miwi_status_t status)
 void wsndemo_task(void)
 {
 	MeshTasks();
+#if defined(ENABLE_NETWORK_FREEZER)
+#if PDS_ENABLE_WEAR_LEVELING
+    PDS_TaskHandler();
+#endif
+#endif
 	APP_TaskHandler();
 }
 
@@ -539,12 +633,5 @@ void appLinkFailureCallback(void)
 	/* On link failure initiate search to establish connection */
 	appState = APP_STATE_CONNECT_NETWORK;
 	SYS_TimerStop(&appDataSendingTimer);
-}
-#endif
-
-#if defined(PAN_COORDINATOR) && defined(MIWI_MESH_TOPOLOGY_SIMULATION_MODE)
-static void appBroadcastDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer)
-{
-		
 }
 #endif

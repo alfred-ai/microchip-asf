@@ -20,7 +20,7 @@
   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
  
-  Atmel Corporation: http://www.atmel.com
+  Microchip Technology Inc: http://www.microchip.com
  
 ******************************************************************************/
 /**************************************************************************//**

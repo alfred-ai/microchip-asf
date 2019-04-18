@@ -5,7 +5,7 @@
  *
  * $Id: nwk_config.h 25096 2011-01-24 09:26:10Z uwalter $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

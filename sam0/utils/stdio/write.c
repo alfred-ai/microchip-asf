@@ -51,7 +51,10 @@ int (*ptr_put)(void volatile*, char);
 
 #include <yfuns.h>
 
+#if (__VER__ < 8010000)
+// Refer http://ftp.iar.se/WWWfiles/arm/webic/doc/EWARM_MigrationGuide.ENU.pdf
 _STD_BEGIN
+#endif
 
 #pragma module_name = "?__write"
 
@@ -92,7 +95,10 @@ size_t __write(int handle, const unsigned char *buffer, size_t size)
 	return nChars;
 }
 
+#if (__VER__ < 8010000)
+// Refer http://ftp.iar.se/WWWfiles/arm/webic/doc/EWARM_MigrationGuide.ENU.pdf
 _STD_END
+#endif
 
 
 #elif (defined(__GNUC__))

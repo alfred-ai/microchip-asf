@@ -93,6 +93,11 @@
 // From module: Part identification macros
 #include <parts.h>
 
+// From module: RTC - Real Time Counter in Count Mode (Callback APIs)
+#include <rtc_count.h>
+#include <rtc_count_interrupt.h>
+#include <rtc_tamper.h>
+
 // From module: SERCOM Callback API
 #include <sercom.h>
 #include <sercom_interrupt.h>

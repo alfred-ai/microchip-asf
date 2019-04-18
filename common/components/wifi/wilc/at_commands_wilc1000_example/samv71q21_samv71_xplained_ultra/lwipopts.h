@@ -140,7 +140,7 @@ extern int random_number(void);
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               1460
+#define PBUF_POOL_BUFSIZE               1604
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,
@@ -438,7 +438,7 @@ extern int random_number(void);
 
 //#define LWIP_NOASSERT
 
-//#define LWIP_DEBUG
+#define LWIP_DEBUG
 #define LWIP_DBG_MIN_LEVEL              LWIP_DBG_LEVEL_ALL
 #define LWIP_DBG_TYPES_ON               LWIP_DBG_ON
 

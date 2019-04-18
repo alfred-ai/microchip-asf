@@ -51,6 +51,8 @@ extern "C" {
 //#define 	STA_MODE_WPA_WPA2_ENTERPRISE_SECURITY
  /*!< Wi-Fi network is secured with WPA/WPA2 Enterprise.IEEE802.1x user-name/password authentication.
  */
+ 
+//#define STA_MODE_STATIC_IP //for using Static IP with STA mode
 
 //#define    P2P_MODE_CONCURRENCY
 /** P2P mode Settings */

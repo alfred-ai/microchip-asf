@@ -6,7 +6,7 @@
  *
  * $Id: tfa.h 24320 2010-11-26 08:59:36Z sschneid $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

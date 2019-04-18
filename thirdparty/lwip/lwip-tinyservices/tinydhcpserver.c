@@ -46,7 +46,7 @@ static struct udp_pcb * dhcp_pcb = 0;
 /* This is the broadcast address used by concurrent mode: 192.168.5.255 */
 static ip_addr_t ip_addr_c_broadcast = { 0xff05a8c0 };
 
-#define LWIP_DHCP_MAX_CLIENT 7
+#define LWIP_DHCP_MAX_CLIENT 8
 static uint8_t lwip_dhcp_known_mac[LWIP_DHCP_MAX_CLIENT][6];
 
 void lwip_dhcp_register_mac(uint8_t *mac)

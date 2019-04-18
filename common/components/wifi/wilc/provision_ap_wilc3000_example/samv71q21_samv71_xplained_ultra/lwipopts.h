@@ -68,8 +68,15 @@ extern int random_number(void);
 /**
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
-#define LWIP_SOCKET                     0
+#define LWIP_SOCKET                     1
 
+#if LWIP_SOCKET
+#define LWIP_TIMEVAL_PRIVATE			0   // set it to 0 to avoid timeval struct redefined build error, if LWIP_SOCKET is set
+#endif
+/**
+ * LWIP_SO_RCVTIMEO==1: Enable recv timeout
+ */
+#define LWIP_SO_RCVTIMEO                1
 /*
    ------------------------------------
    ---------- Memory options ----------
@@ -133,7 +140,7 @@ extern int random_number(void);
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               1460
+#define PBUF_POOL_BUFSIZE               1604
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,

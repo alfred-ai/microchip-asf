@@ -41,6 +41,9 @@
 #include "star_demo.h"
 #include "mimem.h"
 #include "asf.h"
+#if defined(ENABLE_SLEEP_FEATURE)
+#include "sleep_mgr.h"
+#endif
 
 #if defined(PROTOCOL_STAR)
     uint8_t i;
@@ -78,6 +81,25 @@
         {
             {   
                 P2PTasks();
+#if defined(ENABLE_SLEEP_FEATURE)
+				if (!role && Total_Connections())
+				{
+					if (P2PStatus.bits.Sleeping)
+					{
+						MiApp_TransceiverPowerState(POWER_STATE_WAKEUP_DR);
+						//printf("\r\nDevice wokeup");
+					}
+					else
+					{
+						if(!(P2PStatus.bits.DataRequesting || P2PStatus.bits.RxHasUserData))
+						{
+							MiApp_TransceiverPowerState(POWER_STATE_SLEEP);
+							sm_sleep((RFD_WAKEUP_INTERVAL - 2));
+							//printf("\r\nDevice is sleeping");
+						}
+					}
+				}
+#endif
                 /*******************************************************************/
                 // If no packet received, now we can check if we want to send out
                 // any information.
@@ -145,7 +167,7 @@
 
                         if (myConnectionIndex_in_PanCo == select_ed)
                         {
-                            dataPtr = MiMem_Alloc(MIWI_TEXT_LEN);
+                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(MIWI_TEXT_LEN));
 						    if (NULL == dataPtr)
 						        return;
                             for (i = 0 ; i < 21 ; i++)
@@ -167,7 +189,7 @@
                             // Edx --> Pan CO --> EDy
                             // To forward a Packet from one ED to another ED , the first 4 bytes should holding
                             // a CMD and end dest device short address (3 bytes)
-                            dataPtr = MiMem_Alloc(4 + MIWI_TEXT_LEN);
+                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(4 + MIWI_TEXT_LEN));
 						    if (NULL == dataPtr)
 						        return;
                             dataPtr[dataLen++] = CMD_FORWRD_PACKET;
@@ -244,7 +266,7 @@
                         uint8_t* dataPtr = NULL;
                         uint8_t dataLen = 0;
                         uint16_t broadcastAddress = 0xFFFF;
-                        dataPtr = MiMem_Alloc(MIWI_TEXT_LEN);
+                        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(MIWI_TEXT_LEN));
 						if (NULL == dataPtr)
 						    return;
                         for(i = 0; i < 21; i++)
@@ -310,7 +332,7 @@
                                         
                                         if (myConnectionIndex_in_PanCo == select_ed)
                                         {
-                                            dataPtr = MiMem_Alloc(21);
+                                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(21));
 							                if (NULL == dataPtr)
 								                return;
                                             for (i = 0 ; i < 21 ; i++)
@@ -333,7 +355,7 @@
                                             // Edx --> Pan CO --> EDy
                                             // To forward a Packet from one ED to another ED , the first 4 bytes should holding
                                             // a CMD and end dest device short address (3 bytes)
-                                            dataPtr = MiMem_Alloc(4 + MIWI_TEXT_LEN);
+                                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(4 + MIWI_TEXT_LEN));
 							                if (NULL == dataPtr)
 								                return;
                                             dataPtr[dataLen++] = (CMD_FORWRD_PACKET);

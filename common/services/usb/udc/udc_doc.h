@@ -343,7 +343,7 @@ Event_VBUS_present() // VBUS interrupt or GPIO interrupt or other
  *   \note In case of USB dual roles (Device and Host) managed through USB OTG connector
  * (USB ID pin), the call of udc_start() must be removed and replaced by uhc_start().
  * Refer to section "Dual roles" for further information in the application note:
- * <a href="http://www.atmel.com/images/doc8486.pdf">
+ * <a href="http://ww1.microchip.com/downloads/en/AppNotes/doc8486.pdf">
  *   Atmel AVR4950: ASF - USB Host Stack</a>
  *
  * \section udc_conf_clock conf_clock.h Examples

@@ -521,6 +521,6 @@ int main(void)
  * - ATSAML22 Series
  *
  * \author
- * Atmel Corporation : http://www.atmel.com
+ * Microchip Technology Inc : http://www.microchip.com
  */
 #endif

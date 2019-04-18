@@ -106,7 +106,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com">Atmel</A>.\n
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
 
 #include "asf.h"
@@ -196,7 +196,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
  * - [SW_STATUS](@ref SW_STATUS)
  * - [RB_STATUS](@ref RB_STATUS)
  * \param[in] u8OtaUpdateStatus type of OTA update status detail. Possible types are:
- * - [OTA_STATUS_SUCSESS](@ref OTA_STATUS_SUCSESS)
+ * - [OTA_STATUS_SUCCESS](@ref OTA_STATUS_SUCCESS)
  * - [OTA_STATUS_FAIL](@ref OTA_STATUS_FAIL)
  * - [OTA_STATUS_INVAILD_ARG](@ref OTA_STATUS_INVAILD_ARG)
  * - [OTA_STATUS_INVAILD_RB_IMAGE](@ref OTA_STATUS_INVAILD_RB_IMAGE)
@@ -208,7 +208,7 @@ static void OtaUpdateCb(uint8_t u8OtaUpdateStatusType, uint8_t u8OtaUpdateStatus
 {
 	printf("OtaUpdateCb %d %d\r\n", u8OtaUpdateStatusType, u8OtaUpdateStatus);
 	if (u8OtaUpdateStatusType == DL_STATUS) {
-		if (u8OtaUpdateStatus == OTA_STATUS_SUCSESS) {
+		if (u8OtaUpdateStatus == OTA_STATUS_SUCCESS) {
 			/* Start Host Controller OTA HERE ... Before switching.... */
 			printf("OtaUpdateCb m2m_ota_switch_firmware start.\r\n");
 			m2m_ota_switch_firmware();
@@ -216,7 +216,7 @@ static void OtaUpdateCb(uint8_t u8OtaUpdateStatusType, uint8_t u8OtaUpdateStatus
 			printf("OtaUpdateCb FAIL u8OtaUpdateStatus %d\r\n", u8OtaUpdateStatus);
 		}
 	} else if (u8OtaUpdateStatusType == SW_STATUS) {
-		if (u8OtaUpdateStatus == OTA_STATUS_SUCSESS) {
+		if (u8OtaUpdateStatus == OTA_STATUS_SUCCESS) {
 			printf("OTA Success. Press reset your board.\r\n");
 			/* system_reset(); */
 		}

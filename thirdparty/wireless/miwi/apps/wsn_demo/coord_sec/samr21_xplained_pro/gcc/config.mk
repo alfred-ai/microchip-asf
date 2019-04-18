@@ -57,6 +57,7 @@ CSRCS = \
        sam0/boards/samr21_xplained_pro/board_init.c       \
        sam0/drivers/extint/extint_callback.c              \
        sam0/drivers/extint/extint_sam_d_r_h/extint.c      \
+       sam0/drivers/nvm/nvm.c                             \
        sam0/drivers/port/port.c                           \
        sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.c      \
        sam0/drivers/sercom/sercom.c                       \
@@ -80,9 +81,25 @@ CSRCS = \
        thirdparty/wireless/miwi/apps/wsn_demo/commands.c  \
        thirdparty/wireless/miwi/apps/wsn_demo/main.c      \
        thirdparty/wireless/miwi/apps/wsn_demo/wsndemo.c   \
+       thirdparty/wireless/miwi/services/otau/notify/client_notify.c \
+       thirdparty/wireless/miwi/services/otau/notify/server_notify.c \
+       thirdparty/wireless/miwi/services/otau/otau.c      \
+       thirdparty/wireless/miwi/services/otau/otau_parser.c \
+       thirdparty/wireless/miwi/services/otau/upgrade/client_upgrade.c \
+       thirdparty/wireless/miwi/services/otau/upgrade/server_upgrade.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/D_Nv.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/External/D_XNv-SamR21.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/External/S_Nv-External.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/External/S_XNv.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/S_Nv-SamR21.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsDataServer.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsInit.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsTaskManager.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsTypesConverter.c \
        thirdparty/wireless/miwi/source/mimac/mimac_at86rf.c \
        thirdparty/wireless/miwi/source/mimac/phy/at86rf233/phy.c \
        thirdparty/wireless/miwi/source/miwi_mesh/miwi_mesh_app.c \
+       thirdparty/wireless/miwi/source/miwi_mesh/miwi_mesh_pds.c \
        thirdparty/wireless/miwi/source/stb/src/stb.c      \
        thirdparty/wireless/miwi/source/stb/src/stb_armcrypto.c \
        thirdparty/wireless/miwi/source/stb/src/stb_help.c \
@@ -91,6 +108,7 @@ CSRCS = \
        thirdparty/wireless/miwi/source/sys/sysTimer.c     \
        thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.c \
        thirdparty/wireless/services/edbg_eui/edbg-eui.c   \
+       thirdparty/wireless/services/nvm/sam0/sam_nvm.c    \
        thirdparty/wireless/services/sal/at86rf2xx/src/sal.c \
        thirdparty/wireless/services/trx_access/trx_access.c
 
@@ -108,6 +126,7 @@ INC_PATH = \
        sam0/boards/samr21_xplained_pro                    \
        sam0/drivers/extint                                \
        sam0/drivers/extint/extint_sam_d_r_h               \
+       sam0/drivers/nvm                                   \
        sam0/drivers/port                                  \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/i2c                            \
@@ -138,6 +157,13 @@ INC_PATH = \
        thirdparty/wireless/miwi/apps/wsn_demo             \
        thirdparty/wireless/miwi/apps/wsn_demo/coord_sec/samr21_xplained_pro \
        thirdparty/wireless/miwi/include                   \
+       thirdparty/wireless/miwi/services/otau             \
+       thirdparty/wireless/miwi/services/otau/notify      \
+       thirdparty/wireless/miwi/services/otau/upgrade     \
+       thirdparty/wireless/miwi/services/pds/inc          \
+       thirdparty/wireless/miwi/services/pds/inc/nv       \
+       thirdparty/wireless/miwi/services/pds/inc/nv/External \
+       thirdparty/wireless/miwi/services/pds/inc/wl       \
        thirdparty/wireless/miwi/source/mimac              \
        thirdparty/wireless/miwi/source/mimac/phy          \
        thirdparty/wireless/miwi/source/miwi_mesh          \
@@ -146,6 +172,7 @@ INC_PATH = \
        thirdparty/wireless/services/common_hw_timer       \
        thirdparty/wireless/services/common_hw_timer/sam0  \
        thirdparty/wireless/services/edbg_eui              \
+       thirdparty/wireless/services/nvm                   \
        thirdparty/wireless/services/sal/inc               \
        thirdparty/wireless/services/trx_access \
        thirdparty/wireless/miwi/apps/wsn_demo/coord_sec/samr21_xplained_pro/gcc
@@ -163,8 +190,8 @@ LIBS =  \
        sam0_lib_hw_timer                                 
 
 # Path relative to top level directory pointing to a linker script.
-LINKER_SCRIPT_FLASH = sam0/utils/linker_scripts/samr21/gcc/samr21g18a_flash.ld
-LINKER_SCRIPT_SRAM  = sam0/utils/linker_scripts/samr21/gcc/samr21g18a_sram.ld
+LINKER_SCRIPT_FLASH = thirdparty/wireless/miwi/services/pds/src/wl/linkerscripts/samr21/gcc/samr21g18a_flash.ld
+LINKER_SCRIPT_SRAM  = thirdparty/wireless/miwi/services/pds/src/wl/linkerscripts/samr21/gcc/samr21g18a_sram.ld
 
 # Path relative to top level directory pointing to a linker script.
 DEBUG_SCRIPT_FLASH = sam0/boards/samr21_xplained_pro/debug_scripts/gcc/samr21_xplained_pro_flash.gdb
@@ -203,10 +230,12 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BOARD=SAMR21_XPLAINED_PRO                       \
        -D COORDINATOR                                     \
+       -D ENABLE_NETWORK_FREEZER                          \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D I2C_MASTER_CALLBACK_MODE=false                  \
        -D MESH_SECURITY                                   \
-       -D MIWI_MESH_TOPOLOGY_SIMULATION_MODE              \
+       -D OTAU_ENABLED                                    \
+       -D PDS_ENABLE_WEAR_LEVELING                        \
        -D PHY_AT86RF233                                   \
        -D PROTOCOL_MESH                                   \
        -D SAL_TYPE=AT86RF2xx                              \

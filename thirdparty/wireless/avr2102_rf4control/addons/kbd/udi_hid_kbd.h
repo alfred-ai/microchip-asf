@@ -192,7 +192,7 @@ bool udi_hid_kbd_down(uint8_t key_id);
  * the steps for usage can be copied into, e.g., the main application function.
  *
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8446.pdf">
+ * <A href="http://www.microchip.com/dyn/resources/prod_documents/doc8446.pdf">
  * AVR4904: ASF - USB Device HID Keyboard Application</A>.
  *
  * \section udi_hid_keyboard_basic_use_case Basic use case
@@ -297,7 +297,7 @@ bool udi_hid_kbd_down(uint8_t key_id);
  * another "Composite Device" module, like "USB MSC (Composite Device)".
  *
  * Also, you can refer to application note
- * <A href="http://www.atmel.com/dyn/resources/prod_documents/doc8445.pdf">
+ * <A href="http://www.microchip.com/dyn/resources/prod_documents/doc8445.pdf">
  * AVR4902 ASF - USB Composite Device</A>.
  *
  * \section udi_hid_keyboard_use_case_composite_setup Setup steps

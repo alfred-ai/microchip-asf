@@ -82,9 +82,10 @@ CSRCS = \
        thirdparty/wireless/miwi/source/mimac/mimac_at86rf.c \
        thirdparty/wireless/miwi/source/mimac/phy/at86rf233/phy.c \
        thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p.c \
+       thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p_pds.c \
        thirdparty/wireless/miwi/source/sys/mimem.c        \
        thirdparty/wireless/miwi/source/sys/miqueue.c      \
-       thirdparty/wireless/miwi/source/sys/symbol.c       \
+       thirdparty/wireless/miwi/source/sys/sysTimer.c     \
        thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.c \
        thirdparty/wireless/services/edbg_eui/edbg-eui.c   \
        thirdparty/wireless/services/nvm/sam0/sam_nvm.c    \

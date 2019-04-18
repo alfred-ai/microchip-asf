@@ -120,19 +120,19 @@
  *
  * \section BLE SDK and Evaluation kit
  * ************************ BLE SDK and Evaluation kit ***********************
- *- Link to BluSDK package -
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=documents
- *- Link to ATBTLC1000 device -
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx
+ *- Links for BluSDK -
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000?tab=documents
+ *- Links for ATBTLC1000 -
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000
  *- Development Kit -
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=tools
- *- SAM L21 + BTLC1000 XPRO -
- *		+ http://www.atmel.com/tools/ATBTLC1000-XSTK.aspx
- *- BTLC1000 XPRO -
- *		+ http://www.atmel.com/tools/ATBTLC1000-XPRO.aspx
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000?tab=tools
+ *- SAM L21 + BTLC1000 XPro -
+ *		+ http://www.microchip.com/developmenttools/productdetails/atbtlc1000-xstk
+ *- BTLC1000 XPro -
+ *		+ http://www.microchip.com/developmenttools/productdetails/atbtlc1000-xpro
  *- Applications -
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=applications
- *- Support and FAQ visit - 
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000?tab=applications
+ *- Support and FAQ - visit 
  *		+ <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 

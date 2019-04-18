@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 M2M driver APIs implementation.
+ * \brief This module contains WILC M2M driver APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -120,6 +120,9 @@ sint8 nm_drv_init(void * arg)
 	nm_sdio_init();
 #endif
 
+#ifdef WILC_SERIAL_BRIDGE_INTERFACE
+	return M2M_SUCCESS;
+#endif
 	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
 #ifndef CONF_WILC_FW_IN_FLASH
 	ret = firmware_download();
@@ -145,18 +148,18 @@ sint8 nm_drv_init(void * arg)
 		goto ERR2;
 	}
 
-#ifdef CONF_WILC_USE_3000_REV_A
-	#ifndef CONF_WILC_FW_IN_FLASH
+#if (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)
+#ifndef CONF_WILC_FW_IN_FLASH
 	ret = firmware_download_bt();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-	#endif /* CONF_WILC_FW_IN_FLASH */
+#endif /* CONF_WILC_FW_IN_FLASH */
 	ret = cpu_start_bt();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
-#endif /*CONF_WILC_USE_3000_REV_A*/
+#endif /* (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE) */
 	ret = enable_interrupts();
 	if (M2M_SUCCESS != ret) {
 		M2M_ERR("failed to enable interrupts..\n");

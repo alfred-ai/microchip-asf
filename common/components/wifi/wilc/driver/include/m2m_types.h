@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief NMC1500 IoT Application Interface Internal Types.
+ * \brief WILC Application Interface Internal Types.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -66,7 +66,7 @@ MACROS
 */
 
 
-#define M2M_FIRMWARE_VERSION_MINOR_NO					(2)
+#define M2M_FIRMWARE_VERSION_MINOR_NO					(3)
 /*!< Firmware Minor release version number.
 */
 
@@ -74,7 +74,7 @@ MACROS
 /*!< Firmware patch release version number.
 */
 
-#define RF_VERSION										("01.1")
+#define RF_VERSION							("01.1")
 /*!< Firmware RF Version.
 */
 
@@ -87,11 +87,11 @@ MACROS
 */
 
 
-#define M2M_DRIVER_VERSION_MINOR_NO						(2)
+#define M2M_DRIVER_VERSION_MINOR_NO					(3)
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO						(4)
+#define M2M_DRIVER_VERSION_PATCH_NO					(4)
 /*!< Driver patch release version number.
 */
 
@@ -1480,21 +1480,6 @@ typedef struct{
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MIfId;
- /*!
- @enum	 \
-	 tenuM2mTxPwrLevel
-	 
- @brief
-	 
- */
- typedef enum {
-	 TX_PWR_HIGH = ((uint8) 1),
-	 /*!< PPA Gain 6dbm  PA Gain 18dbm */
-	 TX_PWR_MED,
-	 /*!< PPA Gain 6dbm  PA Gain 12dbm */
-	 TX_PWR_LOW,
-	 /*!< PPA Gain 6dbm  PA Gain 6dbm */
- }tenuM2mTxPwrLevel;
  
  /*!
  @struct \	 

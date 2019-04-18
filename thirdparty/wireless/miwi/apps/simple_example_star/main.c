@@ -54,6 +54,11 @@
 #include "asf.h"
 #include "sio2host.h"
 
+#if defined(ENABLE_NETWORK_FREEZER)
+#include "pdsDataServer.h"
+#include "wlPdsTaskManager.h"
+#endif
+
 #if ((BOARD == SAMR30_XPLAINED_PRO) || (BOARD == SAMR21_XPLAINED_PRO))
 #include "edbg-eui.h"
 #endif
@@ -61,6 +66,9 @@
 /************************** DEFINITIONS **********************************/
 #if (BOARD == SAMR21ZLL_EK)
 #define NVM_UID_ADDRESS   ((volatile uint16_t *)(0x00804008U))
+#endif
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+#define NVM_UID_ADDRESS   ((volatile uint16_t *)(0x0080400AU))
 #endif
 
 /************************** PROTOTYPES **********************************/
@@ -116,11 +124,13 @@ int main ( void )
 #endif
 
 	sio2host_init();
-    // Timer Initialize
-    InitSymbolTimer (); 
 	
 	// Read the MAC address from either flash or EDBG
     ReadMacAddress();
+
+    // Initialize system Timer
+    SYS_TimerInit();
+
     // Demo Start Message 
     DemoOutput_Greeting();	
 
@@ -131,10 +141,15 @@ int main ( void )
 #if (defined EXT_BOARD_OLED1_XPLAINED_PRO)
     Buttons_init();
 #endif
-    
+#if defined(ENABLE_NETWORK_FREEZER)
+    SYS_TimerInit();
+	nvm_init(INT_FLASH);
+	PDS_Init();
+	demo_output_freezer_options();
+#endif 
 #if defined(ENABLE_NETWORK_FREEZER)
     // User Selection to commission a network or use Freezer
-        freezer_enable = freezer_feature();    
+        freezer_enable = freezer_feature();
         
 #endif
     // Commission the network 
@@ -164,7 +179,7 @@ int main ( void )
 **********************************************************************/
 void ReadMacAddress(void)
 {
-#if BOARD == SAMR21ZLL_EK
+#if ((BOARD == SAMR21ZLL_EK) || (BOARD == SAMR30_MODULE_XPLAINED_PRO))
    uint8_t i = 0, j = 0;
    for (i = 0; i < 8; i += 2, j++)
    {

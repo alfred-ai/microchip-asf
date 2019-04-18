@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1500 ASIC specific internal APIs.
+ * \brief This module contains WILC ASIC specific internal APIs.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -243,13 +243,14 @@ sint8 chip_reset(void);
 
 sint8 firmware_download(void);
 
-#ifdef CONF_WILC_USE_3000_REV_A
+#if	(defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)
 sint8 cpu_start_bt(void);
+
 sint8 firmware_download_bt(void);
 #endif
 
-
 sint8 wait_for_firmware_start(void);
+
 sint8 wait_for_bootrom(void);
 
 sint8 chip_deinit(void);

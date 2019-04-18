@@ -79,7 +79,7 @@
  * may or may not work.
  *
  * \section contactinfo Contact Information
- * For further information, visit <a href="http://www.atmel.com/">Atmel</a>.\n
+ * For further information, visit <a href="http://www.microchip.com/">Microchip</a>.\n
  */
 
  //! \name Unit test configuration

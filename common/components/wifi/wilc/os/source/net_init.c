@@ -131,6 +131,9 @@ static void net_interface_up_imp(uint32_t net_if)
 {
 	if (net_if == NET_IF_STA) {
 		/* Bring up interface in lwIP. */
+		if(use_static_IP == 1) {		
+			netif_set_up(&wilc_netif_sta);
+		}	
 		netif_set_link_up(&wilc_netif_sta);
 		net_state_sta |= NET_S_NET_UP;
 		
@@ -232,6 +235,22 @@ void net_set_mode(uint32_t net_if, uint32_t mode)
 		net_mode_c = mode;
 	}
 }
+
+
+int8_t net_set_interface_address(uint32_t net_if,ip_addr_t *ip_addr,ip_addr_t *ip_net_mask,ip_addr_t *ip_gw_addr)
+{
+	int8_t retVal = 0;
+	
+	if (net_if == NET_IF_STA) {
+		netif_set_addr(&wilc_netif_sta,ip_addr,ip_net_mask,ip_gw_addr);
+	}else if (net_if == NET_IF_C){
+		netif_set_addr(&wilc_netif_c_mode,ip_addr,ip_net_mask,ip_gw_addr);
+	}else{
+		retVal = -1;
+	}
+	return retVal;
+}
+
 
 void net_init(void)
 {

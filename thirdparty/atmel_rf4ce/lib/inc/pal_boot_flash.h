@@ -5,7 +5,7 @@
  *
  * $Id: pal_boot_flash.h 26812 2011-05-23 08:27:09Z pawan.jadia $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

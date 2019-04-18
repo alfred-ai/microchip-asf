@@ -94,7 +94,7 @@ extern "C" {
  * this interface, so that the USB Device Stack can work based on the
  * USB module.
  *
- * Refer to <a href="http://www.atmel.com/images/doc8360.pdf">
+ * Refer to <a href="http://www.microchip.com//wwwAppNotes/AppNotes.aspx?appnote=en591065">
  * "ASF - USB Device Stack"</a> for more details.
  * \endif
  *
@@ -104,7 +104,7 @@ extern "C" {
  * to support USB host operations. The USB module host driver complies with
  * this interface, so that the USB Host Stack can work based on the USB module.
  *
- * Refer to <a href="http://www.atmel.com/images/doc8486.pdf">
+ * Refer to <a href="http://www.microchip.com//wwwAppNotes/AppNotes.aspx?appnote=en591721">
  * "ASF - USB Host Stack"</a> for more details.
  * \endif
  */

@@ -41,12 +41,8 @@
 #if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 #include "miwi_config_p2p.h"      //MiWi Protocol layer configuration file
 #endif
-//#if defined(PROTOCOL_MESH)
-//#include "miwi_config_mesh.h"      //MiWi Protocol layer configuration file
-//#endif
 
 #include "miwi_api.h"
-//#include "mimac_at86rf.h"
 
 #define SEC_LEVEL_CBC_MAC_32    7
 #define SEC_LEVEL_CBC_MAC_64    6

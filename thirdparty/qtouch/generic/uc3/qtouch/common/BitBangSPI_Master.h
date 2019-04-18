@@ -11,7 +11,7 @@
  * - Userguide:          QTouch Library User Guide - doc8207.pdf.
  * - Support:            https://www.microchip.com/support/
  *
- * \author               Atmel Corporation: http://www.atmel.com
+ * \author               Microchip Technology Inc: http://www.microchip.com
  *
  *
  * Copyright (c) 2010-2018 Microchip Technology Inc. and its subsidiaries.

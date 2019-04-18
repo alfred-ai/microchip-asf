@@ -77,7 +77,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com">Atmel</A>.\n
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
 
 #include "asf.h"
@@ -87,7 +87,7 @@
 
 #define WILC_TASK1_STACK_SIZE		(8192 / sizeof(portSTACK_TYPE))
 #define WILC_TASK1_PRIORITY			(tskIDLE_PRIORITY + 2)
-#define CMD_HANDLER_STACK_SIZE		(2048 / sizeof(portSTACK_TYPE))
+#define CMD_HANDLER_STACK_SIZE		(4096 / sizeof(portSTACK_TYPE))
 #define CMD_HANDLER_PRIORITY		(tskIDLE_PRIORITY + 1)
 
 #define STRING_EOL    "\r\n"

@@ -42,7 +42,7 @@
  * for industrial
  *  and consumer ZigBee/IEEE 802.15.4, 6LoWPAN, RF4CE and high data rate sub
  * 1GHz  ISM band applications
- * \a Refer <A href="http://www.atmel.com/Images/doc8111.pdf">AT86RF233 Data
+ * \a Refer <A href="http://ww1.microchip.com/downloads/en/DeviceDoc/doc8111.pdf">AT86RF233 Data
  * Sheet </A> \b for \b detailed \b information .
  * @{
  */

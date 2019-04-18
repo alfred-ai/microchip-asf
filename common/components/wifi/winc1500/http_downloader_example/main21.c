@@ -55,7 +55,7 @@
  *
  * -# Configure HTTP URL macro in the main.h file.
  * \code
- *    #define MAIN_HTTP_FILE_URL                   "http://www.atmel.com/Images/45093A-SmartConnectWINC1500_E_US_101014_web.pdf"
+ *    #define MAIN_HTTP_FILE_URL                   "http://www.microchip.com/Images/45093A-SmartConnectWINC1500_E_US_101014_web.pdf"
  * \endcode
  *
  * -# Build the program and download it into the board.
@@ -105,7 +105,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com">Atmel</A>.\n
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
 
 #include <errno.h>

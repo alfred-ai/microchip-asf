@@ -52,11 +52,12 @@
 #include "system.h"
 #include "miwi_config.h"          //MiWi Application layer configuration file
 #include "miwi_config_p2p.h"      //MiWi Protocol layer configuration file
-#include "symbol.h"
+#include "sysTimer.h"
 #include "miwi_api.h"
 #include "mimem.h"
 #include "sio2host.h"
 #include "asf.h"
+#include "phy.h"
 
 #if ((BOARD == SAMR30_XPLAINED_PRO) || (BOARD == SAMR21_XPLAINED_PRO))
 #include "edbg-eui.h"
@@ -72,6 +73,10 @@
 #define NVM_UID_ADDRESS   ((volatile uint16_t *)(0x00804008U))
 #endif
 
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+#define NVM_UID_ADDRESS   ((volatile uint16_t *)(0x0080400AU))
+#endif
+
 /************************** VARIABLES ************************************/
 
 /*************************************************************************/
@@ -84,9 +89,13 @@
 
 /*************************************************************************/
 #ifdef PHY_AT86RF212B
-uint8_t        myChannel = 8;
+uint8_t        myChannel = 3;
+/* Range for default configuration: 1 to 10
+ Note: TX Power and PHY Mode Setting needs to be modified as per the 
+ recommendation from Data Sheet for European band (ie.,Channel 0)*/
 #else 
 uint8_t        myChannel = 26;
+/* Range: 11 to 26 */
 #endif
 
 //Chat Window Application Variables
@@ -145,7 +154,9 @@ static void Connection_Confirm(miwi_status_t status);
 
 int main (void)
 {
-    uint8_t    i;
+	uint8_t i;
+	uint64_t ieeeAddr;
+	uint64_t invalidIEEEAddr;
     irq_initialize_vectors();
     /*******************************************************************
     * System related initialization based on the API provided by board
@@ -178,6 +189,8 @@ int main (void)
     // Read the MAC address from either flash or EDBG
     ReadMacAddress();
 	
+    // Initialize system Timer
+    SYS_TimerInit();
     /*******************************************************************/
 
     // Function MiApp_ProtocolInit initialize the protocol stack. The
@@ -187,7 +200,32 @@ int main (void)
 
     /*******************************************************************/	
     MiApp_ProtocolInit(NULL, NULL);
-	
+
+	/* Check if a valid IEEE address is available. */
+	memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+	memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
+	srand(PHY_RandomReq());
+	/*
+	 * This while loop is on purpose, since just in the
+	 * rare case that such an address is randomly
+	 * generated again, we must repeat this.
+	 */
+	while ((ieeeAddr == 0x00UL) || (ieeeAddr == invalidIEEEAddr))
+	{
+		/*
+		 * In case no valid IEEE address is available, a random
+		 * IEEE address will be generated to be able to run the
+		 * applications for demonstration purposes.
+		 * In production code this can be omitted.
+		 */
+		uint8_t* peui64 = (uint8_t *)&myLongAddress;
+		for(i = 0; i<MY_ADDRESS_LENGTH; i++)
+		{
+			*peui64++ = (uint8_t)rand();
+		}
+		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+	}
+	PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
 	MiApp_SubscribeDataIndicationCallback(ReceivedDataIndication);
     // Set default channel
     if( MiApp_Set(CHANNEL, &myChannel) == false )
@@ -227,7 +265,7 @@ int main (void)
 
     /*******************************************************************/
 
-    MiApp_StartConnection(START_CONN_DIRECT, 0, 0, Connection_Confirm) ;
+    MiApp_StartConnection(START_CONN_DIRECT, 10, (1L << myChannel), Connection_Confirm) ;
     /*******************************************************************/
 
     // Function MiApp_EstablishConnection try to establish a new
@@ -375,7 +413,8 @@ void TransmitMessage()
     //  MiApp_WriteData
 
     /*******************************************************************/
-   dataPtr = MiMem_Alloc(TxMessageSize);
+    //+1 to add TxMessageSize also in payload
+   dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(TxMessageSize + 1)); 
    if (NULL == dataPtr)
        return;
 
@@ -497,21 +536,19 @@ void ReceivedDataIndication (RECEIVED_MESSAGE *ind)
 **********************************************************************/
 void ReadMacAddress(void)
 {
-#if BOARD == SAMR21ZLL_EK
-   uint8_t i = 0, j = 0;
-   for (i = 0; i < 8; i += 2, j++)
-   {
-     myLongAddress[i] = (NVM_UID_ADDRESS[j] & 0xFF);
-	 myLongAddress[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
-   }
-#elif ((BOARD == SAMR30_XPLAINED_PRO) || (BOARD == SAMR21_XPLAINED_PRO))
-   uint8_t* peui64 = edbg_eui_read_eui64();
-   for(uint8_t i = 0; i<MY_ADDRESS_LENGTH; i++)
-   {
-	   myLongAddress[i] = peui64[MY_ADDRESS_LENGTH-i-1];
-	   
+#if ((BOARD == SAMR21ZLL_EK) || (BOARD == SAMR30_MODULE_XPLAINED_PRO))
+	uint8_t i = 0, j = 0;
+	for (i = 0; i < MY_ADDRESS_LENGTH; i += 2, j++)
+	{
+		myLongAddress[i] = (NVM_UID_ADDRESS[j] & 0xFF);
+		myLongAddress[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
 	}
-	
+#elif ((BOARD == SAMR30_XPLAINED_PRO) || (BOARD == SAMR21_XPLAINED_PRO))
+	uint8_t* peui64 = edbg_eui_read_eui64();
+	for(uint8_t i = 0; i<MY_ADDRESS_LENGTH; i++)
+	{
+		myLongAddress[i] = peui64[MY_ADDRESS_LENGTH-i-1];
+	}
 #endif
 }
  

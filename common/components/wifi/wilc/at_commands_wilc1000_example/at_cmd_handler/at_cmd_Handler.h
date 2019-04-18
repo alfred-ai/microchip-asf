@@ -41,6 +41,13 @@
 				AT+AP_EN=5[DEMO_WEP,0,3,1*1234567890,255]  //'*' is a seperator for WEP_KEY_INDEX and WEP_KEY
 		AP_DIS  // Disable AP mode
 		RESET   // Reset Board
+		
+		AT+STATIC_IP=2[<IP Address>,<Gateway>] // Static IP. Subnet is 255.255.255.0 by default. 
+		Example: AT+STATIC_IP=2[192.168.0.106,192.168.0.1].
+		
+		AT+PING=2[Destination Address, No. of Pings] // Ping another IP address in the network.
+		Example: AT+PING=2[192.168.0.101,10].
+		
 		CFG=2[COMMAND,VALUE]  //  Enable/Disable Echo and Hint
 			 AS:
 				[ECHO,0:1]
@@ -72,7 +79,7 @@
 				AT+HTTPCON=2[www.atmel.com,80]
 		FILE_DOWNLOAD=1[HTTP_FILE_URL]
 			Example:
-				AT+FILE_DOWNLOAD=1[http://www.atmel.com/images/doc7529.pdf]
+				AT+FILE_DOWNLOAD=1[http://www.microchip.com/images/doc7529.pdf]
 		OTA=1[BIN_FILE_URL]  // Update new firmware to flash. SAM4SD32 devices only supported.
 			Example:
 				AT+FILE_DOWNLOAD=1[http://10.0.1.3:8080/at_commads_example.bin]
@@ -98,7 +105,12 @@
 #define _AT_CMDS_H_
 
 #include "common/include/nm_common.h"
+#include "driver/include/m2m_types.h"
+#include "lwip/def.h"
+#include "lwip/netdb.h"
+#include "os/include/net_init.h"
 #include "asf.h"
+#include "lwip/ping.h"
 
 #define ENABLE_PRINT 1
 
@@ -113,12 +125,23 @@
 
 #define AT_HEADER					"AT+"
 
+tstrM2MIPConfig						StaticIPcfg;
 
 #define AT_MAX_PARAMETERS_COUNT		(8)
 #define AT_MIN_CMD_LENGTH			(3)
 #define AT_MAX_CMD_LENGTH			(15)
 #define AT_MAX_PARAM_LENGTH			(250)
 #define AT_MAX_HOST_NAME			(100)
+
+//TX power ppa
+#define TX_PWR_DBM_0 0
+#define TX_PWR_DBM_3 3
+#define TX_PWR_DBM_6 6
+#define TX_PWR_DBM_9 9
+#define TX_PWR_DBM_12 12
+#define TX_PWR_DBM_15 15
+#define TX_PWR_DBM_18 18
+
 
 #define AT_MAX_RX_BUFF_SIZE ((AT_MAX_PARAM_LENGTH * AT_MAX_PARAMETERS_COUNT) + AT_MAX_CMD_LENGTH)
 #define BASE_16						(16)
@@ -155,6 +178,7 @@ enum at_cmd_index {
 	AT_INDEX_CONN,
 	//AT_INDEX_DEF_CONN,
 	AT_INDEX_DISCONN,
+	AT_INDEX_PING,
 	/*AT_INDEX_GROWL_INIT,
 	AT_INDEX_GROWL_SEND,
 	AT_INDEX_NMA,
@@ -183,8 +207,8 @@ enum at_cmd_index {
 	AT_INDEX_RESET,
 	AT_INDEX_MON_EN,
 	AT_INDEX_MON_DIS,
-	/*AT_INDEX_PS_MODE,
-	AT_INDEX_STATIC_IP,*/
+	/*AT_INDEX_PS_MODE,*/
+	AT_INDEX_STATIC_IP,
 	AT_INDEX_GET_CONN_INFO,
 	/*AT_INDEX_SET_PWR_PRO,*/
 	AT_INDEX_IPERF,
@@ -197,9 +221,8 @@ enum at_cmd_index {
 	AT_TLS_CRL_SEND,
 	AT_INDEX_TLS_SET_CS,
 	AT_INDEX_TLS_WCERT,
-	AT_SSL_OPT,
-	AT_PING,
-	AT_INDEX_GETIME,*/
+	AT_SSL_OPT,*/
+	/*AT_INDEX_GETIME,*/
     AT_TX_PWR,
 	AT_MAX_COMMANDS_COUNT /* Always keep this at the last entry */
 };

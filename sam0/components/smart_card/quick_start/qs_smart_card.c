@@ -103,7 +103,7 @@
  *
  * \section appdoc_sam0_smart_card_contactinfo Contact Information
  * For further information, visit
- * <a href="http://www.atmel.com">http://www.atmel.com</a>.
+ * <a href="http://www.microchip.com">http://www.microchip.com</a>.
  */
  
 #include <asf.h>

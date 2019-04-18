@@ -98,12 +98,12 @@ typedef struct {
  * but does not implement same protocol.
  *
  * The USB Device Atmel DFU class implement both version:
- * - The <A href="http://www.atmel.com/Images/doc7618.pdf">
+ * - The <A href="http://ww1.microchip.com/downloads/en/DeviceDoc/doc7618.pdf">
  * doc7618: USB DFU Bootloader Datasheet</A> describes the
  * FLIP USB DFU Protocol version 1 used by Mega devices.
- * - The <A href="http://www.atmel.com/Images/doc32131.pdf">
+ * - The <A href="http://ww1.microchip.com/downloads/en/AppNotes/doc32131.pdf">
  * AVR32760: AVR32 UC3 USB DFU Bootloader Protocol</A>  and the
- * <A href="http://www.atmel.com/Images/doc8457.pdf">
+ * <A href="http://ww1.microchip.com/downloads/en/AppNotes/doc8457.pdf">
  * AVR4023: FLIP USB DFU Protocol</A> describes the
  * FLIP USB DFU Protocol version 2 used by UC3 and Xmega devices.
  *

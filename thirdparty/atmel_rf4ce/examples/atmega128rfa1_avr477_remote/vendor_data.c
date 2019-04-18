@@ -5,7 +5,7 @@
  *
  * $Id: vendor_data.c 24198 2010-11-15 20:46:17Z uwalter $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

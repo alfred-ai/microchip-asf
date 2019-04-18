@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains common APIs declarations.
+ * \brief This module contains WILC common APIs declarations.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *

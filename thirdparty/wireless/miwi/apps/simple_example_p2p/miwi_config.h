@@ -48,17 +48,6 @@
 #define ENABLE_CONSOLE
 
 /*********************************************************************/
-// ENABLE_NETWORK_FREEZER enables the network freezer feature, which
-// stores critical network information into non-volatile memory, so
-// that the protocol stack can recover from power loss gracefully.
-// The network infor can be saved in data EPROM of MCU, external 
-// EEPROM or programming space, if enhanced flash is used in MCU.
-// Network freezer feature needs definition of NVM kind to be 
-// used, which is specified in HardwareProfile.h
-/*********************************************************************/
-//#define ENABLE_NETWORK_FREEZER
-
-/*********************************************************************/
 // FRAME_COUNTER_UPDATE_INTERVAL defines the NVM update interval for
 // frame counter, when security is enabled. The same interval will be
 // added to the frame counter read from NVM when Network Freezer
@@ -148,13 +137,6 @@
 
 
 /*********************************************************************/
-// ENABLE_SLEEP will enable the device to go to sleep and wake up 
-// from the sleep
-/*********************************************************************/
-//#define ENABLE_SLEEP
-
-
-/*********************************************************************/
 // ENABLE_ED_SCAN will enable the device to do an energy detection scan
 // to find out the channel with least noise and operate on that channel
 /*********************************************************************/
@@ -165,7 +147,7 @@
 // ENABLE_ACTIVE_SCAN will enable the device to do an active scan to 
 // to detect current existing connection. 
 /*********************************************************************/
-#define ENABLE_ACTIVE_SCAN
+//#define ENABLE_ACTIVE_SCAN
 
 
 /*********************************************************************/

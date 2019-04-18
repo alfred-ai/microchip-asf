@@ -3,7 +3,7 @@
  *
  * \brief Linker script for running in internal FLASH on the SAMDA1J14B
  *
- * Copyright (c) 2016 Atmel Corporation,
+ * Copyright (c) 2016 Microchip Technology Inc,
  *                    a wholly owned subsidiary of Microchip Technology Inc.
  *
  * \asf_license_start

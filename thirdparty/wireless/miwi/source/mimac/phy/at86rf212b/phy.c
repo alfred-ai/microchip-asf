@@ -42,7 +42,7 @@
 #if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 #include "miwi_config_p2p.h"      //MiWi Protocol layer configuration file
 #endif
-#include "sio2host.h"
+
 #include "delay.h"
 #include "sal.h"
 #include "phy.h"
@@ -80,7 +80,6 @@ RxBuffer_t RxBuffer[BANK_SIZE];
 
 /*************************************************************************//**
 *****************************************************************************/
-// Radio Initialization //TODO
 void PHY_Init(void)
 {
 	trx_spi_init();
@@ -98,8 +97,12 @@ void PHY_Init(void)
 	(1 << TX_AUTO_CRC_ON) | (3 << SPI_CMD_MODE) |
 	(1 << IRQ_MASK_MODE));
 
-	phyWriteRegister(TRX_CTRL_2_REG, (1 << RX_SAFE_MODE));
+	/* BPSK-40-ALT - Proprietary - alternative spreading code*/
+	phyWriteRegister(TRX_CTRL_2_REG, (1 << RX_SAFE_MODE) | (1 << ALT_SPECTRUM) |
+	(0 << BPSK_OQPSK) | (1 << SUB_MODE));
 	phyWriteRegister(RF_CTRL_0_REG, PWR_BPSK_OFFSET);
+	/* Transmit power 3dbm for BPSK-40-ALT*/
+	phyWriteRegister(PHY_TX_PWR_REG, TX_PWR);
 }
 
 
@@ -118,6 +121,10 @@ void PHY_SetRxState(bool rx)
 void PHY_SetChannel(uint8_t channel)
 {
 	phyChannel = channel;
+	if (PHY_STATE_SLEEP == phyState)
+	{
+		PHY_Wakeup();
+	}
 	phySetChannel();
 }
 
@@ -173,9 +180,12 @@ void PHY_SetTxPower(uint8_t txPower)
 // Radio Sleep
 void PHY_Sleep(void)
 {
-	phyTrxSetState(TRX_CMD_TRX_OFF);
-	TRX_SLP_TR_HIGH();
-	phyState = PHY_STATE_SLEEP;
+	if (PHY_STATE_SLEEP != phyState)
+	{
+		phyTrxSetState(TRX_CMD_TRX_OFF);
+		TRX_SLP_TR_HIGH();
+		phyState = PHY_STATE_SLEEP;	
+	}
 }
 
 /*************************************************************************//**
@@ -183,9 +193,12 @@ void PHY_Sleep(void)
 // Radio Wake Up
 void PHY_Wakeup(void)
 {
-	TRX_SLP_TR_LOW();
-	phySetRxState();
-	phyState = PHY_STATE_IDLE;
+	if (PHY_STATE_SLEEP == phyState)
+	{
+		TRX_SLP_TR_LOW();
+	 	phySetRxState();
+	 	phyState = PHY_STATE_IDLE;
+	}
 }
 
 /*************************************************************************//**
@@ -370,6 +383,7 @@ static void phySetRxState(void)
 
 	if (phyRxState) {
 		phyTrxSetState(TRX_CMD_RX_AACK_ON);
+		phyState = PHY_STATE_IDLE;
 	}
 }
 
@@ -377,6 +391,10 @@ static void phySetRxState(void)
 *****************************************************************************/
 static void phyTrxSetState(uint8_t state)
 {
+    if (PHY_STATE_SLEEP == phyState)
+	{
+		TRX_SLP_TR_LOW();
+	}
 	do { phyWriteRegister(TRX_STATE_REG, TRX_CMD_FORCE_TRX_OFF);
 	} while (TRX_STATUS_TRX_OFF !=
 			(phyReadRegister(TRX_STATUS_REG) & TRX_STATUS_MASK));

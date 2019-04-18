@@ -160,10 +160,11 @@ void demo_output_freezer_options(void)
 { 
 #if defined (ENABLE_LCD)
 	#if defined(PHY_AT86RF233)
-	LCDDisplay((char *)"To be done", 0, false);
+	LCDDisplay((char *)"SW: Use Nwk Freezer \nPress in 5 sec", 0, false);
 	#elif defined(PHY_AT86RF212B)
-	LCDDisplay((char *)"To be done", 0, false);
+	LCDDisplay((char *)"SW: Use Nwk Freezer \nPress in 5 sec", 0, false);
 	#endif
+	delay_ms(1000);
 #endif
 }
 void DemoOutput_Channel(uint8_t channel, uint8_t Step)
@@ -173,22 +174,26 @@ void DemoOutput_Channel(uint8_t channel, uint8_t Step)
 #if defined (ENABLE_LCD)       
         LCDDisplay((char *)"Connecting Peer on \n Channel ", channel, true);
 #endif
+#if defined (ENABLE_CONSOLE)
         #if !defined(MIWIKIT)
         printf("\r\nConnecting Peer on Channel ");
         printf("%d",channel);
         printf("\r\n");
         #endif
+#endif
     }
     else
     { 
 #if defined (ENABLE_LCD)
         LCDDisplay((char *)"Connected Peer on \n Channel ", channel, true);
 #endif
+#if defined (ENABLE_CONSOLE)
         #if !defined(MIWIKIT)
         printf("\r\nConnected Peer on Channel ");
         printf("%d",channel);
         printf("\r\n");
         #endif
+#endif
     }
 }    
 

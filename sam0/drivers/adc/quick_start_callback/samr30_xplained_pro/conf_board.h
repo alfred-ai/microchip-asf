@@ -3,7 +3,7 @@
  *
  * \brief SAM R30 Xplained Pro board configuration.
  *
- * Copyright (c) 206 Atmel Corporation. All rights reserved.
+ * Copyright (c) 206 Microchip Technology Inc. All rights reserved.
  *
  * \asf_license_start
  *

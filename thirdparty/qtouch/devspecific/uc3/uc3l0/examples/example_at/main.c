@@ -768,9 +768,9 @@ void power_save_measures_init()
  *
  * \section contactinfo Contact Information
  * For further information, visit :
- * <A href="http://www.atmel.com/products/AVR32/"> Atmel AVR32 </A>.\n
+ * <A href="http://www.microchip.com/design-centers/32-bit /"> Atmel AVR32 </A>.\n
  * Technical support & faq, visit :
  * <A href="https://www.microchip.com/support/"> Support and FAQ </A>.
  *
- * \author  Atmel Corporation: http://www.atmel.com \n
+ * \author  Microchip Technology Inc: http://www.microchip.com \n
  */

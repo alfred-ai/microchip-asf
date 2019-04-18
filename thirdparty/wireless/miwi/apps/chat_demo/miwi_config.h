@@ -142,10 +142,10 @@
 
 
 /*********************************************************************/
-// ENABLE_SLEEP will enable the device to go to sleep and wake up 
+// ENABLE_SLEEP_FEATURE will enable the device to go to sleep and wake up 
 // from the sleep
 /*********************************************************************/
-//#define ENABLE_SLEEP
+//#define ENABLE_SLEEP_FEATURE
 
 
 /*********************************************************************/

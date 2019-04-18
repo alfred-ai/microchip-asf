@@ -88,8 +88,7 @@ void miQueueInit(MiQueue_t *q)
  * @param q Queue into which buffer should be appended
  *
  * @param buf Pointer to the buffer that should be appended into the queue.
- * Note that this pointer should be same as the
- * pointer returned by bmm_buffer_alloc.
+ * 
  */
 #ifdef ENABLE_QUEUE_CAPACITY
 bool miQueueAppend(MiQueue_t *q, miQueueBuffer_t *buf)

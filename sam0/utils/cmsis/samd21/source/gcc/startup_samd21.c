@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief gcc starttup file for SAMD21
+ * \brief gcc startup file for SAMD21
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -112,6 +112,9 @@ void I2S_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler
 #ifdef ID_AC1
 void AC1_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
+#ifdef ID_TCC3
+void TCC3_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif
 
 /* Exception Table */
 __attribute__ ((section(".vectors")))
@@ -206,9 +209,12 @@ const DeviceVectors exception_table = {
         .pvReserved27           = (void*) (0UL),                  /* 27 Reserved */
 #endif
 #ifdef ID_AC1
-        .pfnAC1_Handler         = (void*) AC1_Handler             /* 28 Analog Comparators 1 */
+        .pfnAC1_Handler         = (void*) AC1_Handler,            /* 28 Analog Comparators 1 */
 #else
-        .pvReserved28           = (void*) (0UL)                   /* 28 Reserved */
+        .pvReserved28           = (void*) (0UL),                  /* 28 Reserved */
+#endif
+#ifdef ID_TCC3
+        .pfnTCC3_Handler        = (void*) TCC3_Handler            /* 29 Timer Counter Control 3 */
 #endif
 };
 

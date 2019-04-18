@@ -119,13 +119,13 @@
  *
  * \section Link Extended Link
  * The OLED Xplained Pro extension board can be found at:
- * <a href="http://www.atmel.com/tools/ATOLED1-XPRO.aspx">OLED1 Xplained Pro</a>
+ * <a href="http://www.microchip.com/atoled1-xpro">OLED1 Xplained Pro</a>
  *
  * The I/O1 Xplained Pro extension board can be found at:
- * <a href="http://www.atmel.com/tools/ATIO1-XPRO.aspx">I/O1 Xplained Pro</a>
+ * <a href="http://www.microchip.com/DevelopmentTools/ProductDetails/atio1-xpro">I/O1 Xplained Pro</a>
  *
  * More information of the bootloader can be found in application note AT02333:
- * <a href="http://www.atmel.com/Images/Atmel-42141-SAM-AT02333-Safe-and-Secure-Bootloader-Implementation-for-SAM3-4_Application-Note.pdf">
+ * <a href="http://ww1.microchip.com/downloads/en/AppNotes/Atmel-42141-SAM-AT02333-Safe-and-Secure-Bootloader-Implementation-for-SAM3-4_Application-Note.pdf">
  * Safe and Secure Bootloader Implementation for SAM3/4</a>
  */
 

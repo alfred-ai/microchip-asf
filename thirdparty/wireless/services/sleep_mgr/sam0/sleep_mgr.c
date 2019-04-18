@@ -88,6 +88,7 @@ void sm_sleep(uint32_t interval)
 {
 	interval = interval * 1000;
 	rtc_count_set_period(&rtc_instance, interval);
+	configure_rtc_callbacks();
 	rtc_count_enable(&rtc_instance);
 	/*put the MCU in standby mode with RTC as wakeup source*/
 	system_set_sleepmode(SYSTEM_SLEEPMODE_STANDBY);

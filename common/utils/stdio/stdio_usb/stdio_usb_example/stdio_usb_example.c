@@ -54,7 +54,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com/avr">Atmel AVR</A>.\n
+ * <A href="http://www.microchip.com/design-centers/8-bit">Atmel AVR</A>.\n
  */
 /*
  * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>

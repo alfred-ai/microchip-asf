@@ -47,6 +47,31 @@
 #include <string.h>
 #include <stdio.h>
 
+/* preprocessor define error check */
+#if defined(AP_STA_CONCURRENCY)
+	#if defined(P2P_AP_CONCURRENCY) || defined(P2P_STA_CONCURRENCY) || defined(STA_ONLY) || defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined along with AP_STA_CONCURRENCY"
+	#endif
+#elif defined(P2P_AP_CONCURRENCY)
+	#if defined(P2P_STA_CONCURRENCY) || defined(STA_ONLY) || defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with P2P_AP_CONCURRENCY"
+	#endif
+#elif defined(P2P_STA_CONCURRENCY)
+	#if defined(STA_ONLY) || defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with P2P_STA_CONCURRENCY"
+	#endif
+#elif defined(STA_ONLY)
+	#if defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with STA_ONLY"
+	#endif
+#elif defined(AP_ONLY)
+	#if defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with AP_ONLY"
+	#endif
+#elif !defined(P2P_ONLY)
+	#error "Error : define application type in sta.h"
+#endif
+
 /** Using broadcast address for simplicity. */
 #define HTTP_PORT					(80)
 
@@ -142,6 +167,11 @@ static void wifi_cb(uint8 msg_type, void *msg)
 					osprintf("wifi_cb: M2M_WIFI_CONNECTED\r\n");
 					net_interface_up(NET_IF_STA);
 					m2m_wifi_request_dhcp_client_ex();
+#ifdef P2P_STA_CONCURRENCY
+					os_m2m_wifi_set_device_name("Direct_WILC3000",strlen("Direct_WILC3000"));
+					os_m2m_wifi_set_p2p_control_ifc(P2P_STA_CONCURRENCY_INTERFACE);
+					os_m2m_wifi_p2p(M2M_WIFI_CH_11);
+#endif
 					// Power save will not be enabled by the FW since AP will be running for this app
 					//os_m2m_wifi_set_sleep_mode(M2M_PS_DEEP_AUTOMATIC, true);
 				}
@@ -151,6 +181,8 @@ static void wifi_cb(uint8 msg_type, void *msg)
 					osprintf("wifi_cb: M2M_WIFI_DISCONNECTED\r\n");
 					osprintf("wifi_cb: reconnecting...\r\n");
 					net_interface_down(NET_IF_STA);
+					
+#if defined(STA_ONLY) || defined(P2P_STA_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
 					if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
 						strcpy((char*)sta_auth_param.au8PSK, STA_WLAN_PSK);
 						os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
@@ -160,6 +192,7 @@ static void wifi_cb(uint8 msg_type, void *msg)
 						os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
 							STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 					}
+#endif
 				}
 			}
 			else if (ctx->u8IfcId == AP_INTERFACE) {
@@ -226,8 +259,14 @@ static void wifi_cb(uint8 msg_type, void *msg)
 		}
 		break;
 		
-
-		default:
+		case M2M_WIFI_RESP_FIRMWARE_STRTED: {
+			osprintf("Firmware Started Successfully\r\n");
+		}
+		break;
+		
+		default:{
+			osprintf("wifi_cb Received unhandled msg type %d\r\n", msg_type);
+		}
 		break;
 	}
 }
@@ -329,6 +368,7 @@ void sta_task(void *argument)
 	param.pfAppWifiCb = wifi_cb;
 	os_m2m_wifi_init(&param);
 
+#if defined(AP_ONLY) || defined(P2P_AP_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
 	/* Enable AP mode. */
 	memset(&cfg, 0, sizeof(cfg));
 	strcpy((char *)cfg.au8SSID, AP_WLAN_SSID);
@@ -341,14 +381,15 @@ void sta_task(void *argument)
 		strcpy((char *)cfg.uniAuth.au8PSK, AP_WLAN_PSK);
 	}
 	os_m2m_wifi_enable_ap(&cfg);
+#endif
 
-#if 0
+#if defined(P2P_ONLY) || defined(P2P_AP_CONCURRENCY)
 //	os_m2m_wifi_set_sleep_mode(M2M_PS_DEEP_AUTOMATIC,1);
 os_m2m_wifi_set_device_name("Direct_WILC3000",strlen("Direct_WILC3000"));
 os_m2m_wifi_set_p2p_control_ifc(P2P_AP_CONCURRENCY_INTERFACE);
 os_m2m_wifi_p2p(M2M_WIFI_CH_11);
 #endif
-
+#if defined(STA_ONLY) || defined(P2P_STA_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
 	/* Connect to station. */
 	if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
 		strcpy((char*)sta_auth_param.au8PSK, STA_WLAN_PSK);
@@ -359,7 +400,7 @@ os_m2m_wifi_p2p(M2M_WIFI_CH_11);
 		os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
 			STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 	}
-
+#endif
 	while (1) {
 		
 		/* Ensure we are connected to AP. */

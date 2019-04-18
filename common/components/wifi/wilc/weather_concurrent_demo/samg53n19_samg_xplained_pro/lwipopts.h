@@ -118,7 +118,7 @@ extern int random_number(void);
  * MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP segments.
  * (requires the LWIP_TCP option)
  */
-#define MEMP_NUM_TCP_SEG                27
+#define MEMP_NUM_TCP_SEG                15
 
 /**
  * MEMP_NUM_SYS_TIMEOUT: the number of simultaneously active timeouts.
@@ -128,12 +128,12 @@ extern int random_number(void);
 /**
  * PBUF_POOL_SIZE: the number of buffers in the pbuf pool. 
  */
-#define PBUF_POOL_SIZE                  24
+#define PBUF_POOL_SIZE                  MEMP_NUM_TCP_SEG
 
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               256
+#define PBUF_POOL_BUFSIZE               1604
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,
@@ -197,13 +197,13 @@ extern int random_number(void);
  * TCP_SND_BUF: TCP sender buffer space (bytes).
  * To achieve good performance, this should be at least 2 * TCP_MSS.
  */
-#define TCP_SND_BUF                     (4 * TCP_MSS)
+#define TCP_SND_BUF                     TCP_WND
 
 /**
  * TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
  * as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work.
  */
-#define TCP_SND_QUEUELEN                ((6 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS))
+#define TCP_SND_QUEUELEN                (4 * TCP_SND_BUF/TCP_MSS)
 
 /*
    ---------------------------------

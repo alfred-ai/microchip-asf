@@ -29,7 +29,7 @@
  *
  * \asf_license_stop
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 
@@ -84,7 +84,7 @@
  *
  * \section contactinfo Contact Information
  * For further information,visit
- * <A href="http://www.atmel.com/avr">www.atmel.com</A>.\n
+ * <A href="http://www.microchip.com/design-centers/8-bit">www.microchip.com</A>.\n
  */
 
 /* === Includes ============================================================ */

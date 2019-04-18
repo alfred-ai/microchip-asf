@@ -36,10 +36,14 @@
 
 /************************ HEADERS ****************************************/
 #include "miwi_api.h"
+#include "miwi_p2p.h"
 #include "task.h"
 #include "p2p_demo.h"
 #include "mimem.h"
 #include "asf.h"
+#if defined(ENABLE_SLEEP_FEATURE)
+#include "sleep_mgr.h"
+#endif
 
 #if defined(PROTOCOL_P2P)
 
@@ -63,11 +67,9 @@
     }
     void run_p2p_demo(void)
     {
-#if defined(ENABLE_SLEEP)
+#if defined(ENABLE_SLEEP_FEATURE)
         if (Total_Connections())
 		{
-			MIWI_TICK tick1, tick2;
-			uint8_t switch_val;
 			if (P2PStatus.bits.Sleeping)
 			{
 				MiApp_TransceiverPowerState(POWER_STATE_WAKEUP_DR);
@@ -78,22 +80,8 @@
 				if(!(P2PStatus.bits.DataRequesting || P2PStatus.bits.RxHasUserData))
 				{
 					MiApp_TransceiverPowerState(POWER_STATE_SLEEP);
+					sm_sleep((RFD_WAKEUP_INTERVAL - 2));
 					//printf("\r\nDevice is sleeping");
-					tick1.Val = MiWi_TickGet();
-					while(1)
-					{
-						uint8_t PressedButton = ButtonPressed();
-#if defined (CONF_BOARD_JOYSTICK)
-						uint8_t JoyStickAction = JoystickPressed();
-						if (JoyStickAction != JOYSTICK_NONE)
-							break;
-#endif
-						if (PressedButton == 1 || PressedButton == 2)
-							break;
-						tick2.Val = MiWi_TickGet();
-						if(MiWi_TickGetDiff(tick2, tick1) > ((ONE_SECOND) * (RFD_WAKEUP_INTERVAL - 2)))//RFD_WAKEUP_INTERVAL -2 so that device will wakeup before and poll
-							break;
-					}
 				}
 			}
 		}
@@ -132,7 +120,7 @@
                         update_ed = false;
                         chk_sel_status = false;
 
-                        dataPtr = MiMem_Alloc(DE_LEN);
+                        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(DE_LEN));
 						if (NULL == dataPtr)
 						    return;
                         for(i = 0; i < 11; i++)
@@ -189,7 +177,6 @@
             switch( PressedButton )
             {
                 case 1:
-#ifndef ENABLE_SLEEP
                 {
 					/*******************************************************************/
                     // Button 1 pressed. We need to send out the bitmap of word "MiWi".
@@ -200,7 +187,7 @@
                     uint8_t* dataPtr = NULL;
                     uint8_t dataLen = 0;
                     uint16_t broadcastAddress = 0xFFFF;
-                    dataPtr = MiMem_Alloc(MIWI_TEXT_LEN);
+                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(MIWI_TEXT_LEN));
 					if (NULL == dataPtr)
 					    return;
                     for(i = 0; i < 21; i++)
@@ -219,8 +206,7 @@
 
                     DemoOutput_Instruction();
 				}
-#endif
-                    break;
+                break;
 
 #if !defined (CONF_BOARD_JOYSTICK)
                 case 2:
@@ -251,7 +237,7 @@
                                 update_ed = false;
                                 chk_sel_status = false;
 
-                                dataPtr = MiMem_Alloc(DE_LEN);
+                                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(DE_LEN));
 							    if (NULL == dataPtr)
 								    return;
                                 for(i = 0; i < 11; i++)

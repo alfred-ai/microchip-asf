@@ -4,7 +4,7 @@
  * \file
  *
  *                        $FILE:  eeprom_access.c
- * \author                Atmel Corporation: http://www.atmel.com \n
+ * \author                Microchip Technology Inc: http://www.microchip.com \n
  *                        Support and FAQ: https://www.microchip.com/support/
  *
  * Copyright (c) 2010-2018 Microchip Technology Inc. and its subsidiaries.

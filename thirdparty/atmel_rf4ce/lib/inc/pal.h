@@ -8,7 +8,7 @@
  *
  * $Id: pal.h 27828 2011-07-25 09:33:49Z agasthian.s $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

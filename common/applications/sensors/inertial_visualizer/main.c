@@ -45,12 +45,12 @@
  * that provides a graphical display of data sent from a remote target.  It
  * is available as a separate download.  For more information on downloading
  * and installing the ADV tool, visit
- * <a href="http://www.atmel.com/dyn/products/tools_card.asp?tool_id=5017">Atmel
+ * <a href="http://www.microchip.com/mplab/avr-support/data-visualizer">Atmel
  * Data Visualizer</a>
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <a href="http://www.atmel.com/avr">Atmel AVR</a>.\n
+ * <a href="http://www.microchip.com/design-centers/8-bit">Atmel AVR</a>.\n
  */
 /*
  * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>

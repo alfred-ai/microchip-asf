@@ -1,6 +1,6 @@
 /*******************************************************************************
 *   $FILE:  qdebug_transport.c
-*   Atmel Corporation:  http://www.atmel.com \n
+*   Microchip Technology Inc:  http://www.microchip.com \n
 *   Support: https://www.microchip.com/support/
 ******************************************************************************/
 

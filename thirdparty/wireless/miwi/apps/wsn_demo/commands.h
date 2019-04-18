@@ -47,6 +47,10 @@ enum {
 	APP_COMMAND_ID_SIMULATE_LINE_TOPOLOGY    = 0x21,
 };
 
+/*- Externs ------------------------------------------------------------------*/
+extern SYS_Timer_t appCmdIdentifyDurationTimer;
+extern SYS_Timer_t appCmdIdentifyPeriodTimer;
+
 /*- Prototypes -------------------------------------------------------------*/
 void APP_CommandsInit(void);
 void appCmdDataInd(RECEIVED_MESH_MESSAGE *ind);

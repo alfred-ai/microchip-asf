@@ -40,11 +40,11 @@
 /************************ DEFINITIONS ******************************/
 #if defined(PROTOCOL_MESH)
 #if defined(PAN_COORDINATOR)
-#define NUMBER_OF_MIMEM_BUFFERS  30
+#define NUMBER_OF_MIMEM_BUFFERS  40
 #elif defined(COORDINATOR)
-#define NUMBER_OF_MIMEM_BUFFERS  20
+#define NUMBER_OF_MIMEM_BUFFERS  30
 #elif defined(ENDDEVICE)
-#define NUMBER_OF_MIMEM_BUFFERS  10
+#define NUMBER_OF_MIMEM_BUFFERS  20
 #endif
 #else
 #define NUMBER_OF_MIMEM_BUFFERS  10
@@ -54,7 +54,7 @@
 /************************ Prototypes ********************************/
 void MiMem_Init(void);
 uint8_t* MiMem_Alloc(uint8_t size);
-uint8_t MiMem_Free(uint8_t* buffPtr);
+void MiMem_Free(void* buffPtr);
 uint8_t MiMem_PercentageOfFreeBuffers(void);
 #endif
 

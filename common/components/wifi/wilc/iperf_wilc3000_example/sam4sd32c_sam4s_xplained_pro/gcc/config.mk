@@ -66,7 +66,6 @@ CSRCS = \
        common/components/wifi/wilc/driver/source/nmi2c.c  \
        common/components/wifi/wilc/driver/source/nmsdio.c \
        common/components/wifi/wilc/driver/source/nmspi.c  \
-       common/components/wifi/wilc/driver/source/nmuart.c \
        common/components/wifi/wilc/driver/source/spi_flash.c \
        common/components/wifi/wilc/drv_hash/PMK.c         \
        common/components/wifi/wilc/iperf_wilc3000_example/iperf.c \
@@ -109,6 +108,7 @@ CSRCS = \
        thirdparty/lwip/lwip-1.4.1-dev/src/api/netbuf.c    \
        thirdparty/lwip/lwip-1.4.1-dev/src/api/netdb.c     \
        thirdparty/lwip/lwip-1.4.1-dev/src/api/netifapi.c  \
+       thirdparty/lwip/lwip-1.4.1-dev/src/api/ping.c      \
        thirdparty/lwip/lwip-1.4.1-dev/src/api/pppapi.c    \
        thirdparty/lwip/lwip-1.4.1-dev/src/api/sockets.c   \
        thirdparty/lwip/lwip-1.4.1-dev/src/api/tcpip.c     \

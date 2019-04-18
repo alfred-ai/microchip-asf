@@ -33,6 +33,8 @@
 #ifndef CONF_BOARD_H
 #define CONF_BOARD_H
 
+#define CONF_BOARD_SD_MMC_HSMCI  
+
 #define CONF_BOARD_UART_CONSOLE
 #define CONF_BOARD_SPI
 #define CONF_BOARD_SPI_NPCS0

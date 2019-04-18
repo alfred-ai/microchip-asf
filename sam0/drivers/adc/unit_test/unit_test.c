@@ -96,7 +96,7 @@
  *
  * \section asfdoc_sam0_adc_unit_test_contactinfo Contact Information
  * For further information, visit
- * <a href="http://www.atmel.com">http://www.atmel.com</a>.
+ * <a href="http://www.microchip.com">http://www.microchip.com</a>.
  */
 /*
  * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>

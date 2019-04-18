@@ -39,9 +39,7 @@
  * \brief SAMB11 CMSIS Definitions.
  */
 
-#if   defined(__BTLC1000WLCSP__) || defined(__ATBTLC1000WLCSP__)
-  #include "btlc1000wlcsp.h"
-#elif defined(__SAMB11G18A__) || defined(__ATSAMB11G18A__)
+#if defined(__SAMB11G18A__) || defined(__ATSAMB11G18A__)
   #include "samb11g18a.h"
 #elif defined(__SAMB11ZR__) || defined(__ATSAMB11ZR__)
   #include "samb11zr.h"

@@ -75,7 +75,7 @@
  *
  * \section asfdoc_common_adp_example_contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com/">Atmel</A>.\n
+ * <A href="http://www.microchip.com/">Microchip</A>.\n
  */
 
 #include <compiler.h>

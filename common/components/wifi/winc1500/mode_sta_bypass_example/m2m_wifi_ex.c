@@ -767,7 +767,7 @@ struct wifi_set_sytem_time_params {
 static void os_m2m_wifi_set_sytem_time_imp(void *pv)
 {
 	struct wifi_set_sytem_time_params *p = (struct wifi_set_sytem_time_params *) pv;
-	p->dispatch.retval = m2m_wifi_set_sytem_time(p->u32UTCSeconds);
+	p->dispatch.retval = m2m_wifi_set_system_time(p->u32UTCSeconds);
 	OS_WIFI_NOTIFY(p);
 }
 sint8 os_m2m_wifi_set_sytem_time(uint32 u32UTCSeconds)

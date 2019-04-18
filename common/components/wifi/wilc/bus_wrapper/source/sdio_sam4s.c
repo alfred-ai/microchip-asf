@@ -53,8 +53,10 @@ static void check_card_exist (void){
 		if ((SD_MMC_ERR_NO_CARD != err)
 		&& (SD_MMC_INIT_ONGOING != err)
 		&& (SD_MMC_OK != err)) {
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE			
 			printf("Card install FAILED\n\r");
 			printf("Please unplug and re-plug the card.\n\r");
+#endif			
 			delay_ms(1000);
 		}
 	} while (SD_MMC_OK != err);
@@ -262,8 +264,10 @@ int8_t sam4s_sdio_init(void)
 
 	//Wait for a card and ready
 	check_card_exist();
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE	
 	// Display basic card information
 	main_display_info_card(0);
+#endif	
 	
 	return M2M_SUCCESS;
 }

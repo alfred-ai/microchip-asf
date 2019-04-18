@@ -67,7 +67,7 @@
  *
  * \section contactinfo Contact Information
  * For further information,visit
- * <A href="http://www.atmel.com/avr">www.atmel.com</A>.\n
+ * <A href="http://www.microchip.com/design-centers/8-bit">www.atmel.com</A>.\n
  */
 
 #include <string.h>

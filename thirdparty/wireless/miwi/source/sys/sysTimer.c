@@ -36,14 +36,18 @@
 #include "common_hw_timer.h"
 #include "sysTimer.h"
 
-volatile uint8_t SysTimerIrqCount;
 
 /*****************************************************************************
 *****************************************************************************/
 static void placeTimer(SYS_Timer_t *timer);
+static void SYS_HwExpiry_Cb(void);
+static void SYS_HwOverflow_Cb(void);
 
 /*- Variables --------------------------------------------------------------*/
 static SYS_Timer_t *timers;
+volatile uint8_t SysTimerIrqCount;
+
+volatile uint8_t timerExtension1,timerExtension2;
 
 /*- Implementations --------------------------------------------------------*/
 
@@ -52,6 +56,9 @@ static SYS_Timer_t *timers;
 void SYS_TimerInit(void)
 {
 	SysTimerIrqCount = 0;
+    timerExtension1 = 0;
+    timerExtension2 = 0;
+    set_common_tc_overflow_callback(SYS_HwOverflow_Cb);
 	set_common_tc_expiry_callback(SYS_HwExpiry_Cb);
 	common_tc_init();
 	common_tc_delay(SYS_TIMER_INTERVAL * MS);
@@ -179,10 +186,122 @@ static void placeTimer(SYS_Timer_t *timer)
 	}
 }
 
+/*********************************************************************
+* Function:         void MiWi_TickGet()
+*
+* PreCondition:     none
+*
+* Input:		    none
+*
+* Output:		    MIWI_TICK - the current symbol time
+*
+* Side Effects:	    The timer interrupt is disabled
+*                   for several instruction cycles while the 
+*                   timer value is grabbed.  This is to prevent a
+*                   rollover from incrementing the timer extenders
+*                   during the read of their values
+*
+* Overview:		    This function returns the current time
+*
+* Note:			    This function should never be called 
+*                   when interrupts are disabled if interrupts are 
+*                   disabled when this is called then the timer 
+*                   might rollover and the byte extension would not 
+*                   get updated.
+********************************************************************/
+uint32_t MiWi_TickGet(void)
+{
+    MIWI_TICK currentTime;
+	uint8_t current_timerExtension1 = timerExtension1;
+    
+    /* disable the timer to prevent roll over of the lower 16 bits 
+	while before/after reading of the extension */
+	tmr_disable_ovf_interrupt();
+
+	currentTime.word.w0 = common_tc_read_count();
+    /* enable the timer*/
+	tmr_enable_ovf_interrupt();
+
+	/* NOP to allow the interrupt to process before copying timerExtension1 */
+	nop();
+
+	/* If interrupt occurred during interrupt disable  read count again*/
+	if (current_timerExtension1 != timerExtension1)
+	{
+		currentTime.word.w0 = common_tc_read_count();
+	}
+    /* copy the byte extension */
+    currentTime.byte.b2 = timerExtension1;
+    currentTime.byte.b3 = timerExtension2;
+
+    return currentTime.Val;
+}
+
+/*********************************************************************
+* Function:         MIWI_TICK MiWi_TickGetDiff()
+*
+* PreCondition:     none
+*
+* Input:		    current_tick  - Recent tick read from MiWi_TickGet
+*                   previous_tick - Tick read prior to current_tick for 
+*                                   calculation.
+*
+* Output:		    uint32_t - Difference in current_tick to previous_tick
+*
+* Side Effects:	    none
+*
+* Overview:		    This function returns difference between current_tick
+*                   and previous_tick
+*
+* Note:			    none
+********************************************************************/
+uint32_t MiWi_TickGetDiff(MIWI_TICK current_tick, MIWI_TICK previous_tick)
+{
+	uint32_t ret_val;
+	if (current_tick.Val > previous_tick.Val)
+	{
+		/* If current > previous, no overflow in running timer*/
+		ret_val = current_tick.Val - previous_tick.Val;
+	}
+	else
+	{
+		/* Handling Overflow as current tick < previous tick */
+		ret_val = (0xFFFFFFFF - previous_tick.Val) + current_tick.Val;
+	}
+	return ret_val;
+}
+
+
 /*****************************************************************************
 *****************************************************************************/
-void SYS_HwExpiry_Cb(void)
+static void SYS_HwExpiry_Cb(void)
 {
 	SysTimerIrqCount++;
 	common_tc_delay(SYS_TIMER_INTERVAL * MS);
+}
+
+static void SYS_HwOverflow_Cb(void)
+{
+	timerExtension1++;
+	if(timerExtension1 == 0)
+	{
+		timerExtension2++;
+	}
+}
+
+void SYS_TimerAdjust_SleptTime(uint32_t sleeptime)
+{
+	SYS_Timer_t* timer = timers;
+	while (timer)
+	{
+		if (timer->timeout > sleeptime)
+		{
+			timer->timeout -= sleeptime;
+		}
+		else
+		{
+			timer->timeout = 0;
+		}
+		timer = timer->next;
+	}
 }

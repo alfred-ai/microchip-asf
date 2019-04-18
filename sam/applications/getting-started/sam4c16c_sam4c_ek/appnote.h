@@ -55,7 +55,7 @@ how to load and buildup a single example project to SAM4C-EK.
 /**
 \page appdoc_chap_00_title1 Get the Device Datasheet
 
-Web page: http://www.atmel.com/SAM4C
+Web page: http://www.microchip.com/SAM4C
 
 Documents: SAM4C Series Datasheet (Summary, Complete) (.pdf) 
 - Select the required device (ie. ATSAM4Cx) or and get the latest datasheet
@@ -69,7 +69,7 @@ Documents: SAM4C Series Datasheet (Summary, Complete) (.pdf)
 /**
 \page appdoc_chap_01_title2 Get the SAM4C Evaluation Kit
 
-Web page: http://www.atmel.com/tools/SAM4C-EK.aspx
+Web page: http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel_11251_SmartEnergy_ATSAM4C-EK-User_Guide_SAM4C8-SAM4C16_User-Guide.pdf
 
 Get the kit: http://store.atmel.com
 

@@ -41,14 +41,13 @@
 #define OUTPUT
 #define IOPUT
 
-
 #include "system.h"
 #include "miwi_config.h"          //MiWi Application layer configuration file
 #include "miwi_config_p2p.h"      //MiWi Protocol layer configuration file
 
 #if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 /************************ HEADERS **********************************/
-#include "symbol.h"
+#include "sysTimer.h"
 #include "miwi_api.h"
 
 
@@ -210,6 +209,8 @@ extern volatile P2P_STATUS P2PStatus;
     extern API_UINT16_UNION myPANID;
 #endif
 extern API_UINT16_UNION CounterVal;
+
+extern volatile uint16_t myShortAddress;
 
 /************************ FUNCTION PROTOTYPES **********************/
 bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2);

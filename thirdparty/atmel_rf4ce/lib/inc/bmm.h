@@ -5,7 +5,7 @@
  *
  * $Id: bmm.h 19562 2009-12-15 17:18:44Z sschneid $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

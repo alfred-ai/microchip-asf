@@ -450,7 +450,7 @@ bool uhd_ep_alloc(usb_add_t add, usb_ep_desc_t * ep_desc, uhd_speed_t speed)
 	ed_info_temp.ed_info_s.bFunctionAddress = add;                        // device address=UHC_DEVICE_ENUM_ADD=1
 	ed_info_temp.ed_info_s.bEndpointNumber = ep_desc->bEndpointAddress;   // endpoint number
 	ed_info_temp.ed_info_s.bDirection = ep_dir;                           // Set direction
-	ed_info_temp.ed_info_s.bSpeed = speed;                                // speed
+	ed_info_temp.ed_info_s.bSpeed = (speed == UHD_SPEED_LOW);             // speed
 	ed_info_temp.ed_info_s.bSkip = 0;                                     // no skip
 	ed_info_temp.ed_info_s.bFormat = 0;                                   // General TD
 	ed_info_temp.ed_info_s.bMaximumPacketSize = ep_desc->wMaxPacketSize;  // max packet size

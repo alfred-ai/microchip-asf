@@ -55,7 +55,10 @@ void (*ptr_get)(void volatile*, char*);
 
 #include <yfuns.h>
 
+#if (__VER__ < 8010000)
+// Refer http://ftp.iar.se/WWWfiles/arm/webic/doc/EWARM_MigrationGuide.ENU.pdf
 _STD_BEGIN
+#endif
 
 #pragma module_name = "?__read"
 
@@ -113,7 +116,10 @@ long __lseek(int handle, long val, int val2)
 	return val;
 }
 
+#if (__VER__ < 8010000)
+// Refer http://ftp.iar.se/WWWfiles/arm/webic/doc/EWARM_MigrationGuide.ENU.pdf
 _STD_END
+#endif
 
 // GCC implementation
 #elif (defined(__GNUC__))

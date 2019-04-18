@@ -38,12 +38,14 @@
 #include "system.h"
 #include "miwi_config.h"          //MiWi Application layer configuration file
 #include "miwi_config_p2p.h"      //MiWi Protocol layer configuration file
-#include "miwi_nvm.h"
 #include "miwi_p2p.h"
 #include "mimac_at86rf.h"
 #include "mimem.h"
 #include "delay.h"
-
+#if defined(ENABLE_NETWORK_FREEZER)
+#include "pdsDataServer.h"
+#include "wlPdsTaskManager.h"
+#endif
 //Global Variables
 // In p2p total no of devices , In star used only by PAN COR to calculate no of END Devices
 uint8_t conn_size ;
@@ -56,10 +58,6 @@ uint8_t temp_bit;
 bool FW_Stat;
 PacketIndCallback_t pktRxcallback = NULL;
 connectionConf_callback_t EstConfCallback; //MATEMP
-
-#if defined(ENABLE_NETWORK_FREEZER)
-nvmParameters_t *nvmParam = START_ADDR;
-#endif
 
 #if defined(PROTOCOL_STAR)
 uint8_t Find_Index (uint8_t *DestAddr);
@@ -209,7 +207,7 @@ uint8_t Total_Connections(void)
         bool status;
         uint8_t* dataPtr = NULL;
         uint8_t dataLen = 0;
-        dataPtr = MiMem_Alloc(fw_payload_len+3);
+        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(fw_payload_len+3));
         if (NULL == dataPtr)
           return false;
         dataPtr[dataLen++] = EDxAddress[0];    // Unique address of EDy (DEST ED) 
@@ -280,7 +278,7 @@ uint8_t Total_Connections(void)
 #if defined(IEEE_802_15_4)
     API_UINT16_UNION        myPANID;                    // the PAN Identifier for the device
 #endif
-uint8_t            currentChannel = 0;             // current operating channel for the device
+uint8_t            currentChannel = 0xFF;             // current operating channel for the device
 uint8_t            ConnMode = DISABLE_ALL_CONN;
 uint8_t            P2PCapacityInfo;
 RECEIVED_MESSAGE  rxMessage;                    // structure to store information for the received packet
@@ -297,7 +295,7 @@ extern uint8_t     AdditionalNodeID[];             // the additional information
                                                                     // operating channel
 #endif
 
-#ifdef ENABLE_SLEEP
+#ifdef ENABLE_SLEEP_FEATURE
     MIWI_TICK DataRequestTimer;
 #endif
 
@@ -313,7 +311,7 @@ MAC_RECEIVED_PACKET MACRxPacket;
 
 
 #if defined(ENABLE_TIME_SYNC)
-    #if defined(ENABLE_SLEEP)
+    #if defined(ENABLE_SLEEP_FEATURE)
         API_UINT16_UNION WakeupTimes;
         API_UINT16_UNION CounterValue;
     #elif defined(ENABLE_INDIRECT_MESSAGE)
@@ -422,8 +420,8 @@ void P2PTasks(void)
 
     
     #ifdef ENABLE_INDIRECT_MESSAGE
-        // check indirect message periodically. If an indirect message is not acquired within
-        // time of INDIRECT_MESSAGE_TIMEOUT
+        //check indirect message periodically. If an indirect message is not acquired within
+        //time of INDIRECT_MESSAGE_TIMEOUT
         for(i = 0; i < INDIRECT_MESSAGE_SIZE; i++)
         {
             if( indirectMessages[i].flags.bits.isValid )
@@ -433,13 +431,13 @@ void P2PTasks(void)
                 {
                     indirectMessages[i].flags.Val = 0x00;   
                     printf("\r\nIndirect message expired");
-                    indirectMessages[i].indirectConfCallback(indirectMessages[i].indirectDataHandle, DATA_TRANSACTION_EXPIRED);
+                    indirectMessages[i].indirectConfCallback(indirectMessages[i].indirectDataHandle, TRANSACTION_EXPIRED, indirectMessages[i].PayLoad);
                 }    
             }    
         }
     #endif
     
-    #ifdef ENABLE_SLEEP
+    #ifdef ENABLE_SLEEP_FEATURE
         // check if a response for Data Request has been received with in 
         // time of RFD_DATA_WAIT, defined in P2P.h. Expire the Data Request
         // to let device goes to sleep, if no response is received. Save
@@ -449,7 +447,9 @@ void P2PTasks(void)
             tmpTick.Val = MiWi_TickGet();
             if( MiWi_TickGetDiff(tmpTick, DataRequestTimer) > RFD_DATA_WAIT )
             {
+#if defined(ENABLE_CONSOLE) 
                 printf("Data Request Expired\r\n");
+#endif
                 P2PStatus.bits.DataRequesting = 0;
                 #if defined(ENABLE_TIME_SYNC)
                     WakeupTimes.Val = RFD_WAKEUP_INTERVAL / 16;
@@ -466,13 +466,17 @@ void P2PTasks(void)
             if( MiWi_TickGetDiff(tmpTick, nvmDelayTick) > (ONE_SECOND) )
             {
                 P2PStatus.bits.SaveConnection = 0;
-                nvmPutConnectionTable(ConnectionTable);  
-                printf("\r\nSave Connection\r\n");   
+#if defined(ENABLE_NETWORK_FREEZER)
+				PDS_Store(PDS_CONNECTION_TABLE_ID);
+#endif
+#if defined(ENABLE_CONSOLE) 
+                printf("\r\nSave Connection\r\n");
+#endif
             }
         }
     #endif
 
-    #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP) && defined(ENABLE_INDIRECT_MESSAGE)
+    #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP_FEATURE) && defined(ENABLE_INDIRECT_MESSAGE)
         tmpTick.Val = MiWi_TickGet();
         if( MiWi_TickGetDiff(tmpTick, TimeSyncTick) > ((ONE_SECOND) * RFD_WAKEUP_INTERVAL) )
         {
@@ -537,7 +541,7 @@ void P2PTasks(void)
                             // if a device goes to sleep, it can only have one
                             // connection, as the result, it cannot accept new
                             // connection request
-                            #ifdef ENABLE_SLEEP
+                            #ifdef ENABLE_SLEEP_FEATURE
                                 MiMAC_DiscardPacket();
                                 break;
                             #else
@@ -606,7 +610,7 @@ void P2PTasks(void)
                                 uint8_t dataLen = 0;
                                 
                                 // prepare the P2P_CONNECTION_RESPONSE command
-                                dataPtr = MiMem_Alloc(TX_BUFFER_SIZE);
+                                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(TX_BUFFER_SIZE));
                                 if (NULL == dataPtr)
                                   return;
                                 dataPtr[dataLen++] = CMD_P2P_CONNECTION_RESPONSE;
@@ -652,12 +656,14 @@ void P2PTasks(void)
                                 #if defined(ENABLE_NETWORK_FREEZER)
                                     if( status == STATUS_SUCCESS )
                                     {
-                                        nvmPutConnectionTableIndex(&(ConnectionTable[LatestConnection]), LatestConnection);
+#if defined(ENABLE_NETWORK_FREEZER)
+										PDS_Store(PDS_CONNECTION_TABLE_ID);
+#endif
                                     }
                                 #endif
       
                                      
-                            #endif  // end of ENABLE_SLEEP
+                            #endif  // end of ENABLE_SLEEP_FEATURE
                             #if defined(PROTOCOL_STAR)
                                     }     // Important if Implementing a Star Network
                             
@@ -684,7 +690,7 @@ void P2PTasks(void)
                                 MiMAC_DiscardPacket();
                                 break;
                             }
-                            dataPtr = MiMem_Alloc(PACKETLEN_P2P_ACTIVE_SCAN_RESPONSE);
+                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_ACTIVE_SCAN_RESPONSE));
                             if (NULL == dataPtr)
                               return;
                             dataPtr[dataLen++] = CMD_P2P_ACTIVE_SCAN_RESPONSE;
@@ -727,7 +733,7 @@ void P2PTasks(void)
                         {
                             uint8_t* dataPtr = NULL;
                             uint8_t dataLen = 0;
-                            dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_RESPONSE);
+                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_RESPONSE));
                             if (NULL == dataPtr)
                               return;
                             dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_RESPONSE;
@@ -743,7 +749,7 @@ void P2PTasks(void)
                                         // set status to be SUCCESS
                                         ConnectionTable[i].status.Val = 0;
                                         #if defined(ENABLE_NETWORK_FREEZER)
-                                            nvmPutConnectionTableIndex(&(ConnectionTable[i]), i);
+											PDS_Store(PDS_CONNECTION_TABLE_ID);
                                         #endif
                                         dataPtr[dataLen++] = STATUS_SUCCESS;
 
@@ -784,11 +790,19 @@ void P2PTasks(void)
                     case CMD_P2P_CONNECTION_RESPONSE:
                         {
                             switch( rxMessage.Payload[1] )
-                            {              
+                            {
                                 case STATUS_SUCCESS:
-                                EstConfCallback(SUCCESS);
+                                    if (EstConfCallback)
+                                    {
+                                        EstConfCallback(SUCCESS);
+                                        EstConfCallback = NULL;
+                                    }
                                 case STATUS_EXISTS:
-                                EstConfCallback(ALREADY_EXISTS);
+                                    if (EstConfCallback)
+                                    {
+                                        EstConfCallback(ALREADY_EXISTS);
+                                        EstConfCallback = NULL;
+                                    }
                                     #if defined(IEEE_802_15_4)
                                         if( myPANID.Val == 0xFFFF )
                                         {
@@ -798,7 +812,7 @@ void P2PTasks(void)
                                                 MiMAC_SetAltAddress((uint8_t *)&tmp, (uint8_t *)&myPANID.Val);
                                             }    
                                             #if defined(ENABLE_NETWORK_FREEZER)
-                                                nvmPutMyPANID(myPANID.v);
+												PDS_Store(PDS_PANID_ID);
                                             #endif
                                         }
                                     #endif
@@ -806,7 +820,7 @@ void P2PTasks(void)
                                     #if defined(PROTOCOL_STAR)
                                         myConnectionIndex_in_PanCo = rxMessage.Payload[2];
                                         #if defined(ENABLE_NETWORK_FREEZER)
-										nvmPutMyIndex(&myConnectionIndex_in_PanCo);
+										PDS_Store(PDS_MYINDEX_ID);
 										#endif
                                     #endif
                                     
@@ -889,7 +903,7 @@ void P2PTasks(void)
                                             // invalidate the record
                                             ConnectionTable[i].status.Val = 0;
                                             #if defined(ENABLE_NETWORK_FREEZER)
-                                                nvmPutConnectionTableIndex(&(ConnectionTable[i]), i);
+												PDS_Store(PDS_CONNECTION_TABLE_ID);
                                             #endif
                                             break;
                                         }
@@ -911,11 +925,11 @@ void P2PTasks(void)
                             uint8_t dataLen = 0;
                             MIWI_TICK tmpW;
                             
-                            dataPtr = MiMem_Alloc(PACKETLEN_TIME_SYNC_DATA_PACKET);
+                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_TIME_SYNC_DATA_PACKET));
                             if (NULL == dataPtr)
                               return;
                             
-                            #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP)
+                            #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP_FEATURE)
                                 dataPtr[dataLen++] = CMD_TIME_SYNC_DATA_PACKET;
                                 isCommand = true;
                                 tmpTick.Val = MiWi_TickGet();
@@ -1040,7 +1054,7 @@ END_OF_SENDING_INDIRECT_MESSAGE:
                 #endif
                 
                 
-                #if defined(ENABLE_TIME_SYNC) && defined(ENABLE_SLEEP)
+                #if defined(ENABLE_TIME_SYNC) && defined(ENABLE_SLEEP_FEATURE)
                     case CMD_TIME_SYNC_DATA_PACKET:
                     case CMD_TIME_SYNC_COMMAND_PACKET:
                         {
@@ -1189,7 +1203,7 @@ END_OF_SENDING_INDIRECT_MESSAGE:
 			MiMAC_DiscardPacket();
         }
 
-        #ifdef ENABLE_SLEEP
+        #ifdef ENABLE_SLEEP_FEATURE
             if( P2PStatus.bits.DataRequesting && P2PStatus.bits.RxHasUserData )
             {
                 P2PStatus.bits.DataRequesting = 0;
@@ -1201,6 +1215,11 @@ END_OF_SENDING_INDIRECT_MESSAGE:
             MiMAC_DiscardPacket();
         }   
     }
+#if defined(ENABLE_NETWORK_FREEZER)
+#if PDS_ENABLE_WEAR_LEVELING
+    PDS_TaskHandler();
+#endif
+#endif
     (void)tmpTick;
 }
 
@@ -1242,10 +1261,6 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         
     #endif
     
-    #if defined(ENABLE_NETWORK_FREEZER)
-        nvm_init(INT_FLASH);
-    #endif
-    
     //clear all status bits
     P2PStatus.Val = 0;
 
@@ -1264,8 +1279,6 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         }
     }
 	#endif
- 
-    InitSymbolTimer();
     
     #ifdef ENABLE_INDIRECT_MESSAGE
         for(i = 0; i < INDIRECT_MESSAGE_SIZE; i++)
@@ -1281,26 +1294,29 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         }
     #endif
     
-    #if defined(ENABLE_NETWORK_FREEZER)
-        if( bNetworkFreezer )
-        {
-            nvmGetCurrentChannel(&currentChannel);
+#if defined(ENABLE_NETWORK_FREEZER)
+        #if defined(IEEE_802_15_4)
+			PDS_Restore(PDS_PANID_ID);
+        #endif
+        if (myPANID.Val)
+		{
+			PDS_Restore(PDS_CURRENT_CHANNEL_ID);
             if( currentChannel >= 32 )
             {
                 return false;
             }
             
             #if defined(IEEE_802_15_4)
-                nvmGetMyPANID(myPANID.v);
+			PDS_Restore(PDS_PANID_ID);
             #endif
-            nvmGetConnMode(&ConnMode);
-            nvmGetConnectionTable(ConnectionTable);
+			PDS_Restore(PDS_CONNECTION_MODE_ID);
+			PDS_Restore(PDS_CONNECTION_TABLE_ID);
 
             #if defined(PROTOCOL_STAR)
-                nvmGetMyRole(&role);
-                nvmGetMyIndex(&myConnectionIndex_in_PanCo);
+			PDS_Restore(PDS_ROLE_ID);
+			PDS_Restore(PDS_MYINDEX_ID);
             #endif
-            nvmGetMyDC(&conn_size);
+			PDS_Restore(PDS_EDC_ID);
                         
             #if defined (ENABLE_CONSOLE)
                 #if defined(IEEE_802_15_4) 
@@ -1309,18 +1325,18 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                 printf("%x",myPANID.v[0]);
                 #endif
                 printf(" Channel:");
-                printf("%x",currentChannel);
+                printf("%d",currentChannel);
             #endif
         }
         else
         {
             #if defined(IEEE_802_15_4)
                 myPANID.Val = MY_PAN_ID;
-                nvmPutMyPANID(myPANID.v);
+				PDS_Store(PDS_PANID_ID);
             #endif
-            nvmPutCurrentChannel(&currentChannel);
-            nvmPutConnMode(&ConnMode);
-            nvmPutConnectionTable(ConnectionTable);
+			PDS_Store(PDS_CURRENT_CHANNEL_ID);
+			PDS_Store(PDS_CONNECTION_MODE_ID);
+			PDS_Store(PDS_CONNECTION_TABLE_ID);
         }
     #else
         #if defined(IEEE_802_15_4)
@@ -1340,17 +1356,18 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
 
     MiMAC_Init(initValue);
     
-    #if defined(IEEE_802_15_4)
+    if (currentChannel != 0xFF)
+	    MiApp_Set(CHANNEL, &currentChannel);
+
+	#if defined(IEEE_802_15_4)
         {
             uint16_t tmp = 0xFFFF;
             MiMAC_SetAltAddress((uint8_t *)&tmp, (uint8_t *)&myPANID.Val);
         }
     #endif
-    
-	MiApp_Set(CHANNEL, &currentChannel);
 
     #if defined(ENABLE_TIME_SYNC)
-        #if defined(ENABLE_SLEEP)
+        #if defined(ENABLE_SLEEP_FEATURE)
             WakeupTimes.Val = 0;
             CounterValue.Val = 61535;   // (0xFFFF - 4000) one second
         #elif defined(ENABLE_INDIRECT_MESSAGE)
@@ -1359,7 +1376,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
     #endif
 
     P2PCapacityInfo = 0;
-    #if !defined(ENABLE_SLEEP)
+    #if !defined(ENABLE_SLEEP_FEATURE)
         P2PCapacityInfo |= 0x01;
     #endif
     #if defined(ENABLE_SECURITY)
@@ -1371,7 +1388,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
     return true;
 }
 
-#ifdef ENABLE_SLEEP
+#ifdef ENABLE_SLEEP_FEATURE
     /************************************************************************************
      * Function:
      *      uint8_t    MiApp_TransceiverPowerState(uint8_t Mode)
@@ -1436,7 +1453,8 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                     #if defined(ENABLE_NETWORK_FREEZER)
                         if( P2PStatus.bits.SaveConnection )
                         {
-                            nvmPutConnectionTable(ConnectionTable);
+							PDS_Store(PDS_CONNECTION_TABLE_ID);
+
                             P2PStatus.bits.SaveConnection = 0;
                         }
                     #endif
@@ -1510,7 +1528,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
 		uint8_t tmpTxData = dataLen;
         uint8_t firstuint8_t = dataPtr[0];
 
-        dataPtr = MiMem_Alloc(PACKETLEN_MAC_DATA_REQUEST);
+        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_MAC_DATA_REQUEST));
         if (NULL == dataPtr)
           return false;
         dataPtr[dataLen++] = CMD_MAC_DATA_REQUEST;
@@ -1619,7 +1637,9 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                             API_UINT16_UNION  DestinationPANID,
                             INPUT uint8_t *DestinationAddress,
                             INPUT bool isCommand, 
-                            INPUT bool SecurityEnabled, 
+                            INPUT bool SecurityEnabled,
+                            INPUT uint8_t msgLen,
+                            INPUT uint8_t* msgPtr,
 							INPUT uint8_t msghandle,
 							INPUT bool ackReq,
                             DataConf_callback_t ConfCallback)
@@ -1627,7 +1647,9 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         bool IndirectPacket(INPUT bool Broadcast, 
                             INPUT uint8_t *DestinationAddress,
                             INPUT bool isCommand, 
-                            INPUT bool SecurityEnabled, 
+                            INPUT bool SecurityEnabled,
+							INPUT uint8_t msgLen,
+							INPUT uint8_t* msgPtr,
 							INPUT uint8_t msghandle,
 							INPUT bool ackReq,
                             DataConf_callback_t ConfCallback)
@@ -1687,10 +1709,10 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                     }
                 #endif
                 
-                indirectMessages[i].PayLoadSize = dataLen;
-                for(j = 0; j < dataLen; j++)
+                indirectMessages[i].PayLoadSize = msgLen;
+                for(j = 0; j < msgLen; j++)
                 {
-                    indirectMessages[i].PayLoad[j] = dataPtr[j];
+                    indirectMessages[i].PayLoad[j] = msgPtr[j];
                 }
                 indirectMessages[i].indirectDataHandle = msghandle;
 				indirectMessages[i].indirectConfCallback = ConfCallback;
@@ -1835,7 +1857,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                                                             bool ackReq, DataConf_callback_t ConfCallback)
    {
 	    bool broadcast = false;
-		uint16_t DestinationAddress16 = ((addr[1] << 8) + addr[0]);
+		uint16_t DestinationAddress16 = ((addr[1] << 8) + addr[0]);	
 		if(addr_len == 2 && (DestinationAddress16 == 0xFFFF))
 		{
 			broadcast = true;
@@ -1847,9 +1869,9 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
 				    if( ConnectionTable[i].status.bits.isValid && ConnectionTable[i].status.bits.RXOnWhenIdle == 0 )
 				    {
 					    #if defined(IEEE_802_15_4)
-					    IndirectPacket(true, myPANID, NULL, false, SecEn, msghandle, ackReq, ConfCallback);
+					    IndirectPacket(true, myPANID, NULL, false, true, msglen, msgpointer, msghandle, ackReq, ConfCallback);
 					    #else
-					    IndirectPacket(true, NULL, false, SecEn, msghandle, ackReq, ConfCallback);
+					    IndirectPacket(true, NULL, false, true, msglen, msgpointer, msghandle, ackReq, ConfCallback);
 					    #endif
 					    break;
 				    }
@@ -1865,13 +1887,13 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         {
             // check if RX on when idle
             if( ConnectionTable[i].status.bits.isValid && (ConnectionTable[i].status.bits.RXOnWhenIdle == 0) &&
-                isSameAddress(DestinationAddress, ConnectionTable[i].Address) )
+                isSameAddress(addr, ConnectionTable[i].Address) )
             {
                 #if defined(IEEE_802_15_4)
-                    return IndirectPacket(broadcast, myPANID, DestinationAddress, false, SecEn, msglen,
+                    return IndirectPacket(broadcast, myPANID, addr, false, true, msglen,
 					 msgpointer, msghandle, ackReq, ConfCallback);
                 #else
-                    return IndirectPacket(broadcast, DestinationAddress, false, SecEn, msglen,
+                    return IndirectPacket(broadcast, addr, false, true, msglen,
 					 msgpointer, msghandle, ackReq, ConfCallback);
                 #endif
             }
@@ -1944,7 +1966,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         
         for (i = 0 ; i < broadcast_count ; i++)
         {
-            dataPtr = MiMem_Alloc(TX_BUFFER_SIZE);
+            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(TX_BUFFER_SIZE));
             if (NULL == dataPtr)
                return;
             dataPtr[dataLen++] = CMD_SHARE_CONNECTION_TABLE;
@@ -2041,7 +2063,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
     {
         uint8_t* dataPtr = NULL;
         uint8_t dataLen = 0;
-        dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST);
+        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST));
         if (NULL == dataPtr)
           return;
         dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_REQUEST; 
@@ -2066,7 +2088,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
             bool send_status;
             uint8_t* dataPtr = NULL;
             uint8_t dataLen = 0;
-            dataPtr = MiMem_Alloc(PACKETLEN_CMD_IAM_ALIVE);
+            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_CMD_IAM_ALIVE));
             if (NULL == dataPtr)
               return;			
             dataPtr[dataLen++] = CMD_IAM_ALIVE; 
@@ -2136,7 +2158,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         {
             uint8_t* dataPtr = NULL;
             uint8_t dataLen = 0;
-            dataPtr = MiMem_Alloc(PACKETLEN_CMD_DATA_TO_ENDDEV_SUCCESS);
+            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_CMD_DATA_TO_ENDDEV_SUCCESS));
             if (NULL == dataPtr)
                 return false;
             dataPtr[dataLen++] = CMD_DATA_TO_ENDDEV_SUCCESS; 
@@ -2190,9 +2212,16 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
     bool MiApp_StartConnection(uint8_t Mode, uint8_t ScanDuration, uint32_t ChannelMap,
 	                                                  connectionConf_callback_t ConfCallback)
     {
+		#if defined (PROTOCOL_STAR)
+		role=true;
+		#endif
         switch(Mode)
         {
             case START_CONN_DIRECT:
+			{
+			
+                uint8_t channel = 0;
+                uint32_t index = 1;
                 #if defined(IEEE_802_15_4)
                     #if MY_PAN_ID == 0xFFFF
                         myPANID.v[0] = TMRL;
@@ -2205,13 +2234,24 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
                         MiMAC_SetAltAddress((uint8_t *)&tmp, (uint8_t *)&myPANID.Val);
                     }
                 #endif
-                #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP) && defined(ENABLE_INDIRECT_MESSAGE)
+				while (!(index & ChannelMap))
+				{
+				// Unset current bit and set the next bit in 'i'
+				index = index << 1;
+
+				// increment position
+				++channel;
+				}
+				/* Set the best channel */
+				MiApp_Set(CHANNEL, &channel);
+                #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP_FEATURE) && defined(ENABLE_INDIRECT_MESSAGE)
                     TimeSyncTick.Val = MiWi_TickGet();
                 #endif
                 tick1.Val = MiWi_TickGet();
                 tick4.Val = MiWi_TickGet();
 				ConfCallback(SUCCESS);
                 return true;
+			}
                 
             case START_CONN_ENERGY_SCN:
                 #if defined(ENABLE_ED_SCAN)
@@ -2236,7 +2276,7 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
                     printf("\r\nStart Wireless Communication on Channel ");
                     printf("%u",channel);
                     printf("\r\n");
-                    #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP) && defined(ENABLE_INDIRECT_MESSAGE)
+                    #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP_FEATURE) && defined(ENABLE_INDIRECT_MESSAGE)
                         TimeSyncTick.Val = MiWi_TickGet();
                     #endif
                     ConfCallback(SUCCESS);
@@ -2302,7 +2342,7 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
      *      If more than one connections have been established through this function call, the
      *      return value points to the index of one of the peer devices.
      *
-     *****************************************************************************************/ 
+     *****************************************************************************************/                
      uint8_t MiApp_EstablishConnection(uint8_t Channel, uint8_t addr_len, uint8_t *addr, uint8_t Capability_info,
                                                                          connectionConf_callback_t ConfCallback)
     {
@@ -2312,7 +2352,6 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
         MIWI_TICK    t1, t2;
         tick1.Val = MiWi_TickGet();
         t1.Val = MiWi_TickGet();
-
         t1.Val -= (ONE_SECOND);
         ConnMode = ENABLE_ALL_CONN;
         P2PStatus.bits.SearchConnection = 1;
@@ -2335,10 +2374,10 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
                     P2PStatus.bits.SearchConnection = 0;
                     return 0xFF;
                 }
-                
+                MiApp_Set(CHANNEL, &Channel);
                 uint8_t* dataPtr = NULL;
                 uint8_t dataLen = 0;
-                dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REQUEST);
+                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REQUEST));
                 if (NULL == dataPtr)
                    return 0;
                 dataPtr[dataLen++] = CMD_P2P_CONNECTION_REQUEST;
@@ -2351,8 +2390,7 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
                 #endif
                 #if ADDITIONAL_NODE_ID_SIZE > 0
                     {
-                        uint8_t i;
-                        
+						uint8_t i;
                         for(i = 0; i < ADDITIONAL_NODE_ID_SIZE; i++)
                         {
                             dataPtr[dataLen++] = AdditionalNodeID[i];
@@ -2362,24 +2400,37 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
 
                 #if defined(IEEE_802_15_4)
                     #if defined(ENABLE_ACTIVE_SCAN)
-                        if( addr == NULL )
+                        uint16_t DestinationAddress16 = ((addr[1] << 8) + addr[0]);	
+                        if( DestinationAddress16 == 0xFFFF )
                         {
                             SendPacket(true, myPANID, NULL, true, false, dataLen, dataPtr,0, true, CommandConfCallback);
                         }
                         else
                         {
-                            uint8_t i,j;
+							uint8_t i,j;
+							bool deviceFound = false;
 							MiApp_Set(CHANNEL, &Channel);
 							for(i = 0; i < ACTIVE_SCAN_RESULT_SIZE; i++)
 							{
+								deviceFound = true;
 								for(j = 0; j < MY_ADDRESS_LENGTH; j++)
 								{
 								  if (addr[j] != ActiveScanResults[i].Address[j])
-								  break;
+								  {
+								      deviceFound = false;
+								      break;
+								  }
+								}
+								if (deviceFound)
+								{
+									break;
 								}
 							}
-                            SendPacket(false, ActiveScanResults[i].PANID, ActiveScanResults[i].Address, true, false, 
-							dataLen, dataPtr,0, true, CommandConfCallback);
+                            if (deviceFound)
+							{
+								SendPacket(false, ActiveScanResults[i].PANID, ActiveScanResults[i].Address, true, false, 
+							    dataLen, dataPtr,0, true, CommandConfCallback);
+							}
                         }
                     #else
                         SendPacket(true, myPANID, NULL, true, false, dataLen, dataPtr,0, true, CommandConfCallback);
@@ -2392,6 +2443,7 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
                         }
                         else
                         {
+							uint8_t i,j;
 							for(i = 0; i < ACTIVE_SCAN_RESULT_SIZE; i++)
 							{
 								for(j = 0; j < MY_ADDRESS_LENGTH; j++)
@@ -2415,7 +2467,7 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
       
         ConnMode = tmpConnectionMode;
         
-        #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP) && defined(ENABLE_INDIRECT_MESSAGE)
+        #if defined(ENABLE_TIME_SYNC) && !defined(ENABLE_SLEEP_FEATURE) && defined(ENABLE_INDIRECT_MESSAGE)
             TimeSyncTick.Val = MiWi_TickGet();
         #endif
         return LatestConnection;
@@ -2435,7 +2487,7 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
         {
           currentChannel = *value;
           #if defined(ENABLE_NETWORK_FREEZER)
-              nvmPutCurrentChannel(&currentChannel);
+			  PDS_Store(PDS_CURRENT_CHANNEL_ID);
           #endif
           return true;
         }
@@ -2448,6 +2500,29 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
     return false;
 }
 
+bool MiApp_Get(miwi_params_t id, uint8_t *value)
+{
+	switch(id)
+	{
+		case CHANNEL:
+		{
+			*value = currentChannel;
+			return true;
+		}
+		break;
+		
+		case PANID:
+		{
+			value[0] = myPANID.Val;
+			value[1] = myPANID.Val >> 8;
+			return true;
+		}
+		break;
+		default:
+		break;
+	}
+	return false;
+}
 #ifdef ENABLE_DUMP
     /*********************************************************************
      * void DumpConnection(uint8_t index)
@@ -2644,7 +2719,7 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
         }
         conn_size = Total_Connections();
     #if defined (ENABLE_NETWORK_FREEZER)
-        nvmPutMyDC(&conn_size);
+		PDS_Store(PDS_EDC_ID);
     #endif
 
         return status;
@@ -2727,8 +2802,7 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
                 printf("%d",i);
                 /* choose appropriate channel */
                 MiApp_Set(CHANNEL, &i);
-
-                dataPtr = MiMem_Alloc(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST);
+                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST));
                 if (NULL == dataPtr)
                    return 0;
                 dataPtr[dataLen++] = CMD_P2P_ACTIVE_SCAN_REQUEST;
@@ -2858,7 +2932,7 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
                 j = maxRSSI/5;
                 for(k = 0; k < j; k++)
                 {
-                    printf('-');
+                    printf("-");
                 }
                 printf(" ");
                 printf("%u",maxRSSI);
@@ -2917,7 +2991,7 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
                 {
                     uint8_t* dataPtr = NULL;
                     uint8_t dataLen = 0;
-                    dataPtr = MiMem_Alloc(PACKETLEN_CMD_CHANNEL_HOPPING);
+                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_CMD_CHANNEL_HOPPING));
                     if (NULL == dataPtr)
                         return;
                     dataPtr[dataLen++] = CMD_CHANNEL_HOPPING;
@@ -3018,9 +3092,9 @@ bool MiApp_Set(miwi_params_t id, uint8_t *value)
                     MiApp_Set(CHANNEL, &j);
                     j++;
                     
-                    dataPtr = MiMem_Alloc(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST);
+                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST));
                     if (NULL == dataPtr)
-                        return;
+                        return false;
                     dataPtr[dataLen++] = CMD_P2P_ACTIVE_SCAN_REQUEST;
                     dataPtr[dataLen++] = currentChannel;
         
@@ -3162,7 +3236,7 @@ GetOutOfLoop:
                 {
                     uint8_t* dataPtr = NULL;
                     uint8_t dataLen = 0;
-                    dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST);
+                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST));
                     if (NULL == dataPtr)
                         return;
                     dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_REQUEST;
@@ -3175,7 +3249,7 @@ GetOutOfLoop:
                 }
                 ConnectionTable[i].status.Val = 0;
                 #if defined(ENABLE_NETWORK_FREEZER)
-                    nvmPutConnectionTableIndex(&(ConnectionTable[i]), i);
+					PDS_Store(PDS_CONNECTION_TABLE_ID);
                 #endif
             } 
         }
@@ -3184,7 +3258,7 @@ GetOutOfLoop:
             uint16_t j;
             uint8_t* dataPtr = NULL;
             uint8_t dataLen = 0;
-            dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST);
+            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST));
             if (NULL == dataPtr)
                 return;			
             dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_REQUEST;
@@ -3198,7 +3272,7 @@ GetOutOfLoop:
             for(j = 0; j < 0xFFF; j++) {}   // delay
             ConnectionTable[ConnectionIndex].status.Val = 0; 
             #if defined(ENABLE_NETWORK_FREEZER)
-                nvmPutConnectionTableIndex(&(ConnectionTable[ConnectionIndex]), ConnectionIndex);
+				PDS_Store(PDS_CONNECTION_TABLE_ID);
             #endif
         }
     }
@@ -3254,7 +3328,7 @@ void MiApp_ConnectionMode(INPUT uint8_t Mode)
     P2PCapacityInfo = (P2PCapacityInfo & 0x0F) | (ConnMode << 4);
     
     #if defined(ENABLE_NETWORK_FREEZER)
-        nvmPutConnMode(&ConnMode);
+		PDS_Store(PDS_CONNECTION_MODE_ID);
     #endif
 }
 
@@ -3300,3 +3374,32 @@ bool  MiApp_SubscribeDataIndicationCallback(PacketIndCallback_t callback)
     }
     return false;
 }
+
+#if defined(ENABLE_NETWORK_FREEZER)
+/************************************************************************************
+* Function:
+* bool MiApp_ResetToFactoryNew(void)
+*
+* Summary:
+*      This function makes the device to factory new device
+*
+* Description:
+*      This is used to erase all the persistent items in the non-volatile memory and resets the system.
+*
+* Returns:
+*      A boolean to indicate the operation is success or not
+*
+*****************************************************************************************/
+bool MiApp_ResetToFactoryNew(void)
+{
+    if (PDS_DeleteAll(true))
+	{
+		NVIC_SystemReset();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+#endif

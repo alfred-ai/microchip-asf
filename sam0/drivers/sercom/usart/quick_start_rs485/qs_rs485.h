@@ -54,6 +54,6 @@
  * Alternatively, this can be done by jumpering RXP to TXP and RXN to TXN, or pins 2 and 5 and
  * pins 3 and 4 on the screw terminal block.
  *
- * Refer to: http://www.atmel.com/Images/Atmel-42468-RS-485-Communications-using-the-SAM-C21-Xplained-Pro-and-RS-485-Xplained-Pro_ApplicationNote_AT8547.pdf
+ * Refer to: http://ww1.microchip.com/downloads/en/AppNotes/Atmel-42468-RS-485-Communications-using-the-SAM-C21-Xplained-Pro-and-RS-485-Xplained-Pro_ApplicationNote_AT8547.pdf
  * for more information
  */

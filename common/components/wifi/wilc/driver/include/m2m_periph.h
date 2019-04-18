@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief NMC1500 Peripherals Application Interface.
+ * \brief WILC Peripherals Application Interface.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *

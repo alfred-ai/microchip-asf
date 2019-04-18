@@ -69,6 +69,7 @@ char report[512];
 /** Number of STA connected. */
 uint32_t sta_connected = 0;
 
+tstrWifiInitParam wifiInitparam;
 /**
  * \brief Callback to get the Wi-Fi status update.
  *
@@ -118,10 +119,9 @@ void ap_task(void *argument)
 	net_init();
 	
 	/* Initialize the WILC1000 driver. */
-	tstrWifiInitParam param;
-	memset(&param, 0, sizeof(param));
-	param.pfAppWifiCb = wifi_cb;
-	os_m2m_wifi_init(&param);
+	memset(&wifiInitparam, 0, sizeof(wifiInitparam));
+	wifiInitparam.pfAppWifiCb = wifi_cb;
+	os_m2m_wifi_init(&wifiInitparam);
 
 
 	/* Initialize AP mode parameters structure with SSID, channel and OPEN security type. */

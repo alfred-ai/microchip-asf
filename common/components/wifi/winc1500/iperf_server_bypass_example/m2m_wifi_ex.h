@@ -79,7 +79,7 @@ sint8 m2m_wifi_disable_ap_ex(void);
 #define m2m_wifi_disable_monitoring_mode_ex	m2m_wifi_disable_monitoring_mode
 #define m2m_wifi_send_wlan_pkt_ex			m2m_wifi_send_wlan_pkt
 #define m2m_wifi_send_ethernet_pkt_ex		m2m_wifi_send_ethernet_pkt
-#define m2m_wifi_set_sytem_time_ex			m2m_wifi_set_sytem_time
+#define m2m_wifi_set_sytem_time_ex			m2m_wifi_set_system_time
 #define m2m_wifi_set_cust_InfoElement_ex	m2m_wifi_set_cust_InfoElement
 #define m2m_wifi_enable_mac_mcast_ex		m2m_wifi_enable_mac_mcast
 #define m2m_wifi_set_receive_buffer_ex		m2m_wifi_set_receive_buffer

@@ -71,7 +71,7 @@ int random_number(void)
 	return rand();
 }
 
-extern tpfAppWifiCb gpfAppWifiCb;
+extern tstrWifiInitParam wifiInitparam;
 static void status_callback(struct netif *netif)
 {
 	if (netif_is_up(netif)) {
@@ -85,8 +85,8 @@ static void status_callback(struct netif *netif)
 #if LWIP_IPV6
 		strIpConfig.u8StaticIPv6 = (uint8_t *)netif->ip6_addr;
 #endif
-		if (gpfAppWifiCb && (netif == &winc_netif_sta)) {
-			gpfAppWifiCb(M2M_WIFI_REQ_DHCP_CONF, &strIpConfig);		
+		if (wifiInitparam.pfAppWifiCb && (netif == &winc_netif_sta)) {
+			wifiInitparam.pfAppWifiCb(M2M_WIFI_REQ_DHCP_CONF, &strIpConfig);		
 		}
 	}
 }

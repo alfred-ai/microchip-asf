@@ -5,7 +5,7 @@
  *
  * $Id: mac_user_build_config.h 20338 2010-02-13 22:43:25Z uwalter $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

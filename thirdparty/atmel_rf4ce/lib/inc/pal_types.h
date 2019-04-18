@@ -7,7 +7,7 @@
  *
  * $Id: pal_types.h 26463 2011-04-29 07:05:35Z yogesh.bellan $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

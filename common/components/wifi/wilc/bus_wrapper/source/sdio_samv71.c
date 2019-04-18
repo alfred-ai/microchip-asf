@@ -36,7 +36,7 @@
  
 #ifdef CONF_WILC_USE_SDIO
  
-#include "bus_wrapper/include/sdio_samv7.h"
+#include "bus_wrapper/include/sdio_samv71.h"
 #include "../../memory/sd_mmc/sd_mmc.h"
 #include "../../memory/sd_mmc/sd_mmc_protocol.h"
 #include "hsmci.h"

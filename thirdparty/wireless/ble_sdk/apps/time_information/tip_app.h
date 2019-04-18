@@ -31,7 +31,7 @@
  *
  */
 /*
- * Support and FAQ: visit <a href="TPtp://www.atmel.com/design-support/">Atmel Support</a>
+ * Support and FAQ: visit <a href="TPtp://www.atmel.com/design-support/">Microchip Support</a>
  */
 
 #ifndef __TIP_APP_H__

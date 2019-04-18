@@ -119,7 +119,8 @@ static strAtCMD_Handler gaAt_CMD_handler_fn[AT_MAX_COMMANDS_COUNT]=	/*Handler an
 	{"HELP"			,atCmd_Help_Handler,0},
 	{"CONN"			,atCmd_Connect_Handler,5},
 	/*{"DEF_CONN"		,atCmd_DefaultConnect_Handler,0},*/
-	{"DISCONN"		,atCmd_DisConnect_Handler,0},/*
+	{"DISCONN"		,atCmd_DisConnect_Handler,0},
+	{"PING"         ,atCmd_Ping, 2},/*
 	{"GROWL_INIT"	,atCmd_InitGrowl_Handler,0},
 	{"GROWL_SEND"	,atCmd_SendGrowl_Handler,5},
 	{"NMA"			,atCmd_NMA_Handler,5},
@@ -148,8 +149,8 @@ static strAtCMD_Handler gaAt_CMD_handler_fn[AT_MAX_COMMANDS_COUNT]=	/*Handler an
 	{"RESET"		,atCmd_Reset_Handler, 0},
 	{"MON_EN"		,atCmd_MonEn_Handler,7},
 	{"MON_DIS"		,atCmd_MonDis_Handler,0},
-	/*{"PS_MODE"		,atCmd_PsMode_Handler,2},
-	{"STATIC_IP"	,atCmd_SetStaticIP_Handler, 2},*/
+	/*{"PS_MODE"		,atCmd_PsMode_Handler,2},*/
+	{"STATIC_IP"	,atCmd_SetStaticIP_Handler, 2},
 	{"GET_CONN_INFO", atCmd_GetConnInfo_Handler,0},
 	/*{"SET_PWR_PRO", atCmd_SetPowerProfile_Handler,1},*/
 	{"IPERF"		,atCmd_Iperf_Handler, 1},
@@ -162,9 +163,8 @@ static strAtCMD_Handler gaAt_CMD_handler_fn[AT_MAX_COMMANDS_COUNT]=	/*Handler an
 	{"TLS_CRL_SEND" ,atCmd_TlsCrlSend_Handler, 0},
 	{"TLS_SET_CS"	,atCmd_TLS_SetCipherSuite_Handler, 1},
 	{"TLS_WCERT"	,atCmd_TLS_CertTransfer_Handler, 0},
-	{"SSL_OPTIONS"  ,atCmd_SslGlobalOption_Handler,4},
-	{"PING"         ,atCmd_Ping,2},
-	{"GET_TIME"		,atCmd_GetSysTime_Handler,0},*/
+	{"SSL_OPTIONS"  ,atCmd_SslGlobalOption_Handler,4},*/
+	/*{"GET_TIME"		,atCmd_GetSysTime_Handler,0},*/
     {"TX_PWR"       ,atCmd_TxPwr_Handler,1}
 };
 static uint8 gaAt_CFG_Values_arr[AT_MAX_CFG_CMD_COUNT][AT_MAX_CMD_LENGTH]=
@@ -370,12 +370,12 @@ sint8 get_index_cmdHandler(tstrAt_cmd_content *strCmd, strAtCMD_Handler *atCMD_H
 	sint8 ret = AT_ERR_NO_ERROR;
 	uint8 loopCntr;
 	uint8 cmdLength = strlen((const char *)strCmd->au8Cmd);
-	M2M_DBG("Searching for CMD handler...\r\n");
+
 	for(loopCntr = 0; loopCntr<AT_MAX_COMMANDS_COUNT; loopCntr++) {
 		if(cmdLength != strlen((const char *)atCMD_Handler[loopCntr].au8AtCMD))
 			continue;
 		if(!memcmp(strCmd->au8Cmd,atCMD_Handler[loopCntr].au8AtCMD,cmdLength)) {
-			/*pf_at_cmd_handler = atCMD_Handler[loopCntr].at_cmd_handler;*/
+			M2M_DBG("Searching for CMD handler...%s=%s[%d]\r\n",(const char *)strCmd->au8Cmd,(const char *)atCMD_Handler[loopCntr].au8AtCMD,loopCntr);
 			ret  = loopCntr; 
 			break;
 		}
@@ -647,7 +647,6 @@ EXIT:
 	return s8Ret;
 }
 
-#if 0
 
 sint8 atCmd_SetStaticIP_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
 {
@@ -678,7 +677,7 @@ sint8 atCmd_SetStaticIP_Handler(tstrAt_cmd_content *data, void* moreData, uint8 
 		pu8Dat = (uint8 *)strtok(NULL,".");
 	}
 	
-	StaticIPcfg.u32StaticIP = _htonl((uint32_t) (parse_static[0]<<24 | parse_static[1]<<16 | parse_static[2]<<8 | parse_static[3]));
+	StaticIPcfg.u32StaticIP = htonl((uint32_t) (parse_static[0]<<24 | parse_static[1]<<16 | parse_static[2]<<8 | parse_static[3]));
 	
 	pu8Dat = (uint8 *)strtok((char *)data->au8ParamsList[1],".");
 
@@ -696,7 +695,7 @@ sint8 atCmd_SetStaticIP_Handler(tstrAt_cmd_content *data, void* moreData, uint8 
 		pu8Dat = (uint8 *)strtok(NULL,".");
 	}	
 	
-	StaticIPcfg.u32SubnetMask = _htonl((uint32_t) (parse_static[0]<<24 | parse_static[1]<<16 | parse_static[2]<<8 | parse_static[3]));// 0xFFFF0000;
+	StaticIPcfg.u32Gateway = htonl((uint32_t) (parse_static[0]<<24 | parse_static[1]<<16 | parse_static[2]<<8 | parse_static[3]));// 0xFFFF0000;
 	
 	use_static_IP = 1;
 	AT_SEND_OK(data->au8Cmd);
@@ -704,7 +703,6 @@ sint8 atCmd_SetStaticIP_Handler(tstrAt_cmd_content *data, void* moreData, uint8 
 EXIT:
 	return s8Ret;
 }
-#endif
 
 sint8 atCmd_Iperf_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue){
 	sint8 s8Ret;
@@ -2414,7 +2412,7 @@ sint8 atCmd_Inquiries_Handler(tstrAt_cmd_content *data, strAtCMD_Handler *pastrA
 		{
 			printf("\t%s\r\n", "   AT+FILE_DOWNLOAD=1[<FILE_URL>]<CR><LF>");
 			printf("\t%s\r\n", "      where FILE_URL : HTTP URL of the file to be downloaded");
-			printf("\t%s\r\n", "      EX. AT+FILE_DOWNLOAD=1[http://www.atmel.com/images/doc7529.pdf]");
+			printf("\t%s\r\n", "      EX. AT+FILE_DOWNLOAD=1[http://www.microchip.com/images/doc7529.pdf]");
 			break;	
 		}
 		/*case AT_INDEX_SDS:
@@ -2920,7 +2918,9 @@ static void pingCb(uint32 u32IPAddr, uint32 u32RTT, uint8 u8ERR)
 		AT_SEND_OK("PING");
 	}
 	else
+	{
 		AT_SEND_ERROR(gu32PingCount,pu8ERR_str[u8ERR]);
+	}
 }
 
 static void pingTestResolveCb(uint8* pu8DomainName, uint32 u32HostIP)
@@ -2930,43 +2930,41 @@ static void pingTestResolveCb(uint8* pu8DomainName, uint32 u32HostIP)
 		m2m_ping_req(u32HostIP, 0, pingCb);
 	}
 }
-
+#endif
 sint8 atCmd_Ping(tstrAt_cmd_content *data, void* moreData, uint8 useStoreValue)
 {
-	sint8	s8Ret = M2M_ERR_INVALID_ARG;
-
-	if(data->u8NumOfParameters != gaAt_CMD_handler_fn[AT_PING].u8NoOfParameters){
+	sint8	s8Ret = M2M_ERR_FAIL;
+	ip_addr_t* u32PingDest;
+	tstr_test_conn_status *status = (tstr_test_conn_status *)moreData;
+		
+	if(data->u8NumOfParameters != gaAt_CMD_handler_fn[AT_INDEX_PING].u8NoOfParameters){
 		s8Ret = AT_ERR_NUM_OF_PARAMS;
 		goto EXIT;
 	}
+	if(	(SERVICE_IS_RUNNING != status->u8Ap_status) && (SERVICE_IS_RUNNING != status->u8Sta_status)){
+		M2M_ERR("Neither STA mode nor AP mode connected\r\n");
+		s8Ret = AT_ERR_INVALID_OPERATION;
+		goto EXIT;
+	}	
 	uint8 u8count = 0, u8count_dot = 0;
 	char *pcPingDest = data->au8ParamsList[0];
-	while (pcPingDest[u8count]!='\0')
-	{
-		if (pcPingDest[u8count]=='.')
-		{
-			u8count_dot++;
-			if (u8count_dot==3)
-			{
-				pcPingDest[u8count+1]='1';
-				pcPingDest[u8count+2]='\0';
-				break;
-			}
-		}
-		u8count++;
-	}
+	M2M_INFO("Pinging Dest %s\n",pcPingDest);
+
 	uint32 u32PingCount = (uint32) atoi(data->au8ParamsList[1]);
-	if((pcPingDest != NULL) && (gu32PingCount == 0))
+	if((pcPingDest != NULL))
 	{
-		socketInit();
-		registerSocketCallback(NULL, pingTestResolveCb);
-		M2M_INFO("Pinging %s\n",pcPingDest);
-		gu32PingCount = u32PingCount;
+
+		s8Ret = AT_ERR_NO_ERROR;
 		if((*pcPingDest >= '1') && (*pcPingDest <= '9'))
 		{
-			uint32	u32IP = nmi_inet_addr(pcPingDest);
-			M2M_INFO("Pinging %d\n",u32IP);
-			s8Ret = m2m_ping_req(u32IP, 0, pingCb);
+			/*clear existing struct*/
+		memset((tstrAt_cmd_content *)&temp_cmd_content , 0, sizeof(tstrAt_cmd_content));
+			/*copy new command struct*/
+		memcpy((tstrAt_cmd_content *)&temp_cmd_content ,data, sizeof(tstrAt_cmd_content));	
+		#ifdef AT_CMD_SEM
+		//M2M_INFO("\nGiving at_cmd_task1_sem for Ping");
+			xSemaphoreGive(at_cmd_task1_sem);
+		#endif
 		}
 		else
 		{
@@ -2976,7 +2974,7 @@ sint8 atCmd_Ping(tstrAt_cmd_content *data, void* moreData, uint8 useStoreValue)
 EXIT:
 	return s8Ret;
 }
-
+#if 0
 static tstrTlsCrlInfo gCRL = {0};
 sint8 atCmd_TlsCrlReset_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
 {
@@ -3166,15 +3164,15 @@ sint8 atCmd_TxPwr_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useSto
     
     pwr_val = atoi((char *)data->au8ParamsList[0]);
 
-    if ((pwr_val < TX_PWR_HIGH) || (pwr_val > TX_PWR_LOW))
+    if ((pwr_val < TX_PWR_DBM_0) || (pwr_val > TX_PWR_DBM_18)) //TX power ppa to one of these values: 0dBm, 3dBm, 6dBm, 9dBm, 12dBm, 15dBm, 18dBm.
     {
-        M2M_INFO("ERROR: Parameter must be between 1 and 3 inclusive (1==TX_PWR_HIGH, 2==TX_PWR_MED, 3==TX_PWR_LOW)");
+        M2M_INFO("ERROR: Parameter must be between 0 and 18 inclusive (18==TX_PWR_HIGH, 9==TX_PWR_MED, 3==TX_PWR_LOW)");
         s8Ret = AT_ERR_INVALID_ARGUMENTS;
 		goto EXIT;
     }
 
     m2m_wifi_set_tx_power(pwr_val);
-    osprintf("TX power set to %s", pwr_val == 1 ? "TX_PWR_HIGH":(pwr_val == 2 ? "TX_PWR_MED" : "TX_PWR_LOW") );
+    osprintf("TX power set to %s", pwr_val == TX_PWR_DBM_18 ? "TX_PWR_HIGH":(pwr_val > TX_PWR_DBM_6 ? "TX_PWR_MED" : "TX_PWR_LOW") );
          
 EXIT:
     return s8Ret;
@@ -3329,6 +3327,7 @@ static sint8 init_m2m_app(void)
 static void start_m2m_app(void)
 {
 	sint8 s8Ret = -1;
+	use_static_IP = 0; // By default code flow for static IP is disabled	
 	uint8 *pu8Data = NULL;
 	while (true)
 	{
@@ -3450,7 +3449,7 @@ void cmd_handler(void *argument)
 	ret = init_m2m_app();
 	if(M2M_SUCCESS == ret) {
 		AT_SEND_OK("Init");
-		printf("\rNow,You can send CMD or use HELP for help.\r\n>>");
+		M2M_INFO("\rNow,You can send CMD or use HELP for help.\r\n>>");
 		start_m2m_app();
 	} else {
 		M2M_ERR("\r\nFailed to initialize APP.");

@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1500 ASIC specific internal APIs.
+ * \brief This module contains WILC ASIC specific internal APIs.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -138,7 +138,7 @@ sint8 cpu_start(void) {
 	return ret;
 }
 
-#ifdef CONF_WILC_USE_3000_REV_A
+#if (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)
 sint8 cpu_start_bt(void) {
 	uint32 reg;
 	sint8 ret = M2M_SUCCESS;
@@ -454,7 +454,9 @@ void* linux_wlan_malloc(uint32_t sz);
 #include "driver/include/wifi_firmware_1000b.h"
 #elif defined CONF_WILC_USE_3000_REV_A
 #include "driver/include/wifi_firmware_3000.h"
+#if (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)
 #include "driver/include/ble_firmware_3000.h"
+#endif
 #endif
 
 sint8 firmware_download(void)
@@ -513,8 +515,7 @@ sint8 firmware_download(void)
 ERR:
 	return s8Ret;
 }
-
-#ifdef CONF_WILC_USE_3000_REV_A
+#if (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)
 sint8 firmware_download_bt(void)
 {
 	sint8 s8Ret;

@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains M2M host interface APIs implementation.
+ * \brief This module contains WILC M2M host interface APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *

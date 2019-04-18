@@ -5,7 +5,7 @@
  *
  * $Id: rf4ce.h 27820 2011-07-24 17:20:51Z pawan.jadia $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

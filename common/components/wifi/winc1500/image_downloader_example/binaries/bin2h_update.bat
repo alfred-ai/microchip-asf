@@ -2,7 +2,7 @@
 
 echo **************************************************
 echo *    ^> WINC1500 Binary to Header File Script ^<   *
-echo *           Owner:  Atmel Corporation            *
+echo *           Owner:  Microchip Technology Inc            *
 echo **************************************************
 echo.
 echo Note: the required firmware binary files can be found

@@ -38,6 +38,7 @@
 #define __MIMAC_AT86RF_H
 
 	#include "miwi_config.h"
+	#include "sysTimer.h"
 
 
 	#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
@@ -63,9 +64,6 @@
 	#define ABASESLOTDURATION			(60)
 	#define ABASESUPERFRAMEDURATION		(ABASESLOTDURATION * ANUMSUPERFRAMESLOTS )
 
-	#if defined(PROTOCOL_MESH)
-	#define ONE_MICRO_SECOND      1
-	#endif
 	#ifdef PHY_AT86RF233
 	#define SYMBOLS_TO_TICKS(a)     ((a)*(16*ONE_MICRO_SECOND))
 	#define TICKS_TO_SYMBOLS(a)     ((a)/(16*ONE_MICRO_SECOND))

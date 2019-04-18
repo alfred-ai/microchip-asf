@@ -32,24 +32,37 @@
 */
 
 /************************ HEADERS **********************************/
+#include <string.h>
 #include "compiler.h"
 #include "mimem.h"
 
 /************************ MACRO DEFINITIONS ******************************/
-/* The size of a single mimem buffer */
-#define MIMEM_BUFFER_SIZE      160
+#define BYTE_ALIGNMENT   4U
+#define ALIGNMENT_FACTOR 2U
+
+#define HEAP_SIZE      (6144UL)
+
+#define ALIGN(X)       ((((X-1) >> ALIGNMENT_FACTOR) << ALIGNMENT_FACTOR) + BYTE_ALIGNMENT)
+
+#define HEAP_MINIMUM_BLOCK_SIZE	 (( size_t )( blockMetaDataSize + 4U)) //4 is min bytes being allocated with alignment
 
 /************************ TYPE DEFINITIONS ******************************/
-typedef struct MiMemBuffer
+typedef struct _Block_t
 {
-  uint32_t MiMemBuffer[(MIMEM_BUFFER_SIZE / 4) + 1];
-  bool bufferFlag;
-}MiMemBuffer_t;
+	struct _Block_t* next;
+	struct _Block_t* prev;
+	size_t size;
+	bool free;
+} Block_t;
 
 /************************ FUNCTION PROTOTYPES **********************/
+static void splitBlock (Block_t* blockTobeSplitted, size_t size);
 
 /************************ VARIABLES ********************************/
-MiMemBuffer_t mimemBuffers[NUMBER_OF_MIMEM_BUFFERS];
+static uint8_t heapMem[HEAP_SIZE];
+static Block_t* base = NULL;
+static size_t totalFreeBytesRemaining;
+static const size_t blockMetaDataSize = ALIGN(sizeof(Block_t));
 
 /************************ FUNCTIONS ********************************/
 
@@ -66,11 +79,14 @@ MiMemBuffer_t mimemBuffers[NUMBER_OF_MIMEM_BUFFERS];
 ********************************************************************/
 void MiMem_Init(void)
 {
-    uint8_t loopIndex = 0;
-    for (loopIndex = 0; loopIndex < NUMBER_OF_MIMEM_BUFFERS; loopIndex++)
-    {
-	    mimemBuffers[loopIndex].bufferFlag = false;
-    }
+	size_t startAddress =  ALIGN((size_t)heapMem);
+
+	/*Aligned heap is the base */
+	base = (Block_t*) startAddress;
+	base->size = totalFreeBytesRemaining = HEAP_SIZE - (startAddress - (size_t)heapMem);
+	base->free = true;
+	base->next = NULL;
+	base->prev = NULL;
 }
 
 /*********************************************************************
@@ -91,22 +107,51 @@ void MiMem_Init(void)
 ********************************************************************/
 uint8_t* MiMem_Alloc(uint8_t size)
 {
-    uint8_t loopIndex = 0;
+	size_t requestedSize = 0U;
+	void* requestedMemPtr = NULL;
 
-    if (size <= MIMEM_BUFFER_SIZE)
-    {
-        for (loopIndex = 0; loopIndex < NUMBER_OF_MIMEM_BUFFERS; loopIndex++)
-        {
-            if (mimemBuffers[loopIndex].bufferFlag == false)
-            {
-                mimemBuffers[loopIndex].bufferFlag = true;
-                //printf("\r\n MiMem Buffer Alloc: %d", loopIndex);
-                return ((uint8_t *)mimemBuffers[loopIndex].MiMemBuffer);
-            }
-        }
-    }
-    //printf("\r\n MiMem Buffer Full/unavailable for given size");
-    return NULL;
+	/* Initialize the Heap */
+	if (!base)
+	{
+		MiMem_Init();
+	}
+	/* if requested size is of non zero */
+	if (size)
+	{
+		requestedSize =  size + blockMetaDataSize;
+		requestedSize = ALIGN(requestedSize);
+		if (requestedSize <= totalFreeBytesRemaining)
+		{
+			size_t receivedSize = (size_t)~0U;
+			Block_t *requestedBlock = NULL;
+			Block_t *blockPtr = base;
+
+			/* Find best fit free Block */
+			while (blockPtr)
+			{
+				if ((blockPtr->free) && (blockPtr->size >= requestedSize) && (blockPtr->size < receivedSize))
+				{
+					receivedSize = blockPtr->size;
+					requestedBlock = blockPtr;
+				}
+				blockPtr = blockPtr->next;
+			}
+
+			if (requestedBlock)
+			{
+				if ((requestedBlock->size - requestedSize) > HEAP_MINIMUM_BLOCK_SIZE)
+				splitBlock (requestedBlock, requestedSize);
+				requestedBlock->free = false;
+				totalFreeBytesRemaining -= requestedBlock->size;
+				requestedMemPtr = ( void* )(((uint8_t*)requestedBlock) + blockMetaDataSize);
+			}
+		}
+	}
+	if (NULL != requestedMemPtr)
+	{
+		memset(requestedMemPtr, 0, size);
+	}
+	return requestedMemPtr;
 }
 
 /*********************************************************************
@@ -116,7 +161,7 @@ uint8_t* MiMem_Alloc(uint8_t size)
 *
 * Input:		    buffPtr  - Pointer to memory to be deallocated
 *
-* Output:		    uint8_t - status of the operation
+* Output:		    void
 *
 * Side Effects:	    none
 *
@@ -125,34 +170,64 @@ uint8_t* MiMem_Alloc(uint8_t size)
 *
 * Note:			    none
 ********************************************************************/
-uint8_t MiMem_Free(uint8_t* buffPtr)
+void MiMem_Free(void *ptr)
 {
-	uint8_t loopIndex = 0;
-	for (loopIndex = 0; loopIndex < NUMBER_OF_MIMEM_BUFFERS; loopIndex++)
+	Block_t* blockPtr = base;
+	Block_t* freeBlockPtr = (Block_t*)((uint8_t*)ptr - (uint8_t*)blockMetaDataSize);
+
+	for(; ((blockPtr != NULL) && (blockPtr != freeBlockPtr)); blockPtr = blockPtr->next);
+
+	if (blockPtr)
 	{
-		if ((mimemBuffers[loopIndex].bufferFlag == true) &&
-		   ((uint8_t *)mimemBuffers[loopIndex].MiMemBuffer == buffPtr))
+		blockPtr->free = true;
+		totalFreeBytesRemaining += blockPtr->size;
+
+		/* if the previous block this freed block is free, merge them */
+		if (blockPtr->prev && blockPtr->prev->free)
 		{
-			//printf("\r\n MiMem Buffer Free: %d", loopIndex);
-			mimemBuffers[loopIndex].bufferFlag = false;
-			return 0;
+			blockPtr->prev->size += blockPtr->size;
+			if (blockPtr->next)
+			blockPtr->next->prev = blockPtr->prev;
+			blockPtr->prev->next = blockPtr->next;
+			blockPtr = blockPtr->prev;
+		}
+		/* if the next block of this freed block is free, merge them */
+		if (blockPtr->next && blockPtr->next->free)
+		{
+			blockPtr->size += blockPtr->next->size ;
+			blockPtr->next = blockPtr->next->next;
+			if (blockPtr->next)
+			blockPtr->next->prev = blockPtr;
 		}
 	}
-	//printf("\r\n MiMem Buffer Already Free");
-	return 0xff;
 }
 
+/******************************************************************************
+  \brief Split the large chunk into two if the existing memory is larger than 
+    the requested size
+  \param[in] blockTobeSplitted - block to be splited
+  \param[in] size size of the memory chunk requested
+  \return None.
+ ******************************************************************************/
+static void splitBlock(Block_t* blockTobeSplitted, size_t size)
+{
+	uint8_t* ptr = (uint8_t*)blockTobeSplitted + size;
+	Block_t* newBlock = (Block_t*)ptr;
+
+	newBlock->size = blockTobeSplitted->size - size;
+
+	if (blockTobeSplitted->next)
+		blockTobeSplitted->next->prev = newBlock;
+
+	newBlock->next = blockTobeSplitted->next;
+	newBlock->prev = blockTobeSplitted;
+	newBlock->free = true;
+
+	blockTobeSplitted->next = newBlock;
+	blockTobeSplitted->size = size;
+}
 
 uint8_t MiMem_PercentageOfFreeBuffers(void)
 {
-	uint8_t loopIndex = 0;
-	uint8_t numUsedBuffers = 0;
-	for (loopIndex = 0; loopIndex < NUMBER_OF_MIMEM_BUFFERS; loopIndex++)
-	{
-		if (mimemBuffers[loopIndex].bufferFlag == true)
-		{
-			numUsedBuffers++;
-		}
-	}
-	return ((NUMBER_OF_MIMEM_BUFFERS - numUsedBuffers) * 100) / NUMBER_OF_MIMEM_BUFFERS;
+	return (totalFreeBytesRemaining * 100) / HEAP_SIZE;;
 }

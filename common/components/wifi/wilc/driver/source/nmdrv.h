@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1500 M2M driver APIs declarations.
+ * \brief This module contains WILC M2M driver APIs declarations.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *

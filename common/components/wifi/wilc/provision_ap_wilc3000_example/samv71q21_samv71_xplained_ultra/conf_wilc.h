@@ -122,7 +122,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_DEBUG					(0)
+#define CONF_WILC_DEBUG					(1)
 #define CONF_WILC_PRINTF				osprintf
 
 #ifdef __cplusplus

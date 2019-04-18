@@ -226,8 +226,14 @@ static void wifi_cb(uint8 msg_type, void *msg)
 		}
 		break;
 		
-
-		default:
+		case M2M_WIFI_RESP_FIRMWARE_STRTED: {
+			osprintf("Firmware Started Successfully\r\n");
+		}
+		break;
+		
+		default:{
+			osprintf("wifi_cb Received unhandled msg type %d\r\n", msg_type);
+		}
 		break;
 	}
 }

@@ -89,9 +89,9 @@ static void wifi_cb(uint8 msg_type, void *msg)
 			os_m2m_wifi_request_scan(M2M_WIFI_CH_ALL);
 		}
 
-		break;
 	}
-
+	break;
+	
 	case M2M_WIFI_RESP_SCAN_RESULT:
 	{
 		tstrM2mWifiscanResult *pstrScanResult = (tstrM2mWifiscanResult *)msg;
@@ -131,8 +131,9 @@ static void wifi_cb(uint8 msg_type, void *msg)
 			os_m2m_wifi_request_scan(M2M_WIFI_CH_ALL);
 		}
 
-		break;
 	}
+	break;
+	
 		
 		case M2M_WIFI_RESP_CON_STATE_CHANGED : {
 			tstrM2mWifiStateChanged *ctx = (tstrM2mWifiStateChanged*)msg;
@@ -162,11 +163,10 @@ static void wifi_cb(uint8 msg_type, void *msg)
 			osprintf("wifi_cb: STA IPv6 addr: %04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x\n\r",
 			htons(a[0]), htons(a[1]), htons(a[2]), htons(a[3]),
 			htons(a[4]), htons(a[5]), htons(a[6]), htons(a[7]));
+			gbConnectedWifi = true;
 			
 			/* Request RSSI for the connected AP. */
 			os_m2m_wifi_req_curr_rssi();
-						
-			gbConnectedWifi = true;
 		}
 		break;
 
@@ -176,9 +176,9 @@ static void wifi_cb(uint8 msg_type, void *msg)
 			/* This message type is triggered by "m2m_wifi_req_curr_rssi()" function. */
 			int8_t *rssi = (int8_t *)msg;
 			osprintf("RSSI for the current connected AP (%d)\r\n", (int8_t)(*rssi));
-			break;
 		}
-
+		break;
+		
 		default:
 		{
 			break;
@@ -214,7 +214,6 @@ void ap_scan_with_rssi_task(void *v)
 	/* Connect to defined AP. */
 	os_m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (void *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 
-	
 	/* Request scan. */
 	os_m2m_wifi_request_scan(M2M_WIFI_CH_ALL);
 	

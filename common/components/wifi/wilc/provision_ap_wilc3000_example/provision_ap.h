@@ -39,7 +39,15 @@ extern "C" {
 #define MAIN_WLAN_SSID                 "WILC3000_AP" /* < SSID */
 #define MAIN_WLAN_AUTH                 M2M_WIFI_SEC_OPEN /* < Security manner */
 #define MAIN_WLAN_CHANNEL              M2M_WIFI_CH_6 // (6) /* < Channel number */
-#define MAIN_WLAN_PSK				   "12345678" /* Replace Assigned < Password for Destination SSID > */
+#define MAIN_WLAN_PSK				   "66117000" /* Replace Assigned < Password for Destination SSID > */
+
+/** WEP security setting for STA mode and/or AP mode */
+#define WEP_KEY_INDEX            M2M_WIFI_WEP_KEY_INDEX_1
+#define WEP_KEY                  "1234567890"
+#define WEP_KEY_SIZE             sizeof(WEP_KEY)
+#define WEP_AUTH_TYPE            WEP_ANY
+#define WEP_CONN_PARAM           {WEP_KEY_INDEX, WEP_KEY_SIZE, WEP_KEY, WEP_AUTH_TYPE}
+
 
 #define MAIN_WIFI_M2M_PRODUCT_NAME        "PROVISION AP TEST"
 

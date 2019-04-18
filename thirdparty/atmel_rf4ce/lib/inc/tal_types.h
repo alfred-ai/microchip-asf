@@ -5,7 +5,7 @@
  *
  * $Id: tal_types.h 22460 2010-07-06 16:09:22Z sschneid $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

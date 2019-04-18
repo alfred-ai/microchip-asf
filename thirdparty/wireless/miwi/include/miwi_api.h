@@ -92,6 +92,9 @@ typedef enum miwi_status {
 	SCAN_NO_BEACON,
 	SCAN_MAX_REACHED,
 	MEMORY_UNAVAILABLE = 10,
+	ERR_TX_FAIL,
+	ERR_TRX_FAIL,
+	ERR_INVALID_INPUT,
 }miwi_status_t;
 
 enum miwi_params {
@@ -100,7 +103,8 @@ enum miwi_params {
 	SHORT_ADDRESS        =  0x02,
 	PARENT_SHORT_ADDRESS =  0x03,
 	DEVICE_TIMEOUT       =  0x04,
-
+	CHANNELMAP           =  0x05,
+	CAPABILITYINFO       =  0x06,
 	BLOOM_AUTO_JOIN      =  0x80,
 	ROUTE_TEST_MODE      =  0x81
 };
@@ -112,6 +116,7 @@ typedef enum miwi_params miwi_params_t;
 #include "miwi_mesh_app.h"      //MiWi Protocol layer configuration file
 #endif
 
+#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 /***************************************************************************/
 // Status information of the connected peer information
 //
@@ -166,7 +171,7 @@ typedef struct __CONNECTION_ENTRY
 	uint8_t        PeerInfo[ADDITIONAL_NODE_ID_SIZE];  // Additional Node ID information, if defined in application layer
 #endif
 } CONNECTION_ENTRY;
-
+#endif
 
 #if defined(PROTOCOL_MESH)
 #define BLOOM_FILTER_SIZE    8
@@ -217,9 +222,14 @@ typedef struct
 } searchConf_t;
 #endif
 
+#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 extern CONNECTION_ENTRY    ConnectionTable[CONNECTION_SIZE];
-
+#endif
 extern uint8_t            currentChannel;
+
+#ifdef MESH_SECURITY
+extern API_UINT32_UNION meshOutgoingFrameCounter;
+#endif
 
 // Source address when sending a packet // can be MAC_Address or EUI based on Users choice
 extern uint8_t myLongAddress[MY_ADDRESS_LENGTH];
@@ -230,6 +240,19 @@ extern uint8_t myLongAddress[MY_ADDRESS_LENGTH];
 extern uint8_t conn_size ;
 
 #define SECURITY_KEY_SIZE         16
+
+#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
+#ifdef ENABLE_SECURITY
+   /* As security fields would add additional bytes in multiples of 16bytes,
+    memory for the same has to be allocated. */
+#define CALC_SEC_PAYLOAD_SIZE(x)	(SECURITY_KEY_SIZE > x)? \
+	SECURITY_KEY_SIZE : (x % SECURITY_KEY_SIZE) ? \
+	((x / SECURITY_KEY_SIZE) * SECURITY_KEY_SIZE) + SECURITY_KEY_SIZE : \
+	(x / SECURITY_KEY_SIZE) * SECURITY_KEY_SIZE
+#else
+#define CALC_SEC_PAYLOAD_SIZE(x)	(x)
+#endif
+#endif
 
 #define HOP_TABLE_COUNT   (((NUM_OF_COORDINATORS % 2) == 0)? \
 							(NUM_OF_COORDINATORS / 2) : \
@@ -519,7 +542,7 @@ typedef void (*connectionConf_callback_t)(miwi_status_t status);
 bool    MiApp_StartConnection( uint8_t Mode, uint8_t ScanDuration, uint32_t ChannelMap,
 connectionConf_callback_t ConfCallback);
 
-
+#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 /***************************************************************************
 * Active Scan result
 *
@@ -556,7 +579,7 @@ uint8_t        PeerInfo[ADDITIONAL_NODE_ID_SIZE];  // Additional Node ID informa
 #ifdef ENABLE_ACTIVE_SCAN
 extern ACTIVE_SCAN_RESULT ActiveScanResults[ACTIVE_SCAN_RESULT_SIZE];
 #endif
-
+#endif
 
 typedef void (*SearchConnectionConf_callback_t)(uint8_t foundScanResults, void* ScanResults);
 /************************************************************************************
@@ -822,6 +845,7 @@ uint8_t 	PacketLQI;                  // LQI value of the received message
 #if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 typedef void (*PacketIndCallback_t)(RECEIVED_MESSAGE *ind);
 #endif
+
 #if defined(PROTOCOL_MESH)
 typedef struct
 {
@@ -832,6 +856,9 @@ uint8_t		packetRSSI;                 // RSSI value of the receive message
 uint8_t 	packetLQI;                  // LQI value of the received message
 } RECEIVED_MESH_MESSAGE;
 
+#endif 
+
+#if defined(PROTOCOL_MESH)
 typedef void (*PacketIndCallback_t)(RECEIVED_MESH_MESSAGE *ind);
 #endif
 /************************************************************************************
@@ -1292,12 +1319,31 @@ bool MiApp_UnicastStar  (uint8_t dataLen, uint8_t* dataPtr, bool SecEn);
 *      None
 *
 *********************************************************************************/
-bool    MiApp_Get(miwi_params_t id, uint8_t *value);
+bool  MiApp_Get(miwi_params_t id, uint8_t *value);
+
+#if defined(ENABLE_NETWORK_FREEZER)
+/************************************************************************************
+* Function:
+* bool MiApp_ResetToFactoryNew(void)
+*
+* Summary:
+*      This function makes the device to factory new device
+*
+* Description:
+*      This is used to erase all the persistent items in the non-volatile memory and resets the system.
+*
+* Returns:
+*      A boolean to indicate the operation is success or not
+*
+*****************************************************************************************/
+bool MiApp_ResetToFactoryNew(void);
+#endif
 
 #if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
 void P2PTasks(void);
 void DumpConnection(INPUT uint8_t index);
-#elif defined(PROTOCOL_MESH)
+#endif
+#if defined(PROTOCOL_MESH)
 void MeshTasks(void);
 #endif
 
@@ -1394,11 +1440,141 @@ typedef void (*LinkFailureCallback_t)(void);
 *****************************************************************************************/
 bool MiApp_SubscribeLinkFailureCallback(LinkFailureCallback_t callback);
 
+typedef void (*ReconnectionCallback_t)(miwi_status_t status);
+/************************************************************************************
+* Function:
+* bool MiApp_SubscribeReConnectionCallback(ReconnectionCallback_t callback)
+*
+* Summary:
+*      This function subscribes for reconnection notification
+*
+* Description:
+*      This is used to subscribe to notify the reconnection. Upon reconnection in
+*  coordinator or end device, this callback will be called.
+*
+* PreCondition:
+*      Protocol initialization has been done.
+*
+* Parameters:
+*      ReconnectionCallback_t callback - The callback routine which will be called upon
+*                                              reconnection
+*
+* Returns:
+*      A boolean to indicates if the subscription is success or not
+*
+*****************************************************************************************/
+bool MiApp_SubscribeReConnectionCallback(ReconnectionCallback_t callback);
+
+/************************************************************************************
+* Function:
+* bool MiApp_ManuSpecSendData(uint8_t addr_len, uint8_t *addr, uint8_t msglen, 
+* uint8_t *msgpointer, uint8_t msghandle, DataConf_callback_t ConfCallback);
+*
+* Summary:
+*      This function unicast a message in the msgpointer to the device with DestinationAddress
+*
+* Description:
+*      This is one of the primary user interface functions for the application layer to
+*      unicast a message. The destination device is specified by the input parameter
+*      DestinationAddress. The application payload is filled using msgpointer.
+*
+* PreCondition:
+*      Protocol initialization has been done.
+*
+* Parameters:
+*      uint8_t addr_len - destination address length
+*      uint8_t *addr  - destionation address
+*      uint8_t msglen - length of the message
+*      uint8_t *msgpointer - message/frame pointer
+*      uint8_t msghandle - message handle
+*      bool ackReq - set to receive network level ack (Note- Discarded for broadcast data)
+*      DataConf_callback_t ConfCallback - The callback routine which will be called upon
+*                                               the initiated data procedure is performed
+*
+* Returns:
+*      A boolean to indicates if the unicast procedure is successful.
+*
+* Example:
+*      <code>
+*      // Secure and then broadcast the message stored in msgpointer to the permanent address
+*      // specified in the input parameter.
+*      MiApp_SendData(SHORT_ADDR_LEN, 0x0004, len, frameptr,1, callback);
+*      </code>
+*
+* Remarks:
+*      None
+*
+*****************************************************************************************/
+bool MiApp_ManuSpecSendData(uint8_t addr_len, uint8_t *addr, uint8_t msglen, uint8_t *msgpointer,
+uint8_t msghandle, bool ackReq, DataConf_callback_t ConfCallback);
+
+/************************************************************************************
+* Function:
+*      bool  MiApp_SubscribeMAnuSpecDataIndicationCallback(PacketIndCallback_t callback)
+*
+* Summary:
+*      This function return a boolean if subscription for rx message is successful
+*
+* Description:
+*      This is the primary user interface functions for the application layer to
+*      call the Microchip proprietary protocol stack to register for message indication
+*      callback to the application. The function will call the protocol stack state machine
+*      to keep the stack running.
+*
+* PreCondition:
+*      Protocol initialization has been done.
+*
+* Parameters:
+*      None
+*
+* Returns:
+*      A boolean to indicates if the subscription operation is successful or not.
+*
+* Example:
+*      <code>
+*      if( true == MiApp_SubscribeMAnuSpecDataIndicationCallback(ind) )
+*      {
+*      }
+*      </code\
+*
+* Remarks:
+*      None
+*
+*****************************************************************************************/
+bool  MiApp_SubscribeManuSpecDataIndicationCallback(PacketIndCallback_t callback);
+
+bool MiApp_IsConnected(void);
+
 #ifdef MIWI_MESH_TOPOLOGY_SIMULATION_MODE
 void MiApp_MeshSetRouteEntry(uint8_t coordIndex, RouteEntry_t *routeEntry);
 void MiApp_MeshGetRouteEntry(uint8_t coordIndex, RouteEntry_t *routeEntry);
 #endif
 #endif
+
+#ifdef ENDDEVICE
+/************************************************************************************
+* Function:
+* bool MiApp_ReadyToSleep(uint32_t* sleepTime)
+*
+* Summary:
+*      This function informs whether the device can go sleep or not and how much time
+*      it can sleep
+*
+* Description:
+*      This is used to understand the stack is ready to sleep and how much time stack
+*      allows to sleep if it is ready.
+*
+* Parameters:
+*      uint32_t* sleepTime - Pointer to sleep time which specifies the sleepable time
+*                            when stack is ready to sleep
+*
+* Returns:
+*      A boolean to indicates that stack is ready to sleep or not
+*
+*****************************************************************************************/
+bool MiApp_ReadyToSleep(uint32_t* sleepTime);
+#endif
+
 // Callback functions
 #define MiApp_CB_AllowConnection(handleInConnectionTable) true
 //BOOL MiApp_CB_AllowConnection(uint8_t handleInConnectionTable);

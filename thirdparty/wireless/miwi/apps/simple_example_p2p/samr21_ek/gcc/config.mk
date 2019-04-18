@@ -67,6 +67,8 @@ CSRCS = \
        sam0/drivers/extint/extint_sam_d_r_h/extint.c      \
        sam0/drivers/nvm/nvm.c                             \
        sam0/drivers/port/port.c                           \
+       sam0/drivers/rtc/rtc_sam_d_r_h/rtc_count.c         \
+       sam0/drivers/rtc/rtc_sam_d_r_h/rtc_count_interrupt.c \
        sam0/drivers/sercom/sercom.c                       \
        sam0/drivers/sercom/sercom_interrupt.c             \
        sam0/drivers/sercom/spi/spi.c                      \
@@ -90,15 +92,26 @@ CSRCS = \
        thirdparty/wireless/miwi/apps/simple_example_p2p/p2p_demo.c \
        thirdparty/wireless/miwi/apps/simple_example_p2p/task.c \
        thirdparty/wireless/miwi/services/lcd/lcd.c        \
+       thirdparty/wireless/miwi/services/pds/src/nv/D_Nv.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/External/D_XNv-SamR21.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/External/S_Nv-External.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/External/S_XNv.c \
+       thirdparty/wireless/miwi/services/pds/src/nv/S_Nv-SamR21.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsDataServer.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsInit.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsTaskManager.c \
+       thirdparty/wireless/miwi/services/pds/src/wl/wlPdsTypesConverter.c \
        thirdparty/wireless/miwi/source/mimac/mimac_at86rf.c \
        thirdparty/wireless/miwi/source/mimac/phy/at86rf233/phy.c \
        thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p.c \
+       thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p_pds.c \
        thirdparty/wireless/miwi/source/sys/mimem.c        \
        thirdparty/wireless/miwi/source/sys/miqueue.c      \
-       thirdparty/wireless/miwi/source/sys/symbol.c       \
+       thirdparty/wireless/miwi/source/sys/sysTimer.c     \
        thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.c \
        thirdparty/wireless/services/nvm/sam0/sam_nvm.c    \
        thirdparty/wireless/services/sal/at86rf2xx/src/sal.c \
+       thirdparty/wireless/services/sleep_mgr/sam0/sleep_mgr.c \
        thirdparty/wireless/services/trx_access/trx_access.c
 
 # List of assembler source files.
@@ -121,6 +134,8 @@ INC_PATH = \
        sam0/drivers/extint/extint_sam_d_r_h               \
        sam0/drivers/nvm                                   \
        sam0/drivers/port                                  \
+       sam0/drivers/rtc                                   \
+       sam0/drivers/rtc/rtc_sam_d_r_h                     \
        sam0/drivers/sercom                                \
        sam0/drivers/sercom/spi                            \
        sam0/drivers/sercom/usart                          \
@@ -149,6 +164,10 @@ INC_PATH = \
        thirdparty/wireless/miwi/apps/simple_example_p2p/samr21_ek \
        thirdparty/wireless/miwi/include                   \
        thirdparty/wireless/miwi/services/lcd              \
+       thirdparty/wireless/miwi/services/pds/inc          \
+       thirdparty/wireless/miwi/services/pds/inc/nv       \
+       thirdparty/wireless/miwi/services/pds/inc/nv/External \
+       thirdparty/wireless/miwi/services/pds/inc/wl       \
        thirdparty/wireless/miwi/source/mimac              \
        thirdparty/wireless/miwi/source/mimac/phy          \
        thirdparty/wireless/miwi/source/miwi_p2p_star      \
@@ -157,6 +176,7 @@ INC_PATH = \
        thirdparty/wireless/services/common_hw_timer/sam0  \
        thirdparty/wireless/services/nvm                   \
        thirdparty/wireless/services/sal/inc               \
+       thirdparty/wireless/services/sleep_mgr             \
        thirdparty/wireless/services/trx_access \
        thirdparty/wireless/miwi/apps/simple_example_p2p/samr21_ek/gcc
 
@@ -171,8 +191,8 @@ LIBS =  \
        sam0_lib_hw_timer                                 
 
 # Path relative to top level directory pointing to a linker script.
-LINKER_SCRIPT_FLASH = sam0/utils/linker_scripts/samr21/gcc/samr21g18a_flash.ld
-LINKER_SCRIPT_SRAM  = sam0/utils/linker_scripts/samr21/gcc/samr21g18a_sram.ld
+LINKER_SCRIPT_FLASH = thirdparty/wireless/miwi/services/pds/src/wl/linkerscripts/samr21/gcc/samr21g18a_flash.ld
+LINKER_SCRIPT_SRAM  = thirdparty/wireless/miwi/services/pds/src/wl/linkerscripts/samr21/gcc/samr21g18a_sram.ld
 
 # Path relative to top level directory pointing to a linker script.
 DEBUG_SCRIPT_FLASH = sam0/boards/samr21zll_ek/debug_scripts/gcc/samr21zll_ek_flash.gdb
@@ -211,10 +231,13 @@ CPPFLAGS = \
        -D ADC_CALLBACK_MODE=false                         \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BOARD=SAMR21ZLL_EK                              \
+       -D ENABLE_NETWORK_FREEZER                          \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D GFX_MONO_UG_2832HSWEG04=1                       \
+       -D PDS_ENABLE_WEAR_LEVELING                        \
        -D PHY_AT86RF233                                   \
        -D PROTOCOL_P2P                                    \
+       -D RTC_COUNT_ASYNC=true                            \
        -D SAL_TYPE=AT86RF2xx                              \
        -D SPI_CALLBACK_MODE=false                         \
        -D SYSTICK_MODE                                    \

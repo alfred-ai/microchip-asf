@@ -80,7 +80,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com/">Atmel</A>.\n
+ * <A href="http://www.microchip.com/">Microchip</A>.\n
  */
 /*
  * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>

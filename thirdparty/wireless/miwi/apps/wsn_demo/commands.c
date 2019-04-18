@@ -102,8 +102,8 @@ static AppCmdUartState_t appCmdUartState = APP_CMD_UART_STATE_IDLE;
 static uint8_t appCmdUartPtr;
 static uint8_t appCmdUartBuf[APP_CMD_UART_BUFFER_SIZE];
 static uint8_t appCmdUartCsum;
-static SYS_Timer_t appCmdIdentifyDurationTimer;
-static SYS_Timer_t appCmdIdentifyPeriodTimer;
+SYS_Timer_t appCmdIdentifyDurationTimer;
+SYS_Timer_t appCmdIdentifyPeriodTimer;
 
 /*- Implementations --------------------------------------------------------*/
 
@@ -290,83 +290,6 @@ static bool appCmdHandle(uint8_t *data, uint8_t size)
 #endif
 		return true;
 	}
-#if defined(COORDINATOR) && defined(MIWI_MESH_TOPOLOGY_SIMULATION_MODE)
-
-	/* Based on the command from PANC, the coordinators will form a line topology.
-	*  This is achieved by configuring the routing to test mode and setting
-	*  route parameters from application.
-	*  For eg.: If the short address of a device is 0x0300, we set the next hop as below...
-	*              -----------------------------------------------
-	*             |   Dest. Addr. |  Next Hop Addr.	|  Hop Count  |
-	*              -----------------------------------------------
-	*             |     0x0000    |     0x0200      |      3      |
-	*             |     0x0100    |     0x0200      |      2      |
-	*             |     0x0200    |     0x0200      |      1      |
-	*             |     0x0300    |     0x0300      |      0      |
-	*             |     0x0400    |     0x0400      |      1      |
-	*             |     0x0500    |     0x0400      |      2      |
-	*             |     0x0600    |     0x0400      |      3      |
-	*             |     0x0700    |     0x0400      |      4      |
-	*             |   .so on      |       ..        |      ..     |
-	*              -----------------------------------------------
-	* Note: The App sending interval has been increased to 60secs as the number of packets
-	* to be routed will be very high near the PANC and gradually decreases as address of 
-	* the device increases.
-	* So the timeout in the WSNMonitor has to be adjusted at least to 240 secs 
-	* to view the topology. 
-	*/
-	else if (APP_COMMAND_ID_TOPOLOGY_SIMULATION_RESET == header->id) {
-		bool routeTest = false;
-		MiApp_Set(ROUTE_TEST_MODE, (uint8_t *)&routeTest);
-		SYS_TimerStop(&appDataSendingTimer);
-		appDataSendingTimer.interval = APP_SENDING_INTERVAL;
-		SYS_TimerStart(&appDataSendingTimer);
-	}
-	else if (APP_COMMAND_ID_SIMULATE_LINE_TOPOLOGY == header->id) {
-		uint16_t shortAddr = 0xFFFF;
-		uint8_t coordIndex;
-		uint8_t shortAddrIndex;
-		bool routeTest = true;
-
-		RouteEntry_t routeEntry;
-		routeEntry.coordNextHopLQI = 3;
-		routeEntry.coordScore = 3;
-
-		SYS_TimerStop(&appDataSendingTimer);
-		appDataSendingTimer.interval = APP_SENDING_INTERVAL_IN_SIMULATION;
-		SYS_TimerStart(&appDataSendingTimer);
-
-		MiApp_Set(ROUTE_TEST_MODE, (uint8_t *)&routeTest);
-
-		MiApp_Get(SHORT_ADDRESS, (uint8_t *)&shortAddr);
-
-		if (shortAddr & COORDINATOR_ADDRESS_MASK)
-		{
-			shortAddrIndex = shortAddr >> 8;
-			for (coordIndex = 0; coordIndex < NUM_OF_COORDINATORS; coordIndex++)
-			{
-				if (coordIndex < shortAddrIndex)
-				{
-					routeEntry.coordNextHop = shortAddrIndex - 1;
-					routeEntry.coordHopCount = shortAddrIndex - coordIndex;
-
-				}
-				else if(coordIndex == shortAddrIndex)
-				{
-					routeEntry.coordNextHop = 0;
-					routeEntry.coordHopCount = 0;
-				}
-				else
-				{
-					routeEntry.coordNextHop = shortAddrIndex + 1;
-					routeEntry.coordHopCount = coordIndex - shortAddrIndex;
-				}
-				MiApp_MeshSetRouteEntry(coordIndex, &routeEntry);
-			}
-		}
-	}
-
-#endif
 	return false;
 }
 

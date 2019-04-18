@@ -45,7 +45,7 @@
  * for AVR32. Other compilers may or may not work.
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com/uc3">Atmel AVR UC3</A>.\n
+ * <A href="http://www.microchip.com/uc3">Atmel AVR UC3</A>.\n
  */
 
 /* Environment include files. */

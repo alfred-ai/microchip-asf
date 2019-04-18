@@ -34,24 +34,26 @@
 
 /** \mainpage
  * \section intro Introduction
- * This example demonstrates the use of the WILC3000 with the SAM Xplained Pro
+ * This example demonstrates the use of the WILC with the SAM Xplained Pro
  * board using WiFi concurrent mode STA/AP.
  * STA mode is used to connect to a home router with internet connection to
  * retrieve weather information. 
- * AP mode is used to allow any WiFi capable devices to connect to the WILC3000
+ * AP mode is used to allow any WiFi capable devices to connect to the WILC
  * and then access an embedded webserver to read weather information as well as
  * host MCU status (up to 7 connected stations at the same time).<br>
  *
- * To access the HTTP server connect with your laptop to WiFi network "WILC3000", then
+ * To access the HTTP server connect with your laptop to WiFi network "WILC", then
  * open a browser at http://192.168.5.1<br>
  *
  * It uses the following hardware:
  * - the SAM Xplained Pro.
- * - the WILC3000 on EXT1 (WINC3400 can be used as well in bypass mode).
+ * - the WILC on EXT1 (WINC can be used as well in bypass mode).
+ * - WILC SD board can also be used connected to the SD Card Connector, with
+ *   IRQ line connected to Ex1[9]
  *
  * \section files Main Files
  * - main.c : Initialize the FreeRTOS scheduler.
- * - sta.c : Enable STA and AP mode for WILC3000. Retrieve weather information via STA mode.
+ * - sta.c : Enable STA and AP mode for WILC. Retrieve weather information via STA mode.
  * - ap.c : Enable HTTP server via AP mode.
  *
  * \section usage Usage
@@ -60,7 +62,19 @@
  *    #define STA_WLAN_SSID         "DEMO_AP"
  *    #define STA_WLAN_AUTH         M2M_WIFI_SEC_WPA_PSK
  *    #define STA_WLAN_PSK          "12345678"
+ *    #define STA_WEP_KEY_INDEX		M2M_WIFI_WEP_KEY_INDEX_1
+ *    #define STA_WEP_KEY			"1234567890"
+ *    #define STA_WEP_AUTH_TYPE		WEP_ANY
  * \endcode
+  * -# Configure below defines in sta.h to specify WILC AP mode to start with.
+  * \code
+  *    #define AP_WLAN_SSID         "WILC1000_AP"
+  *    #define AP_WLAN_AUTH         M2M_WIFI_SEC_WEP
+  *    #define AP_WLAN_PSK          "12345678"
+  *    #define AP_WEP_KEY_INDEX		M2M_WIFI_WEP_KEY_INDEX_1
+  *    #define AP_WEP_KEY			"1234567890"
+  *    #define AP_WEP_AUTH_TYPE		WEP_ANY
+  * \endcode
  * -# Build the program and download it into the board.
  * -# On the computer, open and configure a terminal application as the follows.
  * \code
@@ -90,7 +104,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com">Atmel</A>.\n
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */ 
 
 #include "asf.h"

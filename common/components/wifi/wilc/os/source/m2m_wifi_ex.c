@@ -95,18 +95,18 @@ static void os_m2m_wifi_init_imp(void *pv)
 
 	/* Init low level. */
 	nm_bsp_init();
-
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE
 	/* Register lwIP low level driver hook. */
 	wilc_fill_callback_info(&p->init->strEthInitParam);
-	
+#endif	
 	/* Init WILC1000 driver. */
 	p->dispatch.retval = m2m_wifi_init(p->init);
-
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE
 	if (M2M_SUCCESS == p->dispatch.retval) {
 		net_add_wilc_netif();
 		wifi_netif_init = 1;
 	}
-
+#endif
 	if (p->dispatch.signal_semaphore) {
 		os_hook_notify();
 	}
@@ -195,6 +195,13 @@ sint8 m2m_wifi_request_callback_ex(m2m_wifi_callback_t callback, void *arg)
 sint8 m2m_wifi_request_dhcp_client_ex(void)
 {
 	net_set_mode(NET_IF_STA, NET_MODE_USE_DHCP);
+	return 0;
+}
+
+
+sint8 m2m_wifi_request_static_client_ex(void)
+{
+	net_set_mode(NET_IF_STA, NET_MODE_USE_STATIC);
 	return 0;
 }
 

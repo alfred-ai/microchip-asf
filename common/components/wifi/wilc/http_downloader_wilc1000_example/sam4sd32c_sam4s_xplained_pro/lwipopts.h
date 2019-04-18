@@ -70,6 +70,12 @@ extern int random_number(void);
  */
 #define LWIP_SOCKET                     1 
 
+#if LWIP_SOCKET
+#define LWIP_TIMEVAL_PRIVATE			0   // set it to 0 to avoid timeval struct redefined build error, if LWIP_SOCKET is set
+#endif
+/**
+ * LWIP_SO_RCVTIMEO==1: Enable recv timeout
+ */
 #define LWIP_SO_RCVTIMEO                1
 
 /*
@@ -135,7 +141,7 @@ extern int random_number(void);
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               1600
+#define PBUF_POOL_BUFSIZE               1604
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,
@@ -471,14 +477,6 @@ extern int random_number(void);
 #define SNMP_MSG_DEBUG                  LWIP_DBG_OFF
 #define SNMP_MIB_DEBUG                  LWIP_DBG_OFF
 #define DNS_DEBUG                       LWIP_DBG_OFF
-
-/*
-   ---------------------------------------
-   ---------- lwip time value ----------
-   ---------------------------------------
-*/
-
-#define LWIP_TIMEVAL_PRIVATE			0
 
 // \note For a list of all possible lwIP configurations, check http://lwip.wikia.com/wiki/Lwipopts.h
 

@@ -50,7 +50,7 @@ extern "C" {
 */
 
 /** Select WILC firmware to use. */
-#define CONF_WILC_USE_1000_REV_B
+#define CONF_WILC_USE_3000_REV_A
 
 /*
    ---------------------------------
@@ -68,7 +68,8 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_USE_SPI				
+#define CONF_WILC_USE_SDIO
+#define CONF_WILC_USE_SDIO_EXT_IRQ 
 
 /** SPI pin and instance settings. */
 #define CONF_WILC_SPI					SPI
@@ -122,7 +123,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_DEBUG					(0)
+#define CONF_WILC_DEBUG					(1)
 #define CONF_WILC_PRINTF				osprintf
 
 #ifdef __cplusplus

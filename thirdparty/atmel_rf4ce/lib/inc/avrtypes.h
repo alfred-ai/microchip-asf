@@ -10,7 +10,7 @@
  *
  * $Id: avrtypes.h 27766 2011-07-19 12:14:15Z agasthian.s $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

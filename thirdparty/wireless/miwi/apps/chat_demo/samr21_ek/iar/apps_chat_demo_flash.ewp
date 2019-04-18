@@ -2164,28 +2164,10 @@
 						</file>
 					</group>
 					<group>
-						<name>sys</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/symbol.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/symbol.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
-						</file>
-					</group>
-					<group>
 						<name>miwi_p2p_star</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
 						</file>
@@ -2194,6 +2176,27 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
+						</file>
+					</group>
+					<group>
+						<name>sys</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.h</name>
 						</file>
 					</group>
 				</group>

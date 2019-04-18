@@ -42,6 +42,7 @@ sint8 os_m2m_wifi_connect(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, tuniM2
 sint8 os_m2m_wifi_enable_ap(tstrM2MAPConfig *ap);
 sint8 m2m_wifi_request_callback_ex(m2m_wifi_callback_t callback, void *arg);
 sint8 m2m_wifi_request_dhcp_client_ex(void);
+sint8 m2m_wifi_request_static_client_ex(void);
 sint8 m2m_wifi_enable_ap_ex(CONST tstrM2MAPConfig* pstrM2MAPConfig);
 sint8 m2m_wifi_disable_ap_ex(void);
 

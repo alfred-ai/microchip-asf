@@ -56,7 +56,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com/products/AVR32/">Atmel AVR32</A>.\n
+ * <A href="http://www.microchip.com/design-centers/32-bit /">Atmel AVR32</A>.\n
  */
 
 #include "string.h"

@@ -5,7 +5,7 @@
  *
  * $Id: app_config.h 27367 2011-06-21 03:13:18Z pawan.jadia $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

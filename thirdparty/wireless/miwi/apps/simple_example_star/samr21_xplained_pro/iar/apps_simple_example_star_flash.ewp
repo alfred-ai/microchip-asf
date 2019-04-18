@@ -167,17 +167,20 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
+					<state>PDS_ENABLE_WEAR_LEVELING</state>
 					<state>GFX_MONO_UG_2832HSWEG04=1</state>
 					<state>BOARD=SAMR21_XPLAINED_PRO</state>
 					<state>I2C_MASTER_CALLBACK_MODE=false</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAMR21G18A__</state>
+					<state>ENABLE_NETWORK_FREEZER</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SPI_CALLBACK_MODE=false</state>
-					<state>PROTOCOL_STAR</state>
 					<state>SAL_TYPE=AT86RF2xx</state>
+					<state>PROTOCOL_STAR</state>
+					<state>RTC_COUNT_ASYNC=true</state>
 					<state>PHY_AT86RF233</state>
 				</option>
 				<option>
@@ -329,15 +332,20 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../services/common_hw_timer</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv/External</state>
 					<state>$PROJ_DIR$/../../../../source/miwi_p2p_star</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
@@ -347,11 +355,13 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -508,17 +518,20 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
+					<state>PDS_ENABLE_WEAR_LEVELING</state>
 					<state>GFX_MONO_UG_2832HSWEG04=1</state>
 					<state>BOARD=SAMR21_XPLAINED_PRO</state>
 					<state>I2C_MASTER_CALLBACK_MODE=false</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAMR21G18A__</state>
+					<state>ENABLE_NETWORK_FREEZER</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SPI_CALLBACK_MODE=false</state>
-					<state>PROTOCOL_STAR</state>
 					<state>SAL_TYPE=AT86RF2xx</state>
+					<state>PROTOCOL_STAR</state>
+					<state>RTC_COUNT_ASYNC=true</state>
 					<state>PHY_AT86RF233</state>
 				</option>
 				<option>
@@ -637,15 +650,20 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../services/common_hw_timer</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv/External</state>
 					<state>$PROJ_DIR$/../../../../source/miwi_p2p_star</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
@@ -655,11 +673,13 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -814,7 +834,7 @@
 				</option>
 				<option>
 					<name>IlinkIcfFile</name>
-					<state>$PROJ_DIR$/../../../../../../../sam0/utils/linker_scripts/samr21/iar/samr21g18a_flash.icf</state>
+					<state>$PROJ_DIR$/../../../../services/pds/src/wl/linkerscripts/samr21/iar/samr21g18a_flash.icf</state>
 				</option>
 				<option>
 					<name>IlinkIcfFileSlave</name>
@@ -1208,17 +1228,20 @@
 				<option>
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
+					<state>PDS_ENABLE_WEAR_LEVELING</state>
 					<state>GFX_MONO_UG_2832HSWEG04=1</state>
 					<state>BOARD=SAMR21_XPLAINED_PRO</state>
 					<state>I2C_MASTER_CALLBACK_MODE=false</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAMR21G18A__</state>
+					<state>ENABLE_NETWORK_FREEZER</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SPI_CALLBACK_MODE=false</state>
-					<state>PROTOCOL_STAR</state>
 					<state>SAL_TYPE=AT86RF2xx</state>
+					<state>PROTOCOL_STAR</state>
+					<state>RTC_COUNT_ASYNC=true</state>
 					<state>PHY_AT86RF233</state>
 				</option>
 				<option>
@@ -1370,15 +1393,20 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../services/common_hw_timer</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv/External</state>
 					<state>$PROJ_DIR$/../../../../source/miwi_p2p_star</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
@@ -1388,11 +1416,13 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -1549,17 +1579,20 @@
 				<option>
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
+					<state>PDS_ENABLE_WEAR_LEVELING</state>
 					<state>GFX_MONO_UG_2832HSWEG04=1</state>
 					<state>BOARD=SAMR21_XPLAINED_PRO</state>
 					<state>I2C_MASTER_CALLBACK_MODE=false</state>
 					<state>TC_ASYNC=true</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>__SAMR21G18A__</state>
+					<state>ENABLE_NETWORK_FREEZER</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SPI_CALLBACK_MODE=false</state>
-					<state>PROTOCOL_STAR</state>
 					<state>SAL_TYPE=AT86RF2xx</state>
+					<state>PROTOCOL_STAR</state>
+					<state>RTC_COUNT_ASYNC=true</state>
 					<state>PHY_AT86RF233</state>
 				</option>
 				<option>
@@ -1678,15 +1711,20 @@
 					<state>$PROJ_DIR$/../../../../../../../common/services/serial</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/i2c</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/..</state>
 					<state>$PROJ_DIR$/../..</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/nvm</state>
 					<state>$PROJ_DIR$/../../../../../services/common_hw_timer</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/nv/External</state>
 					<state>$PROJ_DIR$/../../../../source/miwi_p2p_star</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
@@ -1696,11 +1734,13 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
+					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -1855,7 +1895,7 @@
 				</option>
 				<option>
 					<name>IlinkIcfFile</name>
-					<state>$PROJ_DIR$/../../../../../../../sam0/utils/linker_scripts/samr21/iar/samr21g18a_flash.icf</state>
+					<state>$PROJ_DIR$/../../../../services/pds/src/wl/linkerscripts/samr21/iar/samr21g18a_flash.icf</state>
 				</option>
 				<option>
 					<name>IlinkIcfFileSlave</name>
@@ -2163,6 +2203,18 @@
 						<name>$PROJ_DIR$/../../../../../services/nvm/common_nvm.h</name>
 					</file>
 				</group>
+				<group>
+					<name>sleep_mgr</name>
+					<group>
+						<name>sam0</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sleep_mgr.h</name>
+					</file>
+				</group>
 			</group>
 			<group>
 				<name>addons</name>
@@ -2182,79 +2234,154 @@
 			<group>
 				<name>miwi</name>
 				<group>
-					<name>apps</name>
+					<name>services</name>
 					<group>
-						<name>simple_example_star</name>
+						<name>lcd</name>
 						<file>
-							<name>$PROJ_DIR$/../../demo_output.c</name>
+							<name>$PROJ_DIR$/../../../../services/lcd/lcd.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../star_demo.c</name>
+							<name>$PROJ_DIR$/../../../../services/lcd/lcd.h</name>
 						</file>
-						<file>
-							<name>$PROJ_DIR$/../../task.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../main.c</name>
-						</file>
+					</group>
+					<group>
+						<name>pds</name>
 						<group>
-							<name>samr21_xplained_pro</name>
-							<file>
-								<name>$PROJ_DIR$/../conf_trx_access.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_board.h</name>
-							</file>
+							<name>src</name>
 							<group>
-								<name>iar</name>
+								<name>nv</name>
+								<group>
+									<name>External</name>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/src/nv/External/D_XNv-SamR21.c</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/src/nv/External/S_XNv.c</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/src/nv/External/S_Nv-External.c</name>
+									</file>
+								</group>
 								<file>
-									<name>$PROJ_DIR$/asf.h</name>
+									<name>$PROJ_DIR$/../../../../services/pds/src/nv/D_Nv.c</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/nv/S_Nv-SamR21.c</name>
+								</file>
+							</group>
+							<group>
+								<name>wl</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/wl/wlPdsTypesConverter.c</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/wl/wlPdsDataServer.c</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/wl/wlPdsTaskManager.c</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/wl/wlPdsInit.c</name>
+								</file>
+							</group>
+						</group>
+						<group>
+							<name>inc</name>
+							<group>
+								<name>nv</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/S_Nv_Init.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/D_Nv_Bindings.h</name>
+								</file>
+								<group>
+									<name>External</name>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/inc/nv/External/S_XNv_Bindings.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/inc/nv/External/D_XNv_Bindings.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/inc/nv/External/D_XNv.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/inc/nv/External/D_XNv_Init.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/inc/nv/External/S_XNv_Init.h</name>
+									</file>
+									<file>
+										<name>$PROJ_DIR$/../../../../services/pds/inc/nv/External/S_XNv.h</name>
+									</file>
+								</group>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/S_Nv.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/D_Nv_Init.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/D_Nv.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/S_Nv_Bindings.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/nv/S_Nv_Internal.h</name>
+								</file>
+							</group>
+							<group>
+								<name>wl</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/wl/wlPdsTaskManager.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/wl/wlPdsTypes.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/wl/wlPdsBindings.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/wl/wlPdsMemIds.h</name>
+								</file>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/inc/wl/wlPdsTypesConverter.h</name>
 								</file>
 							</group>
 							<file>
-								<name>$PROJ_DIR$/../conf_ssd1306.h</name>
+								<name>$PROJ_DIR$/../../../../services/pds/inc/pdsDataServer.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_sio2host.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_nvm.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_spi.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_clocks.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_hw_timer.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_sysfont.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
+								<name>$PROJ_DIR$/../../../../services/pds/inc/pdsMemIds.h</name>
 							</file>
 						</group>
-						<file>
-							<name>$PROJ_DIR$/../../miwi_config_p2p.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../star_demo.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../miwi_config.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../demo_output.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../task.h</name>
-						</file>
 					</group>
 				</group>
 				<group>
 					<name>source</name>
+					<group>
+						<name>sys</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.h</name>
+						</file>
+					</group>
 					<group>
 						<name>mimac</name>
 						<file>
@@ -2277,28 +2404,10 @@
 						</file>
 					</group>
 					<group>
-						<name>sys</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/symbol.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/symbol.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
-						</file>
-					</group>
-					<group>
 						<name>miwi_p2p_star</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
 						</file>
@@ -2311,14 +2420,80 @@
 					</group>
 				</group>
 				<group>
-					<name>services</name>
+					<name>apps</name>
 					<group>
-						<name>lcd</name>
+						<name>simple_example_star</name>
 						<file>
-							<name>$PROJ_DIR$/../../../../services/lcd/lcd.c</name>
+							<name>$PROJ_DIR$/../../demo_output.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../services/lcd/lcd.h</name>
+							<name>$PROJ_DIR$/../../star_demo.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../task.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../main.c</name>
+						</file>
+						<group>
+							<name>samr21_xplained_pro</name>
+							<file>
+								<name>$PROJ_DIR$/../conf_trx_access.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_spinctrl.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_board.h</name>
+							</file>
+							<group>
+								<name>iar</name>
+								<file>
+									<name>$PROJ_DIR$/asf.h</name>
+								</file>
+							</group>
+							<file>
+								<name>$PROJ_DIR$/../conf_ssd1306.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_sio2host.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_rtc.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_extint.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_nvm.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_spi.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_clocks.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_hw_timer.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_sysfont.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../miwi_config_p2p.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../star_demo.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../miwi_config.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../demo_output.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../task.h</name>
 						</file>
 					</group>
 				</group>
@@ -2347,6 +2522,9 @@
 					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.c</name>
 				</file>
 				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.c</name>
+				</file>
+				<file>
 					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_ug_2832hsweg04.c</name>
 				</file>
 				<file>
@@ -2354,6 +2532,9 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_framebuffer.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.h</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_text.h</name>
@@ -2466,9 +2647,6 @@
 						</file>
 					</group>
 				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/sercom.c</name>
-				</file>
 				<group>
 					<name>spi</name>
 					<file>
@@ -2496,6 +2674,9 @@
 						</file>
 					</group>
 				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/sercom.c</name>
+				</file>
 				<group>
 					<name>i2c</name>
 					<group>
@@ -2636,6 +2817,27 @@
 				</file>
 			</group>
 			<group>
+				<name>rtc</name>
+				<group>
+					<name>rtc_sam_d_r_h</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h/rtc_count_interrupt.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h/rtc_count.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_tamper.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_count_interrupt.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_count.h</name>
+				</file>
+			</group>
+			<group>
 				<name>port</name>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/port/port.c</name>
@@ -2740,6 +2942,9 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/instance/adc.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/instance/mtb.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/instance/gclk.h</name>
 							</file>
 							<file>
@@ -2747,9 +2952,6 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/instance/sercom0.h</name>
-							</file>
-							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/instance/mtb.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/instance/sercom3.h</name>
@@ -2794,13 +2996,13 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/adc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/port.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/sysctrl.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/usb.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/gclk.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/hmatrixb.h</name>
@@ -2821,19 +3023,16 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/evsys.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/mtb.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/rtc.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/pm.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/gclk.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/eic.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/eic.h</name>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/port.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/nvmctrl.h</name>
@@ -2852,6 +3051,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/ac.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr21/include/component/mtb.h</name>
 							</file>
 						</group>
 						<file>

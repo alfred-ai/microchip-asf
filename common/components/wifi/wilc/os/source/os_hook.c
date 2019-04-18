@@ -74,10 +74,12 @@ static void os_hif_task(void *pv)
 				m2m_wifi_handle_events(NULL);
 
 			} 
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE
 			/* Outgoing data packet. */
 			else if ((msg.id == MSG_TX_STA) || (msg.id == MSG_TX_AP)) {
 				wilc_netif_tx_from_queue(&msg);
 			}
+#endif			
 			/* WiFi command. */
 			else if (msg.id == MSG_CMD) {
 
@@ -86,7 +88,9 @@ static void os_hif_task(void *pv)
 			} 
 			/* Error. */
 			else {
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE				
 				osprintf("Warning: Wrong id  msg id %lu \r\n", msg.id);
+#endif				
 			}
 		}
 	}
@@ -105,7 +109,9 @@ void os_hook_isr(void)
 	msg.payload_size = 0;
 	msg.payload = NULL;
 	if (xQueueSendFromISR(hif_queue, &msg, &woken) != pdTRUE) {
+#ifndef WILC_SERIAL_BRIDGE_INTERFACE		
 		osprintf("os_hook_isr: queue full error!\n");
+#endif		
 	}
 	else {
 		portEND_SWITCHING_ISR(woken);

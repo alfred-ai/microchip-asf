@@ -702,12 +702,12 @@ void init_timer_isr( void )
  *
  * \section contactinfo Contact Information
  * For further information, visit : 
- * <A href="http://www.atmel.com/products/AVR32/"> Atmel AVR32 </A>.\n
+ * <A href="http://www.microchip.com/design-centers/32-bit /"> Atmel AVR32 </A>.\n
  * Technical support & faq, visit : 
  * <A href="https://www.microchip.com/support/"> Support and FAQ </A>.
  *
  * \author 
- * Atmel Corporation : http://www.atmel.com \n
+ * Microchip Technology Inc : http://www.microchip.com \n
  */
         
  

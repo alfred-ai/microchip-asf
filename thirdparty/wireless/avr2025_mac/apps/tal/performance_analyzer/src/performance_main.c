@@ -245,7 +245,7 @@
  * \page devsup Device Support
  * - \b ATXMEGA256A3BU
  *                     - <A
- * href="http://www.atmel.com/tools/xmega-a3buxplained.aspx"> \b   XMEGA-A3BU
+ * href="http://www.microchip.com/tools/xmega-a3buxplained.aspx"> \b   XMEGA-A3BU
  * Xplained  </A>  <A
  * href="http://store.atmel.com/PartDetail.aspx?q=p:10500293">\a Buy </A>\n
  * - \b ATXMEGA256A3U-Zigbit (USB and Carrier)
@@ -253,7 +253,7 @@
  * - \b Atmega256rfr2 Zigbit (Carrier)
  *
  * - \b UC3A3256S
- *                      - <A href="http://www.atmel.com/tools/rz600.aspx"> \b
+ *                      - <A href="http://www.microchip.com/developmenttools/productdetails/partno/atavrrz600"> \b
  * RZ600 </A> <A
  * href="http://store.atmel.com/PartDetail.aspx?q=p:10500245;c:100118">\a Buy
  *</A>\n
@@ -270,7 +270,7 @@
  * Support</a>.\n
  * \page contactinfo Contact Information
  * For further information,visit
- * <A href="http://www.atmel.com/avr">www.atmel.com</A>.\n
+ * <A href="http://www.microchip.com/design-centers/8-bit">www.microchip.com</A>.\n
  */
 
 /* === TYPES =============================================================== */

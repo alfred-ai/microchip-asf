@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 bus wrapper APIs implementation.
+ * \brief This module contains SAM4S WILC bus wrapper APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -40,7 +40,7 @@
 #include "ioport.h"
 #include "asf.h"
 #ifdef CONF_WILC_USE_SDIO
-#include "bus_wrapper/include/sdio_samv7.h"
+#include "bus_wrapper/include/sdio_samv71.h"
 #endif
 
 #define NM_BUS_MAX_TRX_SZ 4096
@@ -133,6 +133,8 @@ sint8 nm_bus_init(void *pvinit)
 	/* TODO: implement I2C. */
 
 #elif defined CONF_WILC_USE_SPI
+	uint8_t spi_baudrate_divider;
+	
 	/* Configure SPI pins. */
 	ioport_set_pin_mode(CONF_WILC_SPI_MISO_GPIO, CONF_WILC_SPI_MISO_FLAGS);
 	ioport_disable_pin(CONF_WILC_SPI_MISO_GPIO);
@@ -156,8 +158,21 @@ sint8 nm_bus_init(void *pvinit)
 	spi_set_clock_polarity(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_POL);
 	spi_set_clock_phase(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_PHA);
 	spi_set_bits_per_transfer(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
+#if 0
 	spi_set_baudrate_div(CONF_WILC_SPI, CONF_WILC_SPI_NPCS,
 			(sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK));
+#endif			
+	/** SPI clock. 
+	** Exact SPI frequency will depend on the CPU clock configuration and it
+	** will be less than or equal to what is configured in CONF_WINC_SPI_CLOCK
+	** Changed based on WSGA-874
+	*/ 	
+	spi_baudrate_divider = (sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK);
+	if ((uint32_t)(spi_baudrate_divider * CONF_WILC_SPI_CLOCK) < sysclk_get_cpu_hz()){
+		++spi_baudrate_divider;
+	}
+	spi_set_baudrate_div(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, spi_baudrate_divider);
+		
 	spi_set_transfer_delay(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_DLYBS,
 			CONF_WILC_SPI_DLYBCT);
 	spi_enable(CONF_WILC_SPI);

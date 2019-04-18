@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 bus wrapper APIs implementation.
+ * \brief This module contains SAM4S WILC bus wrapper APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -127,6 +127,8 @@ sint8 nm_bus_init(void *pvinit)
 	result = M2M_ERR_INIT;
 
 #elif defined CONF_WILC_USE_SPI
+	uint8_t spi_baudrate_divider;
+	
 	/* Configure SPI pins. */
 	gpio_configure_pin(CONF_WILC_SPI_MISO_GPIO, CONF_WILC_SPI_MISO_FLAGS);
 	gpio_configure_pin(CONF_WILC_SPI_MOSI_GPIO, CONF_WILC_SPI_MOSI_FLAGS);
@@ -153,11 +155,21 @@ sint8 nm_bus_init(void *pvinit)
 			CONF_WILC_SPI_NPCS, CONF_WILC_SPI_POL);
 	spi_set_clock_phase(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_PHA);
 	spi_set_bits_per_transfer(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
-	if (sysclk_get_cpu_hz() % CONF_WILC_SPI_CLOCK != 0) {
-		M2M_ERR("Warning: non-integer SPI clock divider not allowed, was floored to %lu.\r\n", sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK);
-	}
+#if 0
 	spi_set_baudrate_div(CONF_WILC_SPI, CONF_WILC_SPI_NPCS,
 			(sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK));
+#endif			
+	/** SPI clock. 
+	** Exact SPI frequency will depend on the CPU clock configuration and it
+	** will be less than or equal to what is configured in CONF_WINC_SPI_CLOCK
+	** Changed based on WSGA-874
+	*/ 	
+	spi_baudrate_divider = (sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK);
+	if ((uint32_t)(spi_baudrate_divider * CONF_WILC_SPI_CLOCK) < sysclk_get_cpu_hz()){
+		++spi_baudrate_divider;
+	}
+	spi_set_baudrate_div(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, spi_baudrate_divider);
+		
 	spi_set_transfer_delay(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_DLYBS,
 			CONF_WILC_SPI_DLYBCT);
 	spi_enable(CONF_WILC_SPI);

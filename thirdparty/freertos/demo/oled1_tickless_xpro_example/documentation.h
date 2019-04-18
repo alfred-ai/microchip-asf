@@ -95,7 +95,7 @@
  *
  *
  * \section appdoc_continfo Contact information
- * For further information, visit <a href="http://www.atmel.com/">Atmel</a>.
+ * For further information, visit <a href="http://www.microchip.com/">Microchip</a>.
  */
 
 #endif // DOCUMENTATION_H_INCLUDED

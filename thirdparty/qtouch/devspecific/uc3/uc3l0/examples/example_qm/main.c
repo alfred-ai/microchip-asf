@@ -455,7 +455,7 @@ main (void)
    For Capacitive Touch Sensor design,
    refer doc10620.pdf: Touch Sensors Design Guide.
 
-   http://www.atmel.com/dyn/products/app_notes.asp?family_id=697
+   http://ww1.microchip.com/downloads/en/devicedoc/doc8207.pdf
 
 3. The Example application uses a CPU, PBA and PBB clock of 48MHz.
    When using a different frequency setting, the following parameters must be

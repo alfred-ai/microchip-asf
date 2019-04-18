@@ -58,9 +58,9 @@
  *
  *  -# Build the program and download it into the evaluation board. Please
  *     refer to the
- *     <a href="http://www.atmel.com/dyn/resources/prod_documents/6421B.pdf">
+ *     <a href="http://ww1.microchip.com/downloads/en/appnotes/atmel-42438-sam-ba-overview-and-customization-process_applicationnote_at09423.pdf">
  *     SAM-BA User Guide</a>, the
- *     <a href="http://www.atmel.com/dyn/resources/prod_documents/doc6310.pdf">
+ *     <a href="http://ww1.microchip.com/downloads/en/appnotes/doc6310.pdf">
  *     GNU-Based Software Development</a>
  *     application note or the
  *     <a href="http://www.iar.com/website1/1.0.1.0/78/1/">

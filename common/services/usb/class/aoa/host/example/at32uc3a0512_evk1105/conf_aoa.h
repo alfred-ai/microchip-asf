@@ -45,7 +45,7 @@ extern "C" {
 #define AOA_STRING_MODEL          "EVK1105"
 #define AOA_STRING_DESCRIPTION    "EVK1105 Application Board"
 #define AOA_STRING_VERSION        "1.0"
-#define AOA_STRING_URL            "http://www.atmel.com/applications/homeentertainment/mobile_accessories/default.aspx"
+#define AOA_STRING_URL            "http://www.microchip.com/design-centers/smartphone-accessory"
 #define AOA_STRING_SERIAL         "0000000012345678"
 
 #ifdef __cplusplus

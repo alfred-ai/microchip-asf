@@ -89,6 +89,8 @@ char report[512];
 /** Number of STA connected. */
 uint32_t sta_connected = 0;
 
+tstrWifiInitParam wifiInitParam;
+
 /**
  * \brief Callback function of IP address.
  *
@@ -248,10 +250,9 @@ void sta_task(void *argument)
 	net_init();
 	
 	/* Initialize the WILC1000 driver. */
-	tstrWifiInitParam param;
-	memset(&param, 0, sizeof(param));
-	param.pfAppWifiCb = wifi_cb;
-	os_m2m_wifi_init(&param);
+	memset(&wifiInitParam, 0, sizeof(wifiInitParam));
+	wifiInitParam.pfAppWifiCb = wifi_cb;
+	os_m2m_wifi_init(&wifiInitParam);
 
 	/* Connect to station. */
 	os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),

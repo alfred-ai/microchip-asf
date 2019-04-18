@@ -146,15 +146,17 @@ extern "C" {
 #define SAMR21ZLL_EK               88  //!< SAMR21ZLL-EK board.
 #define ATMEGA168PB_XPLAINED_MINI  89  //!< ATMEGA168PB Xplained MINI board.
 #define ATMEGA324PB_XPLAINED_PRO   90  //!< ATMEGA324PB Xplained Pro board.
-#define SAMB11CSP_XPLAINED_PRO     91  //!< SAM B11 CSP Xplained Pro board.
 #define SAMB11ZR_XPLAINED_PRO      92  //!< SAM B11 ZR Xplained Pro board.
 #define SAMR30_XPLAINED_PRO        93  //!< SAM R30 Xplained Pro board.
 #define SAMHA1G16A_XPLAINED_PRO    94  //!< SAM HA1G16A Xplained Pro board.
 #define SIMULATOR_XMEGA_A1         97  //!< Simulator for XMEGA A1 devices.
 #define AVR_SIMULATOR_UC3          98  //!< Simulator for the AVR UC3 device family.
 #define USER_BOARD                 99  //!< User-reserved board (if any).
-#define DUMMY_BOARD               100  //!< Dummy board to support board-independent applications (e.g. bootloader).
-#define SAMB11ZR_SENSOR_TAG       101  //!< SAMB11ZR sensor tag board
+#define DUMMY_BOARD                100 //!< Dummy board to support board-independent applications (e.g. bootloader).
+#define SAMB11ZR_SENSOR_TAG        101 //!< SAMB11ZR sensor tag board
+#define SAMR30_MODULE_XPLAINED_PRO 102 //!< SAM R30 Module Xplained Pro board.
+#define SAMR21G18_MODULE           103 //!< SAMR21G18-MR210UA Module.
+#define SAMR21B18_MODULE           104 //!< SAMR21B18-MZ210PA Module.
 //! @}
 
 /*! \name Extension Boards
@@ -277,8 +279,10 @@ extern "C" {
 #  include "samd21_xplained_pro/samd21_xplained_pro.h"
 #elif BOARD == SAMR21_XPLAINED_PRO
 #  include "samr21_xplained_pro/samr21_xplained_pro.h"
-#elif BOARD == SAMR30_XPLAINED_PRO
+#elif BOARD == SAMR30_XPLAINED_PRO && defined(__SAMR30G18A__)
 #  include "samr30_xplained_pro/samr30_xplained_pro.h"
+#elif BOARD == SAMR30_MODULE_XPLAINED_PRO && defined(__SAMR30E18A__)
+#  include "samr30_module_xplained_pro/samr30_module_xplained_pro.h"
 #elif BOARD == SAMR21ZLL_EK
 #  include "samr21zll_ek/samr21zll_ek.h"
 #elif BOARD == SAMD11_XPLAINED_PRO
@@ -365,16 +369,18 @@ extern "C" {
 #  include "atmega168pb_xplained_mini/atmega168pb_xplained_mini.h"
 #elif BOARD == ATMEGA324PB_XPLAINED_PRO
 #  include "atmega324pb_xplained_pro/atmega324pb_xplained_pro.h"
-#elif BOARD == SAMB11CSP_XPLAINED_PRO
-#  include "samb11csp_xplained_pro/samb11csp_xplained_pro.h"
 #elif BOARD == SAMB11ZR_XPLAINED_PRO
 #  include "samb11zr_xplained_pro/samb11zr_xplained_pro.h"
 #elif BOARD == SIMULATOR_XMEGA_A1
 #  include "simulator/xmega_a1/simulator_xmega_a1.h"
 #elif BOARD == AVR_SIMULATOR_UC3
 #  include "avr_simulator_uc3/avr_simulator_uc3.h"
+#elif BOARD == SAMR21G18_MODULE
+# include "samr21g18_module/samr21g18_module.h"
+#elif BOARD == SAMR21B18_MODULE
+# include "samr21b18_module/samr21b18_module.h"
 #elif BOARD == USER_BOARD
- // User-reserved area: #include the header file of your board here (if any).
+// User-reserved area: #include the header file of your board here (if any).
 #  include "user_board.h"
 #elif BOARD == DUMMY_BOARD
 #  include "dummy/dummy_board.h"

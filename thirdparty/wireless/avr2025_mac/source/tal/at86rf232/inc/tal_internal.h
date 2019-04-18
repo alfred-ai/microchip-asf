@@ -59,7 +59,7 @@
  * functionalities and
  * provides interfaces to the upper layers (like IEEE 802.15.4 MAC )and  uses
  * the services of PAL.
- * \a Refer <A href="http://www.atmel.com/Images/doc8321.pdf">AT86RF232 Data
+ * \a Refer <A href="http://ww1.microchip.com/downloads/en/DeviceDoc/doc8321.pdf">AT86RF232 Data
  * Sheet </A> \b for \b detailed \b information .
  */
 

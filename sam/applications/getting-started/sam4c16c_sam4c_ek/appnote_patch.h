@@ -47,16 +47,16 @@ The SAM4C-EK is an evaluation kit featuring
 
 /**
 \defgroup DEV_TOOLS development tools
-- Atmel Studio 6.1: http://www.atmel.com/atmelstudio
+- Atmel Studio 6.1: http://www.microchip.com/mplab/avr-support/atmel-studio-7
 - IAR Embedded Workbench for ARM 6.50.5:
   http://www.iar.com/en/Products/IAR-Embedded-Workbench/ARM/
   - SAM4C patch for IAR Embedded Workbench for eariler version of IAR:
     <i>ewarm add-on v0.1.1.zip</i> (provided with the application note)
 - Segger J-Link (v4.75d or above): http://www.segger.com/download_jlink.html
-- SAM-BA (v2.12): http://www.atmel.com/tools/atmelsam-bain-systemprogrammer.aspx
+- SAM-BA (v2.12): http://www.microchip.com/developmenttools/ProductDetails/atmel%20sam-ba%20in-system%20programmer
   - SAM4C patch for SAM-BA v2.12: <i>sam-ba_2.12_patchsam4c.exe</i>
     (provided with the application note)
-- ASF (v3.11.1 or above): http://www.atmel.com/tools/avrsoftwareframework.aspx
+- ASF (v3.11.1 or above): http://www.microchip.com/tools/avrsoftwareframework.aspx
 */
 
 /**

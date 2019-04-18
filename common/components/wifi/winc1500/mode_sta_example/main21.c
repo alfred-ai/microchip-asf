@@ -76,7 +76,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com">Atmel</A>.\n
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
 
 #include "asf.h"
@@ -131,6 +131,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("Wi-Fi disconnected\r\n");
+			printf("Error code: %d\r\n",pstrWifiState->u8ErrCode);
 
 			/* Connect to defined AP. */
 			m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (void *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
@@ -141,10 +142,16 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 
 	case M2M_WIFI_REQ_DHCP_CONF:
 	{
-		uint8_t *pu8IPAddress = (uint8_t *)pvMsg;
+		tstrM2MIPConfig *dhcpConf = (tstrM2MIPConfig *)pvMsg;
+		uint8_t *pu8IPAddress = (uint8_t *)&dhcpConf->u32StaticIP;
+		uint8_t *u32Gateway = (uint8_t *)&dhcpConf->u32Gateway;
+		uint8_t *u32DNS = (uint8_t *)&dhcpConf->u32DNS;
+		uint8_t *u32SubnetMask = (uint8_t *)&dhcpConf->u32SubnetMask;
 		printf("Wi-Fi connected\r\n");
-		printf("Wi-Fi IP is %u.%u.%u.%u\r\n",
-				pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
+		printf("Wi-Fi IP is %u.%u.%u.%u\r\n",pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
+		printf("Gateway IP is %u.%u.%u.%u\r\n",u32Gateway[0], u32Gateway[1], u32Gateway[2], u32Gateway[3]);
+		printf("DNS IP is %u.%u.%u.%u\r\n",u32DNS[0], u32DNS[1], u32DNS[2], u32DNS[3]);
+		printf("Subnet mask IP is %u.%u.%u.%u\r\n",u32SubnetMask[0], u32SubnetMask[1], u32SubnetMask[2], u32SubnetMask[3]);
 		break;
 	}
 

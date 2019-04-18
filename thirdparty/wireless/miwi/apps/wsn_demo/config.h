@@ -55,21 +55,53 @@
 #define SHORT_ADDRESS_CAPTION_SIZE     7
 
 #if defined(PAN_COORDINATOR)
+#if defined(OTAU_ENABLED)
+#if defined(OTAU_SERVER)
+#define APP_CAPTION     "Server-PAN Coordinator"
+#else
+#define APP_CAPTION     "Client-PAN Coordinator"
+#endif
+#else
 #define APP_CAPTION     "PAN Coordinator"
+#endif
 #define APP_NODE_TYPE   0
 #define APP_COORDINATOR 1
 #define APP_ROUTER      0
 #define APP_ENDDEVICE   0
 #elif defined(COORDINATOR)
+#if defined(OTAU_ENABLED)
+#if defined(OTAU_SERVER)
+#define APP_CAPTION     "Server-Coordinator"
+#else
+#define APP_CAPTION     "Client-Coordinator"
+#endif
+#else
 #define APP_CAPTION     "Coordinator"
+#endif
 #define APP_CAPTION_ED_SIZE  (sizeof(APP_CAPTION_ED) - 1 + SHORT_ADDRESS_CAPTION_SIZE)
-#define APP_CAPTION_ED  "End Device"
+#if defined(OTAU_ENABLED)
+#if defined(OTAU_SERVER)
+#define APP_CAPTION_ED     "Server-End Device"
+#else
+#define APP_CAPTION_ED     "Client-End Device"
+#endif
+#else
+#define APP_CAPTION_ED     "End Device"
+#endif
 #define APP_NODE_TYPE   1
 #define APP_COORDINATOR 0
 #define APP_ROUTER      1
 #define APP_ENDDEVICE   0
 #else
+#if defined(OTAU_ENABLED)
+#if defined(OTAU_SERVER)
+#define APP_CAPTION     "Server-End Device"
+#else
+#define APP_CAPTION     "Client-End Device"
+#endif
+#else
 #define APP_CAPTION     "End Device"
+#endif
 #define APP_NODE_TYPE   2
 #define APP_COORDINATOR 0
 #define APP_ROUTER      0

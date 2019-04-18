@@ -59,7 +59,7 @@
 /** Eddystone-URL defines */
 
 /** @brief  Default URL value in encoded form 
- *  \x02goo.gl/SJmAjy = Shortened URL for "http://www.atmel.com/products/Wireless/bluetooth/default.aspx"
+ *  \x02goo.gl/SJmAjy = Shortened URL for "http://www.microchip.com/products/Wireless/bluetooth/default.aspx"
  */
 #define CONF_ES_DEFAULT_URL							("\x02goo.gl/SJmAjy")
 

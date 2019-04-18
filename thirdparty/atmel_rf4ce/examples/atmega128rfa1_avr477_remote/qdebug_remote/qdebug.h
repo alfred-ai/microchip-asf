@@ -1,6 +1,6 @@
 /*******************************************************************************
 *   $FILE:  QDebug.h
-*   Atmel Corporation:  http://www.atmel.com \n
+*   Microchip Technology Inc:  http://www.microchip.com \n
 *   Support: https://www.microchip.com/support/
 ******************************************************************************/
 

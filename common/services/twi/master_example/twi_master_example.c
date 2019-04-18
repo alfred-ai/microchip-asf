@@ -50,7 +50,7 @@
  * All AVR or SAM devices can be used. When use the example in Xplained Pro
  * Kits, we need connect an IO1 Xplained Pro board to the proper EXT port. For
  * information of the IO1Xplained Pro board, visit
- * <A href="http://www.atmel.com/tools/ATIO1-XPRO.aspx">IO1 web link.</A>
+ * <A href="http://www.microchip.com/tools/ATIO1-XPRO.aspx">IO1 web link.</A>
  * This example has been tested with the following setup:
  *   - access to the TWI signals.
  *
@@ -70,7 +70,7 @@
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com/">Atmel</A>.\n
+ * <A href="http://www.microchip.com/">Microchip</A>.\n
  */
 /*
  * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>

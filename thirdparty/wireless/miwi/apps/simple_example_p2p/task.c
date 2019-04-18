@@ -39,7 +39,10 @@
 #include "miwi_api.h"
 #include "p2p_demo.h"
 #include "asf.h"
-
+#if defined(ENABLE_SLEEP_FEATURE)
+#include "sleep_mgr.h"
+#endif
+#include "phy.h"
 /************************** VARIABLES ************************************/
 #define LIGHT   0x01
 #define SWITCH  0x02
@@ -69,8 +72,12 @@
 
 #ifdef PHY_AT86RF233
 uint8_t myChannel = 26;
+/* Range: 11 to 26 */
 #elif PHY_AT86RF212B
 uint8_t myChannel = 8;
+/* Range for default configuration: 1 to 10
+ Note: TX Power and PHY Mode Setting needs to be modified as per the 
+ recommendation from Data Sheet for European band (ie.,Channel 0)*/
 #endif
 
 //bool role = false ;  // Default : Any device will be END_DEVICE
@@ -88,7 +95,7 @@ bool freezer_feature(void)
         if(MiWi_TickGetDiff(tick2, tick1) > (ONE_SECOND * 4))
             break;
         switch_val = ButtonPressed ();
-        if(switch_val == 2)
+        if(switch_val == 1)
         {
 #if defined (ENABLE_LCD)
             LCDDisplay((char *)"Restoring Network !!", 0, false);
@@ -115,8 +122,14 @@ bool Initialize_Demo(bool freezer_enable)
 {
     uint8_t i;
 
+	uint64_t ieeeAddr;
+	uint64_t invalidIEEEAddr;
 
     MiApp_SubscribeDataIndicationCallback(ReceivedDataIndication);
+
+#ifdef ENABLE_SLEEP_FEATURE
+    sm_init();
+#endif
 
     if (freezer_enable)
     {
@@ -131,12 +144,36 @@ bool Initialize_Demo(bool freezer_enable)
         // network starts from scratch.
         /*******************************************************************/
         MiApp_ProtocolInit(NULL, NULL);
+		/* Check if a valid IEEE address is available. */
+		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+		memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
+		srand(PHY_RandomReq());
+		/*
+		 * This while loop is on purpose, since just in the
+		 * rare case that such an address is randomly
+		 * generated again, we must repeat this.
+		 */
+		while ((ieeeAddr == 0x00UL) || (ieeeAddr == invalidIEEEAddr))
+		{
+			/*
+			 * In case no valid IEEE address is available, a random
+			 * IEEE address will be generated to be able to run the
+			 * applications for demonstration purposes.
+			 * In production code this can be omitted.
+			 */
+			uint8_t* peui64 = (uint8_t *)&myLongAddress;
+			for(i = 0; i<MY_ADDRESS_LENGTH; i++)
+			{
+				*peui64++ = (uint8_t)rand();
+			}
+			memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+		}
+		PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
         #if defined(PROTOCOL_P2P)  
             DemoOutput_Instruction();
             #else
             STAR_DEMO_OPTIONS_MESSAGE (role);
         #endif
-        
     }
     else
     {
@@ -153,7 +190,31 @@ bool Initialize_Demo(bool freezer_enable)
         // network starts from scratch.
         /*******************************************************************/
         MiApp_ProtocolInit(NULL, NULL);
-
+		/* Check if a valid IEEE address is available. */
+		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+		memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
+		srand(PHY_RandomReq());
+		/*
+		 * This while loop is on purpose, since just in the
+		 * rare case that such an address is randomly
+		 * generated again, we must repeat this.
+		 */
+		while ((ieeeAddr == 0x0000000000000000) || (ieeeAddr == invalidIEEEAddr))
+		{
+			/*
+			 * In case no valid IEEE address is available, a random
+			 * IEEE address will be generated to be able to run the
+			 * applications for demonstration purposes.
+			 * In production code this can be omitted.
+			 */
+			uint8_t* peui64 = (uint8_t *)&myLongAddress;
+			for(i = 0; i<MY_ADDRESS_LENGTH; i++)
+			{
+				*peui64++ = (uint8_t)rand();
+			}
+			memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
+		}
+		PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
         // Set default channel
         if( MiApp_Set(CHANNEL, &myChannel) == false )
         {
@@ -228,7 +289,7 @@ bool Initialize_Demo(bool freezer_enable)
             //     only needs to pay attention to the channels that are not 
             //     preferred.
             /*******************************************************************/
-            MiApp_StartConnection(START_CONN_DIRECT, 10, 0, Connection_Confirm);
+            MiApp_StartConnection(START_CONN_DIRECT, 10, (1L << myChannel), Connection_Confirm);
         #if defined(PROTOCOL_STAR)
             role = true;  // Denotes its a Pan Co
         #endif

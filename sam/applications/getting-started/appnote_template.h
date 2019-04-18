@@ -55,7 +55,7 @@ on how to load and buildup a single example project to BOARD_NAME.
 /**
 \page appdoc_chap_00_title1 Get the Device Datasheet
 
-Web page: http://www.atmel.com/CHIP_NAME
+Web page: http://www.microchip.com/CHIP_NAME
 
 Documents: CHIP_NAME Series Datasheet (Summary, Complete) (.pdf) 
 - Select the required device (ie. ATCHIP_NAMEx) or and get the latest datasheet
@@ -69,7 +69,7 @@ Documents: CHIP_NAME Series Datasheet (Summary, Complete) (.pdf)
 /**
 \page appdoc_chap_01_title2 Get the CHIP_NAME Evaluation Kit
 
-Web page: http://www.atmel.com/tools/BOARD_NAME.aspx
+Web page: http://www.microchip.com/tools/BOARD_NAME.aspx
 
 Get the kit: http://store.atmel.com
 

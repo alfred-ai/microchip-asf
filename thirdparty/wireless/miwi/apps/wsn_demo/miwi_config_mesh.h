@@ -41,20 +41,16 @@
 
    #if defined(PROTOCOL_MESH)
 
-    /* Choose the device Type, Select only one */
-    //#define PAN_COORDINATOR
-    //#define COORDINATOR
-    //#define ENDDEVICE
-
     /* Channel Map for Network Operation - Configurable */
     #if (defined(PHY_AT86RF212B))
-        #define CHANNEL_MAP    (1 << 8)
+        #define CHANNEL_MAP    (1 << 2)
+    /* Range for default configuration: 1 to 10
+    Note: TX Power and PHY Mode Setting needs to be modified as per the 
+    recommendation from Data Sheet for European band (ie.,Channel 0)*/
     #else
         #define CHANNEL_MAP    (1 << 25)
+    /* Range: 11 to 26 */
     #endif
-
-    /* Security to be Used for network Operation or not */
-    //#define MESH_SECURITY
 
     #ifdef MESH_SECURITY
     /* Security Level Used for transmission of frames..Configurable */
@@ -80,10 +76,10 @@
 	#define KEEP_ALIVE_RXONENDDEVICE_TIMEOUT_IN_SEC    KEEP_ALIVE_RXONENDDEVICE_SEND_INTERVAL * 10
 
     /* The Periodic Polling data request interval for sleeping end devices - Configurable  */
-    #define DATA_REQUEST_SEND_INTERVAL       10
+    #define DATA_REQUEST_SEND_INTERVAL       3
 
     /* End Device Key Alive Timeout - Configurable */
-    #define RXOFF_DEVICE_TIMEOUT_IN_SEC      DATA_REQUEST_SEND_INTERVAL * 5
+    #define RXOFF_DEVICE_TIMEOUT_IN_SEC      DATA_REQUEST_SEND_INTERVAL * 20
 
 
 	#define MAX_NUMBER_OF_DEVICES_IN_NETWORK     32
@@ -127,7 +123,7 @@
     #define INDIRECT_DATA_WAIT_INTERVAL 25
 
     /* The Max number of failures to reach the parent before raising failure callback  - Configurable  */
-    #define ED_LINK_FAILURE_ATTEMPTS    5
+    #define ED_LINK_FAILURE_ATTEMPTS    15
 
     /* The time to wait for acknowledgment before next retry of the packet  - Configurable  */
     #define FRAME_ACK_WAIT_INTERVAL     5

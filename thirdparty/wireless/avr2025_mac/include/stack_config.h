@@ -32,7 +32,7 @@
  */
 
 /*
- * Copyright (c) 2013-2018, Atmel Corporation All rights reserved.
+ * Copyright (c) 2013-2018, Microchip Technology Inc All rights reserved.
  *
  * Licensed under Atmel's Limited License Agreement --> EULA.txt
  */

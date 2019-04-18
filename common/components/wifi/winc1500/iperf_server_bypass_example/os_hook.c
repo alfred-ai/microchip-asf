@@ -100,7 +100,7 @@ static void os_hif_task(void *pv)
 			
 			/* Error. */
 			else {
-				osprintf("Warning: Wrong id  msg id %d \r\n", msg.id);
+				osprintf("Warning: Wrong id  msg id %ld \r\n", msg.id);
 			}
 		}
 	}

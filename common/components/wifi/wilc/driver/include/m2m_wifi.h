@@ -1,6 +1,6 @@
 /** \defgroup m2m_wifi WLAN
  *
- * \brief NMC1500 IoT Application Interface.
+ * \brief WILC IoT Application Interface.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *

@@ -81,6 +81,9 @@ INC_PATH = \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/gain_builder/gain_sheets \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_builder \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_builder/debug \
+       common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_cloner \
+       common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_cloner/debug_i2c \
+       common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_cloner/debug_uart \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_downloader \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_downloader/debug_i2c \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/image_downloader/debug_uart \
@@ -93,12 +96,16 @@ INC_PATH = \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/tls_cert_flash_tool/Debug_I2C \
        common/components/wifi/winc1500/firmware_update_project/firmware/Tools/tls_cert_flash_tool/Debug_UART \
        common/components/wifi/winc1500/firmware_update_project/firmware/ate_firmware \
+       common/components/wifi/winc1500/firmware_update_project/firmware/boot_firmware \
+       common/components/wifi/winc1500/firmware_update_project/firmware/boot_firmware/release3A0 \
+       common/components/wifi/winc1500/firmware_update_project/firmware/downloader_firmware \
+       common/components/wifi/winc1500/firmware_update_project/firmware/downloader_firmware/release3A0 \
        common/components/wifi/winc1500/firmware_update_project/firmware/firmware \
        common/components/wifi/winc1500/firmware_update_project/firmware/firmware/wifi_v111 \
        common/components/wifi/winc1500/firmware_update_project/firmware/firmware/wifi_v111/ASIC_3A0 \
        common/components/wifi/winc1500/firmware_update_project/firmware/ota_firmware \
        common/components/wifi/winc1500/firmware_update_project/firmware/programmer_firmware \
-       common/components/wifi/winc1500/firmware_update_project/firmware/programmer_firmware/release \
+       common/components/wifi/winc1500/firmware_update_project/firmware/programmer_firmware/release3A0 \
        common/components/wifi/winc1500/firmware_update_project/firmware/provisioning_webpage \
        common/components/wifi/winc1500/firmware_update_project/firmware/tls_cert_store \
        common/components/wifi/winc1500/firmware_update_project/firmware/tls_cert_store/CA \

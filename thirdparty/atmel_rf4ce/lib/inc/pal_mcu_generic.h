@@ -7,7 +7,7 @@
  *
  * $Id: pal_mcu_generic.h 22792 2010-08-09 06:22:00Z uwalter $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

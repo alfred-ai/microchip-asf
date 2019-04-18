@@ -5,7 +5,7 @@
  *
  * $Id: atmega128rfa1.h 27079 2011-06-08 05:44:08Z pawan.jadia $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

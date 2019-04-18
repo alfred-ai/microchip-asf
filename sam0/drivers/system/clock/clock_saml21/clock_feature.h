@@ -1416,7 +1416,7 @@ static inline void system_flash_set_waitstates(uint8_t wait_states)
  *
  * \section asfdoc_sam0_system_clock_extra_errata Errata
  *
- *	- This driver implements experimental workaround for errata 9905
+ *	- This driver implements workaround for errata 9905
  *
  *	  "The DFLL clock must be requested before being configured. Otherwise a
  *	  write access to a DFLL register can freeze the device."

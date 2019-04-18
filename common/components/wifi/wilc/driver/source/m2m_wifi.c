@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains M2M Wi-Fi APIs implementation.
+ * \brief This module contains WILC M2M Wi-Fi APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -325,11 +325,15 @@ sint8 m2m_wifi_disconnect(void)
 
 /*!
 @fn			NMI_API sint8 m2m_wifi_set_tx_power(uint8 u8TxPwrLevel);
-@brief		set the TX power tenuM2mTxPwrLevel
+@brief		set the TX power
 @param [in]	u8TxPwrLevel
-			change the TX power tenuM2mTxPwrLevel
+			TX power ppa to one of these values:
+			0dBm, 3dBm, 6dBm, 9dBm, 12dBm, 15dBm, 18dBm.
+			Other values between these steps will be floored to the nearest 
+			supported level. A maximum level might be enforced by the firmware 
+			to comply to RF regulations
 @return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
-@sa			tenuM2mTxPwrLevel
+@sa			
 @pre		m2m_wifi_init
 @warning	
 */
@@ -949,7 +953,7 @@ sint8 m2m_wifi_download_cert(uint8* pCertData,uint32 u32CertSize)
 
 		u32CertChunkSize =  (u32OrigCertSize&0xffff)|(u32ChunkSize<<16);
 		m2m_memcpy((uint8 *)pChunk, &pCertData[u32OrigCertSize-u32CertSize], u32ChunkSize);
-		s8Ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_CERT_ADD_CHUNK, (uint8*)u32CertChunkSize, sizeof(u32CertSize),
+		s8Ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_CERT_ADD_CHUNK, (uint8*)&u32CertChunkSize, sizeof(u32CertSize),
 				(uint8 *)pChunk, u32ChunkSize,sizeof(u32CertSize));
 		u32CertSize -= u32ChunkSize;
 	}

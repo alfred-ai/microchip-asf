@@ -7,7 +7,7 @@
  *
  * $Id: return_val.h 26685 2011-05-16 11:38:33Z sschneid $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

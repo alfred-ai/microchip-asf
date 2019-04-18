@@ -183,7 +183,7 @@ void winc_netif_rx_callback(uint8 msg_type, void * msg, void *ctrl_buf)
 
 	if (msg_type == M2M_WIFI_RESP_ETHERNET_RX_PACKET) {
 		sz = ctrl->u16DataSize;
-		rem = ctrl->u16RemainigDataSize;
+		rem = ctrl->u16RemainingDataSize;
 		if (!rx_first) {
 			rx_first = rx_last = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_POOL);
 			if (rx_first == NULL) {

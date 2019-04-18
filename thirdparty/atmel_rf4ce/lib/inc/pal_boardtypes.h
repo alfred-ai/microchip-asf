@@ -7,7 +7,7 @@
  *
  * $Id: pal_boardtypes.h 24949 2011-01-18 07:21:56Z pawan.jadia $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*
@@ -76,7 +76,7 @@
 
 /*
  * ATmega128RFA1-EK1 Evaluation Kit
- * http://www.atmel.com/dyn/products/tools_card_mcu.asp?tool_id=4677
+ * http://www.microchip.com/dyn/products/tools_card_mcu.asp?tool_id=4677
  */
 #define EK1                     (0x11)
 

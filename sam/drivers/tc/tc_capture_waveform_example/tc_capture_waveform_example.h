@@ -51,7 +51,7 @@
  *
  * This package can be used with SAM4 evaluation kits such as the SAM4L EK,
  * the SAM4L Xplained Pro, and other evaluation kits. Refer to the list of
- * kits available for the actual device on http://www.atmel.com.
+ * kits available for the actual device on http://www.microchip.com.
  *
  * It generates a waveform on the Timer Counter pin PIN_TC_WAVEFORM,
  * and it captures a waveform from pin PIN_TC_CAPTURE. Refer to the

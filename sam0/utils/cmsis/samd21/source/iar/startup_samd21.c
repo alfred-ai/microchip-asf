@@ -99,6 +99,9 @@ void Dummy_Handler(void);
 #ifdef       ID_AC1
 #pragma weak AC1_Handler              = Dummy_Handler
 #endif
+#ifdef       ID_TCC3
+#pragma weak TCC3_Handler              = Dummy_Handler
+#endif
 
 /* Exception Table */
 #pragma language = extended
@@ -198,9 +201,12 @@ const DeviceVectors __vector_table[] = {
         (void*) (0UL),                  /* 27 Reserved */
 #endif
 #ifdef ID_AC1
-        (void*) AC1_Handler             /* 28 Analog Comparators 1 */
+        (void*) AC1_Handler,            /* 28 Analog Comparators 1 */
 #else
-        (void*) (0UL)                   /* 28 Reserved */
+        (void*) (0UL),                  /* 28 Reserved */
+#endif
+#ifdef ID_TCC3
+        (void*) TCC3_Handler            /* 29 Timer Counter Control 3 */
 #endif
 };
 

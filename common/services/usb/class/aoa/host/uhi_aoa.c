@@ -139,7 +139,7 @@ static struct uhi_aoa_dev_t uhi_aoa_dev = {
 #   warning Using the default Version value meant for the EVK1105
 #endif
 #ifndef AOA_STRING_URL
-#   define AOA_STRING_URL          "http://www.atmel.com/applications/homeentertainment/mobile_accessories/default.aspx"
+#   define AOA_STRING_URL          "http://www.microchip.com/design-centers/smartphone-accessory"
 #   warning Using the default URL value meant for the EVK1105
 #endif
 #ifndef AOA_STRING_SERIAL

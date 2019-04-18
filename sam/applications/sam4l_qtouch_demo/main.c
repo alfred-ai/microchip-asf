@@ -72,7 +72,7 @@
  *
  * - Build the program and download it to the evaluation board. Please
  *  refer to the SAM4L main page documentation
- *  http://www.atmel.com/tools/SAM4L-EK.aspx
+ *  http://www.microchip.com/developmenttools/productdetails/partno/atsam4l-ek
  * - Start the application.
  * - The message "SAM4L-EK DEMO" is scrolling on SAM4L-EK on-board LCD segment.
  * - Play with QTouch and push button.

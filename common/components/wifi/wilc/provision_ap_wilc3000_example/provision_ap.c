@@ -92,6 +92,8 @@ static uint8_t packetCnt = 0;
 /** tcp MAX packet count */
 #define MAIN_WIFI_M2M_PACKET_COUNT         10
 
+tstrM2mWifiWepParams  gstrAPWepParam = WEP_CONN_PARAM;
+
 //////////////////////////////////////////////////
 /** Receive buffer definition. */
 //static uint8_t gau8SocketTestBuffer[MAIN_WIFI_M2M_BUFFER_SIZE];
@@ -235,8 +237,14 @@ void provision_ap_task(void *v)
 		memset(&strM2MAPConfig, 0x00, sizeof(strM2MAPConfig));
 		strcpy((char *)&strM2MAPConfig.au8SSID, MAIN_WLAN_SSID);
 		strM2MAPConfig.u8ListenChannel = MAIN_WLAN_CHANNEL;
+		strM2MAPConfig.u16BeaconInterval = 0;
 		strM2MAPConfig.u8SecType = MAIN_WLAN_AUTH;
 		
+		if (strM2MAPConfig.u8SecType == M2M_WIFI_SEC_WEP) {
+			strM2MAPConfig.uniAuth.strWepInfo = gstrAPWepParam;
+			} else {
+			strcpy((char *)strM2MAPConfig.uniAuth.au8PSK, MAIN_WLAN_PSK);
+		}
 		ret = os_m2m_wifi_enable_ap(&strM2MAPConfig);
 		if (M2M_SUCCESS != ret) {
 			printf("main: m2m_wifi_enable_ap call error!\r\n");
@@ -303,6 +311,8 @@ void provision_ap_task(void *v)
 			if (p != NULL && !strncmp(p, "apply", 5)) {
 				char str_ssid[M2M_MAX_SSID_LEN], str_pw[M2M_MAX_PSK_LEN];
 				uint8 sec_type = 0;
+				uint8 wep_index = 1;
+				uint8 wep_type = 3;
 
 				p = strtok(NULL, ",");
 				if (p) {
@@ -317,7 +327,7 @@ void provision_ap_task(void *v)
 					sec_type = atoi(p);
 				}
 
-				osprintf("main : SSID : %d!\r\n",sec_type);
+				osprintf("main : Security type : %s!\r\n",sec_type == 1?"OPEN":(sec_type == 2?"WPA":(sec_type == 3?"WEP":"Invalid Security type")));
 				
 				p = strtok(NULL, ",");
 				if (p) {
@@ -327,13 +337,40 @@ void provision_ap_task(void *v)
 
 				osprintf("main : PSW : %s   %d!\r\n",(char *) str_pw,strlen((char *)str_pw));
 
-				osprintf("Disable to AP.\r\n");
+				p = strtok(NULL, ",");
+				if (p) {
+					wep_index = atoi(p);
+					osprintf("main : WEP Key index : %d!\r\n",wep_index);
+					
+					p = strtok(NULL, ",");
+					if (p) {
+						wep_type = atoi(p);
+						osprintf("main : WEP Key Type : %d!\r\n",wep_type);
+					}
+				}
+				
+				osprintf("Disable AP.\r\n");
 				os_m2m_wifi_disable_ap();
 				vTaskDelay(500);  //				nm_bsp_sleep(500);
 				osprintf("Connecting to %s.\r\n", (char *)str_ssid);
 				osprintf("main : ssid Length : %d!\r\n",strlen((char *)str_ssid));
-				os_m2m_wifi_connect((char *)str_ssid, strlen((char *)str_ssid)+1, sec_type, (void *)str_pw, M2M_WIFI_CH_ALL);
 				
+				if(sec_type == M2M_WIFI_SEC_WEP) {
+					osprintf("Applying WEP security parameters\r\n");
+					
+					tstrM2mWifiWepParams wepParams;
+					memset(&wepParams, 0, sizeof(wepParams));
+					wepParams.u8KeyIndx=wep_index;
+					wepParams.u8KeySz=strlen((const char *)str_pw) + 1;
+					memcpy(wepParams.au8WepKey,str_pw,strlen((const char *)str_pw));
+					wepParams.u8WepAuthType = wep_type;
+					
+					os_m2m_wifi_connect((char *)str_ssid, strlen((char *)str_ssid), sec_type, &wepParams, M2M_WIFI_CH_ALL);
+				}
+				else
+				{
+					os_m2m_wifi_connect((char *)str_ssid, strlen((char *)str_ssid)+1, sec_type, (void *)str_pw, M2M_WIFI_CH_ALL);	
+				}
 				osprintf("main : number of received packets from TCP Client : %d !\r\n",recv_chk);
 			}
 		}

@@ -69,6 +69,19 @@ STA and AP interfaces.*/
 
 void sta_task(void *argument);
 
+
+/***************** Application types *******************/
+#define AP_STA_CONCURRENCY  
+/* AP and STA Concurrency - standard default configuration */
+
+//#define P2P_AP_CONCURRENCY
+//#define P2P_STA_CONCURRENCY
+//#define STA_ONLY
+//#define AP_ONLY
+//#define P2P_ONLY
+
+/*********************************************************/
+
 #ifdef __cplusplus
 }
 #endif

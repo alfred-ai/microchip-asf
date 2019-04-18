@@ -583,7 +583,7 @@ void usb_init(void)
  * \note On the Atmel boards, the switch of USB role is managed automatically by the
  * USB stack thank to a USB On-The-Go (OTG) connector and its USB ID pin.
  * Refer to section "Dual roles" for further information in the application note:
- * - <a href="http://www.atmel.com/images/doc8486.pdf">
+ * - <a href="http://ww1.microchip.com/downloads/en/AppNotes/doc8486.pdf">
  *   Atmel AVR4950: ASF - USB Host Stack</a>
  *
  * \section uhc_use_case_3_setup Setup Steps

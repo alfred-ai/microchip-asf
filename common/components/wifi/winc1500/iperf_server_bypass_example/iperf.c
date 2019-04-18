@@ -74,7 +74,7 @@ static ip_addr_t udp_client_ip;
 static uint32_t udp_client_port;
 static uint32_t test_time;
 static uint32_t test_tx;
-
+tstrWifiInitParam wifiInitparam;
 /** Number of STA connected. */
 uint32_t sta_connected = 0;
 
@@ -154,7 +154,7 @@ static void iperf_udp_recv(struct netconn *conn)
 				addr = netbuf_fromaddr(nbuf);
 				udp_client_port = netbuf_fromport(nbuf);
 				udp_client_ip = *addr;
-				osprintf("[  1] local 127.0.0.1 port 5001 connected with %lu.%lu.%lu.%lu port %d\n",
+				osprintf("[  1] local 127.0.0.1 port 5001 connected with %u.%u.%u.%u port %ld\n",
 						(addr->addr & 0xFF), (addr->addr & 0xFF00) >> 8,
 						(addr->addr & 0xFF0000) >> 16, (addr->addr & 0xFF000000) >> 24,
 						udp_client_port);
@@ -236,12 +236,12 @@ static void iperf_udp_send(struct netconn *conn)
 	/* Is -r option enabled? */
 	if (test_tx) {
 		osprintf("------------------------------------------------------------\r\n");
-		osprintf("Client connecting to %lu.%lu.%lu.%lu, UDP port 5001\r\n",
+		osprintf("Client connecting to %u.%u.%u.%u, UDP port 5001\r\n",
 				(udp_client_ip.addr & 0xFF), (udp_client_ip.addr & 0xFF00) >> 8,
 				(udp_client_ip.addr & 0xFF0000) >> 16, (udp_client_ip.addr & 0xFF000000) >> 24);
 		osprintf("Sending %d byte datagrams\r\n", IPERF_WIFI_UDP_BUFFER_SIZE);
 		osprintf("------------------------------------------------------------\r\n");
-		osprintf("[  1] local 127.0.0.1 port ??? connected with %lu.%lu.%lu.%lu port 5001\n",
+		osprintf("[  1] local 127.0.0.1 port ??? connected with %u.%u.%u.%u port 5001\n",
 				(udp_client_ip.addr & 0xFF), (udp_client_ip.addr & 0xFF00) >> 8,
 				(udp_client_ip.addr & 0xFF0000) >> 16, (udp_client_ip.addr & 0xFF000000) >> 24);
 				
@@ -426,10 +426,9 @@ void iperf_tcp_task(void *v)
 	net_init();
 	
 	/* Initialize the WINC15X0 driver. */
-	tstrWifiInitParam param;
-	memset(&param, 0, sizeof(param));
-	param.pfAppWifiCb = wifi_cb;
-	os_m2m_wifi_init(&param);
+	memset(&wifiInitparam, 0, sizeof(wifiInitparam));
+	wifiInitparam.pfAppWifiCb = wifi_cb;
+	os_m2m_wifi_init(&wifiInitparam);
 
 	os_m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID),
 				MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);

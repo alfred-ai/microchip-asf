@@ -42,7 +42,7 @@
 
     #if defined(PROTOCOL_P2P)
 
-        #include "symbol.h"
+        #include "sysTimer.h"
     
         /*********************************************************************/
         // ENABLE_DUMP will enable the stack to be able to print out the 

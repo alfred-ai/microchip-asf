@@ -47,7 +47,7 @@
  * AT86RF231 radio transceiver.
  * \a Refer <A
  *
- *href="http://www.atmel.com/Images/Atmel-8393-MCU_Wireless-ATmega256RFR2-ATmega128RFR2-ATmega64RFR2_Datasheet.pdf">ATMEGARFR2
+ *href="http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-8393-MCU_Wireless-ATmega256RFR2-ATmega128RFR2-ATmega64RFR2_Datasheet.pdf">ATMEGARFR2
  * Data Sheet </A> \b for \b detailed \b information .
  * @{
  */

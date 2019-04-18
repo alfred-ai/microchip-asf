@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 bus wrapper APIs implementation.
+ * \brief This module contains WILC bus wrapper APIs implementation.
  *
  * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
  *

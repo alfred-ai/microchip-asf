@@ -152,6 +152,11 @@ void PHY_SetChannel(uint8_t channel)
 {
 	uint8_t reg;
 
+	if (PHY_STATE_SLEEP == phyState)
+	{
+		PHY_Wakeup();
+	}
+
 	reg = phyReadRegister(PHY_CC_CCA_REG) & ~0x1f;
 	phyWriteRegister(PHY_CC_CCA_REG, reg | channel);
 }
@@ -193,9 +198,12 @@ void PHY_SetTxPower(uint8_t txPower)
 // Radio Sleep
 void PHY_Sleep(void)
 {
-	phyTrxSetState(TRX_CMD_TRX_OFF);
-	TRX_SLP_TR_HIGH();
-	phyState = PHY_STATE_SLEEP;
+	if (PHY_STATE_SLEEP != phyState)
+	{
+		phyTrxSetState(TRX_CMD_TRX_OFF);
+		TRX_SLP_TR_HIGH();
+		phyState = PHY_STATE_SLEEP;	
+	}
 }
 
 /*************************************************************************//**
@@ -203,9 +211,12 @@ void PHY_Sleep(void)
 // Radio Wake Up
 void PHY_Wakeup(void)
 {
-	TRX_SLP_TR_LOW();
-	phySetRxState();
-	phyState = PHY_STATE_IDLE;
+	if (PHY_STATE_SLEEP == phyState)
+	{
+		TRX_SLP_TR_LOW();
+	 	phySetRxState();
+	 	phyState = PHY_STATE_IDLE;
+	}
 }
 
 /*************************************************************************//**
@@ -322,6 +333,10 @@ static void phySetRxState(void)
 *****************************************************************************/
 static void phyTrxSetState(uint8_t state)
 {
+    if (PHY_STATE_SLEEP == phyState)
+	{
+		TRX_SLP_TR_LOW();
+	}
 	do { phyWriteRegister(TRX_STATE_REG, TRX_CMD_FORCE_TRX_OFF);
 	} while (TRX_STATUS_TRX_OFF !=
 			(phyReadRegister(TRX_STATUS_REG) & TRX_STATUS_MASK));

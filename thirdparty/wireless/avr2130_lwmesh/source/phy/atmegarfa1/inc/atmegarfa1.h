@@ -45,7 +45,7 @@
  * 2.4 GHz
  *  ISM band. It is derived from the ATmega1281 microcontroller and the
  * AT86RF231 radio transceiver.
- * \a Refer <A href="http://www.atmel.com/Images/doc8266.pdf">ATMEGARFA1 Data
+ * \a Refer <A href="http://www.microchip.com/Images/doc8266.pdf">ATMEGARFA1 Data
  * Sheet </A> \b for \b detailed \b information .
  * @{
  */

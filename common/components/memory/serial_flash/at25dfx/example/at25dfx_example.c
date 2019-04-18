@@ -59,9 +59,9 @@
  *
  * -# Build the program and download it into the evaluation board. Please
  *    refer to the
- *    <a href="http://www.atmel.com/dyn/resources/prod_documents/doc6224.pdf">
+ *    <a href="http://www.microchip.com/dyn/resources/prod_documents/doc6224.pdf">
  *    SAM-BA User Guide</a>, the
- *    <a href="http://www.atmel.com/dyn/resources/prod_documents/doc6310.pdf">
+ *    <a href="http://ww1.microchip.com/downloads/en/appnotes/doc6310.pdf">
  *    GNU-Based Software Development</a> application note or the
  *    <a href="ftp://ftp.iar.se/WWWfiles/arm/Guides/EWARM_UserGuide.ENU.pdf">
  *    IAR EWARM User Guide</a>, depending on the solutions that users choose.

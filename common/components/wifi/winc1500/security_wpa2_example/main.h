@@ -39,9 +39,9 @@ extern "C" {
 #endif
 
 /** security information for Wi-Fi connection */
-#define MAIN_WLAN_DEVICE_NAME           "DEMO_AP" /**< Destination SSID */
-#define MAIN_WLAN_802_1X_USR_NAME       "atmeluser" /**< RADIUS user account name */
-#define MAIN_WLAN_802_1X_PWD            "12345678" /**< RADIUS user account password */
+#define MAIN_WLAN_DEVICE_NAME           "WINC1500_ENTERPRISE" /**< Destination SSID */
+#define MAIN_WLAN_802_1X_USR_NAME       "DEMO_USER" /**< RADIUS user account name */
+#define MAIN_WLAN_802_1X_PWD            "DemoPassword" /**< RADIUS user account password */
 
 #ifdef __cplusplus
 }

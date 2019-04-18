@@ -33,6 +33,7 @@
  */
 #ifndef NET_INIT_H_INCLUDED
 #define NET_INIT_H_INCLUDED
+#include "lwip/ip_addr.h"
 
 #define NET_IF_STA				0x1
 #define NET_IF_C				0x2
@@ -44,6 +45,8 @@
 #define NET_MODE_USE_DHCP_SVR	0x10
 
 #define NET_IF_REQ_DHCP_CONF (M2M_P2P_CMD_BASE + 100)
+
+uint8_t								use_static_IP;
 
 typedef struct {
 	uint8_t	*u8StaticIP;
@@ -62,5 +65,6 @@ void net_interface_down(uint32_t net_if);
 void net_add_wilc_netif(void);
 void net_remove_wilc_netif(void);
 int net_in_tcpip_task(void);
+int8_t net_set_interface_address(uint32_t net_if,ip_addr_t *ip_addr,ip_addr_t *ip_net_mask,ip_addr_t *ip_gw_addr);
 
 #endif /* NET_INIT_H_INCLUDED */

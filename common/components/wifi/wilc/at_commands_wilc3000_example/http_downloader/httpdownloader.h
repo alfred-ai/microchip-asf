@@ -39,7 +39,7 @@ extern "C" {
 #endif
 
 /** Content URI for download. */
-//#define MAIN_HTTP_FILE_URL					 "http://www.atmel.com/images/doc7529.pdf"
+//#define MAIN_HTTP_FILE_URL					 "http://www.microchip.com/images/doc7529.pdf"
 
 /** Maximum size for packet buffer. */
 #define MAIN_BUFFER_MAX_SIZE				 (1446)

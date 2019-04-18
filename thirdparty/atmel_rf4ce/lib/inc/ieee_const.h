@@ -5,7 +5,7 @@
  *
  * $Id: ieee_const.h 26610 2011-05-11 08:47:45Z sschneid $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*

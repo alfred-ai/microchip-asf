@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-* Atmel Corporation
+* Microchip Technology Inc
 *
 * File              : twi_master.c
 * Compiler          : IAR EWAAVR 2.28a/3.10c

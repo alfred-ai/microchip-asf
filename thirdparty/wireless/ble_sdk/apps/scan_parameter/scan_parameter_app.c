@@ -140,19 +140,19 @@
  * \section BluSDK Package
  * ***************************** BluSDK Package *****************************************
  * - BluSDK -
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=documents
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000?tab=documents
  * - ATBTLC1000 - 
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx 
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000 
  * - Developement kit -
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=tools
+ *		+ http://www.microchip.com/wwwproducts/en/ATBTLC1000?tab=tools
  *		+ SAM L21 + BTLC1000 XPro -
- *			+ http://www.atmel.com/tools/ATBTLC1000-XSTK.aspx
+ *			+ http://www.microchip.com/developmenttools/productdetails/atbtlc1000-xstk
  *		+ BTLC1000 XPro -
- *				+ http://www.atmel.com/tools/ATBTLC1000-XPRO.aspx
+ *				+ http://www.microchip.com/developmenttools/productdetails/atbtlc1000-xpro
  * - Applications - 
- *		+ http://www.atmel.com/devices/ATBTLC1000.aspx?tab=applications
- * - Support and FAQ: visit -
- *      + <a href="https://www.microchip.com/support/">Microchip Support</a>
+ *		+ http://www.microchip.com/devices/ATBTLC1000.aspx?tab=applications
+ * - Support and FAQ visit - 
+ *		+ <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 /****************************************************************************************
 *							        Includes	                                     	*

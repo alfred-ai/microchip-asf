@@ -48,7 +48,7 @@
 #include "mimac_at86rf.h"
 
 #if defined(ENABLE_NETWORK_FREEZER)
-#include "miwi_nvm.h"
+#include "pdsDataServer.h"
 #endif
 
 #ifdef ENABLE_SECURITY
@@ -389,7 +389,7 @@ API_UINT32_UNION FrameCounter, uint8_t FrameControl)
 
 }
 #endif
-#if defined ENABLE_SLEEP
+
 /************************************************************************************
  * Function:
  *      bool MiMAC_PowerState(uint8_t PowerState)
@@ -453,7 +453,6 @@ bool MiMAC_PowerState(INPUT uint8_t PowerState)
     }
     return true;
 }
-#endif
 
 /************************************************************************************
      * Function:
@@ -556,8 +555,6 @@ bool MiMAC_Init(MACINIT_PARAM initValue)
 	PHY_SetRxState(true);
 	IEEESeqNum =   x & 0xff;
 
-	MACCurrentChannel = 11;
-
 	// Set Node Address
 	PHY_SetIEEEAddr(MACInitParams.PAddress);
 
@@ -569,13 +566,13 @@ bool MiMAC_Init(MACINIT_PARAM initValue)
 		#if defined(ENABLE_NETWORK_FREEZER)
 			if (initValue.actionFlags.bits.NetworkFreezer)
 			{
-				nvmGetOutFrameCounter(OutgoingFrameCounter.v);
+				PDS_Restore(PDS_OUTGOING_FRAME_COUNTER_ID);
 				OutgoingFrameCounter.Val += FRAME_COUNTER_UPDATE_INTERVAL;
-				nvmPutOutFrameCounter(OutgoingFrameCounter.v);
+				PDS_Store(PDS_OUTGOING_FRAME_COUNTER_ID);
 			} else
 			{
 				OutgoingFrameCounter.Val = 0;
-				nvmPutOutFrameCounter(OutgoingFrameCounter.v);
+				PDS_Store(PDS_OUTGOING_FRAME_COUNTER_ID);
 				OutgoingFrameCounter.Val = 1;
 			}
 		#else
@@ -819,7 +816,7 @@ if (transParam.flags.bits.secEn)
 	#if defined(ENABLE_NETWORK_FREEZER)
 	if ((OutgoingFrameCounter.v[0] == 0) && ((OutgoingFrameCounter.v[1] & 0x03) == 0))
 	{
-		nvmPutOutFrameCounter(OutgoingFrameCounter.v);
+		PDS_Store(PDS_OUTGOING_FRAME_COUNTER_ID);
 	}
 	#endif
 	//copy myKeySequenceNumber

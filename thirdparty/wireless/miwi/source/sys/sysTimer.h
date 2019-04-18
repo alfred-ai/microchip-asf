@@ -1,5 +1,5 @@
 /**
-* \file  sysTimer.c
+* \file  sysTimer.h
 *
 * \brief System timer interface
 *
@@ -39,13 +39,40 @@
 #include <stdbool.h>
 
 /**
- * \ingroup group_lwmesh_sys
- * \defgroup group_lwmesh_sys_timer LWMesh System Services - Timer
+ * \ingroup group_miwi_sys
+ * \defgroup group_miwi_sys_timer MiWi System Services - Timer
  * @{
  */
 
- #define SYS_TIMER_INTERVAL      10ul /* ms */
- #define MS 1000
+#define SYS_TIMER_INTERVAL      10ul /* ms */
+#define MS 1000
+
+#define ONE_SECOND              ((uint32_t)1000000)
+
+#define ONE_MICRO_SECOND    (ONE_SECOND/1000000)
+#define ONE_MILI_SECOND     (ONE_SECOND/1000)
+#define HUNDRED_MILI_SECOND (ONE_SECOND/10)
+#define FORTY_MILI_SECOND   (ONE_SECOND/25)
+#define FIFTY_MILI_SECOND   (ONE_SECOND/20)
+#define TWENTY_MILI_SECOND  (ONE_SECOND/50)
+#define TEN_MILI_SECOND     (ONE_SECOND/100)
+#define FIVE_MILI_SECOND    (ONE_SECOND/200)
+#define TWO_MILI_SECOND     (ONE_SECOND/500)
+#define ONE_MINUTE          (ONE_SECOND*60)
+#define ONE_HOUR            (ONE_MINUTE*60)
+
+
+
+#if defined(PROTOCOL_STAR)
+
+#define SHARE_PEER_DEVICE_INFO_TIMEOUT      ONE_SECOND*15
+#define LINK_STATUS_TIMEOUT                 ONE_SECOND*15
+#define SW_ACK_TIMEOUT                      HUNDRED_MILI_SECOND*2
+// every 10 minutes the stack will evaluate the inactive end nodes
+#define FIND_INACTIVE_DEVICE_TIMEOUT        ONE_MINUTE*10
+#define END_DEVICES_DISPLAY_TIMEOUT         ONE_SECOND*15
+
+#endif
 
 /*- Types ------------------------------------------------------------------*/
 typedef enum SYS_TimerMode_t {
@@ -64,13 +91,34 @@ typedef struct SYS_Timer_t {
 	void (*handler)(struct SYS_Timer_t *timer);
 } SYS_Timer_t;
 
+typedef union _MIWI_TICK
+{
+    uint32_t Val;
+    struct _MIWI_TICK_bytes
+    {
+        uint8_t b0;
+        uint8_t b1;
+        uint8_t b2;
+        uint8_t b3;
+    } byte;
+    uint8_t v[4];
+    struct _MIWI_TICK_words
+    {
+        uint16_t w0;
+        uint16_t w1;
+    } word;
+} MIWI_TICK;
+
 /*- Prototypes -------------------------------------------------------------*/
 void SYS_TimerInit(void);
 void SYS_TimerStart(SYS_Timer_t *timer);
 void SYS_TimerStop(SYS_Timer_t *timer);
 bool SYS_TimerStarted(SYS_Timer_t *timer);
 void SYS_TimerTaskHandler(void);
-void SYS_HwExpiry_Cb(void);
+void SYS_TimerAdjust_SleptTime(uint32_t sleeptime);
+
+uint32_t MiWi_TickGet(void);
+uint32_t MiWi_TickGetDiff(MIWI_TICK current_tick, MIWI_TICK previous_tick);
 
 /** @} */
 #endif /* _SYS_TIMER_H_ */

@@ -48,17 +48,6 @@
 #define ENABLE_CONSOLE
 
 /*********************************************************************/
-// ENABLE_NETWORK_FREEZER enables the network freezer feature, which
-// stores critical network information into non-volatile memory, so
-// that the protocol stack can recover from power loss gracefully.
-// The network infor can be saved in data EPROM of MCU, external 
-// EEPROM or programming space, if enhanced flash is used in MCU.
-// Network freezer feature needs definition of NVM kind to be 
-// used, which is specified in HardwareProfile.h
-/*********************************************************************/
-//#define ENABLE_NETWORK_FREEZER
-
-/*********************************************************************/
 // FRAME_COUNTER_UPDATE_INTERVAL defines the NVM update interval for
 // frame counter, when security is enabled. The same interval will be
 // added to the frame counter read from NVM when Network Freezer
@@ -104,120 +93,21 @@
 /*********************************************************************/
 #define MY_PAN_ID                       0x1234
 
-
-/*********************************************************************/
-// ADDITIONAL_NODE_ID_SIZE defines the size of additional payload
-// will be attached to the P2P Connection Request. Additional payload 
-// is the information that the devices what to share with their peers
-// on the P2P connection. The additional payload will be defined by 
-// the application and defined in main.c
-/*********************************************************************/
-#define ADDITIONAL_NODE_ID_SIZE   1
-
-
-/*********************************************************************/
-// P2P_CONNECTION_SIZE defines the maximum P2P connections that this 
-// device allowes at the same time. 
-/*********************************************************************/
-#define CONNECTION_SIZE             20
-
-
-/*********************************************************************/
-// TARGET_SMALL will remove the support of inter PAN communication
-// and other minor features to save programming space
-/*********************************************************************/
-//#define TARGET_SMALL
-
-
-/*********************************************************************/
-// ENABLE_PA_LNA enable the external power amplifier and low noise
-// amplifier on the RF board to achieve longer radio communication 
-// range. To enable PA/LNA on RF board without power amplifier and
-// low noise amplifier may be harmful to the transceiver.
-/*********************************************************************/
-//#define ENABLE_PA_LNA
-
-
-/*********************************************************************/
-// ENABLE_HAND_SHAKE enables the protocol stack to hand-shake before 
-// communicating with each other. Without a handshake process, RF
-// transceivers can only broadcast, or hardcoded the destination address
-// to perform unicast.
-/*********************************************************************/
-#define ENABLE_HAND_SHAKE
-
-/*********************************************************************/
-// ENABLE_SLEEP will enable the device to go to sleep and wake up 
-// from the sleep
-/*********************************************************************/
-//#define ENABLE_SLEEP
-
-
 /*********************************************************************/
 // ENABLE_ED_SCAN will enable the device to do an energy detection scan
 // to find out the channel with least noise and operate on that channel
 /*********************************************************************/
 //#define ENABLE_ED_SCAN
 
-
-/*********************************************************************/
-// ENABLE_ACTIVE_SCAN will enable the device to do an active scan to 
-// to detect current existing connection. 
-/*********************************************************************/
-//#define ENABLE_ACTIVE_SCAN
-
-
-/*********************************************************************/
-// ENABLE_SECURITY will enable the device to encrypt and decrypt
-// information transferred
-/*********************************************************************/
-//#define ENABLE_SECURITY
-
-
-/*********************************************************************/
-// ENABLE_INDIRECT_MESSAGE will enable the device to store the packets
-// for the sleeping devices temporily until they wake up and ask for
-// the messages
-/*********************************************************************/
-//#define ENABLE_INDIRECT_MESSAGE
-
-
-/*********************************************************************/
-// ENABLE_BROADCAST will enable the device to broadcast messages for
-// the sleeping devices until they wake up and ask for the messages
-/*********************************************************************/
-//#define ENABLE_BROADCAST
-
-
-/*********************************************************************/
-// RFD_WAKEUP_INTERVAL defines the wake up interval for RFDs in second.
-// This definition is for the FFD devices to calculated various
-// timeout. RFD depends on the setting of the watchdog timer to wake 
-// up, thus this definition is not used.
-/*********************************************************************/
-#define RFD_WAKEUP_INTERVAL     8
-
-
-/*********************************************************************/
-// ENABLE_FREQUENCY_AGILITY will enable the device to change operating
-// channel to bypass the sudden change of noise
-/*********************************************************************/
-//#define ENABLE_FREQUENCY_AGILITY
-
-
 // Constants Validation
-#if !defined(PROTOCOL_P2P) && !defined(PROTOCOL_STAR) && !defined(PROTOCOL_MESH)
-    #error "One Microchip proprietary protocol must be defined for the wireless application."
+#if !defined(PROTOCOL_MESH)
+    #error "PROTOCOL_MESH Microchip proprietary protocol must be defined for this wireless application."
 #endif
 
 #if defined(PROTOCOL_MESH)
 #if !defined(PAN_COORDINATOR) && !defined(COORDINATOR) && !defined(ENDDEVICE)
 #error "One device type for MiWi Mesh need to be defined."
 #endif
-#endif
-
-#if defined(ENABLE_FREQUENCY_AGILITY)
-    #define ENABLE_ED_SCAN
 #endif
 
 #if MY_ADDRESS_LENGTH > 8
@@ -232,36 +122,20 @@
 #undef MY_ADDRESS_LENGTH
 #define MY_ADDRESS_LENGTH 8
 
-#if defined(ENABLE_NETWORK_FREEZER)
-    #define ENABLE_NVM
-#endif
-
-#if defined(ENABLE_ACTIVE_SCAN) && defined(TARGET_SMALL)
-    #error  Target_Small and Enable_Active_Scan cannot be defined together 
-#endif
-
-#if defined(ENABLE_INDIRECT_MESSAGE) && !defined(RFD_WAKEUP_INTERVAL)
-    #error "RFD Wakeup Interval must be defined if indirect message is enabled"
-#endif
-
 #if (RX_BUFFER_SIZE > 127)
-    #error RX BUFFER SIZE too large. Must be <= 127.
+#error RX BUFFER SIZE too large. Must be <= 127.
 #endif
 
 #if (TX_BUFFER_SIZE > 127)
-    #error TX BUFFER SIZE too large. Must be <= 127.
+#error TX BUFFER SIZE too large. Must be <= 127.
 #endif
 
 #if (RX_BUFFER_SIZE < 10)
-    #error RX BUFFER SIZE too small. Must be >= 10.
+#error RX BUFFER SIZE too small. Must be >= 10.
 #endif
 
 #if (TX_BUFFER_SIZE < 10)
-    #error TX BUFFER SIZE too small. Must be >= 10.
-#endif
-
-#if (CONNECTION_SIZE > 0xFE)
-    #error NETWORK TABLE SIZE too large.  Must be < 0xFF.
+#error TX BUFFER SIZE too small. Must be >= 10.
 #endif
 
 #endif

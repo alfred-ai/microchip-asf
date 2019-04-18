@@ -4,7 +4,7 @@
  * @brief This header file declares macros for various build configurations
  *
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 

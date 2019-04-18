@@ -39,9 +39,8 @@
     #define __CONFIGURE_P2P_H
     
     #include "miwi_config.h"
-    #include "symbol.h"
-	#include "lcd.h"
-    
+    #include "sysTimer.h"
+
         /*********************************************************************/
         // ENABLE_DUMP will enable the stack to be able to print out the 
         // content of the P2P connection entry. It is useful in the debugging

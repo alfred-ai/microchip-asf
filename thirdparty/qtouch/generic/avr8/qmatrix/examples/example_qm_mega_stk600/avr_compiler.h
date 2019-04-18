@@ -8,7 +8,7 @@
  *      settings and supported devices see readme.html
  *
  * \author
- *      Atmel Corporation: http://www.atmel.com \n
+ *      Microchip Technology Inc: http://www.microchip.com \n
  *      Support: https://www.microchip.com/support/
  *
  * $Revision: 613 $

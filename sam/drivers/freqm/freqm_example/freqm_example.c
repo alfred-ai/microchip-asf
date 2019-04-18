@@ -51,7 +51,7 @@
  *
  * - Build the program and download it to the evaluation board. Please
  *  refer to the SAM4L main page documentation
- *  http://www.atmel.com/products/microcontrollers/ARM/SAM4L.aspx
+ *  http://www.microchip.com/products/microcontrollers/ARM/SAM4L.aspx
  * -# On the computer, open and configure a terminal application
  *    (e.g., HyperTerminal on Microsoft Windows) with these settings:
  *   - 115200 bauds

@@ -292,12 +292,12 @@ int main(void)
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <a href="http://www.atmel.com">http://www.atmel.com</a>.
+ * <a href="http://www.microchip.com">http://www.microchip.com</a>.
  * Support and FAQ: visit
  * <a href="https://www.microchip.com/support/">Microchip Support</a>
  *
  * \author
- * Atmel Corporation : http://www.atmel.com \n
+ * Microchip Technology Inc : http://www.microchip.com \n
  */
  
  

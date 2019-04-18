@@ -158,7 +158,7 @@ static void zid_set_attribute_confirm(nwk_enum_t status, uint8_t PairingRef,
  *
  * \section contactinfo Contact Information
  * For further information,visit
- * <A href="http://www.atmel.com/avr">www.atmel.com</A>.\n
+ * <A href="http://www.microchip.com/design-centers/8-bit">www.microchip.com</A>.\n
  */
 
 /**

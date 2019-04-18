@@ -4,7 +4,7 @@
  *
  * $Id: mcu_types.h 20986 2010-03-19 17:40:19Z dthiele $
  *
- * @author    Atmel Corporation: http://www.atmel.com
+ * @author    Microchip Technology Inc: http://www.microchip.com
  * @author    Support: https://www.microchip.com/support/
  */
 /*
