@@ -45,4 +45,11 @@
 /** Enable SD MMC interface pins through HSMCI */
 #define CONF_BOARD_SD_MMC_HSMCI
 
+#define HSMCI_DEBUG
+#define SD_MMC_DEBUG
+
+#define CONF_BOARD_CONFIG_MPU_AT_INIT
+//#define CONF_BOARD_ENABLE_CACHE_AT_INIT
+
+//#define HSMCI_DMA_DMAEN
 #endif /* CONF_BOARD_H */

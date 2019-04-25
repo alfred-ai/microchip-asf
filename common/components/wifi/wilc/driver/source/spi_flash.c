@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief NMC1500 stack SPI Flash internal APIs implementation.
+ * \brief WILC stack SPI Flash internal APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -30,6 +30,9 @@
  *
  * \asf_license_stop
  *
+ */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 
 #include "common/include/nm_common.h"

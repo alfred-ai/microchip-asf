@@ -266,4 +266,17 @@ USART_HOST_ISR_VECT()
 	cpu_irq_enable();
 }
 
+void sio2host_disable(void)
+{
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
+	usart_disable(&host_uart_module);
+#endif
+}
+
+void sio2host_enable(void)
+{
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
+	usart_enable(&host_uart_module);
+#endif
+}
 /* EOF */

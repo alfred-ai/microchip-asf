@@ -43,8 +43,6 @@
 *****************************************************************************/
 #define APP_SENDING_INTERVAL    10000
 
-#define APP_SENDING_INTERVAL_IN_SIMULATION 60000
-
 #define APP_NWKSTATUS_INTERVAL  1000
 
 #define APP_RX_BUF_SIZE         20

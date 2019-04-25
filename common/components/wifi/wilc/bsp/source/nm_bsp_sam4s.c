@@ -52,20 +52,18 @@ static void chip_isr(uint32_t id, uint32_t mask)
 
 /*
  *	@fn		init_chip_pins
- *	@brief	Initialize reset, chip enable and wake pin
+ *	@brief	Initialize reset, chip enable
  */
 static void init_chip_pins(void)
 {
 #ifdef __SAM4SD32C__
 	pio_configure_pin(CONF_WILC_PIN_RESET, PIO_TYPE_PIO_OUTPUT_0|PIO_PULLUP);
 	pio_configure_pin(CONF_WILC_PIN_CHIP_ENABLE, PIO_TYPE_PIO_OUTPUT_0|PIO_PULLUP);
-	pio_configure_pin(CONF_WILC_PIN_WAKE, PIO_TYPE_PIO_OUTPUT_0|PIO_PULLUP);
 	pio_configure_pin(CONF_WILC_SPI_CS_GPIO, PIO_DEFAULT|PIO_PULLUP);
 	pio_set_pin_high(CONF_WILC_SPI_CS_GPIO);
 #else
 	pio_configure_pin(CONF_WILC_PIN_RESET, PIO_TYPE_PIO_OUTPUT_0);
 	pio_configure_pin(CONF_WILC_PIN_CHIP_ENABLE, PIO_TYPE_PIO_OUTPUT_0);
-	pio_configure_pin(CONF_WILC_PIN_WAKE, PIO_TYPE_PIO_OUTPUT_0);
 #endif
 }
 

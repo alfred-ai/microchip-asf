@@ -549,6 +549,25 @@ sint8 os_m2m_wifi_set_device_name(uint8* pu8DeviceName, uint8 u8DeviceNameLength
 	OS_WIFI_DISPATCH_WAIT(os_m2m_wifi_set_device_name_imp, &params);
 	return params.dispatch.retval;
 }
+struct wifi_set_pin_params {
+	struct params_dispatch dispatch;
+	uint8* pu8PinNumber;
+	uint8 u8PinLength;
+};
+static void os_m2m_wifi_set_p2p_pin_imp(void *pv)
+{
+	struct wifi_set_pin_params *p = (struct wifi_set_pin_params *) pv;
+	p->dispatch.retval = m2m_wifi_set_p2p_pin(p->pu8PinNumber, p->u8PinLength);
+	OS_WIFI_NOTIFY(p);
+}
+sint8 os_m2m_wifi_set_p2p_pin(uint8* pu8PinNumber, uint8 u8PinLength)
+{
+	struct wifi_set_pin_params params;
+	params.pu8PinNumber = pu8PinNumber;
+	params.u8PinLength = u8PinLength;
+	OS_WIFI_DISPATCH_WAIT(os_m2m_wifi_set_p2p_pin_imp, &params);
+	return params.dispatch.retval;
+}
 
 
 struct wifi_set_lsn_int_params {

@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #include "asf.h"
 #include "FreeRTOS.h"
@@ -44,8 +47,11 @@
 #include "os/include/m2m_wifi_ex.h"
 #include "tinyservices.h"
 #include "conf_wilc.h"
+
 #include <string.h>
 #include <stdio.h>
+#include <wchar.h>
+#include "utf8/utf8.h"
 
 /* preprocessor define error check */
 #if defined(AP_STA_CONCURRENCY)
@@ -71,6 +77,11 @@
 #elif !defined(P2P_ONLY)
 	#error "Error : define application type in sta.h"
 #endif
+/* Pointers to UTF-8 SSID and PSK */
+unsigned int *utf8_STA_mode_SSID = NULL, *utf8_STA_mode_PSK = NULL;
+
+/** Firmware start event */
+static xSemaphoreHandle firmware_start_sem = NULL;
 
 /** Using broadcast address for simplicity. */
 #define HTTP_PORT					(80)
@@ -118,6 +129,8 @@ tstrM2MAPAssocInfo strApAssocInfo;
 tstrM2mWifiWepParams  gstrSTAWepParam = WEP_CONN_PARAM;
 tstrM2mWifiWepParams  gstrAPWepParam = WEP_CONN_PARAM;
 
+
+
 /**
  * \brief Callback function of IP address.
  *
@@ -164,7 +177,13 @@ static void wifi_cb(uint8 msg_type, void *msg)
 							
 			if (ctx->u8IfcId == STATION_INTERFACE) {
 				if (ctx->u8CurrState == M2M_WIFI_CONNECTED) {
-					osprintf("wifi_cb: M2M_WIFI_CONNECTED\r\n");
+					vPortFree(utf8_STA_mode_SSID);
+					utf8_STA_mode_SSID = NULL;
+
+					if (utf8_STA_mode_PSK != NULL) {
+						vPortFree(utf8_STA_mode_PSK);
+						utf8_STA_mode_PSK = NULL;
+					}
 					net_interface_up(NET_IF_STA);
 					m2m_wifi_request_dhcp_client_ex();
 #ifdef P2P_STA_CONCURRENCY
@@ -181,15 +200,32 @@ static void wifi_cb(uint8 msg_type, void *msg)
 					osprintf("wifi_cb: M2M_WIFI_DISCONNECTED\r\n");
 					osprintf("wifi_cb: reconnecting...\r\n");
 					net_interface_down(NET_IF_STA);
+					/* Enable STA mode and connect to AP. */
+					utf8_STA_mode_SSID = u8_encode(STA_WLAN_SSID);
+					if (utf8_STA_mode_SSID == NULL) {
+						osprint("sta_task: STA mode utf8 SSID encode error! returning\r\n");
+						return;
+					}
 					
 #if defined(STA_ONLY) || defined(P2P_STA_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
+					if (STA_WLAN_AUTH == M2M_WIFI_SEC_OPEN) {
+						strcpy((char*)sta_auth_param.au8PSK, "");
+						os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
+							STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
+					}
 					if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
-						strcpy((char*)sta_auth_param.au8PSK, STA_WLAN_PSK);
-						os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
+						utf8_STA_mode_PSK = u8_encode(STA_WLAN_PSK);
+						if (utf8_STA_mode_PSK == NULL) {
+							osprint("sta_task: STA mode utf8 PSK encode error! returning\r\n");
+							vPortFree(utf8_STA_mode_SSID);
+							return;
+						}
+						strcpy((char*)sta_auth_param.au8PSK, (unsigned char*)utf8_STA_mode_PSK);
+						os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
 							STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 					} else {
 						sta_auth_param.strWepInfo = gstrSTAWepParam;
-						os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
+						os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
 							STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 					}
 #endif
@@ -261,6 +297,9 @@ static void wifi_cb(uint8 msg_type, void *msg)
 		
 		case M2M_WIFI_RESP_FIRMWARE_STRTED: {
 			osprintf("Firmware Started Successfully\r\n");
+			if (firmware_start_sem != NULL) {
+				xSemaphoreGive(firmware_start_sem);
+			}
 		}
 		break;
 		
@@ -359,6 +398,9 @@ void sta_task(void *argument)
 	tuniM2MWifiAuth sta_auth_param;
 	tstrM2MAPConfig cfg;
 
+	/* For firmware start event */
+	firmware_start_sem = xSemaphoreCreateCounting(1, 0);
+		
 	/* Initialize the network stack. */
 	net_init();
 	
@@ -367,18 +409,50 @@ void sta_task(void *argument)
 	memset(&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb;
 	os_m2m_wifi_init(&param);
-
+	//os_m2m_wifi_set_sleep_mode(M2M_PS_DEEP_AUTOMATIC, true);
+	/* Antenna modes are defined in sta.h */
+#ifdef MAC_ANTENNA_DIVERSITY
+	m2m_wifi_set_antenna_mode(ANT_MODE, ANT_SWTCH_GPIO_CTRL_MODE, ANTENNA_GPIO_NUM_1, ANTENNA_GPIO_NUM_2);
+#endif
+	
+	/* Make sure we received M2M_WIFI_RESP_FIRMWARE_STRTED event in wifi_cb */
+	if (firmware_start_sem != NULL) {
+		xSemaphoreTake(firmware_start_sem, portMAX_DELAY);
+		vSemaphoreDelete(firmware_start_sem);
+	}
+				
 #if defined(AP_ONLY) || defined(P2P_AP_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
 	/* Enable AP mode. */
 	memset(&cfg, 0, sizeof(cfg));
-	strcpy((char *)cfg.au8SSID, AP_WLAN_SSID);
+	/* Pointers to UTF-8 SSID and PSK */
+	unsigned int *utf8_AP_mode_SSID = NULL, *utf8_AP_mode_PSK = NULL;
+	utf8_AP_mode_SSID = u8_encode(AP_WLAN_SSID);
+	if (utf8_AP_mode_SSID == NULL) {
+		osprint("sta_task: AP mode utf8 SSID encode error! returning\r\n");
+		return;
+	}	
+	strcpy((char *)cfg.au8SSID, (unsigned char*)utf8_AP_mode_SSID);
 	cfg.u8ListenChannel = M2M_WIFI_CH_11;
 	cfg.u16BeaconInterval = 0;
 	cfg.u8SecType = AP_WLAN_AUTH;
-	if (cfg.u8SecType == M2M_WIFI_SEC_WEP) {
+	if (cfg.u8SecType == M2M_WIFI_SEC_OPEN) {
+		strcpy((char*)cfg.uniAuth.au8PSK, "");
+	} else if (cfg.u8SecType == M2M_WIFI_SEC_WEP) {
 		cfg.uniAuth.strWepInfo = gstrAPWepParam;
 	} else {
-		strcpy((char *)cfg.uniAuth.au8PSK, AP_WLAN_PSK);
+		utf8_AP_mode_PSK = u8_encode(AP_WLAN_PSK);
+		if (utf8_AP_mode_PSK == NULL) {
+			osprint("sta_task: AP mode utf8 PSK encode error! returning\r\n");
+			vPortFree(utf8_AP_mode_SSID);
+			return;
+		}
+		strcpy((char *)cfg.uniAuth.au8PSK, (unsigned char*)utf8_AP_mode_PSK);
+		vPortFree(utf8_AP_mode_SSID);
+		if(utf8_AP_mode_PSK != NULL) {
+			vPortFree(utf8_AP_mode_PSK);
+		}
+		utf8_AP_mode_SSID = NULL;
+		utf8_AP_mode_PSK = NULL;
 	}
 	os_m2m_wifi_enable_ap(&cfg);
 #endif
@@ -390,14 +464,30 @@ os_m2m_wifi_set_p2p_control_ifc(P2P_AP_CONCURRENCY_INTERFACE);
 os_m2m_wifi_p2p(M2M_WIFI_CH_11);
 #endif
 #if defined(STA_ONLY) || defined(P2P_STA_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
-	/* Connect to station. */
-	if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
-		strcpy((char*)sta_auth_param.au8PSK, STA_WLAN_PSK);
-		os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
-			STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
+	/* Enable STA mode and connect to AP. */
+	utf8_STA_mode_SSID = u8_encode(STA_WLAN_SSID);
+	if (utf8_STA_mode_SSID == NULL) {
+		osprint("sta_task: STA mode utf8 SSID encode error! returning\r\n");
+		return;
+	}
+	
+	if (STA_WLAN_AUTH == M2M_WIFI_SEC_OPEN) {
+		strcpy((char*)sta_auth_param.au8PSK, "");
+		os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
+				STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
+	} else if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
+		utf8_STA_mode_PSK = u8_encode(STA_WLAN_PSK);
+		if (utf8_STA_mode_PSK == NULL) {
+			osprint("sta_task: STA mode utf8 PSK encode error! returning\r\n");
+			vPortFree(utf8_STA_mode_SSID);
+			return;
+		}
+		strcpy((char*)sta_auth_param.au8PSK, (unsigned char*)utf8_STA_mode_PSK);
+		os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
+				STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 	} else {
 		sta_auth_param.strWepInfo = gstrSTAWepParam;
-		os_m2m_wifi_connect((char *)STA_WLAN_SSID, sizeof(STA_WLAN_SSID),
+		os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
 			STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 	}
 #endif

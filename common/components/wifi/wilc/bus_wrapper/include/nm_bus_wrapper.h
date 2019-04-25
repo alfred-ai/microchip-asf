@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 bus wrapper APIs declarations.
+ * \brief This module contains WILC bus wrapper APIs declarations.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+ /*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 
 #ifndef _NM_BUS_WRAPPER_H_
 #define _NM_BUS_WRAPPER_H_

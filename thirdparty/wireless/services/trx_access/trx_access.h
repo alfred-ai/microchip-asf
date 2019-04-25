@@ -298,6 +298,16 @@ void trx_spi_init(void);
  */
 void PhyReset(void);
 
+/**
+ * @brief Disables the SPI interface for communication with the transceiver
+ */
+void trx_spi_disable(void);
+
+/**
+ * @brief enables the SPI interface for communication with the transceiver
+ */
+void trx_spi_enable(void);
+
 /* ! @} */
 #ifdef __cplusplus
 } /* extern "C" */

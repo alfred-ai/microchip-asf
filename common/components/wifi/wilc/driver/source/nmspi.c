@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 SPI protocol bus APIs implementation.
+ * \brief This module contains WILC SPI protocol bus APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 #include "common/include/nm_common.h"
 
 #ifdef CONF_WILC_USE_SPI
@@ -900,7 +904,7 @@ static sint8 spi_write_reg(uint32 addr, uint32 u32data)
 	uint8 clockless = 0;
 	
 _RETRY_:	
-	if (addr <= 0x10) 
+	if (addr <= 0x30) 
 	{
 		/**
 		NMC1000 clockless registers.
@@ -1037,7 +1041,7 @@ static sint8 spi_read_reg(uint32 addr, uint32 *u32data)
 
 _RETRY_:
 
-	if (addr <= 0x10) 
+	if (addr <= 0x30) 
 	{
 		/**
 		NMC1000 clockless registers.
@@ -1075,7 +1079,7 @@ _RETRY_:
 	/* to avoid endianess issues */
 	result = spi_data_read(&tmp[0], 4, clockless);
 	if (result != N_OK) {
-		M2M_ERR("[nmi spi]: Failed data read...\n");
+		M2M_ERR("[nmi spi]: Failed data read reg (%08x)...\n", addr);
 		goto _FAIL_;
 	}
 #else

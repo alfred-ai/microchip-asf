@@ -30,17 +30,34 @@
 /*
 	Syntax of AT commands
 	AT+
-		CONN=5[SSID, SSID_LENGTH, SEC_TYPE, SEC_KEY, CHANNEL] //Connect to an AP
-			Example:
-				AT+CONN=5[IOT_XX,6,2,1234567890,0]
+AT+CONN=5[SSID,SSID_LENGTH,SEC_TYPE,SEC_KEY,CHANNEL]<CR><LF>
+        where SSID        : is Access Point you want to connect with.
+              SSID_LENGTH : number of characters of SSID
+              SEC_TYPE    : Type of Security of AP and has one of the following:
+                  1       : OPEN
+                  2       : WPA/WPA2
+                  3       : WEP
+                  4       : Enterprise
+              SEC_KEY     : Security key and will be in case of:
+                  OPEN      : at least any character
+                  WPA/WPA2  : any valid sequence of characters
+                  WEP       : KEY_INDEX*KEY_VALUE ,where they areconcatenated with '*'
+                  Enterprise: USRNAME*PASSWORD ,where they are concatenated with '*'
+              CHANNEL     : is channel number of the Access Point
+        EX.: AT+CONN=5[DEMO_AP,7,1,NS,5]                  -> Connect to OPEN
+           : AT+CONN=5[DEMO_AP,7,2,1234567890,6]          -> Connect to WPA/WPA2
+           : AT+CONN=5[DEMO_AP,7,3,1*1234567890,7]        -> Connect to WEP
+           : AT+CONN=5[DEMO_AP,7,4,EntUser*EntPassword,8] -> Connect to Enterprise
 		DISCONN	//Disconnect from an AP
 		AP_EN=5[SSID, SSID_VISIBLE_MODE, SEC_TYPE, SEC_KEY, CHANNEL] //Enable AP mode
 			Example:
 				AT+AP_EN=5[DEMO_Open,0,1,0,255]  
-				AT+AP_EN=5[DEMO_WPA,0,2,12345678,255]
+				AT+AP_EN=5[DEMO_WPA,0,2,12345678,255] //Hidden(1)/Visible(0)
 				AT+AP_EN=5[DEMO_WEP,0,3,1*1234567890,255]  //'*' is a seperator for WEP_KEY_INDEX and WEP_KEY
 		AP_DIS  // Disable AP mode
 		RESET   // Reset Board
+		
+		AT+CHIP_INFO //For Mac address and chip info
 		
 		AT+STATIC_IP=2[<IP Address>,<Gateway>] // Static IP. Subnet is 255.255.255.0 by default. 
 		Example: AT+STATIC_IP=2[192.168.0.106,192.168.0.1].
@@ -54,16 +71,75 @@
 				[HINT,0:1]
 		P2P_EN=1[CHANNEL]  // Start P2P mode
 		P2P_DIS  // Stop P2P mode
-		SCAN=1[CHANNEL]  // Scan the specified channel to get AP list
+		
+		P2P_PIN Display/Keypad method
+
+		Enter AT_Command in console AT+P2P_EN=3[P2P_LISTEN_CHANNEL,P2P_TRIGGER,CONFIG_METHODS]
+		For example:
+		>> AT+P2P_EN=3[11,0,264]
+
+		Where,
+		P2P_LISTEN_CHANNEL = 11
+		P2P_TRIGGER = P2P_PIN = 0
+		CONFIG_METHODS = CONF_METHOD_DISPLAY | CONF_METHOD_KEYPAD => 0X0008 | 0X0100 = 264
+
+		P2P_PIN Display method
+		For example:
+		>> AT+P2P_EN=3[11,0,8]
+		Where
+		P2P_LISTEN_CHANNEL = 11
+		P2P_TRIGGER = P2P_PIN = 0
+		CONFIG_METHODS = CONF_METHOD_DISPLAY => 0X0008 = 8
+
+		P2P_PIN Keypad method
+		For example:
+		>> AT+P2P_EN=3[11,0,256]
+		Where
+		P2P_LISTEN_CHANNEL = 11
+		P2P_TRIGGER = P2P_PIN = 0
+		CONFIG_METHODS = CONF_METHOD_KEYPAD => 0X0100 = 256
+
+		P2P_PBC method
+		For example:
+		>> AT+P2P_EN=3[6,4,128]
+		Where
+		P2P_LISTEN_CHANNEL = 6
+		P2P_TRIGGER = P2P_PBC = 4
+		CONFIG_METHODS = CONF_METHOD_PBC => 0X0080 = 128
+		
+		AT+P2P_PIN=1[PIN#]  for eg: AT+P2P_PIN=1[13895013]
+
+		SCAN=1[CHANNEL]  // Scan the specified channel to get AP list. '255' will scan all channels.
 		SCAN=2[CHANNEL,HIDDEN_SSID] //Scan the specified channel and include the hidden SSID in the scan result if it is in the range
-		RSSI  //get RSSI
+		Example:
+			AT+SCAN=1[11] //Scan Channel 11
+			AT+SCAN=1[255] //Scan all Channels
+		RSSI  //get RSSI of currently connected AP
+		Example:
+			AT+RSSI
 		GET_CONN_INFO  // Get Connected AP info
-		AT+TX_PWR=1[TX_PWR_LEVEL] //set the TX power (1==TX_PWR_HIGH, 2==TX_PWR_MED, 3==TX_PWR_LOW)
+		AT+TX_PWR=1[TX_PWR_LEVEL] //set the TX power ppa to one of these values: 0dBm, 3dBm, 6dBm, 9dBm, 12dBm, 15dBm, 18dBm
+		Example: AT+TX_PWR[15]
+		
+		AT+ANT_DIV=1[ANTENNA_SELECTION,ANT_SWTCH_GPIO_CTRL_MODE] //set the ANTENNA_SELECTION (0==ANTENNA1, 1==ANTENNA2, 2==DIVERSITY)
+		ANT_SWTCH_GPIO_CTRL_MODE = (1 = ANT_SWTCH_GPIO_SINGLE, 2 = ANT_SWTCH_GPIO_DUAL or 0 = ANT_SWTCH_GPIO_NONE)
+		ANTENNA_GPIO_NUM_1, ANTENNA_GPIO_NUM_2 set in at_cmd_Handler.h (below)
+		Example: AT+ANT_DIV[1,2]		
+		
 		WPS_START=2[TRIGGER_TYPE,PIN_CODE]  //Start WPS (TRIGGER_TYPE is 0 = WPS_PIN_TRIGGER or 4 = WPS_PBC_TRIGGER)
 			Example:
 				AT+WPS_START=2[4,0]  //PBC
 				AT+WPS_START=2[0,12345670]  //PIN
 		WPS_DIS  //Stop WPS
+		
+		//Power Save mode
+		PS_MODE[M2M_NO_PS/M2M_PS_DEEP_AUTOMATIC] //Where M2M_NO_PS = 0,M2M_PS_DEEP_AUTOMATIC = 1
+		It is common to both WILC1000 & WILC3000.
+		For BLE, in addition, USART is asserted/deasserted for PSM enable/disable.
+			Example:
+				AT+PS_MODE[1] to enable
+				AT+PS_MODe[0] to disable
+		
 		IPCON=2[PROTOCOL,PORT]  // Start TCP/UDP server (where PROTOCOL is TCP or UDP & PORT is port number to start the server). 
 								// Please find the python scripts in \src\scripts folder
 			Example:
@@ -106,6 +182,7 @@
 
 #include "common/include/nm_common.h"
 #include "driver/include/m2m_types.h"
+#include "driver/source/nmasic.h"
 #include "lwip/def.h"
 #include "lwip/netdb.h"
 #include "os/include/net_init.h"
@@ -142,6 +219,27 @@ tstrM2MIPConfig						StaticIPcfg;
 #define TX_PWR_DBM_15 15
 #define TX_PWR_DBM_18 18
 
+/***************** Antenna Selection/Diversity Testing *******************/
+
+#define MAC_ANTENNA_DIVERSITY
+
+#ifdef MAC_ANTENNA_DIVERSITY
+
+/* Antenna Switch mode - {ANTENNA1, ANTENNA2 or DIVERSITY} */
+#define ANT_MODE (ANTENNA2)
+
+/* 
+ * Antenna GPIO ctrl - {ANT_SWTCH_GPIO_SINLGE, ANT_SWTCH_GPIO_DUAL
+ * or ANT_SWTCH_GPIO_NONE} 
+ */
+#define ANT_SWTCH_GPIO_CTRL_MODE (ANT_SWTCH_GPIO_DUAL)
+
+/* Antenna GPIO configuration */
+#define ANTENNA_GPIO_NUM_1	(4)
+#define ANTENNA_GPIO_NUM_2	(20)
+
+#endif //MAC_ANTENNA_DIVERSITY
+/*************************************************************************/
 
 #define AT_MAX_RX_BUFF_SIZE ((AT_MAX_PARAM_LENGTH * AT_MAX_PARAMETERS_COUNT) + AT_MAX_CMD_LENGTH)
 #define BASE_16						(16)
@@ -190,6 +288,7 @@ enum at_cmd_index {
 	AT_INDEX_AP_ENABLE,
 	AT_INDEX_AP_DISABLE,
 	AT_INDEX_P2P_ENABLE,
+	AT_INDEX_P2P_PIN_INPUT,
 	AT_INDEX_P2P_DISABLE,
 	/*AT_INDEX_PROV_ENABLE,
 	AT_INDEX_PROV_DISABLE,
@@ -207,7 +306,7 @@ enum at_cmd_index {
 	AT_INDEX_RESET,
 	AT_INDEX_MON_EN,
 	AT_INDEX_MON_DIS,
-	/*AT_INDEX_PS_MODE,*/
+	AT_INDEX_PS_MODE,
 	AT_INDEX_STATIC_IP,
 	AT_INDEX_GET_CONN_INFO,
 	/*AT_INDEX_SET_PWR_PRO,*/
@@ -224,6 +323,8 @@ enum at_cmd_index {
 	AT_SSL_OPT,*/
 	/*AT_INDEX_GETIME,*/
     AT_TX_PWR,
+	AT_ANT_DIV,
+	AT_CHIP_INFO,
 	AT_MAX_COMMANDS_COUNT /* Always keep this at the last entry */
 };
 enum
@@ -389,6 +490,7 @@ sint8 atCmd_CurRSSI_Handler(tstrAt_cmd_content *data, void *, uint8);
 sint8 atCmd_ApEnable_Handler(tstrAt_cmd_content *data, void *, uint8);
 sint8 atCmd_ApDisable_Handler(tstrAt_cmd_content *data, void *, uint8);
 sint8 atCmd_P2pEnable_Handler(tstrAt_cmd_content *data, void *, uint8);
+sint8 atCmd_P2pPIN_Handler(tstrAt_cmd_content *data, void*, uint8);
 sint8 atCmd_P2pDisable_Handler(tstrAt_cmd_content *data, void *, uint8);
 sint8 atCmd_ProvisionEnable_Handler(tstrAt_cmd_content *data, void *, uint8);
 sint8 atCmd_ProvisionDisable_Handler(tstrAt_cmd_content *data, void *, uint8);
@@ -413,7 +515,7 @@ sint8 atCmd_TLS_SetCipherSuite_Handler(tstrAt_cmd_content *data, void* moreData,
 sint8 atCmd_TLS_CertTransfer_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_GetSysTime_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_TxPwr_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
-
+sint8 atCmd_AntDiversity_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 
 sint8 atCmd_Inquiries_Handler(tstrAt_cmd_content *, strAtCMD_Handler *);
 sint8 atCmd_IsParameterNumericOnly(uint8* pData);
@@ -429,6 +531,7 @@ sint8 atCmd_MonEn_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useSto
 sint8 atCmd_MonDis_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_PsMode_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_GetConnInfo_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
+sint8 atCmd_ChipInfo_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_SetPowerProfile_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_FileDownload_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);
 sint8 atCmd_ScanPassive_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue);

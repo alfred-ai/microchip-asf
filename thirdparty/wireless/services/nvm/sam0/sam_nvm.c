@@ -60,13 +60,13 @@ status_code_t nvm_sam0_read(mem_type_t mem, uint32_t address,
 		uint8_t *const buffer,
 		uint32_t len)
 {
-	/* Get a pointer to the module hardware instance */
-	Nvmctrl *const nvm_module = NVMCTRL;
 	switch (mem) {
 		
 
 	case INT_FLASH:
-
+    {
+		/* Get a pointer to the module hardware instance */
+		Nvmctrl *const nvm_module = NVMCTRL;
 		/* Check if the module is busy */
 		if (!nvm_is_ready()) {
 			return STATUS_BUSY;
@@ -95,6 +95,7 @@ status_code_t nvm_sam0_read(mem_type_t mem, uint32_t address,
 				buffer[i + 1] = (data >> 8);
 			}
 		}
+     }
 
 		break;
 

@@ -86,6 +86,7 @@ CSRCS = \
        thirdparty/wireless/miwi/services/otau/otau_parser.c \
        thirdparty/wireless/miwi/services/otau/upgrade/client_upgrade.c \
        thirdparty/wireless/miwi/services/otau/upgrade/server_upgrade.c \
+       thirdparty/wireless/miwi/services/pds/src/nopds/fakePds.c \
        thirdparty/wireless/miwi/services/pds/src/nv/D_Nv.c \
        thirdparty/wireless/miwi/services/pds/src/nv/External/D_XNv-SamR21.c \
        thirdparty/wireless/miwi/services/pds/src/nv/External/S_Nv-External.c \

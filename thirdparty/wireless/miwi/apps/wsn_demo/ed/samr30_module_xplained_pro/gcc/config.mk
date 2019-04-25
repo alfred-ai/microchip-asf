@@ -53,6 +53,7 @@ TARGET_SRAM = apps_wsn_demo_sram.elf
 # List of C source files.
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
+       common2/components/memory/serial_flash/at25dfx/at25dfx.c \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/samr30_module_xplained_pro/board_init.c \
        sam0/drivers/extint/extint_callback.c              \
@@ -88,6 +89,7 @@ CSRCS = \
        thirdparty/wireless/miwi/services/otau/otau_parser.c \
        thirdparty/wireless/miwi/services/otau/upgrade/client_upgrade.c \
        thirdparty/wireless/miwi/services/otau/upgrade/server_upgrade.c \
+       thirdparty/wireless/miwi/services/pds/src/nopds/fakePds.c \
        thirdparty/wireless/miwi/services/pds/src/nv/D_Nv.c \
        thirdparty/wireless/miwi/services/pds/src/nv/External/D_XNv-SamR21.c \
        thirdparty/wireless/miwi/services/pds/src/nv/External/S_Nv-External.c \
@@ -97,6 +99,7 @@ CSRCS = \
        thirdparty/wireless/miwi/services/pds/src/wl/wlPdsInit.c \
        thirdparty/wireless/miwi/services/pds/src/wl/wlPdsTaskManager.c \
        thirdparty/wireless/miwi/services/pds/src/wl/wlPdsTypesConverter.c \
+       thirdparty/wireless/miwi/services/sleep_mgr/sam0/sleep_mgr.c \
        thirdparty/wireless/miwi/source/mimac/mimac_at86rf.c \
        thirdparty/wireless/miwi/source/mimac/phy/at86rf212b/phy.c \
        thirdparty/wireless/miwi/source/miwi_mesh/miwi_mesh_app.c \
@@ -110,7 +113,6 @@ CSRCS = \
        thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.c \
        thirdparty/wireless/services/nvm/sam0/sam_nvm.c    \
        thirdparty/wireless/services/sal/at86rf2xx/src/sal.c \
-       thirdparty/wireless/services/sleep_mgr/sam0/sleep_mgr.c \
        thirdparty/wireless/services/trx_access/trx_access.c
 
 # List of assembler source files.
@@ -121,6 +123,8 @@ INC_PATH = \
        common/boards                                      \
        common/services/serial                             \
        common/utils                                       \
+       common2/components/memory/serial_flash/at25dfx     \
+       common2/components/memory/serial_flash/at25dfx/hal/spi_polled \
        common2/services/delay                             \
        common2/services/delay/sam0                        \
        sam0/boards                                        \
@@ -165,6 +169,7 @@ INC_PATH = \
        thirdparty/wireless/miwi/services/pds/inc/nv       \
        thirdparty/wireless/miwi/services/pds/inc/nv/External \
        thirdparty/wireless/miwi/services/pds/inc/wl       \
+       thirdparty/wireless/miwi/services/sleep_mgr        \
        thirdparty/wireless/miwi/source/mimac              \
        thirdparty/wireless/miwi/source/mimac/phy          \
        thirdparty/wireless/miwi/source/miwi_mesh          \
@@ -174,7 +179,6 @@ INC_PATH = \
        thirdparty/wireless/services/common_hw_timer/sam0  \
        thirdparty/wireless/services/nvm                   \
        thirdparty/wireless/services/sal/inc               \
-       thirdparty/wireless/services/sleep_mgr             \
        thirdparty/wireless/services/trx_access \
        thirdparty/wireless/miwi/apps/wsn_demo/ed/samr30_module_xplained_pro/gcc
 

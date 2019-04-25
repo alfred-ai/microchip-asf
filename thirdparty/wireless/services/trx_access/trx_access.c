@@ -730,3 +730,17 @@ void trx_aes_wrrd(uint8_t addr, uint8_t *idata, uint8_t length)
 #endif
 	LEAVE_TRX_REGION();
 }
+
+void trx_spi_disable(void)
+{
+#if SAMD || SAMR21 || SAML21 || SAMR30
+	spi_disable(&master);
+#endif
+}
+
+void trx_spi_enable(void)
+{
+#if SAMD || SAMR21 || SAML21 || SAMR30
+	spi_enable(&master);
+#endif
+}

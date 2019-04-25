@@ -43,6 +43,8 @@ CommDeviceTable_t commnDeviceTable[MAX_NUMBER_OF_DEVICES_IN_NETWORK];
 
 RebroadcastTable_t reBroadcastTable[REBROADCAST_TABLE_SIZE];
 
+DuplicateRejectionTable_t duplicateRejectionTable[DUPLICATE_REJECTION_TABLE_SIZE];
+
 /* Network Tables */
 DeviceTable_t deviceTable[NUM_OF_NONSLEEPING_ENDDEVICES];
 SleepDeviceTable_t sleepdeviceTable[NUM_OF_SLEEPING_ENDDEVICES];
@@ -75,8 +77,6 @@ defaultParametersRomOrRam_t defaultParamsRomOrRam = {
 	.coordinatorHopCount = &coordHopCount[0],
 	.rebroadcastTable = &reBroadcastTable[0],
 
-	.numOfCoordinators = NUM_OF_COORDINATORS,
-
 	.maxNumOfDevicesInNetwork = MAX_NUMBER_OF_DEVICES_IN_NETWORK,
 
 	.keepAliveCoordSendInterval = KEEP_ALIVE_COORDINATOR_SEND_INTERVAL,
@@ -91,15 +91,17 @@ defaultParametersRomOrRam_t defaultParamsRomOrRam = {
 	.rebroadcastTableSize = REBROADCAST_TABLE_SIZE,
 	.rebroadcastTimeout = REBROADCAST_TIMEOUT,
 #endif
-
+	.duplicateRejectionTable = &duplicateRejectionTable[0],
+	.duplicateRejectionTableSize = DUPLICATE_REJECTION_TABLE_SIZE,
+	.numOfCoordinators = NUM_OF_COORDINATORS,
 	.keepAliveRxOnEdSendInterval = KEEP_ALIVE_RXONENDDEVICE_SEND_INTERVAL,
 	.keepAliveRxOnEdTimeoutSec = KEEP_ALIVE_RXONENDDEVICE_TIMEOUT_IN_SEC,
 	.deviceTimeout = RXOFF_DEVICE_TIMEOUT_IN_SEC,
 	.dataRequestInterval = DATA_REQUEST_SEND_INTERVAL,
+	.maxDataRequestInterval = MAXIMUM_DATA_REQUEST_SEND_INTERVAL,
 	.edLinkFailureAttempts = ED_LINK_FAILURE_ATTEMPTS,
 	.connRespWaitInSec = CONNECTION_RESPONSE_WAIT_IN_SEC,
 
-	.frameAckWaitInterval = FRAME_ACK_WAIT_INTERVAL,
 	.frameRetry = FRAME_RETRY,
 #ifndef PAN_COORDINATOR
     .searchConfMem = &searchConfirmMem,

@@ -234,10 +234,117 @@ void at86rfx_isr(void);
 #if SAMR21
 #warning \
 	"For SAMR21 Antenna Diversity Related Pin configurations refer to system_board_init function of SAMR21 Xplained Pro board_init.c file "
+
+#define RF_IRQ_INPUT            0
+#define RF_IRQ_PINMUX           PINMUX_PB00A_EIC_EXTINT0
+
+/** 802.15.4 TRX Interface definitions of SAMR21 SiP Package*/
+
+#define AT86RFX_SPI                  SERCOM4
+#define AT86RFX_RST_PIN              PIN_PB15
+#define AT86RFX_IRQ_PIN              PIN_PB00
+#define AT86RFX_SLP_PIN              PIN_PA20
+#define AT86RFX_SPI_CS               PIN_PB31
+#define AT86RFX_SPI_MOSI             PIN_PB30
+#define AT86RFX_SPI_MISO             PIN_PC19
+#define AT86RFX_SPI_SCK              PIN_PC18
+#define PIN_RFCTRL1                  PIN_PA09
+#define PIN_RFCTRL2                  PIN_PA12
+#define RFCTRL_CFG_ANT_DIV           4
+
+
+#define AT86RFX_SPI_SERCOM_MUX_SETTING   RF_SPI_SERCOM_MUX_SETTING
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD0   RF_SPI_SERCOM_PINMUX_PAD0
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD1   PINMUX_UNUSED
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD2   RF_SPI_SERCOM_PINMUX_PAD2
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD3   RF_SPI_SERCOM_PINMUX_PAD3
+
+#define AT86RFX_IRQ_CHAN             RF_IRQ_INPUT
+#define AT86RFX_IRQ_PINMUX           RF_IRQ_PINMUX
+
+
+/** Enables the transceiver main interrupt. */
+#define ENABLE_TRX_IRQ()    \
+		extint_chan_enable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT)
+
+/** Disables the transceiver main interrupt. */
+#define DISABLE_TRX_IRQ()   \
+		extint_chan_disable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT)
+
+/** Clears the transceiver main interrupt. */
+#define CLEAR_TRX_IRQ()     \
+		extint_chan_clear_detected(AT86RFX_IRQ_CHAN);
+
+/*
+ * This macro saves the trx interrupt status and disables the trx interrupt.
+ */
+#define ENTER_TRX_REGION()   \
+		{ extint_chan_disable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT)
+
+/*
+ *  This macro restores the transceiver interrupt status
+ */
+#define LEAVE_TRX_REGION()   \
+		extint_chan_enable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT); }
+
 #elif SAMR30
 #warning \
 	"For SAMR30 Antenna Diversity Related Pin configurations refer to system_board_init function of SAMR30 Xplained Pro board_init.c file "
+
+#define RF_IRQ_INPUT            0
+#define RF_IRQ_PINMUX           PINMUX_PB00A_EIC_EXTINT0
+
+/** 802.15.4 TRX Interface definitions of SAMR30 SiP Package*/
+
+#define AT86RFX_SPI                  SERCOM4
+#define AT86RFX_RST_PIN              PIN_PB15
+#define AT86RFX_IRQ_PIN              PIN_PB00
+#define AT86RFX_SLP_PIN              PIN_PA20
+#define AT86RFX_SPI_CS               PIN_PB31
+#define AT86RFX_SPI_MOSI             PIN_PB30
+#define AT86RFX_SPI_MISO             PIN_PC19
+#define AT86RFX_SPI_SCK              PIN_PC18
+#define PIN_RFCTRL1                  PIN_PA09
+#define PIN_RFCTRL2                  PIN_PA12
+#define RFCTRL_CFG_ANT_DIV           4
+
+
+#define AT86RFX_SPI_SERCOM_MUX_SETTING   RF_SPI_SERCOM_MUX_SETTING
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD0   RF_SPI_SERCOM_PINMUX_PAD0
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD1   PINMUX_UNUSED
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD2   RF_SPI_SERCOM_PINMUX_PAD2
+#define AT86RFX_SPI_SERCOM_PINMUX_PAD3   RF_SPI_SERCOM_PINMUX_PAD3
+
+#define AT86RFX_IRQ_CHAN       RF_IRQ_INPUT
+#define AT86RFX_IRQ_PINMUX     RF_IRQ_PINMUX
+
+
+/** Enables the transceiver main interrupt. */
+#define ENABLE_TRX_IRQ()     \
+		extint_chan_enable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT)
+
+/** Disables the transceiver main interrupt. */
+#define DISABLE_TRX_IRQ()    \
+		extint_chan_disable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT)
+
+/** Clears the transceiver main interrupt. */
+#define CLEAR_TRX_IRQ()      \
+		extint_chan_clear_detected(AT86RFX_IRQ_CHAN);
+
+/*
+ * This macro saves the trx interrupt status and disables the trx interrupt.
+ */
+#define ENTER_TRX_REGION()   \
+		{ extint_chan_disable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT)
+
+/*
+ *  This macro restores the transceiver interrupt status
+ */
+#define LEAVE_TRX_REGION()   \
+		extint_chan_enable_callback(AT86RFX_IRQ_CHAN, EXTINT_CALLBACK_TYPE_DETECT); }
+
 #endif
+
 #ifndef AT86RFX_SPI
 #define AT86RFX_SPI                  SERCOM0
 #define AT86RFX_RST_PIN              PIN_PA23
@@ -286,6 +393,6 @@ void at86rfx_isr(void);
 		EXTINT_CALLBACK_TYPE_DETECT); \
 	}
 
-#endif
+#endif /* #ifndef AT86RFX_SPI */
 #endif /* SAMD || SAMR21 || SAML21 || SAMR30 */
 #endif /* CONF_TRX_ACCESS_H_INCLUDED */

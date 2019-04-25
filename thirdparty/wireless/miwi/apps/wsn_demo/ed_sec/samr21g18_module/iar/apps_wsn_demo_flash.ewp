@@ -342,7 +342,6 @@
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/nv</state>
@@ -360,6 +359,7 @@
 					<state>$PROJ_DIR$/../../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/wl</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/extint</state>
@@ -661,7 +661,6 @@
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/nv</state>
@@ -679,6 +678,7 @@
 					<state>$PROJ_DIR$/../../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/wl</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/extint</state>
@@ -1405,7 +1405,6 @@
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/nv</state>
@@ -1423,6 +1422,7 @@
 					<state>$PROJ_DIR$/../../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/wl</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/extint</state>
@@ -1724,7 +1724,6 @@
 					<state>$PROJ_DIR$/../../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/interrupt</state>
-					<state>$PROJ_DIR$/../../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/nv</state>
@@ -1742,6 +1741,7 @@
 					<state>$PROJ_DIR$/../../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../../services/pds/inc/wl</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/extint</state>
@@ -2208,9 +2208,6 @@
 					</group>
 					<group>
 						<name>mimac</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../source/mimac/mimac_at86rf.c</name>
-						</file>
 						<group>
 							<name>phy</name>
 							<group>
@@ -2223,6 +2220,9 @@
 								<name>$PROJ_DIR$/../../../../../source/mimac/phy/phy.h</name>
 							</file>
 						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../source/mimac/mimac_at86rf.c</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../source/mimac/mimac_at86rf.h</name>
 						</file>
@@ -2321,6 +2321,12 @@
 									<name>$PROJ_DIR$/../../../../../services/pds/src/wl/wlPdsDataServer.c</name>
 								</file>
 							</group>
+							<group>
+								<name>nopds</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../../services/pds/src/nopds/fakePds.c</name>
+								</file>
+							</group>
 						</group>
 						<group>
 							<name>inc</name>
@@ -2395,6 +2401,18 @@
 							</file>
 						</group>
 					</group>
+					<group>
+						<name>sleep_mgr</name>
+						<group>
+							<name>sam0</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sleep_mgr.h</name>
+						</file>
+					</group>
 				</group>
 				<group>
 					<name>apps</name>
@@ -2426,6 +2444,9 @@
 									<name>$PROJ_DIR$/../conf_rtc.h</name>
 								</file>
 								<file>
+									<name>$PROJ_DIR$/../conf_extint.h</name>
+								</file>
+								<file>
 									<name>$PROJ_DIR$/../conf_board.h</name>
 								</file>
 								<group>
@@ -2436,9 +2457,6 @@
 								</group>
 								<file>
 									<name>$PROJ_DIR$/../conf_sleepmgr.h</name>
-								</file>
-								<file>
-									<name>$PROJ_DIR$/../conf_extint.h</name>
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../conf_nvm.h</name>
@@ -2533,18 +2551,6 @@
 							<name>$PROJ_DIR$/../../../../../../services/sal/inc/sal_generic.h</name>
 						</file>
 					</group>
-				</group>
-				<group>
-					<name>sleep_mgr</name>
-					<group>
-						<name>sam0</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../services/sleep_mgr/sleep_mgr.h</name>
-					</file>
 				</group>
 				<group>
 					<name>trx_access</name>

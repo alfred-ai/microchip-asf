@@ -44,9 +44,9 @@ define symbol __ICFEDIT_region_RAM_start__    = 0x20000000;
 define symbol __ICFEDIT_region_RAM_end__      = 0x20007FFF;
 define symbol __ICFEDIT_region_ROM_start__    = 0x00000000;
 define symbol __ICFEDIT_region_ROM_end__      = 0x0001FFFF;
-define symbol __ICFEDIT_region_pds_ROM_start__  = 0x00000100;
-define symbol __ICFEDIT_region_pds_ROM_end__    = 0x00040FF;
-define symbol __ICFEDIT_region_text_ROM_start__  = 0x004100;
+define symbol __ICFEDIT_region_pds_ROM_start__  = 0x00002100;
+define symbol __ICFEDIT_region_pds_ROM_end__    = 0x00060FF;
+define symbol __ICFEDIT_region_text_ROM_start__  = 0x006100;
 define symbol __ICFEDIT_region_text_ROM_end__    = 0x0001FFFF;
 /*-Sizes-*/
 if (!isdefinedsymbol(__ICFEDIT_size_cstack__)) {
@@ -67,6 +67,7 @@ define region text_ROM_region       = mem:[from __ICFEDIT_region_text_ROM_start_
 
 define block CSTACK with alignment = 8, size = __ICFEDIT_size_cstack__ { };
 define block HEAP   with alignment = 8, size = __ICFEDIT_size_heap__   { };
+define block D_NV_MEMORY with size = _D_NV_MEMORY_SIZE, alignment = 8 { };
 
 initialize by copy { readwrite };
 do not initialize  { section .noinit };

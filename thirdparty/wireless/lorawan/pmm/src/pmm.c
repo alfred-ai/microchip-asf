@@ -97,47 +97,41 @@ PMM_Status_t PMM_Sleep(PMM_SleepReq_t *req)
 {
     PMM_Status_t status = PMM_SLEEP_REQ_DENIED;
     uint32_t sysSleepTime = ~0u; /* 0xffFFffFF is invalid */
-    
-    
-    if (NULL != req)
-    {
-        if (SYSTEM_ReadyToSleep())
+    bool canSleep;
+
+    if ( req )
+    {        
+        canSleep = SYSTEM_ReadyToSleep();
+        canSleep = canSleep && validateSleepDuration( req->sleepTimeMs );
+        
+        if ( SLEEP_MODE_BACKUP == req->sleep_mode )
         {
-            if (validateSleepDuration(req->sleepTimeMs))
+            canSleep = canSleep && ( SWTIMER_INVALID_TIMEOUT == SwTimerNextExpiryDuration() );
+            sysSleepTime = req->sleepTimeMs;
+        }
+        else if ( SLEEP_MODE_STANDBY == req->sleep_mode )
+        {
+            sysSleepTime = (SWTIMER_INVALID_TIMEOUT == SwTimerNextExpiryDuration()) ? PMM_SLEEPTIME_MAX_MS : US_TO_MS( sysSleepTime );
+            canSleep = canSleep && validateSleepDuration( sysSleepTime );            
+            if ( canSleep && (req->sleepTimeMs < sysSleepTime) )
             {
-                    
-                    sysSleepTime = SwTimerNextExpiryDuration();
-                    if (SWTIMER_INVALID_TIMEOUT == sysSleepTime)
-                    {
-                        sysSleepTime = PMM_SLEEPTIME_MAX_MS;
-                    }
-                    else
-                    {
-                        sysSleepTime = US_TO_MS(sysSleepTime);
-                    }
-
-                    if (validateSleepDuration(sysSleepTime))
-                    {
-                        if (req->sleepTimeMs < sysSleepTime)
-                        {
-                            sysSleepTime = req->sleepTimeMs;
-                        }
-
-                        SystemTimerSuspend();
-                        SleepTimerStart(
-                            MS_TO_SLEEP_TICKS(sysSleepTime - PMM_WAKEUPTIME_MS),
-                            PMM_Wakeup
-                        );
-
-                        pmmState = PMM_STATE_SLEEP;
-                        sleepReq = req;
-                        
-                        HAL_Sleep(req->sleep_mode);
-
-                        status = PMM_SLEEP_REQ_PROCESSED;
-                    }
-                
-            }
+                sysSleepTime = req->sleepTimeMs;
+            }            
+        }
+        
+        if ( canSleep )
+        {
+            /* Start of sleep preparation */
+            SystemTimerSuspend();
+            SleepTimerStart( MS_TO_SLEEP_TICKS( sysSleepTime - PMM_WAKEUPTIME_MS ), PMM_Wakeup );
+            pmmState = PMM_STATE_SLEEP;
+            sleepReq = req;            
+            /* End of sleep preparation */
+            
+            /* Put the system to sleep */
+            HAL_Sleep(req->sleep_mode);
+            
+            status = PMM_SLEEP_REQ_PROCESSED;
         }
     }
     

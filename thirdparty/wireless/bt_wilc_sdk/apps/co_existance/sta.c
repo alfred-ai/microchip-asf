@@ -315,6 +315,7 @@ static void parse_response(char *buffer, uint32_t len)
  */
 void sta_task(void *argument)
 {
+    xSemaphoreTake(wifi_bt_if_sem, portMAX_DELAY); /* Semaphore to synchronize BT &WiFi FW download */
 	struct netconn *conn = NULL;
 	struct ip_addr local_ip;
 	struct ip_addr remote_ip;
@@ -329,13 +330,14 @@ void sta_task(void *argument)
 
 	/* Initialize the network stack. */
 	net_init();
-	
+
 	/* Initialize the WILC1000 driver. */
 	tstrWifiInitParam param;
 	memset(&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb;
 	os_m2m_wifi_init(&param);
 
+	
 	/* Enable AP mode. */
 	memset(&cfg, 0, sizeof(cfg));
 	strcpy((char *)cfg.au8SSID, AP_WLAN_SSID);
@@ -349,6 +351,7 @@ void sta_task(void *argument)
 	}
 	os_m2m_wifi_enable_ap(&cfg);
 
+	xSemaphoreGive(wifi_bt_if_sem);	/* Semaphore to synchronize BT &WiFi FW download */
 #if 0
 //	os_m2m_wifi_set_sleep_mode(M2M_PS_DEEP_AUTOMATIC,1);
 os_m2m_wifi_set_device_name("Direct_WILC3000",strlen("Direct_WILC3000"));
@@ -369,8 +372,8 @@ os_m2m_wifi_p2p(M2M_WIFI_CH_11);
 	
 	//m2m_wifi_set_sleep_mode(M2M_NO_PS);
 	//os_m2m_wifi_set_sleep_mode(M2M_NO_PS,0);
-	
-	vTaskDelay(2000);	
+
+
 	while (1) {
 		
 		/* Ensure we are connected to AP. */

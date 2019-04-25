@@ -43,8 +43,6 @@
 #include "otau_upgrade.h"
 #include "otau_parser.h"
 
-upgrade_otau_state_t curr_upgrade_otau_state;
-
 void otauUpgradeInit(void)
 {
 
@@ -80,27 +78,26 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 	}
 }
 
-void otauUpgradeSentFrame(addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
+void otauUpgradeSentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
 {
-	switch (curr_upgrade_otau_state)
+	switch (messageId)
 	{
-		case SERVER_NOTIFY_SENT:
+		case OTA_SERVER_NOTIFY:
 		send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, addr, SERVER_NOTIFY_CONFIRM, &status, 1);
 		break;
-		case IMAGE_NOTIFY_SENT:
+		case OTA_IMAGE_NOTIFY:
 		send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, addr, IMAGE_NOTIFY_CONFIRM, &status, 1);
 		break;
-		case IMAGE_RESPONSE_SENT:
+		case OTA_IMAGE_RESPONSE:
 		send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, addr, IMAGE_CONFIRM, &status, 1);
 		break;
-		case SWITCH_RESPONSE_SENT:
+		case OTA_SWITCH_RESPONSE:
 		send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, addr, SWITCH_IMAGE_CONFIRM, &status, 1);
 		break;
 		default:
 		break;
 		/*  */
 	}
-	curr_upgrade_otau_state = UPGRADE_OTAU_IDLE;
 }
 
 
@@ -140,7 +137,6 @@ void handle_upgrade_otau_msg(otau_domain_msg_t *otau_domain_msg)
 			server_notify.msgId = OTA_SERVER_NOTIFY;
 			memcpy(&server_notify.ieee_addr, get_node_address(EXTENDED_ADDR_MODE), EXTENDED_ADDR_SIZE);
 			memcpy(&server_notify.short_addr, get_node_address(NATIVE_ADDR_MODE), NATIVE_ADDR_SIZE);
-			curr_upgrade_otau_state = SERVER_NOTIFY_SENT;
 			server_notify.domainId = DOMAIN_OTAU_UPGRADE;
 			otauDataSend(addr_mode, addr, &server_notify, sizeof(server_notify_indication_t));
 			break;
@@ -150,7 +146,6 @@ void handle_upgrade_otau_msg(otau_domain_msg_t *otau_domain_msg)
 			otauImageNotifyRequest_t imageNotify;
 			imageNotify.msgId = OTA_IMAGE_NOTIFY;
 			memcpy(&imageNotify.imageType, msg, sizeof(otauImageNotifyRequest_t) - 2);
-			curr_upgrade_otau_state = IMAGE_NOTIFY_SENT;
 			imageNotify.domainId = DOMAIN_OTAU_UPGRADE;
 			otauDataSend(addr_mode, addr, &imageNotify, sizeof(otauImageNotifyRequest_t));
 			break;
@@ -164,7 +159,6 @@ void handle_upgrade_otau_msg(otau_domain_msg_t *otau_domain_msg)
 			memcpy(&image_response.imageRespType, msg, temp);
 			msg += temp;
 			memcpy(&image_response.block, msg, image_response.blockSize);
-			curr_upgrade_otau_state = IMAGE_RESPONSE_SENT;
 			image_response.domainId = DOMAIN_OTAU_UPGRADE;
 			otauDataSend(addr_mode, addr, &image_response, temp + 2 + image_response.blockSize);
 			break;
@@ -174,7 +168,6 @@ void handle_upgrade_otau_msg(otau_domain_msg_t *otau_domain_msg)
 			otauSwitchImageResponse_t switch_image_resp;
 			switch_image_resp.msgId = OTA_SWITCH_RESPONSE;
 			memcpy(&switch_image_resp.switchTime, msg, sizeof(switch_image_resp.switchTime));
-			curr_upgrade_otau_state = SWITCH_RESPONSE_SENT;
 			switch_image_resp.domainId = DOMAIN_OTAU_UPGRADE;
 			otauDataSend(addr_mode, addr, &switch_image_resp, sizeof(otauSwitchImageResponse_t));
 			break;

@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 #ifndef _NMASIC_H_
 #define _NMASIC_H_
 
@@ -215,15 +219,11 @@ typedef struct {
      extern "C" {
  #endif
  
-
 sint8 chip_wake(void);
-/*
-*	@fn		chip_sleep
-*	@brief	
-*/
-sint8 chip_sleep(void);
-void chip_idle(void);
 
+sint8 chip_sleep(void);
+
+void chip_idle(void);
 
 sint8 enable_interrupts(void);
 
@@ -268,6 +268,8 @@ sint8 pullup_ctrl(uint32 pinmask, uint8 enable);
 sint8 nmi_get_otp_mac_address(uint8 *pu8MacAddr, uint8 * pu8IsValid);
 
 sint8 nmi_get_mac_address(uint8 *pu8MacAddr);
+
+sint8 is_valid_gpio(uint8 gpio);
 
 #ifdef __cplusplus
 	 }

@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains SAM4S BSP APIs declarations.
+ * \brief This module contains SAM4S WILC BSP APIs declarations.
  *
  * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef _NM_BSP_SAM4S_H_
 #define _NM_BSP_SAM4S_H_
@@ -45,8 +48,6 @@
 #else
 #define CONF_WIFI_USE_SPI
 #endif
-#define ETH_MODE
-
 
 #define CONF_WIFI_M2M_DEBUG					(1)
 #define CONF_WIFI_M2M_PRINTF				printk

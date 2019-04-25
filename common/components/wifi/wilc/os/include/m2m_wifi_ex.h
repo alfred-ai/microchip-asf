@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+
 #ifndef M2M_WIFI_EX_H_INCLUDED
 #define M2M_WIFI_EX_H_INCLUDED
 #include <driver/include/m2m_wifi.h>
@@ -98,6 +102,7 @@ sint8 os_m2m_wifi_get_otp_mac_address(uint8* pu8MacAddr, uint8* pu8IsValid);
 sint8 os_m2m_wifi_get_mac_address(uint8* pu8MacAddr0, uint8* pu8MacAddr1);
 sint8 os_m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn);
 sint8 os_m2m_wifi_set_device_name(uint8* pu8DeviceName, uint8 u8DeviceNameLength);
+sint8 os_m2m_wifi_set_p2p_pin(uint8* pu8PinNumber, uint8 u8PinLength);
 sint8 os_m2m_wifi_set_lsn_int(tstrM2mLsnInt* pstrM2mLsnInt);
 sint8 os_m2m_wifi_enable_monitoring_mode(tstrM2MWifiMonitorModeCtrl* pstrMtrCtrl);
 sint8 os_m2m_wifi_disable_monitoring_mode(void);

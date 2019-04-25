@@ -95,6 +95,7 @@ typedef enum miwi_status {
 	ERR_TX_FAIL,
 	ERR_TRX_FAIL,
 	ERR_INVALID_INPUT,
+	RECONNECTION_IN_PROGRESS,
 }miwi_status_t;
 
 enum miwi_params {
@@ -341,6 +342,13 @@ typedef struct RebroadcastTable_
 	uint8_t timeout;
 }RebroadcastTable_t;
 
+typedef struct DuplicateRejectionTable_
+{
+	uint16_t srcAddr;
+	uint8_t seqNo;
+	uint8_t timeout;
+}DuplicateRejectionTable_t;
+
 typedef struct __defaultParametersRomOrRam
 {
 #if defined(PROTOCOL_MESH)
@@ -357,7 +365,7 @@ typedef struct __defaultParametersRomOrRam
 
 	uint16_t keepAliveCoordSendInterval;
 	uint16_t keepAliveCoordTimeoutSec;
-	uint8_t numOfCoordinators;
+
 	uint8_t maxNumOfDevicesInNetwork;
 
 	uint8_t roleUpgradeIntervalInSec;
@@ -372,14 +380,17 @@ typedef struct __defaultParametersRomOrRam
 	uint8_t rebroadcastTableSize;
 	uint8_t rebroadcastTimeout;
 #endif
+	DuplicateRejectionTable_t *duplicateRejectionTable;
 	uint32_t deviceTimeout;
 	uint16_t keepAliveRxOnEdSendInterval;
 	uint16_t keepAliveRxOnEdTimeoutSec;
+	uint8_t duplicateRejectionTableSize;
+	uint8_t numOfCoordinators;
 	uint8_t dataRequestInterval;
+	uint8_t maxDataRequestInterval;
 	
 	uint8_t edLinkFailureAttempts;
 	uint8_t connRespWaitInSec;
-	uint8_t frameAckWaitInterval;
 	uint8_t frameRetry;
 #ifndef PAN_COORDINATOR
 	searchConf_t* searchConfMem;
@@ -407,7 +418,7 @@ extern defaultParametersRamOnly_t defaultParamsRamOnly;
 
 /************************************************************************************
 * Function:
-*      void MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
+*      miwi_status_t MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
 *                              defaultParametersRamOnly_t *defaultRamOnlyParams)
 *
 * Summary:
@@ -428,7 +439,9 @@ extern defaultParametersRamOnly_t defaultParamsRamOnly;
 *                                           Ignored in case of P2P / Star
 *
 * Returns:
-*      None
+*      miwi_status_t status of Initialization
+*      In Mesh, when Network Freezer is enabled, stack try to restores the network freezer
+*      data and tries to reconnect to the network, this is indicated with reconnection progress status
 *
 * Example:
 *      <code>
@@ -440,7 +453,7 @@ extern defaultParametersRamOnly_t defaultParamsRamOnly;
 *      None
 *
 *********************************************************************************/
-bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
+miwi_status_t MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
 						defaultParametersRamOnly_t *defaultRamOnlyParams);
 
 /************************************************************************************

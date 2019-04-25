@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 I2C protocol bus APIs implementation.
+ * \brief This module contains WILC I2C protocol bus APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -30,6 +30,9 @@
  *
  * \asf_license_stop
  *
+ */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 
 #ifdef CONF_WIFI_USE_I2C 

@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef __M2M_WIFI_TYPES_H__
 #define __M2M_WIFI_TYPES_H__
@@ -66,15 +69,15 @@ MACROS
 */
 
 
-#define M2M_FIRMWARE_VERSION_MINOR_NO					(3)
+#define M2M_FIRMWARE_VERSION_MINOR_NO					(4)
 /*!< Firmware Minor release version number.
 */
 
-#define M2M_FIRMWARE_VERSION_PATCH_NO					(4)
+#define M2M_FIRMWARE_VERSION_PATCH_NO					(2)
 /*!< Firmware patch release version number.
 */
 
-#define RF_VERSION							("01.1")
+#define RF_VERSION										("01.1")
 /*!< Firmware RF Version.
 */
 
@@ -87,11 +90,11 @@ MACROS
 */
 
 
-#define M2M_DRIVER_VERSION_MINOR_NO					(3)
+#define M2M_DRIVER_VERSION_MINOR_NO					(4)
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO					(4)
+#define M2M_DRIVER_VERSION_PATCH_NO					(2)
 /*!< Driver patch release version number.
 */
 
@@ -105,7 +108,7 @@ MACROS
  */
 
 
-#define M2M_MAC_ADDRES_LEN                                 				6
+#define M2M_MAC_ADDRES_LEN                              6
 /*!< The size fo 802 MAC address.
  */
 
@@ -118,17 +121,17 @@ Should be word aligned
 /*!< Pad size before the Ethernet header to keep the Ethernet data aligned
  */
 
-#define M2M_ETHERNET_HDR_LEN								14
+#define M2M_ETHERNET_HDR_LEN							14
 /*!< Length of the Etherenet header in bytes.
 */
 
 
-#define M2M_MAX_SSID_LEN 									33
+#define M2M_MAX_SSID_LEN 								33
 /*!< Maximum size for the Wi-Fi SSID including the NULL termination.
  */
 
 
-#define M2M_MAX_PSK_LEN           								65
+#define M2M_MAX_PSK_LEN           						65
 /*!< Maximum size for the WPA PSK including the NULL termination.
  */
 
@@ -146,7 +149,7 @@ THIS VALUE CANNOT BE CHANGED
  */
  
 
-#define M2M_LISTEN_INTERVAL 								1
+#define M2M_LISTEN_INTERVAL 							1
 /*!< The STA uses the Listen Interval parameter to indicate to the AP how
 	many beacon intervals it shall sleep before it retrieves the queued frames
 	from the AP. 
@@ -171,16 +174,16 @@ THIS VALUE CANNOT BE CHANGED
 */
 
 
-#define M2M_CONFIG_CMD_BASE									1
+#define M2M_CONFIG_CMD_BASE								1
 /*!< The base value of all the host configuration commands opcodes.
 */
-#define M2M_STA_CMD_BASE									40
+#define M2M_STA_CMD_BASE								40
 /*!< The base value of all the station mode host commands opcodes.
 */
-#define M2M_AP_CMD_BASE										80
+#define M2M_AP_CMD_BASE									80
 /*!< The base value of all the Access Point mode host commands opcodes.
 */
-#define M2M_P2P_CMD_BASE									90
+#define M2M_P2P_CMD_BASE								90
 /*!< The base value of all the P2P mode host commands opcodes.
 */
 
@@ -218,6 +221,9 @@ THIS VALUE CANNOT BE CHANGED
 #define M2M_SCAN_ERR_WPS      							((sint8)-6)	
 /*!< currently not used.
 */
+#define P2P_MAX_PIN_SIZE								8
+/*!< The maxmimum pin size for P2P PIN Config method.
+*/
 
 /*======*======*======*======*
 	MONTIORING MODE DEFINITIONS
@@ -229,6 +235,30 @@ THIS VALUE CANNOT BE CHANGED
 #define M2M_WIFI_FRAME_SUB_TYPE_ANY						0xFF
 /*!< Set monitor mode to receive frames with any sub type
 */
+
+
+/*======*======*======*======*
+		Device configuration methods
+*======*======*======*======*/
+
+#define CONF_METHOD_LABEL								0x0004
+#define CONF_METHOD_PBC									0x0080
+#define CONF_METHOD_VIRTUAL_DISPLAY						0x2008
+#define CONF_METHOD_VIRTUAL_PBC							0x0280
+#define CONF_METHOD_PHYSICAL_PBC						0x0480
+#define CONF_METHOD_KEYPAD								0x0100
+#define CONF_METHOD_DISPLAY								0x0008
+#define CONF_METHOD_PHYSICAL_DISPLAY					0x4008
+
+/*======*======*======*======*
+		Device Pwd ID
+*======*======*======*======*/
+
+#define P2P_DEFAULT_PIN 								0X00
+#define P2P_USER_SPECIFIED								0X01
+#define P2P_PUSHBUTTON									0X04
+#define P2P_REGISTER_SPECIFIED 							0X05
+
 
 /**@}*/
 
@@ -384,6 +414,13 @@ typedef enum {
 	M2M_WIFI_REQ_DISABLE_MCAST_FILTER,
 	/*!< Request to disable multicast filter.
 	*/
+	M2M_WIFI_REQ_SET_ANT_SWITCH_MODE,
+	/*!< Set antenna switch mode
+	*/
+	M2M_WIFI_P2P_AUTH_RES,
+	/*!< Set p2p pin number
+	*/
+
 }tenuM2mConfigCmd;
 
 /*!
@@ -489,6 +526,12 @@ typedef enum {
 	*/
 	M2M_WIFI_REQ_CHG_MONITORING_CHNL,
 	/*!< Change monitoring channel
+	*/
+	M2M_WIFI_RESP_ANT_SWITCH_MODE,
+	/*!< Request connection information response.
+	*/
+	M2M_WIFI_REQ_P2P_AUTH,
+	/*!< Request to enter p2p pin
 	*/
 } tenuM2mStaCmd;
 
@@ -689,6 +732,63 @@ typedef enum{
 	*/
 }tenuWPSTrigger;
 
+/*!
+@enum	\
+	tenuP2PTrigger
+	
+@brief
+	P2P Triggering Methods.
+*/
+typedef enum{
+	P2P_PIN = 0,
+	/*!< P2P-WPS is triggered in PIN method.
+	*/
+	P2P_PBC = 4
+	/*!< P2P-WPS is triggered via push button.
+	*/
+}tenuP2PTrigger;
+
+
+/*!
+@enum	\
+	tenuAntSwitchMode
+
+@brief
+	Antenna Switch Modes.
+*/
+typedef enum {
+	ANTENNA1		= 0,
+	/*!< To select Antenna1 mode
+	*/
+	ANTENNA2		= 1,
+	/*!< To select Antenna2 mode
+	*/
+	DIVERSITY     = 2,
+	/*!< Antenna selection is ON in dual antenna mode
+		or diversity mode
+	*/
+	NUM_ANT_MODE
+}tenuAntSwitchMode;
+
+/*!
+@enum	\
+	tenuAntSelGpio
+
+@brief
+	Antenna GPIO options.
+*/
+typedef enum {
+	ANT_SWTCH_GPIO_NONE		= 0,
+	/*!< Antenna GPIO mode is turned OFF.
+	*/
+	ANT_SWTCH_GPIO_SINLGE	= 1,
+	/*!< Antenna switch is ON in single antenna mode.
+	*/
+	ANT_SWTCH_GPIO_DUAL     = 2
+	/*!< Antenna switch is ON in dual antenna mode
+		or diversity mode
+	*/
+}tenuAntSelGpio;
 
 /*!
 @struct	\
@@ -859,7 +959,20 @@ typedef struct{
 	*/
 }tstrM2MWPSInfo;
 
+/*!
+@struct	\
+	tstrM2MP2pDevInfo
 
+@brief	P2P Pin
+
+	This structure is passed to the application along with authorization request.
+	The	config methods bitmap shall contain the method opted by p2p peer device.
+*/
+typedef struct{
+	uint16	u16CfgMethods;
+	/*!< WSC config methods requested by peer methods
+	*/
+}tstrM2MP2pDevInfo;
 /*!
 @struct	\
 	tstrM2MScan
@@ -1044,10 +1157,13 @@ typedef struct {
 	uint8  u8IfcId;
 	/*! < Interface on which state was changed
 	*/
+	uint8  u8Ch;
+	/*! < Channel number of the STA/AP involved in state change
+	*/
 	uint8  u8MAcAddr[6];
 	/*! < Mac Address of the STA/AP involved in state change
 	*/
-	uint8	__PAD24__[3];
+	uint8	__PAD24__[2];
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mWifiStateChanged;
@@ -1236,7 +1352,13 @@ typedef struct {
 	uint8 	u8ListenChannel; 
 	/*!< P2P Listen Channel (1, 6 or 11)
 	*/
-	uint8	__PAD24__[3];
+	tenuP2PTrigger enuTrigger;
+	/*!< P2P trigger type @ref tenuP2PTrigger
+	*/
+	uint16 u16WPS_CfgMethods;
+	/*!< P2P config methods
+	*/
+	uint8	__PAD24__[2];
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MP2PConnect;
@@ -1324,6 +1446,21 @@ typedef struct {
 	/*!< NULL terminated device name
 	*/
 }tstrM2MDeviceNameConfig;
+
+/*!
+@struct	\
+ 	tstrM2MPinInfo
+ 	
+@brief	PIN Number (input)
+
+	The PIN Number is assigned by application in response to
+	authorization request while P2P Connection.
+*/
+typedef struct {
+	uint8 	au8Pin[P2P_MAX_PIN_SIZE+1];
+	/*!< NULL terminated pin number
+	*/
+}tstrM2MPinInfo;
 
 /*!
 @struct	\
@@ -1498,5 +1635,31 @@ typedef struct{
  }tstrM2mTxPwrLevel;
 
  /**@}*/
+
+ /*!
+@struct \
+	 tstrM2mAntDiversityParams
+
+@brief
+	 Antena selection/switch mode
+@sa
+	tenuAntSelGpio
+	tenuAntSwitchMode
+
+*/
+ typedef struct {
+	  uint8 mode;
+	 /*!< Antenna Selection mode
+	 */
+	  uint8 antenna1;
+	 /*!< Antenna1 WILC GPIO number selection
+	 */
+	  uint8 antenna2;
+	 /*!< Antenna2 WILC GPIO number selection
+	 */
+	  uint8 gpio_mode;
+	 /*!< Antenna GPIO Switch mode - Single=1, Dual=2 or None=0
+	 */
+ }tstrM2mAntDivParams;
 
 #endif

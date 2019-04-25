@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #include "driver/source/nmbus.h"
 #include "bsp/include/nm_bsp.h"
@@ -366,7 +369,6 @@ sint8 chip_sleep(void)
 		if(ret != M2M_SUCCESS)goto ERR1;
 	}
 #endif
-
 ERR1:
 	return ret;
 }
@@ -375,7 +377,7 @@ sint8 chip_wake(void)
 {
 	sint8 ret;
 	volatile uint32 reg = 0, clk_status_reg = 0,trials = 0;
-	
+
 #ifdef CONF_WILC_USE_1000_REV_B
 	ret = nm_read_reg_with_ret(WILC_FROM_INTERFACE_TO_WF_REG, (uint32*)&reg);
 	if(ret != M2M_SUCCESS)goto _WAKE_EXIT;
@@ -386,7 +388,7 @@ sint8 chip_wake(void)
 		ret = nm_write_reg(WILC_FROM_INTERFACE_TO_WF_REG, reg|WILC_FROM_INTERFACE_TO_WF_BIT);
 		if(ret != M2M_SUCCESS)goto _WAKE_EXIT;
 	}
-#endif		
+#endif
 	ret = nm_read_reg_with_ret(WILC_WAKEUP_REG, (uint32*)&reg);
 	if(ret != M2M_SUCCESS)goto _WAKE_EXIT;
 	/* Set bit 1 */
@@ -785,3 +787,14 @@ _EXIT_ERR:
 	return ret;
 }
 
+sint8 is_valid_gpio(uint8 gpio)
+{
+#if	defined(CONF_WILC_USE_1000_REV_B)
+	return (gpio == 0 || gpio == 1 || gpio == 3 || gpio == 4 || gpio == 6);
+#elif defined(CONF_WILC_USE_3000_REV_A)
+	return (gpio == 0 || gpio == 3 || gpio == 4 ||gpio == 6 ||
+		(gpio >= 17 && gpio <= 20));
+#endif
+	
+	return false;
+}

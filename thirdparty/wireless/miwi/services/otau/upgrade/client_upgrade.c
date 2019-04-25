@@ -41,6 +41,13 @@
 #include "client_upgrade.h"
 #include "otau_upgrade.h"
 #include "common_nvm.h"
+#ifdef OTAU_USE_EXTERNAL_MEMORY
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+#include "at25dfx.h"
+#include "conf_at25dfx.h"
+#endif
+#endif
+
 #include "delay.h"
 
 static void send_image_req(uint32_t index);
@@ -63,6 +70,13 @@ uint16_t block[APP_MAX_PAYLOAD_SIZE / 2];
 
 uint8_t otauUpgradeConfirmWait = 0;
 uint8_t imageReqRetry = 0;
+
+#ifdef OTAU_USE_EXTERNAL_MEMORY
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+extern struct spi_module at25dfx_spi;
+extern struct at25dfx_chip_module at25dfx_chip;
+#endif
+#endif
 
 void otauUpgradeInit(void)
 {
@@ -112,7 +126,15 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 				{
 					imageReqRetry = 0;
 					memcpy(&block, &(image_resp->block), image_resp->blockSize);
+#ifndef OTAU_USE_EXTERNAL_MEMORY
 					nvm_write(INT_FLASH, UPGRADE_OFFSET_ADDRESS + (image_resp->blockAddr - upgradeImageStart), (uint8_t *)&block, image_resp->blockSize);
+#else
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+                    at25dfx_chip_write_buffer(&at25dfx_chip, UPGRADE_OFFSET_ADDRESS + (image_resp->blockAddr - upgradeImageStart) , (void *)&block, image_resp->blockSize);
+#else
+#error "To be implemented"
+#endif
+#endif
 					image_index += image_resp->blockSize;
 					if(image_index < image_end)
 					{
@@ -120,15 +142,44 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 					}
 					else
 					{
-						const uint8_t *byte = (uint8_t *)UPGRADE_OFFSET_ADDRESS;
 						uint32_t index = 0;
 						uint8_t crc = 0;
+#ifndef OTAU_USE_EXTERNAL_MEMORY
+						const uint8_t *address = (uint8_t *)UPGRADE_OFFSET_ADDRESS;
 						while(index < image_size)
 						{
-							crc ^= *byte;
-							byte++;
+							crc ^= *address;
+							address++;
 							index++;
 						}
+#else
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+						uint32_t address = UPGRADE_OFFSET_ADDRESS;
+						uint8_t loopIndexLocal2 = 0;
+                        uint8_t blockRead[256] = {0};
+						uint32_t readCount = 0;
+						while(index < image_size)
+						{
+							if ((image_size - index) > 128)
+							{
+								readCount = 128;
+							}
+							else
+							{
+								readCount = image_size - index;
+							}
+							at25dfx_chip_read_buffer(&at25dfx_chip, address, (void *)blockRead, readCount);
+							for (loopIndexLocal2 = 0; loopIndexLocal2 < readCount; loopIndexLocal2++)
+							{
+								crc = crc ^ blockRead[loopIndexLocal2];
+							}
+							address += readCount;
+							index += readCount;
+						}
+#else
+#error "To be implemented"
+#endif
+#endif
 						if(crc == image_crc)
 						{
 							otauTimerStop(DOMAIN_OTAU_UPGRADE);
@@ -170,7 +221,7 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 	}
 }
 
-void otauUpgradeSentFrame(addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
+void otauUpgradeSentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
 {
 	otauUpgradeConfirmWait = 0;
 	if (currOtauUpgradeState == IMAGE_REQUEST_SENT)
@@ -230,7 +281,15 @@ void otauUpgradeTimerHandler(SYS_Timer_t *timer)
 		app_info.appTable[0].existingImageInfo.active = 1;
 
 		app_info.appTable[0].bootInfo.update_action = 1;
+#ifndef OTAU_USE_EXTERNAL_MEMORY
 		app_info.appTable[0].bootInfo.src_memtype = TYPE_INTERNAL;
+#else
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+		app_info.appTable[0].bootInfo.src_memtype = TYPE_EXTERNAL;
+#else
+#error "To be implemented"
+#endif
+#endif
 		app_info.appTable[0].bootInfo.dest_memtype = TYPE_INTERNAL;
 		app_info.appTable[0].bootInfo.img_type = 0;
 

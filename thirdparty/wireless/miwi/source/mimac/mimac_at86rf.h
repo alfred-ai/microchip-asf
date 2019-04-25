@@ -55,10 +55,12 @@
 	#define FULL_CHANNEL_MAP        0x000007FF
 	#define FIRST_CHANNEL_NUM      0
 	#define LAST_CHANNEL_NUM       10
+	#define MAX_FRAME_TX_TIME      10
 	#elif (defined(PHY_AT86RF233))
 	#define FULL_CHANNEL_MAP        0x07FFF800
 	#define FIRST_CHANNEL_NUM      11
 	#define LAST_CHANNEL_NUM       26
+	#define MAX_FRAME_TX_TIME      5
 	#endif
 	#define ANUMSUPERFRAMESLOTS			(16)
 	#define ABASESLOTDURATION			(60)

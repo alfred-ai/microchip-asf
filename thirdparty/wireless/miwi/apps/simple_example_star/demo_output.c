@@ -344,8 +344,8 @@ void STAR_DEMO_OPTIONS_MESSAGE(bool NetworkRole)
 
 uint8_t ButtonPressed(void)
 {
-    MIWI_TICK tickDifference;
 #if (BOARD == SAMR21_XPLAINED_PRO) || (BOARD == SAMR21ZLL_EK) || (BOARD == SAMR30_XPLAINED_PRO)
+    MIWI_TICK tickDifference;
     if(!port_pin_get_input_level(BUTTON_0_PIN))
     {
         //if the button was previously not pressed

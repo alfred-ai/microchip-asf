@@ -116,6 +116,7 @@ typedef struct DataHandleTable_
 	uint8_t addrMode;
 	uint8_t dataHandle;
 	uint8_t domainId;
+	uint8_t messageId;
 }DataHandleTable_t;
 
 typedef struct {

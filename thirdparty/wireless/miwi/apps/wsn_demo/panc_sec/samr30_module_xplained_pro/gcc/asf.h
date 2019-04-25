@@ -56,6 +56,9 @@
 #include <compiler.h>
 #include <status_codes.h>
 
+// From module: Common files for AT25DFx SerialFlash drivers
+#include <at25dfx.h>
+
 // From module: Delay routines
 #include <delay.h>
 

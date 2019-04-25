@@ -110,14 +110,11 @@ static const DRParams_t DefaultDrparamsEU[] =
 #if (ENABLE_PDS == 1)
 #define PDS_REG_EU868_CH_PARAM_1_ADDR                      ((uint8_t *)&(RegParams.cmnParams.paramsType2.chParams[MAX_CHANNELS_T2 - MAX_CHANNELS_T2]))
 #define PDS_REG_EU868_CH_PARAM_2_ADDR                      ((uint8_t *)&(RegParams.cmnParams.paramsType2.othChParams[MAX_CHANNELS_T2 - MAX_CHANNELS_T2]))
-#define PDS_REG_EU868_SB_DUTY_PRESCLAR_ADDR			       ((uint8_t *)&(RegParams.cmnParams.paramsType2.subBandDutyCycle[MAX_CHANNELS_T2 - MAX_CHANNELS_T2]))
 
 #define PDS_REG_EU868_CH_PARAM_1_SIZE					    sizeof(RegParams.cmnParams.paramsType2.chParams)
 #define PDS_REG_EU868_CH_PARAM_2_SIZE					    sizeof(RegParams.cmnParams.paramsType2.othChParams)
-#define PDS_REG_EU868_SB_DUTY_PRESCLAR_SIZE                 sizeof(RegParams.cmnParams.paramsType2.subBandDutyCycle)
 
 #define PDS_REG_EU868_CH_PARAM_1_OFFSET                    (PDS_FILE_START_OFFSET)
-#define PDS_REG_EU868_SB_DUTY_PRESCLAR_OFFSET              (PDS_REG_EU868_CH_PARAM_1_OFFSET + PDS_SIZE_OF_ITEM_HDR + PDS_REG_EU868_CH_PARAM_1_SIZE)
 #define PDS_REG_EU868_CH_PARAM_2_OFFSET                    (PDS_FILE_START_OFFSET)
 
 /* PDS Reg Params NA Item declaration */
@@ -127,12 +124,7 @@ const ItemMap_t pds_reg_eu868_fid1_item_list[] = {
 	PDS_FILE_REG_EU868_04_IDX,
 	(uint8_t)PDS_REG_EU868_CH_PARAM_1,
 	PDS_REG_EU868_CH_PARAM_1_SIZE,
-	PDS_REG_EU868_CH_PARAM_1_OFFSET),
-	DECLARE_ITEM(PDS_REG_EU868_SB_DUTY_PRESCLAR_ADDR,
-	PDS_FILE_REG_EU868_04_IDX,
-	(uint8_t)PDS_REG_EU868_SB_DUTY_PRESCLAR,
-	PDS_REG_EU868_SB_DUTY_PRESCLAR_SIZE,
-	PDS_REG_EU868_SB_DUTY_PRESCLAR_OFFSET)	
+	PDS_REG_EU868_CH_PARAM_1_OFFSET)
 };
 
 const ItemMap_t pds_reg_eu868_fid2_item_list[] = {
@@ -194,7 +186,6 @@ StackRetStatus_t LORAReg_InitEU(IsmBand_t ismBand)
 		RegParams.regParamItems.alt_ch_item_id = 0;
 		RegParams.regParamItems.ch_param_1_item_id = PDS_REG_EU868_CH_PARAM_1;
 		RegParams.regParamItems.ch_param_2_item_id = PDS_REG_EU868_CH_PARAM_2;
-		RegParams.regParamItems.sb_dc_prescalr_item_id = PDS_REG_EU868_SB_DUTY_PRESCLAR;
 		RegParams.regParamItems.band_item_id = 0;
 
 		PdsFileMarks_t filemarks_fid1;

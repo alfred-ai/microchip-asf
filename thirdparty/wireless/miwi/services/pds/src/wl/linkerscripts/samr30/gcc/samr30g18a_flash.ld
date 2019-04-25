@@ -58,11 +58,14 @@ SECTIONS
         _sfixed = .;
         KEEP(*(.vectors .vectors.*))
 
+		/***************************************************************************/
+		/** REMOVE THE BELOW SECTION IF YOU ARE NOT USING NETWORK_FREEZER - START **/
+		/***************************************************************************/
 		/* PDS NV memory section */
-		. = ALIGN(0x400);
+		. = ALIGN(0x2100);
 		PROVIDE(__d_nv_mem_start = .);
 		FILL(0xFFFFFFFF)
-		. = ALIGN(0x4400); /* Size of D_Nv memory section is 0x4000 i.e., 16KB */
+		. = ALIGN(0x6100); /* Size of D_Nv memory section is 0x4000 i.e., 16KB */
 		PROVIDE(__d_nv_mem_end = .);
 
         /* Non-volatile file system PDS_FF section */
@@ -74,6 +77,9 @@ SECTIONS
         PROVIDE(__pds_fd_start = .);
         KEEP(*(.pds_fd))
         PROVIDE(__pds_fd_end = .);
+		/***************************************************************************/
+		/*** REMOVE THE BELOW SECTION IF YOU ARE NOT USING NETWORK_FREEZER - END ***/
+		/***************************************************************************/
 
         *(.text .text.* .gnu.linkonce.t.*)
         *(.glue_7t) *(.glue_7)

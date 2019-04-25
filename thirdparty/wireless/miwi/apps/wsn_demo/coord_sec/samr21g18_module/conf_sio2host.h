@@ -40,7 +40,7 @@
 #define SERIAL_RX_BUF_SIZE_HOST    156
 
 /** Baudrate setting */
-#define USART_HOST_BAUDRATE        9600
+#define USART_HOST_BAUDRATE        38400
 #ifndef ENABLE_UART1
 #define USART_HOST                 UART0_SERCOM
 #define HOST_SERCOM_MUX_SETTING    UART0_SERCOM_MUX_SETTING

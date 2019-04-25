@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef APP_H_INCLUDED
 #define APP_H_INCLUDED
@@ -40,13 +43,15 @@ extern "C" {
 #endif
 
 /** Wi-Fi Settings - STA mode. */
-#define STA_WLAN_SSID                "DEMO_AP" /* < Destination SSID */
+#define STA_WLAN_SSID                L"DEMO_AP" /* < Destination SSID */
 #define STA_WLAN_AUTH                M2M_WIFI_SEC_OPEN/* < Security manner */
-#define STA_WLAN_PSK                 "1234567890" /* < Password for Destination SSID */
+#define STA_WLAN_PSK                 L"1234567890" /* < Password for Destination SSID */
 
 /** WEP security setting for STA mode and/or AP mode */
 #define WEP_KEY_INDEX            M2M_WIFI_WEP_KEY_INDEX_1
 #define WEP_KEY                  "1234567890"
+/**< 64 bit WEP key. In case of WEP64, 10 hexadecimal (base 16) characters (0-9 and A-F) ) */
+/**< 128 bit WEP key. In case of WEP128, 26 hexadecimal (base 16) characters (0-9 and A-F) ) */
 #define WEP_KEY_SIZE             sizeof(WEP_KEY)
 #define WEP_AUTH_TYPE            WEP_ANY
 #define WEP_CONN_PARAM           {WEP_KEY_INDEX, WEP_KEY_SIZE, WEP_KEY, WEP_AUTH_TYPE}
@@ -56,9 +61,9 @@ WEP authentication type (OPEN, SHARED, or ANY) should be used for both
 STA and AP interfaces.*/
 
 /** Wi-Fi Settings - AP mode. */
-#define AP_WLAN_SSID                "DEMO_AP" /* < WILC SSID */
+#define AP_WLAN_SSID                L"DEMO_AP" /* < WILC SSID */
 #define AP_WLAN_AUTH                M2M_WIFI_SEC_OPEN/* < Security manner M2M_WIFI_SEC_OPEN, M2M_WIFI_SEC_WPA_PSK*/
-#define AP_WLAN_PSK                 "1234567890" /* < Password for WILC SSID */
+#define AP_WLAN_PSK                 L"1234567890" /* < Password for WILC SSID */
 
 /** Send buffer of TCP socket. */
 #define STA_PREFIX_BUFFER            "GET /data/2.5/weather?q="
@@ -68,6 +73,10 @@ STA and AP interfaces.*/
 #define STA_WEATHER_SERVER_NAME      "api.openweathermap.org"
 
 void sta_task(void *argument);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 /***************** Application types *******************/
@@ -80,10 +89,27 @@ void sta_task(void *argument);
 //#define AP_ONLY
 //#define P2P_ONLY
 
-/*********************************************************/
 
-#ifdef __cplusplus
-}
-#endif
+/***************** Antenna Selection/Diversity Testing *******************/
+
+//#define MAC_ANTENNA_DIVERSITY
+
+#ifdef MAC_ANTENNA_DIVERSITY
+
+/* Antenna Switch mode - {ANTENNA1, ANTENNA2 or DIVERSITY} */
+#define ANT_MODE (ANTENNA2)
+
+/* 
+ * Antenna GPIO ctrl - {ANT_SWTCH_GPIO_SINLGE, ANT_SWTCH_GPIO_DUAL
+ * or ANT_SWTCH_GPIO_NONE} 
+ */
+#define ANT_SWTCH_GPIO_CTRL_MODE (ANT_SWTCH_GPIO_DUAL)
+
+/* Antenna GPIO configuration */
+#define ANTENNA_GPIO_NUM_1	(4)
+#define ANTENNA_GPIO_NUM_2	(20)
+
+#endif //MAC_ANTENNA_DIVERSITY
+/*************************************************************************/
 
 #endif /* APP_H_INCLUDED */

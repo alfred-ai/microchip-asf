@@ -46,9 +46,9 @@ define symbol __ICFEDIT_region_LPRAM_start__  = 0x30000000;
 define symbol __ICFEDIT_region_LPRAM_end__    = 0x30001FFF;
 define symbol __ICFEDIT_region_ROM_start__    = 0x00000000;
 define symbol __ICFEDIT_region_ROM_end__      = 0x0003FFFF;
-define symbol __ICFEDIT_region_pds_ROM_start__  = 0x00000100;
-define symbol __ICFEDIT_region_pds_ROM_end__    = 0x00040FF;
-define symbol __ICFEDIT_region_text_ROM_start__  = 0x004100;
+define symbol __ICFEDIT_region_pds_ROM_start__  = 0x00002100;
+define symbol __ICFEDIT_region_pds_ROM_end__    = 0x00060FF;
+define symbol __ICFEDIT_region_text_ROM_start__  = 0x006100;
 define symbol __ICFEDIT_region_text_ROM_end__    = 0x0003FFFF;
 
 /*-Sizes-*/

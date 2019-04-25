@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains SAM4S BSP APIs declarations.
+ * \brief This module contains SAM4S WILC BSP APIs declarations.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *

@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 /**@defgroup  BSPDefine Defines
  * @ingroup nm_bsp
  * @{
@@ -286,7 +290,7 @@ void* nm_bsp_malloc(uint32 u32Size);
  */
 void nm_bsp_free(void* pvMemBuffer);
   /**@}*/
- 
+
 #ifdef __cplusplus
 }
 #endif

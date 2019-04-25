@@ -109,6 +109,9 @@ static inline uint32_t _at25dfx_get_device_id(enum at25dfx_type type)
 	case AT25DFX_041A:
 		return 0x01441f;
 
+	case AT25DFX_041B:
+		return 0x02441f;
+
 	case AT25DFX_081:
 		return 0x02451f;
 
@@ -153,6 +156,7 @@ static inline uint32_t _at25dfx_get_device_size(enum at25dfx_type type)
 		return 256 * 1024UL;
 
 	case AT25DFX_041A:
+	case AT25DFX_041B:
 		return 512 * 1024UL;
 
 	case AT25DFX_081:

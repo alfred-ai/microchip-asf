@@ -198,7 +198,11 @@ int main(void)
 	pwm_clock_t clock_setting = {
 		.ul_clka = PWM_FREQUENCY * PERIOD_VALUE,
 		.ul_clkb = 0,
+#if (SAMV70 || SAMV71 || SAME70 || SAMS70)
+		.ul_mck = sysclk_get_peripheral_hz()
+#else
 		.ul_mck = sysclk_get_cpu_hz()
+#endif
 	};
 #if (SAMV70 || SAMV71 || SAME70 || SAMS70)
 	pwm_init(PWM0, &clock_setting);

@@ -56,7 +56,17 @@ static enum status_code _usart_set_config(
 
 	/* Index for generic clock */
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
-	uint32_t gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+	uint32_t gclk_index;
+
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (SAMC21)
+	if (sercom_index == 5) {
+		gclk_index   = SERCOM5_GCLK_ID_CORE;
+	} else {
+		gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+	}
+#else
+	gclk_index   = sercom_index + SERCOM0_GCLK_ID_CORE;
+#endif
 
 	/* Cache new register values to minimize the number of register writes */
 	uint32_t ctrla = 0;

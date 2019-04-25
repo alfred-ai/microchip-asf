@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+ /*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 #include "linux_wlan_sdio.h"
 
 #include "bsp/include/nm_bsp.h"

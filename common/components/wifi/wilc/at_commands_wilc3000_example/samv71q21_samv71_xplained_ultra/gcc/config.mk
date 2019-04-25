@@ -88,6 +88,7 @@ CSRCS = \
        common/utils/osprintf/osprintf.c                   \
        common/utils/stdio/read.c                          \
        common/utils/stdio/write.c                         \
+       common/utils/utf8/utf8.c                           \
        sam/boards/samv71_xplained_ultra/init.c            \
        sam/drivers/efc/efc.c                              \
        sam/drivers/hsmci/hsmci.c                          \

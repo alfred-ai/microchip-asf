@@ -44,7 +44,14 @@
 #ifdef OTAU_SERVER
 #include "otau_parser.h"
 #else
+#ifndef OTAU_USE_EXTERNAL_MEMORY
 #include "common_nvm.h"
+#else
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+#include "at25dfx.h"
+#include "conf_at25dfx.h"
+#endif
+#endif
 #endif
 
 #include "miwi_api.h"
@@ -61,8 +68,8 @@ static void otauDataInd(RECEIVED_MESH_MESSAGE *ind);
 static void otauDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer);
 
 static void initDataHandleTable(void);
-static bool addDataHandleTableEntry(uint8_t domainId, addr_mode_t addrMode, uint8_t *addr, uint8_t handle);
-static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *addr, uint8_t *addrMode, uint8_t *domainId);
+static bool addDataHandleTableEntry(uint8_t domainId, uint8_t messageId, addr_mode_t addrMode, uint8_t *addr, uint8_t handle);
+static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *domainId, uint8_t *messageId, uint8_t *addrMode, uint8_t *addr);
 
 static SYS_Timer_t otauNotifyTimer;
 static SYS_Timer_t otauUpgradeTimer;
@@ -84,6 +91,54 @@ static uint8_t msgHandle = 0;
 uint16_t serverShortAddress = 0x0000;
 #endif
 
+#if !defined(OTAU_SERVER)
+#ifdef OTAU_USE_EXTERNAL_MEMORY
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+
+struct spi_module at25dfx_spi;
+struct at25dfx_chip_module at25dfx_chip;
+
+void serialFlashInit(void)
+{
+    /* configuration instances */
+    struct at25dfx_chip_config at25dfx_chip_config_struct;
+    struct spi_config at25dfx_spi_config;
+
+    /* SPI Setup */
+    at25dfx_spi_get_config_defaults(&at25dfx_spi_config);
+    at25dfx_spi_config.mode_specific.master.baudrate = AT25DFX_CLOCK_SPEED;
+    at25dfx_spi_config.mux_setting = AT25DFX_SPI_PINMUX_SETTING;
+    at25dfx_spi_config.pinmux_pad0 = AT25DFX_SPI_PINMUX_PAD0;
+    at25dfx_spi_config.pinmux_pad1 = AT25DFX_SPI_PINMUX_PAD1;
+    at25dfx_spi_config.pinmux_pad2 = AT25DFX_SPI_PINMUX_PAD2;
+    at25dfx_spi_config.pinmux_pad3 = AT25DFX_SPI_PINMUX_PAD3;
+
+    /* SPI Initialization */
+    spi_init(&at25dfx_spi, AT25DFX_SPI, &at25dfx_spi_config);
+
+    /* SPI Enable */
+    spi_enable(&at25dfx_spi);
+
+    /* Chip Setup */
+    at25dfx_chip_config_struct.type = AT25DFX_MEM_TYPE;
+    at25dfx_chip_config_struct.cs_pin = AT25DFX_CS;
+
+    /* Chip Initialization */
+    at25dfx_chip_init(&at25dfx_chip, &at25dfx_spi, &at25dfx_chip_config_struct);
+
+    /* Chip Wakeup */
+    at25dfx_chip_wake(&at25dfx_chip);
+
+    /* Erase Chip for storing the images */
+    at25dfx_chip_erase(&at25dfx_chip);
+
+    /* Disable global sector protect */
+    at25dfx_chip_set_global_sector_protect(&at25dfx_chip, false);
+}
+#endif
+#endif
+#endif
+
 void otauInit(void)
 {
 	miQueueInit(&networkFrame);
@@ -92,7 +147,15 @@ void otauInit(void)
 #ifdef OTAU_SERVER
 	otauParserInit();
 #else
+#ifndef OTAU_USE_EXTERNAL_MEMORY
 	nvm_init(INT_FLASH);
+#else
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+	serialFlashInit();
+#else
+#error "not supported "
+#endif
+#endif
 #endif
 	initDataHandleTable();
 	MiApp_SubscribeManuSpecDataIndicationCallback(otauDataInd);
@@ -168,6 +231,7 @@ void otauDataSend(addr_mode_t addr_mode, uint8_t *addr, void *payload, uint16_t 
 {
 	uint16_t dstAddr;
 	uint8_t domainId = *((uint8_t *)payload);
+	uint8_t msgId = *(uint8_t *)((uint8_t *)payload + 1);
 	if (NATIVE_ADDR_MODE == addr_mode && NULL == addr)
 	{
 #ifndef OTAU_SERVER
@@ -183,11 +247,11 @@ void otauDataSend(addr_mode_t addr_mode, uint8_t *addr, void *payload, uint16_t 
 	{
 		if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
 		{
-			otauNotifySentFrame(NATIVE_ADDR_MODE, addr, OTAU_ERROR);
+			otauNotifySentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
 		}
 		else
 		{
-			addDataHandleTableEntry(domainId, NATIVE_ADDR_MODE, addr, msgHandle);
+			addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
 			msgHandle++;
 		}		
 	}
@@ -195,11 +259,11 @@ void otauDataSend(addr_mode_t addr_mode, uint8_t *addr, void *payload, uint16_t 
 	{
 		if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
 		{
-			otauUpgradeSentFrame(NATIVE_ADDR_MODE, addr, OTAU_ERROR);
+			otauUpgradeSentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
 		}
 		else
 		{
-			addDataHandleTableEntry(domainId, NATIVE_ADDR_MODE, addr, msgHandle);
+			addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
 			msgHandle++;
 		}
 	}
@@ -209,8 +273,9 @@ static void otauDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* m
 {
 	uint16_t dstAddr;
 	uint8_t domainId = DOMAIN_OTAU_NOTIFY;
+	uint8_t messageId = 0xFF;
 	uint8_t addrMode;
-	getAddressFromDataHandleTable(msgConfHandle, &domainId, &addrMode, (uint8_t *)&dstAddr);
+	getAddressFromDataHandleTable(msgConfHandle, &domainId, &messageId, &addrMode, (uint8_t *)&dstAddr);
 	switch (status)
 	{
 		case SUCCESS:
@@ -227,11 +292,11 @@ static void otauDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* m
 	}
 	if (DOMAIN_OTAU_NOTIFY == domainId)
 	{
-		otauNotifySentFrame(NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, status);
+		otauNotifySentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, status);
 	}
 	else if (DOMAIN_OTAU_UPGRADE == domainId)
 	{
-		otauUpgradeSentFrame(NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, status);
+		otauUpgradeSentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, status);
 	}
 }
 
@@ -361,7 +426,7 @@ void reverseMemcpy(uint8_t *dst, uint8_t *src, uint8_t len)
 	}
 }
 
-static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *domainId, uint8_t *addrMode, uint8_t *addr)
+static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *domainId, uint8_t *messageId, uint8_t *addrMode, uint8_t *addr)
 {
 	uint8_t loopIndex;
 	for (loopIndex = 0; loopIndex < DATA_HANDLE_TABLE_SIZE; loopIndex++)
@@ -369,6 +434,7 @@ static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *domainId, uin
 		if (dataHandleTable[loopIndex].dataHandle == handle)
 		{
 			*domainId = dataHandleTable[loopIndex].domainId;
+			*messageId = dataHandleTable[loopIndex].messageId;
 			*addrMode = dataHandleTable[loopIndex].addrMode;
 			memcpy(addr, &(dataHandleTable[loopIndex].nativeAddr), SHORT_ADDR_LEN);
 			dataHandleTable[loopIndex].domainId = 0xFF;
@@ -378,7 +444,7 @@ static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *domainId, uin
 	return false;
 }
 
-static bool addDataHandleTableEntry(uint8_t domainId, addr_mode_t addrMode, uint8_t *addr, uint8_t handle)
+static bool addDataHandleTableEntry(uint8_t domainId, uint8_t messageId, addr_mode_t addrMode, uint8_t *addr, uint8_t handle)
 {
 	uint8_t loopIndex;
 	for (loopIndex = 0; loopIndex < DATA_HANDLE_TABLE_SIZE; loopIndex++)
@@ -386,6 +452,7 @@ static bool addDataHandleTableEntry(uint8_t domainId, addr_mode_t addrMode, uint
 		if (dataHandleTable[loopIndex].domainId == 0xFF)
 		{
 			dataHandleTable[loopIndex].domainId = domainId;
+			dataHandleTable[loopIndex].messageId = messageId;
 			dataHandleTable[loopIndex].addrMode = addrMode;
 			dataHandleTable[loopIndex].dataHandle = handle;
 			memcpy(&(dataHandleTable[loopIndex].nativeAddr), addr, SHORT_ADDR_LEN);
@@ -401,6 +468,7 @@ static void initDataHandleTable(void)
 	for (loopIndex = 0; loopIndex < DATA_HANDLE_TABLE_SIZE; loopIndex++)
 	{
 		dataHandleTable[loopIndex].domainId = 0xFF;
+		dataHandleTable[loopIndex].messageId = 0xFF;
 	}
 }
 

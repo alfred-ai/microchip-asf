@@ -41,10 +41,10 @@
 
 /*
 * This macro specifies the sleep mode to use when node is in IDLE
-* mode i.e., when no transaction is happening. By default, during
-* transaction, if sleep is called, then STANDBY mode is used.
+* mode i.e., when no transaction is happening.
 */
 #define CONF_PMM_SLEEPMODE_WHEN_IDLE  SLEEP_MODE_STANDBY
+// #define CONF_PMM_SLEEPMODE_WHEN_IDLE  SLEEP_MODE_BACKUP
 
 #endif /* CONF_PMM_H_INCLUDED */
 

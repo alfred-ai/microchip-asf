@@ -36,6 +36,7 @@
 
 #ifndef PMM_H
 #define PMM_H
+#include <asf.h>
 #include "sleep.h"
 #ifdef	__cplusplus
 extern "C" {

@@ -1160,7 +1160,7 @@ static StackRetStatus_t LORAREG_GetAttr_DutyCycleTimer(LorawanRegionalAttributes
 	    }
     }
         
-    if(minimSubBandTimer >= RegParams.cmnParams.paramsType2.aggregatedDutyCycleTimeout)
+    if((UINT32_MAX != minimSubBandTimer) && (minimSubBandTimer >= RegParams.cmnParams.paramsType2.aggregatedDutyCycleTimeout))
     {
 	    minDutyCycleTimer = minimSubBandTimer;
     }
@@ -1171,9 +1171,12 @@ static StackRetStatus_t LORAREG_GetAttr_DutyCycleTimer(LorawanRegionalAttributes
         
     ticks = SwTimerReadValue (RegParams.pDutyCycleTimer->timerId);
     delta = RegParams.pDutyCycleTimer->lastTimerValue - US_TO_MS(ticks);
-        
-    /*Get the time left for the band timer which supports the requested data rate to expire*/
-    minDutyCycleTimer = minDutyCycleTimer - delta; //Logically delta will not be greater than minDcTimer
+    
+	if( minDutyCycleTimer != 0)
+	{
+		/*Get the time left for the band timer which supports the requested data rate to expire*/
+		minDutyCycleTimer = minDutyCycleTimer - delta; //Logically delta will not be greater than minDcTimer
+	}
         
     memcpy(attrOutput,&minDutyCycleTimer,sizeof(uint32_t));
 	

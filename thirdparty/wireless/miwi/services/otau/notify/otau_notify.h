@@ -115,6 +115,6 @@ COMPILER_PACK_RESET()
 void otauHandleNotifyMsg(otau_domain_msg_t *otau_domain_msg);
 void otauNotifyTimerHandler(struct SYS_Timer_t *timer);
 void otauNotifyInit(void);
-void otauNotifySentFrame(addr_mode_t addr_mode, uint8_t *addr, uint8_t status);
+void otauNotifySentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *addr, uint8_t status);
 void otauNotifyRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t length, uint8_t *payload);
 #endif /* OTAU_NOTIFY_H */

@@ -86,20 +86,21 @@
 #define MPU_AP_READONLY                         ( 0x06 << MPU_RASR_AP_Pos )
 #define MPU_AP_READONLY2                        ( 0x07 << MPU_RASR_AP_Pos )
 
-#define MPU_TEX_B000                            ( 0x01 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B000                            ( 0x00 << MPU_RASR_TEX_Pos )
 #define MPU_TEX_B001                            ( 0x01 << MPU_RASR_TEX_Pos )
-#define MPU_TEX_B010                            ( 0x01 << MPU_RASR_TEX_Pos )
-#define MPU_TEX_B011                            ( 0x01 << MPU_RASR_TEX_Pos )
-#define MPU_TEX_B100                            ( 0x01 << MPU_RASR_TEX_Pos )
-#define MPU_TEX_B101                            ( 0x01 << MPU_RASR_TEX_Pos )
-#define MPU_TEX_B110                            ( 0x01 << MPU_RASR_TEX_Pos )
-#define MPU_TEX_B111                            ( 0x01 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B010                            ( 0x02 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B011                            ( 0x03 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B100                            ( 0x04 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B101                            ( 0x05 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B110                            ( 0x06 << MPU_RASR_TEX_Pos )
+#define MPU_TEX_B111                            ( 0x07 << MPU_RASR_TEX_Pos )
 
 #define SHAREABLE       1
 #define NON_SHAREABLE   0
 
 #define INNER_NORMAL_WB_RWA_TYPE(x)   (( 0x04 << MPU_RASR_TEX_Pos ) | ( DISABLE  << MPU_RASR_C_Pos ) | ( ENABLE  << MPU_RASR_B_Pos )  | ( x << MPU_RASR_S_Pos ))
 #define INNER_NORMAL_WB_NWA_TYPE(x)   (( 0x04 << MPU_RASR_TEX_Pos ) | ( ENABLE  << MPU_RASR_C_Pos )  | ( ENABLE  << MPU_RASR_B_Pos )  | ( x << MPU_RASR_S_Pos ))
+#define INNER_OUTER_NORMAL_NOCACHE_TYPE(x) ((0x01 << MPU_RASR_TEX_Pos) | (DISABLE << MPU_RASR_C_Pos) | (DISABLE << MPU_RASR_B_Pos) | (x << MPU_RASR_S_Pos))
 #define STRONGLY_ORDERED_SHAREABLE_TYPE      (( 0x00 << MPU_RASR_TEX_Pos ) | ( DISABLE << MPU_RASR_C_Pos ) | ( DISABLE << MPU_RASR_B_Pos ))     // DO not care //
 #define SHAREABLE_DEVICE_TYPE                (( 0x00 << MPU_RASR_TEX_Pos ) | ( DISABLE << MPU_RASR_C_Pos ) | ( ENABLE  << MPU_RASR_B_Pos ))     // DO not care //
 

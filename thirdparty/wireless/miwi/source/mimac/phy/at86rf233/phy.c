@@ -49,7 +49,7 @@
 /*- Definitions ------------------------------------------------------------*/
 #define PHY_CRC_SIZE    2
 /*- Definitions ------------------------------------------------------------*/
-#define PHY_RSSI_BASE_VAL                     (-91)
+#define PHY_RSSI_BASE_VAL                     (-94)
 
 /*- Types ------------------------------------------------------------------*/
 typedef enum {
@@ -384,10 +384,13 @@ void PHY_TaskHandler(void)
 
 			if (RxBank < BANK_SIZE)
 			{
+				int8_t rssi;
+
+				rssi = (int8_t)phyReadRegister(PHY_ED_LEVEL_REG);
 				trx_frame_read(&size, 1);
 
 			 	trx_frame_read(phyRxBuffer, size + 2);
-				RxBuffer[RxBank].PayloadLen = size+2;
+				RxBuffer[RxBank].PayloadLen = size + 2;
 				if (RxBuffer[RxBank].PayloadLen < RX_PACKET_SIZE)
 			 	{
 					//copy all of the data from the FIFO into the RxBuffer, plus RSSI and LQI
@@ -395,6 +398,7 @@ void PHY_TaskHandler(void)
 					{
 						RxBuffer[RxBank].Payload[i-1] = phyRxBuffer[i];
 					}
+					RxBuffer[RxBank].Payload[RxBuffer[RxBank].PayloadLen - 1] = rssi + PHY_RSSI_BASE_VAL;
 			    }
 				phyWaitState(TRX_STATUS_RX_AACK_ON);
 			}

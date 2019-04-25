@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains SAMV71 BSP APIs implementation.
+ * \brief SDIO Interface for SAMV7.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+ /*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 /**@defgroup  SAMSDIO Defines
  * @ingroup sam_sdio
  * @{

@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains NMC1000 SDIO protocol bus APIs implementation.
+ * \brief This module contains WILC SDIO protocol bus APIs implementation.
  *
  * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
  *
@@ -30,6 +30,9 @@
  *
  * \asf_license_stop
  *
+ */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
 
 #ifndef _NMSDIO_H_

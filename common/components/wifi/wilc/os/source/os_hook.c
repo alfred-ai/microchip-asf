@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #include <os/include/os_hook.h>
 #include <FreeRTOS.h>
@@ -72,7 +75,7 @@ static void os_hif_task(void *pv)
 			/* Incoming data packet. */
 			else if (msg.id == MSG_RX) {
 				m2m_wifi_handle_events(NULL);
-
+				vTaskDelay(1);
 			} 
 #ifndef WILC_SERIAL_BRIDGE_INTERFACE
 			/* Outgoing data packet. */

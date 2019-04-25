@@ -27,6 +27,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #include "application.h"
 #include "FreeRTOS.h"
@@ -40,6 +43,7 @@
 #include "ota_fw_update/ota_fw_update.h"
 #include "lwip/sockets.h"
 #include "lwip/api.h"
+#include "lwip/netdb.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -72,6 +76,9 @@ uint32_t local_ip;
 
 xSemaphoreHandle at_cmd_task1_sem;
 
+/** Firmware start event */
+static xSemaphoreHandle firmware_start_sem = NULL;
+
 extern uint8 u8DataSubType[AT_MAX_DATA_SUBTYPE];
 extern uint8 u8ControlSubtype[AT_MAX_CONTROL_SUBTYPE];
 extern uint8 u8MangmentSubtype[AT_MAX_MANGEMENT_SUBTYPE];
@@ -99,7 +106,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 			tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 			if (pstrWifiState->u8IfcId == STATION_INTERFACE) {
 				if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
-					osprintf("Wi-Fi connected\r\n");
+					M2M_INFO("Wifi State :: CONNECTED ::\r\n");
 					if(use_static_IP == 1) {
 						ip_addr_t ipaddr, netmask, gw;
 						IP4_ADDR(&netmask, 255,255,255,0);
@@ -117,11 +124,11 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 					}
 
 				} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
-					osprintf("Wi-Fi disconnected\r\n");
+					M2M_INFO("Wifi State :: DISCONNECTED ::\r\n");
 					if(gstrAllStatus.u8Sta_status == SERVICE_IS_RUNNING) {
 						gstrAllStatus.u8Sta_status = SERVICE_IS_STOPPED;
 						//get_cmd_txt(AT_INDEX_DISCONN, (uint8 *)au8CmdTxt);
-						//AT_SEND_OK(au8CmdTxt);
+						AT_SEND_OK("DISCONN");
 					}
 					net_interface_down(NET_IF_STA);
 				}
@@ -176,8 +183,8 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		{
 			tstrM2MIPConfig2 *strIpConfig = pvMsg;
 			uint16_t *a = (void *)strIpConfig->u8StaticIPv6;
-			osprintf("wifi_cb: STA IPv4 addr: %d.%d.%d.%d\r\n", strIpConfig->u8StaticIP[0], strIpConfig->u8StaticIP[1],
-			strIpConfig->u8StaticIP[2], strIpConfig->u8StaticIP[3]);
+			M2M_INFO("DHCP IP Address \"%u.%u.%u.%u\"\r\n",strIpConfig->u8StaticIP[0], strIpConfig->u8StaticIP[1],strIpConfig->u8StaticIP[2], strIpConfig->u8StaticIP[3]);
+			AT_SEND_OK("");
 			osprintf("wifi_cb: STA IPv6 addr: %04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x\r\n",
 			htons(a[0]), htons(a[1]), htons(a[2]), htons(a[3]),
 			htons(a[4]), htons(a[5]), htons(a[6]), htons(a[7]));
@@ -269,6 +276,30 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 
 			break;
 		}
+		case M2M_WIFI_REQ_P2P_AUTH:
+		{
+			tstrM2MP2pDevInfo *pstrP2PDevInfo = (tstrM2MP2pDevInfo *)pvMsg;
+			if (pstrP2PDevInfo->u16CfgMethods & CONF_METHOD_KEYPAD) {
+				osprintf("\r\nPlease enter P2P pin\r\n(Usage: P2P_PIN <pin-number displayed on phone>\r\n");
+			}
+			else if (pstrP2PDevInfo->u16CfgMethods & CONF_METHOD_DISPLAY){
+				osprintf("\r\nPlease enter P2P pin on phone <12345678>\r\n");
+					/* Set device name. */
+					os_m2m_wifi_set_p2p_pin((uint8_t *)"12345678", 8);
+			}
+			else {
+				osprintf("\r\nAllow pushbutton method\r\n");
+				m2m_wifi_allow_p2p_connection();
+			}
+			break;
+		}
+		case M2M_WIFI_RESP_FIRMWARE_STRTED: {
+			osprintf("Firmware Started Successfully\r\n");
+			if (firmware_start_sem != NULL) {
+				xSemaphoreGive(firmware_start_sem);
+			}
+		}
+		break;		
 		default:
 		{
 			break;
@@ -660,6 +691,10 @@ void http_connection(char *host_name, uint16 port){
  */
 void wilc_task_1(void *argument)
 {
+	
+	/* For firmware start event */
+	firmware_start_sem = xSemaphoreCreateCounting(1, 0);
+	
 	/* Initialize the network stack. */
 	net_init();
 	/* Initialize the WILC driver. */
@@ -668,6 +703,18 @@ void wilc_task_1(void *argument)
 	param.pfAppWifiCb = wifi_cb;
 	param.pfAppMonCb = wifi_monitoring_cb;
 	os_m2m_wifi_init(&param);
+	
+	/* Antenna modes are defined in sta.h */
+#ifdef MAC_ANTENNA_DIVERSITY
+	m2m_wifi_set_antenna_mode(ANT_MODE, ANT_SWTCH_GPIO_CTRL_MODE, ANTENNA_GPIO_NUM_1, ANTENNA_GPIO_NUM_2);
+#endif
+	
+	/* Make sure we received M2M_WIFI_RESP_FIRMWARE_STRTED event in wifi_cb */
+	if (firmware_start_sem != NULL) {
+		xSemaphoreTake(firmware_start_sem, portMAX_DELAY);
+		vSemaphoreDelete(firmware_start_sem);
+	}	
+	
 #ifdef AT_CMD_SEM 
 	vSemaphoreCreateBinary(at_cmd_task1_sem);
 	xSemaphoreTake(at_cmd_task1_sem, portMAX_DELAY);

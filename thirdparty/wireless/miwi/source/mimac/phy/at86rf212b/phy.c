@@ -67,6 +67,7 @@ static void phyWaitState(uint8_t state);
 static void phyTrxSetState(uint8_t state);
 static void phySetChannel(void);
 static void phySetRxState(void);
+static int8_t phyRssiBaseVal(void);
 
 /*- Variables --------------------------------------------------------------*/
 static PhyState_t phyState = PHY_STATE_INITIAL;
@@ -318,7 +319,7 @@ uint8_t PHY_EdReq(void) //TODO datatype int8 or uint8
 		*Normalised value from the register is sufficient
 	*/
 
-	return ed; //+ phyRssiBaseVal();
+	return ed + phyRssiBaseVal();
 }
 
 
@@ -406,6 +407,33 @@ static void phyTrxSetState(uint8_t state)
 
 /*************************************************************************//**
 *****************************************************************************/
+static int8_t phyRssiBaseVal(void)
+{
+	bool oqpsk = (phyModulation & (1 << BPSK_OQPSK));
+	bool sub   = (phyModulation & (1 << SUB_MODE));
+	bool rc    = (phyModulation & (1 << 4 /*ALT_SPEC*/));
+
+	if (0 == oqpsk) {
+		if (0 == sub) {
+			return PHY_RSSI_BASE_VAL_BPSK_20;
+		} else {
+			return PHY_RSSI_BASE_VAL_BPSK_40;
+		}
+	} else {
+		if (0 == sub) {
+			return PHY_RSSI_BASE_VAL_OQPSK_SIN_RC_100;
+		} else {
+			if (0 == rc) {
+				return PHY_RSSI_BASE_VAL_OQPSK_SIN_250;
+			} else {
+				return PHY_RSSI_BASE_VAL_OQPSK_RC_250;
+			}
+		}
+	}
+}
+
+/*************************************************************************//**
+*****************************************************************************/
 void PHY_SetIEEEAddr(uint8_t *ieee_addr)
 {
 	uint8_t *ptr_to_reg = ieee_addr;
@@ -431,6 +459,9 @@ void PHY_TaskHandler(void)
         if (PHY_STATE_IDLE == phyState)
         {
             uint8_t size,i,RxBank=0xFF;
+			int8_t rssi;
+
+			rssi = (int8_t)phyReadRegister(PHY_ED_LEVEL_REG);
 
             for (i = 0; i < BANK_SIZE; i++)
             {
@@ -457,6 +488,7 @@ void PHY_TaskHandler(void)
                    RxBuffer[RxBank].Payload[i-1] = phyRxBuffer[i];
                 }
             }
+			RxBuffer[RxBank].Payload[RxBuffer[RxBank].PayloadLen - 1] = rssi + phyRssiBaseVal();
 
             phyWaitState(TRX_STATUS_RX_AACK_ON);
         }

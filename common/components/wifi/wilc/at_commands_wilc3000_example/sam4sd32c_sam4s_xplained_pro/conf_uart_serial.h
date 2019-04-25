@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Serial USART service configuration.
+ * \brief USART Serial Configuration
  *
  * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
  *

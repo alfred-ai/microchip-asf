@@ -332,7 +332,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -351,9 +350,10 @@
 					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -642,7 +642,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -661,9 +660,10 @@
 					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -1377,7 +1377,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -1396,9 +1395,10 @@
 					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -1687,7 +1687,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -1706,9 +1705,10 @@
 					<state>$PROJ_DIR$/../../../../services/pds/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../addons/sio2host/uart</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -2162,18 +2162,6 @@
 						<name>$PROJ_DIR$/../../../../../services/nvm/common_nvm.h</name>
 					</file>
 				</group>
-				<group>
-					<name>sleep_mgr</name>
-					<group>
-						<name>sam0</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sleep_mgr.h</name>
-					</file>
-				</group>
 			</group>
 			<group>
 				<name>miwi</name>
@@ -2217,6 +2205,12 @@
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../services/pds/src/wl/wlPdsInit.c</name>
+								</file>
+							</group>
+							<group>
+								<name>nopds</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/nopds/fakePds.c</name>
 								</file>
 							</group>
 						</group>
@@ -2293,30 +2287,21 @@
 							</file>
 						</group>
 					</group>
+					<group>
+						<name>sleep_mgr</name>
+						<group>
+							<name>sam0</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../services/sleep_mgr/sleep_mgr.h</name>
+						</file>
+					</group>
 				</group>
 				<group>
 					<name>source</name>
-					<group>
-						<name>sys</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.h</name>
-						</file>
-					</group>
 					<group>
 						<name>mimac</name>
 						<file>
@@ -2351,6 +2336,27 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
+						</file>
+					</group>
+					<group>
+						<name>sys</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.h</name>
 						</file>
 					</group>
 				</group>
@@ -2391,9 +2397,6 @@
 								<name>$PROJ_DIR$/../conf_sio2host.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../conf_nvm.h</name>
 							</file>
 							<file>
@@ -2404,6 +2407,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../conf_hw_timer.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_extint.h</name>
 							</file>
 						</group>
 						<file>

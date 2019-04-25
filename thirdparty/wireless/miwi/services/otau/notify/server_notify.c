@@ -44,8 +44,6 @@
 #include "otau_parser.h"
 #include "miwi_config.h"
 
-otauNotifyState_t curr_notify_otau_state;
-
 otauServerInfoResp_t server_info = {
 	.ieee_addr_mode = EXTENDED_ADDR_MODE,
 	.short_addr_mode = NATIVE_ADDR_MODE,
@@ -60,7 +58,6 @@ otauServerInfoResp_t server_info = {
 
 void otauNotifyInit(void)
 {
-	curr_notify_otau_state = NOTIFY_OTAU_IDLE;
 	memcpy(&server_info.ieee_addr, get_node_address(EXTENDED_ADDR_MODE), EXTENDED_ADDR_SIZE);
 	server_info.pan_id = MY_PAN_ID;
 }
@@ -82,27 +79,25 @@ void otauNotifyRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t leng
 	}
 }
 
-void otauNotifySentFrame(addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
+void otauNotifySentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
 {
-	switch (curr_notify_otau_state)
+	switch (messageId)
 	{
-		case CLIENT_DISCOVERY_REQUEST_SENT:
+		case OTA_CLIENT_DISCOVERY:
 			send_pc_data(DOMAIN_OTAU_NOTIFY, CLIENT_DISCOVERY_CONFIRM, &status, 1);
 			break;
-		case CLIENT_INFO_REQUEST_SENT:
+		case OTA_CLIENT_INFO_REQ:
 			send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, addr, CLIENT_INFO_CONFIRM, &status, 1);
 			break;
-		case CLIENT_IDENTIFY_REQUEST_SENT:
+		case OTA_IDENTIFY_REQ:
 			send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, addr, CLIENT_IDENTIFY_CONFIRM, &status, 1);
 			break;
-		case CLIENT_RESET_REQUEST_SENT:
+		case OTA_RESET_REQ:
 			send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, addr, CLIENT_RESET_CONFIRM, &status, 1);
 			break;
 		default:
 			break;
-			/*  */
 	}
-	curr_notify_otau_state = NOTIFY_OTAU_IDLE;
 }
 
 
@@ -149,7 +144,6 @@ void otauHandleNotifyMsg(otau_domain_msg_t *otau_domain_msg)
 			otauClientDiscoveryReq_t clientDiscReq;
 			clientDiscReq.msgId = OTA_CLIENT_DISCOVERY;
 			memcpy((uint8_t *)&clientDiscReq.interval, msg, sizeof(clientDiscReq) - 2);
-			curr_notify_otau_state = CLIENT_DISCOVERY_REQUEST_SENT;
 			clientDiscReq.domainId = DOMAIN_OTAU_NOTIFY;
 			otauDataSend(addr_mode, addr, &clientDiscReq, sizeof(otauClientDiscoveryReq_t));
 			break;
@@ -159,7 +153,6 @@ void otauHandleNotifyMsg(otau_domain_msg_t *otau_domain_msg)
 			otauClientInfoRequest_t clientInfoReq;
 			clientInfoReq.domainId = DOMAIN_OTAU_NOTIFY;
 			clientInfoReq.msgId = OTA_CLIENT_INFO_REQ;
-			curr_notify_otau_state = CLIENT_INFO_REQUEST_SENT;
 			otauDataSend(addr_mode, addr, &clientInfoReq, sizeof(otauClientInfoRequest_t));
 			break;
 		}
@@ -168,7 +161,6 @@ void otauHandleNotifyMsg(otau_domain_msg_t *otau_domain_msg)
 			otauClientIdentifyRequest_t clientIdentifyReq;
 			clientIdentifyReq.domainId = DOMAIN_OTAU_NOTIFY;
 			clientIdentifyReq.msgId = OTA_IDENTIFY_REQ;
-			curr_notify_otau_state = CLIENT_IDENTIFY_REQUEST_SENT;
 			otauDataSend(addr_mode, addr, &clientIdentifyReq, sizeof(otauClientIdentifyRequest_t));
 			break;
 		}
@@ -177,7 +169,6 @@ void otauHandleNotifyMsg(otau_domain_msg_t *otau_domain_msg)
 			otauClientResetRequest_t clientResetReq;
 			clientResetReq.domainId = DOMAIN_OTAU_NOTIFY;
 			clientResetReq.msgId = OTA_RESET_REQ;
-			curr_notify_otau_state = CLIENT_RESET_REQUEST_SENT;
 			otauDataSend(addr_mode, addr, &clientResetReq, sizeof(otauClientResetRequest_t));
 			break;
 		}

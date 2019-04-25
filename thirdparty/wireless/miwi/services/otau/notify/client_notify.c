@@ -69,8 +69,12 @@ const otauClientInfoIndication_t clientInfo = {
 	.device_type = "EndDevice ",
 #endif
 	.firmware = "MiWi Mesh ",
-	.firmware_version = "6.1.0",
+	.firmware_version = "6.2.0",
+#ifdef PHY_AT86RF212B
+	.board = "SAMR30    ",
+#else
 	.board = "SAMR21    ",
+#endif
 	.board_version = "1.0.0"
 };
 
@@ -124,7 +128,7 @@ void otauNotifyRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t leng
 	}
 }
 
-void otauNotifySentFrame(addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
+void otauNotifySentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *addr, uint8_t status)
 {    
 	otauNotifyConfirmWait = 0;
 

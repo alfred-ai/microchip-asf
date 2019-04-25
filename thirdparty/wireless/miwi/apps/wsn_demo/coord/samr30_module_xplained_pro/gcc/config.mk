@@ -53,6 +53,7 @@ TARGET_SRAM = apps_wsn_demo_sram.elf
 # List of C source files.
 CSRCS = \
        common/utils/interrupt/interrupt_sam_nvic.c        \
+       common2/components/memory/serial_flash/at25dfx/at25dfx.c \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/samr30_module_xplained_pro/board_init.c \
        sam0/drivers/extint/extint_callback.c              \
@@ -86,6 +87,7 @@ CSRCS = \
        thirdparty/wireless/miwi/services/otau/otau_parser.c \
        thirdparty/wireless/miwi/services/otau/upgrade/client_upgrade.c \
        thirdparty/wireless/miwi/services/otau/upgrade/server_upgrade.c \
+       thirdparty/wireless/miwi/services/pds/src/nopds/fakePds.c \
        thirdparty/wireless/miwi/services/pds/src/nv/D_Nv.c \
        thirdparty/wireless/miwi/services/pds/src/nv/External/D_XNv-SamR21.c \
        thirdparty/wireless/miwi/services/pds/src/nv/External/S_Nv-External.c \
@@ -118,6 +120,8 @@ INC_PATH = \
        common/boards                                      \
        common/services/serial                             \
        common/utils                                       \
+       common2/components/memory/serial_flash/at25dfx     \
+       common2/components/memory/serial_flash/at25dfx/hal/spi_polled \
        common2/services/delay                             \
        common2/services/delay/sam0                        \
        sam0/boards                                        \

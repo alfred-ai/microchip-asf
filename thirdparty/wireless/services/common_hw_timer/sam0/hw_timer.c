@@ -75,13 +75,6 @@ uint16_t tmr_read_count(void)
 	return ((uint16_t)tc_get_count_value(&module_inst));
 }
 
-/*! \brief  write the given timer count to register
- */
-void tmr_write_count(uint16_t count)
-{
-	tc_set_count_value(&module_inst, (uint32_t)count);
-}
-
 /*! \brief  to disable compare interrupt
  */
 void tmr_disable_cc_interrupt(void)

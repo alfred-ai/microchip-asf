@@ -52,6 +52,7 @@ TARGET_SRAM = apps_co_existance_sram.elf
 
 # List of C source files.
 CSRCS = \
+       common/components/memory/sd_mmc/sd_mmc.c           \
        common/components/wifi/wilc/bsp/source/nm_bsp_samv71.c \
        common/components/wifi/wilc/bus_wrapper/source/nm_bus_wrapper_samv71.c \
        common/components/wifi/wilc/bus_wrapper/source/sdio_samv71.c \
@@ -78,7 +79,9 @@ CSRCS = \
        common/utils/osprintf/osprintf.c                   \
        common/utils/stdio/read.c                          \
        common/utils/stdio/write.c                         \
+       common/utils/utf8/utf8.c                           \
        sam/boards/samv71_xplained_ultra/init.c            \
+       sam/drivers/hsmci/hsmci.c                          \
        sam/drivers/mpu/mpu.c                              \
        sam/drivers/pio/pio.c                              \
        sam/drivers/pio/pio_handler.c                      \
@@ -193,6 +196,7 @@ ASSRCS =
 # List of include paths.
 INC_PATH = \
        common/boards                                      \
+       common/components/memory/sd_mmc                    \
        common/components/wifi/wilc                        \
        common/components/wifi/wilc/driver/include         \
        common/services/clock                              \
@@ -206,6 +210,7 @@ INC_PATH = \
        common/utils/stdio/stdio_serial                    \
        sam/boards                                         \
        sam/boards/samv71_xplained_ultra                   \
+       sam/drivers/hsmci                                  \
        sam/drivers/mpu                                    \
        sam/drivers/pio                                    \
        sam/drivers/pmc                                    \

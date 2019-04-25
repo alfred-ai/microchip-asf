@@ -31,17 +31,35 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef _NM_COMMON_H_
 #define _NM_COMMON_H_
 
 #include "bsp/include/nm_bsp.h"
 
+/* 
+ * Enable computing PMK in host rather than in WILC.
+ * WILC1000 has HW accelerator that speeds up the computation on the device.
+ * WILC3000 doesn't HW accelerator, and with this option not defined, PMK will
+ * be computed in the FW, which takes up to 5 secs.
+ */
 #ifdef CONF_WILC_USE_3000_REV_A
 #define COMPUTE_PMK_IN_HOST
 #endif
+/* 
+ * Default Tx mechanism is that the driver will wait in hif_send() till the FW
+ * allocates memory for the packet. If memory is still not available it will fail
+ * If INT_BASED_TX is defined, the driver would fail instantiously if no
+ * memory was availble.
+ * On the other hand, the driver will send an M2M_WIFI_RESP_PACKET_SENT
+ * notification to the application when last tx packet was sent, and FW is
+ * ready to receive new packets. In this mode the applicatino shouldn't attempt
+ * sending a new packet unless the notification is received.
+ */
 //#define INT_BASED_TX
-#define CONF_MGMT
 
 #define M2M_TIME_OUT_DELAY 10000
 

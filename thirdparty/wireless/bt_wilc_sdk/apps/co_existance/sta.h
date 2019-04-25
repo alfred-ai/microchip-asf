@@ -51,7 +51,8 @@ extern "C" {
 #define STA_WLAN_AUTH                M2M_WIFI_SEC_WPA_PSK /* < Security manner */
 #define STA_WLAN_PSK                 "12345678" /* < Password for Destination SSID */
 
-
+/* Semaphore to synchronize BT &WiFi FW download */
+xSemaphoreHandle wifi_bt_if_sem;
 
 /** WEP security setting for STA mode and/or AP mode */
 #define WEP_KEY_INDEX            M2M_WIFI_WEP_KEY_INDEX_1

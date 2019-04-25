@@ -29,6 +29,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef __M2M_WIFI_H__
 #define __M2M_WIFI_H__
@@ -55,8 +58,8 @@ INCLUDES
 	Values are defined as per the IEEE 802.11 standard.
 	
 @remarks
-	The following frame types are useful for advanced user usage when @ref CONF_MGMT is defined
-	and the user application requires to monitor the frame transmission and reception.
+	The following frame types are useful when the user application requires
+	to monitor the frame transmission and reception.
 @see
 	tenuSubTypes
 */
@@ -84,8 +87,8 @@ typedef enum {
 	(MANAGEMENT, CONTROL & DATA).
 	Values are defined as per the IEEE 802.11 standard.
 @remarks
-	The following sub-frame types are useful for advanced user usage when @ref CONF_MGMT is defined
-	and the application developer requires to monitor the frame transmission and reception.
+	The following sub-frame types are useful when  the application
+	developer requires to monitor the frame transmission and reception.
 @see
     	tenuWifiFrameType
 */
@@ -502,7 +505,7 @@ NMI_API sint8 m2m_wifi_handle_events(void * arg);
 	a negative return value indicates only locally-detected errors.
 	
 @return	The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
-	
+
 */
 NMI_API sint8 m2m_wifi_connect(char *pcSsid, uint8 u8SsidLen, uint8 u8SecType, tuniM2MWifiAuth *puniAuthInfo, uint16 u16Ch);
  /**@}*/
@@ -754,21 +757,40 @@ NMI_API sint8 m2m_wifi_wps_disable(void);
  *    Asynchronous  Wi-Fi direct (P2P) enabling mode function.
 	The WILC supports P2P in device listening mode ONLY (intent is ZERO).
 	The WILC P2P implementation does not support P2P GO (Group Owner) mode.
-	Active P2P devices (e.g. phones) could find the WILC in the search list. When a device is connected to WILC, a Wi-Fi notification event
+	Active P2P devices (e.g. phones) could find the WILC in the search list.
+	When the P2P GO Peer device place provisional discovery request, a Wi-Fi notification event
+	@ref M2M_WIFI_REQ_P2P_AUTH is triggered with config methods opted by peer device.
+	In response to callback event M2M_WIFI_REQ_P2P_AUTH, the Application should send
+	response back to WILC with either @ref m2m_wifi_allow_p2p_connection() API in case of CONF_METHOD_PBC,
+	or m2m_wifi_set_p2p_pin() for CONF_METHOD_DISPLAY & CONF_METHOD_KEYPAD (pin request) to allow
+	P2P connection. However, the application can ignore the event to reject the p2p connection request.
+	When a device is connected to WILC, a Wi-Fi notification event
 	@ref M2M_WIFI_RESP_CON_STATE_CHANGED is triggered. Refer to the code examples for a more illustrative example.
  */
  /**@{*/
 /*!
 @fn	\
-	NMI_API sint8 m2m_wifi_p2p(uint8 u8Channel);
+	NMI_API sint8 m2m_wifi_p2p(uint8 u8Channel, tenuP2PTrigger enuTrigger, uint16 u16WPS_CfgMehods);
 
 @param [in]	u8Channel
-				P2P Listen RF channel. According to the P2P standard It must hold only one of the following values 1, 6 or 11.
+				P2P Listen RF channel. According to the P2P standard It must hold only one of the following
+				values 1, 6 or 11.
+
+@param [in]	enuTrigger
+				P2P Trigger method. Could be:
+				- [P2P_PIN]   Push button method
+				- [P2P_PBC]	  Pin method
+
+@param [in]	u16WPS_CfgMehods
+				WSC Config methods [@ref "Device configuration methods" in m2m_types.h]
+
 
 @pre
-	- A Wi-Fi notification callback of type @ref tpfAppWifiCb MUST be implemented and registered at initialization. Registering the callback
+	- A Wi-Fi notification callback of type @ref tpfAppWifiCb MUST be implemented and registered at initialization.
+	Registering the callback
 	  is done through passing it to the @ref m2m_wifi_init.
 	- The events @ref M2M_WIFI_RESP_CON_STATE_CHANGED must be handled in the callback.
+	- The events @ref M2M_WIFI_REQ_P2P_AUTH must be handled in the callback.
 	- The @ref m2m_wifi_handle_events MUST be called to receive the responses in the callback.
 
 @warning
@@ -779,6 +801,11 @@ NMI_API sint8 m2m_wifi_wps_disable(void);
 	m2m_wifi_init
 	M2M_WIFI_RESP_CON_STATE_CHANGED
 	tstrM2mWifiStateChanged
+	M2M_WIFI_REQ_P2P_AUTH
+	tstrM2MP2pDevInfo
+	tenuP2PTrigger
+	m2m_wifi_set_p2p_pin
+	m2m_wifi_allow_p2p_connection
 
 @return
 	The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
@@ -800,7 +827,21 @@ NMI_API sint8 m2m_wifi_wps_disable(void);
 				// Do something
 			}
 			break;
-			
+		case M2M_WIFI_REQ_P2P_AUTH:
+		{
+			tstrM2MP2pDevInfo *pstrP2PDevInfo = (tstrM2MP2pDevInfo *)pvMsg;
+			if (pstrP2PDevInfo->u16CfgMethods & CONF_METHOD_KEYPAD) {
+				osprintf("\r\nPlease enter P2P pin\r\n(Usage: P2P_PIN <pin-number displayed on phone>\r\n");
+			}
+			else if (pstrP2PDevInfo->u16CfgMethods & CONF_MEHTOD_DISPLAY){
+				osprintf("\r\nPlease enter P2P pin on phone <12345678>\r\n");
+					os_m2m_wifi_set_p2p_pin((uint8_t *)"12345678", 8);
+			}
+			else {
+				m2m_wifi_allow_p2p_connection();
+			}
+			break;
+		}
 		default:
 			break;
 		}
@@ -814,7 +855,7 @@ NMI_API sint8 m2m_wifi_wps_disable(void);
 		if(!m2m_wifi_init(&param))
 		{
 			// Trigger P2P
-			m2m_wifi_p2p(1);
+			m2m_wifi_p2p(1, P2P_PBC, CONF_METHOD_PHYSICAL_PBC|CONF_METHOD_LABEL);
 			
 			while(1)
 			{
@@ -826,7 +867,7 @@ NMI_API sint8 m2m_wifi_wps_disable(void);
 @endcode
 
 */
-NMI_API sint8 m2m_wifi_p2p(uint8 u8Channel);
+NMI_API sint8 m2m_wifi_p2p(uint8 u8Channel, tenuP2PTrigger enuTrigger, uint16 u16WPS_CfgMehods);
  /**@}*/
 /** @defgroup WifiP2PDisconnectFn m2m_wifi_p2p_disconnect
  *   @ingroup WLANAPI
@@ -1671,9 +1712,8 @@ NMI_API sint8 m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn);
 */
 NMI_API uint8 m2m_wifi_get_sleep_mode(void);
 /**@}*/
-/** @defgroup WifiSetDeviceNameFn m2m_wifi_set_device_name
- *   @ingroup WLANAPI
- *  Set the WILC1000 device name which is to be used as a P2P device name.
+/** m2m_wifi_set_device_name
+ *  Set the WILC device name which is to be used as a P2P device name.
  */
  /**@{*/
 /*!
@@ -1686,6 +1726,26 @@ NMI_API uint8 m2m_wifi_get_sleep_mode(void);
 @return		The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
 */
 NMI_API sint8 m2m_wifi_set_device_name(uint8 *pu8DeviceName, uint8 u8DeviceNameLength);
+/**@}*/
+/*!
+@fn			NMI_API sint8 m2m_wifi_set_p2p_pin(uint8 *pu8PinNumber, uint8 u8PinLength);
+@param [in]	pu8PinNumber
+			PIN number for P2P PIN method. It must follow the rules stated by the WPS Standard.
+@param [in]	u8PinLength
+			Length of the PIN number. Should not exceed the maximum P2P_MAX_PIN_SIZE.
+@warning		The function called once after initialization. 
+@return		The function returns @ref M2M_SUCCESS for successful operations and a negative value otherwise.
+*/
+NMI_API sint8 m2m_wifi_set_p2p_pin(uint8 *pu8PinNumber, uint8 u8PinLength);
+/**@}*/
+/*!
+@fn			NMI_API sint8 m2m_wifi_allow_p2p_connection();
+@param [in]	None
+@warning	The p2p mode must have be enabled and active before a m2m_wifi_set_p2p_pin can be called.
+@return		The function returns @ref M2M_SUCCESS for successful operations and a
+			negative value otherwise.
+*/
+NMI_API sint8 m2m_wifi_allow_p2p_connection();
 /**@}*/
 /** @defgroup WifiSetLsnIntFn m2m_wifi_set_lsn_int
  *   @ingroup WLANAPI
@@ -2044,6 +2104,27 @@ NMI_API sint8 m2m_wifi_set_tx_power(uint8 u8TxPwrLevel);
 @warning	
 */
 NMI_API sint8 m2m_wifi_set_max_tx_rate(tenuTxDataRate enuMaxTxDataRate);
+
+/*!
+@fn			NMI_API sint8 m2m_wifi_set_ant_mode(tstrM2mAntDivParams strM2mAntDivParams);
+@brief		Set the antenna selection & gpio switch mode
+@param [in]	ant_mode
+			Antenna Selection mode
+			
+			ant_gpio1
+			Antena WILC GPIO number 1
+			
+			ant_gpio2;
+			Antena WILC GPIO number 2
+
+			gpio_mode:
+			Antenna GPIO Switch mode - Single=1, Dual=2 or None=0
+@return		The function SHALL return M2M_SUCCESE for success and a negative value otherwise.
+@sa			strM2mAntDivParams
+@pre		m2m_wifi_init
+@warning	
+*/
+NMI_API sint8 m2m_wifi_set_antenna_mode(uint8 ant_mode, uint8 gpio_mode, uint8 ant_gpio1, uint8 ant_gpio2);
 
 #ifdef __cplusplus
 }

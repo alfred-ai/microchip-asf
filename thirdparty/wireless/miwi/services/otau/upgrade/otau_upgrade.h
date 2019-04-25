@@ -56,7 +56,11 @@
 
 #define APP_INFO_START_ADDRESS (0x0003FF00ul)
 
+#ifndef OTAU_USE_EXTERNAL_MEMORY
 #define UPGRADE_OFFSET_ADDRESS (0x00020000ul)
+#else
+#define UPGRADE_OFFSET_ADDRESS (0x00002000ul)
+#endif
 
 #define APP_START_ADDRESS      (0x00002000ul)
 
@@ -217,6 +221,6 @@ COMPILER_PACK_RESET()
 void handle_upgrade_otau_msg(otau_domain_msg_t *otau_domain_msg);
 void otauUpgradeTimerHandler(SYS_Timer_t *timer);
 void otauUpgradeInit(void);
-void otauUpgradeSentFrame(addr_mode_t addr_mode, uint8_t *addr, uint8_t status);
+void otauUpgradeSentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *addr, uint8_t status);
 void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t length, uint8_t *payload);
 #endif /* OTAU_UPGRADE_H */

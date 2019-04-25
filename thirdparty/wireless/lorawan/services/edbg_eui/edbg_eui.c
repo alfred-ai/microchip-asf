@@ -1,7 +1,7 @@
 /**
 * \file  edbg_eui.c
 *
-* \brief This is the implementation of to read EUI value from EDBG
+* \brief This is the implementation of to read device MAC EUI value from EDBG
 *		
 *
 * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
@@ -36,6 +36,7 @@
 */
 
 #include <stdint.h>
+#include "string.h"
 #include "edbg_eui.h"
 #include "asf.h"
 
@@ -98,6 +99,18 @@
 #define LEN_EUI						256
 #define MAC_ADDR_LEN				8
 
+#ifndef EDBG_I2C_MODULE
+#define EDBG_I2C_MODULE   					SERCOM1
+#endif
+
+#ifndef EDBG_I2C_SERCOM_PINMUX_PAD0
+#define EDBG_I2C_SERCOM_PINMUX_PAD0			PINMUX_PA16C_SERCOM1_PAD0
+#endif
+
+#ifndef EDBG_I2C_SERCOM_PINMUX_PAD1
+#define EDBG_I2C_SERCOM_PINMUX_PAD1			PINMUX_PA17C_SERCOM1_PAD1
+#endif
+
 /************************** GLOBAL VARIABLES ***********************************/
 struct i2c_master_module i2c_master_instance;
 struct i2c_master_packet master_packet;
@@ -154,7 +167,6 @@ static void configure_i2c_master(void)
 			STATUS_OK) {
 		/* Increment timeout counter and check if timed out. */
 		if (timeout++ == TIMEOUT) {
-			printf("\r\n Timeout");
 			return;
 		}
 	}
@@ -166,7 +178,6 @@ static void configure_i2c_master(void)
 			STATUS_OK) {
 		/* Increment timeout counter and check if timed out. */
 		if (timeout++ == TIMEOUT) {
-			printf("\r\n Timeout");
 			return;
 		}
 	}

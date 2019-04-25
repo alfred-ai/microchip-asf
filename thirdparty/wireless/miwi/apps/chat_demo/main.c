@@ -122,7 +122,7 @@ static void dataConfcb(uint8_t handle, miwi_status_t status, uint8_t* msgPointer
 // the two devices. This  variable array will be stored in
 // the Connection Entry structure of the partner device. The
 // size of this array is ADDITIONAL_NODE_ID_SIZE, defined in
-// ConfigApp.h.
+// miwi_config.h.
 // In this demo, this variable array is set to be empty.
 
 /*************************************************************************/
@@ -155,7 +155,7 @@ static void Connection_Confirm(miwi_status_t status);
 int main (void)
 {
 	uint8_t i;
-	uint64_t ieeeAddr;
+	bool invalidIEEEAddrFlag = false;
 	uint64_t invalidIEEEAddr;
     irq_initialize_vectors();
     /*******************************************************************
@@ -200,17 +200,24 @@ int main (void)
 
     /*******************************************************************/	
     MiApp_ProtocolInit(NULL, NULL);
-
-	/* Check if a valid IEEE address is available. */
-	memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
-	memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
 	srand(PHY_RandomReq());
-	/*
-	 * This while loop is on purpose, since just in the
-	 * rare case that such an address is randomly
-	 * generated again, we must repeat this.
-	 */
-	while ((ieeeAddr == 0x00UL) || (ieeeAddr == invalidIEEEAddr))
+	/* Check if a valid IEEE address is available.
+		0x0000000000000000 and 0xFFFFFFFFFFFFFFFF is persumed to be invalid */
+	/* Check if IEEE address is 0x0000000000000000 */
+	memset((uint8_t *)&invalidIEEEAddr, 0x00, LONG_ADDR_LEN);
+	if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+	{
+		invalidIEEEAddrFlag = true;
+	}
+
+	/* Check if IEEE address is 0xFFFFFFFFFFFFFFFF */
+	memset((uint8_t *)&invalidIEEEAddr, 0xFF, LONG_ADDR_LEN);
+	if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+	{
+		invalidIEEEAddrFlag = true;
+	}
+	
+	if (invalidIEEEAddrFlag)
 	{
 		/*
 		 * In case no valid IEEE address is available, a random
@@ -223,9 +230,8 @@ int main (void)
 		{
 			*peui64++ = (uint8_t)rand();
 		}
-		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
 	}
-	PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
+	PHY_SetIEEEAddr((uint8_t *)&myLongAddress);
 	MiApp_SubscribeDataIndicationCallback(ReceivedDataIndication);
     // Set default channel
     if( MiApp_Set(CHANNEL, &myChannel) == false )
@@ -414,7 +420,7 @@ void TransmitMessage()
 
     /*******************************************************************/
     //+1 to add TxMessageSize also in payload
-   dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(TxMessageSize + 1)); 
+   dataPtr = MiMem_Alloc(TxMessageSize + 1); 
    if (NULL == dataPtr)
        return;
 

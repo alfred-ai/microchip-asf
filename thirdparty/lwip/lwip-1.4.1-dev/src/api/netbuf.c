@@ -112,7 +112,7 @@ netbuf_alloc(struct netbuf *buf, u16_t size)
   if (buf->p != NULL) {
     pbuf_free(buf->p);
   }
-  buf->p = pbuf_alloc(PBUF_TRANSPORT, size, PBUF_RAM);
+  buf->p = pbuf_alloc(PBUF_TRANSPORT, size, PBUF_POOL);
   if (buf->p == NULL) {
      return NULL;
   }

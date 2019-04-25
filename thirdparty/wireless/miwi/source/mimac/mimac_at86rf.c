@@ -229,16 +229,19 @@ void mic_generator (uint8_t *Payloadinfo, uint8_t len , uint8_t frame_control , 
 bool DataEncrypt(uint8_t *Payloadinfo, uint8_t *Payload_len, API_UINT32_UNION FrameCounter,
 uint8_t FrameControl)
 {
-	uint8_t i , iterations , block[16] , j , CTR_Nonce_and_Counter[16];
+	uint8_t i , iterations , block[16] , j , CTR_Nonce_and_Counter[16], CipheringData[CALC_SEC_PAYLOAD_SIZE(TX_BUFFER_SIZE)];
 	// Calculating No of blocks in the packet (1 block = 16 bytes of data)
 	iterations = *Payload_len/16;
 	if (*Payload_len % 16 != 0) iterations++;
+
+    // Copy payload for security processing 
+	memcpy(CipheringData, Payloadinfo, *Payload_len);
 
 	mic_generator(&Payloadinfo[0] , *Payload_len, FrameControl  , FrameCounter ,  MACInitParams.PAddress);
 
 	for (i=*Payload_len;i<iterations *16 ; i++ )
 	{
-		Payloadinfo[i] = 0; // Padding
+		CipheringData[i] = 0; // Padding
 	}
 	CTR_Nonce_and_Counter[0] = 0x01;  // L
 	for (i=0;i<8;i++)
@@ -268,11 +271,15 @@ uint8_t FrameControl)
 			}
 			else
 			{
-				Payloadinfo[j+(i-1)*16] = block[j] ^ Payloadinfo[j+(i-1)*16];
+				CipheringData[j+(i-1)*16] = block[j] ^ CipheringData[j+(i-1)*16];
 			}
 		}
-		CTR_Nonce_and_Counter[15]++; // Increment Counter for next opration
+		CTR_Nonce_and_Counter[15]++; // Increment Counter for next operation
 	}
+
+    // Copy back the decrypted payload after security processing 
+	memcpy(Payloadinfo, CipheringData, *Payload_len);
+
 	return true;
 
 }
@@ -334,16 +341,19 @@ bool validate_mic(void)
 bool DataDecrypt(uint8_t *Payload, uint8_t *PayloadLen, uint8_t *SourceIEEEAddress,
 API_UINT32_UNION FrameCounter, uint8_t FrameControl)
 {
-	uint8_t i , iterations , block[16] , j , CTR_Nonce_and_Counter[16];
+	uint8_t i , iterations , block[16] , j , CTR_Nonce_and_Counter[16], CipheringData[CALC_SEC_PAYLOAD_SIZE(RX_BUFFER_SIZE)];
 	// Calculating No of blocks in the packet (1 block = 16 bytes of data)
 	iterations = *PayloadLen/16;
 	if (*PayloadLen % 16 != 0) iterations++;
+
+	// Copy payload for security processing 
+	memcpy(CipheringData, Payload, *PayloadLen);
 
 	//mic_generator(&Payloadinfo[0] , *Payload_len);
 
 	for (i=*PayloadLen;i<iterations *16 ; i++ )
 	{
-		Payload[i] = 0; // Padding
+		CipheringData[i] = 0; // Padding
 	}
 	CTR_Nonce_and_Counter[0] = 0x01;  // L
 	for (i=0;i<8;i++)
@@ -374,17 +384,21 @@ API_UINT32_UNION FrameCounter, uint8_t FrameControl)
 			}
 			else
 			{
-				Payload[j+(i-1)*16] = block[j] ^ Payload[j+(i-1)*16];
+				CipheringData[j+(i-1)*16] = block[j] ^ CipheringData[j+(i-1)*16];
 			}
 		}
 		CTR_Nonce_and_Counter[15]++; // Increment Counter for next opration
 	}
 	*PayloadLen = *PayloadLen-4;
-	mic_generator(&Payload[0] , *PayloadLen , FrameControl  , FrameCounter , SourceIEEEAddress);
+	mic_generator(&CipheringData[0] , *PayloadLen , FrameControl  , FrameCounter , SourceIEEEAddress);
 	for (i=0;i<16;i++)
 	{
 		final_mic_value[i] = CTR_mic[i] ^ CBC_mic[i];
 	}
+
+	// Copy back the decrypted payload after security processing 
+	memcpy(Payload, CipheringData, *PayloadLen);
+
 	return validate_mic();
 
 }
@@ -970,6 +984,7 @@ bool MiMAC_ReceivedPacket(void)
 		#endif
 		MACRxPacket.flags.Val = 0;
 		MACRxPacket.altSourceAddress = false;
+		MACRxPacket.SourcePANID.Val = 0xFFFF;
 
 		//Determine the start of the MAC payload
 		addrMode = RxBuffer[BankIndex].Payload[1] & 0xCC;

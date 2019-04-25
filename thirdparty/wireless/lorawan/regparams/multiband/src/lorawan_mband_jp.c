@@ -159,7 +159,6 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
 		RegParams.regParamItems.alt_ch_item_id = 0;
 		RegParams.regParamItems.ch_param_1_item_id = PDS_REG_JPN_CH_PARAM_1;
 		RegParams.regParamItems.ch_param_2_item_id = PDS_REG_JPN_CH_PARAM_2;
-		RegParams.regParamItems.sb_dc_prescalr_item_id = 0;
 		RegParams.regParamItems.band_item_id = 0;
 		PdsFileMarks_t filemarks;
 		/* File ID JPN - Register */

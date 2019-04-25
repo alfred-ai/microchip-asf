@@ -1500,8 +1500,10 @@ static void udd_ctrl_setup_received(void)
 		udd_ack_setup_received(0);
 		return; // Error data number doesn't correspond to SETUP packet
 	}
-	uint8_t *ptr = (uint8_t *) & udd_get_endpoint_fifo_access(0,8);
-	for (i = 0; i < 8; i++) {
+	
+	uint16_t nb_data = udd_byte_count(0);
+	volatile uint8_t *ptr = (uint8_t *) & udd_get_endpoint_fifo_access(0,8);
+	for (i = 0; i < nb_data; i++) {
 		((uint8_t*) &udd_g_ctrlreq.req)[i] = *ptr++;
 	}
 	// Manage LSB/MSB to fit with CPU usage
@@ -1549,7 +1551,8 @@ static void udd_ctrl_in_sent(void)
 	static bool b_shortpacket = false;
 	uint16_t nb_remain;
 	uint8_t i;
-	uint8_t *ptr_dest, *ptr_src;
+	volatile uint8_t *ptr_dest;
+	volatile uint8_t *ptr_src;
 	irqflags_t flags;
 
 	flags = cpu_irq_save();
@@ -1659,8 +1662,8 @@ static void udd_ctrl_out_received(void)
 		// Payload buffer too small
 		nb_data = udd_g_ctrlreq.payload_size - udd_ctrl_payload_buf_cnt;
 	}
-	uint8_t *ptr_src = (uint8_t *) & udd_get_endpoint_fifo_access(0, 8);
-	uint8_t *ptr_dest = udd_g_ctrlreq.payload + udd_ctrl_payload_buf_cnt;
+	volatile uint8_t *ptr_src = (uint8_t *) & udd_get_endpoint_fifo_access(0, 8);
+	volatile uint8_t *ptr_dest = udd_g_ctrlreq.payload + udd_ctrl_payload_buf_cnt;
 	for (i = 0; i < nb_data; i++) {
 		*ptr_dest++ = *ptr_src++;
 	}

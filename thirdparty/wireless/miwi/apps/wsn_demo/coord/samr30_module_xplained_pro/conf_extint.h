@@ -37,7 +37,14 @@
 #ifndef CONF_EXTINT_H_INCLUDED
 #define CONF_EXTINT_H_INCLUDED
 
-#  define EXTINT_CLOCK_SELECTION   EXTINT_CLK_GCLK
+#define EXTINT_CLOCK_SELECTION   EXTINT_CLK_ULP32K
+ 
+/**
+ * Define which GCLK source is used when selecting EXTINT_CLK_GCLK type.
+ */
+#if (EXTINT_CLOCK_SELECTION == EXTINT_CLK_GCLK)
 #  define EXTINT_CLOCK_SOURCE      GCLK_GENERATOR_0
+#endif
+
 
 #endif

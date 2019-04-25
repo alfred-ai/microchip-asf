@@ -97,6 +97,18 @@ void sio2host_putchar(uint8_t);
  */
 int sio2host_getchar_nowait(void);
 
+/**
+ * \brief Disables the Serial IO Module
+ * \return void
+ */
+void sio2host_disable(void);
+
+/**
+ * \brief Enables the Serial IO Module
+ * \return void
+ */
+void sio2host_enable(void);
+
 #if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 void USART_HOST_ISR_VECT(uint8_t instance);
 

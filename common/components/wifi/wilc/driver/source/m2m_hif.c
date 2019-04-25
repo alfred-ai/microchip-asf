@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #include "driver/source/nmbus.h"
 #include "bsp/include/nm_bsp.h"
@@ -492,7 +495,7 @@ static sint8 hif_isr(void)
 	if(M2M_SUCCESS == ret)
 	{
 #ifdef INT_BASED_TX
-		if(int_stat & 0x2)	/* New interrupt has been received */
+		if(int_stat & 0x2)	/* Packet sent. Host can now send more packets*/
 		{
 			if( (int_stat&1) == 0)
 				nm_bsp_interrupt_ctrl(1);

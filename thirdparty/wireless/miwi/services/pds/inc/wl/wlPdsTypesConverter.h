@@ -97,7 +97,7 @@ typedef const PDS_DirDescr_t *PDS_DirDescrRec_t;
 #define PDS_DEVICE_TABLE_NONSLEEP_ITEM_SIZE      (sizeof(DeviceTable_t))
 #define PDS_DEVICE_TABLE_SLEEP_ITEM_SIZE         (sizeof(SleepDeviceTable_t))
 #define PDS_ROUTE_TABLE_COORD_ITEM_SIZE          (sizeof(CoordRouteTable_t))
-#define PDS_ROUTE_TABLE_HOP_ITEM_SIZE            (sizeof(CoordHopCount_t))
+#define PDS_ROUTE_TABLE_HOP_ITEM_SIZE            (HOP_TABLE_COUNT)
 #else
 #define PDS_OUTGOING_FRAME_COUNTER_ITEM_SIZE     (sizeof(API_UINT32_UNION))
 #define PDS_PANID_ITEM_SIZE                      (sizeof(API_UINT16_UNION))

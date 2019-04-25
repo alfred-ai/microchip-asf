@@ -54,7 +54,7 @@
 // the two devices. This  variable array will be stored in 
 // the Connection Entry structure of the partner device. The 
 // size of this array is ADDITIONAL_NODE_ID_SIZE, defined in 
-// ConfigApp.h.
+// miwi_config.h.
 // In this demo, this variable array is set to be empty.
 /*************************************************************************/
 #if ADDITIONAL_NODE_ID_SIZE > 0
@@ -122,38 +122,36 @@ bool Initialize_Demo(bool freezer_enable)
 {
     uint8_t i;
 
-	uint64_t ieeeAddr;
+	bool invalidIEEEAddrFlag = false;
 	uint64_t invalidIEEEAddr;
 
     MiApp_SubscribeDataIndicationCallback(ReceivedDataIndication);
 
 #ifdef ENABLE_SLEEP_FEATURE
-    sm_init();
+    sleepMgr_init();
 #endif
 
     if (freezer_enable)
     {
-        /*******************************************************************/
-        // Initialize Microchip proprietary protocol. Which protocol to use
-        // depends on the configuration in ConfigApp.h
-        /*******************************************************************/
-        /*******************************************************************/
-        // Function MiApp_ProtocolInit initialize the protocol stack. The
-        // only input parameter indicates if previous network configuration
-        // should be restored. In this simple example, we assume that the 
-        // network starts from scratch.
-        /*******************************************************************/
         MiApp_ProtocolInit(NULL, NULL);
-		/* Check if a valid IEEE address is available. */
-		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
-		memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
 		srand(PHY_RandomReq());
-		/*
-		 * This while loop is on purpose, since just in the
-		 * rare case that such an address is randomly
-		 * generated again, we must repeat this.
-		 */
-		while ((ieeeAddr == 0x00UL) || (ieeeAddr == invalidIEEEAddr))
+		/* Check if a valid IEEE address is available.
+		0x0000000000000000 and 0xFFFFFFFFFFFFFFFF is persumed to be invalid */
+		/* Check if IEEE address is 0x0000000000000000 */
+		memset((uint8_t *)&invalidIEEEAddr, 0x00, LONG_ADDR_LEN);
+		if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+		{
+			invalidIEEEAddrFlag = true;
+		}
+
+		/* Check if IEEE address is 0xFFFFFFFFFFFFFFFF */
+		memset((uint8_t *)&invalidIEEEAddr, 0xFF, LONG_ADDR_LEN);
+		if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+		{
+			invalidIEEEAddrFlag = true;
+		}
+		
+		if (invalidIEEEAddrFlag)
 		{
 			/*
 			 * In case no valid IEEE address is available, a random
@@ -166,9 +164,8 @@ bool Initialize_Demo(bool freezer_enable)
 			{
 				*peui64++ = (uint8_t)rand();
 			}
-			memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
 		}
-		PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
+		PHY_SetIEEEAddr((uint8_t *)&myLongAddress);
         #if defined(PROTOCOL_P2P)  
             DemoOutput_Instruction();
             #else
@@ -179,27 +176,25 @@ bool Initialize_Demo(bool freezer_enable)
     {
 		LED_Off(LED0);
 
-        /*******************************************************************/
-        // Initialize Microchip proprietary protocol. Which protocol to use
-        // depends on the configuration in ConfigApp.h
-        /*******************************************************************/
-        /*******************************************************************/
-        // Function MiApp_ProtocolInit initialize the protocol stack. The
-        // only input parameter indicates if previous network configuration
-        // should be restored. In this simple example, we assume that the 
-        // network starts from scratch.
-        /*******************************************************************/
         MiApp_ProtocolInit(NULL, NULL);
-		/* Check if a valid IEEE address is available. */
-		memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
-		memset((uint8_t *)&invalidIEEEAddr, 0xFF, sizeof(invalidIEEEAddr));
 		srand(PHY_RandomReq());
-		/*
-		 * This while loop is on purpose, since just in the
-		 * rare case that such an address is randomly
-		 * generated again, we must repeat this.
-		 */
-		while ((ieeeAddr == 0x0000000000000000) || (ieeeAddr == invalidIEEEAddr))
+		/* Check if a valid IEEE address is available.
+		0x0000000000000000 and 0xFFFFFFFFFFFFFFFF is persumed to be invalid */
+		/* Check if IEEE address is 0x0000000000000000 */
+		memset((uint8_t *)&invalidIEEEAddr, 0x00, LONG_ADDR_LEN);
+		if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+		{
+			invalidIEEEAddrFlag = true;
+		}
+
+		/* Check if IEEE address is 0xFFFFFFFFFFFFFFFF */
+		memset((uint8_t *)&invalidIEEEAddr, 0xFF, LONG_ADDR_LEN);
+		if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+		{
+			invalidIEEEAddrFlag = true;
+		}
+		
+		if (invalidIEEEAddrFlag)
 		{
 			/*
 			 * In case no valid IEEE address is available, a random
@@ -212,9 +207,8 @@ bool Initialize_Demo(bool freezer_enable)
 			{
 				*peui64++ = (uint8_t)rand();
 			}
-			memcpy((uint8_t *)&ieeeAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN);
 		}
-		PHY_SetIEEEAddr((uint8_t *)&ieeeAddr);
+		PHY_SetIEEEAddr((uint8_t *)&myLongAddress);
         // Set default channel
         if( MiApp_Set(CHANNEL, &myChannel) == false )
         {

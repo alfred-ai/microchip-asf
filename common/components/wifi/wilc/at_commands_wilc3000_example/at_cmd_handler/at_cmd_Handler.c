@@ -131,7 +131,8 @@ static strAtCMD_Handler gaAt_CMD_handler_fn[AT_MAX_COMMANDS_COUNT]=	/*Handler an
 	{"RSSI"			,atCmd_CurRSSI_Handler,0},
 	{"AP_EN"		,atCmd_ApEnable_Handler,5},
 	{"AP_DIS"		,atCmd_ApDisable_Handler,0},
-	{"P2P_EN"		,atCmd_P2pEnable_Handler,1},
+	{"P2P_EN"		,atCmd_P2pEnable_Handler,3},
+	{"P2P_PIN"		,atCmd_P2pPIN_Handler,1},
 	{"P2P_DIS"		,atCmd_P2pDisable_Handler,0},
 	/*{"PROV_EN"		,atCmd_ProvisionEnable_Handler,8},
 	{"PROV_DIS"		,atCmd_ProvisionDisable_Handler,0},
@@ -149,7 +150,7 @@ static strAtCMD_Handler gaAt_CMD_handler_fn[AT_MAX_COMMANDS_COUNT]=	/*Handler an
 	{"RESET"		,atCmd_Reset_Handler, 0},
 	{"MON_EN"		,atCmd_MonEn_Handler,7},
 	{"MON_DIS"		,atCmd_MonDis_Handler,0},
-	/*{"PS_MODE"		,atCmd_PsMode_Handler,2},*/
+	{"PS_MODE"		,atCmd_PsMode_Handler,1},
 	{"STATIC_IP"	,atCmd_SetStaticIP_Handler, 2},
 	{"GET_CONN_INFO", atCmd_GetConnInfo_Handler,0},
 	/*{"SET_PWR_PRO", atCmd_SetPowerProfile_Handler,1},*/
@@ -165,7 +166,9 @@ static strAtCMD_Handler gaAt_CMD_handler_fn[AT_MAX_COMMANDS_COUNT]=	/*Handler an
 	{"TLS_WCERT"	,atCmd_TLS_CertTransfer_Handler, 0},
 	{"SSL_OPTIONS"  ,atCmd_SslGlobalOption_Handler,4},*/
 	/*{"GET_TIME"		,atCmd_GetSysTime_Handler,0},*/
-    {"TX_PWR"       ,atCmd_TxPwr_Handler,1}
+    {"TX_PWR"       ,atCmd_TxPwr_Handler,1},
+	{"ANT_DIV"       ,atCmd_AntDiversity_Handler,2},
+	{"CHIP_INFO"       ,atCmd_ChipInfo_Handler,0}	
 };
 static uint8 gaAt_CFG_Values_arr[AT_MAX_CFG_CMD_COUNT][AT_MAX_CMD_LENGTH]=
 {
@@ -586,7 +589,7 @@ sint8 atCmd_Connect_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useS
 		goto EXIT;
 	}
 	
-	if(	(SERVICE_IS_RUNNING == status->u8Ap_status)|| /*Check if AP mode is running*/
+	if(	(SERVICE_IS_RUNNING == status->u8Ap_status)&& /*Check if AP mode is running*/
 		(SERVICE_IS_RUNNING == status->u8P2p_status)	/*Check if P2P mode is running*/
 	){
 		PRINT("AP/P2P already connected %d %d\r\n",status->u8Ap_status, status->u8P2p_status);
@@ -1023,7 +1026,7 @@ sint8 atCmd_ApEnable_Handler(tstrAt_cmd_content *data, void* moreData, uint8 use
 		goto EXIT;
 	}
 	
-	if(	(SERVICE_IS_RUNNING == status->u8P2p_status)|| /*Check if P2P mode is running*/
+	if(	(SERVICE_IS_RUNNING == status->u8P2p_status) && /*Check if P2P mode is running*/
 		(SERVICE_IS_RUNNING == status->u8Sta_status)	/*Check if STA mode is running*/
 	){
 		s8Ret = AT_ERR_INVALID_OPERATION;
@@ -1211,6 +1214,8 @@ EXIT:
 /************************************************************************/
 enum{
 	P2P_INDEX_CHANNEL = 0,	
+	P2P_INDEX_TRIGGER,
+	P2P_INDEX_CFG_METHODS,
 };
 tstrM2MP2PConnect gstrP2pConfig;
 /************************************************************************/
@@ -1250,6 +1255,7 @@ EXIT:
 sint8 atCmd_P2pEnable_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
 {
 	sint8 s8Ret = AT_ERR_NO_ERROR;
+	uint8 u8InterfaceID = P2P_AP_CONCURRENCY_INTERFACE;
 	tstr_test_conn_status *status = (tstr_test_conn_status *)moreData;
 	
 	PRINT("atCmd_P2pEnable_Handler\r\n");
@@ -1258,23 +1264,27 @@ sint8 atCmd_P2pEnable_Handler(tstrAt_cmd_content *data, void* moreData, uint8 us
 		goto EXIT;
 	}
 	gstrP2pConfig.u8ListenChannel = GET_CH_ENUM_VAL(atoi((const char *)data->au8ParamsList[P2P_INDEX_CHANNEL]));
-	
+	gstrP2pConfig.enuTrigger = atoi((const char *)data->au8ParamsList[P2P_INDEX_TRIGGER]);
+	gstrP2pConfig.u16WPS_CfgMethods = atoi((const char *)data->au8ParamsList[P2P_INDEX_CFG_METHODS]);
 	if(SERVICE_IS_RUNNING == status->u8P2p_status) { /*Check if P2P mode is running*/
 		s8Ret = AT_ERR_INVALID_OPERATION;
 		goto EXIT;
 	}
 	
-	if(	(SERVICE_IS_RUNNING == status->u8Ap_status)|| /*Check if AP mode is running*/
+	if(	(SERVICE_IS_RUNNING == status->u8Ap_status) && /*Check if AP mode is running*/
 		(SERVICE_IS_RUNNING == status->u8Sta_status)	/*Check if STA mode is running*/
 	){
 		s8Ret = AT_ERR_INVALID_OPERATION;
 		goto EXIT;
 	}
+	if(SERVICE_IS_RUNNING == status->u8Sta_status) /*Check if STA mode is running*/
+		u8InterfaceID = P2P_STA_CONCURRENCY_INTERFACE;
+	
 	/* Set device name. */
 	os_m2m_wifi_set_device_name((uint8_t *)MAIN_WLAN_DEVICE_NAME, strlen(MAIN_WLAN_DEVICE_NAME));
-	//os_m2m_wifi_set_p2p_control_ifc(P2P_AP_CONCURRENCY_INTERFACE);
+	os_m2m_wifi_set_p2p_control_ifc(u8InterfaceID);
 	osprintf("gstrP2pConfig.u8ListenChannel %d\r\n", gstrP2pConfig.u8ListenChannel);
-	if(M2M_SUCCESS == (s8Ret=os_m2m_wifi_p2p(gstrP2pConfig.u8ListenChannel))) {
+	if(M2M_SUCCESS == (s8Ret=m2m_wifi_p2p(gstrP2pConfig.u8ListenChannel,gstrP2pConfig.enuTrigger,gstrP2pConfig.u16WPS_CfgMethods))) {
 		status->u8P2p_status = SERVICE_IS_RUNNING;		
 		AT_SEND_OK(data->au8Cmd);						
 	} else {
@@ -1283,6 +1293,33 @@ sint8 atCmd_P2pEnable_Handler(tstrAt_cmd_content *data, void* moreData, uint8 us
 	
 EXIT:
 	return s8Ret;
+}
+/************************************************************************/
+/* P2P Enable Handler                                                   */
+/************************************************************************/
+sint8 atCmd_P2pPIN_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
+{
+	sint8 s8Ret = AT_ERR_NO_ERROR;
+	tstr_test_conn_status *status = (tstr_test_conn_status *)moreData;
+	
+	PRINT("atCmd_P2pEnable_Handler\r\n");
+	if(gaAt_CMD_handler_fn[AT_INDEX_P2P_PIN_INPUT].u8NoOfParameters != data->u8NumOfParameters){
+		s8Ret = AT_ERR_NUM_OF_PARAMS;
+		goto EXIT;
+	}
+	
+	if(SERVICE_IS_RUNNING != status->u8P2p_status) { /*Check if P2P mode is running*/
+		s8Ret = AT_ERR_INVALID_OPERATION;
+		goto EXIT;
+	}
+	
+	/* Set pin number */
+	s8Ret = os_m2m_wifi_set_p2p_pin((uint8_t *)data->au8ParamsList[0], strlen(data->au8ParamsList[0]));
+	//os_m2m_wifi_set_p2p_control_ifc(P2P_AP_CONCURRENCY_INTERFACE);
+	osprintf("Pin Number %s\r\n", data->au8ParamsList[0]);
+
+EXIT:
+	return s8Ret;	
 }
 #if 0
 //////////////////////////////////////////////////////////////////////////
@@ -2470,7 +2507,25 @@ sint8 atCmd_Inquiries_Handler(tstrAt_cmd_content *data, strAtCMD_Handler *pastrA
 			printf("\t%s\r\n", "      where SERVERNAME: The name of the server you want to stablish a connection to");
 			printf("\t%s\r\n", "      where PORT      : The port to be used for the connection");			
 			break;
-		}	
+		}
+		case AT_TX_PWR:
+		{
+			printf("%s  \r\n", "AT+TX_PWR=1[TX_PWR_LEVEL]");
+			printf("\t%s\r\n", "      where TX_PWR_LEVEL: 0dBm, 3dBm, 6dBm, 9dBm, 12dBm, 15dBm, 18dBm");
+			break;
+		}
+		case AT_ANT_DIV:
+		{
+			printf("%s  \r\n", "AT+ANT_DIV=1[ANTENNA_SELECTION,ANT_SWTCH_GPIO_CTRL_MODE]");
+			printf("\t%s\r\n", "      where ANTENNA_SELECTION: (1==ANTENNA1, 2==ANTENNA2, 3==DIVERSITY)");
+			printf("\t%s\r\n", "      where ANT_SWTCH_GPIO_CTRL_MODE: (1 = ANT_SWTCH_GPIO_SINGLE, 2 = ANT_SWTCH_GPIO_DUAL or 3 = ANT_SWTCH_GPIO_NONE}");
+			break;
+		}
+		case AT_CHIP_INFO:
+		{
+			printf("%s  \r\n", "AT+CHIP_INFO");
+			break;
+		}		
 		/*case AT_TLS_CRL_RESET:
 		{
 			printf("%s  \r\n", "AT+TLS_CRL_RESET=1[<CRL_TYPE>]");
@@ -2765,12 +2820,11 @@ void print_monitoring_result(){
 }
 
 
-#if 0
+
 sint8 atCmd_PsMode_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
 {
 	sint8 ret = AT_ERR_NO_ERROR;
 	sint8 s8PsMode = 0;
-	sint8 s8BcEn = 0;
 	sint32 i;
 	
 	if(gaAt_CMD_handler_fn[AT_INDEX_PS_MODE].u8NoOfParameters != data->u8NumOfParameters)
@@ -2779,27 +2833,33 @@ sint8 atCmd_PsMode_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useSt
 		goto EXIT;
 	}
 	s8PsMode = atoi(data->au8ParamsList[0]);
-	if(s8PsMode < M2M_NO_PS || s8PsMode > M2M_PS_MANUAL)
+	if(s8PsMode < M2M_NO_PS || s8PsMode > M2M_PS_DEEP_AUTOMATIC)
 	{
-		M2M_PRINT("Invalid PS type\n");
+		M2M_PRINT("Invalid PS type: Enter 0 for M2M_NO_PS, 1 for M2M_PS_DEEP_AUTOMATIC\n");
 		ret = AT_ERR_INVALID_ARGUMENTS;
 		goto EXIT;
 	}
-	
-	s8BcEn = atoi(data->au8ParamsList[1]);
-	if(s8BcEn < 0 || s8BcEn > 1)
-	{
-		M2M_PRINT("Invalid BC value\n");
-		ret = AT_ERR_INVALID_ARGUMENTS;
-		goto EXIT;
+
+/*This (if) block has an effect only for WILC3000 when BLE is enabled.
+		It does not have any effect for WILC1000 */
+	if(uart_is_rx_ready(USART1))
+	{	
+		uart_read((Uart *)USART1, &data); // sometimes its called as CONF_UART
+		if (s8PsMode == M2M_PS_DEEP_AUTOMATIC) {
+			M2M_DBG("PS_MODE USART: assert\r\n");
+			usart_start_tx_break(USART0); // also known as BOARD_USART
+		}
+		else if (s8PsMode == M2M_NO_PS) {
+			M2M_DBG("PS_MODE USART: de-assert\r\n");
+			usart_stop_tx_break(USART0);
+		}
 	}
-	
-	
-	ret = m2m_wifi_set_sleep_mode(s8PsMode,s8BcEn);
+	/* Execute command */
+	ret = m2m_wifi_set_sleep_mode(s8PsMode,true);
 	if(ret == AT_ERR_NO_ERROR)
 	{
 		sint8 s8Buf[20] = {0};
-		sprintf(s8Buf,"PS_MODE:%d,%d",s8PsMode,s8BcEn);
+		sprintf(s8Buf,"PS_MODE:%d",s8PsMode);
 		AT_SEND_OK(s8Buf);
 	}
 	else
@@ -2807,11 +2867,10 @@ sint8 atCmd_PsMode_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useSt
 		AT_SEND_ERROR(ret,"PS_MODE");
 	}
 	
-
-EXIT:
+	EXIT:
 	return ret;
 }
-#endif
+
 sint8 atCmd_GetConnInfo_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
 {
 	printf("atCmd_GetConnInfo_Handler\r\n");
@@ -2819,6 +2878,56 @@ sint8 atCmd_GetConnInfo_Handler(tstrAt_cmd_content *data, void* moreData, uint8 
 	ret = os_m2m_wifi_get_connection_info();
 	return ret;
 }
+
+sint8 atCmd_ChipInfo_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
+{
+	printf("atCmd_ChipInfo_Handler\r\n");
+
+	sint8 s8Ret;
+	uint8_t mac_addr[M2M_MAC_ADDRES_LEN];
+	uint8_t read_mac_addr[M2M_MAC_ADDRES_LEN];
+	uint8_t u8IsMacAddrValid;
+	/** User define MAC Address. */
+	const char main_user_define_mac_address[] = {0xf8, 0xf0, 0x05, 0x20, 0x0b, 0x09};
+	const char main_user_define_mac_address1[] = {0xf8, 0xf0, 0x05, 0x20, 0x0b, 0x0A};
+	
+	/* Get MAC Address from OTP. */
+	os_m2m_wifi_get_otp_mac_address( (uint8_t *)mac_addr, &u8IsMacAddrValid);
+	if (!u8IsMacAddrValid) {
+		osprintf("USER MAC Address : \r\n");
+
+		/* Cannot find MAC Address from OTP. Set user define MAC address. */
+		
+		/* Also set the other MAC address to be locally modified, if required*/
+		//main_user_define_mac_address1[0] = main_user_define_mac_address[0]^0x02;
+
+		os_m2m_wifi_set_mac_address((uint8_t *)main_user_define_mac_address, (uint8_t *) main_user_define_mac_address1);
+		} else {
+		printf("OTP MAC Address : \r\n");
+	}
+
+	/* Get MAC Address. */
+	os_m2m_wifi_get_mac_address((uint8_t *)mac_addr, (uint8_t *)read_mac_addr );
+
+	/* Note - Address should be read from LSB to MSB */
+	osprintf("%02X:%02X:%02X:%02X:%02X:%02X\r\n",
+	mac_addr[0], mac_addr[1], mac_addr[2],
+	mac_addr[3], mac_addr[4], mac_addr[5]);
+
+	osprintf("%02X:%02X:%02X:%02X:%02X:%02X\r\n",
+	read_mac_addr[0], read_mac_addr[1], read_mac_addr[2],
+	read_mac_addr[3], read_mac_addr[4], read_mac_addr[5]);
+	
+	/* Display WILC1000 chip information. */
+	osprintf("Chip ID : \r\t\t\t%x\r\n", (unsigned int)nmi_get_chipid());
+	osprintf("RF Revision ID : \r\t\t\t%x\r\n", (unsigned int)nmi_get_rfrevid());
+	osprintf("Done.\r\n\r\n");
+		s8Ret = AT_ERR_NO_ERROR;
+EXIT:
+	return s8Ret;
+	
+}
+
 #if 0
 sint8 atCmd_SetPowerProfile_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
 {
@@ -3166,18 +3275,45 @@ sint8 atCmd_TxPwr_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useSto
 
     if ((pwr_val < TX_PWR_DBM_0) || (pwr_val > TX_PWR_DBM_18)) //TX power ppa to one of these values: 0dBm, 3dBm, 6dBm, 9dBm, 12dBm, 15dBm, 18dBm.
     {
-        M2M_INFO("ERROR: Parameter must be between 0 and 18 inclusive (18==TX_PWR_HIGH, 9==TX_PWR_MED, 3==TX_PWR_LOW)");
+        M2M_INFO("ERROR: Parameter must be between 0 and 18 inclusive (0dBm <<< 18dBm)");
         s8Ret = AT_ERR_INVALID_ARGUMENTS;
 		goto EXIT;
     }
 
     m2m_wifi_set_tx_power(pwr_val);
-    osprintf("TX power set to %s", pwr_val == TX_PWR_DBM_18 ? "TX_PWR_HIGH":(pwr_val > TX_PWR_DBM_6 ? "TX_PWR_MED" : "TX_PWR_LOW") );
+    osprintf("TX power level (Range: 0dBm <<< 18dBm) set to %d", pwr_val);
          
 EXIT:
     return s8Ret;
 }
 
+sint8 atCmd_AntDiversity_Handler(tstrAt_cmd_content *data, void* moreData, uint8 useStoredValue)
+{
+	osprintf("atCmd_AntDiversity_Handler\r\n");
+	sint8 s8Ret = AT_ERR_NO_ERROR;
+	uint8 ant_sel = 0;
+	uint8 gpio_ctrl = 0;
+	
+	/* Check for ANTENNA_SELECTION and ANT_SWTCH_GPIO_CTRL_MODE parameters*/
+	if(data->u8NumOfParameters != 2){
+		s8Ret = AT_ERR_NUM_OF_PARAMS;
+		goto EXIT;
+	}
+	
+	ant_sel = atoi((const char *)data->au8ParamsList[0]);
+	gpio_ctrl = atoi((const char *)data->au8ParamsList[1]);
+	
+	osprintf(">>ANTENNA_SELECTION: %d (0==ANTENNA1, 1==ANTENNA2, 2==DIVERSITY)\r\n",ant_sel);
+	osprintf(">>ANT_SWTCH_GPIO_CTRL_MODE: %d (1 = ANT_SWTCH_GPIO_SINGLE, 2 = ANT_SWTCH_GPIO_DUAL or 0 = ANT_SWTCH_GPIO_NONE)\r\n",gpio_ctrl);
+	/* ANTENNA_GPIO_NUM_1, ANTENNA_GPIO_NUM_2 set in at_cmd_Handler.h*/
+	if(M2M_SUCCESS != (s8Ret= m2m_wifi_set_antenna_mode(ant_sel, gpio_ctrl, ANTENNA_GPIO_NUM_1, ANTENNA_GPIO_NUM_2))) {
+
+		s8Ret = AT_ERR_INVALID_ARGUMENTS;
+	}
+	
+	EXIT:
+	return s8Ret;
+}
 
 void handle_data()
 {
@@ -3327,7 +3463,7 @@ static sint8 init_m2m_app(void)
 static void start_m2m_app(void)
 {
 	sint8 s8Ret = -1;
-	use_static_IP = 0; // By default code flow for static IP is disabled
+	use_static_IP = 0; // By default code flow for static IP is disabled	
 	uint8 *pu8Data = NULL;
 	while (true)
 	{

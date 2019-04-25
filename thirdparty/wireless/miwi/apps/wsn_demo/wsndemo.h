@@ -79,8 +79,6 @@ void wsndemo_task(void);
 #define LED_BLINK_INACTIVE_LEVEL  LED0_INACTIVE_LEVEL
 #endif
 
-#define MIN_SLEEP_INTERVAL 500
-
 extern SYS_Timer_t appDataSendingTimer;
 
 #endif /* WSNDEMO_H */

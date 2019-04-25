@@ -26,7 +26,9 @@
  * \asf_license_stop
  *
  */
-
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 #include "asf.h"
 #include "FreeRTOS.h"
 #include "osprintf.h"
@@ -41,6 +43,42 @@
 #include <string.h>
 #include <stdio.h>
 #include <iperf.h>
+#include <wchar.h>
+#include "utf8/utf8.h"
+
+/* preprocessor define error check */
+#if defined(AP_STA_CONCURRENCY)
+	#if defined(P2P_AP_CONCURRENCY) || defined(P2P_STA_CONCURRENCY) || defined(STA_ONLY) || defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined along with AP_STA_CONCURRENCY"
+	#endif
+#elif defined(P2P_AP_CONCURRENCY)
+	#if defined(P2P_STA_CONCURRENCY) || defined(STA_ONLY) || defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with P2P_AP_CONCURRENCY"
+	#endif
+#elif defined(P2P_STA_CONCURRENCY)
+	#if defined(STA_ONLY) || defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with P2P_STA_CONCURRENCY"
+	#endif
+#elif defined(STA_ONLY)
+	#if defined(AP_ONLY) || defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with STA_ONLY"
+	#endif
+#elif defined(AP_ONLY)
+	#if defined(P2P_ONLY)
+	#error "Error : Multiple application types defined defined along with AP_ONLY"
+	#endif
+#elif !defined(P2P_ONLY)
+	#error "Error : define application type in sta.h"
+#endif
+
+/* Pointers to UTF-8 SSID and PSK */
+unsigned int *utf8_STA_mode_SSID = NULL, *utf8_STA_mode_PSK = NULL;
+/** Firmware start event */
+static xSemaphoreHandle firmware_start_sem = NULL;
+
+tstrM2mWifiWepParams  gstrSTAWepParam = WEP_CONN_PARAM;
+/** Wi-Fi status variable. */
+static volatile bool gbConnectedWifi = false;
 
 #define IPERF_PORT						5001
 
@@ -63,8 +101,15 @@ struct iperf_state {
 	struct client_hdr chdr;
 	uint32_t flags;
 };
-
+#ifndef THROUGHPUT_DEBUG
 uint8_t buffer[BUFSIZE];
+#else
+#define BUFF_SIZE 1536
+uint8_t buffer[BUFF_SIZE+1];
+uint8_t udp_pkt[BUFF_SIZE+1];
+uint16 pkt_size=0;
+#endif
+
 struct iperf_state iperf;
 
 struct iperf_stats stats;
@@ -90,6 +135,23 @@ static void wifi_cb(uint8 msg_type, void *msg)
 	switch (msg_type) {
 		case M2M_WIFI_RESP_CON_STATE_CHANGED : {
 			tstrM2mWifiStateChanged *ctx = (tstrM2mWifiStateChanged*)msg;
+			osprintf("wifi_cb: %s Ifc %s state %02x-%02x-%02x-%02x-%02x-%02x, error: %s, %d\r\n",
+						ctx->u8IfcId == STATION_INTERFACE? "STA":
+						ctx->u8IfcId == AP_INTERFACE? "AP":
+						ctx->u8IfcId == P2P_INTERFACE? "P2P":"Unknown",
+						ctx->u8CurrState == M2M_WIFI_DISCONNECTED ? "Disconnected":
+						ctx->u8CurrState == M2M_WIFI_CONNECTED ? "Connected" : "Unknown",
+							ctx->u8MAcAddr[0], ctx->u8MAcAddr[1], ctx->u8MAcAddr[2],
+							ctx->u8MAcAddr[3], ctx->u8MAcAddr[4], ctx->u8MAcAddr[5],
+							ctx->u8ErrCode == M2M_ERR_NONE ? "None":
+							ctx->u8ErrCode == M2M_ERR_AP_NOT_FOUND ? "M2M_ERR_AP_NOT_FOUND":
+							ctx->u8ErrCode == M2M_ERR_AUTH_FAIL ? "M2M_ERR_AUTH_FAIL":
+							ctx->u8ErrCode == M2M_ERR_ASSOC_FAIL ? "M2M_ERR_ASSOC_FAIL":
+							ctx->u8ErrCode == M2M_ERR_LINK_LOSS ? "M2M_ERR_LINK_LOSS":
+							ctx->u8ErrCode == M2M_ERR_STATION_IS_LEAVING ? "M2M_ERR_STATION_IS_LEAVING": 							
+							ctx->u8ErrCode == M2M_ERR_AP_OVERLOAD ? "M2M_ERR_AP_OVERLOAD":
+							ctx->u8ErrCode == M2M_ERR_SEC_CNTRMSR ? "M2M_ERR_SEC_CNTR_MSR":"UNKNOWN", ctx->u8ErrCode);
+							
 			if (ctx->u8IfcId == STATION_INTERFACE) {
 				if (ctx->u8CurrState == M2M_WIFI_CONNECTED) {
 					osprintf("WiFi Connected\r\n");
@@ -107,6 +169,7 @@ static void wifi_cb(uint8 msg_type, void *msg)
 		}
 		break;
 
+
 		case NET_IF_REQ_DHCP_CONF : {
 			tstrM2MIPConfig2 *strIpConfig = msg;
 			uint16_t *a = (void *)strIpConfig->u8StaticIPv6;
@@ -119,6 +182,15 @@ static void wifi_cb(uint8 msg_type, void *msg)
 		}
 		break;
 
+		case M2M_WIFI_RESP_FIRMWARE_STRTED: {
+			osprintf("Firmware Started Successfully\r\n");
+			if (firmware_start_sem != NULL) {
+				xSemaphoreGive(firmware_start_sem);
+			}
+		}
+		
+		break;
+		
 		default:
 		break;
 	}
@@ -177,6 +249,8 @@ static void iperf_udp_recv(struct netconn *conn)
 		else {
 			/* UDP test is now over. */
 			if (started) {
+				float rx_size_MB;
+				
 				pkt->id = htonl(datagramID);
 				stats.udp_rx_end_sec = ntohl(pkt->tv_sec);
 				stats.udp_rx_end_usec = ntohl(pkt->tv_usec);
@@ -211,9 +285,11 @@ static void iperf_udp_recv(struct netconn *conn)
 
 				/* Send report to client. */
 				netconn_sendto(conn, nbuf2, &udp_client_ip, udp_client_port);
+				rx_size_MB = (float)stats.udp_rx_total_size/(float)(1024*1024);
 				osprintf("========= UDP receive status =========\r\n");
 				osprintf("test run for %ld seconds\r\n",test_time);
-				osprintf("%ld bytes(%f MB) received\r\n",stats.udp_rx_total_size, (float)stats.udp_rx_total_size/(float)(1024*1024));
+				osprintf("%ld bytes(%f MB) received\r\n",stats.udp_rx_total_size, rx_size_MB);
+				osprintf("throughput(%f Mb/s)\r\n", (rx_size_MB*8)/(float)(test_time));
 				osprintf("%ld datagrams lost out of %ld datagrams\r\n",stats.udp_rx_lost, stats.udp_rx_seq);
 				osprintf("%ld datagrams received out of order\r\n",stats.udp_rx_outorder);
 				osprintf("======================================\r\n");
@@ -236,7 +312,10 @@ static void iperf_udp_send(struct netconn *conn)
 	char *buf;
 	int32_t datagramID = 0;
 	uint32_t start_time = 0;
-	
+#ifdef THROUGHPUT_DEBUG
+	uint32_t data_count=0;
+	int32_t ret=0,i,j;
+#endif
 	/* Is -r option enabled? */
 	if (test_tx) {
 		osprintf("------------------------------------------------------------\r\n");
@@ -273,6 +352,7 @@ static void iperf_udp_send(struct netconn *conn)
 			}
 			/* Send test end with neg ID 10 times. */
 			else {
+				float tx_size_MB;
 				pkt->id = ntohl(-datagramID);
 				for (uint32_t i = 0; i < 10; ++i) {
 					nbuf = netbuf_new();
@@ -281,14 +361,35 @@ static void iperf_udp_send(struct netconn *conn)
 					netconn_sendto(conn, nbuf, &udp_client_ip, IPERF_PORT);
 					netbuf_delete(nbuf);
 				}
+				tx_size_MB = (float)(IPERF_WIFI_UDP_BUFFER_SIZE * datagramID)/(float)(1024 * 1024);
 				osprintf("========== UDP send status =========\r\n");
 				osprintf("test run for %ld seconds\r\n", test_time / 1000);
 				osprintf("sent %ld datagrams\r\n", datagramID);
-				osprintf("sent %ld bytes(%f MB)\r\n", IPERF_WIFI_UDP_BUFFER_SIZE * datagramID , (float)(IPERF_WIFI_UDP_BUFFER_SIZE * datagramID)/(float)(1024 * 1024));
+				osprintf("sent %ld bytes(%f MB)\r\n", IPERF_WIFI_UDP_BUFFER_SIZE * datagramID, tx_size_MB);
+				osprintf("Throughput(%f Mb/s)\r\n", (tx_size_MB*8)/(test_time/1000));
 				osprintf("====================================\r\n");	
 				break;
 			}
 		}
+		
+#ifdef THROUGHPUT_DEBUG
+				start_time = xTaskGetTickCount();
+				pkt = (void *)udp_pkt;
+				/* Send as much data as possible to the server. */
+				while (xTaskGetTickCount() - start_time < (uint32_t)10000) {
+					pkt->id = ntohl(-datagramID);
+					ret = m2m_wifi_send_ethernet_pkt(udp_pkt,pkt_size,STATION_INTERFACE);
+					//ret = hif_chip_wake();
+					if (ret != M2M_SUCCESS) {
+						osprintf("Send ethernet pkt - err=%d\n\r",ret);
+						break;
+					}
+					data_count++;
+				}
+				osprintf("========= udp on Driver send status =========\r\n");
+				osprintf("sent %ld bytes(throughput = %f MB)\r\n", BUFF_SIZE * data_count , (float)((BUFF_SIZE * data_count * 8)/(float)(1024 * 1024))/(float)(10));
+				osprintf("===================================\r\n");
+#endif
 	}
 }
 
@@ -322,7 +423,7 @@ void iperf_udp_task(void *v)
 		/* Send if required by client. */
 		iperf_udp_send(udp_socket);
 		
-		osprintf("[  1] done\n");
+		osprintf("[  1] done\r\n");
 	}
 
 }
@@ -372,7 +473,7 @@ static void iperf_tcp_recv(struct netconn *conn)
 	iperf.status = E_CLOSED;
 }
 
-static void iperf_tcp_send(ip_addr_t *local_ip, ip_addr_t *remote_ip)
+static void iperf_tcp_send(ip_addr_t *local_ip, ip_addr_t *remote_ip, u16_t port)
 {
 	struct netconn *conn = netconn_new(NETCONN_TCP);
 	uint32_t start_time = 0;
@@ -382,7 +483,7 @@ static void iperf_tcp_send(ip_addr_t *local_ip, ip_addr_t *remote_ip)
 	osprintf("TCP window size: %d Bytes\r\n", TCP_SND_BUF);
 	osprintf("------------------------------------------------------------\r\n");
 
-	if (ERR_OK != netconn_bind(conn, local_ip, 0)) {
+	if (ERR_OK != netconn_bind(conn, local_ip, port)) {
 		osprintf("iperf_tcp_send: bind failed\n");
 		netconn_delete(conn);
 		return;
@@ -418,12 +519,62 @@ static void iperf_tcp_send(ip_addr_t *local_ip, ip_addr_t *remote_ip)
  */
 void iperf_tcp_task(void *v)
 {
+#ifdef THROUGHPUT_DEBUG
+		uint32_t i, j;
+		uint32_t start_time = 0;
+		uint32_t data_count = 0;
+		struct client_hdr* temp_hdr = (struct UDP_datagram *)buffer;
+
+
+		/****** Test SDIO block write ******/
+
+
+		int ret;
+		/* Initialize the network stack. */
+		//net_init();
+		
+		/* Init low level. */
+		//os_m2m_sdio_init();
+		
+		/* Initialize the network stack. */
+		net_init();
+		
+		/* Initialize the WILC1000 driver. */
+		tstrWifiInitParam param;
+		memset(&param, 0, sizeof(param));
+		param.pfAppWifiCb = wifi_cb;
+		os_m2m_wifi_init(&param);
+		
+		/* Fill send buffer with pattern. */
+		for (i = 0, j = 0; i < BUFF_SIZE; ++i, ++j) {
+			if (j > 9)
+			j = 0;
+			buffer[i] = '0' + j;
+		}
+
+		/* Send as much data as possible to the server. */
+		while (xTaskGetTickCount() - start_time < (uint32_t)10000) {
+			ret = m2m_wifi_send_ethernet_pkt(buffer,BUFF_SIZE,STATION_INTERFACE);
+			//ret = hif_chip_wake();
+			if (ret != M2M_SUCCESS) {
+				osprintf("Sripad - err=%d\n\r",ret);
+				break;
+			}
+			data_count++;
+		}
+		osprintf("========= Raw buffer on Driver send =========\r\n");
+		osprintf("sent %ld bytes(throughput = %f MB)\r\n", BUFF_SIZE * data_count , (float)((BUFF_SIZE * data_count * 8)/(float)(1024 * 1024))/(float)(10));
+		osprintf("===================================\r\n");
+#else
 	struct netconn *tcp_socket;
 	ip_addr_t local_ip;
 	ip_addr_t remote_ip;
 	u16_t port;
 	uint32_t i, j;
 
+	/* For firmware start event */
+	firmware_start_sem = xSemaphoreCreateCounting(1, 0);
+	
 	/* Initialize the network stack. */
 	net_init();
 	
@@ -433,6 +584,12 @@ void iperf_tcp_task(void *v)
 	param.pfAppWifiCb = wifi_cb;
 	os_m2m_wifi_init(&param);
 
+	
+	/* Make sure we received M2M_WIFI_RESP_FIRMWARE_STRTED event in wifi_cb */
+	if (firmware_start_sem != NULL) {
+		xSemaphoreTake(firmware_start_sem, portMAX_DELAY);
+		vSemaphoreDelete(firmware_start_sem);
+	}
 	/* Connect to defined AP. */
 	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (void *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 
@@ -480,13 +637,144 @@ void iperf_tcp_task(void *v)
 
 			/* Test connection for receiving. */
 			iperf_tcp_recv(conn);
-
+			delay_ms(5);
 			/* Test connection for sending. */
 			if (iperf.flags & HEADER_VERSION1) {
-				iperf_tcp_send(&local_ip, &remote_ip);
+				iperf_tcp_send(&local_ip, &remote_ip, port);
 			}
 
-			osprintf("[  0] done\n");
+			osprintf("[  0] done\r\n");
 		}
 	}
+	#endif //#ifdef THROUGHPUT_DEBUG
+}
+
+static sint32 check_digit (char c) {
+	return (c>='0') && (c<='9');
+}
+
+void SetServerIpAddr(char* addr, uint32* u32RemoteIPAddress)
+{
+	uint8 value = 0;
+	uint8 offset = 0;
+	if(addr == NULL || u32RemoteIPAddress == NULL)
+	{
+		return;
+	}
+	
+	*u32RemoteIPAddress = 0;
+	
+	while (*addr)
+	{
+		if (check_digit((char)*addr))
+		{
+			value *= 10;
+			value += *addr - '0';
+		}
+		else
+		{
+			*u32RemoteIPAddress |= (value << offset);
+			value = 0;
+			offset += 8;
+		}
+
+		addr++;
+	}
+
+	if(offset == 24)
+	*u32RemoteIPAddress |= (value << offset);
+	
+	M2M_PRINT("Server IP Address %u.%u.%u.%u\r\n",
+	(*u32RemoteIPAddress		&	0x000000FF), ((*u32RemoteIPAddress >> 8) &	0x000000FF),
+	((*u32RemoteIPAddress >> 16) &	0x000000FF), ((*u32RemoteIPAddress >> 24) &	0x000000FF));
+}
+
+void iperf_tcp_client_task(void *v)
+{
+	struct netconn *conn ;
+	ip_addr_t local_ip;
+	ip_addr_t remote_ip;
+	u16_t port;
+	uint32_t i, j;
+	uint32_t start_time = 0;
+	uint32_t data_count = 0;
+	struct client_hdr* temp_hdr = (struct UDP_datagram *)buffer;
+	
+	/* Initialize the network stack. */
+	net_init();
+	
+	/* Initialize the WILC1000 driver. */
+	tstrWifiInitParam param;
+	memset(&param, 0, sizeof(param));
+	param.pfAppWifiCb = wifi_cb;
+	os_m2m_wifi_init(&param);
+
+	/* Connect to defined AP. */
+	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (void *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
+
+	/* Fill send buffer with pattern. */
+	for (i = sizeof(struct client_hdr), j = 0; i < BUFSIZE; ++i, ++j) {
+		if (j > 9)
+		j = 0;
+		buffer[i] = '0' + j;
+	}
+
+	SetServerIpAddr(SERVER_IP_ADDRESS, &(remote_ip.addr));
+	SetServerIpAddr("192.168.1.100", &(local_ip.addr));
+	conn = netconn_new(NETCONN_TCP);
+	
+	while(1)
+	{
+		if((ioport_get_pin_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE))
+		{
+				osprintf("------------------------------------------------------------\r\n");
+				osprintf("Client connecting to %s, TCP port 5001\r\n", ipaddr_ntoa(&remote_ip));
+				osprintf("TCP window size: %d Bytes\r\n", TCP_SND_BUF);
+				osprintf("------------------------------------------------------------\r\n");
+
+				if (ERR_OK != netconn_bind(conn, &local_ip, IPERF_CLIENT_PORT)) {
+					osprintf("iperf_tcp_send: bind failed\n");
+					netconn_delete(conn);
+					return;
+				}
+				
+				if (ERR_OK != netconn_connect(conn, &remote_ip, IPERF_PORT)) {
+					osprintf("iperf_tcp_send: connect failed\n");
+					netconn_delete(conn);
+					return;
+				}
+				//tcp_nagle_disable(conn->pcb.tcp);
+				printf("connected\r\n");
+				start_time = xTaskGetTickCount();
+				i = TEST_TIME;
+				temp_hdr->flags  = htonl(HEADER_VERSION1);
+				temp_hdr->bufferlen =  htonl(BUFSIZE);
+				temp_hdr->mWinBand  = htonl(TCP_WND);
+				temp_hdr->mPort  = htonl(IPERF_PORT);
+				temp_hdr->numThreads = htonl(NUM_THREADS);
+				temp_hdr->mAmount    = htonl((long)i--);
+				netconn_write(conn, buffer,  sizeof(struct client_hdr), NETCONN_NOCOPY) ;
+
+				/* Send as much data as possible to the server. */
+				while (xTaskGetTickCount() - start_time < (uint32_t)10000) {
+
+					temp_hdr->mAmount    = htonl((long)i--);
+					if (ERR_OK != netconn_write(conn, buffer, 1400, NETCONN_COPY)) {
+						osprintf("iperf_tcp_send: write failed\n");
+						break;
+					}
+
+					data_count++;
+				}
+				osprintf("========= TCP send status =========\r\n");
+				osprintf("Sent data for %ld seconds\r\n", (uint32_t)iperf.chdr.mAmount/1000);
+				osprintf("sent %ld bytes(%f MB)\r\n", BUFSIZE * data_count , (float)(BUFSIZE * data_count)/(float)(1024 * 1024));
+				osprintf("===================================\r\n");
+				/* Close connection. */
+				netconn_close(conn);
+				netconn_delete(conn);
+				iperf.status = E_CLOSED;
+		}
+	}
+
 }

@@ -450,7 +450,7 @@ static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_typ
         if (LORAWAN_SUCCESS == status)
         {
             printf("\nDevice Addr - ");
-            printf("%ld \n\r", devAddr);
+            printf("0x%lx \n\r", devAddr);
             status = LORAWAN_SetAttr (APPS_KEY, appsKey);
         }
 

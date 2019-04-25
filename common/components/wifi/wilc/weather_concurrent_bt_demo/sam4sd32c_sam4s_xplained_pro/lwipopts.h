@@ -30,6 +30,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
@@ -68,8 +71,15 @@ extern int random_number(void);
 /**
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
-#define LWIP_SOCKET                     0
+#define LWIP_SOCKET                     1
 
+#if LWIP_SOCKET
+#define LWIP_TIMEVAL_PRIVATE			0   // set it to 0 to avoid timeval struct redefined build error, if LWIP_SOCKET is set
+#endif
+/**
+ * LWIP_SO_RCVTIMEO==1: Enable recv timeout
+ */
+#define LWIP_SO_RCVTIMEO                1
 /*
    ------------------------------------
    ---------- Memory options ----------
@@ -133,7 +143,7 @@ extern int random_number(void);
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               1604
+#define PBUF_POOL_BUFSIZE               1610
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,
@@ -259,7 +269,13 @@ extern int random_number(void);
 /**
  * LWIP_AUTOIP==1: Enable AUTOIP module.
  */
-#define LWIP_AUTOIP					1
+#define LWIP_AUTOIP						1
+
+/**
+ * LWIP_DHCP_AUTOIP_COOP==1: Allow DHCP and AUTOIP to be both enabled on
+ * the same interface at the same time.
+ */
+#define LWIP_DHCP_AUTOIP_COOP           1
 
 /*
    ------------------------------------
@@ -362,14 +378,14 @@ extern int random_number(void);
  * NETCONN_UDP. The queue size value itself is platform-dependent, but is passed
  * to sys_mbox_new() when the recvmbox is created.
  */
-#define DEFAULT_UDP_RECVMBOX_SIZE       6
+#define DEFAULT_UDP_RECVMBOX_SIZE       16
 
 /**
  * DEFAULT_TCP_RECVMBOX_SIZE: The mailbox size for the incoming packets on a
  * NETCONN_TCP. The queue size value itself is platform-dependent, but is passed
  * to sys_mbox_new() when the recvmbox is created.
  */
-#define DEFAULT_TCP_RECVMBOX_SIZE       6
+#define DEFAULT_TCP_RECVMBOX_SIZE       16
 
 /**
  * DEFAULT_ACCEPTMBOX_SIZE: The mailbox size for the incoming connections.

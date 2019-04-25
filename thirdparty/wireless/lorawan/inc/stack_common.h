@@ -50,7 +50,7 @@ extern "C" {
 #define MAJOR_NUM                 "1"
 #define MINOR_NUM                 "0"
 #define BUILD_TYPE                "P"                /* E or P */
-#define BUILD_NUM                 "0"
+#define BUILD_NUM                 "1"
 
 /* Release Version Information */
 #define STACK_VER    PRODUCT"_"MAJOR_NUM"_"MINOR_NUM"_"BUILD_TYPE"_"BUILD_NUM

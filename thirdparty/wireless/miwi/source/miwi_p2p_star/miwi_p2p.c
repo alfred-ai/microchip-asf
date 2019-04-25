@@ -57,7 +57,7 @@ bool lost_connection = false;
 uint8_t temp_bit;
 bool FW_Stat;
 PacketIndCallback_t pktRxcallback = NULL;
-connectionConf_callback_t EstConfCallback; //MATEMP
+connectionConf_callback_t EstConfCallback;
 
 #if defined(PROTOCOL_STAR)
 uint8_t Find_Index (uint8_t *DestAddr);
@@ -65,6 +65,7 @@ void handle_lost_connection(void);
 void store_connection_tb(uint8_t *payload);
 bool Forward_Packet_PANCr_to_EDy(uint8_t fw_payload_len, uint8_t *fw_payload ,uint8_t index , uint8_t *EDxAddress);
 #endif
+void CommandConfCallback(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer);
 
 // permanent address definition
 #if MY_ADDRESS_LENGTH == 8
@@ -157,7 +158,7 @@ uint8_t Total_Connections(void)
         bool stat = false;
         if (!role)
         {
-            for (i=0;i<end_nodes+1;i++)
+            for (i=0;i<end_nodes;i++)
             {
                 if (myLongAddress[0] == END_DEVICES_Short_Address[i].Address[0] && myLongAddress[1] == END_DEVICES_Short_Address[i].Address[1])
                 {
@@ -207,7 +208,7 @@ uint8_t Total_Connections(void)
         bool status;
         uint8_t* dataPtr = NULL;
         uint8_t dataLen = 0;
-        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(fw_payload_len+3));
+        dataPtr = MiMem_Alloc(fw_payload_len+3);
         if (NULL == dataPtr)
           return false;
         dataPtr[dataLen++] = EDxAddress[0];    // Unique address of EDy (DEST ED) 
@@ -219,12 +220,10 @@ uint8_t Total_Connections(void)
         }
         #if defined(ENABLE_SECURITY)
                 status = MiApp_SendData(LONG_ADDR_LEN, ConnectionTable[index].Address, 
-				dataLen, dataPtr, 0, true, NULL);
-				MiMem_Free(dataPtr);
+				dataLen, dataPtr, 0, true, CommandConfCallback);
         #else
                 status = MiApp_SendData(LONG_ADDR_LEN, ConnectionTable[index].Address, 
-				dataLen, dataPtr, 0, true, NULL);
-				MiMem_Free(dataPtr);
+				dataLen, dataPtr, 0, true, CommandConfCallback);
         #endif
 
         return status;
@@ -323,7 +322,6 @@ MAC_RECEIVED_PACKET MACRxPacket;
 
 /************************ FUNCTION DEFINITION ********************************/
 uint8_t AddConnection(void);
-void CommandConfCallback(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer);
 
 #if defined(IEEE_802_15_4)
     bool SendPacket(INPUT bool Broadcast,
@@ -610,7 +608,7 @@ void P2PTasks(void)
                                 uint8_t dataLen = 0;
                                 
                                 // prepare the P2P_CONNECTION_RESPONSE command
-                                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(TX_BUFFER_SIZE));
+                                dataPtr = MiMem_Alloc(TX_BUFFER_SIZE);
                                 if (NULL == dataPtr)
                                   return;
                                 dataPtr[dataLen++] = CMD_P2P_CONNECTION_RESPONSE;
@@ -690,7 +688,7 @@ void P2PTasks(void)
                                 MiMAC_DiscardPacket();
                                 break;
                             }
-                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_ACTIVE_SCAN_RESPONSE));
+                            dataPtr = MiMem_Alloc(PACKETLEN_P2P_ACTIVE_SCAN_RESPONSE);
                             if (NULL == dataPtr)
                               return;
                             dataPtr[dataLen++] = CMD_P2P_ACTIVE_SCAN_RESPONSE;
@@ -733,7 +731,7 @@ void P2PTasks(void)
                         {
                             uint8_t* dataPtr = NULL;
                             uint8_t dataLen = 0;
-                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_RESPONSE));
+                            dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_RESPONSE);
                             if (NULL == dataPtr)
                               return;
                             dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_RESPONSE;
@@ -925,7 +923,7 @@ void P2PTasks(void)
                             uint8_t dataLen = 0;
                             MIWI_TICK tmpW;
                             
-                            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_TIME_SYNC_DATA_PACKET));
+                            dataPtr = MiMem_Alloc(PACKETLEN_TIME_SYNC_DATA_PACKET);
                             if (NULL == dataPtr)
                               return;
                             
@@ -1123,7 +1121,7 @@ END_OF_SENDING_INDIRECT_MESSAGE:
                           if (!role)
                             {
                                 // END_devices FFD|| RFD process this Packet
-                                end_nodes = rxMessage.Payload[1]-1; 
+                                end_nodes = rxMessage.Payload[1]; 
                                 store_connection_tb(rxMessage.Payload);
                                 MiMAC_DiscardPacket();
                             }
@@ -1224,11 +1222,12 @@ END_OF_SENDING_INDIRECT_MESSAGE:
 }
 
 
-bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
+miwi_status_t MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                               defaultParametersRamOnly_t *defaultRamOnlyParams)
 {
     uint8_t i = 0;
-    
+    miwi_status_t initStatus = SUCCESS;
+
     MACINIT_PARAM initValue;
     
     #if defined(ENABLE_NVM)
@@ -1385,7 +1384,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
     P2PCapacityInfo |= (ConnMode << 4);
 
     (void)i;
-    return true;
+    return initStatus;
 }
 
 #ifdef ENABLE_SLEEP_FEATURE
@@ -1525,27 +1524,11 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
      {
         uint8_t* dataPtr = NULL;
         uint8_t dataLen = 0;
-		uint8_t tmpTxData = dataLen;
-        uint8_t firstuint8_t = dataPtr[0];
 
-        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_MAC_DATA_REQUEST));
+        dataPtr = MiMem_Alloc(PACKETLEN_MAC_DATA_REQUEST);
         if (NULL == dataPtr)
           return false;
         dataPtr[dataLen++] = CMD_MAC_DATA_REQUEST;
-
-        #if defined(ENABLE_ENHANCED_DATA_REQUEST)
-            if( tmpTxData > 0 )
-            {
-                uint8_t i;
-                
-                for( i = tmpTxData; i > 1; i--)
-                {
-                    dataPtr[dataLen++] = dataPtr[i-1];
-                }
-                dataPtr[1] = firstuint8_t;
-                dataLen = tmpTxData + 1;  
-            }    
-        #endif
                     
         #if defined(IEEE_802_15_4)
             #if defined(ENABLE_ENHANCED_DATA_REQUEST)
@@ -1570,25 +1553,8 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
                 P2PStatus.bits.Enhanced_DR_SecEn = 0;
             #endif
             DataRequestTimer.Val = MiWi_TickGet();
-            dataPtr[0] = firstuint8_t;
-            dataLen = tmpTxData;
-            #if defined(ENABLE_TIME_SYNC)
-                #if defined(__18CXX)
-                    TMR3H = 0;
-                    TMR3L = 0;
-                #elif defined(__dsPIC33F__) || defined(__PIC24F__) || defined(__PIC24FK__) || defined(__PIC24H__)
-                    PR1 = 0xFFFF;
-                    TMR1 = 0;
-                #elif defined(__PIC32MX__)
-                    PR1 = 0xFFFF;
-                    while(T1CONbits.TWIP) ;
-                    TMR1 = 0;
-                #endif
-            #endif
             return true;
         }
-        dataPtr[0] = firstuint8_t;
-        dataLen = tmpTxData;
         #if defined(ENABLE_ENHANCED_DATA_REQUEST)
             P2PStatus.bits.Enhanced_DR_SecEn = 0;
         #endif
@@ -1901,10 +1867,10 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
     #endif
 		}
     
-    #if defined(ENABLE_ENHANCED_DATA_REQUEST) && defined(ENABLE_SLEEPING)
+    #if defined(ENABLE_ENHANCED_DATA_REQUEST) && defined(ENABLE_SLEEP_FEATURE)
         if( P2PStatus.bits.Sleeping )
         {
-            P2PStatus.bits.Enhanced_DR_SecEn = SecEn;
+            P2PStatus.bits.Enhanced_DR_SecEn = 0;
             return true;
         }    
     #endif
@@ -1966,7 +1932,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         
         for (i = 0 ; i < broadcast_count ; i++)
         {
-            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(TX_BUFFER_SIZE));
+            dataPtr = MiMem_Alloc(TX_BUFFER_SIZE);
             if (NULL == dataPtr)
                return;
             dataPtr[dataLen++] = CMD_SHARE_CONNECTION_TABLE;
@@ -2063,7 +2029,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
     {
         uint8_t* dataPtr = NULL;
         uint8_t dataLen = 0;
-        dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST));
+        dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST);
         if (NULL == dataPtr)
           return;
         dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_REQUEST; 
@@ -2088,7 +2054,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
             bool send_status;
             uint8_t* dataPtr = NULL;
             uint8_t dataLen = 0;
-            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_CMD_IAM_ALIVE));
+            dataPtr = MiMem_Alloc(PACKETLEN_CMD_IAM_ALIVE);
             if (NULL == dataPtr)
               return;			
             dataPtr[dataLen++] = CMD_IAM_ALIVE; 
@@ -2158,7 +2124,7 @@ bool MiApp_ProtocolInit(defaultParametersRomOrRam_t *defaultRomOrRamParams,
         {
             uint8_t* dataPtr = NULL;
             uint8_t dataLen = 0;
-            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_CMD_DATA_TO_ENDDEV_SUCCESS));
+            dataPtr = MiMem_Alloc(PACKETLEN_CMD_DATA_TO_ENDDEV_SUCCESS);
             if (NULL == dataPtr)
                 return false;
             dataPtr[dataLen++] = CMD_DATA_TO_ENDDEV_SUCCESS; 
@@ -2377,7 +2343,7 @@ bool    isSameAddress(INPUT uint8_t *Address1, INPUT uint8_t *Address2)
                 MiApp_Set(CHANNEL, &Channel);
                 uint8_t* dataPtr = NULL;
                 uint8_t dataLen = 0;
-                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REQUEST));
+                dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REQUEST);
                 if (NULL == dataPtr)
                    return 0;
                 dataPtr[dataLen++] = CMD_P2P_CONNECTION_REQUEST;
@@ -2802,7 +2768,7 @@ bool MiApp_Get(miwi_params_t id, uint8_t *value)
                 printf("%d",i);
                 /* choose appropriate channel */
                 MiApp_Set(CHANNEL, &i);
-                dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST));
+                dataPtr = MiMem_Alloc(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST);
                 if (NULL == dataPtr)
                    return 0;
                 dataPtr[dataLen++] = CMD_P2P_ACTIVE_SCAN_REQUEST;
@@ -2991,7 +2957,7 @@ bool MiApp_Get(miwi_params_t id, uint8_t *value)
                 {
                     uint8_t* dataPtr = NULL;
                     uint8_t dataLen = 0;
-                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_CMD_CHANNEL_HOPPING));
+                    dataPtr = MiMem_Alloc(PACKETLEN_CMD_CHANNEL_HOPPING);
                     if (NULL == dataPtr)
                         return;
                     dataPtr[dataLen++] = CMD_CHANNEL_HOPPING;
@@ -3092,7 +3058,7 @@ bool MiApp_Get(miwi_params_t id, uint8_t *value)
                     MiApp_Set(CHANNEL, &j);
                     j++;
                     
-                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST));
+                    dataPtr = MiMem_Alloc(PACKETLEN_P2P_ACTIVE_SCAN_REQUEST);
                     if (NULL == dataPtr)
                         return false;
                     dataPtr[dataLen++] = CMD_P2P_ACTIVE_SCAN_REQUEST;
@@ -3236,7 +3202,7 @@ GetOutOfLoop:
                 {
                     uint8_t* dataPtr = NULL;
                     uint8_t dataLen = 0;
-                    dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST));
+                    dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST);
                     if (NULL == dataPtr)
                         return;
                     dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_REQUEST;
@@ -3258,7 +3224,7 @@ GetOutOfLoop:
             uint16_t j;
             uint8_t* dataPtr = NULL;
             uint8_t dataLen = 0;
-            dataPtr = MiMem_Alloc(CALC_SEC_PAYLOAD_SIZE(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST));
+            dataPtr = MiMem_Alloc(PACKETLEN_P2P_CONNECTION_REMOVAL_REQUEST);
             if (NULL == dataPtr)
                 return;			
             dataPtr[dataLen++] = CMD_P2P_CONNECTION_REMOVAL_REQUEST;

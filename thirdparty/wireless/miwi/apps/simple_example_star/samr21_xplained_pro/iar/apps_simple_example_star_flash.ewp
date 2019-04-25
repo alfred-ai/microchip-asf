@@ -336,7 +336,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -359,9 +358,10 @@
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -654,7 +654,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -677,9 +676,10 @@
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -1397,7 +1397,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -1420,9 +1419,10 @@
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -1715,7 +1715,6 @@
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt/system_interrupt_samr21</state>
 					<state>$PROJ_DIR$/../../../../../../../common/utils</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_sam_d_r_h</state>
-					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/interrupt</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/tc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_d_r_h</state>
@@ -1738,9 +1737,10 @@
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../services/lcd</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/pinmux</state>
+					<state>$PROJ_DIR$/../../../../services/sleep_mgr</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system</state>
 					<state>$PROJ_DIR$/../../../../services/pds/inc/wl</state>
-					<state>$PROJ_DIR$/../../../../../services/sleep_mgr</state>
+					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/extint</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/utils/header_files</state>
 					<state>$PROJ_DIR$/../../../../../services/nvm</state>
@@ -2203,18 +2203,6 @@
 						<name>$PROJ_DIR$/../../../../../services/nvm/common_nvm.h</name>
 					</file>
 				</group>
-				<group>
-					<name>sleep_mgr</name>
-					<group>
-						<name>sam0</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../services/sleep_mgr/sleep_mgr.h</name>
-					</file>
-				</group>
 			</group>
 			<group>
 				<name>addons</name>
@@ -2282,6 +2270,12 @@
 								</file>
 								<file>
 									<name>$PROJ_DIR$/../../../../services/pds/src/wl/wlPdsInit.c</name>
+								</file>
+							</group>
+							<group>
+								<name>nopds</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../services/pds/src/nopds/fakePds.c</name>
 								</file>
 							</group>
 						</group>
@@ -2358,64 +2352,16 @@
 							</file>
 						</group>
 					</group>
-				</group>
-				<group>
-					<name>source</name>
 					<group>
-						<name>sys</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.h</name>
-						</file>
-					</group>
-					<group>
-						<name>mimac</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/mimac/mimac_at86rf.c</name>
-						</file>
+						<name>sleep_mgr</name>
 						<group>
-							<name>phy</name>
-							<group>
-								<name>at86rf233</name>
-								<file>
-									<name>$PROJ_DIR$/../../../../source/mimac/phy/at86rf233/phy.c</name>
-								</file>
-							</group>
+							<name>sam0</name>
 							<file>
-								<name>$PROJ_DIR$/../../../../source/mimac/phy/phy.h</name>
+								<name>$PROJ_DIR$/../../../../services/sleep_mgr/sam0/sleep_mgr.c</name>
 							</file>
 						</group>
 						<file>
-							<name>$PROJ_DIR$/../../../../source/mimac/mimac_at86rf.h</name>
-						</file>
-					</group>
-					<group>
-						<name>miwi_p2p_star</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_nvm.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
+							<name>$PROJ_DIR$/../../../../services/sleep_mgr/sleep_mgr.h</name>
 						</file>
 					</group>
 				</group>
@@ -2462,9 +2408,6 @@
 								<name>$PROJ_DIR$/../conf_rtc.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../conf_extint.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../conf_nvm.h</name>
 							</file>
 							<file>
@@ -2478,6 +2421,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../conf_sysfont.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../conf_extint.h</name>
 							</file>
 						</group>
 						<file>
@@ -2498,87 +2444,69 @@
 					</group>
 				</group>
 				<group>
+					<name>source</name>
+					<group>
+						<name>mimac</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/mimac/mimac_at86rf.c</name>
+						</file>
+						<group>
+							<name>phy</name>
+							<group>
+								<name>at86rf233</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../source/mimac/phy/at86rf233/phy.c</name>
+								</file>
+							</group>
+							<file>
+								<name>$PROJ_DIR$/../../../../source/mimac/phy/phy.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/mimac/mimac_at86rf.h</name>
+						</file>
+					</group>
+					<group>
+						<name>miwi_p2p_star</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_nvm.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
+						</file>
+					</group>
+					<group>
+						<name>sys</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/miqueue.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/mimem.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/sys/sysTimer.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
 					<name>include</name>
 					<file>
 						<name>$PROJ_DIR$/../../../../include/miwi_api.h</name>
-					</file>
-				</group>
-			</group>
-		</group>
-	</group>
-	<group>
-		<name>common2</name>
-		<group>
-			<name>services</name>
-			<group>
-				<name>gfx_mono</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_framebuffer.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_text.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_ug_2832hsweg04.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/sysfont.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_framebuffer.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_text.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/sysfont.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_ug_2832hsweg04.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.h</name>
-				</file>
-			</group>
-			<group>
-				<name>delay</name>
-				<group>
-					<name>sam0</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0/systick_counter.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0/systick_counter.h</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/delay/delay.h</name>
-				</file>
-			</group>
-		</group>
-		<group>
-			<name>components</name>
-			<group>
-				<name>display</name>
-				<group>
-					<name>ssd1306</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306/ssd1306.c</name>
-					</file>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306/ssd1306.h</name>
 					</file>
 				</group>
 			</group>
@@ -2589,25 +2517,34 @@
 		<group>
 			<name>drivers</name>
 			<group>
-				<name>extint</name>
-				<group>
-					<name>extint_sam_d_r_h</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_sam_d_r_h/extint.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_callback.c</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_callback.h</name>
-				</file>
-			</group>
-			<group>
 				<name>sercom</name>
+				<group>
+					<name>spi</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/spi.c</name>
+					</file>
+					<group>
+						<name>quick_start_slave</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_slave/qs_spi_slave_basic.h</name>
+						</file>
+					</group>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/spi.h</name>
+					</file>
+					<group>
+						<name>quick_start_dma</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_dma/qs_spi_dma_use.h</name>
+						</file>
+					</group>
+					<group>
+						<name>quick_start_master</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_master/qs_spi_master_basic.h</name>
+						</file>
+					</group>
+				</group>
 				<group>
 					<name>usart</name>
 					<file>
@@ -2644,33 +2581,6 @@
 						<name>quick_start</name>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/usart/quick_start/qs_usart_basic_use.h</name>
-						</file>
-					</group>
-				</group>
-				<group>
-					<name>spi</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/spi.c</name>
-					</file>
-					<group>
-						<name>quick_start_slave</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_slave/qs_spi_slave_basic.h</name>
-						</file>
-					</group>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/spi.h</name>
-					</file>
-					<group>
-						<name>quick_start_dma</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_dma/qs_spi_dma_use.h</name>
-						</file>
-					</group>
-					<group>
-						<name>quick_start_master</name>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/spi/quick_start_master/qs_spi_master_basic.h</name>
 						</file>
 					</group>
 				</group>
@@ -2715,6 +2625,24 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/sercom_interrupt.h</name>
+				</file>
+			</group>
+			<group>
+				<name>extint</name>
+				<group>
+					<name>extint_sam_d_r_h</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_sam_d_r_h/extint.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_callback.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/extint/extint_callback.h</name>
 				</file>
 			</group>
 			<group>
@@ -2799,24 +2727,6 @@
 				</group>
 			</group>
 			<group>
-				<name>tc</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.c</name>
-				</file>
-				<group>
-					<name>tc_sam_d_r_h</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h/tc.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc.h</name>
-				</file>
-			</group>
-			<group>
 				<name>rtc</name>
 				<group>
 					<name>rtc_sam_d_r_h</name>
@@ -2835,6 +2745,24 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/rtc/rtc_count.h</name>
+				</file>
+			</group>
+			<group>
+				<name>tc</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.c</name>
+				</file>
+				<group>
+					<name>tc_sam_d_r_h</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h/tc.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc.h</name>
 				</file>
 			</group>
 			<group>
@@ -3163,6 +3091,84 @@
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/boards/samr21_xplained_pro/samr21_xplained_pro.h</name>
 				</file>
+			</group>
+		</group>
+	</group>
+	<group>
+		<name>common2</name>
+		<group>
+			<name>services</name>
+			<group>
+				<name>gfx_mono</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_framebuffer.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_text.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_ug_2832hsweg04.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/sysfont.c</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_framebuffer.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_text.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/sysfont.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_ug_2832hsweg04.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.h</name>
+				</file>
+			</group>
+			<group>
+				<name>delay</name>
+				<group>
+					<name>sam0</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0/systick_counter.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0/systick_counter.h</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/delay/delay.h</name>
+				</file>
+			</group>
+		</group>
+		<group>
+			<name>components</name>
+			<group>
+				<name>display</name>
+				<group>
+					<name>ssd1306</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306/ssd1306.c</name>
+					</file>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../common2/components/display/ssd1306/ssd1306.h</name>
+					</file>
+				</group>
 			</group>
 		</group>
 	</group>

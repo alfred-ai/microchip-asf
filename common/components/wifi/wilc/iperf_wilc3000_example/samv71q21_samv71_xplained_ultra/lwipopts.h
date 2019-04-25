@@ -30,6 +30,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
@@ -68,8 +71,15 @@ extern int random_number(void);
 /**
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
-#define LWIP_SOCKET                     0
+#define LWIP_SOCKET                     1
 
+#if LWIP_SOCKET
+#define LWIP_TIMEVAL_PRIVATE			0   // set it to 0 to avoid timeval struct redefined build error, if LWIP_SOCKET is set
+#endif
+/**
+ * LWIP_SO_RCVTIMEO==1: Enable recv timeout
+ */
+#define LWIP_SO_RCVTIMEO                1
 /*
    ------------------------------------
    ---------- Memory options ----------
@@ -118,7 +128,7 @@ extern int random_number(void);
  * MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP segments.
  * (requires the LWIP_TCP option)
  */
-#define MEMP_NUM_TCP_SEG                27
+#define MEMP_NUM_TCP_SEG                64
 
 /**
  * MEMP_NUM_SYS_TIMEOUT: the number of simultaneously active timeouts.
@@ -128,12 +138,12 @@ extern int random_number(void);
 /**
  * PBUF_POOL_SIZE: the number of buffers in the pbuf pool. 
  */
-#define PBUF_POOL_SIZE                  8//20
+#define PBUF_POOL_SIZE                  MEMP_NUM_TCP_SEG
 
 /**
  * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool.
  */
-#define PBUF_POOL_BUFSIZE               1604
+#define PBUF_POOL_BUFSIZE               1610
 
 /** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
  * alignment of payload after that header. Since the header is 14 bytes long,
@@ -191,19 +201,19 @@ extern int random_number(void);
  * TCP_WND: The size of a TCP window.  This must be at least 
  * (2 * TCP_MSS) for things to work well
  */
-#define TCP_WND                         (4 * TCP_MSS)//(8 * TCP_MSS)
+#define TCP_WND                         (8 * TCP_MSS)
 
 /**
  * TCP_SND_BUF: TCP sender buffer space (bytes).
  * To achieve good performance, this should be at least 2 * TCP_MSS.
  */
-#define TCP_SND_BUF                     (4 * TCP_MSS)
+#define TCP_SND_BUF                     TCP_WND
 
 /**
  * TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
  * as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work.
  */
-#define TCP_SND_QUEUELEN                ((6 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS))
+#define TCP_SND_QUEUELEN                (4 * TCP_SND_BUF / TCP_MSS)
 
 /*
    ---------------------------------
@@ -284,14 +294,14 @@ extern int random_number(void);
  * The priority value itself is platform-dependent, but is passed to
  * sys_thread_new() when the thread is created.
  */
-#define TCPIP_THREAD_PRIO               (configMAX_PRIORITIES - 2)
+#define TCPIP_THREAD_PRIO               (configMAX_PRIORITIES - 1)
 
 /**
  * TCPIP_MBOX_SIZE: The mailbox size for the tcpip thread messages
  * The queue size value itself is platform-dependent, but is passed to
  * sys_mbox_new() when tcpip_init is called.
  */
-#define TCPIP_MBOX_SIZE                 24
+#define TCPIP_MBOX_SIZE                 64
 
 /**
  * SLIPIF_THREAD_NAME: The name assigned to the slipif_loop thread.
@@ -362,14 +372,14 @@ extern int random_number(void);
  * NETCONN_UDP. The queue size value itself is platform-dependent, but is passed
  * to sys_mbox_new() when the recvmbox is created.
  */
-#define DEFAULT_UDP_RECVMBOX_SIZE       24
+#define DEFAULT_UDP_RECVMBOX_SIZE       16
 
 /**
  * DEFAULT_TCP_RECVMBOX_SIZE: The mailbox size for the incoming packets on a
  * NETCONN_TCP. The queue size value itself is platform-dependent, but is passed
  * to sys_mbox_new() when the recvmbox is created.
  */
-#define DEFAULT_TCP_RECVMBOX_SIZE       24
+#define DEFAULT_TCP_RECVMBOX_SIZE       16
 
 /**
  * DEFAULT_ACCEPTMBOX_SIZE: The mailbox size for the incoming connections.

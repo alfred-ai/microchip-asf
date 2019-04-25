@@ -2,7 +2,7 @@
  *
  * \file
  *
- * \brief This module contains Linux BSP APIs implementation.
+ * \brief This module contains Linux WILC BSP APIs implementation.
  *
  * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
  *

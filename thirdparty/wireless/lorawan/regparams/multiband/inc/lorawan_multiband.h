@@ -603,12 +603,11 @@ typedef enum _pds_reg_na_items
 #define REG_EU868_PDS_FID1_START_INDEX    PDS_FILE_REG_EU868_04_IDX << 8
 #define REG_EU868_PDS_FID2_START_INDEX    PDS_FILE_REG_EU868_12_IDX << 8
 
-#define PDS_REG_EU868_FID1_MAX_VALUE 2
+#define PDS_REG_EU868_FID1_MAX_VALUE 1
 /* PDS Reg EU868 Items - List*/
 typedef enum _pds_reg_fid1_eu868_items
 {
-    PDS_REG_EU868_CH_PARAM_1 = REG_EU868_PDS_FID1_START_INDEX, /* Channel Param structure for all 16 channels */
-    PDS_REG_EU868_SB_DUTY_PRESCLAR
+    PDS_REG_EU868_CH_PARAM_1 = REG_EU868_PDS_FID1_START_INDEX /* Channel Param structure for all 16 channels */
       /* Always add new items above this value */
 }pds_reg_eu868_fid1_items_t;
 
@@ -753,7 +752,6 @@ typedef struct _RegPdsItems
     uint16_t alt_ch_item_id;
     uint16_t ch_param_1_item_id;
     uint16_t ch_param_2_item_id;
-    uint16_t sb_dc_prescalr_item_id;
     uint16_t band_item_id;
 }RegPdsItems_t;
 #endif

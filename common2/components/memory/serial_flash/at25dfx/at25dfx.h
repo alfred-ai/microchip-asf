@@ -213,6 +213,8 @@ enum at25dfx_type {
 	AT25DFX_321A,
 	/** AT25DF641, compatible with AT25DF641A */
 	AT25DFX_641,
+	/** AT25DF041B */
+    AT25DFX_041B,
 };
 
 #include <at25dfx_hal.h>

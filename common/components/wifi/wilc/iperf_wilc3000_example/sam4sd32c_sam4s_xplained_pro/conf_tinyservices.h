@@ -30,6 +30,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef CONF_TINYSERVICES_H_INCLUDED
 #define CONF_TINYSERVICES_H_INCLUDED

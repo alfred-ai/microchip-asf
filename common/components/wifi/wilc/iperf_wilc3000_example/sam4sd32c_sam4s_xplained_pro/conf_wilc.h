@@ -51,7 +51,7 @@ extern "C" {
 
 /** Select WILC firmware to use. */
 #define CONF_WILC_USE_3000_REV_A
-
+//#define CONF_WILC_USE_1000_REV_B
 /*
    ---------------------------------
    ---------- PIN settings ---------
@@ -102,7 +102,9 @@ extern "C" {
 #define CONF_WILC_SPI_PHA				(1)
 
 /** SPI clock. */
-#define CONF_WILC_SPI_CLOCK				(48000000)
+#define CONF_WILC_SPI_CLOCK				(40000000)
+
+//#define CONF_WILC_FW_IN_FLASH
 
 /*
    ---------------------------------
@@ -124,7 +126,7 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WILC_DEBUG					(0)
+#define CONF_WILC_DEBUG					(1)
 #define CONF_WILC_PRINTF				osprintf
 
 #ifdef __cplusplus

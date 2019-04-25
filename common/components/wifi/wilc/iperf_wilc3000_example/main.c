@@ -118,8 +118,10 @@ void vApplicationMallocFailedHook(void)
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName);
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 {
-	osprintf("ERROR: STACK OVERFLOW");
-	osprintf(pcTaskName);
+	/*TRACE("ERROR: STACK OVERFLOW");
+	TRACE(pcTaskName);*/
+	M2M_ERR("ERROR: STACK OVERFLOW");
+	M2M_ERR(pcTaskName);
 	for (;;) {
 	}
 }
@@ -189,6 +191,7 @@ int main(void)
 	/* Create main task. */
 	xTaskCreate(iperf_tcp_task, (signed char *)"TestTCP", TASK_DEMO_STACK_SIZE, 0, TASK_DEMO_PRIORITY, 0);
 	xTaskCreate(iperf_udp_task, (signed char *)"TestUDP", TASK_DEMO_STACK_SIZE, 0, TASK_DEMO_PRIORITY, 0);
+	//xTaskCreate(iperf_tcp_client_task, (signed char *)"TestClientTCP", TASK_DEMO_STACK_SIZE, 0, TASK_DEMO_PRIORITY, 0);
 
 	vTaskStartScheduler();
 	

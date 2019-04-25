@@ -31,6 +31,7 @@
 *
 */
 
+#if defined(ENABLE_NETWORK_FREEZER)
 #if PDS_ENABLE_WEAR_LEVELING
 
 /******************************************************************************
@@ -93,6 +94,7 @@ void PDS_TaskHandler(void)
   }
 }
 
+#endif
 #endif
 
 /* eof wlPdsTaskManager.c */

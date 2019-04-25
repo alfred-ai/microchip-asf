@@ -292,6 +292,7 @@ static void SYS_HwOverflow_Cb(void)
 void SYS_TimerAdjust_SleptTime(uint32_t sleeptime)
 {
 	SYS_Timer_t* timer = timers;
+    /* Synchornise timers based on sleep time */
 	while (timer)
 	{
 		if (timer->timeout > sleeptime)
@@ -304,4 +305,11 @@ void SYS_TimerAdjust_SleptTime(uint32_t sleeptime)
 		}
 		timer = timer->next;
 	}
+    /* Stop and Start Timers */
+	common_tc_overflow_stop();
+	common_tc_compare_stop();
+    set_common_tc_overflow_callback(SYS_HwOverflow_Cb);
+    set_common_tc_expiry_callback(SYS_HwExpiry_Cb);
+    common_tc_init();
+    common_tc_delay(SYS_TIMER_INTERVAL * MS);
 }

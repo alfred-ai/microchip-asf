@@ -44,9 +44,9 @@ define symbol __ICFEDIT_region_RAM_start__    = 0x20000000;
 define symbol __ICFEDIT_region_RAM_end__      = 0x20007FFF;
 define symbol __ICFEDIT_region_ROM_start__    = 0x00000000;
 define symbol __ICFEDIT_region_ROM_end__      = 0x0003FFFF;
-define symbol __ICFEDIT_region_pds_ROM_start__  = 0x00000100;
-define symbol __ICFEDIT_region_pds_ROM_end__    = 0x00040FF;
-define symbol __ICFEDIT_region_text_ROM_start__  = 0x004100;
+define symbol __ICFEDIT_region_pds_ROM_start__  = 0x00002100;
+define symbol __ICFEDIT_region_pds_ROM_end__    = 0x00060FF;
+define symbol __ICFEDIT_region_text_ROM_start__  = 0x006100;
 define symbol __ICFEDIT_region_text_ROM_end__    = 0x0003FFFF;
 
 /*-Sizes-*/
@@ -56,7 +56,7 @@ if (!isdefinedsymbol(__ICFEDIT_size_cstack__)) {
 if (!isdefinedsymbol(__ICFEDIT_size_heap__)) {
   define symbol __ICFEDIT_size_heap__      = 0x0;
 }
-define symbol D_NV_MEMORY_START = 0x400;
+define symbol D_NV_MEMORY_START = 0x2100;
 define symbol _D_NV_MEMORY_SIZE = 0x4000;
 /**** End of ICF editor section. ###ICF###*/
 

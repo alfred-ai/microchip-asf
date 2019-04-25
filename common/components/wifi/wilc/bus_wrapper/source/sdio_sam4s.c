@@ -31,6 +31,10 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+ 
 #include "common/include/nm_common.h"
 #ifdef CONF_WILC_USE_SDIO
 #include "bus_wrapper/include/sdio_sam4s.h"
@@ -63,7 +67,7 @@ static void check_card_exist (void){
 }
 
 static int8_t wilc_cmd53(uint8_t rw_flag, uint8_t func_nb, uint32_t reg_addr,
-uint8_t inc_addr,uint8_t BlkMode ,uint32_t Blksize, uint32_t count,uint32_t nb_block,bool access_block)
+uint8_t inc_addr, uint8_t BlkMode, uint32_t Blksize, uint32_t nb_block, bool access_block)
 {
 	if (Blksize >512)
 	{
@@ -73,7 +77,7 @@ uint8_t inc_addr,uint8_t BlkMode ,uint32_t Blksize, uint32_t count,uint32_t nb_b
 	bool ret = hsmci_adtc_start((rw_flag == SDIO_CMD53_READ_FLAG)?
 	SDIO_CMD53_IO_R_BLOCK_EXTENDED :
 	SDIO_CMD53_IO_W_BLOCK_EXTENDED,
-	(count    << SDIO_CMD53_COUNT)
+	(nb_block    << SDIO_CMD53_COUNT)
 	| ((uint32_t)reg_addr << SDIO_CMD53_REG_ADDR)
 	| ((uint32_t)inc_addr << SDIO_CMD53_OP_CODE)
 	| ((uint32_t)BlkMode  << SDIO_CMD53_BLOCK_MODE)
@@ -140,10 +144,14 @@ int8_t nmi_sdio_cmd52(tstrNmSdioCmd52* cmd){
 	
 	uint8_t DataVal = cmd->data;
 	if(!cmd->read_write){
-		if(wilc_cmd52(SDIO_CMD52_READ_FLAG, cmd->function, cmd->address, cmd->raw, &DataVal)) return -1;
+		if(wilc_cmd52(SDIO_CMD52_READ_FLAG, cmd->function,
+			cmd->address, cmd->raw, &DataVal))
+			return -1;
 	}
 	else{
-		if(wilc_cmd52(SDIO_CMD52_WRITE_FLAG, cmd->function, cmd->address, cmd->raw, &DataVal)) return -2;
+		if(wilc_cmd52(SDIO_CMD52_WRITE_FLAG, cmd->function,
+			cmd->address, cmd->raw, &DataVal))
+			return -2;
 	}
 	cmd->data = DataVal;
 	return M2M_SUCCESS;
@@ -161,41 +169,53 @@ int8_t nmi_sdio_cmd53(tstrNmSdioCmd53* cmd){
 	{
 		/* begin CMD53 command */
 
-		if (wilc_cmd53_compact(flag, cmd->function,cmd->address ,cmd->increment, cmd->count, false)) return -1;
+		if (wilc_cmd53_compact(flag, cmd->function,cmd->address,
+			cmd->increment, cmd->count, true))
+			return -1;
 		
 		if (flag == SDIO_CMD53_READ_FLAG)
 		{
 			/* start using DMA to read the data from the register */
-			if (!hsmci_start_read_blocks(cmd->buffer, 1)) return -2;
+			if (!hsmci_start_read_blocks(cmd->buffer, 1))
+				return -2;
 			/* wait for dma to finish reading */
-			if (!hsmci_wait_end_of_read_blocks()) return -3;
+			if (!hsmci_wait_end_of_read_blocks())
+				return -3;
 		}
 		else if (flag == SDIO_CMD53_WRITE_FLAG)
 		{
 			/* start using DMA to read the data from the register */
-			if (!hsmci_start_write_blocks(cmd->buffer, 1)) return -2;
+			if (!hsmci_start_write_blocks(cmd->buffer, 1))
+				return -2;
 			/* wait for dma to finish writing */
-			if (!hsmci_wait_end_of_write_blocks()) return -3;
+			if (!hsmci_wait_end_of_write_blocks())
+				return -3;
 			
 		}
 	}
 	else{
 		/* begin CMD53 command */
-		if (wilc_cmd53(flag, cmd->function, cmd->address,cmd->increment,cmd->block_mode,cmd->block_size,cmd->count,cmd->block_size*cmd->count, true)) return -4;
+		if (wilc_cmd53(flag, cmd->function, cmd->address,cmd->increment,
+			cmd->block_mode,cmd->block_size,cmd->count,true))
+			return -4;
 		
 		if (flag == SDIO_CMD53_READ_FLAG)
 		{
 			/* start using DMA to read the data from the register */
-			if (!hsmci_start_read_blocks(cmd->buffer, cmd->count)) return -5;
+			if (!hsmci_start_read_blocks(cmd->buffer, cmd->count))
+				return -5;
 			/* wait for dma to finish reading */
-			if (!hsmci_wait_end_of_read_blocks()) return -6;
+			if (!hsmci_wait_end_of_read_blocks())
+				return -6;
 		}
 		else if (flag == SDIO_CMD53_WRITE_FLAG)
 		{
 			/* start using DMA to read the data from the register */
-			if (!hsmci_start_write_blocks(cmd->buffer, cmd->count)) return -5;
+			if (!hsmci_start_write_blocks(cmd->buffer, cmd->count))
+				return -5;
 			/* wait for dma to finish writing */
-			if (!hsmci_wait_end_of_write_blocks()) return -6;
+			if (!hsmci_wait_end_of_write_blocks())
+				return -6;
 			
 		}
 	}

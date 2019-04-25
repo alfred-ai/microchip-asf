@@ -31,6 +31,7 @@
 *
 */
 
+#if defined(ENABLE_NETWORK_FREEZER)
 #if PDS_ENABLE_WEAR_LEVELING
 
 /******************************************************************************
@@ -405,6 +406,7 @@ static bool pdsInitItemMask(S_Nv_ItemId_t memoryId, uint8_t *itemMask)
   return true;
 }
 
+#endif
 #endif 
 
 // eof wlpdsDataServer.c

@@ -30,6 +30,7 @@
 * \asf_license_stop
 *
 */
+#if defined(ENABLE_NETWORK_FREEZER)
 #if PDS_ENABLE_WEAR_LEVELING
 
 /******************************************************************************
@@ -501,5 +502,6 @@ bool pdsGetDirDescr(S_Nv_ItemId_t itemId, PDS_DirDescr_t *dirDescrToGet )
   return false;
 }
 #endif 
+#endif
 
 // eof wlPdsTypesConverter.c

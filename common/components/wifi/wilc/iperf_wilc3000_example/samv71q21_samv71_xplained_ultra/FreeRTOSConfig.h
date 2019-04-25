@@ -66,7 +66,7 @@
 #define configTICK_RATE_HZ						( 1000 )
 #define configMAX_PRIORITIES					( 5 )
 #define configMINIMAL_STACK_SIZE				( ( unsigned short ) 130 )
-#define configTOTAL_HEAP_SIZE					( ( size_t ) ( 65 * 1024 ) )
+#define configTOTAL_HEAP_SIZE					( ( size_t ) ( 60000 ) )
 #define configMAX_TASK_NAME_LEN					( 10 )
 #define configUSE_TRACE_FACILITY				1
 #define configUSE_16_BIT_TICKS					0
@@ -109,11 +109,22 @@ to exclude the API function. */
 #define INCLUDE_uxTaskPriorityGet		1
 #define INCLUDE_vTaskDelete				1
 #define INCLUDE_vTaskCleanUpResources	1
-#define INCLUDE_vTaskSuspend			0
+#define INCLUDE_vTaskSuspend			1
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
 #define INCLUDE_eTaskGetState			1
 #define INCLUDE_xTimerPendFunctionCall	0
+
+/* Dimensions a buffer into which command outputs can be written.  The buffer
+can be declared in the CLI code itself, to allow multiple command consoles to
+share the same buffer.  For example, an application may allow access to the
+command interpreter by UART and by Ethernet.  Sharing a buffer is done purely
+to save RAM.  Note, however, that the command console itself is not re-entrant,
+so only one command interpreter interface can be used at any one time.  For
+that reason, no attempt at providing mutual exclusion to the buffer is
+attempted. */
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE 400
+
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS

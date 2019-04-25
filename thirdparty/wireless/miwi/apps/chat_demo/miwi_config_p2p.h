@@ -116,16 +116,6 @@
         
         
         /*********************************************************************/
-        // ENABLE_ENHANCED_DATA_REQUEST enables the Enhanced Data Request 
-        // feature of P2P stack. It combines the message that is send from
-        // the sleeping device with Data Request command upon wakeup, to save
-        // 20% - 30% active time for sleeping device, thus prolong the battery
-        // life.
-        /*********************************************************************/
-        //#define ENABLE_ENHANCED_DATA_REQUEST
-        
-        
-        /*********************************************************************/
         // ENABLE_TIME_SYNC enables the Time Synchronizaiton feature of P2P
         // stack. It allows the FFD to coordinate the check-in interval of
         // sleeping device, thus allow one FFD to connect to many sleeping

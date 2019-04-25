@@ -34,7 +34,7 @@
 
  #include "bt_uart.h"
  #include "uart_stream.h"
- #include "driver/include/wilc3000_ble_burst_firmware.h"
+ #include "driver/include/ble_firmware_3000.h"
 
  // Address to load firmware
  #define IRAM_START 0x80000000
@@ -66,8 +66,8 @@
 	 uint8_t s8Ret = 0;
 	 uint16_t bytes_to_write = 0;
 
-	fw_size = sizeof(ble_firmware);
-	fw_data = &ble_firmware;
+	fw_size = sizeof(firmware_ble);
+	fw_data = &firmware_ble;
 	
 	do 
 	{

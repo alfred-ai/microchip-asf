@@ -2317,6 +2317,12 @@
 									<name>$PROJ_DIR$/../../../../../services/pds/src/wl/wlPdsDataServer.c</name>
 								</file>
 							</group>
+							<group>
+								<name>nopds</name>
+								<file>
+									<name>$PROJ_DIR$/../../../../../services/pds/src/nopds/fakePds.c</name>
+								</file>
+							</group>
 						</group>
 						<group>
 							<name>inc</name>

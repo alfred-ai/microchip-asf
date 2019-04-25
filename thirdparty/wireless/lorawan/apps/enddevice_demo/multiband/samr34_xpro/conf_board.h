@@ -39,10 +39,6 @@
 #ifndef CONF_BOARD_H_INCLUDED
 #define CONF_BOARD_H_INCLUDED
 
-/* TODO: If Board is having EDBG with DEV_EUI flashed in Userpage Enable this Macro otherwise make it as 0 */
-#define EDBG_EUI_READ	1
-//#define EDBG_EUI_READ   0
-
 #define RFSWITCH_ENABLE
 
 /* Possible Radio clock sources */

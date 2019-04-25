@@ -57,6 +57,9 @@ SECTIONS
         _sfixed = .;
         KEEP(*(.vectors .vectors.*))
 
+		/***************************************************************************/
+		/** REMOVE THE BELOW SECTION IF YOU ARE NOT USING NETWORK_FREEZER - START **/
+		/***************************************************************************/
 		/* PDS NV memory section */
 		. = ALIGN(0x2100);
 		PROVIDE(__d_nv_mem_start = .);
@@ -73,6 +76,9 @@ SECTIONS
         PROVIDE(__pds_fd_start = .);
         KEEP(*(.pds_fd))
         PROVIDE(__pds_fd_end = .);
+		/***************************************************************************/
+		/*** REMOVE THE BELOW SECTION IF YOU ARE NOT USING NETWORK_FREEZER - END ***/
+		/***************************************************************************/
 
         *(.text .text.* .gnu.linkonce.t.*)
         *(.glue_7t) *(.glue_7)

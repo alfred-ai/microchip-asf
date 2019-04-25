@@ -26,22 +26,39 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 #ifndef IPERF_H_INCLUDED
 #define IPERF_H_INCLUDED
 
 /** Wi-Fi Settings */
-#define MAIN_WLAN_SSID        "ATSC24TIBO" /* < Destination SSID */
+#define MAIN_WLAN_SSID        "DEMO_AP" /* < Destination SSID */
 #define MAIN_WLAN_AUTH        M2M_WIFI_SEC_WPA_PSK /* < Security manner */
-#define MAIN_WLAN_PSK         "atmel123" /* < Password for Destination SSID */
+#define MAIN_WLAN_PSK         "12345678" /* < Password for Destination SSID */
+
+#define WEP_KEY_INDEX            M2M_WIFI_WEP_KEY_INDEX_1
+#define WEP_KEY                  "1234567890" //"01234567890123456789abcdef" /**< 10 digit or 26 digit key */
+#define WEP_KEY_SIZE             sizeof(WEP_KEY)
+#define WEP_AUTH_TYPE            WEP_ANY
+#define WEP_CONN_PARAM           {WEP_KEY_INDEX, WEP_KEY_SIZE, WEP_KEY, WEP_AUTH_TYPE}
 
 void iperf_tcp_task(void *argument);
+void iperf_tcp_client_task(void *argument);
 void iperf_udp_task(void *argument);
 
 #define IPERF_WIFI_M2M_TX_TIME				(9999)
 
 #define IPERF_WIFI_SERVER_PORT			    (5001)
 #define IPERF_WIFI_TCP_BUFFER_SIZE			(1400)
-#define IPERF_WIFI_UDP_BUFFER_SIZE			(1700)
+#define IPERF_WIFI_UDP_BUFFER_SIZE			(1400)
+#define SERVER_IP_ADDRESS					"192.168.1.102"
+#define HEADER_VERSION1						0x80000000
+#define UDP_RATE							40 * 1024 * 1024 // rate = 40 Mega
+#define IPERF_SERVER_PORT					5001
+#define IPERF_CLIENT_PORT					5001
+#define NUM_THREADS							1
+#define TEST_TIME							1000 // 10 sec
 
 /** iPerf Settings */
 #define HEADER_VERSION1						0x80000000
@@ -52,6 +69,39 @@ struct UDP_datagram {
 	uint32_t tv_sec;
 	uint32_t tv_usec;
 };
+
+/***************** Application types *******************/
+#define AP_STA_CONCURRENCY  
+/* AP and STA Concurrency - standard default configuration */
+
+//#define P2P_AP_CONCURRENCY
+//#define P2P_STA_CONCURRENCY
+//#define STA_ONLY
+//#define AP_ONLY
+//#define P2P_ONLY
+
+
+/***************** Antenna Selection/Diversity Testing *******************/
+
+//#define MAC_ANTENNA_DIVERSITY
+
+#ifdef MAC_ANTENNA_DIVERSITY
+
+/* Antenna Switch mode - {ANTENNA1, ANTENNA2 or DIVERSITY} */
+#define ANT_MODE (ANTENNA2)
+
+/* 
+ * Antenna GPIO ctrl - {ANT_SWTCH_GPIO_SINLGE, ANT_SWTCH_GPIO_DUAL
+ * or ANT_SWTCH_GPIO_NONE} 
+ */
+#define ANT_SWTCH_GPIO_CTRL_MODE (ANT_SWTCH_GPIO_DUAL)
+
+/* Antenna GPIO configuration */
+#define ANTENNA_GPIO_NUM_1	(4)
+#define ANTENNA_GPIO_NUM_2	(20)
+
+#endif //MAC_ANTENNA_DIVERSITY
+/*************************************************************************/
 
 struct client_hdr {
     /*

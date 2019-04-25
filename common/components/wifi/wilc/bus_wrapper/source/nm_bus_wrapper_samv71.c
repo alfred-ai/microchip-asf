@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #include <stdio.h>
 #include "conf_wilc.h"
@@ -158,10 +161,7 @@ sint8 nm_bus_init(void *pvinit)
 	spi_set_clock_polarity(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_POL);
 	spi_set_clock_phase(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, CONF_WILC_SPI_PHA);
 	spi_set_bits_per_transfer(CONF_WILC_SPI, CONF_WILC_SPI_NPCS, SPI_CSR_BITS_8_BIT);
-#if 0
-	spi_set_baudrate_div(CONF_WILC_SPI, CONF_WILC_SPI_NPCS,
-			(sysclk_get_cpu_hz() / CONF_WILC_SPI_CLOCK));
-#endif			
+
 	/** SPI clock. 
 	** Exact SPI frequency will depend on the CPU clock configuration and it
 	** will be less than or equal to what is configured in CONF_WINC_SPI_CLOCK

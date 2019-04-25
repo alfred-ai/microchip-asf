@@ -104,10 +104,18 @@ extern "C" {
 #define CONF_WILC_SPI_DLYBCT 			(0)
 
 /** SPI interrupt pin. */
-#define CONF_WILC_SPI_INT_PIN			IOPORT_CREATE_PIN(PIOC, 31)
-#define CONF_WILC_SPI_INT_PIO			PIOC
-#define CONF_WILC_SPI_INT_PIO_ID		ID_PIOC
-#define CONF_WILC_SPI_INT_MASK			(1 << 31)
+#if defined(CONF_WILC_USE_SPI) && defined(CONF_WILC_USE_3000_REV_A) 
+/*Interrupt pin configuration is unique for WILC3000SHLD + SAMv71*/
+#define CONF_WILC_SPI_INT_PIN               IOPORT_CREATE_PIN(PIOC, 31)
+#define CONF_WILC_SPI_INT_PIO               PIOC
+#define CONF_WILC_SPI_INT_PIO_ID            ID_PIOC
+#define CONF_WILC_SPI_INT_MASK              (1 << 31)
+#else
+#define CONF_WILC_SPI_INT_PIN           IOPORT_CREATE_PIN(PIOD, 28)
+#define CONF_WILC_SPI_INT_PIO           PIOD
+#define CONF_WILC_SPI_INT_PIO_ID        ID_PIOD
+#define CONF_WILC_SPI_INT_MASK          (1 << 28)
+#endif
 
 /** Highest INT priority that can call FreeRTOS FromISR() functions. */
 #define CONF_WILC_SPI_INT_PRIORITY		(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY)

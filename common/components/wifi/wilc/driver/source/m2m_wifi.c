@@ -31,7 +31,10 @@
  * \asf_license_stop
  *
  */
-
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
+#include <string.h>
 #include "driver/include/m2m_wifi.h"
 #include "driver/source/nmdrv.h"
 #include "driver/source/m2m_hif.h"
@@ -50,9 +53,7 @@ static uint16 	        gu16ethRcvBufSize ;
 
 tuCtrlStruct guCtrlStruct __M2M_DMA_BUF_ATT__;
 
-#ifdef CONF_MGMT
 static tpfAppMonCb  gpfAppMonCb  = NULL;
-#endif
 /**
 *	@fn			m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint32 u32Addr, uint8 grp)
 *	@brief		WiFi call back function
@@ -140,8 +141,6 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint8* pu8Buffer)
 	{
 		gpfAppEthCb(M2M_WIFI_RESP_PACKET_SENT, NULL, 0);
 	}
-
-#ifdef CONF_MGMT
 	else if(u8OpCode == M2M_WIFI_RESP_WIFI_RX_PACKET)
 	{
 		tstrM2MWifiRxPacketInfo*		pstrRxPacketInfo = (tstrM2MWifiRxPacketInfo*)pu8Buffer;
@@ -151,11 +150,16 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint8* pu8Buffer)
 		if(gpfAppMonCb)
 			gpfAppMonCb(pstrRxPacketInfo, pu8Buffer,u16DataSize);
 	}
-#endif
 	else if(u8OpCode == M2M_WIFI_RESP_FIRMWARE_STRTED)
 	{		
 		if(gpfAppWifiCb)
 				gpfAppWifiCb(M2M_WIFI_RESP_FIRMWARE_STRTED, NULL);
+	}
+	else if(u8OpCode == M2M_WIFI_REQ_P2P_AUTH)
+	{
+		tstrM2MP2pDevInfo* pstrM2MP2pDevInfo = (tstrM2MP2pDevInfo*)pu8Buffer;
+		if(gpfAppWifiCb)
+		gpfAppWifiCb(M2M_WIFI_REQ_P2P_AUTH, (tstrM2MP2pDevInfo*)pstrM2MP2pDevInfo);
 	}
 	else
 	{
@@ -172,10 +176,7 @@ sint8 m2m_wifi_init(tstrWifiInitParam * param)
  	gpfAppEthCb  	    = param->strEthInitParam.pfAppEthCb;
 	gpu8ethRcvBuf       = param->strEthInitParam.au8ethRcvBuf;
 	gu16ethRcvBufSize	= param->strEthInitParam.u16ethRcvBufSize;
-
-#ifdef CONF_MGMT
 	gpfAppMonCb  = param->pfAppMonCb;
-#endif
 	gu8scanInProgress = 0;
 	/* Apply device specific initialization. */
 	ret = nm_drv_init(NULL);
@@ -518,13 +519,16 @@ sint8 m2m_wifi_wps_disable(void)
 	return ret;
 }
 
-sint8 m2m_wifi_p2p(uint8 u8Channel)
+sint8 m2m_wifi_p2p(uint8 u8Channel, tenuP2PTrigger enuTrigger, uint16 u16WPS_CfgMehods)
 {
 	sint8 ret = M2M_SUCCESS;
 	if((u8Channel == M2M_WIFI_CH_1) || (u8Channel == M2M_WIFI_CH_6) || (u8Channel == M2M_WIFI_CH_11))
 	{
 		tstrM2MP2PConnect* pstrtmp = &guCtrlStruct.strM2MP2PConnect;
 		pstrtmp->u8ListenChannel = u8Channel;
+		pstrtmp->enuTrigger = enuTrigger;
+		pstrtmp->u16WPS_CfgMethods = u16WPS_CfgMehods;
+
 		ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_ENABLE_P2P, (uint8*)pstrtmp, sizeof(tstrM2MP2PConnect), NULL, 0,0);
 	}
 	else
@@ -752,14 +756,12 @@ uint8 m2m_wifi_get_sleep_mode(void)
 sint8 m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn)
 {
 	sint8 ret = M2M_SUCCESS;
-#ifndef CONF_WILC_USE_3000_REV_A
 	tstrM2mPsType* pstrPs = &guCtrlStruct.strM2mPsType;
 	pstrPs->u8PsType = PsTyp;
 	pstrPs->u8BcastEn = BcastEn;
 	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SLEEP, (uint8*)pstrPs,sizeof(tstrM2mPsType), NULL, 0, 0);
 	M2M_INFO("POWER SAVE %d\n",PsTyp);
 	hif_set_sleep_mode(PsTyp);
-#endif
 	return ret;
 }
 /*!
@@ -785,7 +787,24 @@ sint8 m2m_wifi_set_device_name(uint8 *pu8DeviceName, uint8 u8DeviceNameLength)
 	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_DEVICE_NAME,
 		(uint8*)pstrDeviceName, sizeof(tstrM2MDeviceNameConfig), NULL, 0,0);
 }
-#ifdef CONF_MGMT
+
+sint8 m2m_wifi_allow_p2p_connection()
+{
+	/* pushbutton doesn't require PIN Number */
+	m2m_wifi_set_p2p_pin(0,0);
+}
+
+sint8 m2m_wifi_set_p2p_pin(uint8 *pu8PinNumber, uint8 u8PinLength)
+{
+	tstrM2MPinInfo strM2MPinInfo;
+
+	memset(&strM2MPinInfo,0,sizeof(tstrM2MPinInfo));
+	m2m_memcpy(strM2MPinInfo.au8Pin, pu8PinNumber, u8PinLength);
+	strM2MPinInfo.au8Pin[u8PinLength++]='\0';
+	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_P2P_AUTH_RES,
+	(uint8*)&strM2MPinInfo, sizeof(tstrM2MPinInfo), NULL, 0,0);
+}
+
 sint8 m2m_wifi_enable_monitoring_mode(tstrM2MWifiMonitorModeCtrl *pstrMtrCtrl)
 {
 	sint8	s8Ret = -1;
@@ -830,7 +849,7 @@ sint8 m2m_wifi_send_wlan_pkt(uint8 *pu8WlanPacket, uint16 u16WlanHeaderLength, u
 	}
 	return s8Ret;
 }
-#endif
+
 sint8 m2m_wifi_get_connection_info(void)
 {
 	return hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_GET_CONN_INFO, NULL, 0, NULL, 0, 0);
@@ -986,4 +1005,39 @@ NMI_API sint8 m2m_wifi_set_max_tx_rate(tenuTxDataRate enuMaxTxDataRate)
 	}
 
 	return s8ret;
+}
+
+NMI_API sint8 m2m_wifi_set_antenna_mode(uint8 ant_mode, uint8 gpio_mode, uint8 ant_gpio1, uint8 ant_gpio2)
+{
+	sint8 s8ret = M2M_ERR_FAIL;
+	tstrM2mAntDivParams antDivParams;
+	
+	if(gpio_mode == ANT_SWTCH_GPIO_NONE || ant_mode == NUM_ANT_MODE) {
+		M2M_ERR("Ant switch GPIO mode is invalid.\n");
+		M2M_ERR("The valid GPIO ctrl modes are ANT_SWTCH_GPIO_SINLGE or ANT_SWTCH_GPIO_DUAL\n");
+		return M2M_ERR_FAIL;
+	}
+	
+	memset(&antDivParams, 0, sizeof(tstrM2mAntDivParams));
+	antDivParams.mode = ant_mode;
+	
+	if (!is_valid_gpio(ant_gpio1)) {
+		M2M_ERR("Invalid GPIO%d\n", ant_gpio1);
+		return M2M_ERR_FAIL;
+	}
+	antDivParams.antenna1 = ant_gpio1;
+
+	if (gpio_mode == ANT_SWTCH_GPIO_DUAL) {
+		if ((ant_gpio2 != ant_gpio1) && is_valid_gpio(ant_gpio2)) {
+			antDivParams.antenna2 = ant_gpio2;
+			} else {
+			M2M_ERR("Invalid GPIO %d\n", ant_gpio2);
+			return M2M_ERR_FAIL;
+		}
+	}
+
+	antDivParams.gpio_mode = gpio_mode;
+	s8ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SET_ANT_SWITCH_MODE, (uint8 *)&antDivParams,sizeof(tstrM2mAntDivParams),NULL,0,0);
+
+	return s8ret;	
 }

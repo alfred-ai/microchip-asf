@@ -78,6 +78,9 @@
     /* The Periodic Polling data request interval for sleeping end devices - Configurable  */
     #define DATA_REQUEST_SEND_INTERVAL       3
 
+	/* The Periodic Polling data request interval for sleeping end devices - Configurable  */
+	#define MAXIMUM_DATA_REQUEST_SEND_INTERVAL    DATA_REQUEST_SEND_INTERVAL * 2
+
     /* End Device Key Alive Timeout - Configurable */
     #define RXOFF_DEVICE_TIMEOUT_IN_SEC      DATA_REQUEST_SEND_INTERVAL * 20
 
@@ -117,25 +120,25 @@
     /* The Periodic Route Update Initiation interval - Configurable  */
 	#define ROUTE_UPDATE_INTERVAL       60
     /* The wait time for receiving route reply after initiating route request - Configurable*/
-    #define ROUTE_REQ_WAIT_INTERVAL     5
+	#define ROUTE_REQ_WAIT_INTERVAL     5
 
-    /* The wait time to maintain the indirect data in queue - Configurable*/
-    #define INDIRECT_DATA_WAIT_INTERVAL 25
+	/* The wait time to maintain the indirect data in queue - Configurable*/
+	#define INDIRECT_DATA_WAIT_INTERVAL 25
 
-    /* The Max number of failures to reach the parent before raising failure callback  - Configurable  */
-    #define ED_LINK_FAILURE_ATTEMPTS    15
+	/* The Max number of failures to reach the parent before raising failure callback  - Configurable  */
+	#define ED_LINK_FAILURE_ATTEMPTS    15
 
-    /* The time to wait for acknowledgment before next retry of the packet  - Configurable  */
-    #define FRAME_ACK_WAIT_INTERVAL     5
+	/* The Max number of frame retries in the network layer  - Configurable  */
+	#define FRAME_RETRY                 3
 
-    /* The Max number of frame retries in the network layer  - Configurable  */
-    #define FRAME_RETRY                 3
+	/* Number of Rebroadcast Table Entries  - Configurable  */
+	#define REBROADCAST_TABLE_SIZE      10
 
-    /* Number of Rebroadcast Table Entries  - Configurable  */
-    #define REBROADCAST_TABLE_SIZE      10
+	/* The time to hold the rebroadcast entry in the table  - Configurable  */
+	#define REBROADCAST_TIMEOUT         5
 
-    /* The time to hold the rebroadcasted entry in the table  - Configurable  */
-    #define REBROADCAST_TIMEOUT         5
+	/* Number of Duplicate Rejection Table Entries  - Configurable  */
+	#define DUPLICATE_REJECTION_TABLE_SIZE      10
 
     /* The number of maximum beacon results to store during scan procedure - Configurable*/
     #define MAX_BEACON_RESULTS          5
