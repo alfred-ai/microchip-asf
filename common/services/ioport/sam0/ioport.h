@@ -231,7 +231,7 @@ inline static void arch_ioport_set_pin_dir(ioport_pin_t pin,
 		base->DIRCLR.reg = arch_ioport_pin_to_mask(pin);
 	}
 
-	base->PINCFG[arch_ioport_pin_to_mask(pin)].reg |= PORT_PINCFG_INEN;
+	base->PINCFG[pin & 0x1F].reg |= PORT_PINCFG_INEN;
 }
 
 inline static void arch_ioport_set_pin_level(ioport_pin_t pin,
