@@ -61,6 +61,7 @@
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
+ *  - Atmel | SMART SAM R34/R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_ac_prerequisites
@@ -100,19 +101,19 @@
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_HYSTERESIS_LEVEL</td>
- *      <td>SAM L21/L22/C20/C21</td>
+ *      <td>SAM L21/L22/C20/C21/R34/R35</td>
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_SYNCBUSY_SCHEME_VERSION_2</td>
- *      <td>SAM L21/L22/C20/C21</td>
+ *      <td>SAM L21/L22/C20/C21/R34/R35</td>
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_RUN_IN_STANDY_EACH_COMPARATOR</td>
- *      <td>SAM L21/L22/C20/C21</td>
+ *      <td>SAM L21/L22/C20/C21/R34/R35</td>
  *    </tr>
  *    <tr>
  *      <td>FEATURE_AC_RUN_IN_STANDY_PAIR_COMPARATOR</td>
- *      <td>SAM D20/L22/D21/D10/D11/R21/DA1/HA1</td>
+ *      <td>SAM D20/L22/D21/D10/D11/R21/DA1/HA1/R34/R35</td>
  *    </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -299,14 +300,14 @@ extern "C" {
  * Define AC driver feature set according to different device family.
  * @{
  */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
    /** Setting of hysteresis level */
 #  define FEATURE_AC_HYSTERESIS_LEVEL
    /** SYNCBUSY scheme version 2 */
 #  define FEATURE_AC_SYNCBUSY_SCHEME_VERSION_2
 #endif
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
  	/** Run in standby feature for each comparator */
 #  define FEATURE_AC_RUN_IN_STANDY_EACH_COMPARATOR
 #else

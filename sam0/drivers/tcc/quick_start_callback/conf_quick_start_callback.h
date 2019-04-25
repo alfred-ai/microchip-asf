@@ -38,7 +38,7 @@
 #define CONF_QUICK_START_H_INCLUDED
 
 //[definition_pwm]
-#if SAMR30
+#if SAMR30G
 /** PWM module to use */
 #define CONF_PWM_MODULE      LED_0_PWM3CTRL_MODULE
 /** PWM channel */
@@ -49,6 +49,19 @@
 #define CONF_PWM_OUT_PIN     LED_0_PWM3CTRL_PIN
 /** PWM output pinmux */
 #define CONF_PWM_OUT_MUX     LED_0_PWM3CTRL_MUX
+
+#elif SAMR30E
+/** PWM module to use */
+#define CONF_PWM_MODULE      LED_1_PWM2CTRL_MODULE
+/** PWM channel */
+#define CONF_PWM_CHANNEL     LED_1_PWM2CTRL_CHANNEL
+/** PWM output */
+#define CONF_PWM_OUTPUT      LED_1_PWM2CTRL_OUTPUT
+/** PWM output pin */
+#define CONF_PWM_OUT_PIN     LED_1_PWM2CTRL_PIN
+/** PWM output pinmux */
+#define CONF_PWM_OUT_MUX     LED_1_PWM2CTRL_MUX
+
 #else
 /** PWM module to use */
 #define CONF_PWM_MODULE      LED_0_PWM4CTRL_MODULE

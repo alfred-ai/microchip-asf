@@ -76,6 +76,14 @@
 #  include "samr30.h"
 #endif
 
+#if (SAMR34)
+#  include "samr34.h"
+#endif
+
+#if (SAMR35)
+#  include "samr35.h"
+#endif
+
 #if (SAML22)
 #  include "saml22.h"
 #endif

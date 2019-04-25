@@ -31,8 +31,8 @@
  *
  */
 
-#ifndef MAIN_H_INCLUDED
-#define MAIN_H_INCLUDED
+#ifndef WIFI_PROV_H_INCLUDED
+#define WIFI_PROV_H_INCLUDED
 
 #include "driver/include/m2m_wifi.h"
 #include "driver/include/m2m_types.h"
@@ -107,4 +107,4 @@ void wifi_ap_connect(wifiProvisionParams *provParams);
 }
 #endif
 
-#endif /* MAIN_H_INCLUDED */
+#endif /* WIFI_PROV_H_INCLUDED*/

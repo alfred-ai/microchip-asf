@@ -96,9 +96,10 @@
  * Other compilers may or may not work.
  *
  * \section contactinfo Contact Information
- * For further information, visit
- * <A href="http://www.microchip.com">Microchip</A>.\n
- */
+*
+* Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+*/
+
 
 #include "asf.h"
 #include <string.h>
@@ -106,6 +107,7 @@
 #include "driver/include/m2m_wifi.h"
 #include "socket/include/socket.h"
 #include "iperf.h"
+#include "bsp_app/include/nm_bsp_samd21_app.h"
 
 #define STRING_EOL    "\r\n"
 #define STRING_HEADER "-- WINC1500 IPERF server example --"STRING_EOL \
@@ -127,6 +129,18 @@ void SysTick_Handler(void)
 {
 	ms_ticks++;
 }
+
+/** Wi-Fi connection state */
+static volatile uint8_t wifi_connected;
+
+uint32		 gu32IPAddress;
+uint32		 clientIPAddress;
+uint32_t	 tcp_serv_pack_recv = 0;
+uint32_t	 udp_serv_pack_recv = 0;
+SOCKET tcp_client_sock = -1;
+SOCKET udp_server_sock = -1;
+app_status iperf_app_stat = {0,0,0,0};
+
 /**
  * \brief Configure UART console.
  */
@@ -146,7 +160,68 @@ static void configure_console(void)
 	usart_enable(&cdc_uart_module);
 }
 
+/**
+ * \brief Callback to get the Wi-Fi status update.
+ *
+ * \param[in] u8MsgType type of Wi-Fi notification. Possible types are:
+ *  - [M2M_WIFI_RESP_CURRENT_RSSI](@ref M2M_WIFI_RESP_CURRENT_RSSI)
+ *  - [M2M_WIFI_RESP_CON_STATE_CHANGED](@ref M2M_WIFI_RESP_CON_STATE_CHANGED)
+ *  - [M2M_WIFI_RESP_CONNTION_STATE](@ref M2M_WIFI_RESP_CONNTION_STATE)
+ *  - [M2M_WIFI_RESP_SCAN_DONE](@ref M2M_WIFI_RESP_SCAN_DONE)
+ *  - [M2M_WIFI_RESP_SCAN_RESULT](@ref M2M_WIFI_RESP_SCAN_RESULT)
+ *  - [M2M_WIFI_REQ_WPS](@ref M2M_WIFI_REQ_WPS)
+ *  - [M2M_WIFI_RESP_IP_CONFIGURED](@ref M2M_WIFI_RESP_IP_CONFIGURED)
+ *  - [M2M_WIFI_RESP_IP_CONFLICT](@ref M2M_WIFI_RESP_IP_CONFLICT)
+ *  - [M2M_WIFI_RESP_P2P](@ref M2M_WIFI_RESP_P2P)
+ *  - [M2M_WIFI_RESP_AP](@ref M2M_WIFI_RESP_AP)
+ *  - [M2M_WIFI_RESP_CLIENT_INFO](@ref M2M_WIFI_RESP_CLIENT_INFO)
+ * \param[in] pvMsg A pointer to a buffer containing the notification parameters
+ * (if any). It should be casted to the correct data type corresponding to the
+ * notification type. Existing types are:
+ *  - tstrM2mWifiStateChanged
+ *  - tstrM2MWPSInfo
+ *  - tstrM2MP2pResp
+ *  - tstrM2MAPResp
+ *  - tstrM2mScanDone
+ *  - tstrM2mWifiscanResult
+ */
+static void iperf_wifi_cb(uint8_t u8MsgType, void *pvMsg)
+{
+	switch (u8MsgType) {
+	case M2M_WIFI_RESP_CON_STATE_CHANGED:
+	{
+		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
+		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
+			printf("iperf_wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: CONNECTED\n");
+			m2m_wifi_request_dhcp_client();
+		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
+			printf("iperf_wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: DISCONNECTED\n");
+			wifi_connected = 0;
+			m2m_wifi_connect((char *)IPERF_WIFI_M2M_WLAN_SSID, sizeof(IPERF_WIFI_M2M_WLAN_SSID),
+				IPERF_WIFI_M2M_WLAN_AUTH, (char *)IPERF_WIFI_M2M_WLAN_PSK, M2M_WIFI_CH_ALL);
+		}
+	}
+	break;
 
+	case M2M_WIFI_REQ_DHCP_CONF:
+	{
+		tstrM2MIPConfig* pstrM2MIpConfig = (tstrM2MIPConfig*) pvMsg;
+		uint8 *pu8IPAddress = (uint8*) &pstrM2MIpConfig->u32StaticIP;
+
+		wifi_connected = 1;
+		gu32IPAddress = pstrM2MIpConfig->u32StaticIP;
+		printf("iperf_wifi_cb: M2M_WIFI_REQ_DHCP_CONF: IP is %u.%u.%u.%u\n",
+				pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
+		
+		iperf_app_stat.tcp_server = MODE_INIT;
+		iperf_app_stat.udp_server = MODE_INIT;
+	}
+	break;
+
+	default:
+		break;
+	}
+}
 /**
  * \brief Main application function.
  *
@@ -156,7 +231,15 @@ static void configure_console(void)
  */
 int main(void)
 {
+     
+	 
+	 tstrWifiInitParam param;
+	 int8_t ret;
+	 tstrM2mLsnInt strM2mLsnInt;
 
+	 tstrIperfInit pstrIperfInit;
+
+	 
 	/* Initialize the board. */
 	system_init();
 
@@ -174,8 +257,122 @@ int main(void)
 	puts(STRING_HEADER);
 	puts(STRING_EOL);
 
-	/* Start the demo task. */
-	iperf_start();
+	/* Initialize the BSP. */
+	ret = nm_bsp_init();
+	if (ret != M2M_SUCCESS) {
+		M2M_ERR("\r\nFailed to initialize BSP.");
+		while(1);
+	}
 
-	return 0;
+	ret = nm_bsp_app_init();
+	if (ret != M2M_SUCCESS) {
+		M2M_ERR("\r\nFailed to initialize BSP App.");
+		while(1);
+	}
+
+	/* Initialize WINC1500 Wi-Fi driver with data and status callbacks. */
+	param.pfAppWifiCb = iperf_wifi_cb;
+	ret = m2m_wifi_init(&param);
+	if (M2M_SUCCESS != ret) {
+		printf("iperf_start: m2m_wifi_init call error!\r\n");
+		while (1);
+	}
+	
+	/* Initialize socket module */
+	socketInit();
+	registerSocketCallback(IperfSocketEventHandler, NULL);
+
+	IperfInit();
+
+	/* Connect to router. */
+	m2m_wifi_connect((char *)IPERF_WIFI_M2M_WLAN_SSID, sizeof(IPERF_WIFI_M2M_WLAN_SSID),
+	IPERF_WIFI_M2M_WLAN_AUTH, (char *)IPERF_WIFI_M2M_WLAN_PSK, M2M_WIFI_CH_ALL);
+
+	while (1) {
+		/* Handle pending events from network controller. */
+		m2m_wifi_handle_events(NULL);
+
+		if ((iperf_app_stat.udp_server == MODE_INIT) || (iperf_app_stat.udp_server == MODE_FINISHED))
+		{
+			if (iperf_app_stat.udp_server == MODE_FINISHED)
+			{
+				IperfSocketClose(udp_server_sock);
+				iperf_app_stat.udp_server = MODE_INIT;
+				printf("\n\n\n------------------------------------------------------------\r\n");
+				printf("Server listening on TCP/UDP port 5001\r\n");
+				printf("TCP window size: 1 KByte\r\n");
+				printf("------------------------------------------------------------\r\n");
+				continue;
+			}
+			//printf("\n\nInit UDP server\r\n");
+			iperf_app_stat.udp_server = MODE_INIT_DONE;
+			pstrIperfInit.port = IPERF_WIFI_M2M_SERVER_PORT;
+			pstrIperfInit.operating_mode = MODE_UDP_SERVER;
+			IperfCreate(&pstrIperfInit, true);
+		}
+		else if (iperf_app_stat.udp_server == MODE_WAIT)
+		{
+			iperf_app_stat.udp_server = MODE_STOP;
+			IperfSocketClose(udp_server_sock);
+			printf("------------------------------------------------------------\r\n");
+			printf("Client connecting to %lu.%lu.%lu.%lu, UDP port 5001\r\n",
+			(udp_client_addr.sin_addr.s_addr & 0xFF), (udp_client_addr.sin_addr.s_addr & 0xFF00) >> 8,
+			(udp_client_addr.sin_addr.s_addr & 0xFF0000) >> 16, (udp_client_addr.sin_addr.s_addr & 0xFF000000) >> 24);
+			printf("Sending %d byte datagrams\r\n", IPERF_TX_BUFFER_SIZE);
+			printf("------------------------------------------------------------\r\n");
+			iperf_app_stat.udp_client = MODE_INIT;
+		}
+		else if (iperf_app_stat.udp_client == MODE_INIT) {
+			iperf_app_stat.udp_client = MODE_INIT_DONE;
+			pstrIperfInit.port = IPERF_WIFI_M2M_SERVER_PORT;
+			pstrIperfInit.operating_mode = MODE_UDP_CLIENT;
+			memcpy(&pstrIperfInit.ip,&udp_client_addr.sin_addr.s_addr,sizeof(in_addr));
+			if (udp_serv_pack_recv == 0) {
+				printf("sending packet indefinitely\r\n");
+				pstrIperfInit.packets_to_send = -1; // Send indefinitely
+				} else {
+				pstrIperfInit.packets_to_send = udp_serv_pack_recv;
+			}
+			pstrIperfInit.packet_len = IPERF_TX_BUFFER_SIZE;
+			pstrIperfInit.tls = 0;
+			IperfCreate(&pstrIperfInit, false);
+		}
+		else if (iperf_app_stat.udp_client == MODE_STOP) {
+			iperf_app_stat.udp_client = MODE_FINISHED;
+			printf("\n\n\n------------------------------------------------------------\r\n");
+			printf("Server listening on TCP/UDP port 5001\r\n");
+			printf("TCP window size: 1 KByte\r\n");
+			printf("------------------------------------------------------------\r\n");
+		}
+
+		if ((iperf_app_stat.tcp_server == MODE_INIT) || (iperf_app_stat.tcp_server == MODE_FINISHED))
+		{
+			iperf_app_stat.tcp_server = MODE_INIT_DONE;
+			pstrIperfInit.port = IPERF_WIFI_M2M_SERVER_PORT;
+			pstrIperfInit.operating_mode = MODE_TCP_SERVER;
+			IperfCreate(&pstrIperfInit, true);
+		}
+		if ((iperf_app_stat.tcp_client == MODE_INIT))
+		{
+			iperf_app_stat.tcp_client = MODE_INIT_DONE;
+			pstrIperfInit.port = IPERF_WIFI_M2M_SERVER_PORT;
+			pstrIperfInit.operating_mode = MODE_TCP_CLIENT;
+			memcpy(&pstrIperfInit.ip,&clientIPAddress,sizeof(clientIPAddress));
+			if (tcp_serv_pack_recv == 0) {
+				printf("sending packet indefinitely\r\n");
+				pstrIperfInit.packets_to_send = -1; // Send indefinitely
+				} else {
+				pstrIperfInit.packets_to_send = tcp_serv_pack_recv;
+			}
+			pstrIperfInit.packet_len = IPERF_TX_BUFFER_SIZE;
+			pstrIperfInit.tls = 0;
+			IperfCreate(&pstrIperfInit, false);
+			}else if (iperf_app_stat.tcp_client == MODE_START) {
+			iperf_app_stat.tcp_client = MODE_RUN;
+			IperfTCP_Client_SendTestPacket();
+		}
+		IperfUpdate();
+	}
 }
+
+

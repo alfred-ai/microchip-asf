@@ -71,11 +71,13 @@ CSRCS = \
        common/components/wifi/winc1500/host_drv/socket/source/socket.c \
        common/components/wifi/winc1500/host_drv/spi_flash/source/flexible_flash.c \
        common/components/wifi/winc1500/host_drv/spi_flash/source/spi_flash.c \
+       common/components/wifi/winc1500/iperf_server_example/bsp_app/source/nm_bsp_samd21_app.c \
        common/components/wifi/winc1500/iperf_server_example/iperf.c \
        common/components/wifi/winc1500/iperf_server_example/main21.c \
        common/utils/interrupt/interrupt_sam_nvic.c        \
        common2/services/delay/sam0/systick_counter.c      \
        sam0/boards/samd21_xplained_pro/board_init.c       \
+       sam0/drivers/dma/dma.c                             \
        sam0/drivers/extint/extint_callback.c              \
        sam0/drivers/extint/extint_sam_d_r_h/extint.c      \
        sam0/drivers/port/port.c                           \
@@ -90,6 +92,8 @@ CSRCS = \
        sam0/drivers/system/interrupt/system_interrupt.c   \
        sam0/drivers/system/pinmux/pinmux.c                \
        sam0/drivers/system/system.c                       \
+       sam0/drivers/tcc/tcc.c                             \
+       sam0/drivers/tcc/tcc_callback.c                    \
        sam0/utils/cmsis/samd21/source/gcc/startup_samd21.c \
        sam0/utils/cmsis/samd21/source/system_samd21.c     \
        sam0/utils/stdio/read.c                            \
@@ -111,6 +115,7 @@ INC_PATH = \
        common2/services/delay/sam0                        \
        sam0/boards                                        \
        sam0/boards/samd21_xplained_pro                    \
+       sam0/drivers/dma                                   \
        sam0/drivers/extint                                \
        sam0/drivers/extint/extint_sam_d_r_h               \
        sam0/drivers/port                                  \
@@ -127,6 +132,7 @@ INC_PATH = \
        sam0/drivers/system/power/power_sam_d_r_h          \
        sam0/drivers/system/reset                          \
        sam0/drivers/system/reset/reset_sam_d_r_h          \
+       sam0/drivers/tcc                                   \
        sam0/utils                                         \
        sam0/utils/cmsis/samd21/include                    \
        sam0/utils/cmsis/samd21/source                     \
@@ -188,6 +194,7 @@ CPPFLAGS = \
        -D EXTINT_CALLBACK_MODE=true                       \
        -D SPI_CALLBACK_MODE=true                          \
        -D SYSTICK_MODE                                    \
+       -D TCC_ASYNC=true                                  \
        -D USART_CALLBACK_MODE=true                        \
        -D __SAMD21J18A__
 

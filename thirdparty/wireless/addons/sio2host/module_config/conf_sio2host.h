@@ -85,7 +85,7 @@
 
 /* ! \name Configuration for SAM4L */
 /* ! @{ */
-#if (SAM && !(SAMD || SAMR21 || SAML21 || SAMR30))
+#if (SAM && !(SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35))
 
 #if SAMG55
                 /* Configuration for console uart IRQ handler */
@@ -116,7 +116,7 @@
 
 /* ! \name Configuration for SAMD20 */
 /* ! @{ */
-#if (SAMD || SAMR21 || SAML21 || SAMR30)
+#if (SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35)
 #if (SAMR30E || SAMR21E)
 #define USART_HOST                 SERCOM0
 #define HOST_SERCOM_MUX_SETTING    USART_RX_1_TX_0_XCK_1

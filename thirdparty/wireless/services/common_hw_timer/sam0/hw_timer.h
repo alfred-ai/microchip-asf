@@ -37,6 +37,7 @@
 typedef void (*tmr_callback_t)(void);
 
 uint16_t tmr_read_count(void);
+void tmr_write_count(uint16_t count);
 void tmr_disable_cc_interrupt(void);
 void tmr_enable_cc_interrupt(void);
 void tmr_disable_ovf_interrupt(void);

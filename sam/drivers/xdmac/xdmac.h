@@ -97,6 +97,7 @@
 
 #include  <compiler.h>
 #include  <status_codes.h>
+#include "conf_board.h"
 
 /** @cond */
 /**INDENT-OFF**/
@@ -351,8 +352,10 @@ static inline void xdmac_channel_enable(Xdmac *xdmac, uint32_t channel_num)
 	Assert(xdmac);
 	Assert(channel_num < XDMACCHID_NUMBER);
 
+#ifdef CONF_BOARD_ENABLE_CACHE_AT_INIT
 	/* Update DCache before DMA transmit */
 	SCB_CleanInvalidateDCache();
+#endif
 
 	xdmac->XDMAC_GE = (XDMAC_GE_EN0 << channel_num);
 }

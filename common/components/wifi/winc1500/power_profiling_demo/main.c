@@ -563,7 +563,6 @@ static void test_init(void)
 */
 static void run_provisioning(low_power_test_param* tp)
 {
-	m2m_wifi_set_tx_power(tp->tx_pwr_mode);
 	m2m_wifi_start_provision_mode((tstrM2MAPConfig *)&gstrM2MAPConfig, (char *)"atmel.com", 1);
 	printf("Provision Mode started.\r\nConnect to [%s] via AP[%s] and fill up the page.\r\n","atmel.com", gstrM2MAPConfig.au8SSID);
 
@@ -667,7 +666,6 @@ static void start_low_power_mode_test(low_power_test_param* tp)
 	strM2mLsnInt.u16LsnInt = tp->listen_interval;	
 	m2m_wifi_set_lsn_int(&strM2mLsnInt);
 	m2m_wifi_set_sleep_mode(tp->ps_mode,tp->dtim);
-	m2m_wifi_set_tx_power(tp->tx_pwr_mode);
 	test_init();
 	if(tp->ps_mode == M2M_PS_MANUAL)
 	{
@@ -699,7 +697,6 @@ static void start_low_power_mode_test(low_power_test_param* tp)
 static void start_transmission_test(low_power_test_param* tp)
 {
 	m2m_wifi_enable_sntp(0);
-	m2m_wifi_set_tx_power(tp->tx_pwr_mode);
 	test_init();
 	while(1)
 	{
@@ -745,7 +742,6 @@ static void execute_state_machine(int server_mode,low_power_test_param* tp)
 			strM2mLsnInt.u16LsnInt = tp->listen_interval;
 			m2m_wifi_set_lsn_int(&strM2mLsnInt);
 			m2m_wifi_set_sleep_mode(tp->ps_mode,tp->dtim);
-			m2m_wifi_set_tx_power(tp->tx_pwr_mode);
 			test_init();
 		break;
 		case WIFI_CONNECTION_STATE:
@@ -839,7 +835,6 @@ static void run_sample_test_app(int enable_ssl,low_power_test_param* tp)
 	strM2mLsnInt.u16LsnInt = tp->listen_interval;
 	m2m_wifi_set_lsn_int(&strM2mLsnInt);
 	m2m_wifi_set_sleep_mode(tp->ps_mode,tp->dtim);
-	m2m_wifi_set_tx_power(tp->tx_pwr_mode);
 	test_init();
 	while(1)
 	{

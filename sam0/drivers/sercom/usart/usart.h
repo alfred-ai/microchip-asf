@@ -62,6 +62,9 @@
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
+ *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  * - \ref asfdoc_sam0_sercom_usart_prerequisites
@@ -91,35 +94,35 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_SYNC_SCHEME_V2</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_OVER_SAMPLE</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_HARDWARE_FLOW_CONTROL</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_IRDA</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_LIN_SLAVE</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_COLLISION_DECTION</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_START_FRAME_DECTION</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_IMMEDIATE_BUFFER_OVERFLOW_NOTIFICATION</td>
- *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21</td>
+ *    <td>SAM D21/R21/D09/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_USART_RS485</td>
@@ -274,7 +277,7 @@ extern "C" {
 
 #if (SAMD21) || (SAMR21) || (SAMD09) || (SAMD10) || (SAMD11) || \
 	(SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || \
-	(SAMR30) || (SAMHA1) || (SAMHA0) || defined(__DOXYGEN__)
+	(SAMR30) || (SAMHA1) || (SAMHA0) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 /** USART sync scheme version 2. */
 #  define FEATURE_USART_SYNC_SCHEME_V2
 /** USART oversampling. */
@@ -1554,7 +1557,7 @@ static inline bool lin_master_transmission_status(struct usart_module *const mod
  *	<tr>
  *		<td>42118F</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, SAMR30 and SAM C20/C21</td>
+ *		<td>Added support for SAM L21/L22, SAM DA1, SAM D09, SAMR30/R34 and SAM C20/C21</td>
  *	</tr>
  *	<tr>
  *		<td>42118E</td>

@@ -70,6 +70,8 @@
  *  - SAM HA1G16A  Xplained Pro board
  *  - SAM C21 Xplained Pro board
  *  - SAM R30 Xplained Pro board
+ *  - SAM R30 Module Xplained Pro board
+ *  - SAM R34 Xplained Pro board
  *
  * \section appdoc_sam0_usart_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -87,6 +89,13 @@
  *  - \b TX/RX: EXT1 PIN11 (PA12) <--> EXT2 PIN4  (PA09)
  * - SAM R30 Xplained Pro board
  *  - \b TX/RX: EXT1 PIN7 (PA18) <--> EXT1 PIN12  (PA17)
+<<<<<<< HEAD
+ * - SAM R30 Module Xplained Pro board
+ *  - \b TX/RX: EXT PIN13 (PA14) <--> EXT PIN15  (PA17)
+=======
+ * - SAM R34 Xplained Pro board
+ *  - \b TX/RX: EXT1 PIN11 (PA16) <--> EXT1 PIN17  (PB02)
+>>>>>>> 3518a2958ff4695a84f9222901de2da524b4520d
  *
  * To run the test:
  *  - Connect the SAM Xplained Pro board to the computer using a

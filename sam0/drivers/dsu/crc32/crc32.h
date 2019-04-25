@@ -106,7 +106,7 @@ extern "C" {
  */
 static inline void dsu_crc32_init(void)
 {
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 		/* Turn on the digital interface clock */
 		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBB, MCLK_APBBMASK_DSU);
 #else

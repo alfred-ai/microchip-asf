@@ -39,6 +39,7 @@
 
 #define NM_LEVEL_INTERRUPT		(1)
 
+
 #define NM_DEBUG				CONF_WINC_DEBUG
 #define NM_BSP_PRINTF			CONF_WINC_PRINTF
 

@@ -31,6 +31,9 @@
  * \asf_license_stop
  *
  */
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ */
 
 #ifndef CONF_WINC_H_INCLUDED
 #define CONF_WINC_H_INCLUDED
@@ -40,6 +43,7 @@ extern "C" {
 #endif
 
 #include "board.h"
+#include "bsp_app/include/nm_bsp_samd21_app.h"
 
 /*
    ---------------------------------
@@ -59,6 +63,7 @@ extern "C" {
 
 #define CONF_WINC_USE_SPI				(1)
 
+#define CONF_WINC_SPI_DMA_ENABLE 
 /** SPI pin and instance settings. */
 #define CONF_WINC_SPI_MODULE			EXT1_SPI_MODULE
 #define CONF_WINC_SPI_SERCOM_MUX		EXT1_SPI_SERCOM_MUX_SETTING

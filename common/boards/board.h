@@ -149,6 +149,7 @@ extern "C" {
 #define SAMB11ZR_XPLAINED_PRO      92  //!< SAM B11 ZR Xplained Pro board.
 #define SAMR30_XPLAINED_PRO        93  //!< SAM R30 Xplained Pro board.
 #define SAMHA1G16A_XPLAINED_PRO    94  //!< SAM HA1G16A Xplained Pro board.
+#define SAMR34_XPLAINED_PRO        95  //!< SAM R34 Xplained Pro board.
 #define SIMULATOR_XMEGA_A1         97  //!< Simulator for XMEGA A1 devices.
 #define AVR_SIMULATOR_UC3          98  //!< Simulator for the AVR UC3 device family.
 #define USER_BOARD                 99  //!< User-reserved board (if any).
@@ -379,6 +380,8 @@ extern "C" {
 # include "samr21g18_module/samr21g18_module.h"
 #elif BOARD == SAMR21B18_MODULE
 # include "samr21b18_module/samr21b18_module.h"
+#elif BOARD == SAMR34_XPLAINED_PRO && defined(__SAMR34J18B__)
+#  include "samr34_xplained_pro/samr34_xplained_pro.h"
 #elif BOARD == USER_BOARD
 // User-reserved area: #include the header file of your board here (if any).
 #  include "user_board.h"

@@ -38,6 +38,7 @@
 
 #define WINDOW_MIN_VALUE    -40
 #define WINDOW_MAX_VALUE    105
+#define GAIN_1_OFFSET		20
 
 /**
  * \internal Writes an TSENS configuration to the hardware module
@@ -186,10 +187,10 @@ void tsens_get_config_defaults(struct tsens_config *const config)
 	tsens_bits[0] = *((uint32_t *)NVMCTRL_TEMP_LOG);
 	tsens_bits[1] = *(((uint32_t *)NVMCTRL_TEMP_LOG) + 1);
 	config->calibration.offset   = \
-		((tsens_bits[0] & TSENS_FUSES_OFFSET_Msk) >> TSENS_FUSES_OFFSET_Pos);
+		((tsens_bits[1] & TSENS_FUSES_OFFSET_Msk) >> TSENS_FUSES_OFFSET_Pos);
 	config->calibration.gain     = \
 		((tsens_bits[0] & TSENS_FUSES_GAIN_0_Msk) >> TSENS_FUSES_GAIN_0_Pos) | \
-		((tsens_bits[1] & TSENS_FUSES_GAIN_1_Msk) >> TSENS_FUSES_GAIN_1_Pos);
+		(((tsens_bits[1] & TSENS_FUSES_GAIN_1_Msk) >> TSENS_FUSES_GAIN_1_Pos) << GAIN_1_OFFSET);
 }
 
 /**
@@ -224,8 +225,11 @@ enum status_code tsens_read(int32_t *result)
 	if(temp & 0x00800000) {
 		temp |= ~TSENS_VALUE_MASK;
 	}
+
 #if (ERRATA_14476)
 	*result = temp * (-1);
+#else
+	*result = temp;
 #endif
 
 	/* Reset ready flag */

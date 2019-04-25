@@ -67,7 +67,11 @@ void configure_tc(void)
 
 	//! [setup_change_config]
 	config_tc.counter_size = TC_COUNTER_SIZE_8BIT;
+	#if (SAMR30E)
+	config_tc.clock_source = GCLK_GENERATOR_0;
+	#else
 	config_tc.clock_source = GCLK_GENERATOR_1;
+	#endif
 	config_tc.clock_prescaler = TC_CLOCK_PRESCALER_DIV1024;
 	config_tc.counter_8_bit.period = 100;
 	config_tc.counter_8_bit.compare_capture_channel[0] = 50;

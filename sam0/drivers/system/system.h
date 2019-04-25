@@ -74,6 +74,9 @@ extern "C" {
  * The following devices can use this module:
  * \if DEVICE_SAML21_SYSTEM_SUPPORT
  *  - Atmel | SMART SAM L21
+ *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  * \endif
  * \if DEVICE_SAMC21_SYSTEM_SUPPORT
  *  - Atmel | SMART SAM C20/C21

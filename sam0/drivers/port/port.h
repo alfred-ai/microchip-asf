@@ -56,6 +56,8 @@
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_port_prerequisites
@@ -87,7 +89,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_PORT_INPUT_EVENT</td>
- *    <td>SAM L21/L22/C20/C21/R30</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -162,7 +164,7 @@ extern "C" {
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 /** Event input control feature support for PORT group. */
 #  define FEATURE_PORT_INPUT_EVENT
 #endif
@@ -755,7 +757,7 @@ static inline enum status_code port_input_event_set_config(
  *		<td>42113E</td>
  *		<td>12/2015</td>
  *		<td>Added input event feature.
- *			Added support for SAM L21/L22, SAM C21, SAM D09, SAMR30 and SAM DA1.</td>
+ *			Added support for SAM L21/L22, SAM C21, SAM D09, SAMR30/R34 and SAM DA1.</td>
  *	</tr>
  *	<tr>
  *		<td>42113D</td>

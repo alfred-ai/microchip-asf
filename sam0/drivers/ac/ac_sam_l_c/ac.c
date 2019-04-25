@@ -121,7 +121,7 @@ enum status_code ac_init(
 	/* Initialize device instance */
 	module_inst->hw = hw;
 
-#if (SAML21) || (SAMR30)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
 	/* Turn on the digital interface clock */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, MCLK_APBDMASK_AC);
 #else

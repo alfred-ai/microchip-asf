@@ -507,6 +507,11 @@ void system_board_init(void);
 #define EDBG_CDC_SERCOM_PINMUX_PAD3  PINMUX_UNUSED
 #define EDBG_CDC_SERCOM_DMAC_ID_TX   SERCOM3_DMAC_ID_TX
 #define EDBG_CDC_SERCOM_DMAC_ID_RX   SERCOM3_DMAC_ID_RX
+
+
+#define EDBG_CDC_SERCOM_PIN_PAD0     PIN_PA22C_SERCOM3_PAD0
+#define EDBG_CDC_SERCOM_PIN_PAD1     PIN_PA23C_SERCOM3_PAD1
+
 /** @} */
 
 /** \name USB definitions
@@ -606,6 +611,147 @@ void system_board_init(void);
 
 /** @} */
 
+/** \name LoRa Radio Interface definitions for EXT1
+ * @{
+ */
+
+
+#ifndef SX_EXT2_CONFIG
+
+#define SX_RF_SPI                  EXT1_SPI_MODULE
+#define SX_RF_RESET_PIN            EXT1_PIN_3
+#define SX_RF_SPI_CS               EXT1_PIN_15
+#define SX_RF_SPI_MOSI             EXT1_PIN_16
+#define SX_RF_SPI_MISO             EXT1_PIN_17
+#define SX_RF_SPI_SCK              EXT1_PIN_18
+
+
+#define SX_RF_SPI_SERCOM_MUX_SETTING   EXT1_SPI_SERCOM_MUX_SETTING
+#define SX_RF_SPI_SERCOM_PINMUX_PAD0   EXT1_SPI_SERCOM_PINMUX_PAD0
+#define SX_RF_SPI_SERCOM_PINMUX_PAD1   PINMUX_UNUSED
+#define SX_RF_SPI_SERCOM_PINMUX_PAD2   EXT1_SPI_SERCOM_PINMUX_PAD2
+#define SX_RF_SPI_SERCOM_PINMUX_PAD3   EXT1_SPI_SERCOM_PINMUX_PAD3
+
+#define DIO0_PIN                   EXT1_PIN_5
+#define DIO0_ACTIVE                true
+#define DIO0_INACTIVE              !DIO0_ACTIVE
+#define DIO0_EIC_PIN               PIN_PB06A_EIC_EXTINT6
+#define DIO0_EIC_MUX               MUX_PB06A_EIC_EXTINT6
+#define DIO0_EIC_PINMUX            PINMUX_PB06A_EIC_EXTINT6
+#define DIO0_EIC_LINE              6 //5
+
+#define DIO1_PIN                   EXT1_PIN_6
+#define DIO1_ACTIVE                true
+#define DIO1_INACTIVE              !DIO1_ACTIVE
+#define DIO1_EIC_PIN               PIN_PB07A_EIC_EXTINT7
+#define DIO1_EIC_MUX               MUX_PB07A_EIC_EXTINT7
+#define DIO1_EIC_PINMUX            PINMUX_PB07A_EIC_EXTINT7
+#define DIO1_EIC_LINE              7
+
+#define DIO2_PIN                   EXT1_PIN_7
+#define DIO2_ACTIVE                true
+#define DIO2_INACTIVE              !DIO2_ACTIVE
+#define DIO2_EIC_PIN               PIN_PA12A_EIC_EXTINT12
+#define DIO2_EIC_MUX               MUX_PA12A_EIC_EXTINT12
+#define DIO2_EIC_PINMUX            PINMUX_PA12A_EIC_EXTINT12
+#define DIO2_EIC_LINE              12
+
+#define DIO3_PIN                   EXT1_PIN_8
+#define DIO3_ACTIVE                true
+#define DIO3_INACTIVE              !DIO2_ACTIVE
+#define DIO3_EIC_PIN               PIN_PA13A_EIC_EXTINT13
+#define DIO3_EIC_MUX               MUX_PA13A_EIC_EXTINT13
+#define DIO3_EIC_PINMUX            PINMUX_PA13A_EIC_EXTINT13
+#define DIO3_EIC_LINE              13
+
+#define DIO4_PIN                   EXT1_PIN_9
+#define DIO4_ACTIVE                true
+#define DIO4_INACTIVE              !DIO2_ACTIVE
+#define DIO4_EIC_PIN               PIN_PB04A_EIC_EXTINT4
+#define DIO4_EIC_MUX               MUX_PB04A_EIC_EXTINT4
+#define DIO4_EIC_PINMUX            PINMUX_PB04A_EIC_EXTINT4
+#define DIO4_EIC_LINE              4
+
+#define DIO5_PIN                   EXT1_PIN_10
+#define DIO5_ACTIVE                true
+#define DIO5_INACTIVE              !DIO2_ACTIVE
+#define DIO5_EIC_PIN               PIN_PA02A_EIC_EXTINT2
+#define DIO5_EIC_MUX               MUX_PA02A_EIC_EXTINT2
+#define DIO5_EIC_PINMUX            PINMUX_PA02A_EIC_EXTINT2
+#define DIO5_EIC_LINE              2
+
+#define SX_RF_RESET_HIGH		   true
+#define SX_RF_RESET_LOW		       !SX_RF_RESET_HIGH
+
+#else
+
+#define SX_RF_SPI                  EXT2_SPI_MODULE
+#define SX_RF_RESET_PIN            EXT2_PIN_3
+#define SX_RF_SPI_CS               EXT2_PIN_15
+#define SX_RF_SPI_MOSI             EXT2_PIN_16
+#define SX_RF_SPI_MISO             EXT2_PIN_17
+#define SX_RF_SPI_SCK              EXT2_PIN_18
+
+
+#define SX_RF_SPI_SERCOM_MUX_SETTING   EXT2_SPI_SERCOM_MUX_SETTING
+#define SX_RF_SPI_SERCOM_PINMUX_PAD0   EXT2_SPI_SERCOM_PINMUX_PAD0
+#define SX_RF_SPI_SERCOM_PINMUX_PAD1   EXT2_SPI_SERCOM_PINMUX_PAD1
+#define SX_RF_SPI_SERCOM_PINMUX_PAD2   EXT2_SPI_SERCOM_PINMUX_PAD2
+#define SX_RF_SPI_SERCOM_PINMUX_PAD3   EXT2_SPI_SERCOM_PINMUX_PAD3
+
+#define DIO0_PIN                   EXT2_PIN_5
+#define DIO0_ACTIVE                true
+#define DIO0_INACTIVE              !DIO0_ACTIVE
+#define DIO0_EIC_PIN               PIN_PA20A_EIC_EXTINT4
+#define DIO0_EIC_MUX               MUX_PA20A_EIC_EXTINT4
+#define DIO0_EIC_PINMUX            PINMUX_PA20A_EIC_EXTINT4
+#define DIO0_EIC_LINE              4
+
+#define DIO1_PIN                   EXT2_PIN_6
+#define DIO1_ACTIVE                true
+#define DIO1_INACTIVE              !DIO1_ACTIVE
+#define DIO1_EIC_PIN               PIN_PA21A_EIC_EXTINT5
+#define DIO1_EIC_MUX               MUX_PA21A_EIC_EXTINT5
+#define DIO1_EIC_PINMUX            PINMUX_PA21A_EIC_EXTINT5
+#define DIO1_EIC_LINE              5
+
+#define DIO2_PIN                   EXT2_PIN_7
+#define DIO2_ACTIVE                true
+#define DIO2_INACTIVE              !DIO2_ACTIVE
+#define DIO2_EIC_PIN               PIN_PB12A_EIC_EXTINT12
+#define DIO2_EIC_MUX               MUX_PB12A_EIC_EXTINT12
+#define DIO2_EIC_PINMUX            PINMUX_PB12A_EIC_EXTINT12
+#define DIO2_EIC_LINE              12
+
+#define DIO3_PIN                   EXT2_PIN_8
+#define DIO3_ACTIVE                true
+#define DIO3_INACTIVE              !DIO2_ACTIVE
+#define DIO3_EIC_PIN               PIN_PB13A_EIC_EXTINT13
+#define DIO3_EIC_MUX               MUX_PB13A_EIC_EXTINT13
+#define DIO3_EIC_PINMUX            PINMUX_PB13A_EIC_EXTINT13
+#define DIO3_EIC_LINE              13
+
+#define DIO4_PIN                   EXT2_PIN_9
+#define DIO4_ACTIVE                true
+#define DIO4_INACTIVE              !DIO2_ACTIVE
+#define DIO4_EIC_PIN               PIN_PB14A_EIC_EXTINT14
+#define DIO4_EIC_MUX               MUX_PB14A_EIC_EXTINT14
+#define DIO4_EIC_PINMUX            PINMUX_PB14A_EIC_EXTINT14
+#define DIO4_EIC_LINE              14
+
+#define DIO5_PIN                   EXT2_PIN_10
+#define DIO5_ACTIVE                true
+#define DIO5_INACTIVE              !DIO2_ACTIVE
+#define DIO5_EIC_PIN               PIN_PB15A_EIC_EXTINT15
+#define DIO5_EIC_MUX               MUX_PB15A_EIC_EXTINT15
+#define DIO5_EIC_PINMUX            PINMUX_PB15A_EIC_EXTINT15
+#define DIO5_EIC_LINE              15
+
+#define SX_RF_RESET_HIGH		   true
+#define SX_RF_RESET_LOW		       !SX_RF_RESET_HIGH
+#endif
+
+/** @} */
 
 /**
  * \brief Turns off the specified LEDs.

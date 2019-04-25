@@ -37,7 +37,7 @@
 #include "tc.h"
 #include "tc_interrupt.h"
 #include "hw_timer.h"
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 #include "clock.h"
 #include <system_interrupt.h>
 #else
@@ -73,6 +73,13 @@ uint16_t common_tc_read_count(void)
 uint16_t tmr_read_count(void)
 {
 	return ((uint16_t)tc_get_count_value(&module_inst));
+}
+
+/*! \brief  write the given timer count to register
+ */
+void tmr_write_count(uint16_t count)
+{
+	tc_set_count_value(&module_inst, (uint32_t)count);
 }
 
 /*! \brief  to disable compare interrupt
@@ -149,7 +156,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
  */
 uint8_t tmr_init(void)
 {
-	uint8_t timer_multiplier;
+	float timer_multiplier;
 	tc_get_config_defaults(&timer_config);
 	#ifdef ENABLE_SLEEP
 	if (sys_sleep == true) {
@@ -165,7 +172,7 @@ uint8_t tmr_init(void)
 	tc_register_callback(&module_inst, tc_cca_callback,
 			TC_CALLBACK_CC_CHANNEL0);
 	tc_enable_callback(&module_inst, TC_CALLBACK_OVERFLOW);
-	tc_enable_callback(&module_inst, TC_CALLBACK_CC_CHANNEL0);
+	/*tc_enable_callback(&module_inst, TC_CALLBACK_CC_CHANNEL0);*/
 
 	tc_enable(&module_inst);
 
@@ -173,13 +180,19 @@ uint8_t tmr_init(void)
 	 * timer with 1Mhz */
 	#ifdef ENABLE_SLEEP
 	if (sys_sleep == true) {
-		timer_multiplier = system_gclk_gen_get_hz(1) / 2000000;
+		timer_multiplier = system_gclk_gen_get_hz(1) / (float) 2000000;
 	} else {
-		timer_multiplier = system_gclk_gen_get_hz(0) / DEF_1MHZ;
+		timer_multiplier = system_gclk_gen_get_hz(0) / (float) DEF_1MHZ;
 	}
 
     #else
-	timer_multiplier = system_gclk_gen_get_hz(0) / DEF_1MHZ;
+	timer_multiplier = system_gclk_gen_get_hz(0) / (float) DEF_1MHZ;	
 	#endif
-	return timer_multiplier;
+	
+	if ((timer_multiplier - (uint32_t)timer_multiplier) >= 0.5f)
+	{
+		timer_multiplier += 1.0f;
+	}
+	
+	return (uint8_t) timer_multiplier;
 }

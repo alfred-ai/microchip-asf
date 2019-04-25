@@ -51,7 +51,7 @@
 # include "mega/sleepmgr.h"
 #elif (SAMD20 || SAMD21 || SAMR21 || SAMD11 || SAMDA1)
 # include "samd/sleepmgr.h"
-#elif (SAML21 || SAML22 || SAMR30)
+#elif (SAML21 || SAML22 || SAMR30 || SAMR34 || SAMR35)
 # include "saml/sleepmgr.h"
 #elif (SAMC21)
 # include "samc/sleepmgr.h"

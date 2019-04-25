@@ -73,6 +73,8 @@
  *  - \b SAM HA1G16A Xplained Pro:EXTINT 0 (PA16, EXT1 pin 10) <-----> TC3 WO1 (PA19, EXT1 pin 8)
  *  - \b SAM C21 Xplained Pro:EXTINT 0 (PB16, EXT2 pin 9)  <-----> TC0 WO1 (PB09, EXT1 pin 3)
  *  - \b SAM R30 Xplained Pro:EXTINT 0 (PA16, EXT1 pin 11)  <-----> TC0 WO1 (PA23, EXT1 pin 10)
+ *  - \b SAM R30 Module Xplained Pro:EXTINT 0 (PA16, EXT1 pin 11)  <-----> TC4 WO1 (PA19, EXT pin 17)
+ *  - \b SAM R34 Xplained Pro:EXTINT 1 (PA17, EXT1 pin 12)  <-----> TC0 WO1 (PA23, EXT1 pin 15)
  *
  * To run the test:
  *  - Connect the SAM Xplained Pro board to the computer using a
@@ -386,7 +388,7 @@ static void run_16bit_capture_and_compare_test(const struct test_case *test)
 
 	/* Calculate the theoretical PWM frequency & duty */
 	uint32_t frequency_output, duty_output;
-#if (SAML21) || (SAML22) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34)
 	frequency_output = system_clock_source_get_hz(SYSTEM_CLOCK_SOURCE_OSC16M)/ (0x03FF+1);
 	/* This value is depend on the WaveGeneration Mode */
 	duty_output = (uint32_t)(tc_test0_config.counter_16_bit.compare_capture_channel[TC_COMPARE_CAPTURE_CHANNEL_1]) * 100 \
@@ -430,16 +432,24 @@ static void run_16bit_capture_and_compare_test(const struct test_case *test)
 	extint_chan_config.gpio_pin            = CONF_EIC_PIN;
 	extint_chan_config.gpio_pin_mux        = CONF_EIC_MUX;
 	extint_chan_config.gpio_pin_pull       = EXTINT_PULL_UP;
-#if (!SAML21) && (!SAML22) && (!SAMC21) && (!SAMR30)
+#if (!SAML21) && (!SAML22) && (!SAMC21) && (!SAMR30) && (!SAMR34)
 	extint_chan_config.wake_if_sleeping    = false;
 #endif
 	extint_chan_config.filter_input_signal = false;
 	extint_chan_config.detection_criteria  = EXTINT_DETECT_HIGH;
+#if (SAMR34)
+	extint_chan_set_config(CONF_EIC_CHANNEL, &extint_chan_config);
+#else
 	extint_chan_set_config(0, &extint_chan_config);
+#endif
 
 	/* Configure external interrupt module to be event generator */
 	struct extint_events extint_event_conf;
+#if (SAMR34)
+	extint_event_conf.generate_event_on_detect[CONF_EIC_CHANNEL] = true;
+#else
 	extint_event_conf.generate_event_on_detect[0] = true;
+#endif
 	extint_enable_events(&extint_event_conf);
 
 	/* Configure event system */
@@ -474,7 +484,7 @@ static void run_16bit_capture_and_compare_test(const struct test_case *test)
 	}
 
 	if(period_after_capture != 0) {
-#if (SAML21) || (SAML22) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34)
 		capture_frequency = system_clock_source_get_hz(SYSTEM_CLOCK_SOURCE_OSC16M)/ period_after_capture;
 #elif SAMC21
 		capture_frequency = system_clock_source_get_hz(SYSTEM_CLOCK_SOURCE_OSC48M)/ period_after_capture;

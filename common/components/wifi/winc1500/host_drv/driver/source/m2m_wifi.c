@@ -451,7 +451,8 @@ sint8 m2m_wifi_init_start(tstrWifiInitParam * pWifiInitParam)
     gpfAppEthCb       = pWifiInitParam->strEthInitParam.pfAppEthCb;
     gau8ethRcvBuf     = pWifiInitParam->strEthInitParam.au8ethRcvBuf;
     gu16ethRcvBufSize = pWifiInitParam->strEthInitParam.u16ethRcvBufSize;
-    u8WifiMode        = pWifiInitParam->strEthInitParam.u8EthernetEnable;
+	if (pWifiInitParam->strEthInitParam.u8EthernetEnable)		
+		u8WifiMode = M2M_WIFI_MODE_ETHERNET;
 #endif /* ETH_MODE */
 
 	gu8scanInProgress = 0;

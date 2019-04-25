@@ -197,7 +197,7 @@ static inline void system_gclk_gen_get_config_defaults(
 	/* Default configuration values */
 	config->division_factor    = 1;
 	config->high_when_disabled = false;
-#if SAML21 || SAML22  || SAMR30
+#if SAML21 || SAML22  || SAMR30 || SAMR34 || SAMR35
 	config->source_clock       = GCLK_SOURCE_OSC16M;
 #elif (SAMC20) || (SAMC21)
 	config->source_clock       = GCLK_SOURCE_OSC48M;

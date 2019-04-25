@@ -71,16 +71,18 @@ typedef struct {
   __I  uint32_t Reserved3[1];
   __IO uint32_t ADC_COR;       /**< \brief (Adc Offset: 0x4C) Channel Offset Register */
   __I  uint32_t ADC_CDR[8];    /**< \brief (Adc Offset: 0x50) Channel Data Register */
-  __I  uint32_t Reserved4[29];
+  __I  uint32_t Reserved4[9];
+  __IO uint32_t ADC_ACR;       /**< \brief (Adc Offset: 0x94) Analog Control Register */
+  __I  uint32_t Reserved5[19];
   __IO uint32_t ADC_WPMR;      /**< \brief (Adc Offset: 0xE4) Write Protection Mode Register */
   __I  uint32_t ADC_WPSR;      /**< \brief (Adc Offset: 0xE8) Write Protection Status Register */
-  __I  uint32_t Reserved5[5];
+  __I  uint32_t Reserved6[5];
   __IO uint32_t ADC_RPR;       /**< \brief (Adc Offset: 0x100) Receive Pointer Register */
   __IO uint32_t ADC_RCR;       /**< \brief (Adc Offset: 0x104) Receive Counter Register */
-  __I  uint32_t Reserved6[2];
+  __I  uint32_t Reserved7[2];
   __IO uint32_t ADC_RNPR;      /**< \brief (Adc Offset: 0x110) Receive Next Pointer Register */
   __IO uint32_t ADC_RNCR;      /**< \brief (Adc Offset: 0x114) Receive Next Counter Register */
-  __I  uint32_t Reserved7[2];
+  __I  uint32_t Reserved8[2];
   __O  uint32_t ADC_PTCR;      /**< \brief (Adc Offset: 0x120) Transfer Control Register */
   __I  uint32_t ADC_PTSR;      /**< \brief (Adc Offset: 0x124) Transfer Status Register */
 } Adc;
@@ -352,6 +354,10 @@ typedef struct {
 /* -------- ADC_CDR[8] : (ADC Offset: 0x50) Channel Data Register -------- */
 #define ADC_CDR_DATA_Pos 0
 #define ADC_CDR_DATA_Msk (0xffffu << ADC_CDR_DATA_Pos) /**< \brief (ADC_CDR[8]) Converted Data */
+/* -------- ADC_ACR : (ADC Offset: 0x94) Analog Control Register -------- */
+#define ADC_ACR_AUTOTEST_Pos 30 /**< \brief (ADC_ACR) ADC Auto-test modes Position */
+#define ADC_ACR_AUTOTEST_Msk (0x3u << ADC_ACR_AUTOTEST_Pos) /**< \brief (ADC_ACR) ADC Auto-test modes Mask */
+#define ADC_ACR_AUTOTEST(value) ((ADC_ACR_AUTOTEST_Msk & ((value) << ADC_ACR_AUTOTEST_Pos)))
 /* -------- ADC_WPMR : (ADC Offset: 0xE4) Write Protection Mode Register -------- */
 #define ADC_WPMR_WPEN (0x1u << 0) /**< \brief (ADC_WPMR) Write Protection Enable */
 #define ADC_WPMR_WPKEY_Pos 8

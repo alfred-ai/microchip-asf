@@ -69,6 +69,8 @@
  *  - SAM DA1 Xplained Pro board
  *  - SAM HA1G16A Xplained Pro board
  *  - SAM R30 Xplained Pro board
+ *  - SAM R30 Module Xplained Pro board
+ *  - SAM R34 Xplained Pro board
  *
  * \section appdoc_sam0_nvm_unit_test_setup Setup
  * The following connections has to be made using wires:

@@ -52,8 +52,11 @@ void TSENS_Handler(void)
 	if(temp & 0x00800000) {
 		temp |= ~TSENS_VALUE_MASK;
 	}
+
 #if (ERRATA_14476)
 	*(module->value) = temp * (-1);
+#else
+	*(module->value) = temp;
 #endif
 
 	for(uint8_t i = 0; i < TSENS_CALLBACK_NUM; i++)

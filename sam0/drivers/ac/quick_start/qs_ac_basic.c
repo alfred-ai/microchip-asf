@@ -86,7 +86,12 @@ void configure_ac_channel(void)
 	/* Set the Analog Comparator channel configuration settings */
 	//! [setup_10]
 	ac_chan_conf.sample_mode      = AC_CHAN_MODE_SINGLE_SHOT;
-	ac_chan_conf.positive_input   = AC_CHAN_POS_MUX_PIN0;
+	#if (SAMR30E)
+		ac_chan_conf.positive_input   = AC_CHAN_POS_MUX_PIN2;
+	#else
+	    ac_chan_conf.positive_input   = AC_CHAN_POS_MUX_PIN0;
+	#endif
+	
 	ac_chan_conf.negative_input   = AC_CHAN_NEG_MUX_SCALED_VCC;
 	ac_chan_conf.vcc_scale_factor = 32;
 	//! [setup_10]

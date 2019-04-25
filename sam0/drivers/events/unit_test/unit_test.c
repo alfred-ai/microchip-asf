@@ -77,6 +77,8 @@
  *      - SAM C21 Xplained Pro board
  *      - SAM HA1G16A Xplained Pro board
  *      - SAM R30 Xplained Pro board
+ *      - SAM R30 Module Xplained Pro board
+ *      - SAM R34 Xplained Pro board
  *
  * \section appdoc_sam0_events_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -119,7 +121,7 @@
 #include "conf_test.h"
 
 /* Event user being TC3 or TC1 */
-#if SAMR30
+#if SAMR30 || SAMR34 || SAMR35 
 #define TEST_EVENT_USER   EVSYS_ID_USER_TC1_EVU
 #else
 #define TEST_EVENT_USER   EVSYS_ID_USER_TC3_EVU
@@ -184,7 +186,7 @@ static void test_event_gen_user_init(void)
 		= (0xFFFF / 4);
 
 	/* Initialize the TC3 or TC1 */
-#if SAMR30
+#if SAMR30 || SAMR34 || SAMR35
 	status = tc_init(&tc_inst, TC1, &config_tc);
 #else
 	status = tc_init(&tc_inst, TC3, &config_tc);

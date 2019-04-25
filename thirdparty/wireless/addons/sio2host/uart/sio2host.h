@@ -53,6 +53,10 @@
  * not initialized
  */
 void sio2host_init(void);
+/**
+ * \brief DeInitializes the Serial IO Module
+ */
+void sio2host_deinit(void);
 
 /**
  * \brief Transmits data via UART
@@ -93,7 +97,7 @@ void sio2host_putchar(uint8_t);
  */
 int sio2host_getchar_nowait(void);
 
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 void USART_HOST_ISR_VECT(uint8_t instance);
 
 #endif

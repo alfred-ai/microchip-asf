@@ -33,6 +33,7 @@
 
 #include "driver/include/m2m_wifi.h"
 #include "wifi_prov.h"
+#include "bsp/include/nm_bsp.h"
 
 #ifndef HTTP_CONTENT_H_INCLUDED
 #define HTTP_CONTENT_H_INCLUDED
@@ -48,4 +49,4 @@ uint32 base64decode(char* src, uint32 len);
 uint32 decodeLength(uint8* buff, uint8* lenBytes);
 uint16_t get_content_length(char *req);
 
-#endif // HTTP_CONTENT_H_INCLUDED
+#endif /* HTTP_CONTENT_H_INCLUDED */

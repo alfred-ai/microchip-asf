@@ -34,8 +34,30 @@
  */
 #include <asf.h>
 
+void configure_osc32k(void);
 void configure_extosc32k(void);
 void configure_dfll_open_loop(void);
+
+//! [setup]
+//! [config_osc32k]
+void configure_osc32k(void)
+{
+	//! [config_osc32k_config]
+	struct system_clock_source_xosc_config config_osc32k;
+	//! [config_osc32k_config]
+	//! [config_osc32k_get_defaults]
+	system_clock_source_xosc32k_get_config_defaults(&config_osc32k);
+	//! [config_osc32k_get_defaults]
+
+	//! [config_osc32k_change_defaults]
+	config_osc32k.startup_time = SYSTEM_XOSC_STARTUP_4096;
+	//! [config_osc32k_change_defaults]
+
+	//! [config_osc32k_set_config]
+	system_clock_source_xosc_set_config(&config_osc32k);
+	//! [config_osc32k_set_config]
+}
+//! [config_osc32k]
 
 //! [setup]
 //! [config_extosc32k]
@@ -80,11 +102,30 @@ void configure_dfll_open_loop(void)
 int main(void)
 {
 //! [main]
+
+#if(SAMR30E)
+{
+  /* Configure the internal 32KHz oscillator */
+  //! [config_osc32k_main]
+  configure_osc32k();
+  //! [config_osc32k_main]
+  /* Enable the internal 32KHz oscillator */
+  //! [enable_osc32k_main]
+  enum status_code osc32k_status =
+  system_clock_source_enable(SYSTEM_CLOCK_SOURCE_XOSC);
+
+  if (osc32k_status != STATUS_OK) {
+	  /* Error enabling the clock source */
+  }
+  //! [enable_osc32k_main]
+}
+	
+#else
+{
 	/* Configure the external 32KHz oscillator */
 //! [config_extosc32k_main]
 	configure_extosc32k();
 //! [config_extosc32k_main]
-
 	/* Enable the external 32KHz oscillator */
 //! [enable_extosc32k_main]
 	enum status_code osc32k_status =
@@ -94,7 +135,8 @@ int main(void)
 		/* Error enabling the clock source */
 	}
 //! [enable_extosc32k_main]
-
+}
+#endif
 #if (!SAMC21)
 	/* Configure the DFLL in open loop mode using default values */
 //! [config_dfll_main]

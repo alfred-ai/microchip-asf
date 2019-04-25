@@ -62,7 +62,7 @@ void system_board_init(void);
  */
 
 /** Name string macro */
-#define BOARD_NAME                "SAMR30_Module_XPLAINED_PRO"
+#define BOARD_NAME                "SAMR30_MODULE_XPLAINED_PRO"
 
 /** \name Resonator definitions
  *  @{ */
@@ -235,6 +235,18 @@ void system_board_init(void);
 #define EXT_ADC_6_MUX            MUX_PA06B_ADC_AIN6
 #define EXT_ADC_6_PINMUX         PINMUX_PA06B_ADC_AIN6
 /** @} */
+
+/** \name Extension header TC definitions
+ *  @{
+ */
+#define EXT_PWM_MODULE           TC4
+#define EXT_PWM_0_CHANNEL        0
+#define EXT_PWM_0_PIN            PIN_PA14E_TC4_WO0
+#define EXT_PWM_0_MUX            MUX_PA14E_TC4_WO0
+#define EXT_PWM_0_PINMUX         PINMUX_PA14E_TC4_WO0
+/** @} */
+
+
 
 /** \name Extension header IRQ/External interrupt definitions
  *  @{

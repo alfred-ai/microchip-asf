@@ -62,6 +62,9 @@
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
+ *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_tc_prerequisites
@@ -108,27 +111,27 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_DOUBLE_BUFFERED</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_SYNCBUSY_SCHEME_VERSION_2</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_STAMP_PW_CAPTURE</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_READ_SYNC</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_IO_CAPTURE</td>
- *    <td>SAM L21/L22/C20/C21</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_TC_GENERATE_DMA_TRIGGER</td>
- *    <td>SAM L21/L22</td>
+ *    <td>SAM L21/L22/R30/R34/R35</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -455,7 +458,7 @@
  * Define port features set according to different device family
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)|| (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 /** TC double buffered. */
 #  define FEATURE_TC_DOUBLE_BUFFERED
 /** SYNCBUSY scheme version 2. */
@@ -468,14 +471,14 @@
 #  define FEATURE_TC_IO_CAPTURE
 #endif
 
-#if (SAML21XXXB) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21XXXB) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 /** Generate Direct Memory Access (DMA) triggers. */
 #  define FEATURE_TC_GENERATE_DMA_TRIGGER
 #endif
 /*@}*/
 
 #if !defined(__DOXYGEN__)
-#if SAMD20 || SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30
+#if SAMD20 || SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30 || (SAMR34) || (SAMR35)
 #  define TC_INSTANCE_OFFSET 0
 #endif
 #if SAMD21 || SAMR21 || SAMDA1 || (SAMHA1) || (SAMHA0)
@@ -487,7 +490,7 @@
 
 #if SAMD20
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC0_CC8_NUM
-#elif SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30
+#elif SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30 || (SAMR34) || (SAMR35)
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC0_CC_NUM
 #elif SAMD09 || SAMD10 || SAMD11
 #  define NUMBER_OF_COMPARE_CAPTURE_CHANNELS TC1_CC8_NUM
@@ -503,7 +506,7 @@
 #  else
 #    define TC_INST_MAX_ID  5
 #  endif
-#elif SAML21 || SAMC20 || SAMC21 || SAMR30
+#elif SAML21 || SAMC20 || SAMC21 || SAMR30 || (SAMR34) || (SAMR35)
 #  define TC_INST_MAX_ID  4
 #elif SAML22
 #  define TC_INST_MAX_ID  3
@@ -604,7 +607,7 @@ enum tc_compare_capture_channel {
  *
  * @{
  */
-#if SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30
+#if SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30 || (SAMR34) || (SAMR35)
 /** TC wave generation mode: normal frequency. */
 #define TC_WAVE_GENERATION_NORMAL_FREQ_MODE TC_WAVE_WAVEGEN_NFRQ
 /** TC wave generation mode: match frequency. */
@@ -745,7 +748,7 @@ enum tc_count_direction {
  *
  * @{
  */
-#if SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30
+#if SAML21 || SAML22 || SAMC20 || SAMC21 || SAMR30 || (SAMR34) || (SAMR35)
 /** Waveform inversion CC0 mode. */
 #define TC_WAVEFORM_INVERT_CC0_MODE  TC_DRVCTRL_INVEN(1)
 /** Waveform inversion CC1 mode. */
@@ -881,7 +884,7 @@ struct tc_config {
 
 	/** When \c true the module is enabled during standby */
 	bool run_in_standby;
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	/** Run on demand */
 	bool on_demand;
 #endif
@@ -1020,7 +1023,7 @@ static inline bool tc_is_syncing(
 	/* Get a pointer to the module's hardware instance */
 	TcCount8 *const tc_module = &(module_inst->hw->COUNT8);
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	return (tc_module->SYNCBUSY.reg);
 #else
 	return (tc_module->STATUS.reg & TC_STATUS_SYNCBUSY);
@@ -1074,7 +1077,7 @@ static inline void tc_get_config_defaults(
 	config->wave_generation            = TC_WAVE_GENERATION_NORMAL_FREQ;
 	config->reload_action              = TC_RELOAD_ACTION_GCLK;
 	config->run_in_standby             = false;
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	config->on_demand                  = false;
 #endif
 	config->waveform_invert_output     = TC_WAVEFORM_INVERT_OUTPUT_NONE;
@@ -1479,7 +1482,7 @@ static inline void tc_dma_trigger_command(
 		/* Wait for sync */
 	}
 
-#if (SAMC20) || (SAMC21) || (SAML22) || (SAML21XXXB) || (SAMR30)
+#if (SAMC20) || (SAMC21) || (SAML22) || (SAML21XXXB) || (SAMR30) || (SAMR34) || (SAMR35)
 	/* Write command to execute */
 	tc_module->CTRLBSET.reg = TC_CTRLBSET_CMD(TC_CTRLBSET_CMD_DMAOS_Val);
 #endif

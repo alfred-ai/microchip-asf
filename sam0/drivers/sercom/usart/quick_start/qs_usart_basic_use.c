@@ -52,6 +52,24 @@ void configure_usart(void)
 //! [setup_config_defaults]
 
 //! [setup_change_config]
+#if(SAMR30E)
+{
+	config_usart.baudrate    = 9600;
+config_usart.mux_setting = CDC_SERCOM_MUX_SETTING;
+config_usart.pinmux_pad0 = CDC_SERCOM_PINMUX_PAD0;
+config_usart.pinmux_pad1 = CDC_SERCOM_PINMUX_PAD1;
+config_usart.pinmux_pad2 = CDC_SERCOM_PINMUX_PAD2;
+config_usart.pinmux_pad3 = CDC_SERCOM_PINMUX_PAD3;
+//! [setup_change_config]
+
+//! [setup_set_config]
+while (usart_init(&usart_instance,
+  CDC_MODULE, &config_usart) != STATUS_OK) {
+}
+//! [setup_set_config]
+}
+#else
+{
 	config_usart.baudrate    = 9600;
 	config_usart.mux_setting = EDBG_CDC_SERCOM_MUX_SETTING;
 	config_usart.pinmux_pad0 = EDBG_CDC_SERCOM_PINMUX_PAD0;
@@ -65,7 +83,8 @@ void configure_usart(void)
 			EDBG_CDC_MODULE, &config_usart) != STATUS_OK) {
 	}
 //! [setup_set_config]
-
+}
+#endif
 //! [setup_enable]
 	usart_enable(&usart_instance);
 //! [setup_enable]

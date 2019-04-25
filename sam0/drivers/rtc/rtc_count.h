@@ -63,6 +63,8 @@
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_rtc_count_prerequisites
@@ -365,7 +367,7 @@ extern "C" {
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 /** RTC periodic interval interrupt. */
 #  define FEATURE_RTC_PERIODIC_INT
 /** RTC prescaler is off. */
@@ -722,7 +724,7 @@ struct rtc_count_config {
 	 *  needed for reading */
 	bool continuously_update;
 #endif
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	/** Enable count read synchronization. The COUNT value requires
 	 * synchronization when reading. Disabling the synchronization
 	 * will prevent the COUNT value from displaying the current value. */
@@ -772,7 +774,7 @@ static inline void rtc_count_get_config_defaults(
 #ifdef FEATURE_RTC_CONTINUOUSLY_UPDATED
 	config->continuously_update = false;
 #endif
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	config->enable_read_sync    = true;
 #endif
 
@@ -1262,7 +1264,7 @@ uint32_t rtc_tamper_get_stamp (struct rtc_module *const module);
  *	<tr>
  *		<td>42111E</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, SAMR30 and SAM DA1</td>
+ *		<td>Added support for SAM L21/L22, SAM C21, SAM D09, SAMR30/R34 and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>42111D</td>

@@ -62,6 +62,8 @@
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  * - \ref asfdoc_sam0_sercom_spi_prerequisites
@@ -99,19 +101,19 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SPI_SLAVE_SELECT_LOW_DETECT</td>
- *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30</td>
+ *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SPI_HARDWARE_SLAVE_SELECT</td>
- *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30</td>
+ *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SPI_ERROR_INTERRUPT</td>
- *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30</td>
+ *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SPI_SYNC_SCHEME_VERSION_2</td>
- *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30</td>
+ *    <td>SAM D21/R21/D10/D11/L21/L22/DA1/C20/C21/R30/R34/R35</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -380,7 +382,7 @@ extern "C" {
  * @{
  */
 #  if (SAMD21) || (SAMR21) || (SAMD11) || (SAMD10) || (SAML21) || (SAMDA1) || (SAMHA1) ||\
-	   (SAMHA0) || (SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || defined(__DOXYGEN__)
+	   (SAMHA0) || (SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || (SAMR34) || (SAMR35)|| defined(__DOXYGEN__)
 /** SPI slave select low detection. */
 #  define FEATURE_SPI_SLAVE_SELECT_LOW_DETECT
 /** Slave select can be controlled by hardware. */
@@ -1770,7 +1772,7 @@ enum status_code spi_select_slave(
   *	<tr>
   *		<td>42115E</td>
   *		<td>12/2015</td>
-  *		<td>Add SAM L21/L22, SAM DA1, SAM D09, SAMR30 and SAM C21 support</td>
+  *		<td>Add SAM L21/L22, SAM DA1, SAM D09, SAMR30/R34 and SAM C21 support</td>
   *	</tr>
   *	<tr>
   *		<td>42115D</td>

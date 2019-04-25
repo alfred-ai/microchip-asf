@@ -65,7 +65,11 @@ static void configure_tcc(void)
 	//! [setup_config_defaults]
 
 	//! [setup_change_config]
+	#if (SAMR30E)
+	config_tcc.counter.clock_source = GCLK_GENERATOR_0;
+	#else
 	config_tcc.counter.clock_source = GCLK_GENERATOR_1;
+	#endif
 	config_tcc.counter.clock_prescaler = TCC_CLOCK_PRESCALER_DIV64;
 	config_tcc.counter.period =   2000;
 	config_tcc.compare.match[0] =  900;

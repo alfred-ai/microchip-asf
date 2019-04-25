@@ -62,6 +62,7 @@ extern "C" {
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34/R35
  *
  * The outline of this documentation is as follows:
  * - \ref asfdoc_sam0_dma_prerequisites
@@ -106,8 +107,12 @@ extern "C" {
  *      <td>6</td>
  *    </tr>
  *    <tr>
- *      <td>SAM L21,SAMR30</td>
+ *      <td>SAM L21,SAMR30/R34/R35</td>
  *      <td>16</td>
+ *    </tr>
+  *   <tr>
+ *      <td>SAM R34/R35</td>
+ *      <td>12</td>
  *    </tr>
  * </table>
  * The DMA channel operation can be suspended at any time by software, by events
@@ -181,7 +186,7 @@ extern "C" {
  *  </tr>
  *  <tr>
  *    <td>FEATURE_DMA_CHANNEL_STANDBY</td>
- *    <td>SAM L21/L22/C20/C21/R30</td>
+ *    <td>SAM L21/L22/C20/C21/R30/R34/R35</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -311,7 +316,7 @@ extern "C" {
 #include <compiler.h>
 #include "conf_dma.h"
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 #define FEATURE_DMA_CHANNEL_STANDBY
 #endif
 
@@ -851,7 +856,7 @@ enum status_code dma_add_descriptor(struct dma_resource *resource,
  *    <tr>
  *        <td>42257C</td>
  *        <td>12/2015</td>
- *        <td>Added suppport for SAM L21/L22, SAM C21, SAM D09, SAMR30 and SAM DA1</td>
+ *        <td>Added suppport for SAM L21/L22, SAM C21, SAM D09,SAMR30/R34 and SAM DA1</td>
  *    </tr>
  *    <tr>
  *        <td>42257B</td>

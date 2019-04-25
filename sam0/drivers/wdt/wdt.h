@@ -61,6 +61,8 @@
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
  *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_wdt_prerequisites
@@ -154,7 +156,7 @@
  * }
  * \enddot
  *
- * \note Watchdog Counter of SAM L21/L22/R30 is \a not provided by GCLK, but it uses an
+ * \note Watchdog Counter of SAM L21/L22/R30/R34/R35 is \a not provided by GCLK, but it uses an
  *       internal 1KHz OSCULP32K output clock.
  *
  * \section asfdoc_sam0_wdt_special_considerations Special Considerations
@@ -244,7 +246,7 @@ struct wdt_conf {
 	bool always_on;
 	/** Enable/Disable the Watchdog Timer */
 	bool enable;
-#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30)
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35)
 	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20/R30*/
 	enum gclk_generator clock_source;
 #endif
@@ -279,7 +281,7 @@ static inline bool wdt_is_syncing(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	if (WDT_module->SYNCBUSY.reg) {
 #else
 	if (WDT_module->STATUS.reg & WDT_STATUS_SYNCBUSY) {
@@ -317,7 +319,7 @@ static inline void wdt_get_config_defaults(
 	/* Default configuration values */
 	config->always_on            = false;
 	config->enable               = true;
-#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30)
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35)
 	config->clock_source         = GCLK_GENERATOR_4;
 #endif
 	config->timeout_period       = WDT_PERIOD_16384CLK;
@@ -339,7 +341,7 @@ static inline bool wdt_is_locked(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
 	return (WDT_module->CTRLA.reg & WDT_CTRLA_ALWAYSON);
 #else
 	return (WDT_module->CTRL.reg & WDT_CTRL_ALWAYSON);

@@ -148,7 +148,7 @@ void adc_get_config_defaults(struct adc_config *const config)
 	config->window.window_mode            = ADC_WINDOW_MODE_DISABLE;
 	config->window.window_upper_value     = 0;
 	config->window.window_lower_value     = 0;
-#if SAMR30
+#if SAMR30 || SAMR34 || SAMR35
 	config->positive_input                = ADC_POSITIVE_INPUT_PIN6;
 #else
 	config->positive_input                = ADC_POSITIVE_INPUT_PIN1;
@@ -236,7 +236,7 @@ static inline void _adc_configure_ain_pin(uint8_t index, uint32_t pin)
 #define PIN_INVALID_ADC_AIN    0xFFFFUL
 
 	/* Pinmapping table for AINxx -> GPIO pin number */
-#if (SAML21) || (SAML22) || (SAMR30)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35)
 	const uint32_t pinmapping[] = {
 #if (SAML21E)
 			PIN_PA02B_ADC_AIN0,  PIN_PA03B_ADC_AIN1,
@@ -263,14 +263,22 @@ static inline void _adc_configure_ain_pin(uint8_t index, uint32_t pin)
             PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
             PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
             PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
-#elif (SAML21G) || (SAMR30G)
-#if !(SAMR30)
+#elif (SAML21G) || (SAMR30G) || (SAMR34J) || (SAMR35J)
+#if !(SAMR30 || SAMR34 || SAMR35)
 			PIN_PA02B_ADC_AIN0,  PIN_PA03B_ADC_AIN1,
 #endif
+#if (SAMR34JXXB) || (SAMR35JXXB)
+			PIN_INVALID_ADC_AIN,  PIN_INVALID_ADC_AIN,
+#else
 			PIN_PB08B_ADC_AIN2,  PIN_PB09B_ADC_AIN3,
+#endif
 			PIN_PA04B_ADC_AIN4,  PIN_PA05B_ADC_AIN5,
 			PIN_PA06B_ADC_AIN6,  PIN_PA07B_ADC_AIN7,
+#if (SAMR34JXXB) || (SAMR35JXXB)
+			PIN_PB00B_ADC_AIN8,  PIN_INVALID_ADC_AIN,
+#else
 			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
+#endif
 			PIN_PB02B_ADC_AIN10, PIN_PB03B_ADC_AIN11,
 			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
 			PIN_INVALID_ADC_AIN, PIN_INVALID_ADC_AIN,
@@ -768,7 +776,7 @@ enum status_code adc_init(
 #if (SAML22)
 	/* Turn on the digital interface clock */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBC, MCLK_APBCMASK_ADC);
-#elif (SAML21) || (SAMR30)
+#elif (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
 	/* Turn on the digital interface clock */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, MCLK_APBDMASK_ADC);
 #else

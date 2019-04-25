@@ -67,6 +67,7 @@ extern "C" {
  * The following devices can use this module:
  *  - Atmel | SMART SAM L21
  *  - Atmel | SMART SAM L22
+ *  - Atmel | SMART SAM R34/R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_drivers_aes_prerequisites

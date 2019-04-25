@@ -58,6 +58,9 @@ extern "C" {
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
+ *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_system_interrupt_prerequisites

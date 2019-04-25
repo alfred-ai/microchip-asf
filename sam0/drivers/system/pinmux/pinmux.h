@@ -55,6 +55,9 @@
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
  *  - Atmel | SMART SAM HA1
+ *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The outline of this documentation is as follows:
  *  - \ref asfdoc_sam0_system_pinmux_prerequisites
@@ -86,7 +89,7 @@
  *  </tr>
  *  <tr>
  *    <td>FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH</td>
- *    <td>SAM L21, SAM C20/C21</td>
+ *    <td>SAM L21, SAM C20/C21, SAM R34/R35</td>
  *  </tr>
  * </table>
  * \note The specific features are only available in the driver when the
@@ -190,8 +193,8 @@
 extern "C" {
 #endif
 
-/*@{*/
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || (SAMD10) || (SAMD11) || (SAMR30) || defined(__DOXYGEN__)
+/*@{*/ 
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || (SAMD10) || (SAMD11) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
 /** Output Driver Strength Selection feature support */
 #  define FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH
 #endif

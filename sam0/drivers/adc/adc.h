@@ -56,6 +56,7 @@
  * \if DEVICE_SAML21_SUPPORT
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R34/R35
  * \else
  *  - Atmel | SMART SAM D20/D21
  *  - Atmel | SMART SAM R21

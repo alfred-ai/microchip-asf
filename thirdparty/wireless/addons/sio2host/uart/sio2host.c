@@ -35,6 +35,7 @@
 #include "asf.h"
 #include "sio2host.h"
 #include "conf_sio2host.h"
+
 /* === TYPES =============================================================== */
 
 /* === MACROS ============================================================== */
@@ -42,7 +43,7 @@
 /* === PROTOTYPES ========================================================== */
 
 /* === GLOBALS ========================================================== */
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 static struct usart_module host_uart_module;
 #else
 static usart_serial_options_t usart_serial_options = {
@@ -78,7 +79,7 @@ static uint8_t serial_rx_count;
 
 void sio2host_init(void)
 {
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 	struct usart_config host_uart_config;
 	/* Configure USART for unit test output */
 	usart_get_config_defaults(&host_uart_config);
@@ -99,17 +100,26 @@ void sio2host_init(void)
 #endif
 	USART_HOST_RX_ISR_ENABLE();
 }
-
+void sio2host_deinit(void)
+{
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35		
+		usart_disable(&host_uart_module);
+	
+		/* Disable transceivers */
+		usart_disable_transceiver(&host_uart_module, USART_TRANSCEIVER_TX);
+		usart_disable_transceiver(&host_uart_module, USART_TRANSCEIVER_RX);
+#endif	
+}
 uint8_t sio2host_tx(uint8_t *data, uint8_t length)
 {
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 	status_code_genare_t status;
 #else
 	status_code_t status;
 #endif /*SAMD || SAMR21 || SAML21 */
 
 	do {
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 		status
 			= usart_serial_write_packet(&host_uart_module,
 				(const uint8_t *)data, length);
@@ -222,14 +232,14 @@ int sio2host_getchar_nowait(void)
 	}
 }
 
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 void USART_HOST_ISR_VECT(uint8_t instance)
 #else
 USART_HOST_ISR_VECT()
 #endif
 {
 	uint8_t temp;
-#if SAMD || SAMR21 || SAML21 || SAMR30
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
 	usart_serial_read_packet(&host_uart_module, &temp, 1);
 #elif SAM4E || SAM4S
 	usart_serial_read_packet((Usart *)USART_HOST, &temp, 1);

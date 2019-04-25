@@ -61,6 +61,9 @@
  *  - Atmel | SMART SAM L21/L22
  *  - Atmel | SMART SAM DA1
  *  - Atmel | SMART SAM C20/C21
+ *  - Atmel | SMART SAM R30
+ *  - Atmel | SMART SAM R34
+ *  - Atmel | SMART SAM R35
  *
  * The reader is assumed to be familiar with the regular SERCOM SPI driver, and
  * how it is configured and operated. Configuration of this driver is done a
