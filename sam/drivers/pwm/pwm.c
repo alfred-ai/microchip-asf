@@ -3,7 +3,7 @@
  *
  * \brief Pulse Width Modulation (PWM) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -285,9 +285,6 @@ uint32_t pwm_channel_init(Pwm *p_pwm, pwm_channel_t *p_channel)
 			p_pwm->PWM_SSPR = PWM_SSPR_SPRD(p_channel->ul_spread);
 		}
 	}
-	p_pwm->PWM_CH_NUM_0X400[ch_num].PWM_CAE =
-			PWM_CAE_ADEDGV(p_channel->ul_additional_edge) |
-			p_channel->additional_edge_mode;
 #elif (SAMV70 || SAMV71 || SAME70 || SAMS70)
 	if (!ch_num) {
 		if (p_channel->spread_spectrum_mode ==
@@ -516,7 +513,6 @@ void pwm_channel_update_output(Pwm *p_pwm, pwm_channel_t *p_channel,
 		pwm_output_t *p_output, bool b_sync)
 {
 	uint32_t ch_num = p_channel->channel;
-	uint32_t channel = (1 << ch_num);
 
 	bool override_pwmh = p_output->b_override_pwmh;
 	bool override_pwml = p_output->b_override_pwml;
@@ -1054,27 +1050,6 @@ void pwm_channel_update_spread(Pwm *p_pwm, pwm_channel_t *p_channel,
 
 	/* Write spread spectrum update register */
 	p_pwm->PWM_SSPUP = PWM_SSPUP_SPRDUP(ul_spread);
-}
-
-/**
- * \brief Change additional edge value and mode.
- *
- * \param p_pwm Pointer to a PWM instance.
- * \param p_channel Configurations of the specified PWM channel.
- * \param ul_additional_edge New additional edge value.
- * \param additional_edge_mode New additional edge mode.
- */
-void pwm_channel_update_additional_edge(Pwm *p_pwm, pwm_channel_t *p_channel,
-		uint32_t ul_additional_edge,
-		pwm_additional_edge_mode_t additional_edge_mode)
-{
-	/* Save new additional edge value */
-	p_channel->ul_additional_edge = ul_additional_edge;
-	p_channel->additional_edge_mode = additional_edge_mode;
-
-	/* Write channel additional edge update register */
-	p_pwm->PWM_CH_NUM_0X400[p_channel->channel].PWM_CAEUPD =
-			PWM_CAEUPD_ADEDGVUP(ul_additional_edge) | additional_edge_mode;
 }
 
 /**

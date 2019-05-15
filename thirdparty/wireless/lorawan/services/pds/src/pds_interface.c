@@ -5,7 +5,7 @@
 *	API's.
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -166,7 +166,7 @@ PdsStatus_t PDS_Restore(PdsFileItemIdx_t pdsFileItemIdx, uint8_t item)
 				return status;
 			}
 			
-			memcpy((void *)&itemInfo, (void *)(fileMarks[pdsFileItemIdx].itemListAddr + item), sizeof(ItemHeader_t));
+			memcpy((void *)&itemInfo, (void *)(fileMarks[pdsFileItemIdx].itemListAddr + item), sizeof(ItemMap_t));
 			ptr = ((uint8_t *)&(buffer.NVM_Struct.pdsNvmData.WL_Struct.pdsWlData));
 			ptr += itemInfo.itemOffset;
 			

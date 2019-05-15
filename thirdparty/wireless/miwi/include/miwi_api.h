@@ -3,7 +3,7 @@
 *
 * \brief Application Program Interface for MiWi Protocols.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -96,6 +96,13 @@ typedef enum miwi_status {
 	ERR_TRX_FAIL,
 	ERR_INVALID_INPUT,
 	RECONNECTION_IN_PROGRESS,
+	RECONNECTED,
+	ADDR_NOT_FOUND_IN_SCANNED_LIST,
+    ENTRY_NOT_EXIST = 0xF0,
+    NOT_ENOUGH_SPACE = 0xF1,
+    NOT_SAME_PAN = 0xF2,
+    NOT_PERMITTED = 0xF3,
+    ACTIVE_SCAN = 0xF4,
 }miwi_status_t;
 
 enum miwi_params {
@@ -118,6 +125,16 @@ typedef enum miwi_params miwi_params_t;
 #endif
 
 #if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
+
+#if defined (PROTOCOL_STAR)
+/* Device Role Enumerations */
+typedef enum _deviceRole
+{
+    PAN_COORD = 0x01,
+    END_DEVICE,
+}DeviceRole_t;
+#endif
+
 /***************************************************************************/
 // Status information of the connected peer information
 //
@@ -171,7 +188,48 @@ typedef struct __CONNECTION_ENTRY
 #if ADDITIONAL_NODE_ID_SIZE > 0
 	uint8_t        PeerInfo[ADDITIONAL_NODE_ID_SIZE];  // Additional Node ID information, if defined in application layer
 #endif
+#if defined(PROTOCOL_STAR)
+#if defined(ENABLE_LINK_STATUS)
+    uint8_t link_status;
+    uint8_t permanent_connections;
+#endif
+#endif
 } CONNECTION_ENTRY;
+
+#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
+/***************************************************************************
+* Active Scan result
+*
+*      This structure contains information from active scan. Application
+*      layer will depend on this information to decide the way to establish
+*      connections.
+**************************************************************************/
+typedef struct
+{
+	uint8_t		Channel;                        // Operating Channel of the PAN
+	uint8_t        Address[MY_ADDRESS_LENGTH];     // Responding device address
+	API_UINT16_UNION    PANID;                          // PAN Identifier
+	uint8_t       RSSIValue;                      // RSSI value for the response
+	uint8_t        LQIValue;                       // LQI value for the response
+	union
+	{
+		uint8_t        Val;
+		struct
+		{
+			uint8_t    Role:		2;              // Role of the responding device in the PAN
+			uint8_t    Sleep:		1;              // Whether the responding device goes to sleep when idle
+			uint8_t    SecurityEn:	1;              // Whether the responding device is capable of securing the data
+			uint8_t    RepeatEn:	1;              // Whether the responding device allow repeat
+			uint8_t    AllowJoin:	1;              // Whether the responding device allows other device to join
+			uint8_t    Direct:		1;              // Whether the responding device in radio range or through a repeater
+			uint8_t    altSrcAddr: 1;              // Whether the Address is alternative network address or permanent address
+		} bits;
+	} Capability;
+	#if ADDITIONAL_NODE_ID_SIZE > 0
+	uint8_t        PeerInfo[ADDITIONAL_NODE_ID_SIZE];  // Additional Node ID information, if defined in application layer
+	#endif
+} ACTIVE_SCAN_RESULT;
+#endif
 #endif
 
 #if defined(PROTOCOL_MESH)
@@ -223,9 +281,6 @@ typedef struct
 } searchConf_t;
 #endif
 
-#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
-extern CONNECTION_ENTRY    ConnectionTable[CONNECTION_SIZE];
-#endif
 extern uint8_t            currentChannel;
 
 #ifdef MESH_SECURITY
@@ -384,10 +439,11 @@ typedef struct __defaultParametersRomOrRam
 	uint32_t deviceTimeout;
 	uint16_t keepAliveRxOnEdSendInterval;
 	uint16_t keepAliveRxOnEdTimeoutSec;
+	uint16_t myPANID;
 	uint8_t duplicateRejectionTableSize;
 	uint8_t numOfCoordinators;
-	uint8_t dataRequestInterval;
-	uint8_t maxDataRequestInterval;
+	uint32_t dataRequestInterval;
+	uint32_t maxDataRequestInterval;
 	
 	uint8_t edLinkFailureAttempts;
 	uint8_t connRespWaitInSec;
@@ -397,7 +453,10 @@ typedef struct __defaultParametersRomOrRam
 	uint8_t maxNoOfBeacons;
 #endif
 #else
-   uint8_t dummy;
+   CONNECTION_ENTRY  *ConnectionTable;
+   ACTIVE_SCAN_RESULT  *ActiveScanResults;
+   uint8_t *AdditionalNodeID;
+   uint8_t networkFreezerRestore;
 #endif
 } defaultParametersRomOrRam_t;
 
@@ -554,45 +613,6 @@ typedef void (*connectionConf_callback_t)(miwi_status_t status);
 *****************************************************************************************/
 bool    MiApp_StartConnection( uint8_t Mode, uint8_t ScanDuration, uint32_t ChannelMap,
 connectionConf_callback_t ConfCallback);
-
-#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
-/***************************************************************************
-* Active Scan result
-*
-*      This structure contains information from active scan. Application
-*      layer will depend on this information to decide the way to establish
-*      connections.
-**************************************************************************/
-typedef struct
-{
-uint8_t		Channel;                        // Operating Channel of the PAN
-uint8_t        Address[MY_ADDRESS_LENGTH];     // Responding device address
-API_UINT16_UNION    PANID;                          // PAN Identifier
-uint8_t       RSSIValue;                      // RSSI value for the response
-uint8_t        LQIValue;                       // LQI value for the response
-union
-{
-uint8_t        Val;
-struct
-{
-uint8_t    Role:		2;              // Role of the responding device in the PAN
-uint8_t    Sleep:		1;              // Whether the responding device goes to sleep when idle
-uint8_t    SecurityEn:	1;              // Whether the responding device is capable of securing the data
-uint8_t    RepeatEn:	1;              // Whether the responding device allow repeat
-uint8_t    AllowJoin:	1;              // Whether the responding device allows other device to join
-uint8_t    Direct:		1;              // Whether the responding device in radio range or through a repeater
-uint8_t    altSrcAddr: 1;              // Whether the Address is alternative network address or permanent address
-} bits;
-} Capability;
-#if ADDITIONAL_NODE_ID_SIZE > 0
-uint8_t        PeerInfo[ADDITIONAL_NODE_ID_SIZE];  // Additional Node ID information, if defined in application layer
-#endif
-} ACTIVE_SCAN_RESULT;
-
-#ifdef ENABLE_ACTIVE_SCAN
-extern ACTIVE_SCAN_RESULT ActiveScanResults[ACTIVE_SCAN_RESULT_SIZE];
-#endif
-#endif
 
 typedef void (*SearchConnectionConf_callback_t)(uint8_t foundScanResults, void* ScanResults);
 /************************************************************************************
@@ -1052,6 +1072,7 @@ uint8_t    MiApp_TransceiverPowerState(uint8_t Mode);
 ******************************************************************************************/
 bool MiApp_InitChannelHopping( uint32_t ChannelMap);
 
+typedef void (*resyncConnection_callback_t)(uint8_t channel, miwi_status_t status);
 /********************************************************************************************
 * Function:
 *      bool MiApp_ResyncConnection(uint8_t ConnectionIndex, uint32_t ChannelMap)
@@ -1092,7 +1113,7 @@ bool MiApp_InitChannelHopping( uint32_t ChannelMap);
 *      the rest of the PAN is operating on.
 *
 *********************************************************************************************/
-bool MiApp_ResyncConnection(uint8_t ConnectionIndex, uint32_t ChannelMap);
+bool MiApp_ResyncConnection(uint8_t ConnectionIndex, uint32_t ChannelMap, resyncConnection_callback_t callback);
 
 /********************************************************************************************
 * Function:
@@ -1123,7 +1144,7 @@ uint8_t Total_Connections(void);
 // from PAN Co and they save that in variable end_nodes
 extern uint8_t end_nodes ;
 // Role == PAN CO or END Device
-extern bool role;
+extern DeviceRole_t role;
 // In case of star network an FFD||RFD End device also saves its index value.
 // Pan Co has connection table where in it store all the FFD || RFD device Information.
 // Each FFD and RFD device is provided a Index by PAN CO on Connection Request
@@ -1152,154 +1173,6 @@ extern  END_DEVICES_Unique_Short_Address  END_DEVICES_Short_Address[CONNECTION_S
 extern bool lost_connection;
 //Used by END_DEVICE to store the index value shared by PAN Co on join
 extern uint8_t myConnectionIndex_in_PanCo;
-
-/************************************************************************************
-* Function:
-*      void MiApp_BroadcastConnectionTable(void)
-*
-* Summary:
-*      This function is  a command type packet which is used by Pan Co
-*
-* Description:
-*      This function is used by only PAN CO in a Star network and is a cmd
-*      type packet. PAN CO in our demo is braodcasting Connection Table details
-*      with every other END_DEVICE (FFD's || RFD's)in the Network, A new peer
-*     END_DEVICE joins PAN C0 , then Pan Co will again broadcast the new connection
-*     Table , As its the duty of PAN Co to keep END_DEVICES Updated of the new nodes
-*     added to network
-*
-* PreCondition:
-*      Protocol initialization has been done.
-*
-* Returns:
-*      None.
-*
-* Remarks:
-*      None
-*
-*****************************************************************************************/
-void MiApp_BroadcastConnectionTable(void);
-
-
-
-#if defined(ENABLE_APP_LAYER_ACK)
-/************************************************************************************
-* Function:
-*      bool SW_Ack_SrED(uint8_t *)
-*
-* Summary:
-*      Pan CO uses this function to send sw generated ACK to source end device
-*
-* Description:
-*      This function is used by PAN Co to send a App_layer ACK to source END_DEVICE to denote
-*      a successful Data Reception by END_DEVICE
-*      Data TX from one END_DEVICE to another END_DEVICE
-*      EDx --> PAN CO --> EDy
-*      PAN CO generates a sw ACK for EDx to denote a Successful TX.
-*      sw generated ACK    :   EDx    <--PANC0
-* PreCondition:
-*      MiApp_Send_Data_Packet_EDx_to_EDy call at SrcEND_Device
-*
-* Returns:
-*      bool - true or false Ack Sending Success or Fail
-*
-* Remarks:
-*      None
-*
-*****************************************************************************************/
-bool SW_Ack_SrED(uint8_t * );
-#endif
-
-#if defined(ENABLE_LINK_STATUS)
-/*********************************************************************
-* Function:        void send_link_status(void)
-*
-* PreCondition:     This function will only be used by End devices(FFD's || RFD's)
-*
-* Input:             None
-
-*
-* Output:           None
-*
-* Side Effects:	    Will Qualify a Device to be active in PAN Co's connection Table
-*
-* Description :     Function will send a link status , (heart beat ) to PAN CO , which
-*                         which denotes that the Device is active participant in Star Network
-*
-**********************************************************************/
-void send_link_status(void);
-
-
-/*********************************************************************
-* Function:        void Find_InActiveDevices(void)
-*
-* PreCondition:     This function is valid for Pan Co
-*
-* Input:             None
-
-*
-* Output:           None
-*
-* Side Effects:	    Inactive devices in Network , will be found
-*
-*
-* Description :     This function will check which devices in the Network have been inactive.
-*                      If a device link stat is 0x00 , it is qualified as inactive. It is the duty of END
-*                      Devices (FFD's || RFD's) to send link status , whenever a END Device , sends
-*                      link status , link_stat[ED] increments by 1 , denoting its a Active part of the
-*                      Star Network
-*
-* Note : If a End device has  requested PAN Co to make it a permanently active device , this function
-*          does not evaluate that particular END_DEVICE's link status.
-**********************************************************************/
-void Find_InActiveDevices(void);
-
-#endif
-
-/*********************************************************************
-* Function:        void MiApp_leave_network(void)
-*
-* PreCondition:     This function is valid for End Devices (FFD's && RFD's)
-*
-* Input:            none
-
-*
-* Output:           None
-*
-* Side Effects:	    Mandatory Leave
-*
-*
-* Description :     This function will be used by End Devices to leave
-*                   the Network.The device will be considered inactive
-*                   by PAN COR Immediately
-*
-* Note :               The Device can join back in the Ntwk Again ,
-**********************************************************************/
-void MiApp_leave_network(void);
-
-/*********************************************************************
-* Function:          bool MiApp_UnicastStar  (uint8_t dataLen, uint8_t* dataPtr, bool SecEn)
-*
-* PreCondition:     This function is valid for End Devices
-*
-* Input:            byte -- Input from APP layer
-*                      Unique index for each END_DEVICE in Star Network
-*                       This value is stored as magic_no in the END_DEVICE
-*                      *pointer--> User Data Pointer
-*
-* Output:               True/ Fale -- Success TX or Fail TX
-*
-* Side Effects:     None
-*
-*
-* Description :     This function will be used by End Devices to TX data to another
-*                          END_DEVICE in a STAR Network
-*
-* Note :              TX happens EDx--> PAN CO--> EDy
-*                          First 4 bytes are occupied by the cmd and DestEndDevice address
-*                          Remaining space is user data
-**********************************************************************/
-bool MiApp_UnicastStar  (uint8_t dataLen, uint8_t* dataPtr, bool SecEn);
 
 #endif
 
@@ -1359,6 +1232,31 @@ void DumpConnection(INPUT uint8_t index);
 #if defined(PROTOCOL_MESH)
 void MeshTasks(void);
 #endif
+
+typedef void (*ReconnectionCallback_t)(miwi_status_t status);
+/************************************************************************************
+* Function:
+* bool MiApp_SubscribeReConnectionCallback(ReconnectionCallback_t callback)
+*
+* Summary:
+*      This function subscribes for reconnection notification
+*
+* Description:
+*      This is used to subscribe to notify the reconnection. Upon reconnection in
+*  coordinator or end device, this callback will be called.
+*
+* PreCondition:
+*      Protocol initialization has been done.
+*
+* Parameters:
+*      ReconnectionCallback_t callback - The callback routine which will be called upon
+*                                              reconnection
+*
+* Returns:
+*      A boolean to indicates if the subscription is success or not
+*
+*****************************************************************************************/
+bool MiApp_SubscribeReConnectionCallback(ReconnectionCallback_t callback);
 
 typedef void (*roleUpgrade_callback_t)(uint16_t newShortAddress);
 #ifdef COORDINATOR
@@ -1427,56 +1325,6 @@ bool MiApp_Commissioning_AddNewDevice(uint64_t joinerAddress, bool triggerBloomU
 *
 *****************************************************************************************/
 uint16_t MiApp_MeshGetNextHopAddr(uint16_t destAddress);
-
-typedef void (*LinkFailureCallback_t)(void);
-/************************************************************************************
-* Function:
-* bool MiApp_SubscribeLinkFailureCallback(LinkFailureCallback_t callback)
-*
-* Summary:
-*      This function subscribes for link failure notification
-*
-* Description:
-*      This is used to subscribe to notify the link failure. Upon link failure in
-*  coordinator or end device, this callback will be called.
-*
-* PreCondition:
-*      Protocol initialization has been done.
-*
-* Parameters:
-*      LinkFailureCallback_t callback - The callback routine which will be called upon
-*                                               link failure
-*
-* Returns:
-*      A boolean to indicates if the subscription is success or not
-*
-*****************************************************************************************/
-bool MiApp_SubscribeLinkFailureCallback(LinkFailureCallback_t callback);
-
-typedef void (*ReconnectionCallback_t)(miwi_status_t status);
-/************************************************************************************
-* Function:
-* bool MiApp_SubscribeReConnectionCallback(ReconnectionCallback_t callback)
-*
-* Summary:
-*      This function subscribes for reconnection notification
-*
-* Description:
-*      This is used to subscribe to notify the reconnection. Upon reconnection in
-*  coordinator or end device, this callback will be called.
-*
-* PreCondition:
-*      Protocol initialization has been done.
-*
-* Parameters:
-*      ReconnectionCallback_t callback - The callback routine which will be called upon
-*                                              reconnection
-*
-* Returns:
-*      A boolean to indicates if the subscription is success or not
-*
-*****************************************************************************************/
-bool MiApp_SubscribeReConnectionCallback(ReconnectionCallback_t callback);
 
 /************************************************************************************
 * Function:
@@ -1564,7 +1412,6 @@ void MiApp_MeshGetRouteEntry(uint8_t coordIndex, RouteEntry_t *routeEntry);
 #endif
 #endif
 
-#ifdef ENDDEVICE
 /************************************************************************************
 * Function:
 * bool MiApp_ReadyToSleep(uint32_t* sleepTime)
@@ -1586,7 +1433,31 @@ void MiApp_MeshGetRouteEntry(uint8_t coordIndex, RouteEntry_t *routeEntry);
 *
 *****************************************************************************************/
 bool MiApp_ReadyToSleep(uint32_t* sleepTime);
-#endif
+
+typedef void (*LinkFailureCallback_t)(void);
+/************************************************************************************
+* Function:
+* bool MiApp_SubscribeLinkFailureCallback(LinkFailureCallback_t callback)
+*
+* Summary:
+*      This function subscribes for link failure notification
+*
+* Description:
+*      This is used to subscribe to notify the link failure. Upon link failure in
+*  coordinator or end device, this callback will be called.
+*
+* PreCondition:
+*      Protocol initialization has been done.
+*
+* Parameters:
+*      LinkFailureCallback_t callback - The callback routine which will be called upon
+*                                               link failure
+*
+* Returns:
+*      A boolean to indicates if the subscription is success or not
+*
+*****************************************************************************************/
+bool MiApp_SubscribeLinkFailureCallback(LinkFailureCallback_t callback);
 
 // Callback functions
 #define MiApp_CB_AllowConnection(handleInConnectionTable) true

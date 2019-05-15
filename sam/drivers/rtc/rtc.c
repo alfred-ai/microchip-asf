@@ -3,7 +3,7 @@
  *
  * \brief Real-Time Clock (RTC) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -696,6 +696,7 @@ void rtc_set_pulse_parameter(Rtc *p_rtc, uint32_t ul_time_high,
 	uint32_t ul_temp;
 
 	ul_temp = p_rtc->RTC_MR;
+	ul_temp &= ~(RTC_MR_THIGH_Msk | RTC_MR_TPERIOD_Msk);
 
 	ul_temp |= (RTC_MR_THIGH_Msk & ((ul_time_high) << RTC_MR_THIGH_Pos));
 	ul_temp |= (RTC_MR_TPERIOD_Msk & ((ul_period) << RTC_MR_TPERIOD_Pos));

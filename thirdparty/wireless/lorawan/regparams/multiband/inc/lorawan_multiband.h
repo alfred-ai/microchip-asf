@@ -4,7 +4,7 @@
 * \brief LORAWAN Regional multiband common inlcude file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -60,6 +60,13 @@
 #define ALL_CHANNELS							1
 #define WITHOUT_DEFAULT_CHANNELS				0
 
+#if ((NA_BAND == 1) || (AU_BAND == 1))
+/* This MACRO defines number of channels in a sub-band */
+#define NO_OF_CH_IN_SUBBAND                     8
+/* This macro defines number of total sub-bands in NA and AU band */
+#define MAX_SUBBANDS							8
+#endif
+
 #if (JPN_BAND == 1)
 /*
 * JPN923 falls under AS923 region, so it has duty cycle support.
@@ -67,17 +74,21 @@
 * for each, it needs 2 timers.
 * Specifically...
 * regTimerId[0] --> LBT timer
-* regTimerId[1] --> duty cycle timer
+* regTimerId[1] --> Join backoff timer
+* regTimerId[2] --> Join dutycycle timer
+* dutycycle timer might get added
 */
-#define REG_PARAMS_TIMERS_COUNT                 (2u)
+#define REG_PARAMS_TIMERS_COUNT                 (3u)
 #else
 /*
 * Bands (KR, AS, EU) other than JPN923 uses 1 timer from regional params.
 * Specifically...
 * In KR920, regTimerId[0] --> LBT timer
 * In EU and AS, regTimerId[0] --> duty cycle timer
+* regTimerId[1] -->Join backoff timer
+* regTimerId[2] -->Join dutycycle timer
 */
-#define REG_PARAMS_TIMERS_COUNT                 (1u)
+#define REG_PARAMS_TIMERS_COUNT                 (3u)
 #endif
 
 /**************************Band wise macros ******************************************/
@@ -107,7 +118,7 @@
 #define DR4_PARAMS_AS                 {49,   242,   125,  -66  , 8,        BW_125KHZ,        MODULATION_LORA}
 #define DR5_PARAMS_AS                 {83,   242,   242,  -68  , 7,        BW_125KHZ,        MODULATION_LORA}
 #define DR6_PARAMS_AS                 {60,   242,   242,  -15  , 7,        BW_250KHZ,        MODULATION_LORA}
-#define DR7_PARAMS_AS                 {8,    242,   242,   -2  , 0,        BW_UNDEFINED,    MODULATION_FSK}
+#define DR7_PARAMS_AS                 {100,    242,   242,   -50  , 0,        BW_UNDEFINED,    MODULATION_FSK}
 
 /*Default EIRP set by the AS923 Specification*/
 #define DEFAULT_EIRP_AS                        16 //dBm
@@ -134,11 +145,16 @@
 
 #endif
 
-#if (AU_BAND == 1)
+#if (AU_BAND == 1|| NA_BAND == 1)
 
-#define MAX_CHANNELS_AU                         72
-#define MAX_CHANNELS_BANDWIDTH_125_AU           64
-#define MAX_CHANNELS_BANDWIDTH_500_AU            8
+#define MAX_CHANNELS_AU_NA                         72
+#define MAX_CHANNELS_BANDWIDTH_125_AU_NA           64
+#define MAX_CHANNELS_BANDWIDTH_500_AU_NA            8
+
+#endif
+
+
+#if (AU_BAND == 1)
 
 #define MAC_RX1_WINDOW_DATARATE_AU                (DR8) // DC
 
@@ -149,6 +165,8 @@
 #define UPSTREAM_CH0_AU                      (FREQ_915200KHZ)
 #define UPSTREAM_CH64_AU                     (FREQ_915900KHZ)
 #define DOWNSTREAM_CH0_AU                    (FREQ_923300KHZ)
+
+#define DEFAULT_EIRP_AU				 30
 
 /* AU channels for 915-928 Mhz */
 #define LC0_915_AU                    { ENABLED,  { ( ( DR5 << SHIFT4 ) | DR0 ) } }
@@ -265,6 +283,7 @@
 /*This is the subband which belongs to the default channels*/
 #define DEFAULT_CH_BAND_EU                        1
 
+#define DEFAULT_EIRP_EU							  16
 
 //EU default channels for 868 Mhz
 #define LC0_868                                {ENABLED,  { ( ( DR5 << SHIFT4 ) | DR0 ) }}
@@ -331,9 +350,9 @@
 #define LC2_865_IN                   {ENABLED,  { ( ( DR5 << SHIFT4 ) | DR0 ) }}
 
 //IND default channels for 868=5 Mhz
-#define ADV_LC0_865_IN                   {865062500, 865062500,  0, 1, MAX_EIRP_IN, 0xFF}
-#define ADV_LC1_865_IN                   {865402500, 865402500,  0, 1, MAX_EIRP_IN, 0xFF}
-#define ADV_LC2_865_IN                   {865985000, 865985000,  0, 1, MAX_EIRP_IN, 0xFF}
+#define ADV_LC0_865_IN                   {865062500, 865062500,  0, 1, DEFAULT_EIRP_IN, 0xFF}
+#define ADV_LC1_865_IN                   {865402500, 865402500,  0, 1, DEFAULT_EIRP_IN, 0xFF}
+#define ADV_LC2_865_IN                   {865985000, 865985000,  0, 1, DEFAULT_EIRP_IN, 0xFF}
 
 /*THis is the minimum channel index which can be modified.Channel index below this are default channels*/
 #define MIN_CHANNEL_INDEX_IN    3
@@ -350,7 +369,7 @@
 #define DR7_PARAMS_IN               {8,242,0,-2,0,BW_UNDEFINED,MODULATION_FSK}
 
 /*Default MAX EIRP value as mentioned in India Regional Spec*/
-#define MAX_EIRP_IN                 30
+#define DEFAULT_EIRP_IN                 30
 
 /*Default RX1 WIndow Data rate.Note this value will be changed based on the selected DR for TX*/
 #define MAC_RX1_WINDOW_DATARATE_IN                 (DR0)
@@ -393,7 +412,7 @@
 #define DR4_PARAMS_JP               {49,   242,   125,  -66  , 8,        BW_125KHZ,        MODULATION_LORA}
 #define DR5_PARAMS_JP               {83,   242,   242,  -68  , 7,        BW_125KHZ,        MODULATION_LORA}
 #define DR6_PARAMS_JP               {60,   242,   242,  -15  , 7,        BW_250KHZ,        MODULATION_LORA}
-#define DR7_PARAMS_JP               {8,    242,   242,  -2  , 0,        BW_UNDEFINED,    MODULATION_FSK}
+#define DR7_PARAMS_JP               {100,    242,   242,  -50  , 0,        BW_UNDEFINED,    MODULATION_FSK}
 
 #define DATARATE_COUNT_JP     8
 
@@ -408,7 +427,7 @@
 #define MIN_CHANNEL_INDEX_JP             2
 
 /*LBT Parameters - From JP Specification*/
-#define LBT_SCAN_PERIOD_JP                            10    /*ms*/
+#define LBT_SCAN_PERIOD_JP                             5    /*ms*/
 #define LBT_SIGNAL_THRESHOLD_JP                       -80  /*dBm*/
 
 #endif
@@ -455,10 +474,10 @@
 #define MIN_CHANNEL_INDEX_KR                     3
 
 // FREQ < 922.1
-#define DEFAULT_EIRP_LF    10
+#define DEFAULT_EIRP_KR_LF    10
 
 //FREQ >=922.1
-#define DEFAULT_EIRP_HF    14
+#define DEFAULT_EIRP_KR_HF    14
 
 /*LBT Parameters - From KR Specification*/
 #define LBT_SCAN_PERIOD_KR                                10    /*ms*/
@@ -468,9 +487,6 @@
 
 
 #if (NA_BAND == 1)
-
-#define MAX_CHANNELS_BANDWIDTH_125_NA            64
-#define MAX_CHANNELS_BANDWIDTH_500_NA            8
 
 #define MAC_RX1_WINDOW_DATARATE_NA                DR10
 #define MAC_RX2_WINDOW_DATARATE_NA                DR8
@@ -556,23 +572,23 @@
 #define DR0_PARAMS_NA                             {18,11,0,-58,10,BW_125KHZ,MODULATION_LORA}
 #define DR1_PARAMS_NA                             {5,53,0,6,9,BW_125KHZ,MODULATION_LORA}
 #define DR2_PARAMS_NA                             {7,125,0,1,8,BW_125KHZ,MODULATION_LORA}
-#define DR3_PARAMS_NA                            {12,242,0,-2,7,BW_125KHZ,MODULATION_LORA}
+#define DR3_PARAMS_NA							{12,242,0,-2,7,BW_125KHZ,MODULATION_LORA}
 #define DR4_PARAMS_NA                            {22,242,0,-4,8,BW_500KHZ,MODULATION_LORA}
 #define DR5_PARAMS_NA                            {0,0,0,0,0,BW_UNDEFINED,MODULATION_LORA}
 #define DR6_PARAMS_NA                            {0,0,0,0,0,BW_UNDEFINED,MODULATION_LORA}
 #define DR7_PARAMS_NA                            {0,0,0,0,0,BW_UNDEFINED,MODULATION_LORA}
-#define DR8_PARAMS_NA                            {16,53,0,-65,12,BW_500KHZ,MODULATION_LORA}
+#define DR8_PARAMS_NA                            {35,53,0,-43,12,BW_500KHZ,MODULATION_LORA}
 #define DR9_PARAMS_NA                            {7,129,0,6,11,BW_500KHZ,MODULATION_LORA}
 #define DR10_PARAMS_NA                            {7,242,0,1,10,BW_500KHZ,MODULATION_LORA}
 #define DR11_PARAMS_NA                            {12,242,0,-2,9,BW_500KHZ,MODULATION_LORA}
 #define DR12_PARAMS_NA                            {22,242,0,-4,8,BW_500KHZ,MODULATION_LORA}
 #define DR13_PARAMS_NA                            {42,242,0,-4,7,BW_500KHZ,MODULATION_LORA}
 
-#define MAX_TX_PWR_NA                           30
+#define DEFAULT_EIRP_NA                           30
 
 #define UPSTREAM_CH0_NA                            FREQ_902300KHZ
-#define UPSTREAM_CH64_NA                        FREQ_903000KHZ
-#define DOWNSTREAM_CH0_NA                        FREQ_923300KHZ
+#define UPSTREAM_CH64_NA                           FREQ_903000KHZ
+#define DOWNSTREAM_CH0_NA                          FREQ_923300KHZ
 
 #endif
 
@@ -592,8 +608,8 @@ typedef void (*pUpdateChIdStatus_t)(uint8_t chid, bool statusNew);
 /* PDS Reg NA Items - List*/
 typedef enum _pds_reg_na_items
 {
-    PDS_REG_NA_ALT_CH = REG_NA_PDS_FID1_START_INDEX,
-    PDS_REG_NA_CH_PARAM,
+    PDS_REG_NA_CH_PARAM = REG_NA_PDS_FID1_START_INDEX,
+	PDS_REG_NA_LAST_USED_SB,
     PDS_REG_NA_MAX_VALUE  /* Always add new items above this value */
 }pds_reg_na_items_t;
 
@@ -628,8 +644,8 @@ typedef enum _pds_reg_eu868_fid2_items
 /* PDS Reg AU Items - List*/
 typedef enum _pds_reg_au_items
 {
-    PDS_REG_AU_ALT_CH = REG_AU_PDS_FID1_START_INDEX,
-    PDS_REG_AU_CH_PARAM
+    PDS_REG_AU_CH_PARAM = REG_AU_PDS_FID1_START_INDEX,
+	PDS_REG_AU_LAST_USED_SB
       /* Always add new items above this value */
 }pds_reg_au_items_t;
 
@@ -749,7 +765,7 @@ COMPILER_PACK_SET(1)
 typedef struct _RegPdsItems
 {
     uint8_t  fileid;
-    uint16_t alt_ch_item_id;
+    uint16_t lastUsedSB;
     uint16_t ch_param_1_item_id;
     uint16_t ch_param_2_item_id;
     uint16_t band_item_id;
@@ -763,6 +779,23 @@ typedef struct _DutyCycleTimer
     /* The unique Id given to the timer */
     uint8_t timerId;
 }    DutyCycleTimer_t;
+/*This Structure stores Joinreq dutycycle timer related information*/
+typedef struct _JoinDutyCycleTimer
+{
+	/* Duty cycle timers last value */
+	uint32_t lastTimerInterval;
+	/* Remaining time if dutycycle time is greater than swtimer max */
+	uint32_t remainingtime;
+	/* The unique Id given to the timer */
+	uint8_t timerId;
+	
+}    JoinDutyCycleTimer_t;
+/*This Structure stores Joinreq backoff timer related information*/
+typedef struct _JoinBackoffTimer
+{
+	/* The unique Id given to the timer */
+	uint8_t timerId;
+}    JoinBackoffTimer_t;
 
 /*This Structure stores LBT timer related information*/
 typedef struct _LBTTimer
@@ -840,6 +873,8 @@ typedef struct _RegParamsType1
     uint8_t Max_500khzChan;
     uint8_t RxParamWindowOffset1;
     uint8_t alternativeChannel;
+	/* Used to store the sub-band from which the channel is used for Transmission */
+	uint8_t lastUsedSB;
 }RegParamsType1_t;
 
 typedef struct _RegParamsType2
@@ -848,13 +883,13 @@ typedef struct _RegParamsType2
     ChannelParams_t chParams[MAX_CHANNELS_T2];
     OthChannelParams_t othChParams[MAX_CHANNELS_T2];
     DutyCycleTimer_t DutyCycleTimer;
-    uint32_t channelTimer[MAX_CHANNELS_T2]; /* LBT Channel timer array */
+	uint32_t channelTimer[MAX_CHANNELS_T2]; /* LBT Channel timer array */
     LBTTimer_t LBTTimer;
     /*DutyCycle multiplier calculated based on the regulatory defined DutyCycle*/
     uint16_t subBandDutyCycle[MAX_NUM_SUBBANDS];
     /*This filed stores the info of aggregated duty cycle*/
     uint32_t  aggregatedDutyCycleTimeout;
-    uint8_t LBTScanPeriod;
+	uint8_t LBTScanPeriod;
     int8_t LBTSignalThreshold;
     uint8_t LBT_RSSISamplesCount;
     uint8_t minNonDefChId;
@@ -879,6 +914,8 @@ typedef struct _RegParams
     OthChannelParams_t *pOtherChParams;
     SubBandParams_t *pSubBandParams;
     DutyCycleTimer_t *pDutyCycleTimer;
+	JoinDutyCycleTimer_t *pJoinDutyCycleTimer;
+	JoinBackoffTimer_t *pJoinBackoffTimer;
     uint32_t DefRx2Freq;
     FeaturesSupported_t FeaturesSupport;
     uint8_t MinNewChIndex;
@@ -904,6 +941,11 @@ typedef struct _RegParams
     /*The last channel which was used for transmission is used here*/
     uint8_t lastUsedChannelIndex;
     uint32_t aggregatedDutyCycleTimeout;
+	JoinDutyCycleTimer_t joinDutyCycleTimer;
+	JoinBackoffTimer_t joinBackoffTimer;
+	/* Join request dutycycle timeout*/
+	uint32_t  joinDutyCycleTimeout;
+	uint8_t joinbccount;
     CmnParams_t cmnParams;
 #if (ENABLE_PDS == 1)
     RegPdsItems_t regParamItems;
@@ -951,6 +993,8 @@ void LORAREG_InitSetAttrFnPtrsIN(void);
 void LORAREG_InitSetAttrFnPtrsJP(void);
 void LORAREG_InitSetAttrFnPtrsKR(void);
 
+
+void JoinBackoffCallback(uint8_t param);
 extern RegParams_t RegParams;
 
 extern uint8_t regTimerId[REG_PARAMS_TIMERS_COUNT];

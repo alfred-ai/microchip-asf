@@ -3,7 +3,7 @@
  *
  * \brief SAM HSMCI driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -943,7 +943,7 @@ bool hsmci_start_read_blocks(void *dest, uint16_t nb_block)
 						| XDMAC_CC_DIF_AHB_IF0
 						| XDMAC_CC_SAM_FIXED_AM
 						| XDMAC_CC_DAM_INCREMENTED_AM
-						| XDMAC_CC_PERID(CONF_HSMCI_XDMAC_CHANNEL);
+						| XDMAC_CC_PERID(XDMAC_HW_ID_HSMCI);
 		p_cfg.mbr_ubc = nb_data;
 		HSMCI->HSMCI_MR |= HSMCI_MR_FBYTE;
 	} else {
@@ -956,7 +956,7 @@ bool hsmci_start_read_blocks(void *dest, uint16_t nb_block)
 						| XDMAC_CC_DIF_AHB_IF0
 						| XDMAC_CC_SAM_FIXED_AM
 						| XDMAC_CC_DAM_INCREMENTED_AM
-						| XDMAC_CC_PERID(CONF_HSMCI_XDMAC_CHANNEL);
+						| XDMAC_CC_PERID(XDMAC_HW_ID_HSMCI);
 		p_cfg.mbr_ubc = nb_data / 4;
 		HSMCI->HSMCI_MR &= ~HSMCI_MR_FBYTE;
 	}
@@ -1019,7 +1019,7 @@ bool hsmci_start_write_blocks(const void *src, uint16_t nb_block)
 						| XDMAC_CC_DIF_AHB_IF1
 						| XDMAC_CC_SAM_INCREMENTED_AM
 						| XDMAC_CC_DAM_FIXED_AM
-						| XDMAC_CC_PERID(CONF_HSMCI_XDMAC_CHANNEL);
+						| XDMAC_CC_PERID(XDMAC_HW_ID_HSMCI);
 		p_cfg.mbr_ubc = nb_data;
 		HSMCI->HSMCI_MR |= HSMCI_MR_FBYTE;
 	} else {
@@ -1032,7 +1032,7 @@ bool hsmci_start_write_blocks(const void *src, uint16_t nb_block)
 						| XDMAC_CC_DIF_AHB_IF1
 						| XDMAC_CC_SAM_INCREMENTED_AM
 						| XDMAC_CC_DAM_FIXED_AM
-						| XDMAC_CC_PERID(CONF_HSMCI_XDMAC_CHANNEL);
+						| XDMAC_CC_PERID(XDMAC_HW_ID_HSMCI);
 		p_cfg.mbr_ubc = nb_data / 4;
 		HSMCI->HSMCI_MR &= ~HSMCI_MR_FBYTE;
 	}

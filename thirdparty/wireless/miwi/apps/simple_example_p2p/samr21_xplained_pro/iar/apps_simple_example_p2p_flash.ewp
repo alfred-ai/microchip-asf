@@ -2472,13 +2472,13 @@
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_star.c</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_nvm.h</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_star.h</name>
 						</file>
 					</group>
 					<group>
@@ -2525,10 +2525,10 @@
 					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_text.c</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.c</name>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.c</name>
 				</file>
 				<file>
-					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_spinctrl.c</name>
+					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_generic.c</name>
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../common2/services/gfx_mono/gfx_mono_ug_2832hsweg04.c</name>

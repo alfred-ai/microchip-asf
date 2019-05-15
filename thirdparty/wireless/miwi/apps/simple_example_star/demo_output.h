@@ -3,7 +3,7 @@
 *
 * \brief Demo output Interface.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -36,6 +36,8 @@
 
 #ifndef _DEMO_OUPUT_H
 #define _DEMO_OUTPUT_H
+
+#include "miwi_api.h"
 
 #define MIWI_TEXT_LEN  21
 #define DE_LEN         11
@@ -142,18 +144,18 @@ void DemoOutput_ChannelError(uint8_t channel);
 void DemoOutput_UnicastFail(void);
 
 /*********************************************************************
- * Function: void STAR_DEMO_OPTIONS_MESSAGE( bool )
+ * Function: void STAR_DEMO_OPTIONS_MESSAGE( DeviceRole_t deviceRole )
  *
  * Overview: Displays available options for the DEMO kit in STAR Network
  *
  * PreCondition: None
  *
- * Input:  boolean true or false
+ * Input:  DeviceRole_t deviceRole- PAN_COORD or END_DEVICE
  *
  * Output: None
  *
  ********************************************************************/
-void STAR_DEMO_OPTIONS_MESSAGE(bool);
+void STAR_DEMO_OPTIONS_MESSAGE(DeviceRole_t deviceRole);
 
 /*********************************************************************
  * Function: void Source_END_DEVICE_INFO( bool )

@@ -4,7 +4,7 @@
 * \brief This is the implementation of LoRaWAN SW Timer module
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -560,16 +560,26 @@ bool SwTimerIsRunning(uint8_t timerId)
 ******************************************************************************/
 uint32_t SwTimerReadValue(uint8_t timerId)
 {
-    uint32_t tv = 0u;
-    uint64_t t1 = gettime();
-    uint64_t t2 = (uint64_t)swTimers[timerId].absoluteExpiryTime;
-
-    if (t2 > t1)
+    uint32_t remainingTime = 0u;
+    uint32_t timerExpiryTime = 0u;
+    uint32_t currentSysTime = 0u;
+    
+    if ( NULL != swTimers[timerId].timerCb )
     {
-        tv = (uint32_t)(t2 - t1);
-    }
+	    timerExpiryTime = swTimers[timerId].absoluteExpiryTime;
+	    currentSysTime = (uint32_t) gettime();
 
-    return tv;
+	    if ( currentSysTime <= timerExpiryTime )
+	    {
+		    remainingTime = timerExpiryTime - currentSysTime;
+	    }
+	    else if ( currentSysTime > timerExpiryTime )
+	    {
+		    remainingTime = (UINT32_MAX - currentSysTime) + timerExpiryTime;
+	    }
+    }
+    
+    return remainingTime;
 }
 
 /**************************************************************************//**

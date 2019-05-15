@@ -3,7 +3,7 @@
  *
  * \brief Commonly used includes, types and macros.
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -1025,7 +1025,7 @@ typedef double                  F64;  //!< 64-bit floating-point number.
 #if defined(__ICCARM__)
 #define nop()               __no_operation()
 #elif defined(__GNUC__)
-#define nop()               (__NOP())
+#define nop()               __NOP()
 #endif
 
 #define FLASH_DECLARE(x)  const x

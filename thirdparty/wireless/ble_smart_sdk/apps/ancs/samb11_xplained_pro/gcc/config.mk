@@ -161,7 +161,7 @@ CPPFLAGS = \
        -D ANCS_CLIENT_SERVICE                             \
        -D ANP_CLIENT                                      \
        -D ANP_GATT_CLIENT                                 \
-       -D ARM_MATH_CM0PLUS=true                           \
+       -D ARM_MATH_CM0=true                               \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BLE_MODULE=SAMB11_MR                            \
        -D BOARD=SAMB11_XPLAINED_PRO                       \

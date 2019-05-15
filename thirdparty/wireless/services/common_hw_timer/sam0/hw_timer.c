@@ -4,7 +4,7 @@
  * @brief
  *
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -86,6 +86,7 @@ void tmr_disable_cc_interrupt(void)
  */
 void tmr_enable_cc_interrupt(void)
 {
+	tc_clear_status(&module_inst, TC_STATUS_CHANNEL_0_MATCH);
 	tc_enable_callback(&module_inst, TC_CALLBACK_CC_CHANNEL0);
 }
 

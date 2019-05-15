@@ -189,7 +189,7 @@ CPPFLAGS = \
        -D ATT_DB_MEMORY                                   \
        -D BATTERY_SERVICE                                 \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D EXTINT_CALLBACK_MODE=true                       \

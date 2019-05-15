@@ -3,7 +3,7 @@
  *
  * @brief
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -46,8 +46,8 @@
 #include "trx_access.h"
 #include "sysTimer.h"
 
-/* Minimum sleep interval in seconds */
-#define MIN_SLEEP_INTERVAL     (1)
+/* Minimum sleep interval in milliseconds */
+#define MIN_SLEEP_INTERVAL     (1000)
 
 struct rtc_module rtc_instance;
 
@@ -132,6 +132,7 @@ static void sleepExit(uint32_t sleepTime)
 
 /**
  * \brief This function puts the transceiver and device to sleep
+ * \Parameter interval - the time to sleep in milliseconds
  */
 bool sleepMgr_sleep(uint32_t interval)
 {
@@ -139,7 +140,6 @@ bool sleepMgr_sleep(uint32_t interval)
     {
         return false;
     }
-    interval = interval * 1000;
 
     /*Set the timeout for compare mode and enable the RTC*/
     rtc_count_set_compare(&rtc_instance, interval, RTC_COUNT_COMPARE_0);

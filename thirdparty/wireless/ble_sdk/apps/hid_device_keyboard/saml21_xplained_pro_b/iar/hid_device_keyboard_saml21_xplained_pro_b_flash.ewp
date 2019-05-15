@@ -179,8 +179,8 @@
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>HID_KEYBOARD_DEVICE</state>
@@ -521,8 +521,8 @@
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>HID_KEYBOARD_DEVICE</state>
@@ -1222,8 +1222,8 @@
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>HID_KEYBOARD_DEVICE</state>
@@ -1564,8 +1564,8 @@
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>HID_KEYBOARD_DEVICE</state>

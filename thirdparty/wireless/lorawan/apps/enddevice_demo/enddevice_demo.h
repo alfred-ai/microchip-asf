@@ -4,7 +4,7 @@
 * \brief LORAWAN Demo Application
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -43,7 +43,7 @@
              network joined bit
 *************************************************************************/
 #define LORAWAN_NW_JOINED	0x01
-
+//#define EDBG_EUI_READ 1
 typedef enum _AppTaskIds_t
 {
 	DISPLAY_TASK_HANDLER,
@@ -102,7 +102,7 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *data);
 /*********************************************************************//*
  \brief      Callback function for the ending of Activation procedure
  ************************************************************************/
-void demo_joindata_callback(bool status);
+void demo_joindata_callback(StackRetStatus_t status);
 
 /*********************************************************************//*
  \brief      Function to Print stack default parameters

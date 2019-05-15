@@ -5,7 +5,7 @@
 *        contains LoRa-specific Radio Driver Hardware Abstract Layer
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -857,7 +857,9 @@ void HAL_TCXOPowerOn(void)
 void HAL_TCXOPowerOff(void)
 {
 #ifdef TCXO_ENABLE
+#ifndef TCXO_ALWAYS_ON
 	port_pin_set_output_level(TCXO_PWR_PIN, TCXO_PWR_INACTIVE);
+#endif
 #endif
 }
 /**

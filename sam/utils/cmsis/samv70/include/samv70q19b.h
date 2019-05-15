@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -660,7 +660,7 @@ void XDMAC_Handler      ( void );
 
 #define IFLASH_SIZE             (0x80000u)
 #define IFLASH_PAGE_SIZE        (512u)
-#define IFLASH_LOCK_REGION_SIZE (8192u)
+#define IFLASH_LOCK_REGION_SIZE (16384u)
 #define IFLASH_NB_OF_PAGES      (1024u)
 #define IFLASH_NB_OF_LOCK_BITS  (32u)
 #define IRAM_SIZE               (0x40000u)
@@ -683,7 +683,7 @@ void XDMAC_Handler      ( void );
 /* ************************************************************************** */
 
 #define CHIP_JTAGID (0x05B3D03FUL)
-#define CHIP_CIDR   (0xA13D0A00UL)
+#define CHIP_CIDR   (0xA13D0A01UL)
 #define CHIP_EXID   (0x00000002UL)
 
 /* ************************************************************************** */

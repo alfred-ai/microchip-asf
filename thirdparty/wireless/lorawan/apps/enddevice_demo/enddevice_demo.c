@@ -4,7 +4,7 @@
 * \brief LORAWAN Demo Application
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -172,6 +172,7 @@ static bool demoMcastEnable = DEMO_APP_MCAST_ENABLE;
 static uint32_t demoMcastDevAddr = DEMO_APP_MCAST_GROUP_ADDRESS;
 static uint8_t demoMcastNwksKey[16] = DEMO_APP_MCAST_NWK_SESSION_KEY;
 static uint8_t demoMcastAppsKey[16] = DEMO_APP_MCAST_APP_SESSION_KEY;
+static uint8_t demoMcastGroupId = DEMO_APP_MCAST_GROUPID;
 /************************** EXTERN VARIABLES ***********************************/
 extern bool button_pressed;
 extern bool factory_reset;
@@ -329,6 +330,7 @@ static void processRunRestoreBand(void)
 	StackRetStatus_t status = LORAWAN_SUCCESS;
 	uint8_t prevBand = 0xff;
 	uint8_t choice = 0xff;
+	bool joinBackoffEnable = false;
 	
 	PDS_RestoreAll();
 	LORAWAN_GetAttr(ISMBAND,NULL,&prevBand);
@@ -344,6 +346,11 @@ static void processRunRestoreBand(void)
 	{
 		status = LORAWAN_Reset(bandTable[choice]);
 	}
+	
+	 /*Disabled Join backoff in Demo application
+	Needs to be enabled in Production Environment Ref Section */
+    LORAWAN_SetAttr(JOIN_BACKOFF_ENABLE,&joinBackoffEnable);
+	
 	if(status == LORAWAN_SUCCESS && choice < sizeof(bandTable)-1)
 	{
 		uint32_t joinStatus = 0;
@@ -726,6 +733,9 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             case LORAWAN_MCAST_HDR_INVALID:
                 printf("\n\rMCAST_HDR_INVALID \n\r");
             break;
+			case LORAWAN_INVALID_PACKET:
+				printf("\n\rINVALID_PACKET \n\r");
+			break;
             default:
                 printf("UNKNOWN ERROR\n\r");
             break;
@@ -822,6 +832,9 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             case LORAWAN_MCAST_HDR_INVALID:
                 printf("\n\rMCAST_HDR_INVALID \n\r");
             break;
+			case LORAWAN_INVALID_PACKET:
+				printf("\n\rINVALID_PACKET \n\r");
+			break;
             default:
                 printf("\n\rUNKNOWN ERROR\n\r");
             break;
@@ -843,11 +856,11 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
 /*********************************************************************//*
 \brief Callback function for the ending of Activation procedure
  ************************************************************************/
-void demo_joindata_callback(bool status)
+void demo_joindata_callback(StackRetStatus_t status)
 {
     /* This is called every time the join process is finished */
     set_LED_data(LED_GREEN,&off);
-    if(true == status)
+    if(LORAWAN_SUCCESS == status)
     {
         uint32_t devAddress;
         bool mcastEnabled;
@@ -868,6 +881,24 @@ void demo_joindata_callback(bool status)
         print_application_config();
         set_LED_data(LED_GREEN,&on);
     }
+	else if(LORAWAN_NO_CHANNELS_FOUND == status)
+	{
+		joined = false;
+		set_LED_data(LED_AMBER,&on);
+		printf("\n No Free Channel found");
+	}
+	else if (LORAWAN_MIC_ERROR == status)
+	{
+		joined = false;
+		set_LED_data(LED_AMBER,&on);
+		printf("\n MIC Error");
+	}
+	else if (LORAWAN_TX_TIMEOUT == status)
+	{
+		joined = false;
+		set_LED_data(LED_AMBER,&on);
+		printf("\n Transmission Timeout");
+	}
     else
     {
         joined = false;
@@ -1141,42 +1172,58 @@ StackRetStatus_t set_device_type(EdClass_t ed_class)
 void set_multicast_params (void)
 {
     StackRetStatus_t status;
-
+    LorawanMcastDevAddr_t dMcastDevAddr;
+    LorawanMcastAppSkey_t mcastAppSKey;
+    LorawanMcastNwkSkey_t mcastNwkSKey;
+    LorawanMcastStatus_t  mcastStatus;
+	
     printf("\n***************Multicast Parameters********************\n\r");
-
-    status = LORAWAN_SetAttr(MCAST_APPS_KEY, &demoMcastAppsKey);
+    
+    dMcastDevAddr.groupId = demoMcastGroupId;
+    mcastAppSKey.groupId  = demoMcastGroupId;
+    mcastNwkSKey.groupId  = demoMcastGroupId;
+    mcastStatus.groupId   = demoMcastGroupId;
+	
+    memcpy(&(mcastAppSKey.mcastAppSKey), &demoMcastAppsKey,LORAWAN_SESSIONKEY_LENGTH);
+    dMcastDevAddr.mcast_dev_addr = demoMcastDevAddr;
+    memcpy(&(mcastNwkSKey.mcastNwkSKey), &demoMcastNwksKey,LORAWAN_SESSIONKEY_LENGTH);
+    memcpy(&(mcastStatus.status),&demoMcastEnable,sizeof(demoMcastEnable));
+    
+    status = LORAWAN_SetAttr(MCAST_APPS_KEY, &mcastAppSKey);
     if (status == LORAWAN_SUCCESS)
     {
-        printf("\nMcastAppSessionKey : ");
-        print_array((uint8_t *)&demoMcastAppsKey, sizeof(demoMcastAppsKey));
-        status = LORAWAN_SetAttr(MCAST_NWKS_KEY, &demoMcastNwksKey);
+	    printf("\nMcastAppSessionKey : ");
+	    print_array((uint8_t *)&(mcastAppSKey.mcastAppSKey), LORAWAN_SESSIONKEY_LENGTH);
+	    status = LORAWAN_SetAttr(MCAST_NWKS_KEY, &mcastNwkSKey);
     }
 
     if(status == LORAWAN_SUCCESS)
     {
-        printf("\nMcastNwkSessionKey : ");
-        print_array((uint8_t *)&demoMcastNwksKey, sizeof(demoMcastNwksKey));
-        status = LORAWAN_SetAttr(MCAST_GROUP_ADDR, &demoMcastDevAddr);
+	    printf("\nMcastNwkSessionKey : ");
+	    print_array((uint8_t *)&(mcastNwkSKey.mcastNwkSKey), LORAWAN_SESSIONKEY_LENGTH);
+	    status = LORAWAN_SetAttr(MCAST_GROUP_ADDR, &dMcastDevAddr);
     }
-
     if (status == LORAWAN_SUCCESS)
     {
-        printf("\nMcastGroupAddr : 0x%lx\n\r", demoMcastDevAddr);
-        status = LORAWAN_SetAttr(MCAST_ENABLE, &demoMcastEnable);
+	    printf("\nMcastGroupAddr : 0x%lx\n\r", dMcastDevAddr.mcast_dev_addr);
+	    status = LORAWAN_SetAttr(MCAST_ENABLE, &mcastStatus);
     }
     else
     {
-        printf("\nMcastGroupAddrStatus : Failed\n\r");
+	    printf("\nMcastGroupAddrStatus : Failed\n\r");
     }
-
+	
     if (status == LORAWAN_SUCCESS)
     {
-        printf("\nMulticastStatus : Enabled\n\r");
+	    printf("\nMulticastStatus : Enabled\n\r");
     }
     else
     {
-        printf("\nMulticastStatus : Failed\n\r");
+	    printf("\nMulticastStatus : Failed\n\r");
     }
+	
+	 printf("\n********************************************************\n\r");
+
 }
 
 
@@ -1189,9 +1236,10 @@ void set_multicast_params (void)
 StackRetStatus_t mote_set_parameters(IsmBand_t ismBand, const uint16_t index)
 {
     StackRetStatus_t status;
-
+    bool joinBackoffEnable = false;
     LORAWAN_Reset(ismBand);
 #if (NA_BAND == 1 || AU_BAND == 1)
+#if (RANDOM_NW_ACQ == 0)
     if ((ismBand == ISM_NA915) || (ismBand == ISM_AU915))
     {
         #define MAX_NA_CHANNELS 72
@@ -1226,7 +1274,10 @@ StackRetStatus_t mote_set_parameters(IsmBand_t ismBand, const uint16_t index)
         }
     }
 #endif
-
+#endif
+    /*Disabled Join backoff in Demo application
+	Needs to be enabled in Production Environment Ref Section */
+    LORAWAN_SetAttr(JOIN_BACKOFF_ENABLE,&joinBackoffEnable);
 
     /* Initialize the join parameters for Demo application */
     status = set_join_parameters(DEMO_APP_ACTIVATION_TYPE);

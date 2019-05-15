@@ -160,7 +160,7 @@ CFLAGS =
 #   BOARD      Target board in use, see boards/board.h for a list.
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
-       -D ARM_MATH_CM0PLUS=true                           \
+       -D ARM_MATH_CM0=true                               \
        -D ATT_DB_MEMORY                                   \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
        -D BLE_MODULE=SAMB11_MR                            \

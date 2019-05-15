@@ -3,7 +3,7 @@
 *
 * \brief System timer interface
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -61,18 +61,6 @@
 #define ONE_MINUTE          (ONE_SECOND*60)
 #define ONE_HOUR            (ONE_MINUTE*60)
 
-
-
-#if defined(PROTOCOL_STAR)
-
-#define SHARE_PEER_DEVICE_INFO_TIMEOUT      ONE_SECOND*15
-#define LINK_STATUS_TIMEOUT                 ONE_SECOND*15
-#define SW_ACK_TIMEOUT                      HUNDRED_MILI_SECOND*2
-// every 10 minutes the stack will evaluate the inactive end nodes
-#define FIND_INACTIVE_DEVICE_TIMEOUT        ONE_MINUTE*10
-#define END_DEVICES_DISPLAY_TIMEOUT         ONE_SECOND*15
-
-#endif
 
 /*- Types ------------------------------------------------------------------*/
 typedef enum SYS_TimerMode_t {

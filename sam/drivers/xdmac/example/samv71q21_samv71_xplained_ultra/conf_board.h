@@ -43,4 +43,7 @@
 /** Enable Com Port. */
 #define CONF_BOARD_UART_CONSOLE
 
+/* Cache Enabled */
+#define CONF_BOARD_ENABLE_CACHE
+
 #endif /* CONF_BOARD_H_INCLUDED */

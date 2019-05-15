@@ -115,7 +115,7 @@ typedef enum {
 #define BRD_ADV_DATA_APPEARANCE_LEN			(2)
 #define BRD_ADV_DATA_APPEARANCE_DATA		"\x80\x00"
 
-#define BRD_ADV_DATA_NAME_LEN               (0x0b)
+#define BRD_ADV_DATA_NAME_LEN               (0x0f)
 #define BRD_ADV_DATA_NAME_DATA              "ATMEL-BROADCAST"
 
 #define BRD_ADV_DATA_MANUFACTURER_LEN		(0x08)

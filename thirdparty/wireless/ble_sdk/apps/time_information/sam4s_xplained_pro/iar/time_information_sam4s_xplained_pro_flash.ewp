@@ -167,10 +167,10 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>BOARD=SAM4S_XPLAINED_PRO</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>__SAM4SD32C__</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
@@ -500,10 +500,10 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>BOARD=SAM4S_XPLAINED_PRO</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>__SAM4SD32C__</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
@@ -1158,10 +1158,10 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>BOARD=SAM4S_XPLAINED_PRO</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>__SAM4SD32C__</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
@@ -1491,10 +1491,10 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>NENABLE_PTS</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>NEXT_DST_SERVICE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>BOARD=SAM4S_XPLAINED_PRO</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>__SAM4SD32C__</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>

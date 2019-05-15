@@ -3,7 +3,7 @@
 *
 * \brief Proximity Monitor Profile Application
 *
-* Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -56,7 +56,8 @@
  *	+ ATSAMD21-XPRO + ATBTLC1000 XPRO
  *	+ ATSAMG55-XPRO + ATBTLC1000 XPRO
  *	+ ATSAM4S-XPRO + ATBTLC1000 XPRO
- * 
+ *	+ ATSAMR34-XPRO + ATBTLC1000 XPRO
+ *
  * - Running the demo -
  *  + 1. Build and flash the binary into supported evaluation board.
  *  + 2. Open the console using TeraTerm or any serial port monitor.
@@ -160,6 +161,10 @@
 #include "console_serial.h"
 #include "pxp_monitor_app.h"
 
+#if SAMR34
+#include "sw_timer.h"
+#endif 
+
 #if defined IMMEDIATE_ALERT_SERVICE
 #include "immediate_alert.h"
 #endif
@@ -193,6 +198,9 @@ pxp_current_alert_t alert_level = PXP_NO_ALERT;
 #define APP_TIMER_EVENT_ID		(1)
 #define APP_BUTTON_EVENT_ID		(2)
 
+#if SAMR34
+uint8_t bleappsHwSwTimerId = 0xFF;
+#endif 
 user_custom_event_t app_custom_event[2] = {
 	{
 		.id = APP_TIMER_EVENT_ID,
@@ -207,6 +215,31 @@ user_custom_event_t app_custom_event[2] = {
 volatile bool button_pressed = false;
 /* Flag to avoid spurious interrupt posting  during reset and initialization */
 volatile bool app_init_done = false;
+
+int8_t rssi_power = 0;
+
+#if SAMR34
+extern void lorawan_main (void);
+//extern void SYSTEM_RunTasks(void);
+static void timer_callback_handler(void);
+void sw_timer_start(uint32_t delayms);
+void sw_timer_stop(void);
+
+
+int send_ble_data;
+char ble_apps_buf[100];
+
+void sw_timer_start(uint32_t delayms)
+{
+	SwTimerStart(bleappsHwSwTimerId,MS_TO_US(delayms),
+	SW_TIMEOUT_RELATIVE,timer_callback_handler,NULL);
+}
+
+void sw_timer_stop(void)
+{
+	SwTimerStop(bleappsHwSwTimerId);
+}
+#endif
 
 void button_cb(void)
 {	
@@ -228,7 +261,6 @@ void button_cb(void)
 #ifndef ENABLE_PTS
 static void rssi_update(at_ble_handle_t conn_handle)
 {
-	int8_t rssi_power = 0;
 	at_ble_status_t status;
 	app_timer_done = false;
 
@@ -303,8 +335,14 @@ static void pxp_app_init(void)
 */
 static void timer_callback_handler(void)
 {
-	/* Stop the timer */
-	hw_timer_stop();
+	#if SAMR34
+		//hw_timer_stop_func_cb();
+		sw_timer_stop();
+	#else
+		/* Stop the timer */
+		hw_timer_stop();
+	#endif
+
 	
 	/* Enable the flag the serve the task */
 	app_timer_done = true;
@@ -320,7 +358,22 @@ static void pxp_monitor_app_timer_event(void)
 	if (app_timer_done) {
 		if (pxp_connect_request_flag == PXP_DEV_CONNECTED) {
 			rssi_update(ble_dev_info[0].conn_info.handle);
-			hw_timer_start(PXP_RSSI_UPDATE_INTERVAL);
+#if SAMR34	
+			{
+				uint8_t count  = 0;	
+				uint8_t iterator = 0;		
+				ble_apps_buf[count++] = 0x00;
+				ble_apps_buf[count++] = 0x46;
+				for (iterator = 5; iterator > 0; iterator--) {
+					ble_apps_buf[count++] = ble_dev_info[0].conn_info.peer_addr.addr[iterator];
+				}
+				ble_apps_buf[count++]= rssi_power;
+				send_ble_data = count;
+			}
+			sw_timer_start(PXP_RSSI_UPDATE_INTERVAL);
+#else
+			hw_timer_start(PXP_RSSI_UPDATE_INTERVAL);	
+#endif // 	#if SAMR34				
 		}
 	
 		app_timer_done = false;
@@ -436,13 +489,22 @@ int main(void)
 	/* Initialize serial console */
 	serial_console_init();
 
+#if SAMR34
+	lorawan_main();
+	
+	SwTimerCreate(&bleappsHwSwTimerId);
+	register_hw_timer_start_func_cb(sw_timer_start);
+	register_hw_timer_stop_func_cb(sw_timer_stop);		
+
+#else
 	/* Initialize the hardware timer */
 	hw_timer_init();
 
 	/* Register the callback */
 	hw_timer_register_callback(timer_callback_handler);
 	register_hw_timer_start_func_cb(hw_timer_start);
-	register_hw_timer_stop_func_cb(hw_timer_stop);
+	register_hw_timer_stop_func_cb(hw_timer_stop);		
+#endif // #if SAMR34	
 
 	/* initialize the BLE chip  and Set the device mac address */
 	ble_device_init(NULL);
@@ -465,5 +527,11 @@ int main(void)
 	while (1) {
 		/* BLE Event Task */
 		ble_event_task();
+		
+#if SAMR34		
+		/* Running the scheduler for LoRaWAN */
+		SYSTEM_RunTasks();
+#endif // #if SAMR34		
+
 	}
 }

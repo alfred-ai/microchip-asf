@@ -4,7 +4,7 @@
 * \brief LoRaWAN INDIA file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -116,6 +116,8 @@ StackRetStatus_t LORAReg_InitIN(IsmBand_t ismBand)
 	RegParams.pDrParams = &RegParams.cmnParams.paramsType2.DRParams[0];
 	RegParams.pOtherChParams = &RegParams.cmnParams.paramsType2.othChParams[0];
 	RegParams.pDutyCycleTimer = &RegParams.cmnParams.paramsType2.DutyCycleTimer;
+    RegParams.pJoinDutyCycleTimer = &RegParams.joinDutyCycleTimer;
+	RegParams.pJoinBackoffTimer = &RegParams.joinBackoffTimer;
 	RegParams.DefRx1DataRate = MAC_RX1_WINDOW_DATARATE_IN;
 	RegParams.DefRx2DataRate = MAC_RX2_WINDOW_DATARATE_IN;
 	RegParams.DefRx2Freq = MAC_RX2_WINDOW_FREQ_IN;	
@@ -126,23 +128,29 @@ StackRetStatus_t LORAReg_InitIN(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType2.minNonDefChId = 3;
 	RegParams.Rx1DrOffset = 7;
 	RegParams.maxTxPwrIndx = 10;
-	RegParams.maxTxPwr = 30;
+	RegParams.maxTxPwr = DEFAULT_EIRP_IN;
+	RegParams.pJoinDutyCycleTimer->timerId = regTimerId[0];
+	RegParams.pJoinDutyCycleTimer->remainingtime = 0;
+	RegParams.pJoinBackoffTimer->timerId = regTimerId[1];
+	RegParams.joinbccount =0;
+	RegParams.joinDutyCycleTimeout =0;
 	
 	RegParams.band = ismBand;
 	
 	if(ismBand == ISM_IND865)
 	{
 		InitDefault865Channels();
-		RegParams.cmnParams.paramsType2.txParams.maxEIRP = MAX_EIRP_IN;
+		RegParams.cmnParams.paramsType2.txParams.maxEIRP = DEFAULT_EIRP_IN;
 		memcpy (RegParams.pDrParams, DefaultDrParamsIN, sizeof(DefaultDrParamsIN) );
 #if (ENABLE_PDS == 1)
 
 		/*Fill PDS item id in RegParam Structure */
 		RegParams.regParamItems.fileid = PDS_FILE_REG_IND_07_IDX;
-		RegParams.regParamItems.alt_ch_item_id = 0;
 		RegParams.regParamItems.ch_param_1_item_id = PDS_REG_IND_CH_PARAM_1;
 		RegParams.regParamItems.ch_param_2_item_id = PDS_REG_IND_CH_PARAM_2;
 		RegParams.regParamItems.band_item_id = 0;
+		RegParams.regParamItems.lastUsedSB = 0;
+		
 		PdsFileMarks_t filemarks;
 		/* File ID IND - Register */
 		filemarks.fileMarkListAddr = aRegIndPdsOps;

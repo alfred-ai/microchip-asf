@@ -3,7 +3,7 @@
 *
 * \brief Physical Layer Abstraction for AT86RF233 implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -76,6 +76,11 @@ RxBuffer_t RxBuffer[BANK_SIZE];
 // Trigger to Transmit Packet
 void PHY_DataReq(uint8_t *data)
 {
+	/* Ignore sending packet if length is more than Max PSDU */
+	if (data[0] > MAX_PSDU)
+	{
+		return;
+	}
 	phyTrxSetState(TRX_CMD_TX_ARET_ON);
 
 	phyReadRegister(IRQ_STATUS_REG);
@@ -389,17 +394,20 @@ void PHY_TaskHandler(void)
 				rssi = (int8_t)phyReadRegister(PHY_ED_LEVEL_REG);
 				trx_frame_read(&size, 1);
 
-			 	trx_frame_read(phyRxBuffer, size + 2);
-				RxBuffer[RxBank].PayloadLen = size + 2;
-				if (RxBuffer[RxBank].PayloadLen < RX_PACKET_SIZE)
-			 	{
-					//copy all of the data from the FIFO into the RxBuffer, plus RSSI and LQI
-					for (i = 1; i <= size+2; i++)
+				if(size <= MAX_PSDU)
+				{
+					trx_frame_read(phyRxBuffer, size + 2);
+					RxBuffer[RxBank].PayloadLen = size + 2;
+					if (RxBuffer[RxBank].PayloadLen < RX_PACKET_SIZE)
 					{
-						RxBuffer[RxBank].Payload[i-1] = phyRxBuffer[i];
+						//copy all of the data from the FIFO into the RxBuffer, plus RSSI and LQI
+						for (i = 1; i <= size+2; i++)
+						{
+							RxBuffer[RxBank].Payload[i-1] = phyRxBuffer[i];
+						}
+						RxBuffer[RxBank].Payload[RxBuffer[RxBank].PayloadLen - 1] = rssi + PHY_RSSI_BASE_VAL;
 					}
-					RxBuffer[RxBank].Payload[RxBuffer[RxBank].PayloadLen - 1] = rssi + PHY_RSSI_BASE_VAL;
-			    }
+				}
 				phyWaitState(TRX_STATUS_RX_AACK_ON);
 			}
 		}

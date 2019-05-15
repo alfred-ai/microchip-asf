@@ -3,7 +3,7 @@
  *
  * \brief Simple Broadcaster Application
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -59,6 +59,7 @@
  *	+ ATSAMD21-XPRO + ATBTLC1000 XPRO
  *	+ ATSAMG55-XPRO + ATBTLC1000 XPRO
  *	+ ATSAM4S-XPRO + ATBTLC1000 XPRO
+ *	+ ATSAMR34-XPRO + ATBTLC1000 XPRO
  * 
  * - Running the demo -
  *  + 1. Build and flash the binary into supported evaluation board.
@@ -137,6 +138,13 @@
 /* Indicate to user that beacon advertisement started in broadcaster mode*/
 static void ble_device_broadcaster_ind(void);
 
+#if SAMR34
+extern void lorawan_main (void);
+extern void SYSTEM_RunTasks(void);
+int send_ble_data;
+char ble_apps_buf[100];
+#endif // #if SAMR34
+
 uint8_t adv_data[MAX_ADV_LEN];
 uint8_t scan_rsp_data[MAX_SCAN_LEN];
 uint8_t adv_length;
@@ -201,10 +209,14 @@ static void brd_start_broadcast(void)
 		DBG_LOG("BLE Broadcast start failed(%d)", status);
 	} else {
 		DBG_LOG("Started Broadcasting");
-
+		
 		/* Indicate to user that beacon advertisement started in
 		 * broadcaster mode*/
 		ble_device_broadcaster_ind();
+#if SAMR34
+		send_ble_data = BRD_ADV_DATA_NAME_LEN;
+		memcpy(ble_apps_buf,(uint8_t *)BRD_ADV_DATA_NAME_DATA,sizeof(BRD_ADV_DATA_NAME_DATA));
+#endif // #if SAMR34		
 	}
 }
 
@@ -860,6 +872,10 @@ int main(void)
 
 	DBG_LOG("Initializing Broadcaster Application");
 	
+	#if SAMR34
+	lorawan_main();
+	#endif // #if SAMR34	
+	
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 
@@ -867,4 +883,13 @@ int main(void)
 
 	/* starting advertisement in broadcast mode */
 	brd_start_broadcast();
+	/* Receiving events */
+	while (1) {
+		ble_event_task();
+#if SAMR34
+		/* Running the scheduler for LoRaWAN */
+		SYSTEM_RunTasks();
+#endif // #if SAMR34
+
+	}	
 }

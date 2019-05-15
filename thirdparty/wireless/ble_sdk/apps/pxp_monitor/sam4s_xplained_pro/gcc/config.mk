@@ -182,7 +182,7 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
        -D BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL                \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BOARD=SAM4S_XPLAINED_PRO                        \
        -D ENABLE_POWER_SAVE                               \
        -D HOST_SLEEP_ENABLE=true                          \
@@ -199,6 +199,7 @@ CPPFLAGS = \
        -D TX_POWER_SERVICE                                \
        -D UART_FLOWCONTROL_4WIRE_MODE=true                \
        -D UART_FLOWCONTROL_6WIRE_MODE=false               \
+       -D USE_SCAN_SOFT_FILTER                            \
        -D __SAM4SD32C__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

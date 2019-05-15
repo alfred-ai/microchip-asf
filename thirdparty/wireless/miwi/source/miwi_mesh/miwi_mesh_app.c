@@ -3,7 +3,7 @@
 *
 * \brief MiWi Mesh Protocol Application Handling implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -107,6 +107,7 @@ defaultParametersRomOrRam_t defaultParamsRomOrRam = {
     .searchConfMem = &searchConfirmMem,
 	.maxNoOfBeacons = MAX_BEACON_RESULTS,
 #endif
+	.myPANID = MY_PAN_ID
 };
 
 defaultParametersRamOnly_t defaultParamsRamOnly = {

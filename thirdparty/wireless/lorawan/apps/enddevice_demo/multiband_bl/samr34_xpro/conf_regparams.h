@@ -4,7 +4,7 @@
 * \brief LORAWAN Regional Parameter Configuration
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -53,7 +53,7 @@
 #define MAC_DEF_TX_CURRENT_DATARATE_NA		(DR2)
 #define MAC_DATARATE_MIN_NA					(DR4)
 #define MAC_DATARATE_MAX_NA					(DR0)
-#define FEATURES_SUPPORTED_NA               (FHSS_SUPPORT | PA_SUPPORT)
+#define FEATURES_SUPPORTED_NA               (FHSS_SUPPORT | PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
 
 #endif
 
@@ -63,7 +63,7 @@
 #define MAC_DEF_TX_CURRENT_DATARATE_AS       (DR3)
 #define MAC_DATARATE_MIN_AS                  (DR7)
 #define MAC_DATARATE_MAX_AS                  (DR0)
-#define FEATURES_SUPPORTED_AS                (PA_SUPPORT | DUTY_CYCLE_SUPPORT)
+#define FEATURES_SUPPORTED_AS                (PA_SUPPORT | DUTY_CYCLE_SUPPORT|JOIN_BACKOFF_SUPPORT)
 
 #endif
 
@@ -73,7 +73,7 @@
 #define MAC_DEF_TX_CURRENT_DATARATE_AU       (DR3)
 #define MAC_DATARATE_MIN_AU                  (DR6)
 #define MAC_DATARATE_MAX_AU                  (DR0)
-#define FEATURES_SUPPORTED_AU                (FHSS_SUPPORT | PA_SUPPORT)
+#define FEATURES_SUPPORTED_AU                (FHSS_SUPPORT | PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
 
 #endif
 
@@ -83,7 +83,7 @@
 #define MAC_DEF_TX_CURRENT_DATARATE_EU		(DR3)
 #define MAC_DATARATE_MIN_EU					(DR7)
 #define MAC_DATARATE_MAX_EU					(DR0)
-#define FEATURES_SUPPORTED_EU               (DUTY_CYCLE_SUPPORT)
+#define FEATURES_SUPPORTED_EU               (DUTY_CYCLE_SUPPORT|JOIN_BACKOFF_SUPPORT)
 #endif
 
 #if (IND_BAND == 1)
@@ -92,7 +92,7 @@
 #define MAC_DEF_TX_CURRENT_DATARATE_IN       (DR3)
 #define MAC_DATARATE_MIN_IN                  (DR7)
 #define MAC_DATARATE_MAX_IN                  (DR0)
-#define FEATURES_SUPPORTED_IN                (PA_SUPPORT)
+#define FEATURES_SUPPORTED_IN                (PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
 #endif
 
 #if (JPN_BAND == 1)
@@ -103,7 +103,7 @@
 #define MAC_DATARATE_MAX_JP                  (DR0)
 
 #define LBT_RSSI_SAMPLES_COUNT_JP		   	 (5)
-#define FEATURES_SUPPORTED_JP                (LBT_SUPPORT | PA_SUPPORT)
+#define FEATURES_SUPPORTED_JP                (LBT_SUPPORT | PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
 #endif
 
 #if (KR_BAND == 1)
@@ -114,7 +114,7 @@
 #define MAC_DATARATE_MAX_KR                   (DR0)
 
 #define LBT_RSSI_SAMPLES_COUNT_KR		      (10)
-#define FEATURES_SUPPORTED_KR                 (LBT_SUPPORT | PA_SUPPORT)
+#define FEATURES_SUPPORTED_KR                 (LBT_SUPPORT | PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
 #endif
 
 #if (KR_BAND == 1 || JPN_BAND == 1)

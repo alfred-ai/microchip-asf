@@ -175,16 +175,16 @@
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
-					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>CCPreprocFile</name>
@@ -511,16 +511,16 @@
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
-					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>AList</name>
@@ -1206,16 +1206,16 @@
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
-					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>CCPreprocFile</name>
@@ -1542,16 +1542,16 @@
 					<state>ATT_DB_MEMORY</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>__SAMD21J18A__</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
-					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>NEW_EVT_HANDLER</state>
+					<state>ENABLE_POWER_SAVE</state>
+					<state>HOST_SLEEP_ENABLE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>AList</name>

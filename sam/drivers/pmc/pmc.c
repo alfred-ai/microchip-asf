@@ -3,7 +3,7 @@
  *
  * \brief Power Management Controller (PMC) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -933,6 +933,48 @@ uint32_t pmc_switch_pck_to_pllack(uint32_t ul_id, uint32_t ul_pres)
 
 	return 0;
 }
+
+#if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+/**
+ * \brief Get Slow clock source configuration.
+ *
+ * \retval Crystal Oscillator Select value.
+ */
+uint32_t pmc_get_slck_config(void)
+{
+	return (SUPC->SUPC_CR & SUPC_CR_XTALSEL);
+}
+
+/**
+ * \brief Get Main clock source configuration.
+ *
+ * \retval Main Clock Source Oscillator Selection and Main RC Oscillator Frequency Selection values.
+ */
+uint32_t pmc_get_mainck_config(void)
+{
+	return (PMC->CKGR_MOR & (CKGR_MOR_MOSCSEL | CKGR_MOR_MOSCRCF_Msk));
+}
+
+/**
+ * \brief Get PLLA clock configuration.
+ *
+ * \retval PLLA Multiplier and PLLA Front End Divider values.
+ */
+uint32_t pmc_get_pllack_config(void)
+{
+	return (PMC->CKGR_PLLAR & (CKGR_PLLAR_DIVA_Msk | CKGR_PLLAR_MULA_Msk));
+}
+
+/**
+ * \brief Get UPLLCKDIV configuration.
+ *
+ * \retval UPLL Divider by 2 value.
+ */
+uint32_t pmc_get_upllckdiv_config(void)
+{
+	return (PMC->PMC_MCKR & PMC_MCKR_UPLLDIV2);
+}
+#endif
 
 #if (SAM3S || SAM4S || SAM4C || SAM4CM || SAM4CP || SAMG55)
 /**

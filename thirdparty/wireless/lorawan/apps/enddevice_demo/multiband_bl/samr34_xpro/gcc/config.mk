@@ -254,6 +254,7 @@ CPPFLAGS = \
        -D JPN_BAND=1                                      \
        -D KR_BAND=1                                       \
        -D NA_BAND=1                                       \
+       -D RANDOM_NW_ACQ=1                                 \
        -D RTC_COUNT_ASYNC=true                            \
        -D SPI_CALLBACK_MODE=false                         \
        -D SYSTICK_MODE                                    \

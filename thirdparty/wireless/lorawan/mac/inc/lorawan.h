@@ -4,7 +4,7 @@
 * \brief LoRaWAN header file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -78,6 +78,8 @@ extern "C" {
 #define LAST_NIBBLE                             0x0F
 #define FIRST_NIBBLE                            0xF0
 
+#define LORAWAN_SESSIONKEY_LENGTH					(16)
+
 /***************************** TYPEDEFS ***************************************/
 
 /** Features Supported List */
@@ -92,7 +94,9 @@ typedef enum _FeaturesSupported
 	/* FHSS is Supported */
 	FHSS_SUPPORT = 1<< 3u,
 	/* PA is supported in the Board */
-	PA_SUPPORT = 1 << 4u
+	PA_SUPPORT = 1 << 4u,
+	/*Join backoff is supported*/
+	JOIN_BACKOFF_SUPPORT = 1 << 5u
 } FeaturesSupported_t;
 
 /* minimum and maximum data rate */
@@ -311,6 +315,36 @@ typedef struct _LorawanLBTParams
 	bool lbtTransmitOn;
 } LorawanLBTParams_t;
 
+typedef struct _LorawanMcastDevAddr
+{
+	uint8_t groupId;
+	uint32_t mcast_dev_addr;
+}LorawanMcastDevAddr_t;
+
+typedef struct _LorawanMcastAppSkey
+{
+	uint8_t groupId;
+	uint8_t mcastAppSKey[LORAWAN_SESSIONKEY_LENGTH];
+}LorawanMcastAppSkey_t;
+
+typedef struct _LorawanMcastNwkSkey
+{
+	uint8_t groupId;
+	uint8_t mcastNwkSKey[LORAWAN_SESSIONKEY_LENGTH];
+}LorawanMcastNwkSkey_t;
+
+typedef struct _LorawanMcastFcnt
+{
+	uint8_t groupId;
+	uint32_t fcntValue;
+}LorawanMcastFcnt_t;
+
+typedef struct _LorawanMcastStatus
+{
+	uint8_t groupId;
+	bool status;
+}LorawanMcastStatus_t;
+
 /* List of LORAWAN attributes */
 typedef enum _LorawanAttributes
 {
@@ -425,6 +459,8 @@ typedef enum _LorawanAttributes
 	MCAST_FCNT_DOWN,
 	/*Enables Test Mode which Disable Duty Cycle for a Device, Override Features Supported by Regulatory*/
 	TEST_MODE_ENABLE,
+	/*Enables Join backoff support as per in Specification */
+	JOIN_BACKOFF_ENABLE,
 /* Bands enabled at compile time */
     SUPPORTED_BANDS,
 	/* RSSI of last recevied packet */
@@ -440,7 +476,9 @@ typedef enum _LorawanAttributes
 	/* Number of retries in one transactions */
 	RETRY_COUNTER,
 	/* Next Payload size */
-	NEXT_PAYLOAD_SIZE
+	NEXT_PAYLOAD_SIZE,
+	PENDING_JOIN_DUTY_CYCLE_TIME
+	
 }LorawanAttributes_t;
 
 /* Structure holding Receive window2 parameters*/
@@ -480,7 +518,7 @@ typedef struct _ChannelParameters
 /* Function Pointer to Application Data callback */
 typedef void (*AppDataCb_t)(void *appHandle, appCbParams_t *data);
 /* Function Pointer to Activation Data callback */
-typedef void (*JoinResponseCb_t)(bool status);
+typedef void (*JoinResponseCb_t)(StackRetStatus_t status);
 
 /* Structure holding function pointers of Application and Activation data callbacks */
 COMPILER_PACK_SET(1)
@@ -489,7 +527,7 @@ typedef struct
 	/* pointer to function that gets called after the bidirectional communication ended */
     void (*AppData)(void *appHandle, appCbParams_t *data);
 	/* pointer to function that gets called after the activation procedure */
-    void (*JoinResponse)(bool status);
+    void (*JoinResponse)(StackRetStatus_t status);
 } AppData_t;
 COMPILER_PACK_RESET()
 

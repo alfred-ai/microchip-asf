@@ -3,7 +3,7 @@
 *
 * \brief WSNDemo command handler implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -226,6 +226,7 @@ static void appCmdBuffer(uint16_t addr, uint8_t *data, uint8_t size)
 	if (0 == addr)
 	{
 		appCmdHandle(data, size);
+		appCmdDataRequest(0xFFFF, size, data);
 	}
 	else
 	{

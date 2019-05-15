@@ -187,7 +187,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
        -D BATTERY_SERVICE                                 \
        -D BLE_DEVICE_ROLE=BLE_ROLE_ALL                    \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D FIND_ME_LOCATOR                                 \
@@ -199,6 +199,7 @@ CPPFLAGS = \
        -D SLEEP_WALKING_ENABLED=false                     \
        -D UART_FLOWCONTROL_4WIRE_MODE=true                \
        -D UART_FLOWCONTROL_6WIRE_MODE=false               \
+       -D USE_SCAN_SOFT_FILTER                            \
        -D __SAMG55J19__                                   \
        -D printf=iprintf                                  \
        -D scanf=iscanf

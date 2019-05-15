@@ -4,7 +4,7 @@
 * \brief LORAWAN Certification Application
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -111,7 +111,7 @@ static void cert_appdata_callback(void *appHandle, appCbParams_t *appdata);
 /*********************************************************************//*
 \brief Callback function for the ending of Activation procedure
  ************************************************************************/
-static void cert_joindata_callback(bool status);
+static void cert_joindata_callback(StackRetStatus_t status);
 
 /*********************************************************************//*
  \brief      Set MAC  parameters function
@@ -395,11 +395,11 @@ static void cert_appdata_callback(void *appHandle, appCbParams_t *appdata)
 /*********************************************************************//*
 \brief Callback function for the ending of Activation procedure
  ************************************************************************/
-static void cert_joindata_callback(bool status)
+static void cert_joindata_callback(StackRetStatus_t status)
 {
     StackRetStatus_t stackRetStatus;
     /* This is called every time the join process is finished */
-    if(true == status)
+    if(LORAWAN_SUCCESS == status)
     {
         printf("\nJoining Successful\n\r");
 

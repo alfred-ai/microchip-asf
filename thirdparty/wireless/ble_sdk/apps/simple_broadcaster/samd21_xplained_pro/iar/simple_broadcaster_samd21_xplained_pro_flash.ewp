@@ -168,17 +168,17 @@
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_BROADCASTER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
 					<state>TC_ASYNC=true</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>NEW_EVT_HANDLER</state>
 					<state>__SAMD21J18A__</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>ENABLE_POWER_SAVE</state>
@@ -500,17 +500,17 @@
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_BROADCASTER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
 					<state>TC_ASYNC=true</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>NEW_EVT_HANDLER</state>
 					<state>__SAMD21J18A__</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>ENABLE_POWER_SAVE</state>
@@ -1191,17 +1191,17 @@
 					<name>CCDefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_BROADCASTER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
 					<state>TC_ASYNC=true</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>NEW_EVT_HANDLER</state>
 					<state>__SAMD21J18A__</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>ENABLE_POWER_SAVE</state>
@@ -1523,17 +1523,17 @@
 					<name>ADefines</name>
 					<state>SYSTICK_MODE</state>
 					<state>HOST_UART_BAUDRATE_CONFIG_VALUE=921600</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_BROADCASTER</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
 					<state>TC_ASYNC=true</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
-					<state>NEW_EVT_HANDLER</state>
 					<state>__SAMD21J18A__</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
 					<state>ENABLE_POWER_SAVE</state>

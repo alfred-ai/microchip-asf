@@ -180,7 +180,7 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BLE_DEVICE_ROLE=BLE_ROLE_OBSERVER               \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BLE_OBSERVER_APP                                \
        -D BOARD=SAML21_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \

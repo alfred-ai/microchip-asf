@@ -3,7 +3,7 @@
 *
 * \brief Physical Layer Abstraction for AT86RF212B interface
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -57,6 +57,8 @@
 // to wait for handling in MiMAC layer.
 /*********************************************************************/
 #define BANK_SIZE         4
+
+#define MAX_PSDU          127
 
 /*********************************************************************/
 // SECURITY_KEY_xx defines xxth byte of security key used in the

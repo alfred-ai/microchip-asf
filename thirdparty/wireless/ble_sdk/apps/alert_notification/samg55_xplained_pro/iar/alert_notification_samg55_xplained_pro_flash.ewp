@@ -168,7 +168,7 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>ANS_CLIENT_SERVICE</state>
@@ -498,7 +498,7 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>ANS_CLIENT_SERVICE</state>
@@ -1153,7 +1153,7 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>ANS_CLIENT_SERVICE</state>
@@ -1483,7 +1483,7 @@
 					<state>NEW_EVT_HANDLER</state>
 					<state>ANP_SIG_GATT_CLIENT</state>
 					<state>ANP_SIG_CLIENT</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL</state>
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>ANS_CLIENT_SERVICE</state>

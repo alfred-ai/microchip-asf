@@ -3,7 +3,7 @@
  *
  * \brief SAM Control Area Network (MCAN) Low Level Driver
  *
- * Copyright (c) 2015-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2015-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -36,6 +36,7 @@
 
 #include "mcan.h"
 #include "pmc.h"
+#include "genclk.h"
 #include <string.h>
 #include <sysclk.h>
 
@@ -302,16 +303,16 @@ void mcan_set_baudrate(Mcan *hw, uint32_t baudrate)
 	uint32_t mcan_nbtp_nbrp_value;
 	uint32_t mcan_nbtp_nsgw_value = 3, mcan_nbtp_ntseg1_value = 10, mcan_nbtp_ntseg2_value = 7;
 
-	gclk_mcan_value = sysclk_get_peripheral_hz();
+	gclk_mcan_value = genclk_get_frequency_hz(PMC_PCK_5);
 
 	mcan_nbtp_nbrp_value = gclk_mcan_value / baudrate / (3 + mcan_nbtp_ntseg1_value + mcan_nbtp_ntseg2_value);
 #if (SAMV71B || SAME70B || SAMV70B)
-	hw->MCAN_NBTP = MCAN_NBTP_NBRP(mcan_nbtp_nbrp_value) |
+	hw->MCAN_NBTP = MCAN_NBTP_NBRP(mcan_nbtp_nbrp_value - 1) |
 			MCAN_NBTP_NSJW(mcan_nbtp_nsgw_value) |
 			MCAN_NBTP_NTSEG1(mcan_nbtp_ntseg1_value) |
 			MCAN_NBTP_NTSEG2(mcan_nbtp_ntseg2_value);
 #else
-	hw->MCAN_BTP = MCAN_BTP_BRP(mcan_nbtp_nbrp_value) |
+	hw->MCAN_BTP = MCAN_BTP_BRP(mcan_nbtp_nbrp_value - 1) |
 			MCAN_BTP_SJW(mcan_nbtp_nsgw_value) |
 			MCAN_BTP_TSEG1(mcan_nbtp_ntseg1_value) |
 			MCAN_BTP_TSEG2(mcan_nbtp_ntseg2_value);
@@ -330,16 +331,16 @@ void mcan_fd_set_baudrate(Mcan *hw, uint32_t baudrate)
 	uint32_t mcan_fd_dbtp_dbrp_value;
 	uint32_t mcan_fd_dbtp_dsgw_value = 3, mcan_fd_dbtp_dtseg1_value = 9, mcan_fd_dbtp_dtseg2_value = 3;
 
-	gclk_mcan_fd_value = sysclk_get_peripheral_hz();
+	gclk_mcan_fd_value = genclk_get_frequency_hz(PMC_PCK_5);
 	
 	mcan_fd_dbtp_dbrp_value = gclk_mcan_fd_value / baudrate / (3 + mcan_fd_dbtp_dtseg1_value + mcan_fd_dbtp_dtseg2_value);
 #if (SAMV71B || SAME70B || SAMV70B)
-	hw->MCAN_DBTP = MCAN_DBTP_DBRP(mcan_fd_dbtp_dbrp_value) |
+	hw->MCAN_DBTP = MCAN_DBTP_DBRP(mcan_fd_dbtp_dbrp_value - 1) |
 			MCAN_DBTP_DSJW(mcan_fd_dbtp_dsgw_value) |
 			MCAN_DBTP_DTSEG1(mcan_fd_dbtp_dtseg1_value) |
 			MCAN_DBTP_DTSEG2(mcan_fd_dbtp_dtseg2_value);
 #else
-	hw->MCAN_FBTP = MCAN_FBTP_FBRP(mcan_fd_dbtp_dbrp_value) |
+	hw->MCAN_FBTP = MCAN_FBTP_FBRP(mcan_fd_dbtp_dbrp_value - 1) |
 			MCAN_FBTP_FSJW(mcan_fd_dbtp_dsgw_value) |
 			MCAN_FBTP_FTSEG1(mcan_fd_dbtp_dtseg1_value) |
 			MCAN_FBTP_FTSEG2(mcan_fd_dbtp_dtseg2_value);

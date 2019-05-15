@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM USART Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -169,9 +169,6 @@ static enum status_code _usart_set_config(
 		usart_hw->RXPL.reg = config->receive_pulse_length;
 	}
 #endif
-
-	/* Wait until synchronization is complete */
-	_usart_wait_for_sync(module);
 
 	/*Set baud val */
 	usart_hw->BAUD.reg = baud;
@@ -505,9 +502,6 @@ enum status_code usart_write_wait(
 	}
 #endif
 
-	/* Wait until synchronization is complete */
-	_usart_wait_for_sync(module);
-
 	/* Write data to USART module */
 	usart_hw->DATA.reg = tx_data;
 
@@ -571,9 +565,6 @@ enum status_code usart_read_wait(
 		/* Return error code */
 		return STATUS_BUSY;
 	}
-
-	/* Wait until synchronization is complete */
-	_usart_wait_for_sync(module);
 
 	/* Read out the status code and mask away all but the 3 LSBs*/
 	error_code = (uint8_t)(usart_hw->STATUS.reg & SERCOM_USART_STATUS_MASK);
@@ -678,9 +669,6 @@ enum status_code usart_write_buffer_wait(
 
 	/* Get a pointer to the hardware module instance */
 	SercomUsart *const usart_hw = &(module->hw->USART);
-
-	/* Wait until synchronization is complete */
-	_usart_wait_for_sync(module);
 
 	uint16_t tx_pos = 0;
 

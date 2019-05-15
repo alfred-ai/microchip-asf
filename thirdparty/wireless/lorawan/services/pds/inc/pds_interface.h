@@ -4,7 +4,7 @@
 * \brief This is the implementation of LoRaWAN power management module
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -115,6 +115,7 @@ typedef enum _PdsFileItemIdx
 	PDS_FILE_REG_KR2_10_IDX,
 	PDS_FILE_REG_JPN2_11_IDX,
 	PDS_FILE_REG_EU868_12_IDX,
+	PDS_FILE_APP_DATA1_13_IDX,
 	PDS_MAX_FILE_IDX
 } PdsFileItemIdx_t;
 

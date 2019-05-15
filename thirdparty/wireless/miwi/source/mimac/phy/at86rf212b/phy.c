@@ -3,7 +3,7 @@
 *
 * \brief Physical Layer Abstraction for AT86RF212B implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -206,6 +206,12 @@ void PHY_Wakeup(void)
 *****************************************************************************/
 void PHY_DataReq(uint8_t *data)
 {
+	/* Ignore sending packet if length is more than Max PSDU */
+	if (data[0] > MAX_PSDU)
+	{
+		return;
+	}
+
 	phyTrxSetState(TRX_CMD_TX_ARET_ON);
 
 	phyReadRegister(IRQ_STATUS_REG);
@@ -459,10 +465,6 @@ void PHY_TaskHandler(void)
         if (PHY_STATE_IDLE == phyState)
         {
             uint8_t size,i,RxBank=0xFF;
-			int8_t rssi;
-
-			rssi = (int8_t)phyReadRegister(PHY_ED_LEVEL_REG);
-
             for (i = 0; i < BANK_SIZE; i++)
             {
                 if (RxBuffer[i].PayloadLen == 0)
@@ -472,25 +474,29 @@ void PHY_TaskHandler(void)
                 }
             }
 
-            trx_frame_read(&size, 1);
-
-            trx_frame_read(phyRxBuffer, size + 2);
-            RxBuffer[RxBank].PayloadLen = size+2;
-            if (RxBuffer[RxBank].PayloadLen < RX_PACKET_SIZE)
+            if (RxBank < BANK_SIZE)
             {
-                //indicate that data is now stored in the buffer
-                //trx_status.bits.RX_BUFFERED = 1;
+                int8_t rssi;
 
-                //copy all of the data from the FIFO into the TxBuffer, plus RSSI and LQI
-                //TODO Where are we copying rssi and lqi?
-                for (i = 1; i <= size+2; i++)
-                {
-                   RxBuffer[RxBank].Payload[i-1] = phyRxBuffer[i];
-                }
+                rssi = (int8_t)phyReadRegister(PHY_ED_LEVEL_REG);
+                trx_frame_read(&size, 1);
+
+				if(size <= MAX_PSDU)
+				{
+					trx_frame_read(phyRxBuffer, size + 2);
+					RxBuffer[RxBank].PayloadLen = size + 2;
+					if (RxBuffer[RxBank].PayloadLen < RX_PACKET_SIZE)
+					 {
+						//copy all of the data from the FIFO into the RxBuffer, plus RSSI and LQI
+						for (i = 1; i <= size+2; i++)
+						{
+							RxBuffer[RxBank].Payload[i-1] = phyRxBuffer[i];
+						}
+						RxBuffer[RxBank].Payload[RxBuffer[RxBank].PayloadLen - 1] = rssi + phyRssiBaseVal();
+					}
+				}
+                phyWaitState(TRX_STATUS_RX_AACK_ON);
             }
-			RxBuffer[RxBank].Payload[RxBuffer[RxBank].PayloadLen - 1] = rssi + phyRssiBaseVal();
-
-            phyWaitState(TRX_STATUS_RX_AACK_ON);
         }
         else if (PHY_STATE_TX_WAIT_END == phyState)
         {
@@ -506,11 +512,11 @@ void PHY_TaskHandler(void)
             }
             else if (TRAC_STATUS_NO_ACK == status)
             {
-               status = PHY_STATUS_NO_ACK;
+                status = PHY_STATUS_NO_ACK;
             }
             else
             {
-            status = PHY_STATUS_ERROR;
+                status = PHY_STATUS_ERROR;
             }
 
             phySetRxState();

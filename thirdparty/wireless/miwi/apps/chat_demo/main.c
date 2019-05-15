@@ -3,28 +3,28 @@
 *
 * \brief Simple demo application for wireless chat.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
 * \page License
 *
 * Subject to your compliance with these terms, you may use Microchip
-* software and any derivatives exclusively with Microchip products. 
-* It is your responsibility to comply with third party license terms applicable 
-* to your use of third party software (including open source software) that 
+* software and any derivatives exclusively with Microchip products.
+* It is your responsibility to comply with third party license terms applicable
+* to your use of third party software (including open source software) that
 * may accompany Microchip software.
 *
-* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, 
-* WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, 
-* INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, 
-* AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE 
-* LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL 
-* LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE 
-* SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE 
-* POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
-* ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY 
-* RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY, 
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES,
+* WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
+* INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
+* AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
+* LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
+* LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
+* SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
+* POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT
+* ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
+* RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *
 * \asf_license_stop
@@ -37,11 +37,11 @@
 /**
 * \mainpage
 * \section preface Preface
-* The chat demo P2P application code focuses on the simplicity of the 
-* MiWi™ DE protocol stack application programming interfaces. 
-* It provides a clean and straightforward wireless communication between 
-* two devices with less than 30 lines of effective C code to run the stack 
-* in application layer for both devices. In this application, following 
+* The chat demo P2P application code focuses on the simplicity of the
+* MiWi™ DE protocol stack application programming interfaces.
+* It provides a clean and straightforward wireless communication between
+* two devices with less than 30 lines of effective C code to run the stack
+* in application layer for both devices. In this application, following
 * features of MiWi™ DE protocol stack have been demonstrated:
 * <P>• Establish connection automatically between two devices.</P>
 * <P>• Unicast a packet.</P>
@@ -91,9 +91,9 @@
 #ifdef PHY_AT86RF212B
 uint8_t        myChannel = 3;
 /* Range for default configuration: 1 to 10
- Note: TX Power and PHY Mode Setting needs to be modified as per the 
+ Note: TX Power and PHY Mode Setting needs to be modified as per the
  recommendation from Data Sheet for European band (ie.,Channel 0)*/
-#else 
+#else
 uint8_t        myChannel = 26;
 /* Range: 11 to 26 */
 #endif
@@ -130,6 +130,21 @@ static void dataConfcb(uint8_t handle, miwi_status_t status, uint8_t* msgPointer
 uint8_t        AdditionalNodeID[ADDITIONAL_NODE_ID_SIZE] = {0x00};
 #endif
 
+/* Connection Table Memory */
+CONNECTION_ENTRY connectionTable[CONNECTION_SIZE];
+
+defaultParametersRomOrRam_t defaultParamsRomOrRam = {
+    .ConnectionTable = &connectionTable[0],
+    #if ADDITIONAL_NODE_ID_SIZE > 0
+    .AdditionalNodeID = &AdditionalNodeID[0],
+    #endif
+    .networkFreezerRestore = 0,
+};
+
+defaultParametersRamOnly_t defaultParamsRamOnly = {
+    .dummy = 0,
+};
+extern API_UINT16_UNION  myPANID;
 void ReadMacAddress(void);
 void ProcessRxMessage(void);
 void FormatTxMessage(void);
@@ -137,26 +152,69 @@ void TransmitMessage(void);
 void ReceivedDataIndication (RECEIVED_MESSAGE *ind);
 static void Connection_Confirm(miwi_status_t status);
 /*********************************************************************
+* Function: static void longAddressValidationAndUpdation(void)
+*
+* Overview: validates the long address and assigns new address
+            by random allocation if invalid address found
+********************************************************************/
+static void longAddressValidationAndUpdation(void)
+{
+    bool invalidIEEEAddrFlag = false;
+    uint64_t invalidIEEEAddr;
+
+    srand(PHY_RandomReq());
+
+    /* Check if a valid IEEE address is available.
+    0x0000000000000000 and 0xFFFFFFFFFFFFFFFF is persumed to be invalid */
+    /* Check if IEEE address is 0x0000000000000000 */
+    memset((uint8_t *)&invalidIEEEAddr, 0x00, LONG_ADDR_LEN);
+    if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+    {
+        invalidIEEEAddrFlag = true;
+    }
+
+    /* Check if IEEE address is 0xFFFFFFFFFFFFFFFF */
+    memset((uint8_t *)&invalidIEEEAddr, 0xFF, LONG_ADDR_LEN);
+    if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
+    {
+        invalidIEEEAddrFlag = true;
+    }
+
+    if (invalidIEEEAddrFlag)
+    {
+         /* In case no valid IEEE address is available, a random
+          * IEEE address will be generated to be able to run the
+          * applications for demonstration purposes.
+          * In production code this can be omitted.
+         */
+        uint8_t* peui64 = (uint8_t *)&myLongAddress;
+        for(uint8_t i = 0; i < MY_ADDRESS_LENGTH; i++)
+        {
+            *peui64++ = (uint8_t)rand();
+        }
+    }
+    /* Set the address in transceiver */
+    PHY_SetIEEEAddr((uint8_t *)&myLongAddress);
+}
+/*********************************************************************
 * Function:         void main(void)
 *
 * PreCondition:     none
 *
-* Input:		    none
+* Input:            none
 *
-* Output:		    none
+* Output:            none
 *
-* Side Effects:	    none
+* Side Effects:        none
 *
-* Overview:		    This is the main function that runs the Chat application
+* Overview:            This is the main function that runs the Chat application
 *
-* Note:			    
+* Note:
 **********************************************************************/
 
 int main (void)
 {
-	uint8_t i;
-	bool invalidIEEEAddrFlag = false;
-	uint64_t invalidIEEEAddr;
+    uint8_t i;
     irq_initialize_vectors();
     /*******************************************************************
     * System related initialization based on the API provided by board
@@ -188,7 +246,7 @@ int main (void)
 
     // Read the MAC address from either flash or EDBG
     ReadMacAddress();
-	
+
     // Initialize system Timer
     SYS_TimerInit();
     /*******************************************************************/
@@ -198,48 +256,22 @@ int main (void)
     // should be restored. In this simple example, we assume that the
     // network starts from scratch.
 
-    /*******************************************************************/	
-    MiApp_ProtocolInit(NULL, NULL);
-	srand(PHY_RandomReq());
-	/* Check if a valid IEEE address is available.
-		0x0000000000000000 and 0xFFFFFFFFFFFFFFFF is persumed to be invalid */
-	/* Check if IEEE address is 0x0000000000000000 */
-	memset((uint8_t *)&invalidIEEEAddr, 0x00, LONG_ADDR_LEN);
-	if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
-	{
-		invalidIEEEAddrFlag = true;
-	}
+    /*******************************************************************/
+    MiApp_ProtocolInit(&defaultParamsRomOrRam, &defaultParamsRamOnly);
 
-	/* Check if IEEE address is 0xFFFFFFFFFFFFFFFF */
-	memset((uint8_t *)&invalidIEEEAddr, 0xFF, LONG_ADDR_LEN);
-	if (0 == memcmp((uint8_t *)&invalidIEEEAddr, (uint8_t *)&myLongAddress, LONG_ADDR_LEN))
-	{
-		invalidIEEEAddrFlag = true;
-	}
-	
-	if (invalidIEEEAddrFlag)
-	{
-		/*
-		 * In case no valid IEEE address is available, a random
-		 * IEEE address will be generated to be able to run the
-		 * applications for demonstration purposes.
-		 * In production code this can be omitted.
-		 */
-		uint8_t* peui64 = (uint8_t *)&myLongAddress;
-		for(i = 0; i<MY_ADDRESS_LENGTH; i++)
-		{
-			*peui64++ = (uint8_t)rand();
-		}
-	}
-	PHY_SetIEEEAddr((uint8_t *)&myLongAddress);
-	MiApp_SubscribeDataIndicationCallback(ReceivedDataIndication);
+    /* Check Valid address is found , else update with random */
+    longAddressValidationAndUpdation();
+
+    /* Subscribe for Data Indication */
+    MiApp_SubscribeDataIndicationCallback(ReceivedDataIndication);
+
     // Set default channel
     if( MiApp_Set(CHANNEL, &myChannel) == false )
     {
         printf("!!!ERROR - Channel configuration for %d failed...\r\n", myChannel);
     }
 
-	
+
     /*******************************************************************/
 
     // Function MiApp_ConnectionMode defines the connection mode. The
@@ -311,21 +343,21 @@ int main (void)
 
     #ifndef ENABLE_POWERSAVE
     // Turn on LED 1 to indicate P2P connection established
-	port_pin_set_output_level(LED_0_PIN, LED_0_ACTIVE);
+    port_pin_set_output_level(LED_0_PIN, LED_0_ACTIVE);
     #endif
 
     printf("-------------------------------------------------------\r\n");
     printf("Chat Window: \r\n");
     printf("-------------------------------------------------------\r\n");
     printf("$$");
-	
+
     while(1)
     {
-		
+
         P2PTasks();
 
         FormatTxMessage();
-            
+
         if(messagePending)
         {
             tickCurrent.Val = MiWi_TickGet();
@@ -344,23 +376,23 @@ int main (void)
 #ifdef BUTTON_0_PIN
         if (port_pin_get_input_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE)
         {
-	        /* Wait for button de-bounce time */
-	        delay_ms(APP_DEBOUNCE_TIME_MS);
-	        /* Check whether button is in default state */
-	        while(port_pin_get_input_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE);
-        	printf("\r\n\r\nDumping Connection Table...\r\n");
-        	DumpConnection(0xFF);
-        	printf("-------------------------------------------------------\r\n");
-        	printf("Chat Window: \r\n");
-        	printf("-------------------------------------------------------\r\n");
-        	printf("$$ ");
+            /* Wait for button de-bounce time */
+            delay_ms(APP_DEBOUNCE_TIME_MS);
+            /* Check whether button is in default state */
+            while(port_pin_get_input_level(BUTTON_0_PIN) == BUTTON_0_ACTIVE);
+            printf("\r\n\r\nDumping Connection Table...\r\n");
+            DumpConnection(0xFF);
+            printf("-------------------------------------------------------\r\n");
+            printf("Chat Window: \r\n");
+            printf("-------------------------------------------------------\r\n");
+            printf("$$ ");
         }
 #endif
     }
 
     //Enable device to foward the received packet information to the console
 }                           //end of main
-        
+
 static void Connection_Confirm(miwi_status_t status)
 {
 
@@ -374,37 +406,37 @@ static void dataConfcb(uint8_t handle, miwi_status_t status, uint8_t* msgPointer
 void FormatTxMessage()
 {
     uint8_t    inputChar;
-	uint8_t retValue;
-    
-    retValue = sio2host_rx(&inputChar, 1);
-	if (0 != retValue)
-	{
-		sio2host_tx(&inputChar, 1);
+    uint8_t retValue;
 
-		if(inputChar == KEY_ENTER)
-		{
-			printf("\r\n$$");
-			messagePending = true;
-			transmitPending = true;
-		}
-		else if(inputChar == KEY_BACKSPACE)
-		{
-			TxMessageSize--;
-		}
-		else
-		{
-			if(TxMessageSize < MAX_MESSAGE_LEN)
-			{
-				TxMessage[TxMessageSize] = inputChar;
-				TxMessageSize++;
-				tickPrevious.Val = MiWi_TickGet();
-				//messagePending = true;
-			}
-		}
-	}
+    retValue = sio2host_rx(&inputChar, 1);
+    if (0 != retValue)
+    {
+        sio2host_tx(&inputChar, 1);
+
+        if(inputChar == KEY_ENTER)
+        {
+            printf("\r\n$$");
+            messagePending = true;
+            transmitPending = true;
+        }
+        else if(inputChar == KEY_BACKSPACE)
+        {
+            TxMessageSize--;
+        }
+        else
+        {
+            if(TxMessageSize < MAX_MESSAGE_LEN)
+            {
+                TxMessage[TxMessageSize] = inputChar;
+                TxMessageSize++;
+                tickPrevious.Val = MiWi_TickGet();
+                //messagePending = true;
+            }
+        }
+    }
 }
-     
-     
+
+
 void TransmitMessage()
 {
     uint8_t index;
@@ -420,7 +452,7 @@ void TransmitMessage()
 
     /*******************************************************************/
     //+1 to add TxMessageSize also in payload
-   dataPtr = MiMem_Alloc(TxMessageSize + 1); 
+   dataPtr = MiMem_Alloc(TxMessageSize + 1);
    if (NULL == dataPtr)
        return;
 
@@ -439,8 +471,8 @@ void TransmitMessage()
     //    The first parameter is the index of connection table for
     //       the peer device. In this lab, the chat is always sent to the
     //       first P2P Connection Entry of the connection table. If that
-    //		 node is down (eg. student is programming new firmare into it),
-    //		 the user is prompted to reset the node to re-establish the
+    //         node is down (eg. student is programming new firmare into it),
+    //         the user is prompted to reset the node to re-establish the
     //       connection table with a new peer.
     //
     //    The second parameter is the boolean to indicate if we need
@@ -454,7 +486,7 @@ void TransmitMessage()
     // input parameter of destination address directly.
 
     /*******************************************************************/
-    if(MiApp_SendData(8, ConnectionTable[0].Address, dataLen, dataPtr, msghandledemo++, true, dataConfcb) == false )
+    if(MiApp_SendData(8, connectionTable[0].Address, dataLen, dataPtr, msghandledemo++, true, dataConfcb) == false )
     {
         //Message TX Failed (peer node 00 was likely being re-programmed by student)
         //Should reset the node to establish new peer connection to send chat to
@@ -463,7 +495,7 @@ void TransmitMessage()
     }
 
 
-	//Reset Chat Application state variables
+    //Reset Chat Application state variables
     messagePending = false;
     transmitPending = false;
     TxMessageSize = 0;
@@ -488,35 +520,35 @@ void ReceivedDataIndication (RECEIVED_MESSAGE *ind)
     uint8_t index;
     if(rxMessage.flags.bits.broadcast)
     {
-	    printf("\n -------- From group:");
+        printf("\n -------- From group:");
     }
     else
     {
-	    printf("\n -------- From [");
+        printf("\n -------- From [");
     }
 
     if(rxMessage.flags.bits.srcPrsnt)
-    
-    {
-	    if(rxMessage.flags.bits.altSrcAddr)
-	    {
-		    printf("%x",rxMessage.SourceAddress[1]);
-		    printf("%x",rxMessage.SourceAddress[0]);
-	    }
-	    else
-	    {
-		    for(index = 0; index < MY_ADDRESS_LENGTH; index++)
-		    {
-			    printf("%x",rxMessage.SourceAddress[MY_ADDRESS_LENGTH - 1 - index]);
-		    }
-	    }
 
-	    printf("] : ");
+    {
+        if(rxMessage.flags.bits.altSrcAddr)
+        {
+            printf("%x",rxMessage.SourceAddress[1]);
+            printf("%x",rxMessage.SourceAddress[0]);
+        }
+        else
+        {
+            for(index = 0; index < MY_ADDRESS_LENGTH; index++)
+            {
+                printf("%x",rxMessage.SourceAddress[MY_ADDRESS_LENGTH - 1 - index]);
+            }
+        }
+
+        printf("] : ");
     }
 
     for(index = 1; index < rxMessage.PayloadSize; index++)
     {
-	    sio2host_tx(&rxMessage.Payload[index], 1);
+        sio2host_tx(&rxMessage.Payload[index], 1);
     }
 
     printf("\r\n$$");
@@ -530,31 +562,131 @@ void ReceivedDataIndication (RECEIVED_MESSAGE *ind)
 *
 * PreCondition:     none
 *
-* Input:		    none
+* Input:            none
 *
-* Output:		    Reads MAC Address from MAC Address EEPROM
+* Output:            Reads MAC Address from MAC Address EEPROM
 *
-* Side Effects:	    none
+* Side Effects:        none
 *
-* Overview:		    Uses the MAC Address from the EEPROM for addressing
+* Overview:            Uses the MAC Address from the EEPROM for addressing
 *
-* Note:			    
+* Note:
 **********************************************************************/
 void ReadMacAddress(void)
 {
 #if ((BOARD == SAMR21ZLL_EK) || (BOARD == SAMR30_MODULE_XPLAINED_PRO))
-	uint8_t i = 0, j = 0;
-	for (i = 0; i < MY_ADDRESS_LENGTH; i += 2, j++)
-	{
-		myLongAddress[i] = (NVM_UID_ADDRESS[j] & 0xFF);
-		myLongAddress[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
-	}
+    uint8_t i = 0, j = 0;
+    for (i = 0; i < MY_ADDRESS_LENGTH; i += 2, j++)
+    {
+        myLongAddress[i] = (NVM_UID_ADDRESS[j] & 0xFF);
+        myLongAddress[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
+    }
 #elif ((BOARD == SAMR30_XPLAINED_PRO) || (BOARD == SAMR21_XPLAINED_PRO))
-	uint8_t* peui64 = edbg_eui_read_eui64();
-	for(uint8_t i = 0; i<MY_ADDRESS_LENGTH; i++)
-	{
-		myLongAddress[i] = peui64[MY_ADDRESS_LENGTH-i-1];
-	}
+    uint8_t* peui64 = edbg_eui_read_eui64();
+    for(uint8_t i = 0; i<MY_ADDRESS_LENGTH; i++)
+    {
+        myLongAddress[i] = peui64[MY_ADDRESS_LENGTH-i-1];
+    }
 #endif
 }
- 
+
+#ifdef ENABLE_DUMP
+    /*********************************************************************
+     * void DumpConnection(uint8_t index)
+     *
+     * Overview:        This function prints out the content of the connection
+     *                  with the input index of the P2P Connection Entry
+     *
+     * PreCondition:
+     *
+     * Input:
+     *          index   - The index of the P2P Connection Entry to be printed out
+     *
+     * Output:  None
+     *
+     * Side Effects:    The content of the connection pointed by the index
+     *                  of the P2P Connection Entry will be printed out
+     *
+     ********************************************************************/
+    void DumpConnection(INPUT uint8_t index)
+    {
+        uint8_t i, j;
+
+        if( index > CONNECTION_SIZE )
+        {
+            printf("\r\n\r\nMy Address: 0x");
+            for(i = 0; i < MY_ADDRESS_LENGTH; i++)
+            {
+                printf("%02x",myLongAddress[MY_ADDRESS_LENGTH-1-i]);
+            }
+            #if defined(IEEE_802_15_4)
+                printf("  PANID: 0x");
+                printf("%x",myPANID.v[1]);
+                printf("%x",myPANID.v[0]);
+            #endif
+            printf("  Channel: ");
+            printf("%d",currentChannel);
+        }
+
+        if( index < CONNECTION_SIZE )
+        {
+            printf("\r\nConnection \tPeerLongAddress \tPeerInfo\r\n");
+            if( connectionTable[index].status.bits.isValid )
+            {
+                printf("%02x",index);
+                printf("\t\t\t");
+                for(i = 0; i < 8; i++)
+                {
+                    if(i < MY_ADDRESS_LENGTH)
+                    {
+                        printf("%02x", connectionTable[index].Address[MY_ADDRESS_LENGTH-1-i] );
+                    }
+                    else
+                    {
+                        printf("\t");
+                    }
+                }
+                printf("/t");
+                #if ADDITIONAL_NODE_ID_SIZE > 0
+                    for(i = 0; i < ADDITIONAL_NODE_ID_SIZE; i++)
+                    {
+                        printf("%02x", connectionTable[index].PeerInfo[i] );
+                    }
+                #endif
+                printf("\r\n");
+            }
+        }
+        else
+        {
+            printf("\r\n\r\nConnection     PeerLongAddress     PeerInfo\r\n");
+            for(i = 0; i < CONNECTION_SIZE; i++)
+            {
+
+                if( connectionTable[i].status.bits.isValid )
+                {
+                    printf("%02x",i);
+                    printf("             ");
+                    for(j = 0; j < 8; j++)
+                    {
+                        if( j < MY_ADDRESS_LENGTH )
+                        {
+                            printf("%02x", connectionTable[i].Address[MY_ADDRESS_LENGTH-1-j] );
+                        }
+                        else
+                        {
+                            printf("  ");
+                        }
+                    }
+                    printf("    ");
+                    #if ADDITIONAL_NODE_ID_SIZE > 0
+                        for(j = 0; j < ADDITIONAL_NODE_ID_SIZE; j++)
+                        {
+                            printf("%02x", connectionTable[i].PeerInfo[j] );
+                        }
+                    #endif
+                    printf("\r\n");
+                }
+            }
+        }
+    }
+#endif

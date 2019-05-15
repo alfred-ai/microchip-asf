@@ -4,7 +4,7 @@
 * \brief LoRaWAN na file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -75,28 +75,29 @@ static const DRParams_t DefaultDrParamsNA[] = {
 
 #if (ENABLE_PDS == 1)
 
-#define PDS_REG_NA_ALT_CH_ADDR                      ((uint8_t *)&(RegParams.cmnParams.paramsType1.alternativeChannel))
 #define PDS_REG_NA_CH_PARAM_ADDR                    ((uint8_t *)&(RegParams.cmnParams.paramsType1.chParams[MAX_CHANNELS_T1 - MAX_CHANNELS_T1]))
+#define PDS_REG_NA_LAST_USED_SB_ADDR                ((uint8_t *)&(RegParams.cmnParams.paramsType1.lastUsedSB))
 
-#define PDS_REG_NA_ALT_CH_SIZE					    sizeof(RegParams.cmnParams.paramsType1.alternativeChannel)
 #define PDS_REG_NA_CH_PARAM_SIZE                    sizeof(RegParams.cmnParams.paramsType1.chParams)
+#define PDS_REG_NA_LAST_USED_SB_SIZE                sizeof(RegParams.cmnParams.paramsType1.lastUsedSB)
 
-#define PDS_REG_NA_ALT_CH_OFFSET                    (PDS_FILE_START_OFFSET)
-#define PDS_REG_NA_CH_PARAM_OFFSET                  (PDS_REG_NA_ALT_CH_OFFSET + PDS_SIZE_OF_ITEM_HDR + PDS_REG_NA_ALT_CH_SIZE)
+#define PDS_REG_NA_CH_PARAM_OFFSET                  (PDS_FILE_START_OFFSET)
+#define PDS_REG_NA_LAST_USED_SB_OFFSET              (PDS_REG_NA_CH_PARAM_OFFSET + PDS_SIZE_OF_ITEM_HDR + PDS_REG_NA_CH_PARAM_SIZE)
 
 /* PDS Reg Params NA Item declaration */
 
 const ItemMap_t pds_reg_na_item_list[] = {
-	DECLARE_ITEM(PDS_REG_NA_ALT_CH_ADDR,
-	PDS_FILE_REG_NA_03_IDX,
-	(uint8_t)PDS_REG_NA_ALT_CH,
-	PDS_REG_NA_ALT_CH_SIZE,
-	PDS_REG_NA_ALT_CH_OFFSET),
+
 	DECLARE_ITEM(PDS_REG_NA_CH_PARAM_ADDR,
 	PDS_FILE_REG_NA_03_IDX,
 	(uint8_t)PDS_REG_NA_CH_PARAM,
 	PDS_REG_NA_CH_PARAM_SIZE,
-	PDS_REG_NA_CH_PARAM_OFFSET)
+	PDS_REG_NA_CH_PARAM_OFFSET),
+	DECLARE_ITEM(PDS_REG_NA_LAST_USED_SB_ADDR,
+	PDS_FILE_REG_NA_03_IDX,
+	(uint8_t)PDS_REG_NA_LAST_USED_SB,
+	PDS_REG_NA_LAST_USED_SB_SIZE,
+	PDS_REG_NA_LAST_USED_SB_OFFSET)
 };
 
 PdsOperations_t aRegNaPdsOps[PDS_REG_NA_MAX_VALUE];
@@ -116,7 +117,7 @@ StackRetStatus_t LORAReg_InitNA(IsmBand_t ismBand)
     RegParams.TxCurDataRate = MAC_DEF_TX_CURRENT_DATARATE_NA;
 	RegParams.maxChannels = MAX_CHANNELS_T1;
 	RegParams.MacTxPower = MAC_DEF_TX_POWER_NA;
-	RegParams.maxTxPwr = MAX_TX_PWR_NA;
+	RegParams.maxTxPwr = DEFAULT_EIRP_NA;
 	RegParams.pChParams = &RegParams.cmnParams.paramsType1.chParams[0];
 	RegParams.pDrParams = &RegParams.cmnParams.paramsType1.DRParams[0];
 	RegParams.MinNewChIndex = 0xFF;
@@ -126,19 +127,27 @@ StackRetStatus_t LORAReg_InitNA(IsmBand_t ismBand)
 	RegParams.FeaturesSupport = FEATURES_SUPPORTED_NA;
 	RegParams.minDataRate = MAC_DATARATE_MIN_NA;
 	RegParams.maxDataRate = MAC_DATARATE_MAX_NA;
-	RegParams.cmnParams.paramsType1.Max_125khzChan = MAX_CHANNELS_BANDWIDTH_125_NA;
-	RegParams.cmnParams.paramsType1.Max_500khzChan = MAX_CHANNELS_BANDWIDTH_500_NA;
+	RegParams.cmnParams.paramsType1.Max_125khzChan = MAX_CHANNELS_BANDWIDTH_125_AU_NA;
+	RegParams.cmnParams.paramsType1.Max_500khzChan = MAX_CHANNELS_BANDWIDTH_500_AU_NA;
 	RegParams.cmnParams.paramsType1.minTxDR = DR0;
 	RegParams.cmnParams.paramsType1.maxTxDR = DR4;
 	RegParams.cmnParams.paramsType1.minRxDR = DR8;
 	RegParams.cmnParams.paramsType1.maxRxDR = DR13;
 	RegParams.cmnParams.paramsType1.RxParamWindowOffset1 = 10;
+	RegParams.pJoinDutyCycleTimer = &RegParams.joinDutyCycleTimer;
+	RegParams.pJoinBackoffTimer = &RegParams.joinBackoffTimer;
 	RegParams.cmnParams.paramsType1.UpStreamCh0Freq = UPSTREAM_CH0_NA;
 	RegParams.cmnParams.paramsType1.UpStreamCh64Freq = UPSTREAM_CH64_NA;
 	RegParams.cmnParams.paramsType1.DownStreamCh0Freq = DOWNSTREAM_CH0_NA;
 	RegParams.Rx1DrOffset = 3;
 	RegParams.maxTxPwrIndx = 10;
-	
+	RegParams.cmnParams.paramsType1.lastUsedSB = 0;
+
+	RegParams.pJoinBackoffTimer->timerId = regTimerId[0];
+	RegParams.pJoinDutyCycleTimer->timerId = regTimerId[1];
+	RegParams.pJoinDutyCycleTimer->remainingtime =0;
+	RegParams.joinbccount =0;
+	RegParams.joinDutyCycleTimeout =0;
 	RegParams.band = ismBand;
 
     InitDefault915Channels ();
@@ -149,10 +158,10 @@ StackRetStatus_t LORAReg_InitNA(IsmBand_t ismBand)
 
 	/*Fill PDS item id in RegParam Structure */
 	RegParams.regParamItems.fileid = PDS_FILE_REG_NA_03_IDX;
-	RegParams.regParamItems.alt_ch_item_id = PDS_REG_NA_ALT_CH;
 	RegParams.regParamItems.ch_param_1_item_id = PDS_REG_NA_CH_PARAM;
 	RegParams.regParamItems.ch_param_2_item_id = 0;
 	RegParams.regParamItems.band_item_id = 0;
+	RegParams.regParamItems.lastUsedSB = PDS_REG_NA_LAST_USED_SB;
 	PdsFileMarks_t filemarks;
 	/* File ID NA - Register */
 	filemarks.fileMarkListAddr = aRegNaPdsOps;

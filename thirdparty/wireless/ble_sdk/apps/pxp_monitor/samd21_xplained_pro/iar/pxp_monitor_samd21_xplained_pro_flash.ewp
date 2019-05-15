@@ -172,20 +172,21 @@
 					<state>LLS_GATT_CLIENT</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>TX_POWER_SERVICE</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>PROXIMITY_MONITOR</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>PROXIMITY_MONITOR</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>USE_SCAN_SOFT_FILTER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>SYSTICK_MODE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>__SAMD21J18A__</state>
@@ -516,20 +517,21 @@
 					<state>LLS_GATT_CLIENT</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>TX_POWER_SERVICE</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>PROXIMITY_MONITOR</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>PROXIMITY_MONITOR</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>USE_SCAN_SOFT_FILTER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>SYSTICK_MODE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>__SAMD21J18A__</state>
@@ -1219,20 +1221,21 @@
 					<state>LLS_GATT_CLIENT</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>TX_POWER_SERVICE</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>PROXIMITY_MONITOR</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>PROXIMITY_MONITOR</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>USE_SCAN_SOFT_FILTER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>SYSTICK_MODE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>__SAMD21J18A__</state>
@@ -1563,20 +1566,21 @@
 					<state>LLS_GATT_CLIENT</state>
 					<state>TXPS_GATT_CLIENT</state>
 					<state>TX_POWER_SERVICE</state>
-					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
+					<state>PROXIMITY_MONITOR</state>
 					<state>IAS_GATT_CLIENT</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>TC_ASYNC=true</state>
 					<state>ARM_MATH_CM0PLUS=true</state>
-					<state>PROXIMITY_MONITOR</state>
+					<state>UART_FLOWCONTROL_4WIRE_MODE=false</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>BOARD=SAMD21_XPLAINED_PRO</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
 					<state>IMMEDIATE_ALERT_SERVICE</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>USE_SCAN_SOFT_FILTER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 					<state>SYSTICK_MODE</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
 					<state>__SAMD21J18A__</state>

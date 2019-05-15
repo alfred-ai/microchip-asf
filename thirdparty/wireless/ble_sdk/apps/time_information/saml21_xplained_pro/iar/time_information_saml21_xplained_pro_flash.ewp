@@ -178,8 +178,8 @@
 					<state>TP_ANDROID</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SLEEP_WALKING_ENABLED=false</state>
@@ -520,8 +520,8 @@
 					<state>TP_ANDROID</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SLEEP_WALKING_ENABLED=false</state>
@@ -1221,8 +1221,8 @@
 					<state>TP_ANDROID</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SLEEP_WALKING_ENABLED=false</state>
@@ -1563,8 +1563,8 @@
 					<state>TP_ANDROID</state>
 					<state>CURRENT_TIME_SERVICE</state>
 					<state>ENABLE_POWER_SAVE</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
 					<state>EXTINT_CALLBACK_MODE=true</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>UART_FLOWCONTROL_6WIRE_MODE=true</state>
 					<state>USART_CALLBACK_MODE=true</state>
 					<state>SLEEP_WALKING_ENABLED=false</state>

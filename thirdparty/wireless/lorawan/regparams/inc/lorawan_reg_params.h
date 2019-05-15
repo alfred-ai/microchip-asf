@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (C) 2016 Microchip Technology Inc. and its subsidiaries
+ * Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries
  * (Microchip).  All rights reserved.
  *
  * You are permitted to use the software and its derivatives with Microchip
@@ -40,7 +40,17 @@
 #define ADR_ACK_LIMIT						64
 #define ADR_ACK_DELAY						32
 #define ACK_TIMEOUT							2000
-
+/* Join dutycycle Prescalar for first 1hr*/
+#define JOIN_BACKOFF_PRESCALAR_1HR          100
+/*Join dutycycle prescalar for 2nd hour from start to 11th hr*/
+#define JOIN_BACKOFF_PRESCALAR_10HR         1000
+/*join dutycycle prescalar for 12th hr from start to 36th hr*/
+#define JOIN_BACKOFF_PRESCALAR_24HR         10000
+/* Join backoff timer base time 30 minutes*/
+#define BACKOFF_BASE_TIME_IN_MS             1800000
+/* Join backoff count For 1 hour is 2 since base timer is 30 minutes*/
+#define AGGREGATEDTIME_1HR                  2
+#define AGGREGATEDTIME_10HR                 20
 #define FCNT_MAX							(UINT32_MAX)
 #define SIZE_JOIN_ACCEPT_WITH_CFLIST		33
 #define NUMBER_CFLIST_FREQUENCIES			5
@@ -85,6 +95,8 @@ typedef enum _LorawanRegionalAttributes
 	TX_PWR,
 	DUTY_CYCLE,
 	DUTY_CYCLE_TIMER,
+	JOIN_DUTY_CYCLE_TIMER,
+	JOIN_BACK_OFF_TIMER,
 	LBT_TIMER,
 	MODULATION_ATTR,
 	BANDWIDTH_ATTR,
@@ -108,6 +120,9 @@ typedef enum _LorawanRegionalAttributes
 	REG_DEF_TX_POWER,
 	REG_DEF_TX_DATARATE,
 	CHMASK_CHCNTL,
+	JOINBACKOFF_CNTL,
+	REG_JOIN_SUCCESS,
+	REG_JOIN_ENABLE_ALL,
 	REG_NUM_ATTRIBUTES	
 }LorawanRegionalAttributes_t;
 
@@ -277,6 +292,11 @@ typedef struct
 	bool joining;
 }UpdateDutyCycleTimer_t;
 
+typedef struct
+{
+	uint32_t joinreqTimeonAir;
+	bool startJoinDutyCycleTimer;
+} UpdateJoinDutyCycleTimer_t;
 /*This Structure stores Transmit Params set using TXParamSetupReq*/	
 typedef struct _TxParams
 {

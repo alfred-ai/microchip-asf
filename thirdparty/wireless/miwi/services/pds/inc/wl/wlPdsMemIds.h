@@ -3,7 +3,7 @@
 *
 * \brief PDS file and directory memory identificators definitions
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -71,6 +71,7 @@ typedef enum {
     PDS_NULL_ID = 0,    // To be maintained as the first entry
     PDS_OUTGOING_FRAME_COUNTER_ID,
     PDS_PANID_ID,
+    PDS_LONGADDR_ID,
     PDS_CURRENT_CHANNEL_ID,
     PDS_CONNECTION_MODE_ID,
     PDS_CONNECTION_TABLE_ID,

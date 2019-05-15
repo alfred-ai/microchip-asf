@@ -1018,8 +1018,21 @@ void system_clock_init(void)
 	_CONF_CLOCK_GCLK_CONFIG(0, ~);
 #endif
 
-	/* If CPU frequency is less than 12MHz, scale down performance level to PL0 */
 	uint32_t cpu_freq = system_cpu_clock_get_hz();
+
+	/* Set the BUPDIV & LPDIV value such that backup & low power domain clock 
+	 * does not exceed their max clock freq even if CPU is configured to it's 
+	 * maximum frequency */
+	if ((cpu_freq > 6000000) && ((CONF_CLOCK_BACKUP_DIVIDER == SYSTEM_MAIN_CLOCK_DIV_1) \
+			|| (CONF_CLOCK_LOW_POWER_DIVIDER == SYSTEM_MAIN_CLOCK_DIV_1)))
+	{
+		/* If CPU speed is greater then 6MHz and LPDIV/BUPDIV is untouched,
+		 * then set the dividers to a safe value */
+		system_backup_clock_set_divider(SYSTEM_MAIN_CLOCK_DIV_8);
+		system_low_power_clock_set_divider(SYSTEM_MAIN_CLOCK_DIV_8);
+	}
+
+	/* If CPU frequency is less than 12MHz, scale down performance level to PL0 */	
 	if (cpu_freq <= 12000000) {
 		system_switch_performance_level(SYSTEM_PERFORMANCE_LEVEL_0);
 	}

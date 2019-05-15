@@ -4,7 +4,7 @@
 * \brief LORAWAN Demo Application include file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -91,6 +91,7 @@
 #define DEMO_APPLICATION_KEY                    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05}
 
 /* Multicast Parameters */
+#define DEMO_APP_MCAST_GROUPID                  0
 #define DEMO_APP_MCAST_ENABLE                   true
 #define DEMO_APP_MCAST_GROUP_ADDRESS            0x0037CC56
 #define DEMO_APP_MCAST_APP_SESSION_KEY          {0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6, 0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6}

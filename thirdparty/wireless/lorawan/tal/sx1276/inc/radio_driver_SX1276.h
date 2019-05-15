@@ -4,7 +4,7 @@
 * \brief This is the Radio drivers SX1276 source file which contains LoRa-specific
 *		 Radio drivers functions declarations and defines for SX1276
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -118,12 +118,20 @@ extern RadioConfiguration_t radioConfiguration;
 /* Prototypes                                                           */
 /************************************************************************/
 /*********************************************************************//**
-\brief This function reads the RSSI value for LoRa and FSK.
+\brief This function reads the RSSI value for LoRa.
 
 \param rssi	- The RSSI measured in the channel.
 \return		- ERR_NONE. Other types are not used now.
 *************************************************************************/
-RadioError_t Radio_ReadRssi(int16_t *rssi);
+RadioError_t Radio_ReadLoraRssi(int16_t *rssi);
+
+/*********************************************************************//**
+\brief This function reads the RSSI value for FSK.
+
+\param rssi	- The RSSI measured in the channel.
+\return		- ERR_NONE. Other types are not used now.
+*************************************************************************/
+RadioError_t Radio_ReadFSKRssi(int16_t *rssi);
 
 #ifdef	__cplusplus
 }

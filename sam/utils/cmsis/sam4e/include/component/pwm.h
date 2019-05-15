@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -56,9 +56,7 @@ typedef struct {
 /** \brief PwmCh_num_0x400 hardware registers */
 typedef struct {
   __IO uint32_t PWM_CMUPD;           /**< \brief (PwmCh_num_0x400 Offset: 0x0) PWM Channel Mode Update Register */
-  __IO uint32_t PWM_CAE;             /**< \brief (PwmCh_num_0x400 Offset: 0x4) PWM Channel Additional Edge Register */
-  __IO uint32_t PWM_CAEUPD;          /**< \brief (PwmCh_num_0x400 Offset: 0x8) PWM Channel Additional Edge Update Register */
-  __I  uint32_t Reserved1[5];
+  __I  uint32_t Reserved1[7];
 } PwmCh_num_0x400;
 /** \brief PwmCmp hardware registers */
 typedef struct {
@@ -586,24 +584,6 @@ typedef struct {
 /* -------- PWM_CMUPD : (PWM Offset: N/A) PWM Channel Mode Update Register -------- */
 #define PWM_CMUPD_CPOLUP (0x1u << 9) /**< \brief (PWM_CMUPD) Channel Polarity Update */
 #define PWM_CMUPD_CPOLINVUP (0x1u << 13) /**< \brief (PWM_CMUPD) Channel Polarity Inversion Update */
-/* -------- PWM_CAE : (PWM Offset: N/A) PWM Channel Additional Edge Register -------- */
-#define PWM_CAE_ADEDGV_Pos 0
-#define PWM_CAE_ADEDGV_Msk (0xffffffu << PWM_CAE_ADEDGV_Pos) /**< \brief (PWM_CAE) Channel Additional Edge Value */
-#define PWM_CAE_ADEDGV(value) ((PWM_CAE_ADEDGV_Msk & ((value) << PWM_CAE_ADEDGV_Pos)))
-#define PWM_CAE_ADEDGM_Pos 24
-#define PWM_CAE_ADEDGM_Msk (0x3u << PWM_CAE_ADEDGM_Pos) /**< \brief (PWM_CAE) Channel Additional Edge Mode */
-#define   PWM_CAE_ADEDGM_INC (0x0u << 24) /**< \brief (PWM_CAE) The additional edge of the channel x output waveform occurs when CCNTx reaches ADEDGV and the counter of the channel x is incrementing. */
-#define   PWM_CAE_ADEDGM_DEC (0x1u << 24) /**< \brief (PWM_CAE) The additional edge of the channel x output waveform occurs when CCNTx reaches ADEDGV and the counter of the channel x is incrementing. */
-#define   PWM_CAE_ADEDGM_BOTH (0x2u << 24) /**< \brief (PWM_CAE) The additional edge of the channel x output waveform occurs when CCNTx reaches ADEDGV, whether the counter is incrementing or not. */
-/* -------- PWM_CAEUPD : (PWM Offset: N/A) PWM Channel Additional Edge Update Register -------- */
-#define PWM_CAEUPD_ADEDGVUP_Pos 0
-#define PWM_CAEUPD_ADEDGVUP_Msk (0xffffffu << PWM_CAEUPD_ADEDGVUP_Pos) /**< \brief (PWM_CAEUPD) Channel Additional Edge Value Update */
-#define PWM_CAEUPD_ADEDGVUP(value) ((PWM_CAEUPD_ADEDGVUP_Msk & ((value) << PWM_CAEUPD_ADEDGVUP_Pos)))
-#define PWM_CAEUPD_ADEDGMUP_Pos 24
-#define PWM_CAEUPD_ADEDGMUP_Msk (0x3u << PWM_CAEUPD_ADEDGMUP_Pos) /**< \brief (PWM_CAEUPD) Channel Additional Edge Mode Update */
-#define   PWM_CAEUPD_ADEDGMUP_INC (0x0u << 24) /**< \brief (PWM_CAEUPD) The additional edge of the channel x output waveform occurs when CCNTx reaches ADEDGVUP and the counter of the channel x is incrementing. */
-#define   PWM_CAEUPD_ADEDGMUP_DEC (0x1u << 24) /**< \brief (PWM_CAEUPD) The additional edge of the channel x output waveform occurs when CCNTx reaches ADEDGVUP and the counter of the channel x is incrementing. */
-#define   PWM_CAEUPD_ADEDGMUP_BOTH (0x2u << 24) /**< \brief (PWM_CAEUPD) The additional edge of the channel x output waveform occurs when CCNTx reaches ADEDGVUP, whether the counter is incrementing or not. */
 
 /*@}*/
 

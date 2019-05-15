@@ -39,7 +39,7 @@
 * POSSIBILITY OF SUCH DAMAGE.  
 * -------------------------------------------------------------------- */
 
-
+#include <compiler.h>
 #include "arm_math.h"
 
 #ifndef MATH_HELPER_H

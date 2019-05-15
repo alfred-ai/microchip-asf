@@ -4,7 +4,7 @@
 * \brief SAMR34 Xplained Pro Board Configuration
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -53,5 +53,9 @@
 
 /* Delay in ms for TCXO to stabilize */
 #define RADIO_CLK_STABILITATION_DELAY       2
+
+/* Uncomment the below macro to make the TCXO oscillator always ON 
+   irrespective of Transceiver state (Even if it is in SLeep state) */ 
+//#define TCXO_ALWAYS_ON
 
 #endif /* CONF_BOARD_H_INCLUDED */

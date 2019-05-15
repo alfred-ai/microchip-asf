@@ -4,7 +4,7 @@
 * \brief LoRaWAN JAPAN file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -128,6 +128,8 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
 	RegParams.pSubBandParams = &RegParams.cmnParams.paramsType2.SubBands[0];
 	RegParams.pOtherChParams = &RegParams.cmnParams.paramsType2.othChParams[0];
 	RegParams.pDutyCycleTimer = &RegParams.cmnParams.paramsType2.DutyCycleTimer;
+    RegParams.pJoinDutyCycleTimer = &RegParams.joinDutyCycleTimer;
+	RegParams.pJoinBackoffTimer = &RegParams.joinBackoffTimer;
 	RegParams.DefRx1DataRate = MAC_RX1_WINDOW_DATARATE_JP;
 	RegParams.DefRx2DataRate = MAC_RX2_WINDOW_DATARATE_JP;
 	RegParams.DefRx2Freq = MAC_RX2_WINDOW_FREQ_JP;	
@@ -141,10 +143,15 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType2.minNonDefChId = 2;
 	RegParams.Rx1DrOffset = 7;
 	RegParams.maxTxPwrIndx = 7;
-	RegParams.maxTxPwr = 16;
+	RegParams.maxTxPwr = DEFAULT_EIRP_JP;
 	RegParams.cmnParams.paramsType2.LBTTimer.timerId = regTimerId[0];
-	RegParams.pDutyCycleTimer->timerId = regTimerId[1];
-	
+	RegParams.pJoinBackoffTimer->timerId = regTimerId[1];
+    RegParams.pJoinDutyCycleTimer->timerId = regTimerId[2];
+	RegParams.pJoinDutyCycleTimer->remainingtime =0;
+	RegParams.joinbccount =0;
+	RegParams.joinDutyCycleTimeout =0;
+	RegParams.cmnParams.paramsType2.txParams.uplinkDwellTime = 1;
+	RegParams.cmnParams.paramsType2.txParams.downlinkDwellTime = 1;
 	RegParams.band = ismBand;
 	
 	if(ismBand == ISM_JPN923)
@@ -156,10 +163,11 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
 
 		/*Fill PDS item id in RegParam Structure */
 		RegParams.regParamItems.fileid = PDS_FILE_REG_JPN_08_IDX;
-		RegParams.regParamItems.alt_ch_item_id = 0;
 		RegParams.regParamItems.ch_param_1_item_id = PDS_REG_JPN_CH_PARAM_1;
 		RegParams.regParamItems.ch_param_2_item_id = PDS_REG_JPN_CH_PARAM_2;
 		RegParams.regParamItems.band_item_id = 0;
+		RegParams.regParamItems.lastUsedSB = 0;
+		
 		PdsFileMarks_t filemarks;
 		/* File ID JPN - Register */
 		filemarks.fileMarkListAddr = aRegJpnFid1PdsOps;

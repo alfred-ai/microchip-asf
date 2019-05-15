@@ -4,7 +4,7 @@
 * \brief This is the Radio drivers SX1276 source file which contains LoRa-specific
 *		 Radio drivers functions declarations and defines for SX1276
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -257,48 +257,49 @@ uint16_t RADIO_ReadRandom(void)
 }
 
 /*********************************************************************//**
-\brief This function reads the RSSI value for LoRa and FSK.
+\brief This function reads the RSSI value for LoRa.
 
 \param rssi	- The RSSI measured in the channel.
 \return		- ERR_NONE. Other types are not used now.
 *************************************************************************/
-RadioError_t Radio_ReadRssi(int16_t *rssi)
-{
-	if (MODULATION_LORA == radioConfiguration.modulation)
-	{
-		if (radioConfiguration.frequency >= HF_FREQ_HZ)
-		{
-#ifdef UT
-			*rssi = testRssi;
-#else // UT
-			*rssi = RSSI_HF_OFFSET + RADIO_RegisterRead(REG_LORA_RSSIVALUE);
-#endif // UT		
-		}
-		else
-		{
-#ifdef UT
-			*rssi = testRssi;
-#else // UT
-			*rssi = RSSI_LF_OFFSET + RADIO_RegisterRead(REG_LORA_RSSIVALUE);
-#endif // UT
-		}
-	}
-	else if (MODULATION_FSK == radioConfiguration.modulation)
+RadioError_t Radio_ReadLoraRssi(int16_t *rssi)
+{	
+	if (radioConfiguration.frequency >= HF_FREQ_HZ)
 	{
 #ifdef UT
 		*rssi = testRssi;
 #else // UT
-		*rssi = -(RADIO_RegisterRead(REG_FSK_RSSIVALUE) >> 1);
-#endif // UT
+		*rssi = RSSI_HF_OFFSET + RADIO_RegisterRead(REG_LORA_RSSIVALUE);
+#endif // UT		
 	}
 	else
 	{
-		return ERR_UNSUPPORTED_ATTR;
+#ifdef UT
+		*rssi = testRssi;
+#else // UT
+		*rssi = RSSI_LF_OFFSET + RADIO_RegisterRead(REG_LORA_RSSIVALUE);
+#endif // UT
 	}
 
 	return ERR_NONE;
 }
 
+/*********************************************************************//**
+\brief This function reads the RSSI value for FSK.
+
+\param rssi	- The RSSI measured in the channel.
+\return		- ERR_NONE. Other types are not used now.
+*************************************************************************/
+RadioError_t Radio_ReadFSKRssi(int16_t *rssi)
+{	
+#ifdef UT
+	*rssi = testRssi;
+#else // UT
+	*rssi = -(RADIO_RegisterRead(REG_FSK_RSSIVALUE) >> 1);
+#endif // UT
+	
+	return ERR_NONE;
+}
 /**
  End of File
  */

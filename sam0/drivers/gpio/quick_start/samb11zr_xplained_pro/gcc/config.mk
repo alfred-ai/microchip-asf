@@ -129,7 +129,7 @@ CFLAGS =
 #   BOARD      Target board in use, see boards/board.h for a list.
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
-       -D ARM_MATH_CM0PLUS=true                           \
+       -D ARM_MATH_CM0=true                               \
        -D BOARD=SAMB11ZR_XPLAINED_PRO                     \
        -D __SAMB11ZR__
 

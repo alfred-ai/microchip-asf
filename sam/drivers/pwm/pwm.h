@@ -3,7 +3,7 @@
  *
  * \brief Pulse Width Modulation (PWM) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -220,12 +220,6 @@ typedef enum {
 	PWM_LEADING_EDGE2_MODE_HINC = PWM_LEBR2_PWMHFEN,
 	PWM_LEADING_EDGE2_MODE_HDEC = PWM_LEBR2_PWMHREN,
 } pwm_leading_edge_blanking_mode_t;
-#else
-typedef enum {
-	PWM_ADDITIONAL_EDGE_MODE_INC = PWM_CAE_ADEDGM_INC,
-	PWM_ADDITIONAL_EDGE_MODE_DEC = PWM_CAE_ADEDGM_DEC,
-	PWM_ADDITIONAL_EDGE_MODE_BOTH = PWM_CAE_ADEDGM_BOTH,
-} pwm_additional_edge_mode_t;
 #endif
 #endif
 
@@ -330,10 +324,6 @@ typedef struct {
 	uint32_t ul_spread;
 	/** Spread Spectrum Mode */
 	pwm_spread_spectrum_mode_t spread_spectrum_mode;
-	/** Additional Edge Value */
-	uint32_t ul_additional_edge;
-	/** Additional Edge Mode */
-	pwm_additional_edge_mode_t additional_edge_mode;
 #elif (SAMV70 || SAMV71 || SAME70 || SAMS70)
 	/** Spread Spectrum Value */
 	uint32_t ul_spread;
@@ -416,9 +406,6 @@ void pwm_stepper_motor_init(Pwm *p_pwm, pwm_stepper_motor_pair_t pair,
 #if SAM4E
 void pwm_channel_update_spread(Pwm *p_pwm, pwm_channel_t *p_channel,
 		uint32_t ul_spread);
-void pwm_channel_update_additional_edge(Pwm *p_pwm, pwm_channel_t *p_channel,
-		uint32_t ul_additional_edge,
-		pwm_additional_edge_mode_t additional_edge_mode);
 void pwm_channel_update_polarity_mode(Pwm *p_pwm, pwm_channel_t *p_channel,
 		bool polarity_inversion_flag, pwm_level_t polarity_value);
 #elif (SAMV70 || SAMV71 || SAME70 || SAMS70)

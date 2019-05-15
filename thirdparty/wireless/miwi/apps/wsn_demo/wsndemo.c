@@ -3,7 +3,7 @@
 *
 * \brief WSNDemo application implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -118,7 +118,6 @@ typedef enum AppState_t {
 	APP_STATE_WAIT_COMMAND_TIMER,
 	APP_STATE_PREPARE_TO_SLEEP,
 	APP_STATE_SLEEP,
-	APP_STATE_WAKEUP,
 } AppState_t;
 COMPILER_PACK_RESET()
 /*- Variables --------------------------------------------------------------*/
@@ -193,9 +192,13 @@ static void appUartSendMessage(uint8_t *data, uint8_t size)
 static void appDataInd(RECEIVED_MESH_MESSAGE *ind)
 {
 	AppMessage_t *msg = (AppMessage_t *)ind->payload;
+
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 	LED_Toggle(LED_DATA);
 #endif
+#endif
+
 	msg->lqi = ind->packetLQI;
 	msg->rssi = ind->packetRSSI;
 #if defined(PAN_COORDINATOR)
@@ -209,9 +212,12 @@ static void appDataInd(RECEIVED_MESH_MESSAGE *ind)
 *****************************************************************************/
 static void appDataSendingTimerHandler(SYS_Timer_t *timer)
 {
-	if (APP_STATE_WAIT_SEND_TIMER == appState) {
+	if ((APP_STATE_WAIT_SEND_TIMER == appState) || (APP_STATE_PREPARE_TO_SLEEP == appState)) 
+	{
 		appState = APP_STATE_SEND;
-	} else {
+	}
+	else
+	{
 		SYS_TimerStart(&appDataSendingTimer);
 	}
 
@@ -224,8 +230,10 @@ static void appDataSendingTimerHandler(SYS_Timer_t *timer)
 *****************************************************************************/
 static void appNetworkStatusTimerHandler(SYS_Timer_t *timer)
 {
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 	LED_Toggle(LED_NETWORK);
+#endif
 #endif
 	(void)timer;
 }
@@ -236,22 +244,28 @@ static void appNetworkStatusTimerHandler(SYS_Timer_t *timer)
 #if defined(COORDINATOR) || defined (ENDDEVICE)
 static void appDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer)
 {
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 	LED_Off(LED_DATA);
+#endif
 #endif
 
 	if (SUCCESS == status) {
 		if (!appNetworkStatus) {
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 			LED_On(LED_NETWORK);
+#endif
 #endif
 			SYS_TimerStop(&appNetworkStatusTimer);
 			appNetworkStatus = true;
 		}
 	} else {
 		if (appNetworkStatus) {
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 			LED_Off(LED_NETWORK);
+#endif
 #endif
 			SYS_TimerStart(&appNetworkStatusTimer);
 			appNetworkStatus = false;
@@ -300,8 +314,10 @@ static void appSendData(void)
 	SYS_TimerStart(&appDataSendingTimer);
 	appState = APP_STATE_WAIT_SEND_TIMER;
 #else
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 	LED_On(LED_DATA);
+#endif
 #endif
 
 	appMsg.caption.type         = 32;
@@ -367,8 +383,10 @@ static void appInit(void)
 	appNetworkStatusTimer.handler = appNetworkStatusTimerHandler;
 	SYS_TimerStart(&appNetworkStatusTimer);
 #else
+#if !defined(ENABLE_SLEEP_FEATURE)
 #if (LED_COUNT > 0)
 	LED_On(LED_NETWORK);
+#endif
 #endif
 #endif
 
@@ -446,6 +464,7 @@ static void APP_TaskHandler(void)
 	case APP_STATE_SENDING_DONE:
 	{
 #if defined(ENABLE_SLEEP_FEATURE) && defined(ENDDEVICE) && (CAPABILITY_INFO == CAPABILITY_INFO_ED)
+		SYS_TimerStart(&appDataSendingTimer);
 		appState = APP_STATE_PREPARE_TO_SLEEP;
 #else
 		SYS_TimerStart(&appDataSendingTimer);
@@ -454,6 +473,7 @@ static void APP_TaskHandler(void)
 	}
 	break;
 #if defined(ENABLE_SLEEP_FEATURE) && defined(ENDDEVICE)
+    case APP_STATE_WAIT_CONF:
 	case APP_STATE_PREPARE_TO_SLEEP:
 	{
 		uint32_t timeToSleep = 0;
@@ -462,28 +482,17 @@ static void APP_TaskHandler(void)
 		    MiApp_ReadyToSleep(&timeToSleep)
 		   )
 		{
-			if (timeToSleep > APP_SENDING_INTERVAL)
+			if (SYS_TimerStarted(&appDataSendingTimer) && (timeToSleep > appDataSendingTimer.timeout))
+			{
+				timeToSleep = appDataSendingTimer.timeout;
+			}
+			else if(timeToSleep > APP_SENDING_INTERVAL)
 			{
 				timeToSleep = APP_SENDING_INTERVAL;
 			}
-
-			timeToSleep /= 1000;
-			if (sleepMgr_sleep(timeToSleep))
-			{				
-				appState = APP_STATE_WAKEUP;
-			}
-			else
-			{
-				SYS_TimerStart(&appDataSendingTimer);
-		        appState = APP_STATE_WAIT_SEND_TIMER;
-			}
+			
+			sleepMgr_sleep(timeToSleep);
 		}
-	}
-	break;
-
-	case APP_STATE_WAKEUP:
-	{
-		appState = APP_STATE_SEND;
 	}
 	break;
 #endif

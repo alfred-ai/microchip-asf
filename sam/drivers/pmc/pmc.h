@@ -3,7 +3,7 @@
  *
  * \brief Power Management Controller (PMC) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -227,6 +227,12 @@ void pmc_pck_set_source(uint32_t ul_id, uint32_t ul_source);
 uint32_t pmc_switch_pck_to_sclk(uint32_t ul_id, uint32_t ul_pres);
 uint32_t pmc_switch_pck_to_mainck(uint32_t ul_id, uint32_t ul_pres);
 uint32_t pmc_switch_pck_to_pllack(uint32_t ul_id, uint32_t ul_pres);
+#if (SAMV71 || SAMV70 || SAME70 || SAMS70)
+uint32_t pmc_get_slck_config(void);
+uint32_t pmc_get_mainck_config(void);
+uint32_t pmc_get_pllack_config(void);
+uint32_t pmc_get_upllckdiv_config(void);
+#endif
 #if (SAM4C || SAM4CM || SAM4CP)
 void pmc_enable_cpck(void);
 void pmc_disable_cpck(void);

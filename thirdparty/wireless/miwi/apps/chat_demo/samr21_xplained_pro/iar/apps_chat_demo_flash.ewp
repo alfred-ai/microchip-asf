@@ -2179,13 +2179,13 @@
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_star.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_star.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_nvm.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
 						</file>
 					</group>
 					<group>

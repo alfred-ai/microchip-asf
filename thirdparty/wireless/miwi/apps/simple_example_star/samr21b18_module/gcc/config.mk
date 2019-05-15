@@ -96,8 +96,8 @@ CSRCS = \
        thirdparty/wireless/miwi/services/sleep_mgr/sam0/sleep_mgr.c \
        thirdparty/wireless/miwi/source/mimac/mimac_at86rf.c \
        thirdparty/wireless/miwi/source/mimac/phy/at86rf233/phy.c \
-       thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p.c \
        thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p_pds.c \
+       thirdparty/wireless/miwi/source/miwi_p2p_star/miwi_p2p_star.c \
        thirdparty/wireless/miwi/source/sys/mimem.c        \
        thirdparty/wireless/miwi/source/sys/miqueue.c      \
        thirdparty/wireless/miwi/source/sys/sysTimer.c     \

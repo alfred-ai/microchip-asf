@@ -3,7 +3,7 @@
  *
  * \brief SAM4S serial driver configuration.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -45,6 +45,14 @@
 	
 	#ifndef EXT1_PIN_10
 	#define EXT1_PIN_10		PIO_PA6_IDX
+	#endif
+	
+	#ifndef EXT1_PIN_3
+	#define EXT1_PIN_3 		PIO_PA17_IDX
+	#endif
+	
+	#ifndef EXT1_PIN_7
+	#define EXT1_PIN_7		PIO_PA23_IDX
 	#endif
 	
 	#ifndef EXT1_PIN_6

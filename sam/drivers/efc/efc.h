@@ -3,7 +3,7 @@
  *
  * \brief Embedded Flash Controller (EFC) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -101,7 +101,9 @@ typedef enum efc_rc {
 /*! \name EFC access mode */
 //! @{
 #define EFC_ACCESS_MODE_128    0
+#if (!(SAMV71 || SAMV70 || SAMS70 || SAME70))
 #define EFC_ACCESS_MODE_64     EEFC_FMR_FAM
+#endif
 //! @}
 
 uint32_t efc_init(Efc *p_efc, uint32_t ul_access_mode, uint32_t ul_fws);

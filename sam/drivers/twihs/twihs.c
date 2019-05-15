@@ -299,14 +299,14 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 		if (!timeout--) {
 			return TWIHS_ERROR_TIMEOUT;
 		}
+		if (!(status & TWIHS_SR_RXRDY)) {
+			continue;
+		}
 		/* Last byte ? */
 		if (cnt == 1) {
 			p_twihs->TWIHS_CR = TWIHS_CR_STOP;
 		}
 
-		if (!(status & TWIHS_SR_RXRDY)) {
-			continue;
-		}
 		*buffer++ = p_twihs->TWIHS_RHR;
 
 		cnt--;

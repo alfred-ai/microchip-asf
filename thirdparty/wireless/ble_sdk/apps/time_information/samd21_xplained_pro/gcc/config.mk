@@ -188,7 +188,7 @@ CFLAGS =
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D CURRENT_TIME_SERVICE                            \
        -D ENABLE_POWER_SAVE                               \

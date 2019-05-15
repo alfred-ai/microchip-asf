@@ -4,7 +4,7 @@
 * \brief LoRaWAN KOREAN file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -112,6 +112,8 @@ StackRetStatus_t LORAReg_InitKR(IsmBand_t ismBand)
 	RegParams.pDrParams = &RegParams.cmnParams.paramsType2.DRParams[0];
 	RegParams.pOtherChParams = &RegParams.cmnParams.paramsType2.othChParams[0];
 	RegParams.pDutyCycleTimer = &RegParams.cmnParams.paramsType2.DutyCycleTimer;
+    RegParams.pJoinDutyCycleTimer = &RegParams.joinDutyCycleTimer;
+	RegParams.pJoinBackoffTimer = &RegParams.joinBackoffTimer;
 	RegParams.DefRx1DataRate = MAC_RX1_WINDOW_DATARATE_KR;
 	RegParams.DefRx2DataRate = MAC_RX2_WINDOW_DATARATE_KR;
 	RegParams.DefRx2Freq = MAC_RX2_WINDOW_FREQ_KR;	
@@ -125,8 +127,13 @@ StackRetStatus_t LORAReg_InitKR(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType2.minNonDefChId = 3;
 	RegParams.Rx1DrOffset = 5;
 	RegParams.maxTxPwrIndx = 7;
-	RegParams.maxTxPwr = 14;
+	RegParams.maxTxPwr = DEFAULT_EIRP_KR_HF;
 	RegParams.cmnParams.paramsType2.LBTTimer.timerId = regTimerId[0];
+	RegParams.pJoinBackoffTimer->timerId = regTimerId[1];
+    RegParams.pJoinDutyCycleTimer->timerId = regTimerId[2];
+	RegParams.pJoinDutyCycleTimer->remainingtime =0;
+	RegParams.joinbccount =0;
+	RegParams.joinDutyCycleTimeout =0;
 		
 	RegParams.band = ismBand;
 	
@@ -144,10 +151,11 @@ StackRetStatus_t LORAReg_InitKR(IsmBand_t ismBand)
 
 		/*Fill PDS item id in RegParam Structure */
 		RegParams.regParamItems.fileid = PDS_FILE_REG_KR_06_IDX;
-		RegParams.regParamItems.alt_ch_item_id = 0;
 		RegParams.regParamItems.ch_param_1_item_id = PDS_REG_KR_CH_PARAM_1;
 		RegParams.regParamItems.ch_param_2_item_id = PDS_REG_KR_CH_PARAM_2;
 		RegParams.regParamItems.band_item_id = 0;
+		RegParams.regParamItems.lastUsedSB = 0;
+		
 		PdsFileMarks_t filemarks;
 		/* File ID KR - Register */
 		filemarks.fileMarkListAddr = aRegKrFid1PdsOps;

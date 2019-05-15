@@ -3,7 +3,7 @@
 *
 * \brief Configuration for MiWi Protocol
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -117,7 +117,7 @@
 // RX_BUFFER_SIZE defines the maximum size of application payload
 // which is to be received
 /*********************************************************************/
-#define RX_BUFFER_SIZE 66
+#define RX_BUFFER_SIZE 40
 
 /*********************************************************************/
 // MY_PAN_ID defines the PAN identifier. Use 0xFFFF if prefer a 

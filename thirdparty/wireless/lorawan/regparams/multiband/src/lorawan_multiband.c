@@ -4,7 +4,7 @@
 * \brief LoRaWAN Multiband file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -52,9 +52,15 @@
 RegParams_t RegParams;
 uint8_t regTimerId[REG_PARAMS_TIMERS_COUNT];
 
+
 /************************ PRIVATE FUNCTION PROTOTYPES *************************/
 /*Init Functions's*/
 //static void InitDefault915Channels (void);
+void JoinDutyCycleCallback(uint8_t param);
+static StackRetStatus_t setJoinDutyCycleTimer(LorawanRegionalAttributes_t attr, void *attrInput);
+static StackRetStatus_t setJoinBackoffCntl(LorawanRegionalAttributes_t attr,void *attrInput);
+static StackRetStatus_t setJoinBackOffTimer(LorawanRegionalAttributes_t attr, void *attrInput);
+
 #if (NA_BAND == 1 || AU_BAND == 1)
 static StackRetStatus_t LORAREG_GetAttr_FreqT1(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_DutyCycleT1(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
@@ -70,6 +76,7 @@ static StackRetStatus_t LORAREG_GetAttr_MinDutyCycleTimer(LorawanRegionalAttribu
 static StackRetStatus_t LORAREG_GetAttr_NewTxChConfigT1(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_FreeChannel1(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 
+
 static StackRetStatus_t ValidateRxFreqT1 (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t ValidateTxFreqT1 (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t ValidateDataRateRxT1 (LorawanRegionalAttributes_t attr, void *attrInput);
@@ -83,7 +90,8 @@ static StackRetStatus_t ValidateChMaskChCntl (LorawanRegionalAttributes_t attr, 
 static StackRetStatus_t setDataRange (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t setChannelIdStatus (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t setNewChannelsT1 (LorawanRegionalAttributes_t attr, void *attrInput);
-
+static StackRetStatus_t setJoinSuccess(LorawanRegionalAttributes_t attr, void *attrInput);
+static StackRetStatus_t setEnableAllChs(LorawanRegionalAttributes_t attr, void *attrInput);
 
 static StackRetStatus_t GetTxChannelConfig1 (bool transmissionType,uint8_t txPwr,uint8_t currDr,radioConfig_t* radioConfig);
 static StackRetStatus_t SearchAvailableChannel1 (uint8_t maxChannels, bool transmissionType,uint8_t currDr, uint8_t* channelIndex);
@@ -159,12 +167,10 @@ static StackRetStatus_t setFrequency(LorawanRegionalAttributes_t attr, void *att
 static StackRetStatus_t setNewChannel(LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t setDlFrequency(LorawanRegionalAttributes_t attr, void *attrInput);
 
-
 static StackRetStatus_t GetTxChannelConfig2 (bool transmissionType,uint8_t txPwr,uint8_t currDr,radioConfig_t* radioConfig);
 static StackRetStatus_t SearchAvailableChannel2 (uint8_t maxChannels, bool transmissionType,uint8_t currDr, uint8_t* channelIndex);
 static StackRetStatus_t ValidateDataRate (LorawanRegionalAttributes_t attr, void *attrInput);
 static DataRange_t getChBandDrT2(uint8_t chMaskCntl,uint16_t channelMask);
-
 // used only in EU band, but included in a common function
 static uint8_t getSubBandId(uint32_t frequency);
 
@@ -235,6 +241,7 @@ static StackRetStatus_t LORAREG_GetAttr_MacMaxFcntGap(LorawanRegionalAttributes_
 static StackRetStatus_t LORAREG_GetAttr_RegDefTxPwr(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_RegDefTxDR(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_CurChIndx(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
+static StackRetStatus_t LORAREG_GetAttr_JoinDutyCycleRemainingTime(LorawanRegionalAttributes_t attr,void *attrInput, void *attrOutput);
 
 
 static void UpdateMinMaxChDataRate (MinMaxDr_t* minmax_val);
@@ -290,6 +297,7 @@ void LORAREG_InitGetAttrFnPtrsNA(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType1;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER] = LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[DUTY_CYCLE] = LORAREG_GetAttr_DutyCycleT1;
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT1;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT1;
@@ -329,6 +337,7 @@ void LORAREG_InitGetAttrFnPtrsEU(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType2;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER]= LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[DUTY_CYCLE] = LORAREG_GetAttr_DutyCycleT2;
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT2;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT2;
@@ -370,6 +379,7 @@ void LORAREG_InitGetAttrFnPtrsAS(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType4;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER]= LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT2;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT2;
     pGetAttr[SPREADING_FACTOR_ATTR] = LORAREG_GetAttr_SpreadFactorT2;
@@ -410,8 +420,9 @@ void LORAREG_InitGetAttrFnPtrsAU(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType1;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER]= LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[DUTY_CYCLE] = LORAREG_GetAttr_DutyCycleT1;
-    pGetAttr[DUTY_CYCLE_TIMER] = LORAREG_GetAttr_MinDutyCycleTimer;
+    pGetAttr[DUTY_CYCLE_TIMER] = LORAREG_GetAttr_MinDutyCycleTimer;	
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT1;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT1;
     pGetAttr[SPREADING_FACTOR_ATTR] = LORAREG_GetAttr_SpreadFactorT1;
@@ -449,6 +460,7 @@ void LORAREG_InitGetAttrFnPtrsIN(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType3;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER]= LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT2;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT2;
     pGetAttr[SPREADING_FACTOR_ATTR] = LORAREG_GetAttr_SpreadFactorT2;
@@ -487,6 +499,7 @@ void LORAREG_InitGetAttrFnPtrsJP(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType4;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER]= LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT2;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT2;
     pGetAttr[SPREADING_FACTOR_ATTR] = LORAREG_GetAttr_SpreadFactorT2;
@@ -527,6 +540,7 @@ void LORAREG_InitGetAttrFnPtrsKR(void)
     pGetAttr[MIN_MAX_DR] = LORAREG_GetAttr_MinMaxDr;
     pGetAttr[CHANNEL_ID_STATUS] = LORAREG_GetAttr_ChIdStatus;
     pGetAttr[RX1_WINDOW_PARAMS] = LORAREG_GetAttr_Rx1WindowparamsType2;
+	pGetAttr[JOIN_DUTY_CYCLE_TIMER]=LORAREG_GetAttr_JoinDutyCycleRemainingTime;
     pGetAttr[MODULATION_ATTR] = LORAREG_GetAttr_ModulationAttrT2;
     pGetAttr[BANDWIDTH_ATTR] = LORAREG_GetAttr_BandwidthAttrT2;
     pGetAttr[SPREADING_FACTOR_ATTR] = LORAREG_GetAttr_SpreadFactorT2;
@@ -1003,6 +1017,19 @@ static StackRetStatus_t LORAREG_GetAttr_Rx1WindowparamsType1(LorawanRegionalAttr
 	return result;
 }
 #endif
+static StackRetStatus_t LORAREG_GetAttr_JoinDutyCycleRemainingTime(LorawanRegionalAttributes_t attr,void *attrInput, void *attrOutput)
+{
+	StackRetStatus_t result = LORAWAN_SUCCESS;
+	
+	uint32_t timeremaining =0;
+	if(SwTimerIsRunning(RegParams.pJoinDutyCycleTimer->timerId))
+	{
+	timeremaining = US_TO_MS(SwTimerReadValue (RegParams.pJoinDutyCycleTimer->timerId));
+	timeremaining = timeremaining + RegParams.pJoinDutyCycleTimer->remainingtime;
+	}
+	memcpy(attrOutput,&timeremaining,sizeof(uint32_t));
+	return result;
+}
 
 #if (EU_BAND == 1 || KR_BAND == 1)
 static StackRetStatus_t LORAREG_GetAttr_Rx1WindowparamsType2(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
@@ -1515,6 +1542,11 @@ void LORAREG_InitSetAttrFnPtrsNA(void)
 	pSetAttr[DATA_RANGE] = setDataRange;
 	pSetAttr[CHANNEL_ID_STATUS] = setChannelIdStatus;
 	pSetAttr[NEW_CHANNELS] = setNewChannelsT1;
+	pSetAttr[REG_JOIN_SUCCESS] = setJoinSuccess;
+	pSetAttr[REG_JOIN_ENABLE_ALL] = setEnableAllChs;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER] = setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1527,7 +1559,10 @@ void LORAREG_InitSetAttrFnPtrsEU(void)
 	pSetAttr[DUTY_CYCLE_TIMER] = setDutyCycleTimer;
 	pSetAttr[FREQUENCY] = setFrequency;
 	pSetAttr[NEW_CHANNELS] = setNewChannel;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER]= setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1539,9 +1574,12 @@ void LORAREG_InitSetAttrFnPtrsAS(void)
 	pSetAttr[FREQUENCY] = setFrequency;
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
     pSetAttr[NEW_CHANNELS] = setNewChannel;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER] = setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[TX_PARAMS] = setTxParams;
 	pSetAttr[DUTY_CYCLE] = setDutyCycle;
 	pSetAttr[DUTY_CYCLE_TIMER] = setDutyCycleTimer;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1551,6 +1589,11 @@ void LORAREG_InitSetAttrFnPtrsAU(void)
 	pSetAttr[DATA_RANGE] = setDataRange;
 	pSetAttr[CHANNEL_ID_STATUS] = setChannelIdStatus;
 	pSetAttr[NEW_CHANNELS] = setNewChannelsT1;
+	pSetAttr[REG_JOIN_SUCCESS] = setJoinSuccess;
+	pSetAttr[REG_JOIN_ENABLE_ALL] = setEnableAllChs;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER]= setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1561,8 +1604,11 @@ void LORAREG_InitSetAttrFnPtrsIN(void)
 	pSetAttr[CHANNEL_ID_STATUS] = setChannelIdStatusT2;
 	pSetAttr[FREQUENCY] = setFrequency;
 	pSetAttr[NEW_CHANNELS] = setNewChannel;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER]= setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
 	pSetAttr[TX_PARAMS] = setTxParams;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1575,9 +1621,12 @@ void LORAREG_InitSetAttrFnPtrsJP(void)
 	pSetAttr[FREQUENCY] = setFrequency;
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
 	pSetAttr[NEW_CHANNELS] = setNewChannel;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER]= setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[TX_PARAMS] = setTxParams;
 	pSetAttr[DUTY_CYCLE] = NULL;
 	pSetAttr[DUTY_CYCLE_TIMER] = NULL;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1590,7 +1639,10 @@ void LORAREG_InitSetAttrFnPtrsKR(void)
 	pSetAttr[FREQUENCY] = setFrequency;
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
 	pSetAttr[NEW_CHANNELS] = setNewChannel;
+	pSetAttr[JOIN_DUTY_CYCLE_TIMER]= setJoinDutyCycleTimer;
+	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[TX_PARAMS] = setTxParams;
+	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
 }
 #endif
 
@@ -1936,9 +1988,14 @@ static StackRetStatus_t ValidateChMaskChCntl (LorawanRegionalAttributes_t attr, 
     StackRetStatus_t result = LORAWAN_INVALID_PARAMETER;
 	
 	ValChMaskCntl_t chMaskchCntl = * (ValChMaskCntl_t *)attrInput;
-
-	result = ((ValidateChannelMask(CHANNEL_MASK, (void *)&chMaskchCntl.chnlMask)) | (ValidateChannelMaskCntl(CHANNEL_MASK_CNTL,  (void *)&chMaskchCntl.chnlMaskCntl)));		
-
+    if(chMaskchCntl.chnlMask == 0 && chMaskchCntl.chnlMaskCntl == 7)
+    {
+        result = LORAWAN_INVALID_PARAMETER;
+    }
+	else
+	{
+		result = ((ValidateChannelMask(CHANNEL_MASK, (void *)&chMaskchCntl.chnlMask)) | (ValidateChannelMaskCntl(CHANNEL_MASK_CNTL,  (void *)&chMaskchCntl.chnlMaskCntl)));
+	}
     return result;
 }
 #endif
@@ -2129,7 +2186,7 @@ static void getRx1WindowparamsType1(Rx1WindowParamsReq_t* rx1WindowParamReq ,Rx1
 	
 	if(rx1WindowParamReq->joining)
 	{
-		if (RegParams.cmnParams.paramsType1.alternativeChannel == 1) 
+		if (RegParams.lastUsedChannelIndex <= MAX_CHANNELS_BANDWIDTH_125_AU_NA) 
 		{
 			rx1WindowParamReq->currDr = RegParams.cmnParams.paramsType1.minTxDR;
 		}
@@ -2303,40 +2360,25 @@ static StackRetStatus_t GetTxChannelConfig1 (bool transmissionType,uint8_t txPwr
 	}
 	else   // join request message, first should search between channels 0 - 63 using DR0, then 64 - 71 using DR4, and so on
 	{
-		if (RegParams.cmnParams.paramsType1.alternativeChannel == 0) //TOFO init in reginit
+		result = SearchAvailableChannel1 (RegParams.cmnParams.paramsType1.Max_125khzChan, transmissionType,DR0, &channelIndex);
+		if(channelIndex < MAX_CHANNELS_BANDWIDTH_125_AU_NA)
 		{
-            if( RegParams.band == ISM_NA915)
+			if( RegParams.band == ISM_NA915)
 			{
-			    radioConfig->sf = SF_10;				
+				radioConfig->sf = SF_10;
 			}
 			else
 			{
 				radioConfig->sf = SF_12;
 			}
-			radioConfig->bandwidth = BW_125KHZ;
-			//DR0 is always used for join on 125 khz bandwidth
-			result = SearchAvailableChannel1 (RegParams.cmnParams.paramsType1.Max_125khzChan, transmissionType,DR0, &channelIndex);
-
-			
 		}
 		else
 		{
-			uint8_t dr = DR6;
 			radioConfig->sf = SF_8;
-			radioConfig->bandwidth = BW_500KHZ;
-			if( RegParams.band == ISM_NA915)
-			{
-				dr = DR4;
-			}
-			//this is a guard for join request, as the 500 kHz channels are only on DR4
-			result = SearchAvailableChannel1 (RegParams.cmnParams.paramsType1.Max_500khzChan, transmissionType,dr, &channelIndex);
-			// JoinReq message - alternatively on a random 125 kHz channel amongst the 64 channels defined using  DR0 and a random 500 kHz channel amongst the 8 channels defined using DR4.
-			
 		}
 
-		RegParams.cmnParams.paramsType1.alternativeChannel = !RegParams.cmnParams.paramsType1.alternativeChannel;
 #if (ENABLE_PDS == 1)
-		PDS_STORE(RegParams.regParamItems.alt_ch_item_id);
+		PDS_STORE(RegParams.regParamItems.lastUsedSB);
 #endif
 
 	}
@@ -2407,6 +2449,7 @@ static StackRetStatus_t GetTxChannelConfig2 (bool transmissionType,uint8_t txPwr
 		currDr = DR2;
 	}
 	
+	
 	result = SearchAvailableChannel2 (RegParams.maxChannels, transmissionType,currDr, &channelIndex);
 
 	if (result == LORAWAN_SUCCESS)
@@ -2446,45 +2489,111 @@ static StackRetStatus_t GetTxChannelConfig2 (bool transmissionType,uint8_t txPwr
 #if (NA_BAND == 1 || AU_BAND == 1)
 static StackRetStatus_t SearchAvailableChannel1 (uint8_t maxChannels, bool transmissionType,uint8_t currDr, uint8_t* channelIndex)
 {
-	uint8_t randomNumberCopy, randomNumber, i = 0;
 	StackRetStatus_t result = LORAWAN_SUCCESS;
-	uint8_t startingIndex = 0;
+	uint8_t i = 0,j = 0,k = 0;
+	/* Channel list is a 2-dimensional array, which stores the Channel 
+	 * in first index and corresponding Sub-band in second index
+	 * For eg: Channel ID 1 and corresponding sub-band is 1.
+	 * Channel ID 55 and corresponding sub-band is 6 */
+	uint8_t ChList[MAX_CHANNELS_BANDWIDTH_125_AU_NA + MAX_CHANNELS_BANDWIDTH_500_AU_NA][2];
+	uint8_t num = 0;
+	uint8_t randomNumber = 0;
+	memset(ChList, 0, (MAX_CHANNELS_BANDWIDTH_125_AU_NA + MAX_CHANNELS_BANDWIDTH_500_AU_NA) * 2);  
 
-	if (maxChannels == 8)
-	{
-		startingIndex = RegParams.cmnParams.paramsType1.Max_125khzChan;
-	}
-	randomNumber =  (rand () % maxChannels) + 1; //this is a guard so that randomNumber is not 0 and the search will happen
-	randomNumberCopy = randomNumber;
-
-	while (randomNumber)
-	{
-		for (i = startingIndex; (i < (startingIndex + maxChannels)) && (randomNumber != 0) ; i++)
+	if(transmissionType == false)
+	{   
+		if(RegParams.FeaturesSupport & JOIN_BACKOFF_SUPPORT)
 		{
-			if ( (currDr >= RegParams.pChParams[i].dataRange.min) && (currDr <= RegParams.pChParams[i].dataRange.max) && 
-			(RegParams.pChParams[i].status == ENABLED) )
+			if(SwTimerIsRunning(RegParams.pJoinDutyCycleTimer->timerId)) 
 			{
-				randomNumber --;
+					return LORAWAN_NO_CHANNELS_FOUND;
 			}
-		}
-
-		// if after one searching in all the vector no valid channel was found, exit the loop and return an error
-		if ( randomNumber == randomNumberCopy )
-		{
-			result = LORAWAN_NO_CHANNELS_FOUND;
-			break;
+			}
+	} 
+	  
+	for (i = 0, k = 0; i < (MAX_CHANNELS_BANDWIDTH_125_AU_NA + MAX_CHANNELS_BANDWIDTH_500_AU_NA); i += 8, k++)
+	{
+			for (j = 0; j < NO_OF_CH_IN_SUBBAND; j++)
+			{
+				/* 1. Check and see, the Channel status is ENABLED.
+				* 2. If the request is for data packet,
+				*		2a. Check and see both data rate input is between range min and max Dr of the Channel.
+				*		2b. Check and see, if Channel is not as same as previous packet.
+				* 3. If the request is for join procedure,
+				*		3a. Check and see  transmissionType value is false.
+				*		3b. Check and see the channel falls between the next sub-band of last used sub-band.
+				*			3b1. Channel ID is less than 63 and lastUsedSB is equals to k.
+				*			3b2. Channel ID is greater than 63 and lastUsedSB is equals to Channel ID - 63.
+				*		Here k value is index and goes from 0-7.
+				*		lastUsedSB is value and goes from 1-8. 
+				*		Need to get channels only from next sub-band of previously used one.
+				*/
+				if (((transmissionType) && (currDr >= RegParams.pChParams[i + j].dataRange.min) && (currDr <= RegParams.pChParams[i + j].dataRange.max) 
+					&& ((RegParams.pChParams[i + j].status == ENABLED) && ((i+j) != RegParams.lastUsedChannelIndex))) 
+					||
+					((!transmissionType) &&((RegParams.pChParams[i + j].status == ENABLED) && ((i+j) != RegParams.lastUsedChannelIndex))
+	#if (RANDOM_NW_ACQ == 1)
+					&&
+					((((i+j) < MAX_CHANNELS_BANDWIDTH_125_AU_NA) && (RegParams.cmnParams.paramsType1.lastUsedSB == k))
+					|| 
+					(((i+j) > MAX_CHANNELS_BANDWIDTH_125_AU_NA) && 
+					(RegParams.cmnParams.paramsType1.lastUsedSB == ((i + j) - MAX_CHANNELS_BANDWIDTH_125_AU_NA))))
+                                  
+	#endif        
+					))
+				{
+						// Mark this channel i+j
+						// Mark this sub band k
+						// increment number of channel;
+						ChList[num][0] = i+j;
+						if((i+j) >= MAX_CHANNELS_BANDWIDTH_125_AU_NA)
+						{
+								/* The channel falls under 500KHz range. So need to calculate sub-band correctly */
+								/* Sub-band values are stored in range of 1-8. So adding 1 to the index */
+								ChList[num][1] = ((i + j) - MAX_CHANNELS_BANDWIDTH_125_AU_NA + 1);
+						}
+						else
+						{
+								/* Channel is in the range of 0-63 125Khz range, Store the k value as sub-band */
+								/* Sub-band values are stored in range of 1-8. So adding 1 to the index */
+								ChList[num][1] = k + 1;    
+						}
+						num++;
+					}					
 		}
 	}
-
-	if (i != 0)
+	/* Get a random number and select a channel */
+	if(0 != num)
 	{
-		*channelIndex = i - 1;
+		randomNumber = rand() % num;
+		*channelIndex = ChList[randomNumber][0];
+	#if (RANDOM_NW_ACQ == 1)          
+		/* Update the lastUsedSB value based on the channel selected */
+		RegParams.cmnParams.paramsType1.lastUsedSB = ChList[randomNumber][1];
+		/* If the lastUsedSB value is 8, then it means roll over has to happen.
+		* So changing the value to 1
+		*/
+		if(RegParams.cmnParams.paramsType1.lastUsedSB >= MAX_SUBBANDS)
+		{
+				RegParams.cmnParams.paramsType1.lastUsedSB = 0;
+		}
+	#endif 
 	}
 	else
 	{
-		*channelIndex = maxChannels - 1;
+		if ((RegParams.pChParams[RegParams.lastUsedChannelIndex].status == ENABLED) &&
+		(currDr >= RegParams.pChParams[RegParams.lastUsedChannelIndex].dataRange.min) &&
+		(currDr <= RegParams.pChParams[RegParams.lastUsedChannelIndex].dataRange.max))
+		{
+			*channelIndex = RegParams.lastUsedChannelIndex;
+		}
+		else
+		{
+			result = LORAWAN_NO_CHANNELS_FOUND;
+		}
+
 	}
-	return result;
+	return result;	
 }
 #endif
 
@@ -2501,66 +2610,60 @@ static StackRetStatus_t SearchAvailableChannel1 (uint8_t maxChannels, bool trans
 #if (EU_BAND == 1 || AS_BAND == 1 || IND_BAND == 1 || JPN_BAND == 1 || KR_BAND == 1)
 static StackRetStatus_t SearchAvailableChannel2 (uint8_t maxChannels, bool transmissionType,uint8_t currDr, uint8_t* channelIndex)
 {
-	uint8_t randomNumberCopy, randomNumber, i = 0;
 	StackRetStatus_t result = LORAWAN_SUCCESS;
-	uint8_t startingIndex = 0;
 
-	if(RegParams.cmnParams.paramsType2.aggregatedDutyCycleTimeout)
+	uint8_t i = 0;
+	uint8_t num = 0;
+	uint8_t ChList[maxChannels];
+	uint8_t randomNumber = 0;
+	memset(ChList, 0, sizeof(ChList));
+	bool bandWithoutDutyCycle = (((1 << RegParams.band) & (ISM_EUBAND | ISM_ASBAND | (1 << ISM_JPN923))) == 0);
+	
+    if(transmissionType == false)
+    {
+	    if(RegParams.FeaturesSupport & JOIN_BACKOFF_SUPPORT)
+	    {
+		    if(SwTimerIsRunning(RegParams.pJoinDutyCycleTimer->timerId)) //check timerrunning
+		    {
+			    return LORAWAN_NO_CHANNELS_FOUND;
+		    }
+	    }
+    }
+    else
+    {
+	    if(RegParams.cmnParams.paramsType2.aggregatedDutyCycleTimeout)
+	    {
+		    return LORAWAN_NO_CHANNELS_FOUND;
+	    }
+    }
+	
+	for (i = 0; i < maxChannels; i++)
 	{
-		return LORAWAN_NO_CHANNELS_FOUND;
-	}
+			if ((RegParams.pChParams[i].status == ENABLED) &&
+				(currDr >= RegParams.pChParams[i].dataRange.min) &&
+				(currDr <= RegParams.pChParams[i].dataRange.max)&&
 
-	randomNumber = (rand () % maxChannels) + 1; //this is a guard so that randomNumber is not 0 and the search will happen
-	randomNumberCopy = randomNumber;
-
-	while (randomNumber)
-	{
-		for (i = startingIndex; (i < (startingIndex + maxChannels)) && (randomNumber != 0) ; i++)
-		{
-			/* ----------------------------------------------------------------
-			* For a channel to be available for transmission it has to satisfy
-			* the following conditions
-			* -----------------------------------------------------------------
-			* [1] data rate allowed in the channel must be within acceptable range
-			*     --- AND ---
-			* [2] specified channel must be enabled
-			*     --- AND ---
-			* <<< if the band/channel has duty cycle >>>
-			* [3] duty cycle timeout of the band/channel must be ZERO
-			*/
-			bool bandWithoutDutyCycle = (((1 << RegParams.band) & (ISM_EUBAND | ISM_ASBAND | (1 << ISM_JPN923))) == 0);
-			if ((currDr >= RegParams.pChParams[i].dataRange.min) && (currDr <= RegParams.pChParams[i].dataRange.max) && \
-				(RegParams.pChParams[i].status == ENABLED) && \
 				(bandWithoutDutyCycle || RegParams.pSubBandParams[RegParams.pOtherChParams[i].subBandId].subBandTimeout == 0))
 			{
-				if(transmissionType == 0  && RegParams.pOtherChParams[i].joinRequestChannel == 1)
+				if(((transmissionType == 0)  && (RegParams.pOtherChParams[i].joinRequestChannel == 1)) || (transmissionType != 0)) 
 				{
-					randomNumber --;
+					ChList[num] = i;
+					num++;
+					
 				}
-				else if (transmissionType != 0)
-				{
-				    randomNumber --;					
-				}
+				
+				
 			}
-		}
-
-		// if after one searching in all the vector no valid channel was found, exit the loop and return an error
-		if ( randomNumber == randomNumberCopy )
-		{
-			result = LORAWAN_NO_CHANNELS_FOUND;
-			break;
-		}
 	}
-
-	if (i != 0)
+	if(0 != num)
 	{
-		*channelIndex = i - 1;
+		randomNumber = rand() % num;
+		*channelIndex = ChList[randomNumber];
 	}
 	else
 	{
-		*channelIndex = maxChannels - 1;
+		result = LORAWAN_NO_CHANNELS_FOUND;
 	}
-	
 	return result;
 }
 #endif
@@ -2640,18 +2743,18 @@ static uint32_t GenerateFrequencyReception (uint8_t channelIndex)
 StackRetStatus_t CreateAllRegSoftwareTimers (void)
 {
     /* For other bands, regTimerId[0] is used for required purpose. */
-    StackRetStatus_t status = SwTimerCreate(&regTimerId[0]);    
-#if (JPN_BAND == 1)
-    /*
-    * For Japan band, we need 2 timers since it uses both LBT and duty cycle.
-    * regTimerId[0] -> LBT timer
-    * regTimerId[1] -> Duty cycle timer
-    */
-    if (LORAWAN_SUCCESS == status)
-    {
-        status = SwTimerCreate(&regTimerId[1]);
-    }
-#endif
+	StackRetStatus_t status  = LORAWAN_SUCCESS;
+	for(uint8_t i=0; i < REG_PARAMS_TIMERS_COUNT; i++)
+	{
+		if(LORAWAN_SUCCESS == status)
+		{
+			status = SwTimerCreate(&regTimerId[i]);
+		}
+		else
+		{
+			break;
+		}
+	}
     return status;
 }
 
@@ -2661,10 +2764,11 @@ StackRetStatus_t CreateAllRegSoftwareTimers (void)
 
 void StopAllRegSoftwareTimers (void)
 {
-	SwTimerStop(regTimerId[0]);
-#if (JPN_BAND == 1)
-	SwTimerStop(regTimerId[1]);
-#endif
+	for (uint8_t i=0; i< REG_PARAMS_TIMERS_COUNT; i++)
+	{
+		SwTimerStop(regTimerId[i]);
+	}
+	
 }
 
 
@@ -2736,12 +2840,40 @@ static void DutyCycleCallback (uint8_t param)
 
         RegParams.pDutyCycleTimer->lastTimerValue = nextTimer;
 		SwTimerStart (RegParams.pDutyCycleTimer->timerId, MS_TO_US(nextTimer), SW_TIMEOUT_RELATIVE, (void *)DutyCycleCallback, NULL);
-        //SwTimerSetTimeout (RegParams.pDutyCycleTimer->timerId, MS_TO_TICKS(nextTimer));
-        //SwTimerStart (RegParams.pDutyCycleTimer->timerId);
+        
     }
 }
 #endif
+void JoinDutyCycleCallback (uint8_t param)
+{   
+	
+	if(RegParams.pJoinDutyCycleTimer->remainingtime!=0)
+	{
+		if(RegParams.pJoinDutyCycleTimer->remainingtime>US_TO_MS(SWTIMER_MAX_TIMEOUT))
+		{
+			RegParams.pJoinDutyCycleTimer->remainingtime = RegParams.pJoinDutyCycleTimer->remainingtime-(US_TO_MS(SWTIMER_MAX_TIMEOUT));
+			SwTimerStart(RegParams.pJoinDutyCycleTimer->timerId, SWTIMER_MAX_TIMEOUT, SW_TIMEOUT_RELATIVE, (void *)JoinDutyCycleCallback, NULL);
+			
+		}
+		else
+		{
+			SwTimerStart(RegParams.pJoinDutyCycleTimer->timerId, MS_TO_US(RegParams.pJoinDutyCycleTimer->remainingtime), SW_TIMEOUT_RELATIVE, (void *)JoinDutyCycleCallback, NULL);
+			RegParams.pJoinDutyCycleTimer->remainingtime =0;
+		}
+	}
+	else
+	{
+	SwTimerStop(RegParams.pJoinDutyCycleTimer->timerId);
+	RegParams.joinDutyCycleTimeout = 0;
+	
+	}
+}
 
+void JoinBackoffCallback (uint8_t param)
+{
+	RegParams.joinbccount ++;
+	SwTimerStart (RegParams.pJoinBackoffTimer->timerId, MS_TO_US(BACKOFF_BASE_TIME_IN_MS), SW_TIMEOUT_RELATIVE, (void *)JoinBackoffCallback, NULL);
+}
 /*
  * \brief Validates if the Datarate is supported by the regional band
  * \param[in] dataRate Data rate to be validated
@@ -2946,7 +3078,7 @@ static StackRetStatus_t ValidateFreqKR (LorawanRegionalAttributes_t attr, void *
 	
 	memcpy(&freqNew,attrInput,sizeof(uint32_t));
 	
-	for(freq = FREQ_920900KHZ; freq < FREQ_923300KHZ; freq += freqwidth)
+	for(freq = FREQ_920900KHZ; freq <= FREQ_923300KHZ; freq += freqwidth)
 	{
 		if(freq == freqNew)
 		{
@@ -3234,17 +3366,15 @@ static void UpdateChannelIdStatusT3(uint8_t chid, bool statusNew)
 #if (ENABLE_PDS == 1)
 	PDS_STORE(RegParams.regParamItems.ch_param_1_item_id);
 #endif
-	if(RegParams.pChParams[chid].status == DISABLED)
-	{
-		RegParams.pOtherChParams[chid].ulfrequency = 0;
+	
 #if (ENABLE_PDS == 1)
-		PDS_STORE(RegParams.regParamItems.ch_param_2_item_id);
+	PDS_STORE(RegParams.regParamItems.ch_param_2_item_id);
 #endif
-		if( RegParams.band == ISM_JPN923)
-		{
-			RegParams.cmnParams.paramsType2.channelTimer[chid] = 0;
-		}
+	if( RegParams.band == ISM_JPN923)
+	{
+		RegParams.cmnParams.paramsType2.channelTimer[chid] = 0;
 	}
+
 }
 #endif
 
@@ -3261,11 +3391,11 @@ static void UpdateChannelIdStatusT4(uint8_t chid, bool statusNew)
 	{
 		if(RegParams.pOtherChParams[chid].ulfrequency < FREQ_922100KHZ)
 		{
-			RegParams.pOtherChParams[chid].maxEIRP = DEFAULT_EIRP_LF;
+			RegParams.pOtherChParams[chid].maxEIRP = DEFAULT_EIRP_KR_LF;
 		}
 		else
 		{
-			RegParams.pOtherChParams[chid].maxEIRP = DEFAULT_EIRP_HF;
+			RegParams.pOtherChParams[chid].maxEIRP = DEFAULT_EIRP_KR_HF;
 		}
 #if (ENABLE_PDS == 1)
 		PDS_STORE(RegParams.regParamItems.ch_param_2_item_id);
@@ -3301,7 +3431,7 @@ static void EnableChannels2(uint8_t startIndx, uint8_t endIndx, uint16_t chMask)
  * \retval LORAWAN_SUCCESS If the validation is successful
  *		   LORAWAN_INVALID_PARAMETER If the Frequency is not supported
  */
-#if(AS_BAND == 1)
+#if (AS_BAND == 1)
 static StackRetStatus_t ValidateFrequencyAS (LorawanRegionalAttributes_t attr, void *attrInput)
 {
 	StackRetStatus_t result = LORAWAN_SUCCESS;
@@ -3404,7 +3534,8 @@ static StackRetStatus_t setDutyCycleTimer(LorawanRegionalAttributes_t attr, void
 	}
 	else
 	{
-		return result;
+		//return result;
+		RegParams.joinDutyCycleTimeout = (uint32_t)updateDCTimer.timeOnAir * ((uint32_t) updateDCTimer.aggDutyCycle - 1);
 	}
 	
 	// find how much time from last timeout is due yet
@@ -3486,6 +3617,127 @@ static StackRetStatus_t setDutyCycleTimer(LorawanRegionalAttributes_t attr, void
 }
 #endif
 
+static StackRetStatus_t setJoinDutyCycleTimer(LorawanRegionalAttributes_t attr, void *attrInput)
+{
+	UpdateJoinDutyCycleTimer_t UpdateJoinDutyCycleTimer;
+	StackRetStatus_t result = LORAWAN_SUCCESS;
+	
+	memcpy(&UpdateJoinDutyCycleTimer,attrInput,sizeof(UpdateJoinDutyCycleTimer_t));
+	
+	uint32_t delta = 0,ticks;
+	
+	if(UpdateJoinDutyCycleTimer.startJoinDutyCycleTimer == true)
+	{
+			if(RegParams.joinbccount < AGGREGATEDTIME_1HR)
+			{
+				RegParams.joinDutyCycleTimeout = (uint32_t)UpdateJoinDutyCycleTimer.joinreqTimeonAir * (JOIN_BACKOFF_PRESCALAR_1HR - 1);
+				
+			}
+			else if (RegParams.joinbccount < AGGREGATEDTIME_10HR)
+			{
+				RegParams.joinDutyCycleTimeout = (uint32_t)UpdateJoinDutyCycleTimer.joinreqTimeonAir * (JOIN_BACKOFF_PRESCALAR_10HR - 1);
+				
+			}
+			else
+			{
+				RegParams.joinDutyCycleTimeout = (uint32_t)UpdateJoinDutyCycleTimer.joinreqTimeonAir * (JOIN_BACKOFF_PRESCALAR_24HR - 1);
+				
+			}
+		
+				
+		// find how much time from last timeout is due yet
+		if(SwTimerIsRunning(RegParams.pJoinDutyCycleTimer->timerId))
+		{
+			
+			ticks = SwTimerReadValue(RegParams.pJoinDutyCycleTimer->timerId);
+			SwTimerStop(RegParams.pJoinDutyCycleTimer->timerId);
+			
+			delta = RegParams.pJoinDutyCycleTimer->lastTimerInterval- US_TO_MS(ticks);
+		}
+		
+		// following block works if DutyCycleReq command imposed specific restrictions in addition to the regional parameters regulations
+		if(RegParams.joinDutyCycleTimeout != 0)
+		{
+			if(RegParams.joinDutyCycleTimeout > delta)
+			{
+				RegParams.joinDutyCycleTimeout = RegParams.joinDutyCycleTimeout - delta;
+				if(RegParams.joinDutyCycleTimeout > US_TO_MS(SWTIMER_MAX_TIMEOUT))
+				{
+					RegParams.pJoinDutyCycleTimer->remainingtime =RegParams.joinDutyCycleTimeout - (US_TO_MS(SWTIMER_MAX_TIMEOUT)) ;
+					SwTimerStart(RegParams.pJoinDutyCycleTimer->timerId, SWTIMER_MAX_TIMEOUT, SW_TIMEOUT_RELATIVE, (void *)JoinDutyCycleCallback, NULL);
+					RegParams.joinDutyCycleTimeout = RegParams.joinDutyCycleTimeout - (US_TO_MS(SWTIMER_MAX_TIMEOUT));
+				
+				}
+				else
+				{
+				SwTimerStart (RegParams.pJoinDutyCycleTimer->timerId, MS_TO_US(RegParams.joinDutyCycleTimeout), SW_TIMEOUT_RELATIVE, (void *)JoinDutyCycleCallback, NULL);
+				}
+			}
+			else
+			{
+				RegParams.joinDutyCycleTimeout = 0;
+			}
+			
+			
+		}
+	}
+	else
+	{
+		SwTimerStop(RegParams.pJoinDutyCycleTimer->timerId);
+		RegParams.joinDutyCycleTimeout = 0;
+		RegParams.pJoinDutyCycleTimer->remainingtime =0;
+	}
+return result;
+	
+}
+static StackRetStatus_t setJoinBackOffTimer(LorawanRegionalAttributes_t attr, void *attrInput)
+{
+	StackRetStatus_t result = LORAWAN_SUCCESS;
+	bool startJoinBackOffTimer;
+	memcpy(&startJoinBackOffTimer,attrInput,sizeof(bool));
+	if(startJoinBackOffTimer == true)
+	{
+		SwTimerStart (RegParams.pJoinBackoffTimer->timerId, MS_TO_US(BACKOFF_BASE_TIME_IN_MS), SW_TIMEOUT_RELATIVE, (void *)JoinBackoffCallback, NULL);
+	}
+	else
+	{
+		SwTimerStop(RegParams.pJoinBackoffTimer->timerId);
+		RegParams.joinbccount = 0;
+	}
+ return result;
+}
+static StackRetStatus_t setJoinBackoffCntl(LorawanRegionalAttributes_t attr,void *attrInput)
+{   
+	StackRetStatus_t result = LORAWAN_SUCCESS;
+	bool joinbackoffcntl;
+	memcpy(&joinbackoffcntl,attrInput,sizeof(bool));
+	if(joinbackoffcntl == false)
+	{
+		if(RegParams.FeaturesSupport & JOIN_BACKOFF_SUPPORT)
+		{
+			/*Disable joinbackoff */
+			RegParams.FeaturesSupport &= ~JOIN_BACKOFF_SUPPORT;
+			
+			/* Stop Join Backoff timer */
+			if (SwTimerIsRunning(RegParams.pJoinBackoffTimer->timerId))
+			{
+				SwTimerStop(RegParams.pJoinBackoffTimer->timerId);
+			}
+			/* Stop Join Dutycycle timer */
+			if (SwTimerIsRunning(RegParams.pJoinDutyCycleTimer->timerId))
+			{
+				SwTimerStop(RegParams.pJoinDutyCycleTimer->timerId);
+			}
+			
+		}
+	
+	}
+	else
+	{   /*Enable join backoff */
+		RegParams.FeaturesSupport |= JOIN_BACKOFF_SUPPORT;
+	}
+return result;
+}
 #if (EU_BAND == 1 || AS_BAND == 1 || IND_BAND == 1 || JPN_BAND == 1 || KR_BAND == 1)
 static StackRetStatus_t setFrequency(LorawanRegionalAttributes_t attr, void *attrInput)
 {
@@ -3528,7 +3780,6 @@ static StackRetStatus_t setNewChannel(LorawanRegionalAttributes_t attr, void *at
 {
 	UpdateNewCh_t newCh;
 	StackRetStatus_t result = LORAWAN_INVALID_PARAMETER;
-	uint16_t chMask;
 	pUpdateChIdStatus_t pUpdateChidStatus = NULL;
 	
 	if(((ISM_ASBAND) & (1 << RegParams.band)) != 0 || ((ISM_JPN923) == RegParams.band))
@@ -3557,9 +3808,13 @@ static StackRetStatus_t setNewChannel(LorawanRegionalAttributes_t attr, void *at
 	}
 	
 	memcpy(&newCh, attrInput,sizeof(UpdateNewCh_t));
-	chMask = newCh.channelMask;
 	
-	if(/*ValidateChannelMaskT2(&chMask) != LORAWAN_SUCCESS*/ chMask == 0 || ValidateChannelMaskCntlT2(CHANNEL_MASK_CNTL, &newCh.channelMaskCntl) != LORAWAN_SUCCESS)
+	ValChMaskCntl_t valchMaskCntl;
+	
+	valchMaskCntl.chnlMask = newCh.channelMask;
+	valchMaskCntl.chnlMaskCntl = newCh.channelMaskCntl;
+	
+	if(LORAREG_ValidateAttr(CHMASK_CHCNTL,&valchMaskCntl) != LORAWAN_SUCCESS)
 	{
 		result = LORAWAN_INVALID_PARAMETER;
 	}
@@ -3579,7 +3834,7 @@ static StackRetStatus_t setNewChannel(LorawanRegionalAttributes_t attr, void *at
 		{
 			for(i = 0; i < RegParams.maxChannels; i++)
 			{
-				if((chMask & BIT0) == BIT0)
+				if((newCh.channelMask & BIT0) == BIT0)
 				{
 					pUpdateChidStatus(i, ENABLED);
 				}
@@ -3587,7 +3842,7 @@ static StackRetStatus_t setNewChannel(LorawanRegionalAttributes_t attr, void *at
 				{
 					pUpdateChidStatus(i,DISABLED);
 				}
-				chMask = chMask >> SHIFT1;
+				newCh.channelMask = newCh.channelMask >> SHIFT1;
 			}
 		}
 	}
@@ -3800,3 +4055,59 @@ StackRetStatus_t LORAREG_UnInit(void)
 	
 	return result;
 }
+
+/*
+ * \brief Sets the channel update status after successful Join procedure.
+ * \param[in] None
+ * \retval LORAWAN_SUCCESS for both NA915 and AU915.
+ *		   LORAWAN_INVALID_PARAMETER for all other regions
+ */
+#if (NA_BAND == 1 || AU_BAND == 1)
+static StackRetStatus_t setJoinSuccess(LorawanRegionalAttributes_t attr, void *attrInput)
+{
+	StackRetStatus_t status = LORAWAN_SUCCESS;
+#if (RANDOM_NW_ACQ == 1)
+	uint8_t lastUsedSB;
+	/* Temporarily making it 8 to disable the remaining channels and after the check, will be changed it to 0 */
+	if(RegParams.cmnParams.paramsType1.lastUsedSB == 0)
+	{
+		lastUsedSB = 8;
+	}
+	else
+	{
+		lastUsedSB = RegParams.cmnParams.paramsType1.lastUsedSB;
+	}
+		
+	for(uint8_t i = 0; i < (NO_OF_CH_IN_SUBBAND * (MAX_SUBBANDS + 1)); i++)
+	{
+		if(((i < MAX_CHANNELS_BANDWIDTH_125_AU_NA) && ((i < ((lastUsedSB - 1) * NO_OF_CH_IN_SUBBAND)) 
+			|| (i >= (((lastUsedSB - 1) * NO_OF_CH_IN_SUBBAND) + 8) )))
+			|| ((i >= MAX_CHANNELS_BANDWIDTH_125_AU_NA) && (i != lastUsedSB + MAX_CHANNELS_BANDWIDTH_125_AU_NA - 1)))
+		{
+			RegParams.pChParams[i].status = DISABLED;	
+		}
+	}
+#if (ENABLE_PDS == 1)
+	PDS_STORE(RegParams.regParamItems.ch_param_1_item_id);
+#endif
+#endif
+	return status;
+}
+
+static StackRetStatus_t setEnableAllChs(LorawanRegionalAttributes_t attr, void *attrInput)
+{
+	StackRetStatus_t status = LORAWAN_SUCCESS;
+#if (RANDOM_NW_ACQ == 1)		
+	for(uint8_t i = 0; i < (NO_OF_CH_IN_SUBBAND * (MAX_SUBBANDS + 1)); i++)
+	{
+		RegParams.pChParams[i].status = ENABLED;	
+	}
+	RegParams.cmnParams.paramsType1.lastUsedSB = 0;
+#if (ENABLE_PDS == 1)
+	PDS_STORE(RegParams.regParamItems.ch_param_1_item_id);
+	PDS_STORE(RegParams.regParamItems.lastUsedSB);
+#endif
+#endif	
+	return status;
+}
+#endif

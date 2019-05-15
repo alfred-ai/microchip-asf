@@ -182,7 +182,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
        -D ATT_DB_MEMORY                                   \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BLE_PAIR_ENABLE=false                           \
        -D BOARD=SAM4S_XPLAINED_PRO                        \
        -D BOARD_AT30TSE_DEVICE_ADDR=0x0                   \

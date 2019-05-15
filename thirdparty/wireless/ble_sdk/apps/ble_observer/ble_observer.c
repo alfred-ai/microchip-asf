@@ -3,7 +3,7 @@
  *
  * \brief BLE Observer application
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -57,6 +57,7 @@
  *	+ ATSAMD21-XPRO + ATBTLC1000 XPRO
  *	+ ATSAMG55-XPRO + ATBTLC1000 XPRO
  *	+ ATSAM4S-XPRO + ATBTLC1000 XPRO
+ *	+ ATSAMR34-XPRO + ATBTLC1000 XPRO
  *- Running the Demo -
  *  + 1. Build and flash the binary into supported evaluation board.
  *  + 2. Open the console using TeraTerm or any serial port monitor.
@@ -157,6 +158,12 @@ volatile uint8_t scanning_state = false;
 volatile bool app_init_done = false;
 volatile bool button_press = false;
 
+#if SAMR34
+extern void lorawan_main (void);
+extern void SYSTEM_RunTasks(void);
+int send_ble_data;
+char ble_apps_buf[100];
+#endif // #if SAMR34
 user_custom_event_t app_button_event =
 {
 	.id = APP_BUTTON_EVENT_ID,
@@ -628,6 +635,10 @@ at_ble_status_t ble_observer_scan_data_handler(void *param)
 {
 	DBG_LOG("Scan Complete. Total No.of device scanned:%d", scan_device_count);
 	ALL_UNUSED(param);
+#if SAMR34
+	send_ble_data = 1;
+	ble_apps_buf[0]=scan_device_count;
+#endif // #if SAMR34	
 	return AT_BLE_SUCCESS;
 }
 
@@ -652,6 +663,10 @@ int main(void )
 	
 	/* Initialize serial console */
 	serial_console_init();
+	
+	#if SAMR34
+	lorawan_main();
+	#endif // #if SAMR34
 
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
@@ -671,7 +686,13 @@ int main(void )
 									&ble_observer_custom_event_cb);
 	
 	/* Receiving events */
-	while (1) {
-		ble_event_task();
+	while (1) 
+	{
+			ble_event_task();
+#if SAMR34
+		/* Running the scheduler for LoRaWAN */
+		SYSTEM_RunTasks();
+#endif // #if SAMR34
+
 	}
 }

@@ -3,7 +3,7 @@
 *
 * \brief BLE Manager
 *
-* Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -153,6 +153,11 @@ static void ble_init(at_ble_init_config_t * args);
 
 /** @brief Set BLE Address, If address is NULL then it will use BD public address */
 static void ble_set_dev_config(at_ble_addr_t *addr);
+
+#ifdef USE_SCAN_SOFT_FILTER
+/** filter function for avoiding duplicated scan data.*/
+static bool ble_scan_duplication_check(at_ble_scan_info_t * info);
+#endif
 
 /** @brief function to get event from stack */
 at_ble_status_t ble_event_task(void)
@@ -746,18 +751,58 @@ at_ble_status_t gap_dev_connect(at_ble_addr_t *dev_addr)
 /** @brief instructs device to start scanning */
 at_ble_status_t gap_dev_scan(void)
 {
+	at_ble_status_t status = AT_BLE_SUCCESS;
 	ble_device_current_state = CENTRAL_SCANNING_STATE;
 	/* Device Scan discover started*/
 	DBG_LOG("Scanning...Please wait...");
 	/* make service discover counter to zero*/
 	scan_response_count = 0;
-	#if BLE_DEVICE_ROLE == BLE_ROLE_OBSERVER
-	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_OBSERVER_MODE, false,false)) ;
+//	#if BLE_DEVICE_ROLE == BLE_ROLE_OBSERVER
+//
+//	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_OBSERVER_MODE, false,false)) ;
+//	#else
+//	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,false)) ;
+//	#endif
+
+	#ifdef USE_SCAN_SOFT_FILTER
+	status = at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false, false) ;
 	#else
-	return(at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_GEN_DISCOVERY, false,true)) ;
+	status = at_ble_scan_start(SCAN_INTERVAL, SCAN_WINDOW, SCAN_TIMEOUT, SCAN_TYPE, AT_BLE_SCAN_OBSERVER_MODE, false,false) ;
 	#endif
+	return status;
 }
 
+#ifdef USE_SCAN_SOFT_FILTER
+static bool ble_scan_duplication_check(at_ble_scan_info_t * info)
+{
+	uint32_t i = 0;
+	uint32_t ret = 0;
+	bool found = false;
+	/*
+	if( //if need to add or remove filter type
+	scan_info[i].type != AT_BLE_ADV_TYPE_DIRECTED &&
+	scan_info[i].type != AT_BLE_ADV_TYPE_UNDIRECTED &&
+	scan_info[i].type != AT_BLE_ADV_TYPE_SCAN_RESPONSE
+	//&& scan_info[i].type != AT_BLE_ADV_TYPE_SCANNABLE_UNDIRECTED
+	//&& scan_info[i].type != AT_BLE_ADV_TYPE_NONCONN_UNDIRECTED
+	//&& scan_info[i].type != AT_BLE_ADV_TYPE_DIRECTED_LDC
+	)
+		return true;
+	*/
+	for(i=0 ; i<scan_response_count ; i++)
+	{
+		ret = memcmp(scan_info[i].dev_addr.addr, info->dev_addr.addr, sizeof(uint8_t)*6);
+		ret |= (scan_info[i].type != info->type) ? 1 : 0;
+		if( !ret ) 
+		{
+			found = true;
+			break;
+		}
+	}
+	
+	return found;
+}
+#endif
 /** @brief function handling scaned information */
 at_ble_status_t ble_scan_info_handler(void *params)
 {
@@ -2057,6 +2102,15 @@ void ble_event_manager(at_ble_events_t events, void *event_params)
 	case AT_BLE_CON_CHANNEL_MAP_IND:
 	{
 		uint8_t idx;
+		
+		#ifdef USE_SCAN_SOFT_FILTER
+	   	if( events == AT_BLE_SCAN_INFO )
+		{
+			if( ble_scan_duplication_check((at_ble_scan_info_t*)event_params) )
+				return;
+		}
+		#endif			
+		
 		for (idx = 0; idx < MAX_GAP_EVENT_SUBSCRIBERS; idx++)
 		{
 			if (ble_mgr_gap_event_cb[idx] != NULL)

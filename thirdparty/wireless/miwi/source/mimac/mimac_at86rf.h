@@ -3,7 +3,7 @@
 *
 * \brief MAC Layer Abstraction for AT86RFx interface
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -42,7 +42,7 @@
 
 
 	#if defined(PROTOCOL_P2P) || defined (PROTOCOL_STAR)
-        #include "miwi_p2p.h"
+        #include "miwi_p2p_star.h"
 		#include "miwi_config_p2p.h"
     #endif
 

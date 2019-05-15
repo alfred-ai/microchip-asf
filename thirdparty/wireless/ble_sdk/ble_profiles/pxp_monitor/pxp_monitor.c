@@ -3,7 +3,7 @@
 *
 * \brief Proximity Monitor Profile
 *
-* Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -45,6 +45,8 @@
 #include <asf.h>
 #include "platform.h"
 #include "pxp_monitor.h"
+
+extern void SYSTEM_RunTasks(void);
 
 static const ble_gap_event_cb_t pxp_gap_handle = {
 	.scan_report = pxp_monitor_scan_data_handler,
@@ -291,6 +293,10 @@ at_ble_status_t pxp_monitor_start_scan(void)
 		}
 		index_value = getchar_timeout(100);
 		ble_event_task();
+#if SAMR34
+		/* Running the scheduler for LoRaWAN */
+		SYSTEM_RunTasks();
+#endif // #if SAMR34
 	} while ((index_value == 0xFF) ||
 	          ((index_value != 0xFF) && !((index_value == 'r') || (index_value == 's'))));
 		

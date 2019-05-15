@@ -187,7 +187,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
        -D ATT_DB_MEMORY                                   \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BLOOD_PRESSURE_SERVICE                          \
        -D BLP_SENSOR                                      \
        -D BOARD=SAMD21_XPLAINED_PRO                       \

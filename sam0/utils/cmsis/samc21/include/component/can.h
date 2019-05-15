@@ -712,7 +712,7 @@ typedef union {
 #define CAN_IE_RF1LE                (0x1ul << CAN_IE_RF1LE_Pos)
 #define CAN_IE_HPME_Pos             8            /**< \brief (CAN_IE) High Priority Message Interrupt Enable */
 #define CAN_IE_HPME                 (0x1ul << CAN_IE_HPME_Pos)
-#define CAN_IE_TCE_Pos              9            /**< \brief (CAN_IE) Timestamp Completed Interrupt Enable */
+#define CAN_IE_TCE_Pos              9            /**< \brief (CAN_IE) Transmission Completed Interrupt Enable */
 #define CAN_IE_TCE                  (0x1ul << CAN_IE_TCE_Pos)
 #define CAN_IE_TCFE_Pos             10           /**< \brief (CAN_IE) Transmission Cancellation Finished Interrupt Enable */
 #define CAN_IE_TCFE                 (0x1ul << CAN_IE_TCFE_Pos)

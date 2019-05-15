@@ -3,7 +3,7 @@
  *
  * \brief Embedded Flash service for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -81,7 +81,9 @@ typedef enum flash_farg_page_num {
 /*! \name Flash access mode */
 //! @{
 #define FLASH_ACCESS_MODE_128    EFC_ACCESS_MODE_128
+#if (!(SAMV71 || SAMV70 || SAMS70 || SAME70))
 #define FLASH_ACCESS_MODE_64     EFC_ACCESS_MODE_64
+#endif
 //! @}
 
 uint32_t flash_init(uint32_t ul_mode, uint32_t ul_fws);

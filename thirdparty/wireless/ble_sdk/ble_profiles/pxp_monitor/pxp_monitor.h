@@ -3,7 +3,7 @@
  *
  * \brief Proximity Monitor Profile declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -59,7 +59,8 @@ typedef enum {
 //   <o> Rssi Prameter Update Interval <1-10>
 //   <i> Defines inteval at which rssi value get updated.
 //   <i> Default: 1
-#define PXP_RSSI_UPDATE_INTERVAL        (0x01)
+//#define PXP_RSSI_UPDATE_INTERVAL        (0x01)
+#define PXP_RSSI_UPDATE_INTERVAL        (0x10) 
 
 
 //   <o> Low Alert Range Value 

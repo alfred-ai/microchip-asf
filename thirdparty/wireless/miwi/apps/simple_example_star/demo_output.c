@@ -3,7 +3,7 @@
 *
 * \brief Demo output Implementation.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -247,7 +247,7 @@ void DemoOutput_HandleMessage(void)
 
 	/* If the role is not PAN Coordinator and receiving a unicast
 	   then first three bytes are source end device info, so skip this*/
-	if (!role && !rxMessage.flags.bits.broadcast)
+	if (END_DEVICE == role && !rxMessage.flags.bits.broadcast)
 	{
 	    startPayloadIndex = 3;
 	}
@@ -295,10 +295,10 @@ void DemoOutput_UnicastFail(void)
         delay_ms(1200);
     }
     
-void STAR_DEMO_OPTIONS_MESSAGE(bool NetworkRole)
+void STAR_DEMO_OPTIONS_MESSAGE(DeviceRole_t deviceRole)
 {
 #if defined (ENABLE_LCD)
-    if (NetworkRole)
+    if (deviceRole == PAN_COORD)
     {
 #if defined(PHY_AT86RF233)
 #if BOARD == SAMR21ZLL_EK		

@@ -3,7 +3,7 @@
  *
  * \brief Supply Controller (SUPC) driver for SAM.
  *
- * Copyright (c) 2011-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2011-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -413,7 +413,9 @@ void supc_backup_sram_on(Supc *p_supc)
  */
 void supc_backup_sram_off(Supc *p_supc)
 {
-	p_supc->SUPC_MR &= (~(SUPC_MR_KEY_PASSWD | SUPC_MR_BKUPRETON));	
+	uint32_t ul_mr = p_supc->SUPC_MR & (~SUPC_MR_BKUPRETON);
+	ul_mr |= SUPC_MR_KEY_PASSWD;
+	p_supc->SUPC_MR = ul_mr;
 }
 #endif
 

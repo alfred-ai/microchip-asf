@@ -3,7 +3,7 @@
  *
  * \brief Chip-specific generic clock management.
  *
- * Copyright (c) 2015-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2015-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -39,6 +39,7 @@
 
 #include <osc.h>
 #include <pll.h>
+#include <sysclk.h>
 
 /// @cond 0
 /**INDENT-OFF**/
@@ -245,6 +246,66 @@ static inline void genclk_enable_source(enum genclk_source e_src)
 		break;
 	}
 }
+
+//! \name Retrieves the current rate in Hz of the Programmable Clock Source
+//@{
+static inline uint32_t genclk_get_frequency_hz(uint32_t ul_id)
+{
+	uint32_t pck_source,clock_config;
+	uint32_t pck_freq = 0;
+	pck_source = (PMC->PMC_PCK[ul_id] & PMC_PCK_CSS_Msk) >> PMC_PCK_CSS_Pos;
+	switch(pck_source)
+	{
+		case PMC_PCK_CSS_SLOW_CLK:
+			if (pmc_get_slck_config())
+				pck_freq = OSC_SLCK_32K_RC_HZ;
+			else
+				pck_freq = OSC_SLCK_32K_XTAL_HZ;
+			break;
+		case PMC_PCK_CSS_MAIN_CLK:
+		case PMC_PCK_CSS_PLLA_CLK:
+			clock_config = pmc_get_mainck_config();
+			if (clock_config & CKGR_MOR_MOSCSEL)
+			{
+				switch(clock_config & CKGR_MOR_MOSCRCF_Msk)
+				{
+					case CKGR_MOR_MOSCRCF_4_MHz:
+						pck_freq = OSC_MAINCK_4M_RC_HZ;
+						break;
+					case CKGR_MOR_MOSCRCF_8_MHz:
+						pck_freq = OSC_MAINCK_8M_RC_HZ;
+						break;
+					case CKGR_MOR_MOSCRCF_12_MHz:
+						pck_freq = OSC_MAINCK_12M_RC_HZ;
+						break;
+				}
+			}
+			else
+			{
+				pck_freq = OSC_MAINCK_XTAL_HZ;
+			}
+
+			if (pck_source == PMC_PCK_CSS_PLLA_CLK)
+			{
+				clock_config = pmc_get_pllack_config();
+				if ((clock_config & CKGR_PLLAR_DIVA_Msk) == 0)
+					return 0;
+				pck_freq *= ((((clock_config & CKGR_PLLAR_MULA_Msk)>>CKGR_PLLAR_MULA_Pos) + 1)/(clock_config & CKGR_PLLAR_DIVA_Msk));
+			}
+			break;
+		case PMC_PCK_CSS_UPLL_CLK:
+			pck_freq = pmc_get_upllckdiv_config() ? PLL_UPLL_HZ/2: PLL_UPLL_HZ;
+			break;
+		case PMC_PCK_CSS_MCK:
+			pck_freq = sysclk_get_main_hz();
+			break;
+		default:
+			break;
+	}
+	pck_freq /= ((PMC->PMC_PCK[ul_id] & PMC_PCK_PRES_Msk) >> PMC_PCK_PRES_Pos)+1;
+	return pck_freq;
+}
+//! @}
 
 //! @}
 

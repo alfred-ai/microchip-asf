@@ -2329,13 +2329,13 @@
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_pds.c</name>
 						</file>
 						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.c</name>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_star.c</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p_star.h</name>
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_nvm.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../source/miwi_p2p_star/miwi_p2p.h</name>
 						</file>
 					</group>
 					<group>
@@ -2572,6 +2572,24 @@
 				</group>
 			</group>
 			<group>
+				<name>tc</name>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.c</name>
+				</file>
+				<group>
+					<name>tc_sam_d_r_h</name>
+					<file>
+						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h/tc.c</name>
+					</file>
+				</group>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.h</name>
+				</file>
+				<file>
+					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc.h</name>
+				</file>
+			</group>
+			<group>
 				<name>rtc</name>
 				<group>
 					<name>rtc_sam_d_r_h</name>
@@ -2674,24 +2692,6 @@
 				</file>
 				<file>
 					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/sercom/sercom_interrupt.h</name>
-				</file>
-			</group>
-			<group>
-				<name>tc</name>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.c</name>
-				</file>
-				<group>
-					<name>tc_sam_d_r_h</name>
-					<file>
-						<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_sam_d_r_h/tc.c</name>
-					</file>
-				</group>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc_interrupt.h</name>
-				</file>
-				<file>
-					<name>$PROJ_DIR$/../../../../../../../sam0/drivers/tc/tc.h</name>
 				</file>
 			</group>
 			<group>

@@ -47,8 +47,8 @@ PART = saml21j18b
 
 # Application target name. Given with suffix .a for library and .elf for a
 # standalone application.
-TARGET_FLASH = gap_peripheral_saml21_xplained_pro_b_flash.elf
-TARGET_SRAM = gap_peripheral_saml21_xplained_pro_b_sram.elf
+TARGET_FLASH = bm70_gap_peripheral_saml21_xplained_pro_b_flash.elf
+TARGET_SRAM = bm70_gap_peripheral_saml21_xplained_pro_b_sram.elf
 
 # List of C source files.
 CSRCS = \

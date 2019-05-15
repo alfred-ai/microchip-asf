@@ -185,7 +185,7 @@ CPPFLAGS = \
        -D ARM_MATH_CM4=true                               \
        -D ATT_DB_MEMORY                                   \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BOARD=SAMG55_XPLAINED_PRO                       \
        -D ENABLE_POWER_SAVE                               \
        -D FIND_ME_TARGET                                  \

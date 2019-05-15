@@ -4,7 +4,7 @@
 * \brief LoRaWAN eu file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -160,6 +160,8 @@ StackRetStatus_t LORAReg_InitEU(IsmBand_t ismBand)
 	RegParams.pSubBandParams = &RegParams.cmnParams.paramsType2.SubBands[0];
 	RegParams.pOtherChParams = &RegParams.cmnParams.paramsType2.othChParams[0];
 	RegParams.pDutyCycleTimer = &RegParams.cmnParams.paramsType2.DutyCycleTimer;
+    RegParams.pJoinDutyCycleTimer = &RegParams.joinDutyCycleTimer;
+	RegParams.pJoinBackoffTimer = &RegParams.joinBackoffTimer;
 	RegParams.MinNewChIndex = 3;
 	RegParams.FeaturesSupport = FEATURES_SUPPORTED_EU;
 	RegParams.minDataRate = MAC_DATARATE_MIN_EU;
@@ -167,8 +169,13 @@ StackRetStatus_t LORAReg_InitEU(IsmBand_t ismBand)
 	RegParams.Rx1DrOffset = 5;
 	RegParams.maxTxPwrIndx = 7;
 	RegParams.cmnParams.paramsType2.minNonDefChId = 3;
-	RegParams.maxTxPwr = 16;
+	RegParams.maxTxPwr = DEFAULT_EIRP_EU;
 	RegParams.pDutyCycleTimer->timerId = regTimerId[0];
+	RegParams.pJoinBackoffTimer->timerId = regTimerId[1];
+    RegParams.pJoinDutyCycleTimer->timerId = regTimerId[2];
+	RegParams.pJoinDutyCycleTimer->remainingtime =0;
+	RegParams.joinbccount =0;
+	RegParams.joinDutyCycleTimeout =0;
 	
 	RegParams.band = ismBand;
 	
@@ -183,11 +190,11 @@ StackRetStatus_t LORAReg_InitEU(IsmBand_t ismBand)
 
 		/*Fill PDS item id in RegParam Structure */
 		RegParams.regParamItems.fileid = PDS_FILE_REG_EU868_04_IDX;
-		RegParams.regParamItems.alt_ch_item_id = 0;
 		RegParams.regParamItems.ch_param_1_item_id = PDS_REG_EU868_CH_PARAM_1;
 		RegParams.regParamItems.ch_param_2_item_id = PDS_REG_EU868_CH_PARAM_2;
 		RegParams.regParamItems.band_item_id = 0;
-
+		RegParams.regParamItems.lastUsedSB = 0;
+		
 		PdsFileMarks_t filemarks_fid1;
 		/* File ID EU868 - Register */
 		filemarks_fid1.fileMarkListAddr = aRegEu868Fid1PdsOps;

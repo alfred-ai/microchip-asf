@@ -3,7 +3,7 @@
 *
 * \brief Configuration for MiWi P2P Protocol
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -109,7 +109,7 @@
         // INDIRECT_MESSAGE_TIMEOUT defines the timeout interval in seconds
         // for the stored packets for sleeping devices
         /*********************************************************************/
-        #define INDIRECT_MESSAGE_TIMEOUT (ONE_SECOND * RFD_WAKEUP_INTERVAL * (INDIRECT_MESSAGE_SIZE + 1))
+        #define INDIRECT_MESSAGE_TIMEOUT (RFD_WAKEUP_INTERVAL * (INDIRECT_MESSAGE_SIZE + 1))
         
         
         /*********************************************************************/

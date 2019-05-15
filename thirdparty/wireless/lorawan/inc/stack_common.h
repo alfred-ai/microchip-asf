@@ -4,7 +4,7 @@
 * \brief LORAWAN Stack common include file
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -50,7 +50,7 @@ extern "C" {
 #define MAJOR_NUM                 "1"
 #define MINOR_NUM                 "0"
 #define BUILD_TYPE                "P"                /* E or P */
-#define BUILD_NUM                 "1"
+#define BUILD_NUM                 "2"
 
 /* Release Version Information */
 #define STACK_VER    PRODUCT"_"MAJOR_NUM"_"MINOR_NUM"_"BUILD_TYPE"_"BUILD_NUM
@@ -86,7 +86,9 @@ typedef enum _StackRetStatus
     LORAWAN_INVALID_MTYPE                       ,    
     LORAWAN_MCAST_HDR_INVALID                   ,
 	LORAWAN_TX_TIMEOUT                    		,
-	LORAWAN_RADIO_TX_TIMEOUT                    
+	LORAWAN_RADIO_TX_TIMEOUT                    ,
+	LORAWAN_MAX_MCAST_GROUP_REACHED				,
+	LORAWAN_INVALID_PACKET             
 } StackRetStatus_t;
 
 /* ISM Band Types*/

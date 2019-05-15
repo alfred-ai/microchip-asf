@@ -67,8 +67,10 @@ extern "C" {
 typedef struct crccu_dscr_type {
 	uint32_t ul_tr_addr;	/* TR_ADDR */
 	uint32_t ul_tr_ctrl;	/* TR_CTRL */
-#if (SAM3S8 || SAM3SD8 || SAM4S || SAM4L || SAMG55)
+#if (SAM3S8 || SAM3SD8 || SAM4L || SAMG55)
 	uint32_t ul_reserved[2];	/* Reserved register */
+#elif SAM4S
+	uint32_t ul_reserved[6];	/* TR_CRC begins at offset 0x20 */
 #elif SAM3S
 	uint32_t ul_reserved[52];	/* TR_CRC begins at offset 0xE0 */
 #endif

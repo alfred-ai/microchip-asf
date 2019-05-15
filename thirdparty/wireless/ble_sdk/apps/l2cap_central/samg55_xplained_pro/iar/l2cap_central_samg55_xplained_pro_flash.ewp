@@ -169,15 +169,15 @@
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>TIME_INTERVAL=5</state>
 					<state>ATT_DB_MEMORY</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
-					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>L2CAP_CENTRAL</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>ARM_MATH_CM4=true</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>CCPreprocFile</name>
@@ -497,15 +497,15 @@
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>TIME_INTERVAL=5</state>
 					<state>ATT_DB_MEMORY</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
-					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>L2CAP_CENTRAL</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>ARM_MATH_CM4=true</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>AList</name>
@@ -1150,15 +1150,15 @@
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>TIME_INTERVAL=5</state>
 					<state>ATT_DB_MEMORY</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
-					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>L2CAP_CENTRAL</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>ARM_MATH_CM4=true</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>CCPreprocFile</name>
@@ -1478,15 +1478,15 @@
 					<state>UART_FLOWCONTROL_4WIRE_MODE=true</state>
 					<state>TIME_INTERVAL=5</state>
 					<state>ATT_DB_MEMORY</state>
-					<state>SLEEP_WALKING_ENABLED=false</state>
-					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>BLE_MODULE=BTLC1000_ZR</state>
 					<state>L2CAP_CENTRAL</state>
 					<state>BLE_DEVICE_ROLE=BLE_ROLE_CENTRAL</state>
-					<state>BLE_MODULE=BTLC1000_MR</state>
+					<state>UART_FLOWCONTROL_6WIRE_MODE=false</state>
+					<state>NEW_EVT_HANDLER</state>
 					<state>ENABLE_POWER_SAVE</state>
 					<state>ARM_MATH_CM4=true</state>
 					<state>HOST_SLEEP_ENABLE=true</state>
-					<state>NEW_EVT_HANDLER</state>
+					<state>SLEEP_WALKING_ENABLED=false</state>
 				</option>
 				<option>
 					<name>AList</name>

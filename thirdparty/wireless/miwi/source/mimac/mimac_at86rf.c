@@ -3,7 +3,7 @@
 *
 * \brief MAC Layer Abstraction for AT86RFx implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -1163,8 +1163,8 @@ bool MiMAC_ReceivedPacket(void)
 
 			for (i = 0; i < CONNECTION_SIZE; i++)
 			{
-				if ((ConnectionTable[i].status.bits.isValid) &&
-				isSameAddress(ConnectionTable[i].Address, MACRxPacket.SourceAddress))
+				if ((defaultParamsRomOrRam.ConnectionTable[i].status.bits.isValid) &&
+				isSameAddress(defaultParamsRomOrRam.ConnectionTable[i].Address, MACRxPacket.SourceAddress))
 				{
 					break;
 				}

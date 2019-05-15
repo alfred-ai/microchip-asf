@@ -2,30 +2,30 @@
 * \file  pmm.c
 *
 * \brief This is the implementation of LoRaWAN power management module
-*		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+*
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
 * \page License
 *
 * Subject to your compliance with these terms, you may use Microchip
-* software and any derivatives exclusively with Microchip products. 
-* It is your responsibility to comply with third party license terms applicable 
-* to your use of third party software (including open source software) that 
+* software and any derivatives exclusively with Microchip products.
+* It is your responsibility to comply with third party license terms applicable
+* to your use of third party software (including open source software) that
 * may accompany Microchip software.
 *
-* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, 
-* WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, 
-* INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, 
-* AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE 
-* LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL 
-* LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE 
-* SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE 
-* POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
-* ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY 
-* RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY, 
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES,
+* WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
+* INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
+* AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
+* LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
+* LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
+* SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
+* POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT
+* ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
+* RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *
 * \asf_license_stop
@@ -99,11 +99,11 @@ PMM_Status_t PMM_Sleep(PMM_SleepReq_t *req)
     uint32_t sysSleepTime = ~0u; /* 0xffFFffFF is invalid */
     bool canSleep;
 
-    if ( req )
-    {        
+    if ( req && (PMM_STATE_ACTIVE == pmmState) )
+    {
         canSleep = SYSTEM_ReadyToSleep();
         canSleep = canSleep && validateSleepDuration( req->sleepTimeMs );
-        
+
         if ( SLEEP_MODE_BACKUP == req->sleep_mode )
         {
             canSleep = canSleep && ( SWTIMER_INVALID_TIMEOUT == SwTimerNextExpiryDuration() );
@@ -111,30 +111,31 @@ PMM_Status_t PMM_Sleep(PMM_SleepReq_t *req)
         }
         else if ( SLEEP_MODE_STANDBY == req->sleep_mode )
         {
-            sysSleepTime = (SWTIMER_INVALID_TIMEOUT == SwTimerNextExpiryDuration()) ? PMM_SLEEPTIME_MAX_MS : US_TO_MS( sysSleepTime );
-            canSleep = canSleep && validateSleepDuration( sysSleepTime );            
+            sysSleepTime = SwTimerNextExpiryDuration();
+            sysSleepTime = (SWTIMER_INVALID_TIMEOUT == sysSleepTime) ? PMM_SLEEPTIME_MAX_MS : US_TO_MS( sysSleepTime );
+            canSleep = canSleep && validateSleepDuration( sysSleepTime );
             if ( canSleep && (req->sleepTimeMs < sysSleepTime) )
             {
                 sysSleepTime = req->sleepTimeMs;
-            }            
+            }
         }
-        
+
         if ( canSleep )
         {
             /* Start of sleep preparation */
             SystemTimerSuspend();
             SleepTimerStart( MS_TO_SLEEP_TICKS( sysSleepTime - PMM_WAKEUPTIME_MS ), PMM_Wakeup );
             pmmState = PMM_STATE_SLEEP;
-            sleepReq = req;            
+            sleepReq = req;
             /* End of sleep preparation */
-            
+
             /* Put the system to sleep */
             HAL_Sleep(req->sleep_mode);
-            
+
             status = PMM_SLEEP_REQ_PROCESSED;
         }
     }
-    
+
     return status;
 }
 
@@ -147,7 +148,7 @@ void PMM_Wakeup(void)
 
     if (PMM_STATE_SLEEP == pmmState)
     {
-        
+
 		pmmState = PMM_STATE_ACTIVE;
         sleptTimeUs = SLEEP_TICKS_TO_US(SleepTimerGetElapsedTime());
         SleepTimerStop();

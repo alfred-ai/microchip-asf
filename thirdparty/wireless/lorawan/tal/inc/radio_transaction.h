@@ -4,7 +4,7 @@
 * \brief This is the radio_transaction header file which contains Transmit,
 *        Receive and Interrupt handling interfaces.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -62,9 +62,12 @@
 #define RADIO_RFCTRL_TX             (1u)
 
 // FIFO Rx FIFO Threshold set to 32 bytes
-#define RADIO_RX_FIFO_LEVEL			(32u)
+#define RADIO_RX_FIFO_LEVEL			(63u)
 // FIFO Tx FIFO Threshold set to 20 bytes
-#define RADIO_TX_FIFO_LEVEL			(20u)
+#define RADIO_TX_FIFO_LEVEL			(63u)
+
+#define NON_BLOCKING_REQ			0
+#define BLOCKING_REQ				1
 
 /************************************************************************/
 /*  Global variables                                                    */

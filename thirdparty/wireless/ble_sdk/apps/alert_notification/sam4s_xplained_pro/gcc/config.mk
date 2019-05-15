@@ -181,7 +181,7 @@ CPPFLAGS = \
        -D ANS_CLIENT_SERVICE                              \
        -D ARM_MATH_CM4=true                               \
        -D BLE_DEVICE_ROLE=BLE_ROLE_PERIPHERAL             \
-       -D BLE_MODULE=BTLC1000_MR                          \
+       -D BLE_MODULE=BTLC1000_ZR                          \
        -D BOARD=SAM4S_XPLAINED_PRO                        \
        -D ENABLE_POWER_SAVE                               \
        -D HOST_SLEEP_ENABLE=true                          \
