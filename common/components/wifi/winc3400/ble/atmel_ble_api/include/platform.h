@@ -1,9 +1,10 @@
 /**
- * \file
  *
- * \brief Platform Abstraction layer for BLE applications.
+ * \file platform.h
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * \brief WINC3400 BLE platform APIs declarations
+ *
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -39,14 +40,19 @@
 #include <stdbool.h>
 #include <string.h>
 #include "at_ble_api.h"
-#ifndef WIN32
-#include "bsp/include/nm_bsp.h"
-#endif
 
-typedef struct{
-	uint8_t (*wr_api32) (uint32_t memAddr,uint32_t* data,uint8_t size);
-	uint8_t (*wr_api32_reset) (uint32_t memAddr,uint32_t* data,uint8_t size);
-}wr_apis;
+#define VERSION_FIELD_VALID (0x5A5A5A5A)
+typedef struct {
+    int (*ble_write_cb)(uint8_t*, uint32_t);
+    void (*plf_wait_cb)(void);
+	uint32_t mv;
+	struct fw_version {
+		uint8_t major;
+		uint8_t minor;
+		uint8_t patch;
+	} fw_ver;
+}plf_params_t;
+
 /**
 @defgroup platform Platform API
 
@@ -55,13 +61,13 @@ typedef struct{
 
  /** @brief implements platform-specific initialization
   *
-  * @param[in] platform_params platform specific params, this pointer is passed from the 
-  * at_ble_init function and interpreted by the platform 
+  * @param[in] platform_params platform specific params, this pointer is passed from the
+  * at_ble_init function and interpreted by the platform
   *
   * @return AT_BLE_SUCCESS operation completed successfully
   * @return AT_BLE_FAILURE Generic error.
   */
-at_ble_status_t platform_init(void* platform_params);
+at_ble_status_t platform_init(plf_params_t* platform_params);
 
  /** @brief sends a message over the platform-specific bus
   *
@@ -71,9 +77,11 @@ at_ble_status_t platform_init(void* platform_params);
   *
   * @param[in] data data to send over the interface
   * @param[in] len length of data
+  * @return Zero if operation completed successfully
+  * @return Non zero for Generic error.
   *
   */
-void platform_interface_send(uint8_t* data, uint32_t len);
+at_ble_status_t platform_interface_send(uint8_t* data, uint32_t len);
 
 void platform_receive(uint8_t* data, uint32_t len);
 
@@ -97,9 +105,10 @@ void platform_cmd_cmpl_signal(void);
  /** @brief blocks until the command-complete signal is fired
   *  @note more details at the platform porting guide
   *
-  * @param[out] timeout a flag that indicates if waiting timed out
+  * @return non-zero if Timeout
+  * @return zero if Operation completed successfully
   */
-void platform_cmd_cmpl_wait(bool* timeout);
+at_ble_status_t platform_cmd_cmpl_wait(void);
 
  /** @brief fires the event signal
   *  @note more details at the platform porting guide
@@ -113,15 +122,15 @@ void platform_event_signal(void);
   * @param[in] timeout timeout in ms passed by user
   *
   */
-uint8_t platform_event_wait(uint32_t timeout);
-void fw_led(bool tempo);
- /** @}*/
+at_ble_status_t platform_event_wait(uint32_t timeout);
 
-typedef void (*ble_api_callback_t)(uint8_t* msg, uint32_t len);
-typedef void (*plf_wait_callback_t)(void);
-typedef struct _plf_params {
-	ble_api_callback_t ble_write_cb;
-	plf_wait_callback_t plf_wait_cb;
-}plf_params_t;
+ /** @brief set timeout value used for wait functions.
+  *  @note more details at the platform porting guide
+  *
+  * @param[in] timeout timeout in ms passed by user
+  *
+  */
+void platform_set_timeout(uint32_t timeout);
+ /** @}*/
 
 #endif // __PLATFORM_H__

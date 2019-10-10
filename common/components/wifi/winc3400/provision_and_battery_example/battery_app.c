@@ -3,7 +3,7 @@
  *
  * \brief BLE Battery Service Application Implementations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -37,8 +37,8 @@
 
 /**
  * \mainpage
-  * \section intro Introduction
- * This example demonstrates Wi-Fi provision via BLE using the WINC3400 
+ * \section intro Introduction
+ * This example demonstrates Wi-Fi provision via BLE using the WINC3400
  * Wi-Fi/BLE module and Battery Profile <br>
  * It uses the following hardware:
  * - SAM Xplained Pro.
@@ -51,17 +51,15 @@
  * \section usage Usage
  * -# To connect the SAM board to the internet Access Point over Wi-Fi, the user must
  * -# provide credentials (SSID and passphrase) over BLE. As a first step, it is required
- * -# that the user install the Atmel BLE provision application available with the example project 
- * -# provision_ap_with_ble_on_chip_profile_example (Atmel_BLE_prov.apk) on an Android device.
+ * -# that the user install the Microchip Bluetooth Data application available available in the Android
+ * -# play store on to an any Android device.
  * -# Then, power up the SAM board and run the Android application: perform a scan, select
  * -# an SSID and enter the passphrase.
  * -# Finally, press connect and enter the PIN code "123456".
  * -# If connection to AP is successful, WINC3400 BLE will start beaconing.
- * -# After Successful Wi-Fi connection, this application switch to BLE Battery profile.
- * -# It is required that the user install the ATMEL SMART application 
- * -# available in the Android Play store on to an any Android device.
+ * -# After Successful Wi-Fi connection, this application switch to BLE Proximity profile.
  * -# Then run the Android application: perform a scan, select
- * -# "ATMEL-BAS" to get start with the Battery service.
+ * -# "MCHP-BAS" to get start with the Battery service.
  * -# The application show the level of Battery available in the connected Mobile.
  *
  * -# Build the program and download it into the board.
@@ -77,29 +75,57 @@
  * -# In the terminal window, the following text should appear:
  * \code
  *  -- Wifi BLE Provisioning demo with Battery--
- *	-- SAMD21_XPLAINED_PRO --
- *	-- Compiled: xxx  x xxxx xx:xx:xx --
-
- *    (APP)(INFO)Chip ID 3400d1
+ *  -- SAMXXX_XPLAINED_PRO --
+ *  -- Compiled: Jun xx xxxx xx:xx:xx --
+ *
+ *    (APP)(INFO)Chip ID 3400d2
  *    (APP)(INFO)Curr driver ver: x.x.x
- *    (APP)(INFO)Curr driver HIF Level: (2) X.x
- *    (APP)(INFO)Fw HIF: 8101
+ *    (APP)(INFO)Curr driver HIF Level: (2) x.x
+ *    (APP)(INFO)Fw HIF: 8104
  *    (APP)(INFO)Firmware HIF (2) : x.x
  *    (APP)(INFO)Firmware ver   : x.x.x
  *    (APP)(INFO)Firmware Build <Month> DD YYYY Time xx:xx:xx
+ *    (APP)(INFO)Ota HIF: xxxx
  *    (APP)(INFO)OTP MAC
  *    (APP)(INFO)MAC Address: xx:xx:xx:xx:xx:xx
  *    (APP)(INFO)M2M_NO_PS
  *    (APP)(INFO)POWER SAVE 0
- *	  (APP)(INFO)Reset provision data
- *	  (APP)(INFO)BLE provisioning started
+ *    (APP)(INFO)Reset provision data(APP)(INFO)BLE provisioning started
+ *    (APP)(INFO)Provisioning Failed
+ *    (APP)(INFO)BLE provisioning started
+ *    (APP)(INFO)Provisioned AP:(APP)(INFO)Sec type   : 2(APP)(INFO)SSID       : XXX(APP)(INFO)Passphrase : XXXXXX(APP)(INFO)Provisioning data received
+ *    (APP)(INFO)Retrieving ssid...
+ *    (APP)(INFO)   have valid ssid(APP)(INFO)WiFi Connect: using provisioned AP(APP)(INFO)Wifi State :: CONNECTED ::
+ *    (APP)(INFO)DHCP IP Address :: xxx.xxx.x.x ::
+ *    (APP)(INFO)WiFi Connected up to layer 3
+ *    (APP)(INFO)Provisioning Complete
+ *
+ *    BLE is initializing
+ *
+ *    Device Name: MCHP-BLE
+ *
+ *    Initializing Battery Service Application
+ *    BLE Started Adv
+ *
+ *	  Battery Level:x%
+ *	  Battery Level:xx%
+ *	  Battery Level:xxx%
+ * \endcode
+ *
+ * \section compinfo Compilation Information
+ * This software was written for the GNU GCC compiler using Atmel Studio 7.0
+ * Other compilers are not guaranteed to work.
+ *
+ * \section contactinfo Contact Information
+ * For further information, visit
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
- 
+
 /*- Includes -----------------------------------------------------------------------*/
 #include "battery_app.h"
 #include "ble_manager.h"
 #include "battery.h"
-#include "bsp/include/nm_bsp_samd21_app.h"
+#include "common/include/nm_common.h"
 #include <asf.h>
 #include "console.h"
 #include "driver/include/m2m_wifi.h"
@@ -127,7 +153,7 @@ extern uint32 nmi_inet_addr(char *pcIpAddr);
 #define APP_STATE_PROVISIONING						2
 #define APP_STATE_WAITING_FOR_BUTTON_PRESS			3
 #define APP_STATE_WAITING_FOR_WIFI_CONNECTION		4
-#define APP_STATE_WAITING_FOR_PROFIFE_SWITCH		5
+#define APP_STATE_WAITING_FOR_PROFILE_SWITCH		5
 #define APP_STATE_COMPLETE							6
 
 
@@ -152,7 +178,7 @@ static at_ble_event_parameter_t gu8BleParam __aligned(4);
 /** @brief BAS_ADV_DATA_NAME_TYPE the gap ad data type */
 #define BAS_ADV_DATA_NAME_TYPE			(0x09)
 /* @brief BAS_ADV_DATA_NAME_DATA the actual name of device */
-#define BAS_ADV_DATA_NAME_DATA			("ATMEL-BAS")
+#define BAS_ADV_DATA_NAME_DATA			("MCHP-BAS")
 /** @brief BAS_ADV_DATA_NAME_LEN the length of the device name */
 #define BAS_ADV_DATA_NAME_LEN			(9)
 
@@ -173,30 +199,30 @@ static at_ble_status_t ble_bat_start_advertise(void)
 {
 	uint8_t idx = 0;
 	uint8_t adv_data [ BAS_ADV_DATA_NAME_LEN + BAS_ADV_DATA_UUID_LEN   + (2*2)];
-	
+
 	adv_data[idx++] = BAS_ADV_DATA_UUID_LEN + ADV_TYPE_LEN;
 	adv_data[idx++] = BAS_ADV_DATA_UUID_TYPE;
 
 	/* Appending the UUID */
 	adv_data[idx++] = (uint8_t)BAT_SERVICE_UUID;
 	adv_data[idx++] = (uint8_t)(BAT_SERVICE_UUID >> 8);
-	
+
 	//Appending the complete name to the Ad packet
 	adv_data[idx++] = BAS_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
 	adv_data[idx++] = BAS_ADV_DATA_NAME_TYPE;
-	
+
 	memcpy(&adv_data[idx], BAS_ADV_DATA_NAME_DATA, BAS_ADV_DATA_NAME_LEN);
 	idx += BAS_ADV_DATA_NAME_LEN;
-	
+
 	/* Adding the advertisement data and scan response data */
 	if (at_ble_adv_data_set(adv_data, idx, SCAN_RESP_DATA, SCAN_RESP_LEN) != AT_BLE_SUCCESS)
 	{
 		DBG_LOG("Failed to set adv data");
 		return AT_BLE_FAILURE;
 	}
-	
+
 	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
-	
+
 	/* Start of advertisement */
 	if (at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL,
 			AT_BLE_ADV_FP_ANY, APP_BAS_FAST_ADV, APP_BAS_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS)
@@ -204,7 +230,7 @@ static at_ble_status_t ble_bat_start_advertise(void)
 		DBG_LOG("BLE Adv start Failed");
 		return AT_BLE_FAILURE;
 	}
-	
+
 	DBG_LOG("BLE Started Adv\n");
 	return AT_BLE_SUCCESS;
 }
@@ -242,10 +268,10 @@ static void ble_bat_process(void)
 		timer_cb_done = false;
 
 		battery_level = (battery_level % BATTERY_MAX_LEVEL);
-		
+
 		// blinking when battery less than 60%
 		led_toggle = (battery_level < 60)? true:false;
-		
+
 		/* send the notification and Update the battery level  */
 		if (bat_update_char_value(&bas_service_handler, battery_level) == AT_BLE_SUCCESS)
 		{
@@ -262,7 +288,7 @@ static void ble_bat_profile_init(void)
 	timer_cb_done = false;
 	led_toggle = false;
 	battery_level = BATTERY_MAX_LEVEL;
-	
+
 	DBG_LOG("Initializing Battery Service Application");
 
 	bat_init_service(&bas_service_handler, &battery_level);
@@ -288,7 +314,7 @@ void ble_bat_process_event(at_ble_events_t event, at_ble_event_parameter_t *para
 		// Feed the received event into BlueSDK stack.
 		ble_event_manager(event, params);
 	}
-	
+
 	ble_bat_process();
 }
 
@@ -309,7 +335,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 #ifdef _STATIC_PS_
 	nm_bsp_register_wake_isr(wake_cb, PS_SLEEP_TIME_MS);
 #endif
-	
+
 	m2m_memset((uint8*)&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb_func;
 #ifdef ETH_MODE
@@ -322,7 +348,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	if (M2M_SUCCESS != ret)
 	{
 		M2M_ERR("Driver Init Failed <%d>\n",ret);
-		M2M_ERR("Reseting\n");
+		M2M_ERR("Resetting\n");
 		// Catastrophe - problem with booting. Nothing but to try and reset
 		system_reset();
 
@@ -330,9 +356,9 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 		{
 		}
 	}
-	
+
 	m2m_periph_pullup_ctrl(pinmask, 0);
-	
+
 	m2m_wifi_get_otp_mac_address(mac_addr, &u8IsMacAddrValid);
 	if (!u8IsMacAddrValid) {
 		uint8 DEFAULT_MAC[] = MAC_ADDRESS;
@@ -345,7 +371,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	M2M_INFO("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n",
 	         mac_addr[0],mac_addr[1],mac_addr[2],
 	         mac_addr[3],mac_addr[4],mac_addr[5]);
-	
+
 
 	/* Name must be in the format WINC3400_00:00 */
 	{
@@ -395,13 +421,13 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	{
 		tstrM2MIPConfig* pstrM2MIpConfig = (tstrM2MIPConfig*) pvMsg;
 		uint8 *pu8IPAddress = (uint8*) &pstrM2MIpConfig->u32StaticIP;
-		
+
 		M2M_INFO("DHCP IP Address :: %u.%u.%u.%u ::\n",
 			pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
 		M2M_INFO("WiFi Connected up to layer 3\r\n");
 
 		gu8WiFiConnectionState = M2M_WIFI_CONNECTED;
-	
+
 	}
 	else if (u8MsgType == M2M_WIFI_RESP_SCAN_DONE)
 	{
@@ -410,7 +436,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 		if (gu8WiFiConnectionState != M2M_WIFI_CONNECTED)
 		{
 			gu8ScanIndex = 0;
-			
+
 			if (pstrInfo->u8NumofCh >= 1)
 			{
 				m2m_wifi_req_scan_result(gu8ScanIndex);
@@ -442,7 +468,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	else if(u8MsgType == M2M_WIFI_RESP_SET_GAIN_TABLE) {
 		tstrM2MGainTableRsp *pstrRsp = (tstrM2MGainTableRsp *)pvMsg;
 		M2M_ERR("Gain Table Load Fail %d\n", pstrRsp->s8ErrorCode);
-	}    
+	}
 }
 
 static void app_button_press_callback(uint8 btn, uint8 press)
@@ -458,19 +484,19 @@ static void app_button_press_callback(uint8 btn, uint8 press)
 }
 
 // This is an example of using onchip_profile, ble_prov API.
-static void app_ble_wifi_provisioning(void) 
+static void app_ble_wifi_provisioning(void)
 {
 	uint8_t app_state = APP_STATE_IDLE;
 	uint8_t wifi_con_state = M2M_WIFI_UNDEF;
 	uint8_t btn_event;
 	at_ble_events_t ble_event;
 	uint8_t display_name[] = APP_WIFI_PROV_DISPLAY_NAME;
-	
+
 	gu8BtnEvent = 0;
 
 	// Initialize BLE stack on 3400.
 	m2m_ble_init();
-	ble_prov_init(display_name);	
+	ble_prov_init(display_name);
 
 	//M2M_INFO("Hold SW0 for 2 sec to start provisioning.\r\n");
 
@@ -526,7 +552,7 @@ static void app_ble_wifi_provisioning(void)
 					{
 						m2m_wifi_disconnect();
 						app_state = APP_STATE_WAITING_FOR_WIFI_DISCONNECTION;
-					}	
+					}
 					else
 					{
 						gu8WiFiConnectionState = M2M_WIFI_UNDEF;
@@ -535,7 +561,7 @@ static void app_ble_wifi_provisioning(void)
 							app_state = APP_STATE_PROVISIONING;
 						}
 					}
-						
+
 				}
 				break;
 			}
@@ -623,8 +649,8 @@ static void app_ble_wifi_provisioning(void)
 				if (wifi_con_state == M2M_WIFI_CONNECTED)
 				{
 					M2M_INFO("Provisioning Complete\r\n");
-					//M2M_INFO("Press SW0 to switch BLE profile to Battery profile\r\n");	
-					app_state = APP_STATE_WAITING_FOR_PROFIFE_SWITCH;
+					//M2M_INFO("Press SW0 to switch BLE profile to Battery profile\r\n");
+					app_state = APP_STATE_WAITING_FOR_PROFILE_SWITCH;
 				}
 				if (wifi_con_state == M2M_WIFI_DISCONNECTED)
 				{
@@ -636,7 +662,7 @@ static void app_ble_wifi_provisioning(void)
 				}
 				break;
 			}
-			case APP_STATE_WAITING_FOR_PROFIFE_SWITCH:
+			case APP_STATE_WAITING_FOR_PROFILE_SWITCH:
 			{
 				//if (btn_event == APP_BTN_EVENT_BTN1_SHORT_PRESS)
 				{
@@ -660,9 +686,8 @@ static void app_ble_battery(void)
 	// Pump BLE event to BLE application.
 	while (1)
 	{
-		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS) 
+		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS)
 		{
-		    if (ble_event) { printf("\nble_event=%d\n", ble_event); }
 			ble_bat_process_event(ble_event, &gu8BleParam);
 		}
 	}
@@ -671,14 +696,14 @@ static void app_ble_battery(void)
 static void app_main(void)
 {
 	// Initialize WiFi interface first.
-	// 3400 WiFi HIF is used to convey BLE API primitives. 
+	// 3400 WiFi HIF is used to convey BLE API primitives.
 	app_wifi_init(app_wifi_handle_event);
 	nm_bsp_btn_init(app_button_press_callback);
 	//nm_bsp_sleep(2000);
-	
+
 	// Demo application using Onchip(AT_BLE API) profile.
 	app_ble_wifi_provisioning();
-	
+
 	nm_bsp_sleep(2000);
 
 	// Demo application using BlueSDK profile.
@@ -703,9 +728,9 @@ int main (void)
 	puts(STRING_HEADER);
 
 	nm_bsp_init();
-	nm_bsp_app_init();	
+	nm_bsp_app_init();
 	led_init();
-	
+
 	app_main();
 }
 

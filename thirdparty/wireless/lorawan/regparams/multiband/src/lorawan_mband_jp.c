@@ -67,12 +67,14 @@ static const DRParams_t DefaultDrParamsJP[] = {
 
 static const SubBandParams_t SubBandParamsJP923[] =
 {
-	SB0_923_JP
+	SB0_923_JP,
+	SB1_923_JP
 };
 
 static const uint16_t SubBandDutyCycleJP923[] =
 {
-	SB0_923_JP_DC_0
+	SB0_923_JP_DC_0,
+	SB1_923_JP_DC_0
 };
 
 
@@ -145,8 +147,9 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
 	RegParams.maxTxPwrIndx = 7;
 	RegParams.maxTxPwr = DEFAULT_EIRP_JP;
 	RegParams.cmnParams.paramsType2.LBTTimer.timerId = regTimerId[0];
-	RegParams.pJoinBackoffTimer->timerId = regTimerId[1];
-    RegParams.pJoinDutyCycleTimer->timerId = regTimerId[2];
+	RegParams.pDutyCycleTimer->timerId = regTimerId[1];
+	RegParams.pJoinBackoffTimer->timerId = regTimerId[2];
+    RegParams.pJoinDutyCycleTimer->timerId = regTimerId[3];
 	RegParams.pJoinDutyCycleTimer->remainingtime =0;
 	RegParams.joinbccount =0;
 	RegParams.joinDutyCycleTimeout =0;

@@ -3,7 +3,7 @@
  *
  * \brief Proximity Reporter Profile Application Implementations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,10 +30,15 @@
  * \asf_license_stop
  *
  */
- /**
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
+ */
+
+/**
  * \mainpage
   * \section intro Introduction
- * This example demonstrates Wi-Fi provision via BLE using the WINC3400 
+ * This example demonstrates Wi-Fi provision via BLE using the WINC3400
  * Wi-Fi/BLE module and Proximity Profile <br>
  * It uses the following hardware:
  * - SAM Xplained Pro.
@@ -46,17 +51,15 @@
  * \section usage Usage
  * -# To connect the SAM board to the internet Access Point over Wi-Fi, the user must
  * -# provide credentials (SSID and passphrase) over BLE. As a first step, it is required
- * -# that the user install the Atmel BLE provision application available with the example project 
- * -# provision_ap_with_ble_on_chip_profile_example (Atmel_BLE_prov.apk) on an Android device.
+ * -# that the user install the Microchip Bluetooth Data application available available in the Android
+ * -# play store on to an any Android device.
  * -# Then, power up the SAM board and run the Android application: perform a scan, select
  * -# an SSID and enter the passphrase.
  * -# Finally, press connect and enter the PIN code "123456".
  * -# If connection to AP is successful, WINC3400 BLE will start beaconing.
  * -# After Successful Wi-Fi connection, this application switch to BLE Proximity profile.
- * -# It is required that the user install the ATMEL SMART application 
- * -# available in the Android Play store on to an any Android device.
  * -# Then run the Android application: perform a scan, select
- * -# "ATMEL-PXP" to get start with the Proximity service.
+ * -# "MCHP-PXP" to get start with the Proximity service.
  * -# The application show the Proximity features: Immediate alert, link loss and Tx power
  *
  * -# Build the program and download it into the board.
@@ -72,30 +75,68 @@
  * -# In the terminal window, the following text should appear:
  * \code
  *  -- Wifi BLE Provisioning demo with Proximity Example--
- *	-- SAMD21_XPLAINED_PRO --
+ *  -- SAMXXX_XPLAINED_PRO --
  *	-- Compiled: xxx  x xxxx xx:xx:xx --
-
- *    (APP)(INFO)Chip ID 3400d1
+ *
+ *    (APP)(INFO)Chip ID 3400d2
  *    (APP)(INFO)Curr driver ver: x.x.x
- *    (APP)(INFO)Curr driver HIF Level: (2) X.x
- *    (APP)(INFO)Fw HIF: 8101
+ *    (APP)(INFO)Curr driver HIF Level: (2) x.x
+ *    (APP)(INFO)Fw HIF: 8104
  *    (APP)(INFO)Firmware HIF (2) : x.x
  *    (APP)(INFO)Firmware ver   : x.x.x
  *    (APP)(INFO)Firmware Build <Month> DD YYYY Time xx:xx:xx
+ *    (APP)(INFO)Ota HIF: xxxx
  *    (APP)(INFO)OTP MAC
  *    (APP)(INFO)MAC Address: xx:xx:xx:xx:xx:xx
  *    (APP)(INFO)M2M_NO_PS
  *    (APP)(INFO)POWER SAVE 0
- *	  (APP)(INFO)Reset provision data
- *	  (APP)(INFO)BLE provisioning started
+ *    (APP)(INFO)Reset provision data(APP)(INFO)BLE provisioning started
+ *    (APP)(INFO)Provisioning Failed
+ *    (APP)(INFO)BLE provisioning started
+ *    (APP)(INFO)Provisioned AP:(APP)(INFO)Sec type   : 2(APP)(INFO)SSID       : XXX(APP)(INFO)Passphrase : XXXXXX(APP)(INFO)Provisioning data received
+ *    (APP)(INFO)Retrieving ssid...
+ *    (APP)(INFO)   have valid ssid(APP)(INFO)WiFi Connect: using provisioned AP(APP)(INFO)Wifi State :: CONNECTED ::
+ *    (APP)(INFO)DHCP IP Address :: xxx.xxx.x.x ::
+ *    (APP)(INFO)WiFi Connected up to layer 3
+ *    (APP)(INFO)Provisioning Complete
+ *
+ *    BLE is initializing
+ *
+ *    Device Name: MCHP-PXP
+ *
+ *    Initializing Battery Service Application
+ *    BLE Started Adv
+ *
+ *    This is Proximity Reporter
+ *    Proximity Reporter provides these services:
+ *      -> Link Loss Service
+ *      -> Immediate Alert Service
+ *      -> Tx Power Service
+ *    BLE device is in Advertising Mode
+ *    Advertising Device Name: ATMEL-PXP
+ *
+ *    Pathloss : Mild Alert(APP)(INFO)
+ *    Pathloss : Mild Alert(APP)(INFO)
+ *    Pathloss : High Alert(APP)(INFO)
+ *    Pathloss : Mild Alert(APP)(INFO)
+ *    Pathloss : High Alert(APP)(INFO)
+ * \endcode
+ * 
+ * \section compinfo Compilation Information
+ * This software was written for the GNU GCC compiler using Atmel Studio 7.0
+ * Other compilers are not guaranteed to work.
+ *
+ * \section contactinfo Contact Information
+ * For further information, visit
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
- 
-/*- Includes -----------------------------------------------------------------------*/ 
+
+/*- Includes -----------------------------------------------------------------------*/
 #include "ble_manager.h"
 #include "pxp_reporter.h"
 #include "immediate_alert.h"
 #include "link_loss.h"
-#include "bsp/include/nm_bsp_samd21_app.h"
+#include "common/include/nm_common.h"
 #include "pxp_reporter_app.h"
 #include <asf.h>
 #include "console.h"
@@ -104,7 +145,6 @@
 #include "m2m_ble.h"
 #include "at_ble_api.h"
 #include "wifi_prov.h"
-#include "pxp_reporter_app.h"
 
 #define STRING_HEADER "-- Wifi BLE Provisioning demo with Proximity Example--\r\n" \
                       "-- "BOARD_NAME" --\r\n" \
@@ -122,7 +162,7 @@
 #define APP_STATE_PROVISIONING						2
 #define APP_STATE_WAITING_FOR_BUTTON_PRESS			3
 #define APP_STATE_WAITING_FOR_WIFI_CONNECTION		4
-#define APP_STATE_WAITING_FOR_PROFIFE_SWITCH		5
+#define APP_STATE_WAITING_FOR_PROFILE_SWITCH		5
 #define APP_STATE_COMPLETE							6
 
 
@@ -254,7 +294,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 #ifdef _STATIC_PS_
 	nm_bsp_register_wake_isr(wake_cb, PS_SLEEP_TIME_MS);
 #endif
-	
+
 	m2m_memset((uint8*)&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb_func;
 #ifdef ETH_MODE
@@ -267,7 +307,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	if (M2M_SUCCESS != ret)
 	{
 		M2M_ERR("Driver Init Failed <%d>\n",ret);
-		M2M_ERR("Reseting\n");
+		M2M_ERR("Resetting\n");
 		// Catastrophe - problem with booting. Nothing but to try and reset
 		system_reset();
 
@@ -275,9 +315,9 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 		{
 		}
 	}
-	
+
 	m2m_periph_pullup_ctrl(pinmask, 0);
-	
+
 	m2m_wifi_get_otp_mac_address(mac_addr, &u8IsMacAddrValid);
 	if (!u8IsMacAddrValid) {
 		uint8 DEFAULT_MAC[] = MAC_ADDRESS;
@@ -290,7 +330,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	M2M_INFO("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n",
 	         mac_addr[0],mac_addr[1],mac_addr[2],
 	         mac_addr[3],mac_addr[4],mac_addr[5]);
-	
+
 
 	/* Name must be in the format WINC3400_00:00 */
 	{
@@ -340,13 +380,13 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	{
 		tstrM2MIPConfig* pstrM2MIpConfig = (tstrM2MIPConfig*) pvMsg;
 		uint8 *pu8IPAddress = (uint8*) &pstrM2MIpConfig->u32StaticIP;
-		
+
 		M2M_INFO("DHCP IP Address :: %u.%u.%u.%u ::\n",
 			pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
 		M2M_INFO("WiFi Connected up to layer 3\r\n");
 
 		gu8WiFiConnectionState = M2M_WIFI_CONNECTED;
-	
+
 	}
 	else if (u8MsgType == M2M_WIFI_RESP_SCAN_DONE)
 	{
@@ -355,7 +395,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 		if (gu8WiFiConnectionState != M2M_WIFI_CONNECTED)
 		{
 			gu8ScanIndex = 0;
-			
+
 			if (pstrInfo->u8NumofCh >= 1)
 			{
 				m2m_wifi_req_scan_result(gu8ScanIndex);
@@ -403,19 +443,19 @@ static void app_button_press_callback(uint8 btn, uint8 press)
 }
 
 // This is an example of using onchip_profile, ble_prov API.
-static void app_ble_wifi_provisioning(void) 
+static void app_ble_wifi_provisioning(void)
 {
 	uint8_t app_state = APP_STATE_IDLE;
 	uint8_t wifi_con_state = M2M_WIFI_UNDEF;
 	uint8_t btn_event;
 	at_ble_events_t ble_event;
 	uint8_t display_name[] = APP_WIFI_PROV_DISPLAY_NAME;
-	
+
 	gu8BtnEvent = 0;
 
 	// Initialize BLE stack on 3400.
 	m2m_ble_init();
-	ble_prov_init(display_name);	
+	ble_prov_init(display_name);
 
 	//M2M_INFO("Hold SW0 for 2 sec to start provisioning.\r\n");
 
@@ -471,7 +511,7 @@ static void app_ble_wifi_provisioning(void)
 					{
 						m2m_wifi_disconnect();
 						app_state = APP_STATE_WAITING_FOR_WIFI_DISCONNECTION;
-					}	
+					}
 					else
 					{
 						gu8WiFiConnectionState = M2M_WIFI_UNDEF;
@@ -480,7 +520,7 @@ static void app_ble_wifi_provisioning(void)
 							app_state = APP_STATE_PROVISIONING;
 						}
 					}
-						
+
 				}
 				break;
 			}
@@ -568,8 +608,8 @@ static void app_ble_wifi_provisioning(void)
 				if (wifi_con_state == M2M_WIFI_CONNECTED)
 				{
 					M2M_INFO("Provisioning Complete\r\n");
-					//M2M_INFO("Press SW0 to switch BLE profile to Proximity profile\r\n");	
-					app_state = APP_STATE_WAITING_FOR_PROFIFE_SWITCH;
+					//M2M_INFO("Press SW0 to switch BLE profile to Proximity profile\r\n");
+					app_state = APP_STATE_WAITING_FOR_PROFILE_SWITCH;
 				}
 				if (wifi_con_state == M2M_WIFI_DISCONNECTED)
 				{
@@ -581,7 +621,7 @@ static void app_ble_wifi_provisioning(void)
 				}
 				break;
 			}
-			case APP_STATE_WAITING_FOR_PROFIFE_SWITCH:
+			case APP_STATE_WAITING_FOR_PROFILE_SWITCH:
 			{
 				//if (btn_event == APP_BTN_EVENT_BTN1_SHORT_PRESS)
 				{
@@ -605,7 +645,7 @@ static void app_ble_proximity(void)
 	// Pump event to BLE application.
 	while (1)
 	{
-		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS) 
+		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS)
 		{
 			ble_pxp_process_event(ble_event, &gu8BleParam);
 		}
@@ -615,13 +655,13 @@ static void app_ble_proximity(void)
 static void app_main(void)
 {
 	// Initialize WiFi interface first.
-	// 3400 WiFi HIF is used to convey BLE API primitives. 
+	// 3400 WiFi HIF is used to convey BLE API primitives.
 	app_wifi_init(app_wifi_handle_event);
 	nm_bsp_btn_init(app_button_press_callback);
-	
+
 	// Demo application using Onchip(AT_BLE API) profile.
 	app_ble_wifi_provisioning();
-	
+
 	// Demo application using BlueSDK profile.
 	app_ble_proximity();
 }
@@ -644,9 +684,9 @@ int main (void)
 	puts(STRING_HEADER);
 
 	nm_bsp_init();
-	nm_bsp_app_init();	
+	nm_bsp_app_init();
 	led_init();
-	
+
 	app_main();
 }
 

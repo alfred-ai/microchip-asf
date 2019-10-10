@@ -3,7 +3,7 @@
 *
 * \brief MiWi Mesh PDS Definitions
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -56,9 +56,7 @@ extern CoordRouteTable_t coordRouteTable[NUM_OF_COORDINATORS];
 extern CoordHopCount_t coordHopCount[HOP_TABLE_COUNT];
 extern uint8_t networkKey[SECURITY_KEY_SIZE];
 extern uint8_t bloomFilterValue[BLOOM_FILTER_SIZE];
-#if defined(ENABLE_FREQUENCY_AGILITY)
 extern uint8_t newChannelToUpdate;
-#endif
 
 /******************************************************************************
                     Files definitions
@@ -69,9 +67,7 @@ PDS_DECLARE_ITEM(PDS_SECURITY_KEY_ID, PDS_SECURITY_KEY_ITEM_SIZE, &networkKey, N
 PDS_DECLARE_ITEM(PDS_SECURITY_COUNTER_ID, PDS_SECURITY_COUNTER_ITEM_SIZE, &meshOutgoingFrameCounter, NULL, NO_ITEM_FLAGS);
 #endif
 PDS_DECLARE_ITEM(PDS_BLOOM_VALUE_ID, PDS_BLOOM_VALUE_ITEM_SIZE, &bloomFilterValue, NULL, NO_ITEM_FLAGS);
-#if defined(ENABLE_FREQUENCY_AGILITY)
 PDS_DECLARE_ITEM(PDS_CHANNEL_UPDATE_ID, PDS_CHANNEL_UPDATE_ITEM_SIZE, &newChannelToUpdate, NULL, NO_ITEM_FLAGS);
-#endif
 #if defined(PAN_COORDINATOR)
 PDS_DECLARE_ITEM(PDS_COMM_DEVICE_TABLE_ID, PDS_COMM_DEVICE_TABLE_ITEM_SIZE*MAX_NUMBER_OF_DEVICES_IN_NETWORK, &commnDeviceTable, NULL, SIZE_MODIFICATION_ALLOWED);
 PDS_DECLARE_ITEM(PDS_COORDINATOR_TABLE_ID, PDS_COORDINATOR_TABLE_ITEM_SIZE*NUM_OF_COORDINATORS, &coordinatorTable, NULL, SIZE_MODIFICATION_ALLOWED);

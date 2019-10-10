@@ -3,7 +3,7 @@
  *
  * \brief BLE Profile related declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,8 +30,10 @@
  * \asf_license_stop
  *
  */
+
 /*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
  */
 
 #ifndef __PROFILES_H__

@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAMD21 BSP APIs implementation.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -49,137 +49,138 @@ static tpfNmBspIsr gpfIsr;
 
 static void chip_isr(void)
 {
-	if (gpfIsr) {
-		gpfIsr();
-	}
+    if(gpfIsr) {
+        gpfIsr();
+    }
 }
 
-/*
- *	@fn		init_chip_pins
- *	@brief	Initialize reset, chip enable and wake pin
+/**
+ *  @fn         init_chip_pins
+ *  @brief      Initialize reset, chip enable and wake pin
  */
 static void init_chip_pins(void)
 {
-	struct port_config pin_conf;
+    struct port_config pin_conf;
 
-	port_get_config_defaults(&pin_conf);
+    port_get_config_defaults(&pin_conf);
 
-	/* Configure control pins as output. */
-	pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
-	port_pin_set_config(CONF_WINC_PIN_RESET, &pin_conf);
-	port_pin_set_config(CONF_WINC_PIN_CHIP_ENABLE, &pin_conf);
-	port_pin_set_config(CONF_WINC_PIN_WAKE, &pin_conf);
-	port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
-	port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
+    /* Configure control pins as output. */
+    pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
+    port_pin_set_config(CONF_WINC_PIN_RESET, &pin_conf);
+    port_pin_set_config(CONF_WINC_PIN_CHIP_ENABLE, &pin_conf);
+    port_pin_set_config(CONF_WINC_PIN_WAKE, &pin_conf);
+    port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
+    port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
 }
 
-/*
- *	@fn		nm_bsp_init
- *	@brief	Initialize BSP
- *	@return	0 in case of success and -1 in case of failure
+/**
+ *  @fn         nm_bsp_init
+ *  @brief      Initialize BSP
+ *  @return     0 in case of success and -1 in case of failure
  */
 sint8 nm_bsp_init(void)
 {
-	gpfIsr = NULL;
+    gpfIsr = NULL;
 
-	/* Initialize chip IOs. */
-	init_chip_pins();
+    /* Initialize chip IOs. */
+    init_chip_pins();
 #ifndef CONF_WINC_USE_SPI
-	nm_bsp_reset();
+    nm_bsp_reset();
 #endif
 
     /* Make sure a 1ms Systick is configured. */
-    if (!(SysTick->CTRL & SysTick_CTRL_ENABLE_Msk && SysTick->CTRL & SysTick_CTRL_TICKINT_Msk)) {
-	    delay_init();
+    if(!(SysTick->CTRL & SysTick_CTRL_ENABLE_Msk && SysTick->CTRL & SysTick_CTRL_TICKINT_Msk)) {
+        delay_init();
     }
-	
-	system_interrupt_enable_global();
-	return M2M_SUCCESS;
+    system_interrupt_enable_global();
+
+    return M2M_SUCCESS;
 }
 
 /**
- *	@fn		nm_bsp_deinit
- *	@brief	De-iInitialize BSP
- *	@return	0 in case of success and -1 in case of failure
+ *  @fn         nm_bsp_deinit
+ *  @brief      De-iInitialize BSP
+ *  @return     0 in case of success and -1 in case of failure
  */
 sint8 nm_bsp_deinit(void)
 {
-	struct port_config pin_conf;
-	port_get_config_defaults(&pin_conf);
-	/* Configure control pins as input no pull up. */
-	pin_conf.direction  = PORT_PIN_DIR_INPUT;
-	pin_conf.input_pull = PORT_PIN_PULL_NONE;
-	port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
-	port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
-	port_pin_set_config(CONF_WINC_SPI_INT_PIN, &pin_conf);
-	return M2M_SUCCESS;
+    struct port_config pin_conf;
+    port_get_config_defaults(&pin_conf);
+    /* Configure control pins as input no pull up. */
+    pin_conf.direction  = PORT_PIN_DIR_INPUT;
+    pin_conf.input_pull = PORT_PIN_PULL_NONE;
+    port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
+    port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
+    port_pin_set_config(CONF_WINC_SPI_INT_PIN, &pin_conf);
+    return M2M_SUCCESS;
 }
 
 /**
- *	@fn		nm_bsp_reset
- *	@brief	Reset NMC1500 SoC by setting CHIP_EN and RESET_N signals low,
- *			CHIP_EN high then RESET_N high.
- *			CHIP_EN and RESET_N are actually already set low by nm_bsp_init or nm_bsp_deinit().
- *			Here we just need to set them high.
+ *  @fn         nm_bsp_reset
+ *  @brief      Reset NMC1500 SoC by setting CHIP_EN and RESET_N signals low,
+ *              CHIP_EN high then RESET_N high
  */
 void nm_bsp_reset(void)
 {
-	port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, true);
-	nm_bsp_sleep(5);
-	port_pin_set_output_level(CONF_WINC_PIN_RESET, true);
+    port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, false);
+    port_pin_set_output_level(CONF_WINC_PIN_RESET, false);
+    nm_bsp_sleep(1);
+    port_pin_set_output_level(CONF_WINC_PIN_CHIP_ENABLE, true);
+    nm_bsp_sleep(5);
+    port_pin_set_output_level(CONF_WINC_PIN_RESET, true);
 }
 
-/*
- *	@fn		nm_bsp_sleep
- *	@brief	Sleep in units of mSec
- *	@param[IN]	u32TimeMsec
- *				Time in milliseconds
+/**
+ *  @fn         nm_bsp_sleep
+ *  @brief      Sleep in units of mSec
+ *  @param[IN]  u32TimeMsec
+ *                  Time in milliseconds
  */
 void nm_bsp_sleep(uint32 u32TimeMsec)
 {
-	while (u32TimeMsec--) {
-		delay_ms(1);
-	}
+    while(u32TimeMsec--) {
+        delay_ms(1);
+    }
 }
 
-/*
- *	@fn		nm_bsp_register_isr
- *	@brief	Register interrupt service routine
- *	@param[IN]	pfIsr
- *				Pointer to ISR handler
+/**
+ *  @fn         nm_bsp_register_isr
+ *  @brief      Register interrupt service routine
+ *  @param[IN]  pfIsr
+ *                  Pointer to ISR handler
  */
 void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 {
-	struct extint_chan_conf config_extint_chan;
+    struct extint_chan_conf config_extint_chan;
 
-	gpfIsr = pfIsr;
+    gpfIsr = pfIsr;
 
-	extint_chan_get_config_defaults(&config_extint_chan);
-	config_extint_chan.gpio_pin = CONF_WINC_SPI_INT_PIN;
-	config_extint_chan.gpio_pin_mux = CONF_WINC_SPI_INT_MUX;
-	config_extint_chan.gpio_pin_pull = EXTINT_PULL_UP;
-	config_extint_chan.detection_criteria = EXTINT_DETECT_FALLING;
+    extint_chan_get_config_defaults(&config_extint_chan);
+    config_extint_chan.gpio_pin = CONF_WINC_SPI_INT_PIN;
+    config_extint_chan.gpio_pin_mux = CONF_WINC_SPI_INT_MUX;
+    config_extint_chan.gpio_pin_pull = EXTINT_PULL_UP;
+    config_extint_chan.detection_criteria = EXTINT_DETECT_FALLING;
 
-	extint_chan_set_config(CONF_WINC_SPI_INT_EIC, &config_extint_chan);
-	extint_register_callback(chip_isr, CONF_WINC_SPI_INT_EIC,
-			EXTINT_CALLBACK_TYPE_DETECT);
-	extint_chan_enable_callback(CONF_WINC_SPI_INT_EIC,
-			EXTINT_CALLBACK_TYPE_DETECT);
+    extint_chan_set_config(CONF_WINC_SPI_INT_EIC, &config_extint_chan);
+    extint_register_callback(chip_isr, CONF_WINC_SPI_INT_EIC,
+                             EXTINT_CALLBACK_TYPE_DETECT);
+    extint_chan_enable_callback(CONF_WINC_SPI_INT_EIC,
+                                EXTINT_CALLBACK_TYPE_DETECT);
 }
 
-/*
- *	@fn		nm_bsp_interrupt_ctrl
- *	@brief	Enable/Disable interrupts
- *	@param[IN]	u8Enable
- *				'0' disable interrupts. '1' enable interrupts
+/**
+ *  @fn         nm_bsp_interrupt_ctrl
+ *  @brief      Enable/Disable interrupts
+ *  @param[IN]  u8Enable
+ *                  '0' disable interrupts. '1' enable interrupts
  */
 void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 {
-	if (u8Enable) {
-		extint_chan_enable_callback(CONF_WINC_SPI_INT_EIC,
-				EXTINT_CALLBACK_TYPE_DETECT);
-	} else {
-		extint_chan_disable_callback(CONF_WINC_SPI_INT_EIC,
-				EXTINT_CALLBACK_TYPE_DETECT);
-	}
+    if(u8Enable) {
+        extint_chan_enable_callback(CONF_WINC_SPI_INT_EIC,
+                                    EXTINT_CALLBACK_TYPE_DETECT);
+    } else {
+        extint_chan_disable_callback(CONF_WINC_SPI_INT_EIC,
+                                     EXTINT_CALLBACK_TYPE_DETECT);
+    }
 }

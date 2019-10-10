@@ -247,7 +247,13 @@ enum status_code dac_init(
 #if DAC_CALLBACK_MODE == true
 	for (uint8_t i = 0; i < DAC_CALLBACK_N; i++) {
 		module_inst->callback[i] = NULL;
-	};
+		module_inst->callback_enable[i] = false;
+	}
+	
+	module_inst->job_buffer = NULL;
+	module_inst->remaining_conversions = 0;
+	module_inst->transferred_conversions = 0;
+	module_inst->job_status = STATUS_OK;
 
 	_dac_instances[0] = module_inst;
 #endif

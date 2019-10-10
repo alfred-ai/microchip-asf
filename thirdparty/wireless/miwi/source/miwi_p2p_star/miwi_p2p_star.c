@@ -1983,7 +1983,7 @@ void frameParse(MAC_RECEIVED_PACKET *macRxPacket)
                     }
                     /* Retry is not needed since already response received */
                     gEstConnectionInfo.connectionRetries = 0;
-
+                    {
                     /* Add Entry in the connection Table */
 #if defined(PROTOCOL_STAR)
                     uint8_t status = AddConnection(rxMessage.Payload[3]);
@@ -2008,7 +2008,7 @@ void frameParse(MAC_RECEIVED_PACKET *macRxPacket)
                     PDS_Store(PDS_MYINDEX_ID);
 #endif
 #endif
-
+                    }
 #if defined(ENABLE_NETWORK_FREEZER)
                    PDS_Store(MIWI_ALL_MEMORY_MEM_ID);
 #endif
@@ -3069,7 +3069,7 @@ bool MiApp_InitChannelHopping( INPUT uint32_t ChannelMap)
 *****************************************************************************************/
 bool MiApp_ReadyToSleep(uint32_t* sleepTime)
 {
-    if(!(P2PStatus.bits.DataRequesting || P2PStatus.bits.RxHasUserData || (frameTxQueue.size) || (!txCallbackReceived)))
+    if((p2pStarCurrentState == IN_NETWORK_STATE) && !(P2PStatus.bits.DataRequesting || P2PStatus.bits.RxHasUserData || (frameTxQueue.size) || (!txCallbackReceived)))
     {
         *sleepTime = dataRequestInterval * 1000;
         return true;

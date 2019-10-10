@@ -1,9 +1,9 @@
-﻿/**
+/**
  * \file
  *
  * \brief HTTP client service.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -458,10 +458,10 @@ void http_client_socket_event_handler(SOCKET sock, uint8_t msg_type, void *msg_d
 /**
  * \brief Event handler of gethostbyname.
  *
- * \param[in]  doamin_name     Domain name.
+ * \param[in]  domain_name     Domain name.
  * \param[in]  server_ip       Server IP.
  */
-void http_client_socket_resolve_handler(uint8_t *doamin_name, uint32_t server_ip);
+void http_client_socket_resolve_handler(uint8_t *domain_name, uint32_t server_ip);
 
 /**
  * \brief Event handler of gethostbyname.

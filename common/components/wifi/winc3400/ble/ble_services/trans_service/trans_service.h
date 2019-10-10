@@ -1,9 +1,10 @@
+
 /**
  * \file
  *
  * \brief Transparent Service declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,8 +31,10 @@
  * \asf_license_stop
  *
  */
+
 /*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
  */
 
 
@@ -67,6 +70,7 @@ at_ble_status_t trans_update_tx_char_value (gatt_service_handler_t *trans_servic
  */
 at_ble_status_t trans_update_ctrl_char_value (gatt_service_handler_t *trans_service, uint8_t* trans_ctrl_value, uint8_t len);
 
+
 /**@brief transparent service and characteristic initialization(Called only once by user).
  *
  * @param[in] trans_service trans service instance
@@ -75,7 +79,7 @@ at_ble_status_t trans_update_ctrl_char_value (gatt_service_handler_t *trans_serv
  */
 void trans_service_init(gatt_service_handler_t *trans_service);
 
-/**@brief Register a transparent service instance inside stack. 
+/**@brief Register a transparent service instance inside stack.
  *
  * @param[in] trans_service trans service instance
  *

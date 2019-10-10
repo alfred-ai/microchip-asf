@@ -123,6 +123,7 @@ typedef enum _LorawanRegionalAttributes
 	JOINBACKOFF_CNTL,
 	REG_JOIN_SUCCESS,
 	REG_JOIN_ENABLE_ALL,
+	CHLIST_DEFAULTS,
 	REG_NUM_ATTRIBUTES	
 }LorawanRegionalAttributes_t;
 

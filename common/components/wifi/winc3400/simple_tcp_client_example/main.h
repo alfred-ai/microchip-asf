@@ -3,7 +3,7 @@
  *
  * \brief MAIN configuration.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -40,10 +40,10 @@ extern "C" {
 
 /** Wi-Fi Settings */
 #define MAIN_WLAN_SSID                    "DEMO_AP" /**< Destination SSID */
-#define MAIN_WLAN_AUTH                    M2M_WIFI_SEC_WPA_PSK /**< Security manner */
+#define MAIN_WLAN_AUTH                    M2M_WIFI_SEC_WPA_PSK /**< Security type */
 #define MAIN_WLAN_PSK                     "12345678" /**< Password for Destination SSID */
 #define MAIN_WIFI_M2M_PRODUCT_NAME        "NMCTemp"
-#define MAIN_WIFI_M2M_SERVER_IP           0xc0a80164 //0xFFFFFFFF /* 255.255.255.255 */
+#define MAIN_WIFI_M2M_SERVER_IP           0xFFFFFFFF /* 255.255.255.255 */
 #define MAIN_WIFI_M2M_SERVER_PORT         (6666)
 #define MAIN_WIFI_M2M_REPORT_INTERVAL     (1000)
 

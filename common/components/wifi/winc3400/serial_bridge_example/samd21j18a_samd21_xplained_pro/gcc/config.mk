@@ -52,10 +52,12 @@ TARGET_SRAM = winc3400_serial_bridge_example_sram.elf
 
 # List of C source files.
 CSRCS = \
-       common/components/wifi/winc3400/serial_bridge_example/serial_bridge.c \
+       common/components/wifi/winc3400/serial_bridge_example/buffered_uart_ultra.c \
+       common/components/wifi/winc3400/serial_bridge_example/serial_bridge_ultra.c \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21.c \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21_app.c \
        common/components/wifi/winc3400/wifi_drv/bus_wrapper/source/nm_bus_wrapper_samd21.c \
+       common/components/wifi/winc3400/wifi_drv/common/source/efuse.c \
        common/components/wifi/winc3400/wifi_drv/common/source/nm_common.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ate_mode.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_crypto.c \
@@ -68,7 +70,6 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmasic.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmbus.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmdrv.c \
-       common/components/wifi/winc3400/wifi_drv/driver/source/nmflash.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmi2c.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmspi.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmuart.c \

@@ -325,7 +325,7 @@
 				</option>
 				<option>
 					<name>CCIncludePath2</name>
-					<state>$PROJ_DIR$/../../../../../services/nvm</state>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/sys/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -372,6 +372,7 @@
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/tal/sx1276/inc</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/services/pds/inc</state>
+					<state>$PROJ_DIR$/../../../../../services/nvm</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_l</state>
@@ -660,7 +661,7 @@
 				</option>
 				<option>
 					<name>AUserIncludes</name>
-					<state>$PROJ_DIR$/../../../../../services/nvm</state>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/sys/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -707,6 +708,7 @@
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/tal/sx1276/inc</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/services/pds/inc</state>
+					<state>$PROJ_DIR$/../../../../../services/nvm</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_l</state>
@@ -1420,7 +1422,7 @@
 				</option>
 				<option>
 					<name>CCIncludePath2</name>
-					<state>$PROJ_DIR$/../../../../../services/nvm</state>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/sys/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -1467,6 +1469,7 @@
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/tal/sx1276/inc</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/services/pds/inc</state>
+					<state>$PROJ_DIR$/../../../../../services/nvm</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_l</state>
@@ -1755,7 +1758,7 @@
 				</option>
 				<option>
 					<name>AUserIncludes</name>
-					<state>$PROJ_DIR$/../../../../../services/nvm</state>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/sys/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -1802,6 +1805,7 @@
 					<state>$PROJ_DIR$/../../../../../../../common2/services/delay/sam0</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/tal/sx1276/inc</state>
 					<state>$PROJ_DIR$/../../../../../lorawan/services/pds/inc</state>
+					<state>$PROJ_DIR$/../../../../../services/nvm</state>
 					<state>$PROJ_DIR$/../../../../utils</state>
 					<state>$PROJ_DIR$/../../../../../../../common/boards</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset/reset_sam_l</state>
@@ -2296,6 +2300,9 @@
 								<name>$PROJ_DIR$/../conf_regparams.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../conf_sal.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../conf_spi.h</name>
 							</file>
 							<file>
@@ -2649,6 +2656,21 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../lorawan/tal/inc/radio_transaction.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>sal</name>
+					<group>
+						<name>src</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../lorawan/sal/src/sal.c</name>
+						</file>
+					</group>
+					<group>
+						<name>inc</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../lorawan/sal/inc/sal.h</name>
 						</file>
 					</group>
 				</group>

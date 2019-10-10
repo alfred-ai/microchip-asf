@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 configuration.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -74,7 +74,7 @@ extern "C" {
 #define CONF_WINC_SPI_CS_FLAGS			IOPORT_MODE_MUX_B
 #define CONF_WINC_SPI_NPCS				(1)
 
-/** SPI delay before SPCK and between consecutive transfer. */
+/** SPI delay before SPCK and between consecutive transfers. */
 #define CONF_WINC_SPI_DLYBS				(0)
 #define CONF_WINC_SPI_DLYBCT 			(0)
 

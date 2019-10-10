@@ -3,7 +3,7 @@
 *
 * \brief Server Notify implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -43,6 +43,7 @@
 #include "otau_notify.h"
 #include "otau_parser.h"
 #include "miwi_config.h"
+#include "miwi_api.h"
 
 otauServerInfoResp_t server_info = {
 	.ieee_addr_mode = EXTENDED_ADDR_MODE,
@@ -66,15 +67,16 @@ void otauNotifyRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t leng
 {
 	uint8_t msg_code = *(payload + 1);
 	payload += 2;
+	length -= 2;
 	switch (msg_code)
 	{
 	case OTA_CLIENT_NOTIFY:
 	{
-		send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, src_addr, CLIENT_NOTIFY_INDICATION, payload, length - 2);
+		send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, src_addr, CLIENT_NOTIFY_INDICATION, payload, length);
 		break;
 	}
 	case OTA_CLIENT_INFO:
-		send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, src_addr, CLIENT_INFO_INDICATION, payload, length - 2);
+		send_server_data(DOMAIN_OTAU_NOTIFY, addr_mode, src_addr, CLIENT_INFO_INDICATION, payload, length);
 		break;
 	}
 }

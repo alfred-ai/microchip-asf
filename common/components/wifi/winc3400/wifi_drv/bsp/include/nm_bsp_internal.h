@@ -4,7 +4,7 @@
  *
  * \brief This module contains WINC3400 BSP APIs declarations.
  *
- * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2016-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -66,14 +66,17 @@
 
 #if (defined __SAMD21J18A__) || (defined __SAMD21G18A__)
 #include "bsp/include/nm_bsp_samd21.h"
+#include "bsp/include/nm_bsp_samd21_app.h"
 #endif
 
 #if (defined __SAM4S16C__) || (defined __SAM4SD32C__)
 #include "bsp/include/nm_bsp_sam4s.h"
+#include "bsp/include/nm_bsp_sam4s_app.h"
 #endif
 
 #ifdef __SAMG55J19__
 #include "bsp/include/nm_bsp_samg55.h"
+#include "bsp/include/nm_bsp_samg55_app.h"
 #endif
 
 #ifdef __SAMG53N19__
@@ -82,6 +85,7 @@
 
 #if (defined __SAME70Q21__) || (defined __SAME70Q21B__)
 #include "bsp/include/nm_bsp_same70.h"
+#include "bsp/include/nm_bsp_same70_app.h"
 #endif
 
 #ifdef CORTUS_APP

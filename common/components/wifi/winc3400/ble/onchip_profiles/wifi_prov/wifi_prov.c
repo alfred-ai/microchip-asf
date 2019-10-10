@@ -3,7 +3,7 @@
  *
  * \brief WiFi Provisioning Implementations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,6 +30,11 @@
  * \asf_license_stop
  *
  */
+
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
+ */
 #include <asf.h>
 #include "at_ble_api.h"
 #include "wifi_prov.h"
@@ -40,31 +45,32 @@ static credentials provisioned_credentials;
 static at_ble_wifiprov_complete_ind wifiprov_complete_ind = {.status = WIFI_PROV_IDLE};
 static struct wifiprov_scanlist_ind ble_scan_list;
 static uint8_t provision_state = 0;
+static uint8_t provision_app_handle_ble_events(void);
 static void init_credentials(void);
 static void update_credentials(credentials new_creds);
-	
+
 static void init_credentials(void)
 {
-	M2M_INFO("Reset provision data\n");
+	M2M_INFO("Reset provision data");
 	provisioned_credentials.sec_type = 0;
 	provisioned_credentials.ssid_length = 0;
-	m2m_memset(provisioned_credentials.ssid, 0, MAX_WIPROVTASK_SSID_LENGTH);
+	memset(provisioned_credentials.ssid, 0, MAX_WIPROVTASK_SSID_LENGTH);
 	provisioned_credentials.passphrase_length = 0;
-	m2m_memset(provisioned_credentials.passphrase,0, MAX_WIPROVTASK_PASS_LENGTH);
+	memset(provisioned_credentials.passphrase,0, MAX_WIPROVTASK_PASS_LENGTH);
 }
 
 static void update_credentials(credentials new_creds)
 {
-	M2M_INFO("Provisioned AP:\n");
-	M2M_INFO("Sec type   : %d\n", new_creds.sec_type);
-	M2M_INFO("SSID       : %s\n", new_creds.ssid);
-	M2M_INFO("Passphrase : %s\n", new_creds.passphrase);
+	M2M_INFO("Provisioned AP:");
+	M2M_INFO("Sec type   : %d", new_creds.sec_type);
+	M2M_INFO("SSID       : %s", new_creds.ssid);
+	M2M_INFO("Passphrase : %s", new_creds.passphrase);
 
 	provisioned_credentials.sec_type = new_creds.sec_type;
 	provisioned_credentials.ssid_length = new_creds.ssid_length;
-	m2m_memcpy(provisioned_credentials.ssid, new_creds.ssid, MAX_WIPROVTASK_SSID_LENGTH);
+	memcpy(provisioned_credentials.ssid, new_creds.ssid, MAX_WIPROVTASK_SSID_LENGTH);
 	provisioned_credentials.passphrase_length = new_creds.passphrase_length;
-	m2m_memcpy(provisioned_credentials.passphrase,new_creds.passphrase, MAX_WIPROVTASK_PASS_LENGTH);
+	memcpy(provisioned_credentials.passphrase,new_creds.passphrase, MAX_WIPROVTASK_PASS_LENGTH);
 }
 
 void ble_prov_process_event(at_ble_events_t event, void* params)
@@ -83,7 +89,7 @@ void ble_prov_process_event(at_ble_events_t event, void* params)
 				{
 					case WIFIPROV_SCANMODE_SCANNING:
 					{
-						m2m_memset((uint8 *)&ble_scan_list, 0, sizeof(ble_scan_list));
+						memset(&ble_scan_list, 0, sizeof(ble_scan_list));
 						m2m_wifi_request_scan(M2M_WIFI_CH_ALL);
 						wifiprov_scan_mode_change_ind_send(WIFIPROV_SCANMODE_SCANNING);
 						break;
@@ -96,7 +102,7 @@ void ble_prov_process_event(at_ble_events_t event, void* params)
 		break;
 		case AT_BLE_WIFIPROV_COMPLETE_IND:
 		{
-			m2m_memcpy((uint8 *)&wifiprov_complete_ind, params, sizeof(wifiprov_complete_ind));
+			memcpy(&wifiprov_complete_ind, params, sizeof(wifiprov_complete_ind));
 			#ifdef BLE_API_DBG
 			M2M_INFO("AT_BLE_WIFIPROV_COMPLETE_IND :%x\n", wifiprov_complete_ind.status);
 			#endif
@@ -105,9 +111,9 @@ void ble_prov_process_event(at_ble_events_t event, void* params)
 				credentials temp_cred;
 				temp_cred.sec_type = wifiprov_complete_ind.sec_type;
 				temp_cred.passphrase_length = wifiprov_complete_ind.passphrase_length;
-				m2m_memcpy(temp_cred.passphrase,wifiprov_complete_ind.passphrase,MAX_WIPROVTASK_PASS_LENGTH);
+				memcpy(temp_cred.passphrase,wifiprov_complete_ind.passphrase,MAX_WIPROVTASK_PASS_LENGTH);
 				temp_cred.ssid_length = wifiprov_complete_ind.ssid_length;
-				m2m_memcpy(temp_cred.ssid,wifiprov_complete_ind.ssid,MAX_WIPROVTASK_SSID_LENGTH);
+				memcpy(temp_cred.ssid,wifiprov_complete_ind.ssid,MAX_WIPROVTASK_SSID_LENGTH);
 				update_credentials(temp_cred);
 				// Return a successfully provisioned status
 				provision_state = BLE_PROV_STATE_SUCCESS;
@@ -129,34 +135,34 @@ uint8_t ble_prov_get_credentials(credentials *cred)
 {
 	uint8_t valid = CREDENTIALS_VALID;
 	M2M_INFO("Retrieving ssid...\n");
-	
+
 	if (provisioned_credentials.ssid_length == 0)
 	{
-		M2M_INFO("   no valid ssid\n");
+		M2M_INFO("   no valid ssid");
 		valid = CREDENTIALS_NOT_VALID;
 	}
 	else
 	{
-		M2M_INFO("   have valid ssid\n");
+		M2M_INFO("   have valid ssid");
 		cred->sec_type = provisioned_credentials.sec_type;
 		cred->ssid_length = provisioned_credentials.ssid_length;
-		m2m_memcpy(cred->ssid,provisioned_credentials.ssid, MAX_WIPROVTASK_SSID_LENGTH);
-		
-		cred->passphrase_length = provisioned_credentials.passphrase_length;		
+		memcpy(cred->ssid,provisioned_credentials.ssid, MAX_WIPROVTASK_SSID_LENGTH);
+
+		cred->passphrase_length = provisioned_credentials.passphrase_length;
 		if (cred->sec_type == M2M_WIFI_SEC_WEP)
 		{
 			// Convert WEP passphrase for m2m_wifi_connect friendly format.
 			tstrM2mWifiWepParams *wepParams = (tstrM2mWifiWepParams *)cred->passphrase;
-			m2m_memset((uint8 *)wepParams, 0, sizeof(tstrM2mWifiWepParams));
+			memset(wepParams, 0, sizeof(tstrM2mWifiWepParams));
 			wepParams->u8KeyIndx = M2M_WIFI_WEP_KEY_INDEX_1;
-			wepParams->u8KeySz  = (m2m_strlen((uint8 *)provisioned_credentials.passphrase)==WEP_40_KEY_STRING_SIZE)?
+			wepParams->u8KeySz  = (strlen((const char *)provisioned_credentials.passphrase)==WEP_40_KEY_STRING_SIZE)?
 			                              WEP_40_KEY_STRING_SIZE + 1:
 										  WEP_104_KEY_STRING_SIZE + 1;
-			m2m_memcpy((uint8*)(&wepParams->au8WepKey), provisioned_credentials.passphrase, wepParams->u8KeySz-1);
+			memcpy((uint8*)(&wepParams->au8WepKey), provisioned_credentials.passphrase, wepParams->u8KeySz-1);
 		}
 		else
 		{
-			m2m_memcpy(cred->passphrase,provisioned_credentials.passphrase, MAX_WIPROVTASK_PASS_LENGTH);
+			memcpy(cred->passphrase,provisioned_credentials.passphrase, MAX_WIPROVTASK_PASS_LENGTH);
 		}
 		valid = CREDENTIALS_VALID;
 	}
@@ -185,16 +191,15 @@ void ble_prov_stop(void)
 	{
 		wifiprov_disable();
 		wifiprov_complete_ind.status = WIFI_PROV_IDLE;
-		delay_ms(100); //wait for the ble prov to get stopped
 	}
-	provision_state = BLE_PROV_STATE_IDLE;	
+	provision_state = BLE_PROV_STATE_IDLE;
 }
 
 void ble_prov_init(uint8_t* localname)
 {
 	provision_state = BLE_PROV_STATE_IDLE;
 	init_credentials();
-	
+
 	// Setup the provisioning service
 	if(AT_BLE_SUCCESS != wifiprov_configure_provisioning(localname))
 	{
@@ -216,10 +221,10 @@ void ble_prov_scan_result(tstrM2mWifiscanResult* pstrScanResult, uint8_t results
 		uint8_t index = ble_scan_list.num_valid;
 		ble_scan_list.scandetails[index].rssi = pstrScanResult->s8rssi;
 		ble_scan_list.scandetails[index].sec_type = pstrScanResult->u8AuthType;
-		m2m_memcpy(ble_scan_list.scandetails[index].ssid, pstrScanResult->au8SSID, sizeof(ble_scan_list.scandetails[index].ssid));
+		memcpy(ble_scan_list.scandetails[index].ssid, pstrScanResult->au8SSID, sizeof(ble_scan_list.scandetails[index].ssid));
 		ble_scan_list.num_valid++;
 	}
-	
+
 	if (resultsRemaining==0)
 	{
 		wifiprov_scan_list_ind_send(&ble_scan_list);

@@ -3,7 +3,7 @@
  *
  * \brief Custom Serial Chat Profile
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -50,11 +50,12 @@
 #include "cscp.h"
 #include "cscs.h"
 
+
 /* Scan response data */
 uint8_t scan_rsp_data[SCAN_RESP_LEN] = {0x09,0xff, 0x00, 0x06, 0xd6, 0xb2, 0xf0, 0x05, 0xf0, 0xf8};
-	
+
 /*Profile Information*/
-app_csc_data_t app_csc_info;	
+app_csc_data_t app_csc_info;
 
 /* Notification callback function pointer */
 recv_ntf_callback_t recv_ntf_cb;
@@ -72,7 +73,7 @@ void csc_prf_buf_init(uint8_t *databuf, uint16_t datalen)
 * \CSC profile initialization function
 */
 void csc_prf_init(void *param)
-{ 
+{
 	csc_serv_init(app_csc_info.buff_ptr, app_csc_info.buff_len);
 	ALL_UNUSED(param);
 }
@@ -109,9 +110,9 @@ void csc_prf_dev_adv(void)
 	if(!(at_ble_adv_data_set(adv_data, idx, scan_rsp_data, SCAN_RESP_LEN) == AT_BLE_SUCCESS)){
 		DBG_LOG("Failed to set advertisement data");
 	}
-	
+
 	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
-	
+
 	/* Start of advertisement */
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY, APP_CSC_FAST_ADV, APP_CSC_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS){
 		DBG_LOG("Device Started Advertisement");
@@ -128,14 +129,14 @@ void csc_prf_connected_state_handler(at_ble_connected_t *params)
 	at_ble_status_t status;
 	memcpy((uint8_t *)&app_csc_info.conn_params, params, sizeof(at_ble_connected_t));
 	if(!app_csc_info.devicedb){
-		app_csc_info.discover_role = DISCOVER_SERVICE;	
+		app_csc_info.discover_role = DISCOVER_SERVICE;
 		app_csc_info.csc_serv.service_uuid.type = AT_BLE_UUID_128;
 		memcpy(&app_csc_info.csc_serv.service_uuid.uuid[0], CSC_SERVICE_UUID, CSC_UUID_128_LEN);
 		/* Discover Remote Service by service UUID */
 		status = at_ble_primary_service_discover_by_uuid(app_csc_info.conn_params.handle,START_HANDLE, END_HANDLE, &app_csc_info.csc_serv.service_uuid);
 		if(status != AT_BLE_SUCCESS){
 			DBG_LOG("Failed to start service discovery. status = %d", status);
-		}		
+		}
 	}
 }
 
@@ -164,7 +165,7 @@ void csc_prf_discovery_complete_handler(at_ble_discovery_complete_t *params)
 				if(at_ble_descriptor_discover_all(app_csc_info.csc_char.conn_handle,(app_csc_info.csc_char.value_handle+1), (app_csc_info.csc_serv.end_handle)) != AT_BLE_SUCCESS)
 				{
 					DBG_LOG("Descriptor Discovery Failed");
-				}				
+				}
 			}
 			else if(app_csc_info.discover_role == DISCOVER_IDLE)
 			{
@@ -208,11 +209,11 @@ void csc_prf_descriptor_found_handler(at_ble_descriptor_found_t *params)
 /**
  * @brief invoked by ble manager on receiving notification
  */
-void csc_prf_notification_handler(at_ble_notification_recieved_t *params)
+void csc_prf_notification_handler(at_ble_notification_received_t *params)
 {
-	 at_ble_notification_recieved_t notif;
+	 at_ble_notification_received_t notif;
 	 csc_report_ntf_t ntf_info;
-	 memcpy((uint8_t *)&notif, params, sizeof(at_ble_notification_recieved_t));
+	 memcpy((uint8_t *)&notif, params, sizeof(at_ble_notification_received_t));
 	 ntf_info.conn_handle = notif.conn_handle;
 	 ntf_info.recv_buff_len = notif.char_len;
 	 ntf_info.recv_buff = &notif.char_value[0];
@@ -220,7 +221,7 @@ void csc_prf_notification_handler(at_ble_notification_recieved_t *params)
 }
 
 /**
- * @brief invoked by ble manager for setting the notification 
+ * @brief invoked by ble manager for setting the notification
  */
 void csc_prf_write_notification_handler(void *param)
 {
@@ -238,7 +239,6 @@ void csc_prf_write_notification_handler(void *param)
 at_ble_status_t csc_prf_disconnect_event_handler(at_ble_disconnected_t *disconnect)
 {
 	at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
-	
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	APP_CSC_FAST_ADV, APP_CSC_ADV_TIMEOUT, 0) != AT_BLE_SUCCESS){
 		DBG_LOG("Device Advertisement Failed");

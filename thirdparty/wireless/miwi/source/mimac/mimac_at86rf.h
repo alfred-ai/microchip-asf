@@ -125,12 +125,6 @@
 
 
 	/*- Types ------------------------------------------------------------------*/
-	typedef struct PHY_DataInd_t {
-		uint8_t *data; // Pointer to Data
-		uint8_t size;   // Size of the frame
-		uint8_t lqi;    // Link Quality Index
-		int8_t rssi;    // RSSI
-	} PHY_DataInd_t;
 
 
     /***************************************************************************

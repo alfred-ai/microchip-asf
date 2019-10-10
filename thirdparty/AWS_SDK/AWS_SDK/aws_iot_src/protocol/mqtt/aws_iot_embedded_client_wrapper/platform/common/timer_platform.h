@@ -3,7 +3,7 @@
  *
  * @brief D21 header file of the timer interface.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -35,6 +35,8 @@
 #define TIMER_PLATFORM_H_
 
 #include <stdint.h>
+
+extern uint32_t getTimeInMillis(void);
 
 struct Timer {
 	uint32_t end_time;

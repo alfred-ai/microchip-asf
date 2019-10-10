@@ -781,9 +781,13 @@ void HAL_EnableRFCtrl(RFCtrl1_t RFCtrl1, RFCtrl2_t RFCtrl2)
 {
 	/* In standard SAMR34_XPRO, Only RFO_HF and PA_BOOST needs to be controlled by a GPIO pin */
 #ifdef RFSWITCH_ENABLE
-   if (RFCtrl1 == RFO_HF)
+   if ((RFCtrl1 == RFO_HF) || (RFCtrl2 == RX))
    {
 		port_pin_set_output_level(RF_SWITCH_PIN, RF_SWITCH_ACTIVE);		
+   }
+   else if ((RFCtrl1 == PA_BOOST) && (RFCtrl2 == TX))
+   {
+	   port_pin_set_output_level(RF_SWITCH_PIN, RF_SWITCH_INACTIVE);
    }
 #endif	
 }
@@ -805,7 +809,7 @@ void HAL_DisableRFCtrl(RFCtrl1_t RFCtrl1, RFCtrl2_t RFCtrl2)
 {
 	/* In standard SAMR34_XPRO, Only RFO_HF and PA_BOOST needs to be controlled by a GPIO pin */
 #ifdef RFSWITCH_ENABLE
-	if (RFCtrl1 == RFO_HF)
+	if ((RFCtrl1 == RFO_HF) || (RFCtrl2 == RX))
 	{
 		port_pin_set_output_level(RF_SWITCH_PIN, RF_SWITCH_INACTIVE);	
 	}

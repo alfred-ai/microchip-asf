@@ -327,6 +327,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../source/miwi_mesh</state>
 					<state>$PROJ_DIR$/../../../../../../services/trx_access</state>
+					<state>$PROJ_DIR$/../../../../../services/otau/debug</state>
 					<state>$PROJ_DIR$/../../../../../source/mimac/phy</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom</state>
@@ -649,6 +650,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../source/miwi_mesh</state>
 					<state>$PROJ_DIR$/../../../../../../services/trx_access</state>
+					<state>$PROJ_DIR$/../../../../../services/otau/debug</state>
 					<state>$PROJ_DIR$/../../../../../source/mimac/phy</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom</state>
@@ -1396,6 +1398,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../source/miwi_mesh</state>
 					<state>$PROJ_DIR$/../../../../../../services/trx_access</state>
+					<state>$PROJ_DIR$/../../../../../services/otau/debug</state>
 					<state>$PROJ_DIR$/../../../../../source/mimac/phy</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom</state>
@@ -1718,6 +1721,7 @@
 					<state>$PROJ_DIR$/../../../../../../../../sam0/utils</state>
 					<state>$PROJ_DIR$/../../../../../source/miwi_mesh</state>
 					<state>$PROJ_DIR$/../../../../../../services/trx_access</state>
+					<state>$PROJ_DIR$/../../../../../services/otau/debug</state>
 					<state>$PROJ_DIR$/../../../../../source/mimac/phy</state>
 					<state>$PROJ_DIR$/../../..</state>
 					<state>$PROJ_DIR$/../../../../../../../../sam0/drivers/sercom</state>
@@ -2265,6 +2269,27 @@
 						<file>
 							<name>$PROJ_DIR$/../../../../../services/otau/otau_parser.c</name>
 						</file>
+						<group>
+							<name>debug</name>
+							<file>
+								<name>$PROJ_DIR$/../../../../../services/otau/debug/client_debug.c</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../services/otau/debug/server_debug.c</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../services/otau/debug/client_debug.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../services/otau/debug/server_debug.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../services/otau/debug/otau_debug.h</name>
+							</file>
+						</group>
+						<file>
+							<name>$PROJ_DIR$/../../../../../services/otau/circularBuffer.c</name>
+						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../services/otau/otau.c</name>
 						</file>
@@ -2291,6 +2316,9 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../services/otau/otau.h</name>
+						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../services/otau/circularBuffer.h</name>
 						</file>
 					</group>
 					<group>
@@ -3081,6 +3109,9 @@
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samr21/include/samr21.h</name>
 						</file>
+						<file>
+							<name>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samr21/include/samr21g17a.h</name>
+						</file>
 						<group>
 							<name>pio</name>
 							<file>
@@ -3116,9 +3147,6 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samr21/include/samr21g18a.h</name>
-						</file>
-						<file>
-							<name>$PROJ_DIR$/../../../../../../../../sam0/utils/cmsis/samr21/include/samr21g17a.h</name>
 						</file>
 					</group>
 				</group>

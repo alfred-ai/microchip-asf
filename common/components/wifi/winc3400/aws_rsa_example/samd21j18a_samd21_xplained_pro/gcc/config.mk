@@ -56,6 +56,7 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21.c \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21_app.c \
        common/components/wifi/winc3400/wifi_drv/bus_wrapper/source/nm_bus_wrapper_samd21.c \
+       common/components/wifi/winc3400/wifi_drv/common/source/efuse.c \
        common/components/wifi/winc3400/wifi_drv/common/source/nm_common.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ate_mode.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_crypto.c \
@@ -68,7 +69,6 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmasic.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmbus.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmdrv.c \
-       common/components/wifi/winc3400/wifi_drv/driver/source/nmflash.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmi2c.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmspi.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmuart.c \
@@ -100,7 +100,7 @@ CSRCS = \
        sam0/utils/syscalls/gcc/syscalls.c                 \
        thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/protocol/mqtt/aws_iot_embedded_client_wrapper/aws_iot_mqtt_embedded_client_wrapper.c \
        thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/protocol/mqtt/aws_iot_embedded_client_wrapper/platform/common/timer.c \
-       thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/protocol/mqtt/aws_iot_embedded_client_wrapper/platform/network_winc1500tls_wrapper.c \
+       thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/protocol/mqtt/aws_iot_embedded_client_wrapper/platform/network_winc3400tls_wrapper.c \
        thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/shadow/aws_iot_shadow.c \
        thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/shadow/aws_iot_shadow_actions.c \
        thirdparty/AWS_SDK/AWS_SDK/aws_iot_src/shadow/aws_iot_shadow_json.c \
@@ -154,6 +154,7 @@ INC_PATH = \
        sam0/utils/preprocessor                            \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/AWS_SDK                                 \
+       thirdparty/AWS_SDK/AWS_SDK                         \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC \
        common/components/wifi/winc3400/aws_rsa_example/samd21j18a_samd21_xplained_pro/gcc
@@ -205,6 +206,7 @@ CFLAGS =
 #   EXT_BOARD  Optional extension board in use, see boards/board.h for a list.
 CPPFLAGS = \
        -D ARM_MATH_CM0PLUS=true                           \
+       -D AWS_IOT_ALPN_ENABLED                            \
        -D BOARD=SAMD21_XPLAINED_PRO                       \
        -D CONF_PERIPH                                     \
        -D EXTINT_CALLBACK_MODE=true                       \

@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 MAC Address Example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -66,7 +66,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -85,8 +85,8 @@
 /** Mac address information. */
 static uint8_t mac_addr[M2M_MAC_ADDRES_LEN];
 
-/** User define MAC Address. */
-const char main_user_define_mac_address[] = {0xf8, 0xf0, 0x05, 0x20, 0x0b, 0x09};
+/** User defined MAC Address. */
+const char main_user_defined_mac_address[] = {0xf8, 0xf0, 0x05, 0x20, 0x0b, 0x09};
 
 /** UART module for debug. */
 static struct usart_module cdc_uart_module;
@@ -150,8 +150,8 @@ int main(void)
 	if (!u8IsMacAddrValid) {
 		printf("USER MAC Address : ");
 
-		/* Cannot found MAC Address from OTP. Set user define MAC address. */
-		m2m_wifi_set_mac_address((uint8_t *)main_user_define_mac_address);
+		/* Cannot found MAC Address from OTP. Set user defined MAC address. */
+		m2m_wifi_set_mac_address((uint8_t *)main_user_defined_mac_address);
 	} else {
 		printf("OTP MAC Address : ");
 	}

@@ -3,7 +3,7 @@
  *
  * @brief D21 implementation of the timer interface.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -37,7 +37,7 @@ extern volatile uint32_t ms_ticks;
  *
  * \return milli second ticks count.
  */
-static uint32_t getTimeInMillis(void)
+uint32_t getTimeInMillis(void)
 {
 	return ms_ticks;
 }

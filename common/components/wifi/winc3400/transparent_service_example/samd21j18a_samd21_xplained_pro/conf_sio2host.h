@@ -1,9 +1,9 @@
 /**
  * \file conf_sio2host.h
  *
- * \brief Serial Input & Output configuration
+ * \brief SAM D21 Serial Input & Output configuration
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *

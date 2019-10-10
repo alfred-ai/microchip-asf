@@ -1,9 +1,10 @@
+
 /**
  * \file
  *
  * \brief Custom Serial Chat Service Declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -54,23 +55,23 @@
 /** @brief Custom serial chat service info */
 typedef struct csc_serv
 {
-	at_ble_uuid_t	serv_uuid; 
-	at_ble_handle_t	serv_handle; 
-	at_ble_characteristic_t	endpoint_chars;  
+	at_ble_uuid_t	serv_uuid;
+	at_ble_handle_t	serv_handle;
+	at_ble_characteristic_t	endpoint_chars;
 }csc_serv_t;
 
 /****************************************************************************************
 *                                       Functions                                       *
 ****************************************************************************************/
 /** @brief Initialize the csc service initialization function
-  * 
+  *
   * @param[in] buf		Buffer pointer for data to be send
-  * @param[in] len      size of buffer		
+  * @param[in] len      size of buffer
   */
 at_ble_status_t csc_serv_init(uint8_t *buf, uint16_t len);
 
 /** @brief Function used for sending data to remote device
-  * 
+  *
  * @param[in] buf		Buffer pointer for data to be send
  * @param[in] len       size of buffer
   */

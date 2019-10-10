@@ -3,7 +3,7 @@
 *
 * \brief Client Upgrade implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -66,7 +66,7 @@ uint16_t upgradeImageReqInterval;
 upgradeState_t currUpgradeState = STATE_IDLE;
 otauUpgradeState_t currOtauUpgradeState = UPGRADE_OTAU_IDLE;
 
-uint16_t block[APP_MAX_PAYLOAD_SIZE / 2];
+uint16_t block[PHY_MAX_PAYLOAD_SIZE / 2];
 
 uint8_t otauUpgradeConfirmWait = 0;
 uint8_t imageReqRetry = 0;
@@ -77,6 +77,7 @@ extern struct spi_module at25dfx_spi;
 extern struct at25dfx_chip_module at25dfx_chip;
 #endif
 #endif
+uint8_t curr_upgrade_mode = 0;
 
 void otauUpgradeInit(void)
 {
@@ -85,6 +86,7 @@ void otauUpgradeInit(void)
 	otauUpgradeConfirmWait = 0;
 	imageReqRetry = 0;
 	upgradeImageReqInterval = MIN_IMAGE_REQ_INTERVAL_MILLI_SEC;
+	curr_upgrade_mode = 0;
 }
 
 void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t length, uint8_t *payload)
@@ -97,8 +99,16 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 			if(STATE_IDLE == currUpgradeState || STATE_WAITING_FOR_SWITCH == currUpgradeState)
 			{
 				otauImageNotifyRequest_t *image_notify = (otauImageNotifyRequest_t *)payload;
-				otauSetServerDetails(src_addr);
-				block_size = APP_MAX_PAYLOAD_SIZE;
+				otauSetServerDetails(addr_mode, src_addr);
+
+				if (NATIVE_ADDR_MODE == addr_mode)
+				{
+					block_size = APP_MAX_PAYLOAD_SIZE;
+				}
+				else
+				{
+					block_size = PHY_MAX_PAYLOAD_SIZE;
+				}
 
 				memcpy(&upgradeImageStart, &image_notify->imageStart, sizeof(uint32_t));
 				memcpy(&image_size, &image_notify->imageSize, sizeof(uint32_t));
@@ -111,6 +121,11 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 
 				image_index = upgradeImageStart;
 				image_end = upgradeImageStart + image_size;
+
+				if (EXTENDED_ADDR_MODE == addr_mode)
+				{
+					curr_upgrade_mode = 1;
+				}
 				currUpgradeState = STATE_START_DOWNLOAD;
 				otauTimerStart(DOMAIN_OTAU_UPGRADE, upgradeImageReqInterval, TIMER_MODE_SINGLE);
 			}
@@ -308,7 +323,19 @@ void otauUpgradeTimerHandler(SYS_Timer_t *timer)
 static void send_image_req(uint32_t index)
 {
 	otauImageRequest_t image_request;
+	addr_mode_t addr_mode;
 	uint8_t *address = NULL;
+
+	if (curr_upgrade_mode)
+	{
+		addr_mode = EXTENDED_ADDR_MODE;
+		otauGetServerDetails(EXTENDED_ADDR_MODE, address);
+	}
+	else
+	{
+		addr_mode = NATIVE_ADDR_MODE;
+		otauGetServerDetails(NATIVE_ADDR_MODE, address);
+	}
 
 	imageReqRetry++;
 	if ((IMAGE_REQ_RETRY_COUNT + 1) == imageReqRetry)
@@ -324,7 +351,14 @@ static void send_image_req(uint32_t index)
 		}
 		else
 		{
-			block_size = APP_MAX_PAYLOAD_SIZE;
+			if (curr_upgrade_mode)
+			{
+				block_size = PHY_MAX_PAYLOAD_SIZE;
+			}
+			else
+			{
+				block_size = APP_MAX_PAYLOAD_SIZE;
+			}
 		}
 		image_request.msgId = OTA_IMAGE_REQUEST;
 		image_request.reqType = 0x00;
@@ -334,7 +368,7 @@ static void send_image_req(uint32_t index)
 		otauUpgradeConfirmWait = 1;
 		currUpgradeState = STATE_IMAGE_REQUESTED;
 		image_request.domainId = DOMAIN_OTAU_UPGRADE;
-		otauDataSend(NATIVE_ADDR_MODE, address, &image_request.domainId, sizeof(otauImageRequest_t));
+		otauDataSend(addr_mode, address, &image_request.domainId, sizeof(otauImageRequest_t));
 		otauTimerStart(DOMAIN_OTAU_UPGRADE, IMAGE_RESP_WAIT_INTERVAL_MILLI_SEC, TIMER_MODE_SINGLE);
 	}
 }
@@ -345,10 +379,20 @@ static void send_switch_req(void)
 	addr_mode_t addr_mode;
 	uint8_t *addr = NULL;
 	otauSwitchImageRequest_t switch_image_req;
+
+	if (curr_upgrade_mode)
+	{
+		addr_mode = EXTENDED_ADDR_MODE;
+		otauGetServerDetails(EXTENDED_ADDR_MODE, addr);
+	}
+	else
+	{
+		addr_mode = NATIVE_ADDR_MODE;
+		otauGetServerDetails(NATIVE_ADDR_MODE, addr);
+	}
+
 	switch_image_req.domainId = DOMAIN_OTAU_UPGRADE;
 	switch_image_req.msgId = OTA_SWITCH_REQUEST;
-	addr_mode = NATIVE_ADDR_MODE;
-	otauGetServerDetails(addr);
 	otauUpgradeConfirmWait = 1;
 	currOtauUpgradeState = SWITCH_REQUEST_SENT;
 	currUpgradeState = STATE_WAITING_FOR_SWITCH;

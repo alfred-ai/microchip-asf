@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAMD21 BSP APIs declarations.
  *
- * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2016-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -38,9 +38,9 @@
 #include "conf_winc.h"
 #include "math.h"
 
-#define NM_EDGE_INTERRUPT		(1)
+#define NM_EDGE_INTERRUPT       (1)
 
-#define NM_DEBUG				CONF_WINC_DEBUG
-#define NM_BSP_PRINTF			CONF_WINC_PRINTF
+#define NM_DEBUG                CONF_WINC_DEBUG
+#define NM_BSP_PRINTF           CONF_WINC_PRINTF
 
 #endif /* _NM_BSP_SAMD21_H_ */

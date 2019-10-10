@@ -3,7 +3,7 @@
  *
  * \brief BLE Transparent Service Application Implementations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,8 +30,12 @@
  * \asf_license_stop
  *
  */
- 
- /**
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
+ */
+
+/**
  * \mainpage
   * \section intro Introduction
  * This example demonstrates Transparent Service <br>
@@ -44,8 +48,8 @@
  * - trans_service_app.c : Initialize the SAM board and starts Transparent Service
  *
  * \section usage Usage
- * -# As a first step, it is required that the user install the Atmel BLE transparent service application
- * -#  available in the doc folder(BLEDK3_V1.0.apk) on an Android device.
+ * -# As a first step, it is required that the user install the Microchip Bluetooth Data application
+ * -#  available in the play store on to an any Android device.
  * -# Then, power up the SAM board and run the Android application: perform a scan, select
  * -# "uC-TRANS" to get start with the Transparent service.
  * -# The application allows to send and receive the data between Mobile and WINC3400.
@@ -63,28 +67,47 @@
  * -# In the terminal window, the following text should appear:
  * \code
  *  -- Wifi BLE demo with Transparent Service--
- *	-- SAMD21_XPLAINED_PRO --
- *	-- Compiled: xxx  x xxxx xx:xx:xx --
+ *  -- SAMXXX_XPLAINED_PRO --
+ *  -- Compiled: Jun xx xxxx xx:xx:xx --
 
- *    (APP)(INFO)Chip ID 3400d1
+ *    (APP)(INFO)Chip ID 3400d2
  *    (APP)(INFO)Curr driver ver: x.x.x
- *    (APP)(INFO)Curr driver HIF Level: (2) X.x
- *    (APP)(INFO)Fw HIF: 8101
+ *    (APP)(INFO)Curr driver HIF Level: (2) x.x
+ *    (APP)(INFO)Fw HIF: 8104
  *    (APP)(INFO)Firmware HIF (2) : x.x
  *    (APP)(INFO)Firmware ver   : x.x.x
  *    (APP)(INFO)Firmware Build <Month> DD YYYY Time xx:xx:xx
+ *    (APP)(INFO)Ota HIF: xxxx
  *    (APP)(INFO)OTP MAC
  *    (APP)(INFO)MAC Address: xx:xx:xx:xx:xx:xx
  *    (APP)(INFO)M2M_NO_PS
  *    (APP)(INFO)POWER SAVE 0
-*/
+
+ *     BLE is initializing
+
+ *     Device Name: MCHP-TRANS
+ *     trans_init_service: primary service defined.
+ *     ble_trans_service_profile_init: primary service defined.
+ *     BLE - trans_service_advertise - Start
+
+ *     BLE Started Adv
+ * \endcode
+ *
+ * \section compinfo Compilation Information
+ * This software was written for the GNU GCC compiler using Atmel Studio 6.2
+ * Other compilers are not guaranteed to work.
+ *
+ * \section contactinfo Contact Information
+ * For further information, visit
+ * <A href="http://www.microchip.com">Microchip</A>.\n
+ */
 
 /*- Includes -----------------------------------------------------------------------*/
 #include "trans_service_app.h"
 #include "ble_manager.h"
 #include "trans_service.h"
-#include "bsp/include/nm_bsp_samd21_app.h"
-#include "sio2host.h"  
+#include "common/include/nm_common.h"
+#include "sio2host.h"
 #include <asf.h>
 #include "driver/include/m2m_periph.h"
 #include "driver/include/m2m_wifi.h"
@@ -111,10 +134,10 @@ extern uint32 nmi_inet_addr(char *pcIpAddr);
 #define APP_STATE_PROVISIONING						2
 #define APP_STATE_WAITING_FOR_BUTTON_PRESS			3
 #define APP_STATE_WAITING_FOR_WIFI_CONNECTION		4
-#define APP_STATE_WAITING_FOR_PROFIFE_SWITCH		5
+#define APP_STATE_WAITING_FOR_PROFILE_SWITCH		5
 #define APP_STATE_COMPLETE							6
 
-static volatile uint8 gu8WiFiConnectionState = M2M_WIFI_DISCONNECTED;; 
+static volatile uint8 gu8WiFiConnectionState = M2M_WIFI_DISCONNECTED;;
 static volatile uint8 gu8BtnEvent;
 static uint8 gu8ScanIndex;
 static at_ble_event_parameter_t gu8BleParam __aligned(4);
@@ -146,14 +169,13 @@ static at_ble_event_parameter_t gu8BleParam __aligned(4);
 
 #define TRANS_ADV_DATA_NAME_DATA			("uC-TRANS")
 
-//static const uint8_t SCAN_RESP_DATA[SCAN_RESP_LEN] = {0x09,0xff, 0x00, 0x06, 0xd6, 0xb2, 0xf0, 0x05, 0xf0, 0xf8};
 static const uint8_t SCAN_RESP_DATA[SCAN_RESP_LEN] = {0x0b,0x08, 'M', 'C', 'H', 'P', '-', 'T', 'R', 'A', 'N', 'S'};
 
 
 /****************************************************************************************
-*							        Globals		
+*							        Globals
 *                                       *
-****************************************************************************************/ 
+****************************************************************************************/
 extern uint8_t trans_tx_notification_flag;
 extern uint8_t trans_ctrl_notification_flag;
 extern uint8_t enable_credit_based_fc;
@@ -170,31 +192,31 @@ static at_ble_status_t ble_trans_service_advertise(void)
 {
         uint8_t idx = 0;
         uint8_t adv_data [ TRANS_ADV_DATA_NAME_LEN + TRANS_ADV_DATA_UUID_LEN   + (2*2)];
-    
+
         printf("BLE - trans_service_advertise - Start\r\n");
-    
+
         adv_data[idx++] = TRANS_ADV_DATA_UUID_LEN + ADV_TYPE_LEN;
         adv_data[idx++] = TRANS_ADV_DATA_UUID_TYPE;
-    
-        /* Appending the UUID */    
+
+        /* Appending the UUID */
         memcpy(&adv_data[idx], trans_service_uuid.uuid, TRANS_ADV_DATA_UUID_LEN);
         idx += TRANS_ADV_DATA_UUID_LEN;
-    
+
         //Appending the complete name to the Ad packet
         adv_data[idx++] = TRANS_ADV_DATA_NAME_LEN + ADV_TYPE_LEN;
         adv_data[idx++] = TRANS_ADV_DATA_NAME_TYPE;
-        
+
         memcpy(&adv_data[idx], TRANS_ADV_DATA_NAME_DATA, TRANS_ADV_DATA_NAME_LEN );
         idx += TRANS_ADV_DATA_NAME_LEN;
-        
+
         /* Adding the advertisement data and scan response data */
         if(!(at_ble_adv_data_set(adv_data, idx, SCAN_RESP_DATA, SCAN_RESP_LEN) == AT_BLE_SUCCESS) )
         {
             DBG_LOG("Failed to set adv data\r\n");
         }
-		
+
 		at_ble_set_dev_config(AT_BLE_GAP_PERIPHERAL_SLV);
-        
+
         /* Start of advertisement */
         if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL,
                     AT_BLE_ADV_FP_ANY, APP_TRANS_FAST_ADV, APP_TRANS_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS)
@@ -207,12 +229,12 @@ static at_ble_status_t ble_trans_service_advertise(void)
             DBG_LOG("BLE Adv start Failed");
         }
         printf("BLE - trans_service_advertise - End\r\n");
-    
+
         return AT_BLE_FAILURE;
 }
 
 
-/**@brief function to check the client characteristic configuration value. 
+/**@brief function to check the client characteristic configuration value.
  */
 static at_ble_status_t ble_trans_char_changed_event(at_ble_characteristic_changed_t *char_changed)
 {
@@ -220,7 +242,7 @@ static at_ble_status_t ble_trans_char_changed_event(at_ble_characteristic_change
 	uint8_t cnt;
 	//printf("\nChanged the character handle 0x%X to a value = \r\n", char_changed->char_handle);
 	if(char_changed->char_len != 0)
-       {   
+       {
 	    printf("Rx:");
 	    for(cnt = 0; cnt < char_changed->char_len; cnt++)
 	    {
@@ -233,7 +255,7 @@ static at_ble_status_t ble_trans_char_changed_event(at_ble_characteristic_change
 		if(char_changed->char_new_value[0])
 		{
 			trans_tx_notification_flag = true;
-			/* sending notification to the peer about change in the trans tx value */			
+			/* sending notification to the peer about change in the trans tx value */
 			if((status = at_ble_notification_send(char_changed->conn_handle, trans_service_handler.serv_chars[0].char_val_handle)) != AT_BLE_SUCCESS) {
 				DBG_LOG("sending trans tx notification failed%d",status);
 				return status;
@@ -241,11 +263,11 @@ static at_ble_status_t ble_trans_char_changed_event(at_ble_characteristic_change
 			else {
 				DBG_LOG_DEV("sending trans tx notification successful");
 				return status;
-			}			
+			}
 		}
 		else
 		{
-			trans_tx_notification_flag = false;			
+			trans_tx_notification_flag = false;
 		}
 
 	}
@@ -259,7 +281,7 @@ static at_ble_status_t ble_trans_char_changed_event(at_ble_characteristic_change
 		else
 		{
 			DBG_LOG("Disabling Credit based Flow control Notification");
-			trans_ctrl_notification_flag = false;			
+			trans_ctrl_notification_flag = false;
 		}
 
 	}
@@ -283,7 +305,7 @@ static at_ble_status_t ble_trans_char_changed_event(at_ble_characteristic_change
 		}
 	}
 
-	
+
 
 	return status;
 }
@@ -293,7 +315,7 @@ void ble_trans_service_send_buf(void)
 	uint16_t ind = 0;
 	uint16_t len = 0;
 	uint8_t buff = 0;
-	uint8_t len_to_send = 20, tx_offset=0;	
+	uint8_t len_to_send = 20, tx_offset=0;
 	len = sio2host_rx(&buff, 1);
 
 	if (len)
@@ -305,7 +327,7 @@ void ble_trans_service_send_buf(void)
 				if (!send_length)
 				{
 					DBG_LOG("TX:");
-                }                  
+                }
 				sio2host_putchar(buff);
 				if (buff == BACKSPACE_BUTTON_PRESS)
 				{
@@ -323,7 +345,7 @@ void ble_trans_service_send_buf(void)
                 {
 					//csc_prf_send_data(&send_data[0], send_length);
 					while(send_length > 0)
-					{	
+					{
 						if(send_length < len_to_send)
 							len_to_send = send_length;
 						trans_update_tx_char_value(&trans_service_handler, &send_data[tx_offset], len_to_send);
@@ -339,7 +361,7 @@ void ble_trans_service_send_buf(void)
 					ind = send_length;
 					//csc_prf_send_data(&send_data[0], ind);
 					while(send_length > 0)
-					{	
+					{
 						if(send_length < len_to_send)
 						len_to_send = send_length;
 						trans_update_tx_char_value(&trans_service_handler, &send_data[tx_offset], len_to_send);
@@ -347,7 +369,7 @@ void ble_trans_service_send_buf(void)
 						send_length -= len_to_send;
 					}
 					DBG_LOG("\r\n");
-					send_length = 0;					
+					send_length = 0;
 				}
 		    }//end else
 		}//end for (ind = 0; ind < len; ind++)
@@ -380,12 +402,12 @@ static void ble_trans_service_profile_init(void)
 	/* Register callback for characteristic changed event */
 	register_ble_characteristic_changed_cb(ble_trans_char_changed_event);
        register_ble_disconnected_event_cb(ble_trans_service_handle_disconnect_event);
-       
+
 	//printf("trans_init_service: done.\r\n");
 
 	//printf("Trans Tx handle 0x%X.\r\n", trans_service_handler.serv_chars[0].char_val_handle);
 	//printf("Trans Rx handle 0x%X.\r\n", trans_service_handler.serv_chars[1].char_val_handle);
-	//printf("Trans Ctrl handle 0x%X.\r\n", trans_service_handler.serv_chars[2].char_val_handle);    
+	//printf("Trans Ctrl handle 0x%X.\r\n", trans_service_handler.serv_chars[2].char_val_handle);
 }
 
 void ble_trans_service_init(void)
@@ -396,7 +418,7 @@ void ble_trans_service_init(void)
 	/* initialize the ble chip  and Set the device mac address */
 	ble_device_init(NULL);
 
-	ble_trans_service_profile_init(); 
+	ble_trans_service_profile_init();
 }
 
 at_ble_status_t ble_trans_update_value_on_btnpress(uint8_t* trans_tx_value, uint8_t len)
@@ -410,7 +432,7 @@ void ble_trans_service_process_event(at_ble_events_t event, at_ble_event_paramet
 	{
 		// Feed the received event into BlueSDK stack.
 		ble_event_manager(event, params);
-	}      
+	}
 }
 
 static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
@@ -430,7 +452,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 #ifdef _STATIC_PS_
 	nm_bsp_register_wake_isr(wake_cb, PS_SLEEP_TIME_MS);
 #endif
-	
+
 	m2m_memset((uint8*)&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb_func;
 #ifdef ETH_MODE
@@ -443,7 +465,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	if (M2M_SUCCESS != ret)
 	{
 		M2M_ERR("Driver Init Failed <%d>\n",ret);
-		M2M_ERR("Reseting\n");
+		M2M_ERR("Resetting\n");
 		// Catastrophe - problem with booting. Nothing but to try and reset
 		system_reset();
 
@@ -451,9 +473,9 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 		{
 		}
 	}
-	
+
 	m2m_periph_pullup_ctrl(pinmask, 0);
-	
+
 	m2m_wifi_get_otp_mac_address(mac_addr, &u8IsMacAddrValid);
 	if (!u8IsMacAddrValid) {
 		uint8 DEFAULT_MAC[] = MAC_ADDRESS;
@@ -466,7 +488,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	M2M_INFO("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n",
 	         mac_addr[0],mac_addr[1],mac_addr[2],
 	         mac_addr[3],mac_addr[4],mac_addr[5]);
-	
+
 
 	/* Name must be in the format WINC3400_00:00 */
 	{
@@ -516,13 +538,13 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	{
 		tstrM2MIPConfig* pstrM2MIpConfig = (tstrM2MIPConfig*) pvMsg;
 		uint8 *pu8IPAddress = (uint8*) &pstrM2MIpConfig->u32StaticIP;
-		
+
 		M2M_INFO("DHCP IP Address :: %u.%u.%u.%u ::\n",
 			pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
 		M2M_INFO("WiFi Connected up to layer 3\r\n");
 
 		gu8WiFiConnectionState = M2M_WIFI_CONNECTED;
-	
+
 	}
 	else if (u8MsgType == M2M_WIFI_RESP_SCAN_DONE)
 	{
@@ -531,7 +553,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 		if (gu8WiFiConnectionState == M2M_WIFI_DISCONNECTED)
 		{
 			gu8ScanIndex = 0;
-			
+
 			if (pstrInfo->u8NumofCh >= 1)
 			{
 				m2m_wifi_req_scan_result(gu8ScanIndex);
@@ -563,7 +585,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	else if(u8MsgType == M2M_WIFI_RESP_SET_GAIN_TABLE) {
 		tstrM2MGainTableRsp *pstrRsp = (tstrM2MGainTableRsp *)pvMsg;
 		M2M_ERR("Gain Table Load Fail %d\n", pstrRsp->s8ErrorCode);
-	}    
+	}
 }
 
 static void app_button_press_callback(uint8 btn, uint8 press)
@@ -580,19 +602,19 @@ static void app_button_press_callback(uint8 btn, uint8 press)
 
 // This is an example of using onchip_profile, ble_prov API.
 #ifdef ENABLE_PROVISIONING
-static void app_ble_wifi_provisioning(void) 
+static void app_ble_wifi_provisioning(void)
 {
 	uint8_t app_state = APP_STATE_IDLE;
 	uint8_t wifi_con_state = M2M_WIFI_UNDEF;
 	uint8_t btn_event;
 	at_ble_events_t ble_event;
 	uint8_t display_name[] = APP_WIFI_PROV_DISPLAY_NAME;
-	
+
 	gu8BtnEvent = 0;
 
 	// Initialize BLE stack on 3400.
 	m2m_ble_init();
-	ble_prov_init(display_name);	
+	ble_prov_init(display_name);
 
 	M2M_INFO("Hold SW0 for 2 sec to start provisioning.\r\n");
 
@@ -710,12 +732,12 @@ static void app_ble_wifi_provisioning(void)
 				if (wifi_con_state == M2M_WIFI_CONNECTED)
 				{
 					M2M_INFO("Provisioning Complete\r\n");
-					M2M_INFO("Press SW0 to switch BLE profile to Transparent Service profile\r\n");	
-					app_state = APP_STATE_WAITING_FOR_PROFIFE_SWITCH;
+					M2M_INFO("Press SW0 to switch BLE profile to Transparent Service profile\r\n");
+					app_state = APP_STATE_WAITING_FOR_PROFILE_SWITCH;
 				}
 				break;
 			}
-			case APP_STATE_WAITING_FOR_PROFIFE_SWITCH:
+			case APP_STATE_WAITING_FOR_PROFILE_SWITCH:
 			{
 				if (btn_event == APP_BTN_EVENT_BTN1_SHORT_PRESS)
 				{
@@ -731,7 +753,7 @@ static void app_ble_wifi_provisioning(void)
 static void app_ble_trans_service(void)
 {
 	at_ble_events_t ble_event;
-    
+
 	// Initialize BLE stack.
 	m2m_ble_init();
 	ble_trans_service_init();
@@ -740,12 +762,12 @@ static void app_ble_trans_service(void)
 	// Pump BLE event to BLE application.
 	while (1)
 	{
-		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS) 
+		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS)
 		{
 		    //if (ble_event) { printf("\nble_event=%d\n", ble_event); }
 			ble_trans_service_process_event(ble_event, &gu8BleParam);
 		}
-    
+
             ble_trans_service_send_buf();
     }
 }
@@ -753,15 +775,15 @@ static void app_ble_trans_service(void)
 static void app_main(void)
 {
 	// Initialize WiFi interface first.
-	// 3400 WiFi HIF is used to convey BLE API primitives. 
+	// 3400 WiFi HIF is used to convey BLE API primitives.
 	app_wifi_init(app_wifi_handle_event);
 	nm_bsp_btn_init(app_button_press_callback);
-	
+
 	// Demo application using Onchip(AT_BLE API) profile.
-#ifdef ENABLE_PROVISIONING	
+#ifdef ENABLE_PROVISIONING
 	app_ble_wifi_provisioning();
 #endif
-	
+
 	// Demo application using BlueSDK profile.
 	app_ble_trans_service();
 }
@@ -780,17 +802,17 @@ static void led_init(void)
 int main (void)
 {
 	system_init();
-    
+
 	/* Initialize serial console */
-	sio2host_init();    
-    
+	sio2host_init();
+
 	//configure_console();
 	puts(STRING_HEADER);
 
 	nm_bsp_init();
-	nm_bsp_app_init();	
+	nm_bsp_app_init();
 	led_init();
-	
+
 	app_main();
 }
 

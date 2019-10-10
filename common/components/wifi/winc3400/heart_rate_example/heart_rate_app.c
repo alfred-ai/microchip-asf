@@ -3,7 +3,7 @@
  *
  * \brief BLE Heart Rate Service Application Implementations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,11 +30,15 @@
  * \asf_license_stop
  *
  */
- 
- /**
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
+ */
+
+/**
  * \mainpage
   * \section intro Introduction
- * This example demonstrates BLE Heart rate Profile <br>
+ * This example demonstrates BLE Heart rate Profile via BLE using the WINC3400<br>
  * It uses the following hardware:
  * - SAM Xplained Pro.
  * - the WINC3400 module on EXT1.
@@ -44,14 +48,14 @@
  * - heart_rate_app.c : Initialize the SAM board and starts Heart rate Profile
  *
  * \section usage Usage
- * -# As a first step, it is required that the user install the ATMEL SMART application 
+ * -# As a first step, it is required that the user installs the Microchip Bluetooth Data application
  * -# available in the Android Play store on to an any Android device.
  * -# Then, power up the SAM board and run the Android application: perform a scan, select
- * -# "ATMEL-HRT" to get start with the Heart rate service.
- * -# The application show the Device location, Heart rate in bpm and Energy expneded in KJ details.
+ * -# "MCHP-HRT" to get start with the Heart rate service.
+ * -# The application show the Device location, Heart rate in bpm and Energy expended in KJ details.
  *
  * -# Build the program and download it into the board.
- * -# On the computer, open and configure a terminal application as the follows.
+ * -# On the computer, open and configure a terminal application as follows.
  * \code
  *    Baud Rate : 115200
  *    Data : 8bit
@@ -63,35 +67,46 @@
  * -# In the terminal window, the following text should appear:
  * \code
  *  -- Wifi BLE Provisioning demo with Heart Rate--
- *	-- SAMD21_XPLAINED_PRO --
- *	-- Compiled: xxx  x xxxx xx:xx:xx --
-
- *    (APP)(INFO)Chip ID 3400d1
+ *  -- SAMXXX_XPLAINED_PRO --
+ *  -- Compiled: Jun xx xxxx xx:xx:xx --
+ *
+ *    (APP)(INFO)Chip ID 3400d2
  *    (APP)(INFO)Curr driver ver: x.x.x
- *    (APP)(INFO)Curr driver HIF Level: (2) X.x
- *    (APP)(INFO)Fw HIF: 8101
+ *    (APP)(INFO)Curr driver HIF Level: (2) x.x
+ *    (APP)(INFO)Fw HIF: 8104
  *    (APP)(INFO)Firmware HIF (2) : x.x
  *    (APP)(INFO)Firmware ver   : x.x.x
  *    (APP)(INFO)Firmware Build <Month> DD YYYY Time xx:xx:xx
+ *    (APP)(INFO)Ota HIF: xxxx
  *    (APP)(INFO)OTP MAC
  *    (APP)(INFO)MAC Address: xx:xx:xx:xx:xx:xx
  *    (APP)(INFO)M2M_NO_PS
  *    (APP)(INFO)POWER SAVE 0
- *	   BLE is initializing
  *
- *	   Device Name: ATMEL-BLE
+ *    BLE is initializing
  *
- *	   Initializing Heart Rate Service Application
- *	   BLE Started Adv
+ *    Device Name: MCHP-BLE
+
+ *    Initializing Heart Rate Service Application
+ *    BLE Started Adv
  *
- *	   Heart Rate: XX bpm      RR Values:(xxx,xxx)msec User Status:Idle/Walling/Brisk Walking/Running
-*/
+ *	  Heart Rate: xx bpm      RR Values:(xxx,xxx)msec User Status:Idle/Walling/Brisk Walking/Running
+ * \endcode
+ *
+ * \section compinfo Compilation Information
+ * This software was written for the GNU GCC compiler using Atmel Studio 7.0
+ * Other compilers are not guaranteed to work.
+ *
+ * \section contactinfo Contact Information
+ * For further information, visit
+ * <A href="http://www.microchip.com">Microchip</A>.\n
+ */
 
 /*- Includes -----------------------------------------------------------------------*/
 #include "heart_rate_app.h"
 #include "ble_manager.h"
 #include "heart_rate.h"
-#include "bsp/include/nm_bsp_samd21_app.h"
+#include "common/include/nm_common.h"
 #include <asf.h>
 #include "console.h"
 #include "driver/include/m2m_wifi.h"
@@ -117,11 +132,11 @@
 #define APP_STATE_PROVISIONING						2
 #define APP_STATE_WAITING_FOR_BUTTON_PRESS			3
 #define APP_STATE_WAITING_FOR_WIFI_CONNECTION		4
-#define APP_STATE_WAITING_FOR_PROFIFE_SWITCH		5
+#define APP_STATE_WAITING_FOR_PROFILE_SWITCH		5
 #define APP_STATE_COMPLETE							6
 
 /****************************************************************************************
-*							        Globals		
+*							        Globals
 *                                       *
 ****************************************************************************************/
 uint16_t rr_interval_value = RR_VALUE_MIN; /*!< to count the rr interval value*/
@@ -129,7 +144,7 @@ uint16_t rr_interval_value = RR_VALUE_MIN; /*!< to count the rr interval value*/
 
 extern uint32 nmi_inet_addr(char *pcIpAddr);
 
-static volatile uint8 gu8WiFiConnectionState = M2M_WIFI_DISCONNECTED;; 
+static volatile uint8 gu8WiFiConnectionState = M2M_WIFI_DISCONNECTED;;
 static volatile uint8 gu8BtnEvent;
 static uint8 gu8ScanIndex;
 static at_ble_event_parameter_t gu8BleParam __aligned(4);
@@ -145,7 +160,7 @@ static void ble_heart_rate_process(void)
 		timer_cb_done = false;
 	    if ((energy_expended_val == ENERGY_RESET) || (second_counter % 10 == energy_inclusion)) {
 		hr_data[idx] = (RR_INTERVAL_VALUE_PRESENT | ENERGY_EXPENDED_FIELD_PRESENT);
-		
+
 		/* To send energy expended after 10 notifications after reset */
 		if (energy_expended_val == ENERGY_RESET) {
 			energy_inclusion = second_counter % 10 ;
@@ -153,24 +168,28 @@ static void ble_heart_rate_process(void)
 	    } else {
 		hr_data[idx] = RR_INTERVAL_VALUE_PRESENT ;
 	    }
-	    idx += 1;			
+	    idx += 1;
 	    DBG_LOG("Heart Rate: %d bpm", heart_rate_value);
 		if(inc_changer == HEART_RATE_INCREMENT_VALUE)
+		{
 			heart_rate_value += HEART_RATE_INCREMENT_VALUE;
-		else	
+		}
+		else
+		{
 			heart_rate_value -= HEART_RATE_INCREMENT_VALUE;
-		
+		}
+
 	    /* Heart Rate Value 8bit*/
 	    hr_data[idx++] = (uint8_t)heart_rate_value ;
 	    if (hr_data[0] & ENERGY_EXPENDED_FIELD_PRESENT) {
 		memcpy(&hr_data[idx], &energy_expended_val, 2);
-		idx += 2;	
+		idx += 2;
 	    }
-	
-	    /* Appending RR interval values*/	
+
+	    /* Appending RR interval values*/
 	    if (rr_interval_value >= RR_VALUE_MAX) {
-		rr_interval_value = (uint8_t) RR_VALUE_MIN; 
-	    }	
+		rr_interval_value = (uint8_t) RR_VALUE_MIN;
+	    }
 	    DBG_LOG_CONT("\tRR Values:(%d,%d)msec",
 		        		rr_interval_value, rr_interval_value + 200);
 	    memcpy(&hr_data[idx], &rr_interval_value, 2);
@@ -179,36 +198,36 @@ static void ble_heart_rate_process(void)
 	    memcpy(&hr_data[idx], &rr_interval_value, 2);
 	    idx += 2;
 	    rr_interval_value += 200;
-	
+
 	    /*printing the user activity,simulation*/
 	    switch(activity) {
 	        case ACTIVITY_NORMAL:
 		    DBG_LOG_CONT(" User Status:Idle");
 		    break;
-		
+
 	        case ACTIVITY_WALKING:
 		    DBG_LOG_CONT(" User Status:Walking");
 		    break;
-		
+
 	        case ACTIVITY_BRISK_WALKING:
 		    DBG_LOG_CONT(" User status:Brisk walking");
 		    break;
-		
+
 	        case ACTIVITY_RUNNING:
 		    DBG_LOG_CONT(" User status:Running");
 		    break;
-		
+
 	        case ACTIVITY_FAST_RUNNING:
 		    DBG_LOG_CONT(" User Status:Fast Running");
-		    break;	
+		    break;
 	    }
-	
+
 	    /* Printing the energy*/
 	    if ((hr_data[0] & ENERGY_EXPENDED_FIELD_PRESENT)) {
 		DBG_LOG("Energy Expended :%d KJ\n", energy_expended_val);
 		energy_expended_val += energy_incrementor;
 	    }
-	
+
 	    /* Sending the data for notifications*/
            heart_rate_send_notification(hr_data, idx);
        }
@@ -242,7 +261,7 @@ static void app_ble_heart_rate(void)
 	// Pump BLE event to BLE application.
 	while (1)
 	{
-		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS) 
+		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS)
 		{
 			ble_heart_rate_process_event(ble_event, &gu8BleParam);
 		}
@@ -266,7 +285,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 #ifdef _STATIC_PS_
 	nm_bsp_register_wake_isr(wake_cb, PS_SLEEP_TIME_MS);
 #endif
-	
+
 	m2m_memset((uint8*)&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb_func;
 #ifdef ETH_MODE
@@ -279,7 +298,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	if (M2M_SUCCESS != ret)
 	{
 		M2M_ERR("Driver Init Failed <%d>\n",ret);
-		M2M_ERR("Reseting\n");
+		M2M_ERR("Resetting\n");
 		// Catastrophe - problem with booting. Nothing but to try and reset
 		system_reset();
 
@@ -287,9 +306,9 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 		{
 		}
 	}
-	
+
 	m2m_periph_pullup_ctrl(pinmask, 0);
-	
+
 	m2m_wifi_get_otp_mac_address(mac_addr, &u8IsMacAddrValid);
 	if (!u8IsMacAddrValid) {
 		uint8 DEFAULT_MAC[] = MAC_ADDRESS;
@@ -302,7 +321,7 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 	M2M_INFO("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n",
 	         mac_addr[0],mac_addr[1],mac_addr[2],
 	         mac_addr[3],mac_addr[4],mac_addr[5]);
-	
+
 
 	/* Name must be in the format WINC3400_00:00 */
 	{
@@ -352,13 +371,13 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	{
 		tstrM2MIPConfig* pstrM2MIpConfig = (tstrM2MIPConfig*) pvMsg;
 		uint8 *pu8IPAddress = (uint8*) &pstrM2MIpConfig->u32StaticIP;
-		
+
 		M2M_INFO("DHCP IP Address :: %u.%u.%u.%u ::\n",
 			pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
 		M2M_INFO("WiFi Connected up to layer 3\r\n");
 
 		gu8WiFiConnectionState = M2M_WIFI_CONNECTED;
-	
+
 	}
 	else if (u8MsgType == M2M_WIFI_RESP_SCAN_DONE)
 	{
@@ -367,7 +386,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 		if (gu8WiFiConnectionState == M2M_WIFI_DISCONNECTED)
 		{
 			gu8ScanIndex = 0;
-			
+
 			if (pstrInfo->u8NumofCh >= 1)
 			{
 				m2m_wifi_req_scan_result(gu8ScanIndex);
@@ -399,7 +418,7 @@ static void app_wifi_handle_event(uint8 u8MsgType, void * pvMsg)
 	else if(u8MsgType == M2M_WIFI_RESP_SET_GAIN_TABLE) {
 		tstrM2MGainTableRsp *pstrRsp = (tstrM2MGainTableRsp *)pvMsg;
 		M2M_ERR("Gain Table Load Fail %d\n", pstrRsp->s8ErrorCode);
-	}    
+	}
 }
 
 static void app_button_press_callback(uint8 btn, uint8 press)
@@ -416,19 +435,19 @@ static void app_button_press_callback(uint8 btn, uint8 press)
 
 // This is an example of using onchip_profile, ble_prov API.
 #ifdef ENABLE_PROVISIONING
-static void app_ble_wifi_provisioning(void) 
+static void app_ble_wifi_provisioning(void)
 {
 	uint8_t app_state = APP_STATE_IDLE;
 	uint8_t wifi_con_state = M2M_WIFI_UNDEF;
 	uint8_t btn_event;
 	at_ble_events_t ble_event;
 	uint8_t display_name[] = APP_WIFI_PROV_DISPLAY_NAME;
-	
+
 	gu8BtnEvent = 0;
 
 	// Initialize BLE stack on 3400.
 	m2m_ble_init();
-	ble_prov_init(display_name);	
+	ble_prov_init(display_name);
 
 	M2M_INFO("Hold SW0 for 2 sec to start provisioning.\r\n");
 
@@ -546,12 +565,12 @@ static void app_ble_wifi_provisioning(void)
 				if (wifi_con_state == M2M_WIFI_CONNECTED)
 				{
 					M2M_INFO("Provisioning Complete\r\n");
-					M2M_INFO("Press SW0 to switch BLE profile to Heart Rate profile\r\n");	
-					app_state = APP_STATE_WAITING_FOR_PROFIFE_SWITCH;
+					M2M_INFO("Press SW0 to switch BLE profile to Heart Rate profile\r\n");
+					app_state = APP_STATE_WAITING_FOR_PROFILE_SWITCH;
 				}
 				break;
 			}
-			case APP_STATE_WAITING_FOR_PROFIFE_SWITCH:
+			case APP_STATE_WAITING_FOR_PROFILE_SWITCH:
 			{
 				if (btn_event == APP_BTN_EVENT_BTN1_SHORT_PRESS)
 				{
@@ -567,15 +586,15 @@ static void app_ble_wifi_provisioning(void)
 static void app_main(void)
 {
 	// Initialize WiFi interface first.
-	// 3400 WiFi HIF is used to convey BLE API primitives. 
+	// 3400 WiFi HIF is used to convey BLE API primitives.
 	app_wifi_init(app_wifi_handle_event);
 	nm_bsp_btn_init(app_button_press_callback);
-	
+
 	// Demo application using Onchip(AT_BLE API) profile.
-#ifdef ENABLE_PROVISIONING	
+#ifdef ENABLE_PROVISIONING
 	app_ble_wifi_provisioning();
-#endif	
-	
+#endif
+
 
 	// Demo application using BlueSDK profile.
 	app_ble_heart_rate();
@@ -599,8 +618,8 @@ int main (void)
 	puts(STRING_HEADER);
 
 	nm_bsp_init();
-	nm_bsp_app_init();	
+	nm_bsp_app_init();
 	led_init();
-	
+
 	app_main();
 }

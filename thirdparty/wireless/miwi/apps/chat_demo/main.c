@@ -99,8 +99,12 @@ uint8_t        myChannel = 26;
 #endif
 
 //Chat Window Application Variables
-uint8_t        TxMessage[MAX_MESSAGE_LEN];
-uint8_t        TxMessageSize = 0;
+
+typedef struct
+{
+	uint8_t MessageSize;
+	uint8_t Message[MAX_MESSAGE_LEN];
+} TxMessage_t;
 
 //Chat Application status variables
 bool    messagePending = false;
@@ -110,6 +114,8 @@ bool    transmitPending = false;
 MIWI_TICK    tickCurrent;
 MIWI_TICK    tickPrevious;
 uint8_t msghandledemo = 0;
+
+TxMessage_t TxMessage;
 
 static void dataConfcb(uint8_t handle, miwi_status_t status, uint8_t* msgPointer);
 
@@ -364,7 +370,7 @@ int main (void)
             if
             (
                 (MiWi_TickGetDiff(tickCurrent, tickPrevious) > (ONE_SECOND * 30)) ||
-                (TxMessageSize >= MAX_MESSAGE_LEN) ||
+                (TxMessage.MessageSize >= MAX_MESSAGE_LEN) ||
                 (transmitPending == true)
             )
             {
@@ -421,14 +427,14 @@ void FormatTxMessage()
         }
         else if(inputChar == KEY_BACKSPACE)
         {
-            TxMessageSize--;
+            TxMessage.MessageSize--;
         }
         else
         {
-            if(TxMessageSize < MAX_MESSAGE_LEN)
+            if(TxMessage.MessageSize < MAX_MESSAGE_LEN)
             {
-                TxMessage[TxMessageSize] = inputChar;
-                TxMessageSize++;
+                TxMessage.Message[TxMessage.MessageSize] = inputChar;
+                TxMessage.MessageSize++;
                 tickPrevious.Val = MiWi_TickGet();
                 //messagePending = true;
             }
@@ -439,54 +445,9 @@ void FormatTxMessage()
 
 void TransmitMessage()
 {
-    uint8_t index;
-    uint8_t* dataPtr = NULL;
-    uint8_t dataLen = 0;
     //Send message
 
-    /******************************************************************/
-
-    // First call function MiApp_FlushTx to reset the Transmit buffer.
-    //  Then fill the buffer one byte by one byte by calling function
-    //  MiApp_WriteData
-
-    /*******************************************************************/
-    //+1 to add TxMessageSize also in payload
-   dataPtr = MiMem_Alloc(TxMessageSize + 1);
-   if (NULL == dataPtr)
-       return;
-
-    dataPtr[dataLen++] = TxMessageSize;
-    for(index = 0; index < TxMessageSize; index++)
-    {
-        dataPtr[dataLen++] = TxMessage[index];
-    }
-
-    //Unicast Message
-
-    /*******************************************************************/
-
-    // Function MiApp_UnicastConnection is one of the functions to
-    // unicast a message.
-    //    The first parameter is the index of connection table for
-    //       the peer device. In this lab, the chat is always sent to the
-    //       first P2P Connection Entry of the connection table. If that
-    //         node is down (eg. student is programming new firmare into it),
-    //         the user is prompted to reset the node to re-establish the
-    //       connection table with a new peer.
-    //
-    //    The second parameter is the boolean to indicate if we need
-    //       to secure the frame. If encryption is applied, the
-    //       security level and security key are defined in the
-    //       configuration file for the transceiver
-    //
-    // Another way to unicast a message is by calling function
-    // MiApp_UnicastAddress. Instead of supplying the index of the
-    // connection table of the peer device, this function requires the
-    // input parameter of destination address directly.
-
-    /*******************************************************************/
-    if(MiApp_SendData(8, connectionTable[0].Address, dataLen, dataPtr, msghandledemo++, true, dataConfcb) == false )
+    if(MiApp_SendData(8, connectionTable[0].Address, TxMessage.MessageSize + 1, &TxMessage.MessageSize, msghandledemo++, true, dataConfcb) == false )
     {
         //Message TX Failed (peer node 00 was likely being re-programmed by student)
         //Should reset the node to establish new peer connection to send chat to
@@ -498,7 +459,7 @@ void TransmitMessage()
     //Reset Chat Application state variables
     messagePending = false;
     transmitPending = false;
-    TxMessageSize = 0;
+    TxMessage.MessageSize = 0;
 
 
 }

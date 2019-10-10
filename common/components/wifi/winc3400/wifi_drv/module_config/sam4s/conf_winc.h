@@ -52,9 +52,9 @@ extern "C" {
    ---------------------------------
 */
 
-#define CONF_WINC_PIN_RESET				0 /*IOPORT_CREATE_PIN(PIOA, 18)*/
-#define CONF_WINC_PIN_CHIP_ENABLE		0 /*IOPORT_CREATE_PIN(PIOA, 6)*/
-#define CONF_WINC_PIN_WAKE				0 /*IOPORT_CREATE_PIN(PIOA, 25)*/
+#define CONF_WINC_PIN_RESET				IOPORT_CREATE_PIN(PIOA, 18)
+#define CONF_WINC_PIN_CHIP_ENABLE		IOPORT_CREATE_PIN(PIOA, 6)
+#define CONF_WINC_PIN_WAKE				IOPORT_CREATE_PIN(PIOA, 25)
 
 /*
    ---------------------------------
@@ -65,16 +65,16 @@ extern "C" {
 #define CONF_WINC_USE_SPI				(1)
 
 /** SPI pin and instance settings. */
-#define CONF_WINC_SPI					0 /*SPI*/
-#define CONF_WINC_SPI_ID				0 /*ID_SPI*/
-#define CONF_WINC_SPI_MISO_GPIO			0 /*SPI_MISO_GPIO */
-#define CONF_WINC_SPI_MISO_FLAGS		0 /*SPI_MISO_FLAGS*/
-#define CONF_WINC_SPI_MOSI_GPIO			0 /*SPI_MOSI_GPIO*/
-#define CONF_WINC_SPI_MOSI_FLAGS		0 /*SPI_MOSI_FLAGS*/
-#define CONF_WINC_SPI_CLK_GPIO			0 /*SPI_SPCK_GPIO*/
-#define CONF_WINC_SPI_CLK_FLAGS			0 /*SPI_SPCK_FLAGS*/
-#define CONF_WINC_SPI_CS_GPIO			0 /*SPI_NPCS0_GPIO*/
-#define CONF_WINC_SPI_CS_FLAGS			0 /*PIO_OUTPUT_1*/
+#define CONF_WINC_SPI					SPI
+#define CONF_WINC_SPI_ID				ID_SPI
+#define CONF_WINC_SPI_MISO_GPIO			SPI_MISO_GPIO
+#define CONF_WINC_SPI_MISO_FLAGS		SPI_MISO_FLAGS
+#define CONF_WINC_SPI_MOSI_GPIO			SPI_MOSI_GPIO
+#define CONF_WINC_SPI_MOSI_FLAGS		SPI_MOSI_FLAGS
+#define CONF_WINC_SPI_CLK_GPIO			SPI_SPCK_GPIO
+#define CONF_WINC_SPI_CLK_FLAGS			SPI_SPCK_FLAGS
+#define CONF_WINC_SPI_CS_GPIO			SPI_NPCS0_GPIO
+#define CONF_WINC_SPI_CS_FLAGS			PIO_OUTPUT_1
 #define CONF_WINC_SPI_NPCS				(0)
 
 /** SPI delay before SPCK and between consecutive transfer. */
@@ -82,10 +82,10 @@ extern "C" {
 #define CONF_WINC_SPI_DLYBCT 			(0)
 
 /** SPI interrupt pin. */
-#define CONF_WINC_SPI_INT_PIN			0 /*IOPORT_CREATE_PIN(PIOA, 1)*/
-#define CONF_WINC_SPI_INT_PIO			0 /*PIOA*/
-#define CONF_WINC_SPI_INT_PIO_ID		0 /*ID_PIOA*/
-#define CONF_WINC_SPI_INT_MASK			0 /*(1 << 1)*/
+#define CONF_WINC_SPI_INT_PIN			IOPORT_CREATE_PIN(PIOA, 1)
+#define CONF_WINC_SPI_INT_PIO			PIOA
+#define CONF_WINC_SPI_INT_PIO_ID		ID_PIOA
+#define CONF_WINC_SPI_INT_MASK			(1 << 1)
 #define CONF_WINC_SPI_INT_PRIORITY		(0)
 
 /** Clock polarity & phase. */

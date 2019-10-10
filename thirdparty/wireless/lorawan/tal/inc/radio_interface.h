@@ -391,7 +391,7 @@ typedef struct _RadioConfiguration_t
 	RadioLBT_t lbt;
 	uint8_t clockStabilizationDelay;
 	uint8_t clockSource;
-	int8_t packetRSSI;
+	int16_t packetRSSI;
 	uint8_t volatile fskPayloadIndex;
 } RadioConfiguration_t;
 

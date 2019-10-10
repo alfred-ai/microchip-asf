@@ -3,7 +3,7 @@
  *
  * \brief TX Service declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,8 +30,10 @@
  * \asf_license_stop
  *
  */
+
 /*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
  */
 
 
@@ -57,12 +59,12 @@
 
 
 /** @brief count of included service in tx power service
-  * 
+  *
   */
 #define TXPS_INCLUDED_SERVICE_COUNT		(0)
 
 /** @brief count of characteristics in tx power service
-  * 
+  *
   */
 #define TXPS_CHARACTERISTIC_COUNT		(1)
 
@@ -81,9 +83,9 @@ typedef struct gatt_txps_char_handler
 ****************************************************************************************/
 
 /** @brief Initialize the tx power service with default values
-  * 
   *
-  * @param[in] gatt_service_handler_t  the service info which has handle range,uuid and characteristic array fields
+  *
+  * @param[in] gatt_service_handler_t the service info which has handle (range,uuid and characteristic array fields)
   *
   * @pre Must be called before @ref txps_primary_service_define
   *
@@ -95,9 +97,9 @@ void init_tx_power_service(gatt_service_handler_t *tx_power_serv);
 
 
 /** @brief Defining the tx power service to the attribute data base
-  * 
   *
-  * @param[in] gatt_service_handler_t  the service info which has handle range,uuid and characteristic array fields
+  *
+  * @param[in] gatt_service_handler_t the service info which has handle (range,uuid and characteristic array fields)
   *
   * @pre Must be called after @ref init_tx_power_service
   *
@@ -125,6 +127,7 @@ at_ble_status_t txps_primary_service_define(gatt_service_handler_t *txps_primary
 
 typedef struct gatt_txps_char_handler
 {
+	at_ble_handle_t conn_handle;
 	at_ble_handle_t start_handle;
 	at_ble_handle_t end_handle;
 	at_ble_handle_t char_handle;

@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 Station Mode Example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -72,7 +72,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -128,7 +128,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 	{
 		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
-			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("Wi-Fi disconnected\r\n");
 

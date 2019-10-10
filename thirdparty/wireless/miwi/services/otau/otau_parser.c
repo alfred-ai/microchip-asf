@@ -3,7 +3,7 @@
 *
 * \brief OTAU Parser implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -160,7 +160,7 @@ static void processIncomingSerialData(void)
 		break;
 
 	case UART_RX_STATE_DOMAIN:
-		if (DOMAIN_OTAU_NOTIFY == sioData[rx_index] || DOMAIN_OTAU_UPGRADE == sioData[rx_index])
+		if (DOMAIN_OTAU_NOTIFY == sioData[rx_index] || DOMAIN_OTAU_UPGRADE == sioData[rx_index] || DOMAIN_OTAU_DEBUG == sioData[rx_index])
 		{
 			sioRxState = UART_RX_STATE_PAYLOAD;
 			/* + 4  to store the next pointer in Queue */
@@ -206,7 +206,7 @@ static void processIncomingSerialData(void)
 		if (sioFCS == sioData[rx_index]) {
 			sioSendAck(sioSeqNum, SIO_FRAME_CTRL_VALID_FCS);
 			/* Message posted to Queue successfully */
-			miQueueAppend(&dataFromTool, (miQueueBuffer_t *)sioRxBuffer);
+			miQueueAppend(&dataFromTool, (void *)sioRxBuffer);
 			sioRxBuffer = NULL;
 		}
 		else{
@@ -317,7 +317,7 @@ void send_server_data(otau_domain_t domainId, addr_mode_t addr_mode, uint8_t *ad
 			}
 		}
 		*buffer_ptr = fcs;
-		miQueueAppend(&dataToTool, (miQueueBuffer_t *)bufferHead);
+		miQueueAppend(&dataToTool, (void *)bufferHead);
 		sioTxSeqNum++;
 	}
 }
@@ -352,7 +352,7 @@ void send_pc_data(otau_domain_t domainId, uint8_t msgId, uint8_t *msg, uint16_t 
 			fcs ^= *(msg + index);
 		}
 		*bufferPtr = fcs;
-		miQueueAppend(&dataToTool, (miQueueBuffer_t *)bufferHead);
+		miQueueAppend(&dataToTool, (void *)bufferHead);
 		sioTxSeqNum++;
 	}
 }
@@ -375,7 +375,7 @@ static void sioSendAck(uint8_t seqNum, uint8_t state)
 		*buffer_ptr++ = seqNum;
 		*buffer_ptr++ = STACK_ID;
 		*buffer_ptr = seqNum ^ STACK_ID; //for FCS
-		miQueueAppend(&dataToTool, (miQueueBuffer_t *)buffer_header);
+		miQueueAppend(&dataToTool, (void *)buffer_header);
 	}
 }
 

@@ -3,7 +3,7 @@
 *
 * \brief Proximity Reporter Profile declarations
 *
-* Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -49,6 +49,9 @@
 /****************************************************************************************
 *							        Macros	                                     							*
 ****************************************************************************************/
+/** @brief PATHLOSS which defines if the user wants pathloss functionality*/
+#define PATHLOSS
+
 
 /** @brief APP_PXP_FAST_ADV between 0x0020 and 0x4000 in 0.625 ms units (20ms to 10.24s). */
 #define APP_PXP_FAST_ADV				(100) //100 ms
@@ -83,7 +86,7 @@
 /** @brief IAL_ADV_DATA_UUID_TYPE the total sizeof IAL service uuid*/
 #define IAL_ADV_DATA_UUID_TYPE			(0x03)
 
-/** @brief PXP_ADV_DATA_NAME_LEN the  length of the device name */
+/** @brief PXP_ADV_DATA_NAME_LEN the length of the device name */
 #define PXP_ADV_DATA_NAME_LEN			(9)
 
 /** @brief PXP_ADV_DATA_NAME_TYPE the gap ad data type */
@@ -92,7 +95,7 @@
 /* @brief PXP_ADV_DATA_NAME_DATA the actual name of device */
 #define PXP_ADV_DATA_NAME_DATA			("ATMEL-PXP")
 
-/* @brief call back handler type  */
+/* @brief call back handler type */
 typedef void (*reporter_callback_t)(uint8_t);
 
 
@@ -102,7 +105,7 @@ typedef void (*reporter_callback_t)(uint8_t);
 
 
 /** @brief Initialize the profile, includes all initializations and start up routines of the profiles
-  * 
+  *
   *
   * @param[in] void
   *
@@ -113,7 +116,7 @@ typedef void (*reporter_callback_t)(uint8_t);
 void pxp_reporter_init(void *param);
 
 /** @brief Initialize the services of the profile
-  * 
+  *
   * @param[in] void
   *
   * @pre Must be called before @ref pxp_service_define
@@ -124,7 +127,7 @@ void pxp_service_init(void);
 
 
 /** @brief profile services definition to the attribute data base
-  * 
+  *
   * @param[in] void
   *
   * @pre Must be called after ref pxp_service_init
@@ -136,7 +139,7 @@ at_ble_status_t pxp_service_define (void);
 
 
 /** @brief sets the advertisement data and starts advertisement
-  * 
+  *
   * @param[in] void
   *
   * @pre Must be called after ref pxp_service_init
@@ -146,7 +149,7 @@ at_ble_status_t pxp_service_define (void);
 void pxp_reporter_adv(void);
 
 /** @brief connection state handler
-  * 
+  *
   * @param[in] at_ble_connected_t which includes the connection parameters like handle
   *
   * @pre Must be called when the device is connected
@@ -158,8 +161,8 @@ extern at_ble_status_t pxp_reporter_connected_state_handler (at_ble_connected_t 
 
 
 /** @brief disconnection event handler
-  * 
-  * @param[in] at_ble_disconencted_t which includes the connection parameters like handle,reason for disconnection
+  *
+  * @param[in] at_ble_disconnected_t which includes the connection parameters like handle,reason for disconnection
   *
   * @pre Must be called when the device is disconnected
   *
@@ -170,10 +173,10 @@ at_ble_status_t pxp_disconnect_event_handler(at_ble_disconnected_t *disconnect);
 
 
 /** @brief character changed handler
-  * 
+  *
   * @param[in] at_ble_characteristic_changed_t which includes handle,new value
   *
-  * @pre Must be called when character change event occurred
+  * @pre Must be called when character change event occurs
   *
   * @return @ref AT_BLE_SUCCESS operation completed successfully
   * @return @ref AT_BLE_FAILURE Generic error.

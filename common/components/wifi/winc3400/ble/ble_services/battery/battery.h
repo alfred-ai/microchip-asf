@@ -1,9 +1,10 @@
+
 /**
  * \file
  *
  * \brief Battery Service declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,8 +31,10 @@
  * \asf_license_stop
  *
  */
+
 /*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
  */
 
 
@@ -75,12 +78,13 @@ at_ble_status_t bat_update_char_value (gatt_service_handler_t *battery_serv , ui
 /**@brief Battery service and characteristic initialization(Called only once by user).
  *
  * @param[in] battery_serv battery service instance
+ * @param[in] battery_value not implemented
  *
  * @return none
  */
 void bat_init_service(gatt_service_handler_t *battery_serv, uint8_t *battery_value);
 
-/**@brief Register a battery service instance inside stack. 
+/**@brief Register a battery service instance inside stack.
  *
  * @param[in] battery_service battery service instance
  *

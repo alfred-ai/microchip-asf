@@ -74,11 +74,12 @@
 * for each, it needs 2 timers.
 * Specifically...
 * regTimerId[0] --> LBT timer
-* regTimerId[1] --> Join backoff timer
-* regTimerId[2] --> Join dutycycle timer
+* regTimerId[1] --> Dutycycle Timer
+* regTimerId[2] --> Join backoff timer
+* regTimerId[3] --> Join dutycycle timer
 * dutycycle timer might get added
 */
-#define REG_PARAMS_TIMERS_COUNT                 (3u)
+#define REG_PARAMS_TIMERS_COUNT                 (4u)
 #else
 /*
 * Bands (KR, AS, EU) other than JPN923 uses 1 timer from regional params.
@@ -385,23 +386,28 @@
 
 #if (JPN_BAND == 1)
 // Number of sub-bands in the available spectrum
-#define MAX_NUM_SUBBANDS_JP                   (1)
+#define MAX_NUM_SUBBANDS_JP                   (2)
 //maximum number of channels
 #define MAX_CHANNELS_JP             16 // 16 channels numbered from 0 to 15
 
+#define DEFAULT_CH_SUBBAND_JP       1
 
 //JP920 default channels
 #define LC0_923_JP                   {ENABLED,  { ( ( DR5 << SHIFT4 ) | DR0 ) }}
 #define LC1_923_JP                   {ENABLED,  { ( ( DR5 << SHIFT4 ) | DR0 ) }}
 
 //JP920 default channels
-#define ADV_LC0_923_JP                   {923200000,923200000, 0, 1, 16, 0xFF}
-#define ADV_LC1_923_JP                   {923400000,923400000, 0, 1, 16, 0xFF}
+//										 ulFreq,    rx1Freq,   chSubBand,  IsJoinChannel, maxEIRP, parametersDefined
+#define ADV_LC0_923_JP                   {923200000,923200000, DEFAULT_CH_SUBBAND_JP, 1, DEFAULT_EIRP_JP, 0xFF}
+#define ADV_LC1_923_JP                   {923400000,923400000, DEFAULT_CH_SUBBAND_JP, 1, DEFAULT_EIRP_JP, 0xFF}
 
 //JP920 subbands
 //                                    min_freq,  max_freq,  timeout
-#define SB0_923_JP                   {920000000, 928000000, 0}
+#define SB0_923_JP                   {920000000, 922200000, 0}
 #define SB0_923_JP_DC_0              (100) // <1%
+
+#define SB1_923_JP                   {922400000, 928000000, 0}
+#define SB1_923_JP_DC_0              (10) // <10%
 
 /*JP Default Parameters Based on DataRate*/
 /*rxWindowSize , maxPayloadSixeDT0,maxPayloadSixeDT1,rxWindowOffset,spreadingFactor,bandwidth,modulation*/
@@ -931,7 +937,6 @@ typedef struct _RegParams
     int8_t maxDrParams;
     int8_t Rx1DrOffset;
     int8_t maxTxPwrIndx;
-    /*Stores which AS band is used*/
     uint8_t band;
 
 

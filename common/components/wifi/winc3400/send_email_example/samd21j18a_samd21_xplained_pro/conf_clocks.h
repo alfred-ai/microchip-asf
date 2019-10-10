@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief SAM D21/R21 Clock configuration
+ * \brief SAM D21 Clock configuration
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *

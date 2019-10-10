@@ -4,7 +4,7 @@
  *
  * \brief WINC Crypto module.
  *
- * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2016-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -47,7 +47,7 @@ MACROS
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
 /*======*======*======*======*======*=======*
-* WINC SHA256 HW Engine Register Definition * 
+* WINC SHA256 HW Engine Register Definition *
 *======*======*======*======*======*========*/
 
 #define SHA_BLOCK_SIZE				(64)
@@ -178,7 +178,7 @@ DATA TYPES
 /*!
 @struct	\
 	tstrHashContext
-	
+
 @brief
 */
 typedef struct{
@@ -374,7 +374,7 @@ sint8 m2m_sha256_hash_finish(tstrM2mSha256Ctxt *pstrSha256Ctxt, uint8 *pu8Sha256
 			u8IsDone = u32RegVal & NBIT0;
 		}
 		nm_read_block(u32ReadAddr, (uint8*)au32Digest, 32);
-		
+
 		/* Convert the output words to an array of bytes.
 		*/
 		u32ByteIdx = 0;
@@ -409,7 +409,7 @@ static void FlipBuffer(uint8 *pu8InBuffer, uint8 *pu8OutBuffer, uint16 u16Buffer
 }
 
 void BigInt_ModExp
-(	
+(
  uint8	*pu8X,	uint16	u16XSize,
  uint8	*pu8E,	uint16	u16ESize,
  uint8	*pu8M,	uint16	u16MSize,
@@ -429,7 +429,7 @@ void BigInt_ModExp
 
 	u16XSizeWords = (u16XSize + 3) / 4;
 	u16ESizeWords = (u16ESize + 3) / 4;
-	
+
 	u32MAddr	= u32XAddr + (u16XSizeWords * 4);
 	u32EAddr 	= u32MAddr + (u16XSizeWords * 4);
 	u32RAddr	= u32EAddr + (u16ESizeWords * 4);
@@ -444,7 +444,7 @@ void BigInt_ModExp
 
 	nm_write_block(u32RAddr,au8Tmp, u16RSize);
 
-	/* Write Input Operands to Chip Memory. 
+	/* Write Input Operands to Chip Memory.
 	*/
 	/*------- X -------*/
 	FlipBuffer(pu8X,au8Tmp,u16XSize);
@@ -466,25 +466,25 @@ void BigInt_ModExp
 	FlipBuffer(pu8M, au8Tmp, u16XSize);
 	nm_write_block(u32MAddr, au8Tmp, u16XSizeWords * 4);
 
-	/* Program the addresses of the input operands. 
+	/* Program the addresses of the input operands.
 	*/
 	nm_write_reg(BIGINT_ADDR_X, u32XAddr);
 	nm_write_reg(BIGINT_ADDR_E, u32EAddr);
 	nm_write_reg(BIGINT_ADDR_M, u32MAddr);
 	nm_write_reg(BIGINT_ADDR_R, u32RAddr);
 
-	/* Mprime. 
+	/* Mprime.
 	*/
 	nm_write_reg(BIGINT_M_PRIME,u32Mprime);
 
-	/* Length. 
+	/* Length.
 	*/
 	u32Reg	= (u16XSizeWords & 0xFF);
 	u32Reg += ((u16ESizeWords & 0xFF) << 8);
 	u32Reg += (u8EMswBits << 16);
 	nm_write_reg(BIGINT_LENGTH,u32Reg);
 
-	/* CTRL Register. 
+	/* CTRL Register.
 	*/
 	u32Reg = nm_read_reg(BIGINT_MISC_CTRL);
 	u32Reg ^= BIGINT_MISC_CTRL_CTL_START;
@@ -515,7 +515,7 @@ void BigInt_ModExp
 #define MD5_DIGEST_SIZE			(16)
 #define SHA1_DIGEST_SIZE		(20)
 
-static const uint8 au8TEncodingMD5[] = 
+static const uint8 au8TEncodingMD5[] =
 {
 	0x30, 0x20, 0x30, 0x0C, 0x06, 0x08, 0x2A, 0x86,
 	0x48, 0x86, 0xF7, 0x0D, 0x02, 0x05, 0x05, 0x00,
@@ -525,16 +525,16 @@ static const uint8 au8TEncodingMD5[] =
 */
 
 
-static const uint8 au8TEncodingSHA1[] = 
+static const uint8 au8TEncodingSHA1[] =
 {
 	0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2B, 0x0E,
-	0x03, 0x02, 0x1A, 0x05, 0x00, 0x04 
+	0x03, 0x02, 0x1A, 0x05, 0x00, 0x04
 };
 /*!< Fixed part of the Encoding T for the SHA-1 hash algorithm.
 */
 
 
-static const uint8 au8TEncodingSHA2[] = 
+static const uint8 au8TEncodingSHA2[] =
 {
 	0x30, 0x31, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86,
 	0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05,
@@ -544,7 +544,7 @@ static const uint8 au8TEncodingSHA2[] =
 */
 
 
-sint8 m2m_rsa_sign_verify(uint8 *pu8N, uint16 u16NSize, uint8 *pu8E, uint16 u16ESize, uint8 *pu8SignedMsgHash, 
+sint8 m2m_rsa_sign_verify(uint8 *pu8N, uint16 u16NSize, uint8 *pu8E, uint16 u16ESize, uint8 *pu8SignedMsgHash,
 						  uint16 u16HashLength, uint8 *pu8RsaSignature)
 {
 	sint8		s8Ret = M2M_RSA_SIGN_FAIL;
@@ -567,19 +567,19 @@ sint8 m2m_rsa_sign_verify(uint8 *pu8N, uint16 u16NSize, uint8 *pu8E, uint16 u16E
 			pu8T 				= (uint8*)au8TEncodingSHA1;
 			u16TEncodingLength	= sizeof(au8TEncodingSHA1);
 		}
-		else 
+		else
 		{
 			pu8T 				= (uint8*)au8TEncodingSHA2;
 			u16TEncodingLength	= sizeof(au8TEncodingSHA2);
 		}
 		u16TLength = u16TEncodingLength + 1 + u16HashLength;
-					
+
 		/* If emLen < tLen + 11.
 		*/
 		if(u16NSize >= (u16TLength + 11))
 		{
 			uint32 	u32PSLength,u32Idx = 0;
-	
+
 			/*
 			RSA verification
 			*/
@@ -587,12 +587,12 @@ sint8 m2m_rsa_sign_verify(uint8 *pu8N, uint16 u16NSize, uint8 *pu8E, uint16 u16E
 
 			u32PSLength = u16NSize - u16TLength - 3;
 
-			/* 
+			/*
 			The calculated EM must match the following pattern.
 			*======*======*======*======*======*
-			* 0x00 || 0x01 || PS || 0x00 || T  *	
+			* 0x00 || 0x01 || PS || 0x00 || T  *
 			*======*======*======*======*======*
-			Where PS is all 0xFF 
+			Where PS is all 0xFF
 			T is defined based on the hash algorithm.
 			*/
 			if((au8EM[0] == 0x00) && (au8EM[1] == 0x01))
@@ -617,7 +617,7 @@ sint8 m2m_rsa_sign_verify(uint8 *pu8N, uint16 u16NSize, uint8 *pu8E, uint16 u16E
 }
 
 
-sint8 m2m_rsa_sign_gen(uint8 *pu8N, uint16 u16NSize, uint8 *pu8d, uint16 u16dSize, uint8 *pu8SignedMsgHash, 
+sint8 m2m_rsa_sign_gen(uint8 *pu8N, uint16 u16NSize, uint8 *pu8d, uint16 u16dSize, uint8 *pu8SignedMsgHash,
 					   uint16 u16HashLength, uint8 *pu8RsaSignature)
 {
 	sint8		s8Ret = M2M_RSA_SIGN_FAIL;
@@ -640,26 +640,26 @@ sint8 m2m_rsa_sign_gen(uint8 *pu8N, uint16 u16NSize, uint8 *pu8d, uint16 u16dSiz
 			pu8T 				= (uint8*)au8TEncodingSHA1;
 			u16TEncodingLength	= sizeof(au8TEncodingSHA1);
 		}
-		else 
+		else
 		{
 			pu8T 				= (uint8*)au8TEncodingSHA2;
 			u16TEncodingLength	= sizeof(au8TEncodingSHA2);
 		}
 		u16TLength = u16TEncodingLength + 1 + u16HashLength;
-					
+
 		/* If emLen < tLen + 11.
 		*/
 		if(u16NSize >= (u16TLength + 11))
 		{
 			uint16 	u16PSLength = 0;
-			uint16	u16Offset	= 0;	
+			uint16	u16Offset	= 0;
 
-			/* 
+			/*
 			The calculated EM must match the following pattern.
 			*======*======*======*======*======*
-			* 0x00 || 0x01 || PS || 0x00 || T  *	
+			* 0x00 || 0x01 || PS || 0x00 || T  *
 			*======*======*======*======*======*
-			Where PS is all 0xFF 
+			Where PS is all 0xFF
 			T is defined based on the hash algorithm.
 			*/
 			au8EM[u16Offset ++]	= 0;
@@ -672,7 +672,7 @@ sint8 m2m_rsa_sign_gen(uint8 *pu8N, uint16 u16NSize, uint8 *pu8d, uint16 u16dSiz
 			u16Offset += u16TEncodingLength;
 			au8EM[u16Offset ++] = u16HashLength;
 			m2m_memcpy(&au8EM[u16Offset], pu8SignedMsgHash, u16HashLength);
-			
+
 			/*
 			RSA Signature Generation
 			*/

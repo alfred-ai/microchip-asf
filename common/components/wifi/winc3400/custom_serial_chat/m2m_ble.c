@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 BLE Application example code.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -84,10 +84,10 @@ sint8 m2m_ble_init(void)
 	 	 M2M_ERR("WiFi is not initialized yet\n");
 	 	 return -1;
 	 }
-	 
+
 	 if (at_ble_init((void*)&plf) != AT_BLE_SUCCESS)
 	 {
-		 M2M_ERR("Failed to initialise BLE API\n");
+		 M2M_ERR("Failed to initialize BLE API\n");
 		 return -1;
 	 }
 
@@ -103,7 +103,7 @@ sint8 m2m_ble_event_get(at_ble_events_t *event, at_ble_event_parameter_t* params
 	// This stimulates BLE operation.
 	while (m2m_wifi_handle_events(NULL) != M2M_SUCCESS){
 	}
-	
+
 
 	return AT_BLE_SUCCESS;
 }

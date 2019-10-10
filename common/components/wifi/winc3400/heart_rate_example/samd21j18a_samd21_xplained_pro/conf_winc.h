@@ -2,9 +2,9 @@
  *
  * \file
  *
- * \brief WINC3400 configuration.
+ * \brief SAM D21 WINC3400 configuration.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -79,7 +79,7 @@ extern "C" {
    ---------- I2C settings ---------
    ---------------------------------
 */
-#define CONF_WIFI_M2M_I2C                    (0) 
+#define CONF_WIFI_M2M_I2C                    (0)
 
 #define CONF_WINC_I2C_SCL                  EXT1_PIN_I2C_SCL
 #define CONF_WINC_I2C_SDA                  EXT1_PIN_I2C_SDA

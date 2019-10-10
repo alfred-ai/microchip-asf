@@ -115,7 +115,7 @@ static StackRetStatus_t LORAREG_GetAttr_Rx1WindowparamsType2(LorawanRegionalAttr
 static void getRx1WindowparamsType2(Rx1WindowParamsReq_t* rx1WindowParamReq ,Rx1WindowParams_t* rx1WindowParams);
 #endif
 
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static StackRetStatus_t LORAREG_GetAttr_DutyCycleT2(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_DutyCycleTimer(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 
@@ -173,6 +173,7 @@ static StackRetStatus_t ValidateDataRate (LorawanRegionalAttributes_t attr, void
 static DataRange_t getChBandDrT2(uint8_t chMaskCntl,uint16_t channelMask);
 // used only in EU band, but included in a common function
 static uint8_t getSubBandId(uint32_t frequency);
+static StackRetStatus_t setChlistDefaultState(LorawanRegionalAttributes_t attr, void *attrInput);
 
 #endif
 
@@ -257,7 +258,7 @@ void SetCallbackRegSoftwareTimers (void);
 
 void StopAllRegSoftwareTimers (void);*/
 
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static void DutyCycleCallback (uint8_t param);
 #endif
 
@@ -519,6 +520,8 @@ void LORAREG_InitGetAttrFnPtrsJP(void)
     pGetAttr[DL_FREQUENCY] = LORAREG_GetAttr_DlFrequency;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
+	pGetAttr[DUTY_CYCLE] = LORAREG_GetAttr_DutyCycleT2;
+	pGetAttr[MIN_DUTY_CYCLE_TIMER] = LORAREG_GetAttr_DutyCycleTimer;
 }
 #endif
 
@@ -1024,8 +1027,8 @@ static StackRetStatus_t LORAREG_GetAttr_JoinDutyCycleRemainingTime(LorawanRegion
 	uint32_t timeremaining =0;
 	if(SwTimerIsRunning(RegParams.pJoinDutyCycleTimer->timerId))
 	{
-	timeremaining = US_TO_MS(SwTimerReadValue (RegParams.pJoinDutyCycleTimer->timerId));
-	timeremaining = timeremaining + RegParams.pJoinDutyCycleTimer->remainingtime;
+		timeremaining = US_TO_MS(SwTimerReadValue (RegParams.pJoinDutyCycleTimer->timerId));
+		timeremaining = timeremaining + RegParams.pJoinDutyCycleTimer->remainingtime;
 	}
 	memcpy(attrOutput,&timeremaining,sizeof(uint32_t));
 	return result;
@@ -1136,7 +1139,7 @@ static StackRetStatus_t LORAREG_GetAttr_DutyCycleT1(LorawanRegionalAttributes_t 
 }
 #endif
 
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static StackRetStatus_t LORAREG_GetAttr_DutyCycleT2(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
 {
 	StackRetStatus_t result = LORAWAN_SUCCESS;
@@ -1160,7 +1163,7 @@ static StackRetStatus_t LORAREG_GetAttr_DutyCycleT2(LorawanRegionalAttributes_t 
 }
 #endif
 
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static StackRetStatus_t LORAREG_GetAttr_DutyCycleTimer(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
 {
 	StackRetStatus_t result = LORAWAN_SUCCESS;
@@ -1563,6 +1566,7 @@ void LORAREG_InitSetAttrFnPtrsEU(void)
 	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
 	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
+	pSetAttr[CHLIST_DEFAULTS] = setChlistDefaultState;
 }
 #endif
 
@@ -1580,6 +1584,7 @@ void LORAREG_InitSetAttrFnPtrsAS(void)
 	pSetAttr[DUTY_CYCLE] = setDutyCycle;
 	pSetAttr[DUTY_CYCLE_TIMER] = setDutyCycleTimer;
 	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
+	pSetAttr[CHLIST_DEFAULTS] = setChlistDefaultState;
 }
 #endif
 
@@ -1609,6 +1614,7 @@ void LORAREG_InitSetAttrFnPtrsIN(void)
 	pSetAttr[DL_FREQUENCY] = setDlFrequency;
 	pSetAttr[TX_PARAMS] = setTxParams;
 	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
+	pSetAttr[CHLIST_DEFAULTS] = setChlistDefaultState;
 }
 #endif
 
@@ -1624,9 +1630,10 @@ void LORAREG_InitSetAttrFnPtrsJP(void)
 	pSetAttr[JOIN_DUTY_CYCLE_TIMER]= setJoinDutyCycleTimer;
 	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[TX_PARAMS] = setTxParams;
-	pSetAttr[DUTY_CYCLE] = NULL;
-	pSetAttr[DUTY_CYCLE_TIMER] = NULL;
+	pSetAttr[DUTY_CYCLE] = setDutyCycle;
+	pSetAttr[DUTY_CYCLE_TIMER] = setDutyCycleTimer;
 	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
+	pSetAttr[CHLIST_DEFAULTS] = setChlistDefaultState;
 }
 #endif
 
@@ -1643,6 +1650,7 @@ void LORAREG_InitSetAttrFnPtrsKR(void)
 	pSetAttr[JOIN_BACK_OFF_TIMER] = setJoinBackOffTimer;
 	pSetAttr[TX_PARAMS] = setTxParams;
 	pSetAttr[JOINBACKOFF_CNTL] = setJoinBackoffCntl;
+	pSetAttr[CHLIST_DEFAULTS] = setChlistDefaultState;
 }
 #endif
 
@@ -2576,6 +2584,7 @@ static StackRetStatus_t SearchAvailableChannel1 (uint8_t maxChannels, bool trans
 		if(RegParams.cmnParams.paramsType1.lastUsedSB >= MAX_SUBBANDS)
 		{
 				RegParams.cmnParams.paramsType1.lastUsedSB = 0;
+			
 		}
 	#endif 
 	}
@@ -2710,6 +2719,8 @@ static StackRetStatus_t ValidateChannelMaskT2 (LorawanRegionalAttributes_t attr,
 		////ChMask can be set to 0 if ChMaskCtrl is set to 6
 		return retVal = LORAWAN_SUCCESS;
 	}
+	
+	return retVal;
 }
 #endif
 
@@ -2776,7 +2787,7 @@ void StopAllRegSoftwareTimers (void)
  * \brief Timer callback for updating the duty cycle timer
  * \param Timer Parameters
  */
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static void DutyCycleCallback (uint8_t param)
 {
     uint32_t minimSubBandTimer = UINT32_MAX;
@@ -3094,7 +3105,7 @@ static StackRetStatus_t ValidateFreqKR (LorawanRegionalAttributes_t attr, void *
 static uint8_t getSubBandId(uint32_t frequency)
 {
 	uint8_t subBandId = 0xFF;
-#if (EU_BAND == 1)	
+#if (EU_BAND == 1)	|| (JPN_BAND == 1)
 	for(uint8_t i = 0; i < RegParams.maxSubBands; i++)
 	{
 		if(frequency >= RegParams.pSubBandParams[i].freqMin && frequency <= RegParams.pSubBandParams[i].freqMax)
@@ -3194,7 +3205,7 @@ static StackRetStatus_t setChannelIdStatusT2 (LorawanRegionalAttributes_t attr, 
 	memcpy(&updateChid,attrInput,sizeof(UpdateChId_t));
 	
 	valChid.channelIndex = updateChid.channelIndex;
-	valChid.allowedForDefaultChannels = WITHOUT_DEFAULT_CHANNELS;
+	valChid.allowedForDefaultChannels = /*WITHOUT_DEFAULT_CHANNELS*/ALL_CHANNELS;
 	
 	if(ValidateChannelIdT2(CHANNEL_ID, &valChid) == LORAWAN_SUCCESS)
 	{
@@ -3477,7 +3488,7 @@ static StackRetStatus_t ValidateFrequencyAS (LorawanRegionalAttributes_t attr, v
 }
 #endif
 
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static StackRetStatus_t setDutyCycle(LorawanRegionalAttributes_t attr, void *attrInput)
 {
     UpdateDutyCycle_t updateDCycle;
@@ -3507,7 +3518,7 @@ static StackRetStatus_t setDutyCycle(LorawanRegionalAttributes_t attr, void *att
 }
 #endif
 
-#if (EU_BAND == 1) || (AS_BAND == 1)
+#if (EU_BAND == 1) || (AS_BAND == 1) || (JPN_BAND == 1)
 static StackRetStatus_t setDutyCycleTimer(LorawanRegionalAttributes_t attr, void *attrInput)
 {
 	UpdateDutyCycleTimer_t updateDCTimer;
@@ -3523,6 +3534,13 @@ static StackRetStatus_t setDutyCycleTimer(LorawanRegionalAttributes_t attr, void
 	
 	// step1: find the sub band of the last used channel
     bandId = RegParams.pOtherChParams[RegParams.lastUsedChannelIndex].subBandId;
+	// Return immediately if the last channel used in not under Dutycycle restrictions as per ARIB Spec
+	// Band 0 => 920.6 MHz to 922.2 MHz -> Following LBT
+	// Band 1 => 922.4 Mhz to 928.0 MHz -> Follwoing both LBT and Dutycycle 
+	if (bandId == 0 && RegParams.band == ISM_JPN923)
+	{
+		return result;
+	}
 	
 	// this duty cycle setting applies only for data frames; if join frame was latest, then return immediately
 	if(updateDCTimer.joining != 1)
@@ -3759,7 +3777,7 @@ static StackRetStatus_t setFrequency(LorawanRegionalAttributes_t attr, void *att
 	else
 	{
 		uint8_t chIndx = updateTxFreq.channelIndex;
-		if(((1 << RegParams.band) & (ISM_EUBAND)) != 0)
+		if((((1 << RegParams.band) & ((ISM_EUBAND) | (1 << ISM_JPN923))) != 0))
 		{
 		    RegParams.pOtherChParams[chIndx].subBandId = getSubBandId(updateTxFreq.frequencyNew);
 		}
@@ -4108,6 +4126,21 @@ static StackRetStatus_t setEnableAllChs(LorawanRegionalAttributes_t attr, void *
 	PDS_STORE(RegParams.regParamItems.lastUsedSB);
 #endif
 #endif	
+	return status;
+}
+#endif
+#if (EU_BAND == 1 || AS_BAND == 1 || IND_BAND == 1 || JPN_BAND == 1 || KR_BAND == 1)
+static StackRetStatus_t setChlistDefaultState(LorawanRegionalAttributes_t attr, void *attrInput)
+{
+	StackRetStatus_t status = LORAWAN_SUCCESS;
+	/* Traverse the entire channel list and disable the all the Channel status except Default channels */
+	for (uint8_t i = 0; i <= RegParams.maxChannels; i++)
+	{
+		if(RegParams.pOtherChParams[i].joinRequestChannel != true)
+		{
+			RegParams.pChParams[i].status = DISABLED;
+		}
+	}
 	return status;
 }
 #endif

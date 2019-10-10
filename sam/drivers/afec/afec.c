@@ -655,12 +655,21 @@ void afec_configure_auto_error_correction(Afec *const afec,
 
 	uint32_t reg = 0;
 	reg = afec->AFEC_CECR;
-	reg = (channel == AFEC_CHANNEL_ALL)? 0 : ~(0x1u << channel);
 	reg |= (channel == AFEC_CHANNEL_ALL)? AFEC_CHANNEL_ALL : (0x1u << channel);
 	afec->AFEC_CECR = reg;
 
-	afec->AFEC_COSR = AFEC_COSR_CSEL;
-    afec->AFEC_CVR = AFEC_CVR_OFFSETCORR(offsetcorr) | AFEC_CVR_GAINCORR(gaincorr);		 
+	if (channel == AFEC_CHANNEL_ALL) {
+		afec->AFEC_COSR = 0;
+		afec->AFEC_CVR = AFEC_CVR_OFFSETCORR(offsetcorr) | AFEC_CVR_GAINCORR(gaincorr);
+		afec->AFEC_COSR = AFEC_COSR_CSEL;
+	}
+	else if (channel < AFEC_CHANNEL_6){
+		afec->AFEC_COSR = 0;
+	}
+	else{
+		afec->AFEC_COSR = AFEC_COSR_CSEL;
+	}
+	afec->AFEC_CVR = AFEC_CVR_OFFSETCORR(offsetcorr) | AFEC_CVR_GAINCORR(gaincorr);
 	
 }
 

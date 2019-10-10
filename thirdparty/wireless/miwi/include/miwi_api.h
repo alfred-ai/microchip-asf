@@ -43,6 +43,9 @@
 #include "miwi_config_p2p.h"      //MiWi Protocol layer configuration file
 #endif
 
+#define MIWI_MAJOR_VERSION    '6'
+#define MIWI_MINOR_VERSION    '4'
+
 #define INPUT
 #define OUTPUT
 #define IOPUT

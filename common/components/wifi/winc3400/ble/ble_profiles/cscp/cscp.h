@@ -3,7 +3,7 @@
  *
  * \brief  Custom Serial Chat Profile
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -49,14 +49,14 @@
 
 /** @brief APP_SPOG_FAST_ADV between 0x0020 and 0x4000 in 0.625 ms units (20ms to 10.24s). */
 //	<o> Fast Advertisement Interval <100-1000:50>
-//	<i> Defines inteval of Fast advertisement in ms.
+//	<i> Defines interval of Fast advertisement in ms.
 //	<i> Default: 100
 //	<id> csc_fast_adv
 #define APP_CSC_FAST_ADV				(100) //100 ms
 
 /** @brief APP_SPOG_ADV_TIMEOUT Advertising time-out between 0x0001 and 0x3FFF in seconds, 0x0000 disables time-out.*/
 //	<o> Advertisement Timeout <1000-10000:50>
-//	<i> Defines inteval at which advertisement timout in ms.
+//	<i> Defines interval at which advertisement timout in ms.
 //	<i> Default: 1000
 //	<id> csc_adv_timeout
 #define APP_CSC_ADV_TIMEOUT				(1000) // 100 Secs
@@ -92,7 +92,7 @@
 /** @brief Custom serial chat UUID length */
 #define CSC_UUID_128_LEN				(16)
 
-/** @brief Discovery sucess status */
+/** @brief Discovery success status */
 #define AT_DISCOVER_SUCCESS				(10)
 
 /**@brief start and end handle */
@@ -108,21 +108,21 @@ typedef enum
 {
 	/// Discovery Disable
 	DISCOVER_IDLE = 0,
-	
+
 	/// Discover Service
 	DISCOVER_SERVICE,
-	
+
 	/// Discover Include Service
 	DISCOVER_INCLUDE_SERVICE,
-	
+
 	/// Discover Characteristic
 	DISCOVER_CHARACTERISTIC,
-	
+
 	/// Discover Descriptor
 	DISCOVER_DESCRIPTOR,
-	
+
 	DISCOVER_COMPLETED,
-	
+
 }ble_discovery_role;
 
 /****************************************************************************************
@@ -153,11 +153,11 @@ typedef struct app_csc_data{
 typedef struct csc_report_ntf
 {
 	/**< Received buffer pointer. */
-	uint8_t *recv_buff;				
+	uint8_t *recv_buff;
 	/**< Received buffer length. */
-	uint8_t recv_buff_len;			
+	uint8_t recv_buff_len;
 	/**< Connection Handle. */
-	at_ble_handle_t conn_handle;	
+	at_ble_handle_t conn_handle;
 }csc_report_ntf_t;
 
 /****************************************************************************************
@@ -181,7 +181,7 @@ void csc_prf_buf_init(uint8_t *databuf, uint16_t datalen);
  */
 void csc_prf_send_data(uint8_t *databuf, uint16_t datalen);
 
-/** @brief CSC profile initialization function 
+/** @brief CSC profile initialization function
  */
 void csc_prf_init(void *param);
 
@@ -198,29 +198,29 @@ void csc_prf_dev_adv(void);
 at_ble_status_t csc_prf_char_changed_handler(at_ble_characteristic_changed_t *char_handle);
 
 /**
- * @brief Handler for connection event 
+ * @brief Handler for connection event
  * @param[in] connected event parameter containing details like handle
  * \note Called by the ble_manager after receiving connection event
  */
 void csc_prf_connected_state_handler(at_ble_connected_t *params);
 
 /**
- * @brief Handler for service found 
+ * @brief Handler for service found
  * @param[in] service found event parameter containing details about the service found
  * \note Called by the ble_manager after receiving the service
  */
 void csc_prf_service_found_handler(at_ble_primary_service_found_t * params);
 
 /**
- * @brief Handler for characteristic found 
+ * @brief Handler for characteristic found
  * @param[in] characteristic found event parameter containing details about the characteristic found
  * \note Called by the ble_manager after receiving the characteristic
  */
 void csc_prf_characteristic_found_handler(at_ble_characteristic_found_t *params);
 
 /**
- * @brief Handler for descriptor found 
- * @param[in] characteristic found event parameter containing details about the descriptor found
+ * @brief Handler for descriptor found
+ * @param[in] descriptor found event parameter containing details about the descriptor found
  * \note Called by the ble_manager after receiving the descriptor
  */
 void csc_prf_descriptor_found_handler(at_ble_descriptor_found_t *params);
@@ -235,10 +235,10 @@ void csc_prf_discovery_complete_handler(at_ble_discovery_complete_t *params);
 /**
  * @brief Handler for notification
  */
-void csc_prf_notification_handler(at_ble_notification_recieved_t *params);
+void csc_prf_notification_handler(at_ble_notification_received_t *params);
 
 /**
- * @brief Handler for configuing the notifcation for remote device
+ * @brief Handler for configuring the notification for remote device
  */
 void csc_prf_write_notification_handler(void *param);
 

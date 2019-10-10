@@ -3,7 +3,7 @@
 *
 * \brief OTAU implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -63,6 +63,12 @@
 #endif
 #include "otau_notify.h"
 #include "otau_upgrade.h"
+#include "otau_debug.h"
+
+#if defined(OTAU_PHY_MODE)
+#include "phy.h"
+#include "mimac_at86rf.h"
+#endif
 
 static void otauDataInd(RECEIVED_MESH_MESSAGE *ind);
 static void otauDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer);
@@ -71,8 +77,14 @@ static void initDataHandleTable(void);
 static bool addDataHandleTableEntry(uint8_t domainId, uint8_t messageId, addr_mode_t addrMode, uint8_t *addr, uint8_t handle);
 static bool getAddressFromDataHandleTable(uint8_t handle, uint8_t *domainId, uint8_t *messageId, uint8_t *addrMode, uint8_t *addr);
 
+#if defined(OTAU_PHY_MODE)
+static void otauPhyDataInd(PHY_DataInd_t *ind);
+static void otauPhyDataConf(uint8_t status);
+#endif
+
 static SYS_Timer_t otauNotifyTimer;
 static SYS_Timer_t otauUpgradeTimer;
+static SYS_Timer_t otauDebugTimer;
 
 static bool otauInited = false;
 
@@ -88,7 +100,12 @@ DataHandleTable_t dataHandleTable[DATA_HANDLE_TABLE_SIZE];
 static uint8_t msgHandle = 0;
 
 #ifndef OTAU_SERVER
-uint16_t serverShortAddress = 0x0000;
+node_address_t serverAddress;
+#endif
+
+#if defined(OTAU_PHY_MODE)
+uint8_t otauPhyData[128];
+static uint8_t storage_buffer[140];
 #endif
 
 #if !defined(OTAU_SERVER)
@@ -144,6 +161,7 @@ void otauInit(void)
 	miQueueInit(&networkFrame);
 	otauNotifyInit();
 	otauUpgradeInit();
+	otauDebugInit();
 #ifdef OTAU_SERVER
 	otauParserInit();
 #else
@@ -158,6 +176,9 @@ void otauInit(void)
 #endif
 #endif
 	initDataHandleTable();
+#if defined(OTAU_PHY_MODE)
+	PHY_SubscribeReservedFrameIndicationCallback(otauPhyDataInd);
+#endif
 	MiApp_SubscribeManuSpecDataIndicationCallback(otauDataInd);
 }
 
@@ -208,7 +229,10 @@ void otauHandleMsg(otau_domain_msg_t *otau_domain_msg)
 			otauHandleNotifyMsg(otau_domain_msg);
 			break;
 		case DOMAIN_OTAU_UPGRADE:
-			handle_upgrade_otau_msg(otau_domain_msg);
+			otauHandleUpgradeMsg(otau_domain_msg);
+			break;
+		case DOMAIN_OTAU_DEBUG:
+			otauHandleDebugMsg(otau_domain_msg);
 			break;
 	}
 #endif
@@ -225,48 +249,252 @@ void otauRcvdFrame(otau_rcvd_frame_t *frame)
 	{
 		otauUpgradeRcvdFrame(frame->addr_mode, frame->src_addr, frame->frame_length, frame->frame_payload);
 	}
+	else if (DOMAIN_OTAU_DEBUG == *domain)
+	{
+		otauDebugRcvdFrame(frame->addr_mode, frame->src_addr, frame->frame_length, frame->frame_payload);
+	}
 }
+
+#if defined(OTAU_PHY_MODE)
+static void phy_transmit_frame(uint8_t dst_addr_mode,uint8_t* dst_addr,uint8_t *src_addr,
+	uint16_t panid, uint8_t payload_length, uint8_t *payload, bool ack_req)
+{
+	uint8_t i;
+	uint8_t *frame_ptr;
+	uint16_t fcf = 0;
+	uint16_t temp_value;
+	PHY_DataReq_t phyDataRequest;
+	/* Get length of current frame. */
+	frame_ptr = &storage_buffer[1] + FCF_LEN;
+
+	/* Set DSN. */
+	*frame_ptr = seq_no++;
+	frame_ptr++;
+
+	/* Destination address */
+	if (FCF_LONG_ADDR == dst_addr_mode) {
+		/* Destination PAN-Id */
+		temp_value = panid;
+		memcpy(frame_ptr, &temp_value, 2);
+		frame_ptr += PAN_ID_LEN;
+#ifndef OTAU_SERVER
+		dst_addr = serverAddress.extended_addr;
+#endif
+		memcpy(frame_ptr, dst_addr, 8);
+		frame_ptr += EXT_ADDR_LEN;
+
+		fcf |= FCF_SET_DEST_ADDR_MODE(FCF_LONG_ADDR);
+
+		/* Source address */
+		memcpy(frame_ptr, src_addr, 8);
+		frame_ptr += EXT_ADDR_LEN;
+
+		fcf |= FCF_SET_SOURCE_ADDR_MODE(FCF_LONG_ADDR);
+	}
+	else
+	{
+		uint64_t tempSrcAddr;
+		/* Destination PAN-Id */
+		temp_value = macShortAddress_def;
+		convert_16_bit_to_byte_array(temp_value, frame_ptr);
+		frame_ptr += PAN_ID_LEN;
+
+		convert_16_bit_to_byte_array(macShortAddress_def,
+		frame_ptr);
+		frame_ptr += SHORT_ADDR_LEN;
+
+		fcf |= FCF_SET_DEST_ADDR_MODE(FCF_SHORT_ADDR);
+
+		memcpy(&tempSrcAddr, src_addr, EXT_ADDR_LEN);
+		/* Source address */
+		convert_64_bit_to_byte_array(tempSrcAddr, frame_ptr);
+		frame_ptr += EXT_ADDR_LEN;
+
+		fcf |= FCF_SET_SOURCE_ADDR_MODE(FCF_LONG_ADDR);
+	}
+	/*
+	* Payload is stored to the end of the buffer avoiding payload
+	* copying.
+	*/
+	for (i = 0; i < payload_length; i++) {
+		*frame_ptr++ = *(payload + i);
+	}
+
+	/* No source PAN-Id included, but FCF updated. */
+	fcf |= FCF_PAN_ID_COMPRESSION;
+
+	/* Set the FCF. */
+	fcf |= FCF_SET_FRAMETYPE(0x07);
+	if (ack_req) {
+		fcf |= FCF_ACK_REQUEST;
+	}
+	memcpy(&storage_buffer[1], &fcf, 2);
+
+	storage_buffer[0] = frame_ptr - &storage_buffer[1];
+
+    phyDataRequest.polledConfirmation = true;
+    phyDataRequest.confirmCallback = otauPhyDataConf;
+    phyDataRequest.data = &storage_buffer[0];
+
+	PHY_DataReq(&phyDataRequest);
+}
+
+static void otauPhyDataConf(uint8_t status)
+{
+	switch (status)
+	{
+		case PHY_STATUS_SUCCESS:
+			status = OTAU_SUCCESS;
+		break;
+		case PHY_STATUS_NO_ACK:
+			status = OTAU_NO_ACK;
+		break;
+		case PHY_STATUS_CHANNEL_ACCESS_FAILURE:
+			status = OTAU_CCA_FAILURE;
+		break;
+		default:
+			status = OTAU_ERROR;
+	}
+	if (DOMAIN_OTAU_NOTIFY == otauPhyData[0])
+	{
+		otauNotifySentFrame(otauPhyData[1], EXTENDED_ADDR_MODE, &storage_buffer[6], status);
+	}
+	else if (DOMAIN_OTAU_UPGRADE == otauPhyData[0])
+	{
+		otauUpgradeSentFrame(otauPhyData[1], EXTENDED_ADDR_MODE, &storage_buffer[6], status);
+	}
+	else if (DOMAIN_OTAU_DEBUG == otauPhyData[0])
+	{
+		otauDebugSentFrame(otauPhyData[1], EXTENDED_ADDR_MODE, &storage_buffer[6], status);
+	}
+}
+
+
+static void otauPhyDataInd(PHY_DataInd_t *ind)
+{
+	uint8_t *frame_ptr = ind->data;
+	uint8_t src_addr_mode;
+	uint8_t dst_addr_mode;
+	bool intra_pan;
+	uint8_t addr_field_len = FRAME_OVERHEAD;
+	uint16_t fcf;
+	uint8_t *src_addr;
+
+    ind->size -=2;
+	fcf = convert_byte_array_to_16_bit(frame_ptr);
+	
+	src_addr_mode = FCF_GET_SOURCE_ADDR_MODE(fcf);
+	dst_addr_mode = FCF_GET_DEST_ADDR_MODE(fcf);
+	intra_pan = fcf & FCF_PAN_ID_COMPRESSION;
+
+	if (0 != dst_addr_mode)
+	{
+		addr_field_len += PAN_ID_LEN;
+		if(FCF_SHORT_ADDR == dst_addr_mode)
+		{
+			addr_field_len += SHORT_ADDR_LEN;
+		}
+		else if (FCF_LONG_ADDR == dst_addr_mode)
+		{
+			addr_field_len += EXT_ADDR_LEN;
+		}
+	}
+	if (0 != src_addr_mode)
+	{
+		if (!intra_pan)
+		{
+			addr_field_len += PAN_ID_LEN;
+		}
+		src_addr = frame_ptr + addr_field_len;
+		if (FCF_SHORT_ADDR == src_addr_mode)
+		{
+			addr_field_len += SHORT_ADDR_LEN;
+		}
+		else if (FCF_LONG_ADDR == src_addr_mode)
+		{
+			addr_field_len += EXT_ADDR_LEN;
+		}
+	}
+	else
+	{
+		src_addr = NULL;
+	}
+	otau_rcvd_frame_t rcvd_frame;
+	rcvd_frame.addr_mode = EXTENDED_ADDR_MODE;
+	rcvd_frame.src_addr = src_addr;
+	rcvd_frame.frame_length = ind->size - addr_field_len;
+	rcvd_frame.frame_payload = frame_ptr + addr_field_len;
+	otauRcvdFrame(&rcvd_frame);
+}
+#endif
 
 void otauDataSend(addr_mode_t addr_mode, uint8_t *addr, void *payload, uint16_t len)
 {
 	uint16_t dstAddr;
 	uint8_t domainId = *((uint8_t *)payload);
 	uint8_t msgId = *(uint8_t *)((uint8_t *)payload + 1);
-	if (NATIVE_ADDR_MODE == addr_mode && NULL == addr)
+	if (EXTENDED_ADDR_MODE != addr_mode)
 	{
+		if (NATIVE_ADDR_MODE == addr_mode && NULL == addr)
+		{
+	#ifndef OTAU_SERVER
+			addr = (uint8_t *)&serverAddress.native_addr;
+	#endif
+		}
+		else if (BROADCAST_MODE == addr_mode)
+		{
+			dstAddr = MESH_BROADCAST_TO_ALL;
+			addr = (uint8_t *)&dstAddr;
+		}
+		if (DOMAIN_OTAU_NOTIFY == domainId)
+		{
+			if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
+			{
+				otauNotifySentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
+			}
+			else
+			{
+				addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
+				msgHandle++;
+			}		
+		}
+		else if (DOMAIN_OTAU_UPGRADE == domainId)
+		{
+			if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
+			{
+				otauUpgradeSentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
+			}
+			else
+			{
+				addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
+				msgHandle++;
+			}
+		}
+		else if (DOMAIN_OTAU_DEBUG == domainId)
+		{
+			if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
+			{
+				otauDebugSentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
+			}
+			else
+			{
+				addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
+				msgHandle++;
+			}
+		}
+	}
+#if defined(OTAU_PHY_MODE)
+	else
+	{
+		uint16_t panID;
+		MiApp_Get(PANID, (uint8_t *)&panID);
 #ifndef OTAU_SERVER
-		addr = (uint8_t *)&serverShortAddress;
+		addr = (uint8_t *)&serverAddress.extended_addr;
 #endif
+		memcpy(&otauPhyData[0], payload, len);
+		phy_transmit_frame(FCF_LONG_ADDR, addr, get_node_address(EXTENDED_ADDR_MODE), panID, len, otauPhyData, 1);
 	}
-	else if (BROADCAST_MODE == addr_mode)
-	{
-		dstAddr = MESH_BROADCAST_TO_ALL;
-		addr = (uint8_t *)&dstAddr;
-	}
-	if (DOMAIN_OTAU_NOTIFY == domainId)
-	{
-		if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
-		{
-			otauNotifySentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
-		}
-		else
-		{
-			addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
-			msgHandle++;
-		}		
-	}
-	else if (DOMAIN_OTAU_UPGRADE == domainId)
-	{
-		if (!MiApp_ManuSpecSendData(SHORT_ADDR_LEN, addr, len, payload, msgHandle, 1, otauDataConf))
-		{
-			otauUpgradeSentFrame(msgId, NATIVE_ADDR_MODE, addr, OTAU_ERROR);
-		}
-		else
-		{
-			addDataHandleTableEntry(domainId, msgId, NATIVE_ADDR_MODE, addr, msgHandle);
-			msgHandle++;
-		}
-	}
+#endif
 }
 
 static void otauDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* msgPointer)
@@ -275,28 +503,33 @@ static void otauDataConf(uint8_t msgConfHandle, miwi_status_t status, uint8_t* m
 	uint8_t domainId = DOMAIN_OTAU_NOTIFY;
 	uint8_t messageId = 0xFF;
 	uint8_t addrMode;
+        error_status_t otauStatus;
 	getAddressFromDataHandleTable(msgConfHandle, &domainId, &messageId, &addrMode, (uint8_t *)&dstAddr);
 	switch (status)
 	{
 		case SUCCESS:
-		status = OTAU_SUCCESS;
+		otauStatus = OTAU_SUCCESS;
 		break;
 		case NO_ACK:
-		status = OTAU_NO_ACK;
+		otauStatus = OTAU_NO_ACK;
 		break;
 		case CHANNEL_ACCESS_FAILURE:
-		status = OTAU_CCA_FAILURE;
+		otauStatus = OTAU_CCA_FAILURE;
 		break;
 		default:
-		status = OTAU_ERROR;
+		otauStatus = OTAU_ERROR;
 	}
 	if (DOMAIN_OTAU_NOTIFY == domainId)
 	{
-		otauNotifySentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, status);
+		otauNotifySentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, otauStatus);
 	}
 	else if (DOMAIN_OTAU_UPGRADE == domainId)
 	{
-		otauUpgradeSentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, status);
+		otauUpgradeSentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, otauStatus);
+	}
+	else if (DOMAIN_OTAU_DEBUG == domainId)
+	{
+		otauDebugSentFrame(messageId, NATIVE_ADDR_MODE, (uint8_t *)&dstAddr, otauStatus);
 	}
 }
 
@@ -326,7 +559,7 @@ static void otauDataInd(RECEIVED_MESH_MESSAGE *ind)
 			memcpy(&(rcvd_frame->frame_length), &size, 2);
 			rcvd_frame->addr_mode = NATIVE_ADDR_MODE;
 
-			miQueueAppend(&networkFrame, (miQueueBuffer_t *)buffer_header);
+			miQueueAppend(&networkFrame, (void *)buffer_header);
 		}
 	}
 }
@@ -336,35 +569,49 @@ void otauTimerStart(otau_domain_t domain_code, uint32_t interval, otau_timer_mod
 	switch (domain_code)
 	{
 		case DOMAIN_OTAU_NOTIFY:
-		if (SYS_TimerStarted(&otauNotifyTimer))
-		{
-			SYS_TimerStop(&otauNotifyTimer);
-		}
-		otauNotifyTimer.interval = interval;
-		otauNotifyTimer.handler = otauNotifyTimerHandler;
-		if(TIMER_MODE_SINGLE == mode) {
-			otauNotifyTimer.mode = SYS_TIMER_INTERVAL_MODE;
-			} else {
-			otauNotifyTimer.mode = SYS_TIMER_PERIODIC_MODE;
-		}
-		SYS_TimerStart(&otauNotifyTimer);
-		break;
+			if (SYS_TimerStarted(&otauNotifyTimer))
+			{
+				SYS_TimerStop(&otauNotifyTimer);
+			}
+			otauNotifyTimer.interval = interval;
+			otauNotifyTimer.handler = otauNotifyTimerHandler;
+			if(TIMER_MODE_SINGLE == mode) {
+				otauNotifyTimer.mode = SYS_TIMER_INTERVAL_MODE;
+				} else {
+				otauNotifyTimer.mode = SYS_TIMER_PERIODIC_MODE;
+			}
+			SYS_TimerStart(&otauNotifyTimer);
+			break;
 		case DOMAIN_OTAU_UPGRADE:
-		if (SYS_TimerStarted(&otauUpgradeTimer))
-		{
-			SYS_TimerStop(&otauUpgradeTimer);
-		}
-		otauUpgradeTimer.interval = interval;
-		otauUpgradeTimer.handler = otauUpgradeTimerHandler;
-		if(TIMER_MODE_SINGLE == mode) {
-			otauUpgradeTimer.mode = SYS_TIMER_INTERVAL_MODE;
-			} else {
-			otauUpgradeTimer.mode = SYS_TIMER_PERIODIC_MODE;
-		}
-		SYS_TimerStart(&otauUpgradeTimer);
-		break;
+			if (SYS_TimerStarted(&otauUpgradeTimer))
+			{
+				SYS_TimerStop(&otauUpgradeTimer);
+			}
+			otauUpgradeTimer.interval = interval;
+			otauUpgradeTimer.handler = otauUpgradeTimerHandler;
+			if(TIMER_MODE_SINGLE == mode) {
+				otauUpgradeTimer.mode = SYS_TIMER_INTERVAL_MODE;
+				} else {
+				otauUpgradeTimer.mode = SYS_TIMER_PERIODIC_MODE;
+			}
+			SYS_TimerStart(&otauUpgradeTimer);
+			break;
+		case DOMAIN_OTAU_DEBUG:
+			if (SYS_TimerStarted(&otauDebugTimer))
+			{
+				SYS_TimerStop(&otauDebugTimer);
+			}
+			otauDebugTimer.interval = interval;
+			otauDebugTimer.handler = otauDebugTimerHandler;
+			if(TIMER_MODE_SINGLE == mode) {
+				otauDebugTimer.mode = SYS_TIMER_INTERVAL_MODE;
+				} else {
+				otauDebugTimer.mode = SYS_TIMER_PERIODIC_MODE;
+			}
+			SYS_TimerStart(&otauDebugTimer);
+			break;
 		default:
-		break;
+			break;
 	}
 }
 
@@ -373,13 +620,16 @@ void otauTimerStop(otau_domain_t domain_code)
 	switch (domain_code)
 	{
 		case DOMAIN_OTAU_NOTIFY:
-		SYS_TimerStop(&otauNotifyTimer);
-		break;
+			SYS_TimerStop(&otauNotifyTimer);
+			break;
 		case DOMAIN_OTAU_UPGRADE:
-		SYS_TimerStop(&otauUpgradeTimer);
-		break;
+			SYS_TimerStop(&otauUpgradeTimer);
+			break;
+		case DOMAIN_OTAU_DEBUG:
+			SYS_TimerStop(&otauDebugTimer);
+			break;
 		default:
-		break;
+			break;
 	}
 }
 
@@ -473,14 +723,30 @@ static void initDataHandleTable(void)
 }
 
 #ifndef OTAU_SERVER
-void otauSetServerDetails(uint8_t *addr)
+void otauSetServerDetails(addr_mode_t addr_mode, uint8_t *addr)
 {
-	memcpy(&serverShortAddress, addr, NATIVE_ADDR_SIZE);
+	if (NATIVE_ADDR_MODE == addr_mode)
+	{
+		memcpy(&serverAddress.native_addr, addr, NATIVE_ADDR_SIZE);
+	}
+	else
+	{
+		memcpy(&serverAddress.extended_addr, addr, EXTENDED_ADDR_SIZE);
+	}
 }
 
-void otauGetServerDetails(uint8_t *addr)
+void otauGetServerDetails(addr_mode_t addr_mode, uint8_t *addr)
 {
-	addr = (uint8_t *)&serverShortAddress;
+	if (NATIVE_ADDR_MODE == addr_mode)
+	{
+		addr = (uint8_t *)&serverAddress.native_addr;
+	}
+	else
+	{
+		addr = (uint8_t *)&serverAddress.extended_addr;
+	}
+        /* Keep Compiler happy*/
+        addr = addr;
 }
 #endif
 #endif //#if defined(OTAU_ENABLED)

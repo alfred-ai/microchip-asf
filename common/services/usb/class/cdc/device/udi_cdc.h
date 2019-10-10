@@ -408,6 +408,16 @@ iram_size_t udi_cdc_read_buf(void* buf, iram_size_t size);
  *
  * \return the number of data effectively read
  */
+iram_size_t udi_cdc_multi_read_no_polling(uint8_t port, void* buf, iram_size_t size);
+
+/**
+ * \brief Non polling reads of a up to 'size' data from CDC line
+ *
+ * \param buf       Buffer where to store read data
+ * \param size      Maximum number of data to read (size of buffer)
+ *
+ * \return the number of data effectively read
+ */
 iram_size_t udi_cdc_read_no_polling(void* buf, iram_size_t size);
 
 /**

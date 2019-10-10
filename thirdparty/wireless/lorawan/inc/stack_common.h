@@ -50,7 +50,7 @@ extern "C" {
 #define MAJOR_NUM                 "1"
 #define MINOR_NUM                 "0"
 #define BUILD_TYPE                "P"                /* E or P */
-#define BUILD_NUM                 "2"
+#define BUILD_NUM                 "3"
 
 /* Release Version Information */
 #define STACK_VER    PRODUCT"_"MAJOR_NUM"_"MINOR_NUM"_"BUILD_TYPE"_"BUILD_NUM
@@ -88,7 +88,12 @@ typedef enum _StackRetStatus
 	LORAWAN_TX_TIMEOUT                    		,
 	LORAWAN_RADIO_TX_TIMEOUT                    ,
 	LORAWAN_MAX_MCAST_GROUP_REACHED				,
-	LORAWAN_INVALID_PACKET             
+	LORAWAN_INVALID_PACKET				,
+	LORAWAN_RXPKT_ENCRYPTION_FAILED				,
+	LORAWAN_TXPKT_ENCRYPTION_FAILED				,
+	LORAWAN_SKEY_DERIVATION_FAILED				,
+	LORAWAN_MIC_CALCULATION_FAILED				,
+	LORAWAN_SKEY_READ_FAILED      
 } StackRetStatus_t;
 
 /* ISM Band Types*/

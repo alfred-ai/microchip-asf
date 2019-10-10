@@ -3,7 +3,7 @@
 *
 * \brief Server Upgrade implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -52,26 +52,27 @@ void otauUpgradeRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t len
 {
 	uint8_t msg_code = *(payload + 1);
 	payload += 2;
+	length -= 2;
 	switch (msg_code)
 	{
 		case OTA_SERVER_DISCOVERY:
 		{
-			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, SERVER_DISCOVERY_REQUEST, payload, length - 2);
+			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, SERVER_DISCOVERY_REQUEST, payload, length);
 			break;
 		}
 		case OTA_QUERY_IMAGE:
 		{
-			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, QUERY_IMAGE_REQUEST, payload, length - 2);
+			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, QUERY_IMAGE_REQUEST, payload, length);
 			break;
 		}
 		case OTA_IMAGE_REQUEST:
 		{
-			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, IMAGE_REQUEST, payload, length - 2);
+			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, IMAGE_REQUEST, payload, length);
 			break;
 		}
 		case OTA_SWITCH_REQUEST:
 		{
-			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, SWITCH_IMAGE_REQUEST, payload + 1, length - 2);
+			send_server_data(DOMAIN_OTAU_UPGRADE, addr_mode, src_addr, SWITCH_IMAGE_REQUEST, payload, length);
 			break;
 		}
 		break;
@@ -106,7 +107,7 @@ void otauUpgradeSentFrame(uint8_t messageId, addr_mode_t addr_mode, uint8_t *add
  * \brief Parses the Received Data in the Buffer and Process the Commands
  *accordingly.
  */
-void handle_upgrade_otau_msg(otau_domain_msg_t *otau_domain_msg)
+void otauHandleUpgradeMsg(otau_domain_msg_t *otau_domain_msg)
 {
 	uint8_t *msg = &(otau_domain_msg->domain_msg);
 	/* *msg is the mode specification for phy/app */

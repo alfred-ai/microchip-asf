@@ -4,7 +4,7 @@
  *
  * \brief This module contains WINC3400 bus wrapper APIs implementation.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -39,6 +39,7 @@
 #include "spi.h"
 #include "port.h"
 #include "conf_winc.h"
+#include <asf.h>
 
 #define NM_BUS_MAX_TRX_SZ	256
 
@@ -65,7 +66,7 @@ static sint8 nm_i2c_write(uint8 *b, uint16 sz)
 		.data_length = sz,
 		.data        = b,
 	};
-	
+
 	/* Write buffer to slave until success. */
 	while (i2c_master_write_packet_wait(&i2c_master_instance, &packet) != STATUS_OK) {
 		/* Increment timeout counter and check if timed out. */
@@ -121,7 +122,7 @@ COMPILER_ALIGNED(32) DmacDescriptor dma_dsc_tx;
 COMPILER_ALIGNED(32) DmacDescriptor dma_dsc_rx;
 struct dma_descriptor_config dma_cfg_rx;
 struct dma_descriptor_config dma_cfg_tx;
-    
+
 static void spi_dma_tx_completion_callback(const struct dma_resource* const resource)
 {
 	spi_dma_tx_done = true;
@@ -139,7 +140,7 @@ static inline sint8 spi_rw_dma(uint8* pu8Mosi, uint8* pu8Miso, uint16 u16Sz)
 
 	dma_cfg_tx.block_transfer_count = u16Sz;
 	dma_cfg_rx.block_transfer_count = u16Sz;
-	
+
 	if (pu8Mosi) {
 		dma_cfg_tx.src_increment_enable = true;
 		dma_cfg_tx.source_address       = (uint32_t)pu8Mosi + u16Sz;
@@ -157,14 +158,16 @@ static inline sint8 spi_rw_dma(uint8* pu8Mosi, uint8* pu8Miso, uint16 u16Sz)
 		dma_cfg_rx.destination_address  = &dummy_buf;
 	}
 	dma_descriptor_create(&dma_dsc_rx, &dma_cfg_rx);
-	
+
 	spi_select_slave(&master, &slave_inst, true);
 	dma_start_transfer_job(&dma_res_rx);
 	dma_start_transfer_job(&dma_res_tx);
-	while((!spi_dma_tx_done) && (!spi_dma_rx_done))
+	/* Must wait until both spi tx dma and spi rx dma are complete.
+	 * spi rx dma will be the last to complete, so could just wait on that. */
+	while((!spi_dma_tx_done) || (!spi_dma_rx_done))
 		;
 	spi_select_slave(&master, &slave_inst, false);
-	
+
 	return M2M_SUCCESS;
 }
 #endif //CONF_WINC_SPI_DMA
@@ -203,7 +206,7 @@ static inline sint8 spi_rw_pio(uint8* pu8Mosi, uint8* pu8Miso, uint16 u16Sz)
 		while (spi_read(&master, &rxd_data) != STATUS_OK)
 			;
 		*pu8Miso = rxd_data;
-			
+
 		u16Sz--;
 		if (!u8SkipMiso)
 			pu8Miso++;
@@ -275,7 +278,7 @@ sint8 nm_bus_init(uint8 *pvinit, uint32 req_serial_number)
 	config.pinmux_pad2 = CONF_WINC_SPI_PINMUX_PAD2;
 	config.pinmux_pad3 = CONF_WINC_SPI_PINMUX_PAD3;
 	config.master_slave_select_enable = false;
-	
+
 	config.mode_specific.master.baudrate = CONF_WINC_SPI_CLOCK;
 	if (spi_init(&master, CONF_WINC_SPI_MODULE, &config) != STATUS_OK) {
 		return M2M_ERR_BUS_FAIL;
@@ -326,7 +329,7 @@ sint8 nm_bus_init(uint8 *pvinit, uint32 req_serial_number)
 *	@param[IN]	u8Cmd
 *					IOCTL command for the operation
 *	@param[IN]	pvParameter
-*					Arbitrary parameter depenging on IOCTL
+*					Arbitrary parameter depending on IOCTL
 *	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
 *	@note	For SPI only, it's important to be able to send/receive at the same time
 */
@@ -375,7 +378,7 @@ sint8 nm_bus_deinit(void)
 {
 	sint8 result = M2M_SUCCESS;
 	struct port_config pin_conf;
-		
+
 	port_get_config_defaults(&pin_conf);
 	/* Configure control pins as input no pull up. */
 	pin_conf.direction  = PORT_PIN_DIR_INPUT;
@@ -394,11 +397,16 @@ sint8 nm_bus_deinit(void)
 	port_pin_set_config(CONF_WINC_SPI_MISO, &pin_conf);
 	port_pin_set_config(CONF_WINC_SPI_SCK,  &pin_conf);
 	port_pin_set_config(CONF_WINC_SPI_SS,   &pin_conf);
-	
+
 	//port_pin_set_output_level(CONF_WINC_SPI_MOSI, false);
 	//port_pin_set_output_level(CONF_WINC_SPI_MISO, false);
 	//port_pin_set_output_level(CONF_WINC_SPI_SCK,  false);
 	//port_pin_set_output_level(CONF_WINC_SPI_SS,   false);
+
+#ifdef CONF_WINC_SPI_DMA
+    dma_free(&dma_res_tx);
+    dma_free(&dma_res_rx);
+#endif //CONF_WINC_SPI_DMA
 #endif /* CONF_WINC_USE_SPI */
 	return result;
 }

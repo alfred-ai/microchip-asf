@@ -3,7 +3,7 @@
  *
  * \brief BLE Heart Rate Service Application Declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -34,7 +34,6 @@
 #define __HEART_RATE_APP_H__
 
 #include <asf.h>
-//#include "ble_manager.h"
 #include "at_ble_api.h"
 
 #define M2M_DEVICE_NAME				"WINC3400_00:00"

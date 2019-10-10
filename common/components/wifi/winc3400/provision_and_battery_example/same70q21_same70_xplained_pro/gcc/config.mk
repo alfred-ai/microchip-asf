@@ -60,6 +60,7 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_same70.c \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_same70_app.c \
        common/components/wifi/winc3400/wifi_drv/bus_wrapper/source/nm_bus_wrapper_same70.c \
+       common/components/wifi/winc3400/wifi_drv/common/source/efuse.c \
        common/components/wifi/winc3400/wifi_drv/common/source/nm_common.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ate_mode.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_crypto.c \
@@ -67,11 +68,11 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_hif.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ota.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_periph.c \
+       common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ssl.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_wifi.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmasic.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmbus.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmdrv.c \
-       common/components/wifi/winc3400/wifi_drv/driver/source/nmflash.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmi2c.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmspi.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmuart.c \
@@ -95,7 +96,21 @@ CSRCS = \
        sam/drivers/usart/usart.c                          \
        sam/utils/cmsis/same70/source/templates/gcc/startup_same70.c \
        sam/utils/cmsis/same70/source/templates/system_same70.c \
-       sam/utils/syscalls/gcc/syscalls.c
+       sam/utils/syscalls/gcc/syscalls.c                  \
+       thirdparty/wireless/winc3400_ble_api/src/dbg_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/error.c   \
+       thirdparty/wireless/winc3400_ble_api/src/event.c   \
+       thirdparty/wireless/winc3400_ble_api/src/gap.c     \
+       thirdparty/wireless/winc3400_ble_api/src/gapc_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/gapm_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/gatt_client.c \
+       thirdparty/wireless/winc3400_ble_api/src/gatt_server.c \
+       thirdparty/wireless/winc3400_ble_api/src/gattc_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/gattm_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/interface.c \
+       thirdparty/wireless/winc3400_ble_api/src/platform.c \
+       thirdparty/wireless/winc3400_ble_api/src/security.c \
+       thirdparty/wireless/winc3400_ble_api/src/wifiprov_task.c
 
 # List of assembler source files.
 ASSRCS = 
@@ -136,17 +151,16 @@ INC_PATH = \
        sam/utils/header_files                             \
        sam/utils/preprocessor                             \
        thirdparty/CMSIS/Include                           \
-       thirdparty/CMSIS/Lib/GCC \
+       thirdparty/CMSIS/Lib/GCC                           \
+       thirdparty/wireless/winc3400_ble_api/include \
        common/components/wifi/winc3400/provision_and_battery_example/same70q21_same70_xplained_pro/gcc
 
 # Additional search paths for libraries.
 LIB_PATH =  \
-       common/components/wifi/winc3400/ble/atmel_ble_api  \
        thirdparty/CMSIS/Lib/GCC                          
 
 # List of libraries to use during linking.
 LIBS =  \
-       at_ble_api_sam4s                                   \
        arm_cortexM7lfsp_math_softfp                       \
        m                                                 
 

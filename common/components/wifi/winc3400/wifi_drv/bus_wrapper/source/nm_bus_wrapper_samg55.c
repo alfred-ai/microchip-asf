@@ -4,7 +4,7 @@
  *
  * \brief This module contains WINC3400 bus wrapper APIs implementation.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -180,7 +180,7 @@ sint8 nm_bus_init(uint8_t *pvinit, uint32 req_serial_number)
  *	@param[IN]	u8Cmd
  *					IOCTL command for the operation
  *	@param[IN]	pvParameter
- *					Arbitrary parameter depenging on IOCTL
+ *					Arbitrary parameter depending on IOCTL
  *	@return	M2M_SUCCESS in case of success and M2M_ERR_BUS_FAIL in case of failure
  *	@note	For SPI only, it's important to be able to send/receive at the same time
  */

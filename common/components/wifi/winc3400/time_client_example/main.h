@@ -3,7 +3,7 @@
  *
  * \brief MAIN configuration.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -43,17 +43,14 @@ extern "C" {
 #define MAIN_WLAN_AUTH                          M2M_WIFI_SEC_WPA_PSK /**< Security manner */
 #define MAIN_WLAN_PSK                           "12345678" /**< Password for Destination SSID */
 
+
 /** Using NTP server information */
-#define MAIN_WORLDWIDE_NTP_POOL_HOSTNAME        "pool.ntp.org"
+#define MAIN_WORLDWIDE_NTP_POOL_HOSTNAME        "*.pool.ntp.org"
 #define MAIN_ASIA_NTP_POOL_HOSTNAME             "asia.pool.ntp.org"
 #define MAIN_EUROPE_NTP_POOL_HOSTNAME           "europe.pool.ntp.org"
 #define MAIN_NAMERICA_NTP_POOL_HOSTNAME         "north-america.pool.ntp.org"
 #define MAIN_OCEANIA_NTP_POOL_HOSTNAME          "oceania.pool.ntp.org"
 #define MAIN_SAMERICA_NTP_POOL_HOSTNAME         "south-america.pool.ntp.org"
-#define MAIN_SERVER_PORT_FOR_UDP                (123)
-#define MAIN_DEFAULT_ADDRESS                    0xFFFFFFFF /* "255.255.255.255" */
-#define MAIN_DEFAULT_PORT                       (6666)
-#define MAIN_WIFI_M2M_BUFFER_SIZE               1460
 
 #ifdef __cplusplus
 }

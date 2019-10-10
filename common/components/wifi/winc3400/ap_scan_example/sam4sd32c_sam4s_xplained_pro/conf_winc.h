@@ -2,9 +2,9 @@
  *
  * \file
  *
- * \brief WINC3400 configuration.
+ * \brief SAM4S WINC3400 configuration.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -72,7 +72,7 @@ extern "C" {
 #define CONF_WINC_SPI_CS_FLAGS			PIO_OUTPUT_1
 #define CONF_WINC_SPI_NPCS				(0)
 
-/** SPI delay before SPCK and between consecutive transfer. */
+/** SPI delay before SPCK and between consecutive transfers. */
 #define CONF_WINC_SPI_DLYBS				(0)
 #define CONF_WINC_SPI_DLYBCT 			(0)
 

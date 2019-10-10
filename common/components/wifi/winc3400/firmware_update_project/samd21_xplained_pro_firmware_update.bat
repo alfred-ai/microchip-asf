@@ -1,47 +1,82 @@
 @ECHO Off
+setlocal  EnableDelayedExpansion
 
-set varPath=%PROGRAMFILES%
+echo usage:
+echo   This program will program a WINC3400 Xplained card plugged into a SamD21XplainedPro card, so long as only one is present
+echo   It fills in defaults and calls more specific script files below.
+echo.
 
-:CheckOS
-IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO RUN)
-:64BIT
-set varPath=%PROGRAMFILES(X86)%
-:RUN
+echo Checking for Python support.
+where /q python.exe
+if ERRORLEVEL 1 GOTO NOPYTHON
+goto :HASPYTHON
+:NOPYTHON
+echo Require Python v2.x
+exit /b 2
+:HASPYTHON
+where python.exe
+echo OK
+echo.
+
+Echo Checking Atmel Studio Installation
+python firmware\handler_search.py atsln atmelstudio > atmelstudiopath.txt
+if ERRORLEVEL 1 GOTO NOAS
+goto :HASAS
+:NOAS
+echo Require Atmel Studio v7.0
+exit /b 2
+:HASAS
+set /p ASFULLPATH=<atmelstudiopath.txt
+For %%A in (%ASFULLPATH%) do (
+    Set ASPATH=%%~dpA
+    Set ASEXE=%%~nxA
+)
+echo Found: %ASPATH%%ASEXE%
+echo OK
+set ATPROGRAM=%ASPATH%atbackend\atprogram.exe
 
 
+Echo running: "%ATPROGRAM%" list
 set /A edbgCnt=0
 set SN=0
-for /f "tokens=1-2" %%i in ('"%varPath%\Atmel\Studio\7.0\atbackend\atprogram.exe" list') do (
+for /f "tokens=1-2" %%i in ('"%ATPROGRAM%" list') do (
 	if "%%i" == "edbg" (
 		set SN=%%j
 		set /A edbgCnt+=1
+		echo Counting %%i = !edbgCnt!
+	) else (
+		echo Ignoring %%i
 	)
-)	
+)
 
 if %edbgCnt%==0 (
 	echo Cannot find and EDBG boards?
-	echo see  '"%varPath%\Atmel\Studio\7.0\atbackend\atprogram.exe" list'
+	echo see  '"%ATPROGRAM%" list'
 	exit /b 1
 )
+
 
 if %edbgCnt% GTR 1 (
 	echo This batch file is unsuitable if more than one EDBG based development board is installed, found %edbgCnt%
 	echo Use download_all_sb.bat with options
-	echo		edbg 
-	echo		ATSAMD21J18A 
-	echo		Tools\serial_bridge\samd21_xplained_pro_serial_bridge.elf 
-	echo		SAMD21 
-	echo		3400 
-	echo		serial number of the dev board attached to the board you wish to program - see '"%varPath%\Atmel\Studio\7.0\atbackend\atprogram.exe" list'
-	echo		0 
-	echo		com port number assigned to the dev board attached to the board you wish to program by the OS
-	echo		..\..\..\tls_cert_store\winc_rsa.key 
-	echo		..\..\..\tls_cert_store\winc_rsa.cer 
-	echo		none
+	echo		edbg
+	echo		ATSAMD21J18A
+	echo		Tools\serial_bridge\samd21_xplained_pro_serial_bridge.elf
+	echo		3400
+	echo		serial number of the dev board attached to the board you wish to program - see '"%ATPROGRAM%" list'
+	echo		com port number [0 for auto - when only one edbg board fitted]
 	exit /b 1
 )
-cd firmware
-download_all_sb.bat edbg ATSAMD21J18A Tools\serial_bridge\samd21_xplained_pro_serial_bridge.elf SAMD21 3400 %SN% 0 0 none none none
 
-pause
+echo Found 1 board
+
+set CHPFAM=3400
+
+echo Calling: download_all_sb.bat
+echo With:    edbg ATSAMD21J18A Tools\serial_bridge\samd21_xplained_pro_serial_bridge.elf %CHPFAM% %SN% 0
+echo.
+cd firmware
+call download_all_sb.bat edbg ATSAMD21J18A Tools\serial_bridge\samd21_xplained_pro_serial_bridge.elf %CHPFAM% %SN% 0
+
+
 

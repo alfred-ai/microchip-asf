@@ -145,6 +145,7 @@ INC_PATH = \
        sam/utils/header_files                             \
        sam/utils/preprocessor                             \
        thirdparty/AWS_SDK                                 \
+       thirdparty/AWS_SDK/AWS_SDK                         \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC \
        common/components/wifi/winc1500/aws_rsa_example/samg55j19_samg_xplained_pro/gcc

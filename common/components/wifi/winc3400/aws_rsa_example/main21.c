@@ -4,7 +4,7 @@
  *
  * \brief AWS RSA Example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -35,16 +35,16 @@
 /** \mainpage
  * \section intro Introduction
  * This example demonstrates the use of the Wi-Fi module with the SAMD21 Xplained Pro
- * board to connect AWS using the RSA Security.<br>
+ * board to connect to AWS .<br>
  * It uses the following hardware:
  * - the SAMD21 Xplained Pro.
- * - the WINC1500 on EXT1.
+ * - the WINC3400 on EXT1.
  *
  * \section files Main Files
  * - main.c : Initialize the Wi-Fi module and connect to server using SSL.
  *
  * \section usage Usage
- * -# Configure below code in the config main.h for AP information to be connected.
+ * -# The connection parameters can be configured in main.h.
  * \code
  *    #define MAIN_WLAN_SSID                  "DEMO_AP"
  *    #define MAIN_WLAN_AUTH                  M2M_WIFI_SEC_WPA_PSK
@@ -60,15 +60,47 @@
  *    Flow control : none
  * \endcode
  * -# Start the application.
+ * -# The application uses AWS_IOT_ALPN_ENABLED macro to enable ALPN connection on port 443 with an AWS IOT MQTT server
+ * -# Disable AWS_IOT_ALPN_ENABLED macro in the properties to disable ALPN(Application Layer Protocol Negotiation)
  * \warning
  * \code
- *    For using AWS connection, the AWS RSA certificate must be installed.
- *    Download the RSA certificate using the firmware upgrade. (Refer to WINC1500 Software User Guide.)
+ * -- AWS IoT Demo --
+ * -- SAMXXX_XPLAINED_PRO --
+ * -- Compiled: Jun xx xxxx xx:xx:xx --
+ * (APP)(INFO)Chip ID 3400d2
+ * (APP)(INFO)Curr driver ver: x.x.x
+ * (APP)(INFO)Curr driver HIF Level: (2) x.x
+ * (APP)(INFO)Fw HIF: 8104
+ * (APP)(INFO)Firmware HIF (2) : x.x
+ * (APP)(INFO)Firmware ver   : x.x.x
+ * (APP)(INFO)Firmware Build <Month> DD YYYY Time xx:xx:xx
+ * (APP)(INFO)Ota HIF: 0000
+ * (APP)(INFO)No valid Ota image
+ * wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: CONNECTED
+ * wifi_cb: M2M_WIFI_REQ_DHCP_CONF: IP is xxx.xxx.xxx.xxx
+ * (APP)(ERR)[hif_isr][674]Socket callback is not registered
+ * (APP)(ERR)[hif_isr][705](hif) host app didn't set RX Done <2><4A>
+ * Received time
+ * Connecting...Host IP is x.xx.xx.xxx
+ * Host Name is xxxxxxxxxxxxx-xxx.xxx.xx-xxxx-x.amazonaws.com
+ *
+ * ALPN mode enabled
+ * (APP)(INFO)Socket 0 session ID = 1
+ * Successfully connected.
+ * Negotiated Amazon MQTT.
+ * Subscribing...Subscription success
+ * Subscribe callback
+ * WINC3400_IOT/sub
+ * {
+ *   "message": "Hello from AWS IoT console"
+ * }
+ * For using AWS connection, the AWS RSA certificate must be installed.
+ * Download the RSA certificate using the firmware upgrade. (Refer to WINC3400 Software User Guide.)
  * \endcode
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -88,7 +120,7 @@
 #define STRING_HEADER "-- AWS IoT Demo --"STRING_EOL \
 	"-- "BOARD_NAME " --"STRING_EOL	\
 	"-- Compiled: "__DATE__ " "__TIME__ " --"STRING_EOL
-	
+
 #define PUBLISH_BUTTON	SW0_PIN
 
 /*Role of the device*/
@@ -96,13 +128,13 @@
 #define PUBLISHER
 
   #ifdef SUBSCRIBER
-  #define CLIENT_ID "WINC1500_Sub"
-  #define SUBSCRIBE_CHANNEL "WINC1500_IOT/sub"
-  #define PUBLISH_CHANNEL   "WINC1500_IOT/pub"
+  #define CLIENT_ID "WINC3400_Sub"
+  #define SUBSCRIBE_CHANNEL "WINC3400_IOT/sub"
+  #define PUBLISH_CHANNEL   "WINC3400_IOT/pub"
   #else
-  #define CLIENT_ID "WINC1500_Pub"
-  #define SUBSCRIBE_CHANNEL "WINC1500_IOT/pub"
-  #define PUBLISH_CHANNEL   "WINC1500_IOT/sub"
+  #define CLIENT_ID "WINC3400_Pub"
+  #define SUBSCRIBE_CHANNEL "WINC3400_IOT/pub"
+  #define PUBLISH_CHANNEL   "WINC3400_IOT/sub"
   #endif
 
 
@@ -132,7 +164,7 @@ uint32_t port = AWS_IOT_MQTT_PORT;
 uint32_t publishCount = 0;
 
 /**
- * \brief SysTick handler used to measure precise delay. 
+ * \brief SysTick handler used to measure precise delay.
  */
 void SysTick_Handler(void)
 {
@@ -182,11 +214,11 @@ static void configure_console(void)
 
 static int32_t MQTTcallbackHandler(MQTTCallbackParams params) {
 
-	printf("Subscribe callback");
+	printf("Subscribe callback\r\n");
 	printf("%.*s\t%.*s",
 	(int)params.TopicNameLen, params.pTopicName,
 	(int)params.MessageParams.PayloadLen, (char*)params.MessageParams.pPayload);
-	printf("\n\r");
+	printf("\r\n");
 	if(strstr((char*)params.MessageParams.pPayload,"toggle") != NULL)
 	{
 		port_pin_set_output_level(LED_0_PIN,toggle);
@@ -229,7 +261,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: CONNECTED\r\n");
-			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: DISCONNECTED\r\n");
 			gbConnectedWifi = false;
@@ -252,7 +283,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		gethostbyname((uint8_t *)HostAddress);
 		break;
 	}
-	
+
 	case M2M_WIFI_RESP_GET_SYS_TIME:
 	{
 		printf("Received time\r\n");
@@ -307,9 +338,9 @@ int main(void)
 	/* Initialize the UART console. */
 	configure_console();
 	printf(STRING_HEADER);
-	
+
 	delay_init();
-	
+
 	/* Enable SysTick interrupt for non busy wait delay. */
 	if (SysTick_Config(system_cpu_clock_get_hz() / 1000)) {
 		puts("main: SysTick configuration error!");
@@ -331,7 +362,7 @@ int main(void)
 		}
 	}
 
-	/* Connect to router. */
+	/* Connect to AP. */
 	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID),
 			MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 	while(1)
@@ -339,7 +370,6 @@ int main(void)
 		m2m_wifi_handle_events(NULL);
 		if(gbConnectedWifi && receivedTime)
 		{
-			//sslEnableCertExpirationCheck(0);
 			printf("Connecting...");
 			rc = aws_iot_mqtt_connect(&connectParams);
 			if (NONE_ERROR != rc) {
@@ -367,9 +397,9 @@ int main(void)
 					printf("Error subscribing\r\n");
 				}
 			}
-			
+
 			printf("Subscription success\r\n");
-	
+
 			Msg.qos = QOS_0;
 			sprintf(cPayload, "%s : %ld ", "hello from SDK", i);
 			Msg.pPayload = (void *) cPayload;
@@ -377,11 +407,11 @@ int main(void)
 
 			if (publishCount != 0) {
 				infinitePublishFlag = false;
-			}			
+			}
 			break;
 		}
 	}
-	
+
 	while ((NETWORK_ATTEMPTING_RECONNECT == rc || RECONNECT_SUCCESSFUL == rc || NONE_ERROR == rc)
 			&& (publishCount > 0 || infinitePublishFlag)) {
 		//Max time the yield function will wait for read messages
@@ -391,7 +421,7 @@ int main(void)
 			delay_ms(1);
 			// If the client is attempting to reconnect we will skip the rest of the loop.
 			continue;
-		}	
+		}
 		/*Calculate duration of time the button was pressed
 		If button was pressed and held for more than 10s we would enter provisioning mode
 		short press would allow us to enter credentials from serial console*/

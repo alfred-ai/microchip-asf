@@ -42,6 +42,7 @@
 #include "sysTimer.h"
 #include "commands.h"
 #include "miwi_api.h"
+#include "otau.h"
 
 #if defined(PAN_COORDINATOR)
 #include "sio2host.h"
@@ -288,6 +289,8 @@ static void appSendData(void)
 #ifndef PAN_COORDINATOR
     uint16_t dstAddr = 0; /* PAN Coordinator Address */
 #endif
+	otau_log(LOG_INFO, MIWI_APP, ENTRY, 8, (uint8_t *)"App Data");
+	otau_trace(TRACE_ENTRY);
 
 	appMsg.sensors.battery     = rand() & 0xffff;
 	appMsg.sensors.temperature = rand() & 0x7f;
@@ -335,7 +338,6 @@ static void appSendData(void)
 	    memcpy(appMsg.caption.text, APP_CAPTION, APP_CAPTION_SIZE);
 		sprintf(&(appMsg.caption.text[APP_CAPTION_SIZE - SHORT_ADDRESS_CAPTION_SIZE]), "-0x%04X", shortAddressLocal);
 	}
-
 	if (MiApp_SendData(2, (uint8_t *)&dstAddr, sizeof(appMsg), (uint8_t *)&appMsg, wsnmsghandle, true, appDataConf))
 	{
 		++wsnmsghandle;

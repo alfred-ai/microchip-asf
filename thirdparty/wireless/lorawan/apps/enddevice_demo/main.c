@@ -62,6 +62,7 @@
 #include "conf_certification.h"
 #include "enddevice_cert.h"
 #endif
+#include "sal.h"
 /************************** Macro definition ***********************************/
 /* Button debounce time in ms */
 #define APP_DEBOUNCE_TIME       50
@@ -143,6 +144,7 @@ static void assertHandler(SystemAssertLevel_t level, uint16_t code)
  */
 int main(void)
 {
+	
     /* System Initialization */
     system_init();
     /* Initialize the delay driver */
@@ -151,11 +153,16 @@ int main(void)
     board_init();
 
     INTERRUPT_GlobalInterruptEnable();
+	/* Initialize the Serial Interface */
+	sio2host_init();
+#ifndef CRYPTO_DEV_ENABLED
+ 	/* Read DEV EUI from EDBG */
+    dev_eui_read();
+#endif
     /* Initialize Hardware and Software Modules */
-    driver_init();
-    /* Initialize the Serial Interface */
-    sio2host_init();
-
+	driver_init();
+   
+    delay_ms(5);
     print_reset_causes();
 #if (_DEBUG_ == 1)
     SYSTEM_AssertSubscribe(assertHandler);
@@ -205,10 +212,9 @@ int main(void)
 /* Initializes all the hardware and software modules used for Stack operation */
 static void driver_init(void)
 {
+	SalStatus_t sal_status = SAL_SUCCESS;
     /* Initialize the Radio Hardware */
     HAL_RadioInit();
-    /* Initialize the AES Hardware Engine */
-    AESInit();
     /* Initialize the Software Timer Module */
     SystemTimerInit();
 #ifdef CONF_PMM_ENABLE
@@ -219,6 +225,16 @@ static void driver_init(void)
     /* PDS Module Init */
     PDS_Init();
 #endif
+	/* Initializes the Security modules */
+	sal_status = SAL_Init();
+	
+	if (SAL_SUCCESS != sal_status)
+	{
+		printf("Initialization of Security module is failed\r\n");
+		/* Stop Further execution */
+		while (1) {
+		}
+	}
 }
 
 #ifdef CONF_PMM_ENABLE

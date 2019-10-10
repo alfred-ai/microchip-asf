@@ -332,6 +332,7 @@
 				</option>
 				<option>
 					<name>CCIncludePath2</name>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -678,6 +679,7 @@
 				</option>
 				<option>
 					<name>AUserIncludes</name>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -1449,6 +1451,7 @@
 				</option>
 				<option>
 					<name>CCIncludePath2</name>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -1795,6 +1798,7 @@
 				</option>
 				<option>
 					<name>AUserIncludes</name>
+					<state>$PROJ_DIR$/../../../../../lorawan/sal/inc</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/power/power_sam_l</state>
 					<state>$PROJ_DIR$/../../../../../../../sam0/drivers/system/reset</state>
@@ -2379,6 +2383,9 @@
 								<name>$PROJ_DIR$/../conf_regparams.h</name>
 							</file>
 							<file>
+								<name>$PROJ_DIR$/../conf_sal.h</name>
+							</file>
+							<file>
 								<name>$PROJ_DIR$/../conf_spi.h</name>
 							</file>
 							<file>
@@ -2732,6 +2739,21 @@
 						</file>
 						<file>
 							<name>$PROJ_DIR$/../../../../../lorawan/tal/inc/radio_transaction.h</name>
+						</file>
+					</group>
+				</group>
+				<group>
+					<name>sal</name>
+					<group>
+						<name>src</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../lorawan/sal/src/sal.c</name>
+						</file>
+					</group>
+					<group>
+						<name>inc</name>
+						<file>
+							<name>$PROJ_DIR$/../../../../../lorawan/sal/inc/sal.h</name>
 						</file>
 					</group>
 				</group>
@@ -3147,9 +3169,6 @@
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr34/include/instance/ac.h</name>
 							</file>
 							<file>
-								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr34/include/instance/eic.h</name>
-							</file>
-							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr34/include/instance/tcc1.h</name>
 							</file>
 							<file>
@@ -3160,6 +3179,9 @@
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr34/include/instance/usb.h</name>
+							</file>
+							<file>
+								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr34/include/instance/eic.h</name>
 							</file>
 							<file>
 								<name>$PROJ_DIR$/../../../../../../../sam0/utils/cmsis/samr34/include/instance/tal.h</name>

@@ -434,7 +434,8 @@ static void cert_joindata_callback(StackRetStatus_t status)
 static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_type)
 {
     StackRetStatus_t status;
-	
+	bool cryptoDevEnabled = false;
+	LORAWAN_SetAttr(CRYPTODEVICE_ENABLED, &cryptoDevEnabled );
 	uint8_t dataRate = DR0;
 	status = LORAWAN_SetAttr (CURRENT_DATARATE, &dataRate);
 

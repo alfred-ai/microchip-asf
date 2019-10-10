@@ -477,8 +477,22 @@ typedef enum _LorawanAttributes
 	RETRY_COUNTER,
 	/* Next Payload size */
 	NEXT_PAYLOAD_SIZE,
-	PENDING_JOIN_DUTY_CYCLE_TIME
-	
+	/* Pending Join Back Off time */
+	PENDING_JOIN_DUTY_CYCLE_TIME,
+	/* Every-time the frame counter reaches the modulo of count value, 
+	 * the Frame counter will be updated in PDS.
+	 * For eg: if maxFcntPdsUpdateValue is 2 (default value), 
+	 * then every time (Frame counter % maxFcntPdsUpdateValue) == 0, 
+	 * Frame counter is stored in PDS.
+	 * Note: After reset of the device, the PDS restore of frame 
+	 * counters will increase the value to times equal to maxFcntPdsUpdateValue
+	 * For eg: If the current stored Frame counter in PDS is 10 and maxFcntPdsUpdateValue is 2,
+	 * then during restore operation, the new frame counter will be equal to 12
+	 * This value is used in terms of power of 2. The max value is 256 (2 ^ 8).
+	 */
+	MAX_FCNT_PDS_UPDATE_VAL,
+	/* Informing MAC that Crypto device is used for keyStorage */
+	CRYPTODEVICE_ENABLED
 }LorawanAttributes_t;
 
 /* Structure holding Receive window2 parameters*/

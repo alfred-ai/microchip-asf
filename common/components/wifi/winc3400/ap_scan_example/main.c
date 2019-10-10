@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 AP Scan Example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -41,10 +41,10 @@
  * - the WINC3400 on EXT1.
  *
  * \section files Main Files
- * - main.c : Initialize the WINC3400 and scan AP until defined AP is founded.
+ * - main.c : Initialize the WINC3400 and scan AP until defined AP is found.
  *
  * \section usage Usage
- * -# Configure below code in the main.h for AP to be connected.
+ * -# The connection parameters can be configured in main.h.
  * \code
  *    #define MAIN_WLAN_SSID         "DEMO_AP"
  *    #define MAIN_WLAN_AUTH         M2M_WIFI_SEC_WPA_PSK
@@ -76,7 +76,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -97,7 +97,7 @@
 /** Index of scan list to request scan result. */
 static uint8_t scan_request_index = 0;
 /** Number of APs found. */
-static uint8_t num_founded_ap = 0;
+static uint8_t num_found_ap = 0;
 
 /**
  * \brief Configure UART console.
@@ -151,10 +151,10 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		uint16_t demo_ssid_len;
 		uint16_t scan_ssid_len = strlen((const char *)pstrScanResult->au8SSID);
 
-		/* display founded AP. */
+		/* display the AP found. */
 		printf("[%d] SSID:%s\r\n", scan_request_index, pstrScanResult->au8SSID);
 
-		num_founded_ap = m2m_wifi_get_num_ap_found();
+		num_found_ap = m2m_wifi_get_num_ap_found();
 		if (scan_ssid_len) {
 			/* check same SSID. */
 			demo_ssid_len = strlen((const char *)MAIN_WLAN_SSID);
@@ -176,7 +176,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 			}
 		}
 
-		if (scan_request_index < num_founded_ap) {
+		if (scan_request_index < num_found_ap) {
 			m2m_wifi_req_scan_result(scan_request_index);
 			scan_request_index++;
 		} else {
@@ -191,7 +191,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 	{
 		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
-			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("Wi-Fi disconnected\r\n");
 

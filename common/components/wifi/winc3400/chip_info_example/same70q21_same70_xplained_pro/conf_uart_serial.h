@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief USART Serial Configuration
+ * \brief SAME70 USART Serial Configuration
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *

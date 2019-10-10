@@ -3,7 +3,7 @@
  *
  * \brief Custom Serial Chat Application declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -50,12 +50,12 @@
  * - csc_app.c : Initialize the WINC3400 and runs custom serial chat profile
  *
  * \section usage Usage
- * -# As a first step, it is required that the user install the Atmel Smart Connect application
- * -#  available in google play store on an Android device.
- * -# Then, power up the SAM board programmed with customer serial chat application and run the 
+ * -# As a first step, it is required that the user installs the Atmel Smart Connect application
+ * -# available in google play store on an Android device.
+ * -# Then, power up the SAM board programmed with custom serial chat application and run the
  * -# Android application: select Bluetooth Smart and select start scan. In the Scan result, select AT-CSC.
- * -# The android appliction will ask to enter the pin to pair with WINC3400. Enter the PIN 123456.
- * -# Select Custome Serial Chat in service list.
+ * -# The android application will ask to enter the pin to pair with WINC3400. Enter the PIN 123456.
+ * -# Select Custom Serial Chat in service list.
  * \endcode
  * -# Build the program and download it into the board.
  * -# On the computer, open and configure a terminal application as the follows.
@@ -72,7 +72,7 @@
  * -- Custom Serial chat demo --
  * -- SAMD21_XPLAINED_PRO --
  * -- Compiled: May  2 2017 14:50:52 --
- * 
+ *
  * (APP)(INFO)Chip ID 3400d1
  * (APP)(INFO)Curr driver ver: 1.0.6
  * (APP)(INFO)Curr driver HIF Level: (2) 1.1
@@ -86,15 +86,15 @@
  * (APP)(INFO)MAC Address: F8:F0:05:F2:52:30
  * (APP)(INFO)M2M_NO_PS
  * (APP)(INFO)POWER SAVE 0
- * 
+ *
  * Initializing Custom Serial Chat Application
  * BLE is initializing
- * 
+ *
  * Device Name: ATMEL-CSC
- * 
+ *
  * Device Started Advertisement
  * Connected to peer device with address 4f:01:d5:b7:b8:33
- * 
+ *
  * Remote device request pairing
  * Sending pairing response
  * please enter the following pass-code on the other device:123456
@@ -105,7 +105,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -163,14 +163,14 @@ static void app_wifi_init(tpfAppWifiCb wifi_cb_func)
 #ifdef _STATIC_PS_
 	nm_bsp_register_wake_isr(wake_cb, PS_SLEEP_TIME_MS);
 #endif
-	
+
 	m2m_memset((uint8*)&param, 0, sizeof(param));
 	param.pfAppWifiCb = wifi_cb_func;
 
 	ret = m2m_ble_wifi_init(&param);
 	if (M2M_SUCCESS != ret){
 		M2M_ERR("Driver Init Failed <%d>\n",ret);
-		M2M_ERR("Reseting\n");
+		M2M_ERR("Resetting\n");
 		// Catastrophe - problem with booting. Nothing but to try and reset
 		system_reset();
 		while (1){
@@ -267,7 +267,7 @@ static void csc_app_send_buf(void)
 					if(send_length)
 						send_length--;
 				}
-				  
+
 				if(send_length < APP_TX_BUF_SIZE)
 				{
 					if(buff != BACKSPACE_BUTTON_PRESS)
@@ -297,18 +297,18 @@ static void csc_app_send_buf(void)
 void ble_csc_init(void )
 {
 	at_ble_events_t ble_event;
-	
+
 	DBG_LOG("Initializing Custom Serial Chat Application");
-	
+
 	/* Initialize the buffer address and buffer length based on user input */
 	csc_prf_buf_init(&send_data[0], APP_TX_BUF_SIZE);
-	
-	/* initialize the ble chip  and Set the device mac address */
+
+	/* initialize the ble chip and Set the device mac address */
 	ble_device_init(NULL);
 
 	/* Register the notification handler */
 	notify_recv_ntf_handler(csc_prf_report_ntf_cb);
-	
+
 	/* Capturing the events  */
 	while(1){
 		if (m2m_ble_event_get(&ble_event, &gu8BleParam) == AT_BLE_SUCCESS)
@@ -318,7 +318,7 @@ void ble_csc_init(void )
 				// Feed the received event into BlueSDK stack.
 				ble_event_manager(ble_event, &gu8BleParam);
 			}
-		}		
+		}
 		csc_app_send_buf();
 	}
 }
@@ -326,14 +326,13 @@ void ble_csc_init(void )
 int main (void)
 {
 	system_init();
-	//configure_console();
 	sio2host_init();
 	puts(STRING_HEADER);
 
 	nm_bsp_init();
 
 	// Initialize WiFi interface first.
-	// 3400 WiFi HIF is used to convey BLE API primitives. 
+	// 3400 WiFi HIF is used to convey BLE API primitives.
 	app_wifi_init(app_wifi_handle_event);
 
 	// Initialize BLE stack on 3400.

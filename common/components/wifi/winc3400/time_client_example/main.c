@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 Time Client Example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -63,8 +63,15 @@
  * -# In the terminal window, the following text should appear:
  * \code
  *    -- WINC3400 time client example --
- *    -- SAMD21_XPLAINED_PRO --
+ *    -- SAM_XPLAINED_PRO --
  *    -- Compiled: xxx xx xxxx xx:xx:xx --
+ *    (APP)(INFO)Chip ID 3400d2
+ *    (APP)(INFO)Curr driver ver: x.x.x
+ *    (APP)(INFO)Curr driver HIF Level: (2) x.x
+ *    (APP)(INFO)Fw HIF: 8104
+ *    (APP)(INFO)Firmware HIF (2) : x.x
+ *    (APP)(INFO)Firmware ver   : x.x.x
+ *    (APP)(INFO)Firmware Build <Month> DD YYYY Time xx:xx:xx
  *    wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: CONNECTED
  *    wifi_cb: M2M_WIFI_REQ_DHCP_CONF: IP is xxx.xxx.xxx.xxx
  *    m2m_ip_resolve_handler : DomainName pool.ntp.org
@@ -73,7 +80,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -92,17 +99,8 @@
 	"-- "BOARD_NAME " --"STRING_EOL	\
 	"-- Compiled: "__DATE__ " "__TIME__ " --"STRING_EOL
 
-/** UDP socket handlers. */
-static SOCKET udp_socket = -1;
-
-/** Receive buffer definition. */
-static uint8_t gau8SocketBuffer[MAIN_WIFI_M2M_BUFFER_SIZE];
-
 /** Wi-Fi status variable. */
 static bool gbConnectedWifi = false;
-
-/** Host name placeholder. */
-static char dns_server_address[HOSTNAME_MAX_SIZE];
 
 /**
  * \brief Configure UART console.
@@ -122,114 +120,6 @@ static void configure_console(void)
 }
 
 /**
- * \brief Callback to get the Data from socket.
- *
- * \param[in] sock socket handler.
- * \param[in] u8Msg Type of Socket notification.
- * \param[in] pvMsg A structure contains notification informations.
- */
-static void socket_cb(SOCKET sock, uint8_t u8Msg, void *pvMsg)
-{
-	/* Check for socket event on socket. */
-	int16_t ret;
-
-	switch (u8Msg) {
-	case SOCKET_MSG_BIND:
-	{
-		/* printf("socket_cb: socket_msg_bind!\r\n"); */
-		tstrSocketBindMsg *pstrBind = (tstrSocketBindMsg *)pvMsg;
-		if (pstrBind && pstrBind->status == 0) {
-			ret = recvfrom(sock, gau8SocketBuffer, MAIN_WIFI_M2M_BUFFER_SIZE, 0);
-			if (ret != SOCK_ERR_NO_ERROR) {
-				printf("socket_cb: recv error!\r\n");
-			}
-		} else {
-			printf("socket_cb: bind error!\r\n");
-		}
-
-		break;
-	}
-
-	case SOCKET_MSG_RECVFROM:
-	{
-		/* printf("socket_cb: socket_msg_recvfrom!\r\n"); */
-		tstrSocketRecvMsg *pstrRx = (tstrSocketRecvMsg *)pvMsg;
-		if (pstrRx->pu8Buffer && pstrRx->s16BufferSize) {
-			uint8_t packetBuffer[48];
-			memcpy(&packetBuffer, pstrRx->pu8Buffer, sizeof(packetBuffer));
-
-			if ((packetBuffer[0] & 0x7) != 4) {                   /* expect only server response */
-				printf("socket_cb: Expecting response from Server Only!\r\n");
-				return;                    /* MODE is not server, abort */
-			} else {
-				uint32_t secsSince1900 = packetBuffer[40] << 24 |
-						packetBuffer[41] << 16 |
-						packetBuffer[42] << 8 |
-						packetBuffer[43];
-
-				/* Now convert NTP time into everyday time.
-				 * Unix time starts on Jan 1 1970. In seconds, that's 2208988800.
-				 * Subtract seventy years.
-				 */
-				const uint32_t seventyYears = 2208988800UL;
-				uint32_t epoch = secsSince1900 - seventyYears;
-
-				/* Print the hour, minute and second.
-				 * GMT is the time at Greenwich Meridian.
-				 */
-				printf("socket_cb: The GMT time is %lu:%02lu:%02lu\r\n",
-						(epoch  % 86400L) / 3600,           /* hour (86400 equals secs per day) */
-						(epoch  % 3600) / 60,               /* minute (3600 equals secs per minute) */
-						epoch % 60);                        /* second */
-				ioport_set_pin_level(LED_0_PIN, false);
-
-				ret = close(sock);
-				if (ret == SOCK_ERR_NO_ERROR) {
-					udp_socket = -1;
-				}
-			}
-		}
-	}
-	break;
-
-	default:
-		break;
-	}
-}
-
-/**
- * \brief Callback to get the ServerIP from DNS lookup.
- *
- * \param[in] pu8DomainName Domain name.
- * \param[in] u32ServerIP Server IP.
- */
-static void resolve_cb(uint8_t *pu8DomainName, uint32_t u32ServerIP)
-{
-	struct sockaddr_in addr;
-	int8_t cDataBuf[48];
-	int16_t ret;
-
-	memset(cDataBuf, 0, sizeof(cDataBuf));
-	cDataBuf[0] = '\x1b'; /* time query */
-
-	printf("resolve_cb: DomainName %s\r\n", pu8DomainName);
-
-	if (udp_socket >= 0) {
-		/* Set NTP server socket address structure. */
-		addr.sin_family = AF_INET;
-		addr.sin_port = _htons(MAIN_SERVER_PORT_FOR_UDP);
-		addr.sin_addr.s_addr = u32ServerIP;
-
-		/*Send an NTP time query to the NTP server*/
-		ret = sendto(udp_socket, (int8_t *)&cDataBuf, sizeof(cDataBuf), 0, (struct sockaddr *)&addr, sizeof(addr));
-		if (ret != M2M_SUCCESS) {
-			printf("resolve_cb: failed to send  error!\r\n");
-			return;
-		}
-	}
-}
-
-/**
  * \brief Callback to get the Wi-Fi status update.
  *
  * \param[in] u8MsgType Type of Wi-Fi notification.
@@ -243,7 +133,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: CONNECTED\r\n");
-			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: DISCONNECTED\r\n");
 			gbConnectedWifi = false;
@@ -261,12 +150,24 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		printf("wifi_cb: M2M_WIFI_REQ_DHCP_CONF: IP is %u.%u.%u.%u\r\n",
 				pu8IPAddress[0], pu8IPAddress[1], pu8IPAddress[2], pu8IPAddress[3]);
 		gbConnectedWifi = true;
-		memcpy(dns_server_address, (uint8_t *)MAIN_WORLDWIDE_NTP_POOL_HOSTNAME, strlen(MAIN_WORLDWIDE_NTP_POOL_HOSTNAME));
-		/* Obtain the IP Address by network name */
-		gethostbyname((uint8_t *)dns_server_address);
+
 		break;
 	}
+	case M2M_WIFI_RESP_GET_SYS_TIME:
+	/*Initial first callback will be provided by the WINC itself on the first communication with NTP */
+	{
 
+		tstrSystemTime *strSysTime_now = (tstrSystemTime *)pvMsg; 
+		
+		/* Print the hour, minute and second.
+		* GMT is the time at Greenwich Meridian.
+		*/
+		printf("socket_cb: The GMT time is %u:%02u:%02u\r\n",
+				strSysTime_now->u8Hour,           /* hour (86400 equals secs per day) */
+				strSysTime_now->u8Minute,         /* minute (3600 equals secs per minute) */
+				strSysTime_now->u8Second);        /* second */
+		break;
+	}
 	default:
 	{
 		break;
@@ -277,7 +178,7 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 /**
  * \brief Main application function.
  *
- * Initialize system, UART console, network then start time client.
+ * Initialize system, UART console, network then configure NTP server the SNTP client should use.
  *
  * \return Program return value.
  */
@@ -285,7 +186,6 @@ int main(void)
 {
 	tstrWifiInitParam param;
 	int8_t ret;
-	struct sockaddr_in addr_in;
 
 	/* Initialize the board. */
 	sysclk_init();
@@ -310,42 +210,22 @@ int main(void)
 		}
 	}
 
-	/* Turn LED0 off initially. */
-	ioport_set_pin_level(LED_0_PIN, true);
-
 	/* Initialize Socket module */
 	socketInit();
 
-	/* Register socket handler, resolve handler */
-	registerSocketCallback(socket_cb, resolve_cb);
-
-	/* Connect to router. */
+	/* SNTP configuration */
+	ret = m2m_wifi_configure_sntp((uint8_t *)MAIN_WORLDWIDE_NTP_POOL_HOSTNAME, strlen(MAIN_WORLDWIDE_NTP_POOL_HOSTNAME), SNTP_ENABLE_DHCP);
+	if(M2M_SUCCESS != ret) {
+		printf("main: SNTP %s configuration Failure\r\n",MAIN_WORLDWIDE_NTP_POOL_HOSTNAME);
+	}
+	
+	/* Connect to AP. */
 	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID),
 			MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 
 	while (1) {
 		/* Handle pending events from network controller. */
 		m2m_wifi_handle_events(NULL);
-
-		if (gbConnectedWifi) {
-			/*
-			 * Create the socket for the first time.
-			 */
-			if (udp_socket < 0) {
-				udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
-				if (udp_socket < 0) {
-					printf("main: UDP Client Socket Creation Failed.\r\n");
-					continue;
-				}
-
-				/* Initialize default socket address structure. */
-				addr_in.sin_family = AF_INET;
-				addr_in.sin_addr.s_addr = _htonl(MAIN_DEFAULT_ADDRESS);
-				addr_in.sin_port = _htons(MAIN_DEFAULT_PORT);
-
-				bind(udp_socket, (struct sockaddr *)&addr_in, sizeof(struct sockaddr_in));
-			}
-		}
 	}
 
 	return 0;

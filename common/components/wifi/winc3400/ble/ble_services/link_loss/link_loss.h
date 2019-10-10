@@ -3,7 +3,7 @@
  *
  * \brief Link Loss Service declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,8 +30,10 @@
  * \asf_license_stop
  *
  */
+
 /*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
  */
 
 
@@ -51,13 +53,13 @@
  #if defined LLS_GATT_SERVER
 
 /** @brief count of included service in Linkloss service
-  * 
+  *
   */
 
 #define LLS_INCLUDED_SERVICE_COUNT  (0)
 
 /** @brief count of characteristics in linkloss service
-  * 
+  *
   */
 #define LLS_CHARACTERISTIC_COUNT	(1)
 
@@ -83,9 +85,9 @@ typedef struct gatt_lls_char_handler
 ****************************************************************************************/
 
 /** @brief Initialize the linkloss service with default values
-  * 
   *
-  * @param[in] gatt_service_handler_t  the service info which has handle range,uuid and characteristic array fields
+  *
+  * @param[in] gatt_service_handler_t the service info which has handle (range,uuid and characteristic array fields)
   *
   * @pre Must be called before @ref lls_primary_service_define
   *
@@ -94,9 +96,9 @@ typedef struct gatt_lls_char_handler
 void init_linkloss_service(gatt_service_handler_t *linkloss_serv);
 
 /** @brief Defining linkloss service to the attribute data base
-  * 
   *
-  * @param[in] gatt_service_handler_t  the service info which has handle range,uuid and characteristic array fields
+  *
+  * @param[in] gatt_service_handler_t the service info which has handle (range,uuid and characteristic array fields)
   *
   * @pre Must be called after @ref init_linkloss_service
   *
@@ -108,9 +110,9 @@ at_ble_status_t lls_primary_service_define(gatt_service_handler_t *lls_service);
 
 
 /** @brief sets the alert value of the Linkloss service
-  * @param[in] gatt_service_handler_t  the service info which has handle range,uuid and characteristic array fields
+  * @param[in] gatt_service_handler_t the service info which has handle range,uuid and characteristic array fields
   * @param[in] at_ble_characteristic_changed_t  the information of the characteristic changed.
-  * @return @ref ias alert value
+  * @return @ref its alert value
   */
 uint8_t lls_set_alert_value(at_ble_characteristic_changed_t *change_params, gatt_service_handler_t *lls_handler);
 
@@ -153,6 +155,7 @@ typedef enum {
 
 typedef struct gatt_lls_char_handler
 {
+	at_ble_handle_t conn_handle;
 	at_ble_handle_t start_handle;
 	at_ble_handle_t end_handle;
 	at_ble_handle_t char_handle;

@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief Configurations for the WINC3400 Serial Bridge Application
+ * \brief SAM D21 External Interrupt Driver Configuration Header
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -30,7 +30,7 @@
  * \asf_license_stop
  *
  */
- 
+
 #ifndef CONF_EXTINT_H_INCLUDED
 #define CONF_EXTINT_H_INCLUDED
 

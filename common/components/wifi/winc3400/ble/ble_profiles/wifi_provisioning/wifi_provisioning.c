@@ -3,7 +3,7 @@
  *
  * \brief WiFi Provision Profile
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -39,6 +39,7 @@
 ****************************************************************************************/
 #include <asf.h>
 #include <string.h>
+#include "wifi_scan.h"
 #include "at_ble_api.h"
 #include "ble_manager.h"
 #include "wifi_provisioning.h"
@@ -46,21 +47,45 @@
 /****************************************************************************************
 *                                     Globals                                           *
 ****************************************************************************************/
-//#define PROVISION_PRINTF(...)			
-//#define PROVISION_PRINTF_CONT(...)		
-#define PROVISION_PRINTF(...)			do{printf("* "); printf(__VA_ARGS__);}while(0)
-#define PROVISION_PRINTF_CONT(...)		do{printf(__VA_ARGS__);}while(0)
+//#define PROVISION_PRINTF(...)
+//#define PROVISION_PRINTF_CONT(...)
+#define PROVISION_PRINTF(...)			do{printf("\n\r* "); printf(__VA_ARGS__);}while(0)
+#define PROVISION_PRINTF_CONT(...)		do{printf("\n\r* "); printf(__VA_ARGS__);}while(0)
 /** @brief APPARAM being 98 bytes long (will be received from the remote device in multiple messages) */
+#ifdef ENTERPRISE_SECURITY
+#define APPARAM_MULTIPART_LENGTH		(180)
+#else
 #define APPARAM_MULTIPART_LENGTH		(98)
+#endif
 /** @brief Position of various parameters within the 98 bytes */
-#define APPARAM_MULTIPART_SECTYPE_POS	(0)  // 1 byte security type
+/*#define APPARAM_MULTIPART_SECTYPE_POS	(0)  // 1 byte security type
 #define APPARAM_MULTIPART_SSIDLEN_POS	(1)  // 1 byte ssid length
 #define APPARAM_MULTIPART_SSID_POS		(2)  // ssid (max len 32) occupies bytes 2-33
 #define APPARAM_MULTIPART_PASSLEN_POS	(34) // 1 byte passphrase length
 #define APPARAM_MULTIPART_PASS_POS		(35) // passphrase (max len 63) occupies byte 35-97
+#define APPARAM_MULTIPART_USERLEN_POS	(98) // 1 byte passphrase length
+#define APPARAM_MULTIPART_USERNAME_POS		(99) // passphrase (max len 10) occupies byte 99-108*/
+
+#define APPARAM_MULTIPART_SECTYPE_POS	(0)  //0 - 1 byte security type
+#define APPARAM_MULTIPART_SSIDLEN_POS	(APPARAM_MULTIPART_SECTYPE_POS + 1)  //1 - 1 byte ssid length
+#define APPARAM_MULTIPART_SSID_POS		(APPARAM_MULTIPART_SSIDLEN_POS + 1)  // 2 - ssid (max len 30) occupies bytes 2-31
+
+#define APPARAM_MULTIPART_PASSLEN_POS	(APPARAM_MULTIPART_SSID_POS + WIFI_PROVISION_MAX_SSID_LENGTH) // 34 - 1 byte passphrase length
+#define APPARAM_MULTIPART_PASS_POS		(APPARAM_MULTIPART_PASSLEN_POS + 1) //35 - passphrase (max len 30) occupies byte 35-65
+#define APPARAM_MULTIPART_USERLEN_POS	(APPARAM_MULTIPART_PASS_POS + WIFI_PROVISION_MAX_PASS_LENGTH) //66 - 1 byte passphrase length
+#define APPARAM_MULTIPART_USERNAME_POS	(APPARAM_MULTIPART_USERLEN_POS + 1) //67 passphrase (max len 34) occupies byte 67-97
+
+/*****TLS********/
+#define APPARAM_MULTIPART_TLSCERTLEN_POS       (APPARAM_MULTIPART_SSID_POS + WIFI_PROVISION_MAX_SSID_LENGTH) // 1 byte passphrase length
+#define APPARAM_MULTIPART_TLSCERT_POS          (APPARAM_MULTIPART_TLSCERTLEN_POS+1) // passphrase (max len 30) occupies byte 33-62
+#define APPARAM_MULTIPART_TLSKEYLEN_POS        (APPARAM_MULTIPART_TLSCERT_POS+WIFI_PROVISION_TLS_CERT_LENGTH) // 1 byte passphrase length
+#define APPARAM_MULTIPART_TLSKEY_POS		   (APPARAM_MULTIPART_TLSKEYLEN_POS+1) // passphrase (max len 34) occupies byte 64-97
+/*****TLS********/
+
 #define NOTIFY_STATE_PROVISIONFAILED	(0)
 #define NOTIFY_STATE_WIFICONNECTING		(1)
-#define NOTIFY_STATE_PROVISIONEND		(2)
+#define NOTIFY_STATE_PROVISIONED		(2)
+
 wificon_gatt_service_handler_t wificon_handle;
 wifiscan_gatt_service_handler_t wifiscan_handle;
 static uint8_t multi_part[APPARAM_MULTIPART_LENGTH];
@@ -95,8 +120,8 @@ static at_ble_status_t start_advertise(void)
 	if(at_ble_adv_start(AT_BLE_ADV_TYPE_UNDIRECTED, AT_BLE_ADV_GEN_DISCOVERABLE, NULL, AT_BLE_ADV_FP_ANY,
 	WIFI_PROVISION_FAST_ADV, WIFI_PROVISION_ADV_TIMEOUT, 0) == AT_BLE_SUCCESS)
 	{
-		PROVISION_PRINTF("BLE device is in Advertising Mode\n");
-		PROVISION_PRINTF("Advertising Device Name: %s\n",WIFI_PROVISION_ADV_DATA_NAME_DATA);
+		PROVISION_PRINTF("BLE device is in Advertising Mode");
+		PROVISION_PRINTF("Advertising Device Name: %s",WIFI_PROVISION_ADV_DATA_NAME_DATA);
 	}
 	else
 	{
@@ -110,7 +135,7 @@ static at_ble_status_t start_advertise(void)
 */
 static void wifi_provision_service_init(void)
 {
-	init_wifi_con_service(&wificon_handle);	
+	init_wifi_con_service(&wificon_handle);
 	init_wifi_scan_service(&wifiscan_handle);
 }
 /**
@@ -142,7 +167,7 @@ static at_ble_status_t prepare_advertisement(void)
 	else
 	{
 		//setting the advertisement data and scan response data
-		st = at_ble_adv_data_set(adv_data,1,adv_scan_rsp_data,srp_idx);		
+		st = at_ble_adv_data_set(adv_data,1,adv_scan_rsp_data,srp_idx);
 		if(st != AT_BLE_SUCCESS)
 		{
 			PROVISION_PRINTF("Failed to set advertisement data.\n");
@@ -161,23 +186,23 @@ static void wifi_provision_set_state(uint8_t s)
 		switch(s)
 		{
 			case WIFI_PROVISION_STATE_IDLE :
-				PROVISION_PRINTF("Provision state_IDLE\n");
+				//PROVISION_PRINTF("Provision state_IDLE\n");
 			break;
 			case WIFI_PROVISION_STATE_REQUESTING_SCAN :
-				PROVISION_PRINTF("Provision state_REQUESTING_SCAN.\n");
+				//PROVISION_PRINTF("Provision state_REQUESTING_SCAN.\n");
 			break;
 			case WIFI_PROVISION_STATE_WIFI_SCANNING :
-				PROVISION_PRINTF("Provision state_WIFI_SCANNING.\n");
+				//PROVISION_PRINTF("Provision state_WIFI_SCANNING.\n");
 			break;
 			case WIFI_PROVISION_STATE_IN_PROGRESS :
-				PROVISION_PRINTF("Provision state_IN_PROGRESS.\n");
+				//PROVISION_PRINTF("Provision state_IN_PROGRESS.\n");
 			break;
 			case WIFI_PROVISION_STATE_HAVE_CREDENTIAL :
-				PROVISION_PRINTF("Provision state_HAVE_CREDENTIAL.\n\n");
+				//PROVISION_PRINTF("Provision state_HAVE_CREDENTIAL.\n\n");
 			break;
 			case WIFI_PROVISION_STATE_FAILED :
-				PROVISION_PRINTF_CONT("\n");
-				PROVISION_PRINTF("Provision state_FAILED.\n");
+				//PROVISION_PRINTF_CONT("\n");
+				//PROVISION_PRINTF("Provision state_FAILED.\n");
 			break;
 		}
 	}
@@ -191,7 +216,7 @@ static at_ble_status_t wifi_provision_scanmode_update(uint8_t sm)
 	return st;
 }
 /**
-* \brief return provision state 
+* \brief return provision state
 */
 static uint8_t wifi_provision_get_state(void)
 {
@@ -206,23 +231,23 @@ static uint8_t wifi_provision_get_state(void)
 uint8_t wifi_provision_processing(void)
 {
 	//Here is the place to put any WiFi Provision state checks and transitions needed
-	
+
 	//(1) Check if we are in a scan requesting state, if so get WiFi scanning going
 	if (wifi_provision_get_state() == WIFI_PROVISION_STATE_REQUESTING_SCAN)
 	{
 		if (scanning_cb() == AT_BLE_SUCCESS)
 		{
 			wifi_provision_set_state(WIFI_PROVISION_STATE_WIFI_SCANNING);
-			//if WiFi Scanning is started okay set the scan mode
+			//if WiFi Scanning starts okay set the scan mode
 			//characteristics to indicate scanning (if not already)
 			wifi_provision_scanmode_update(WIFI_PROVISION_SCANMODE_SCANNING);
 		}
-		// if failed stay in requesting scan state		
+		// if failed stay in requesting scan state
 	}
 	// (x) Any other checks ? ...
-	
+
 	//In exit, return the WiFi Provision state to the application so it can
-	//take any actions
+	//take appropriate actions
 	return (wifi_provision_get_state());
 }
 
@@ -244,20 +269,20 @@ void register_wifi_provision_scanning_handler(wifi_provision_scanning_callback_t
 * \brief definition of WiFi Provision profile services
 */
 at_ble_status_t wifi_provision_define (void)
-{	
+{
 	at_ble_status_t service_define_status = wificon_primary_service_define(&wificon_handle);
 	if (service_define_status == AT_BLE_SUCCESS)
 	{
 		service_define_status = wifiscan_primary_service_define(&wifiscan_handle);
 	}
 	if (service_define_status == AT_BLE_SUCCESS)
-	{		
+	{
 		printf("\n* This is WiFi Provisioning.\n");
 	}
 	else
 	{
 		printf("\n* WiFi Provisioning: Failed services setup!\n");
-	}	
+	}
 	return service_define_status;
 }
 /**
@@ -267,36 +292,38 @@ uint8_t wifi_provision_svc_changed_handler(uint8_t *data)
 {
 	at_ble_status_t s = AT_BLE_SUCCESS;
 	at_ble_handle_t h;
-	//PROVISION_PRINTF("Serviced Change. Data:[0x%02x][0x%02x]\n",data[0], data[1]);
+	//PROVISION_PRINTF("Service Change. Data:[0x%02x][0x%02x]\n",data[0], data[1]);
 	// service change handle is one before the wificon service
 	h = wificon_handle.serv_handle - 1;
 	if (h > 0)
 	{
-		s = at_ble_characteristic_value_set(h, (uint8_t *) data, 0 , 2);
+		s = at_ble_characteristic_value_set(h, (uint8_t *) data, 2);
 	}
 	return s;
 }
 /**
-* \brief service characteristic change handler function 
+* \brief service characteristic change handler function
 */
 uint8_t wifi_provision_char_changed_handler(at_ble_characteristic_changed_t *char_handle)
 {
 	uint8_t change_status;
-		
+	uint8_t uName_length;
+	uint8_t uName[34];
+
 	at_ble_characteristic_changed_t  p;
 	memcpy(&p, char_handle, sizeof(at_ble_characteristic_changed_t));
-	PROVISION_PRINTF("wifi_provisioning_characteristics_changed: ");
+	//PROVISION_PRINTF("wifi_provisioning_characteristics_changed: ");
 //	PROVISION_PRINTF_CONT("param->handle: %02x ", param.char_handle);
 //	PROVISION_PRINTF_CONT("param->length: %02x ", param.char_len);
 //	PROVISION_PRINTF_CONT("param->offset: %02x ", param.char_offset);
-//	PROVISION_PRINTF_CONT("param->value : %u %u %u\n",param.char_new_value[0],param.char_new_value[1],param.char_new_value[2]);	
+//	PROVISION_PRINTF_CONT("param->value : %u %u %u\n",param.char_new_value[0],param.char_new_value[1],param.char_new_value[2]);
 
 	/**************************************************************************
 	*                A characteristic has changed...                          *
 	*                Look for it in wificon service.                          *
 	*                                                                         *
 	**************************************************************************/
-	
+
 	// Check if char change is aimed at state client configuration
 	change_status = wificon_char_change_state_client_cfg(&p,&wificon_handle);
 	if (change_status == VALID_WIFICON_CHANGE_PARAM)
@@ -307,14 +334,16 @@ uint8_t wifi_provision_char_changed_handler(at_ble_characteristic_changed_t *cha
 	{
 		PROVISION_PRINTF_CONT("state characteristics: client_config tried but failed.\n");
 	}
-		
+
 	// Check if char change is aimed at apparam
 	if (change_status == INVALID_WIFICON_CHANGE_PARAM)
 	{
+		//printf("\n INSIDE INVALID_WIFICON_CHANGE_PARAM");
 		change_status = wificon_char_change_apparam(&p,&wificon_handle);
 		if (change_status == VALID_WIFICON_CHANGE_PARAM)
 		{
-			PROVISION_PRINTF("multi-part apparam: off:%u successful update.\n",p.char_offset);
+			//printf("\n INSIDE VALID_WIFICON_CHANGE_PARAM");
+			//PROVISION_PRINTF("multi-part apparam: off:%u successful update.\n",p.char_offset);
 	//		PROVISION_PRINTF_CONT("param->handle: %u ", p.char_handle);
 	//		PROVISION_PRINTF_CONT("length: %u ", p.char_len);
 	//		PROVISION_PRINTF_CONT("offset: %u ", p.char_offset);
@@ -324,20 +353,86 @@ uint8_t wifi_provision_char_changed_handler(at_ble_characteristic_changed_t *cha
 			memcpy(&multi_part[p.char_offset],p.char_new_value,p.char_len);
 			if (p.char_offset + p.char_len >= APPARAM_MULTIPART_LENGTH)
 			{
-				credentials cred;
-				cred.sec_type = multi_part[APPARAM_MULTIPART_SECTYPE_POS];
-				cred.ssid_length = (multi_part[APPARAM_MULTIPART_SSIDLEN_POS]> WIFI_PROVISION_MAX_SSID_LENGTH ? WIFI_PROVISION_MAX_SSID_LENGTH: multi_part[APPARAM_MULTIPART_SSIDLEN_POS]);
-				memcpy(&cred.ssid, &multi_part[APPARAM_MULTIPART_SSID_POS], cred.ssid_length);
-				cred.passphrase_length = (multi_part[APPARAM_MULTIPART_PASSLEN_POS]> WIFI_PROVISION_MAX_PASS_LENGTH ? WIFI_PROVISION_MAX_PASS_LENGTH: multi_part[APPARAM_MULTIPART_PASSLEN_POS]);
-				memcpy(&cred.passphrase,  &multi_part[APPARAM_MULTIPART_PASS_POS], cred.passphrase_length);
-				//PROVISION_PRINTF("\nReceive complete.\n");
-				//PROVISION_PRINTF("\nSSID: %s\n",cred.ssid);
-				//PROVISION_PRINTF("PASS: %s\n",cred.passphrase);
-				//PROVISION_PRINTF("SECU: %u\n",cred.sec_type);
-				if (AT_BLE_SUCCESS==credentials_cb(&cred))
+				//printf("\n INSIDE APPARAM_MULTIPART_LENGTH");
+				if (multi_part[APPARAM_MULTIPART_SECTYPE_POS] == 5){
+					credentials_tls cred;
+					//printf("\n INSIDE APPARAM_MULTIPART_SECTYPE_POS");
+					cred.sec_type = multi_part[APPARAM_MULTIPART_SECTYPE_POS];
+					cred.ssid_length = (multi_part[APPARAM_MULTIPART_SSIDLEN_POS]> WIFI_PROVISION_MAX_SSID_LENGTH ? WIFI_PROVISION_MAX_SSID_LENGTH: multi_part[APPARAM_MULTIPART_SSIDLEN_POS]);
+					memcpy(&cred.ssid, &multi_part[APPARAM_MULTIPART_SSID_POS], cred.ssid_length);
+
+					cred.certificate_length = (multi_part[APPARAM_MULTIPART_TLSCERTLEN_POS]> WIFI_PROVISION_TLS_CERT_LENGTH ? WIFI_PROVISION_TLS_CERT_LENGTH: multi_part[APPARAM_MULTIPART_TLSCERTLEN_POS]);
+					memcpy(&cred.certificate,  &multi_part[APPARAM_MULTIPART_TLSCERT_POS], cred.certificate_length);
+					cred.keydata_length = (multi_part[APPARAM_MULTIPART_TLSKEYLEN_POS]> WIFI_PROVISION_TLS_KEY_LENGTH ? WIFI_PROVISION_TLS_KEY_LENGTH: multi_part[APPARAM_MULTIPART_TLSKEYLEN_POS]);
+					memcpy(&cred.keydata,  &multi_part[APPARAM_MULTIPART_TLSKEY_POS], cred.keydata_length);
+
+					PROVISION_PRINTF("Receive complete.\n");
+					PROVISION_PRINTF("SSID: %s\n",cred.ssid);
+					PROVISION_PRINTF("PASS: %s\n",cred.certificate);
+					PROVISION_PRINTF("SECU: %u\n",cred.sec_type);
+					PROVISION_PRINTF("KEYD: %s\n",cred.keydata);
+					if (AT_BLE_SUCCESS==credentials_cb(&cred))
+						wifi_provision_set_state(WIFI_PROVISION_STATE_HAVE_CREDENTIAL);
+					else
+						wifi_provision_set_state(WIFI_PROVISION_STATE_FAILED);
+				}
+				else if (multi_part[APPARAM_MULTIPART_SECTYPE_POS] == 4){
+					credentials_mschapv2 cred;
+					cred.sec_type = multi_part[APPARAM_MULTIPART_SECTYPE_POS];
+					cred.ssid_length = (multi_part[APPARAM_MULTIPART_SSIDLEN_POS]> WIFI_PROVISION_MAX_SSID_LENGTH ? WIFI_PROVISION_MAX_SSID_LENGTH: multi_part[APPARAM_MULTIPART_SSIDLEN_POS]);
+					memcpy(&cred.ssid, &multi_part[APPARAM_MULTIPART_SSID_POS], cred.ssid_length);
+
+					cred.passphrase_length = (multi_part[APPARAM_MULTIPART_PASSLEN_POS]> WIFI_PROVISION_MAX_PASS_LENGTH ? WIFI_PROVISION_MAX_PASS_LENGTH: multi_part[APPARAM_MULTIPART_PASSLEN_POS]);
+					memcpy(&cred.passphrase,  &multi_part[APPARAM_MULTIPART_PASS_POS], cred.passphrase_length);
+					cred.username_length = (multi_part[APPARAM_MULTIPART_USERLEN_POS]> WIFI_PROVISION_MAX_USERNAME_LENGTH ? WIFI_PROVISION_MAX_USERNAME_LENGTH: multi_part[APPARAM_MULTIPART_USERLEN_POS]);
+					memcpy(&cred.username,  &multi_part[APPARAM_MULTIPART_USERNAME_POS], cred.passphrase_length);
+
+					cred.ssid[cred.ssid_length] = '\0';
+					cred.passphrase[cred.passphrase_length] = '\0';
+					cred.username[cred.username_length] = '\0';
+
+					PROVISION_PRINTF("*******************************************");
+					PROVISION_PRINTF("Receive complete.");
+					PROVISION_PRINTF("SSID: %s",cred.ssid);
+					PROVISION_PRINTF("SSID LENGTH: %d",cred.ssid_length);
+					PROVISION_PRINTF("PASS: %s",cred.passphrase);
+					PROVISION_PRINTF("PASS LENGTH: %d",cred.passphrase_length);
+					PROVISION_PRINTF("SECU: %u",cred.sec_type);
+					PROVISION_PRINTF("UMAE: %s",cred.username);
+					PROVISION_PRINTF("UMAE LENGTH: pos %d %d",APPARAM_MULTIPART_USERLEN_POS, cred.username_length);
+					PROVISION_PRINTF("*******************************************");
+					if (AT_BLE_SUCCESS==credentials_cb(&cred))
+						wifi_provision_set_state(WIFI_PROVISION_STATE_HAVE_CREDENTIAL);
+					else
+						wifi_provision_set_state(WIFI_PROVISION_STATE_FAILED);
+				}
+				else{
+					credentials cred;
+					cred.sec_type = multi_part[APPARAM_MULTIPART_SECTYPE_POS];
+					cred.ssid_length = (multi_part[APPARAM_MULTIPART_SSIDLEN_POS]> WIFI_PROVISION_MAX_SSID_LENGTH ? WIFI_PROVISION_MAX_SSID_LENGTH: multi_part[APPARAM_MULTIPART_SSIDLEN_POS]);
+					memcpy(&cred.ssid, &multi_part[APPARAM_MULTIPART_SSID_POS], cred.ssid_length);
+
+					cred.passphrase_length = (multi_part[APPARAM_MULTIPART_PASSLEN_POS]> WIFI_PROVISION_MAX_PASS_LENGTH ? WIFI_PROVISION_MAX_PASS_LENGTH: multi_part[APPARAM_MULTIPART_PASSLEN_POS]);
+					memcpy(&cred.passphrase,  &multi_part[APPARAM_MULTIPART_PASS_POS], cred.passphrase_length);
+
+					cred.ssid[cred.ssid_length] = '\0';
+					cred.passphrase[cred.passphrase_length] = '\0';
+
+					PROVISION_PRINTF("*******************************************");
+					PROVISION_PRINTF("Receive complete.");
+					PROVISION_PRINTF("SSID: %s",cred.ssid);
+					PROVISION_PRINTF("SSID LENGTH: %d",cred.ssid_length);
+					PROVISION_PRINTF("PASS: %s",cred.passphrase);
+					PROVISION_PRINTF("PASS LENGTH: %d",cred.passphrase_length);
+					PROVISION_PRINTF("SECU: %u",cred.sec_type);
+					PROVISION_PRINTF("*******************************************");
+
+					if (AT_BLE_SUCCESS==credentials_cb(&cred))
 					wifi_provision_set_state(WIFI_PROVISION_STATE_HAVE_CREDENTIAL);
-				else
+					else
 					wifi_provision_set_state(WIFI_PROVISION_STATE_FAILED);
+
+				}
 			}
 		}
 		else if (change_status == FAILED_WIFICON_CHANGE_PARAM)
@@ -348,7 +443,7 @@ uint8_t wifi_provision_char_changed_handler(at_ble_characteristic_changed_t *cha
 
 	if (change_status == INVALID_WIFICON_CHANGE_PARAM)
 	{
-		
+
 	/**************************************************************************
 	*                A characteristic has changed...                          *
 	*                Look for it in wifiscan service.                         *
@@ -363,7 +458,7 @@ uint8_t wifi_provision_char_changed_handler(at_ble_characteristic_changed_t *cha
 			{
 				//if remote device changed scan mode to scanning
 				//callback to application to request wifi scanning
-				if (p.char_new_value[0] = WIFI_PROVISION_SCANMODE_SCANNING)
+				if (p.char_new_value[0] == WIFI_PROVISION_SCANMODE_SCANNING)
 				{
 					// Callback to application to request WiFi scanning
 					wifi_provision_set_state(WIFI_PROVISION_STATE_REQUESTING_SCAN);
@@ -375,7 +470,7 @@ uint8_t wifi_provision_char_changed_handler(at_ble_characteristic_changed_t *cha
 			PROVISION_PRINTF("scan mode characteristics: update tried but failed.\n");
 		}
 	}
-		
+
 	return change_status;
 }
 /**
@@ -413,13 +508,13 @@ void inform_wifi_connection_state(uint8_t s)
 	switch(wifi_connection_state)
 	{
 		case WIFI_CONNECTION_STATE_PROVISIONED :
-			wificon_connect_noti(&wificon_handle,NOTIFY_STATE_PROVISIONEND);
-			PROVISION_PRINTF("WiFi state_SUCCESS.\n");
+			wificon_connect_noti(&wificon_handle,NOTIFY_STATE_PROVISIONED);
+			PROVISION_PRINTF("\n\rWiFi state_SUCCESS.");
 			wifi_provision_set_state(WIFI_PROVISION_STATE_IDLE);
 		break;
 		case WIFI_CONNECTION_STATE_PROVISIONFAILED :
 			wificon_connect_noti(&wificon_handle,NOTIFY_STATE_PROVISIONFAILED);
-			PROVISION_PRINTF("WiFi state_FAILED.\n");
+			PROVISION_PRINTF("\n\rWiFi state_FAILED.");
 			wifi_provision_set_state(WIFI_PROVISION_STATE_FAILED);
 		break;
 		case WIFI_CONNECTION_STATE_CONNECTING :
@@ -429,9 +524,9 @@ void inform_wifi_connection_state(uint8_t s)
 	}
 }
 /**
-* \brief application updates the wifi scan list 
+* \brief application updates the wifi scan list
 */
-uint8_t wifi_provision_scanlist_receive(struct wifi_provision_scanlist *param)
+uint8_t wifi_provision_scanlist_receive(wifi_provision_scanlist *param)
 {
 	at_ble_status_t status;
 	uint8_t num_ap_found;
@@ -441,7 +536,7 @@ uint8_t wifi_provision_scanlist_receive(struct wifi_provision_scanlist *param)
 		status = wifi_provision_scanmode_update(WIFI_PROVISION_SCANMODE_DONE);
 		PROVISION_PRINTF("Number of APs found: %u\n", num_ap_found);
 	}
-	
+
 	if (status == AT_BLE_SUCCESS)
 	{
 		wifi_provision_set_state(WIFI_PROVISION_STATE_IN_PROGRESS);

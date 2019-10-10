@@ -60,6 +60,7 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21.c \
        common/components/wifi/winc3400/wifi_drv/bsp/source/nm_bsp_samd21_app.c \
        common/components/wifi/winc3400/wifi_drv/bus_wrapper/source/nm_bus_wrapper_samd21.c \
+       common/components/wifi/winc3400/wifi_drv/common/source/efuse.c \
        common/components/wifi/winc3400/wifi_drv/common/source/nm_common.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_ate_mode.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/m2m_crypto.c \
@@ -72,7 +73,6 @@ CSRCS = \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmasic.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmbus.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmdrv.c \
-       common/components/wifi/winc3400/wifi_drv/driver/source/nmflash.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmi2c.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmspi.c \
        common/components/wifi/winc3400/wifi_drv/driver/source/nmuart.c \
@@ -102,7 +102,21 @@ CSRCS = \
        sam0/utils/stdio/read.c                            \
        sam0/utils/stdio/write.c                           \
        sam0/utils/syscalls/gcc/syscalls.c                 \
-       thirdparty/wireless/addons/sio2host/uart/sio2host.c
+       thirdparty/wireless/addons/sio2host/uart/sio2host.c \
+       thirdparty/wireless/winc3400_ble_api/src/dbg_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/error.c   \
+       thirdparty/wireless/winc3400_ble_api/src/event.c   \
+       thirdparty/wireless/winc3400_ble_api/src/gap.c     \
+       thirdparty/wireless/winc3400_ble_api/src/gapc_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/gapm_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/gatt_client.c \
+       thirdparty/wireless/winc3400_ble_api/src/gatt_server.c \
+       thirdparty/wireless/winc3400_ble_api/src/gattc_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/gattm_task.c \
+       thirdparty/wireless/winc3400_ble_api/src/interface.c \
+       thirdparty/wireless/winc3400_ble_api/src/platform.c \
+       thirdparty/wireless/winc3400_ble_api/src/security.c \
+       thirdparty/wireless/winc3400_ble_api/src/wifiprov_task.c
 
 # List of assembler source files.
 ASSRCS = 
@@ -150,17 +164,16 @@ INC_PATH = \
        sam0/utils/stdio/stdio_serial                      \
        thirdparty/CMSIS/Include                           \
        thirdparty/CMSIS/Lib/GCC                           \
-       thirdparty/wireless/addons/sio2host/uart \
+       thirdparty/wireless/addons/sio2host/uart           \
+       thirdparty/wireless/winc3400_ble_api/include \
        common/components/wifi/winc3400/transparent_service_example/samd21j18a_samd21_xplained_pro/gcc
 
 # Additional search paths for libraries.
 LIB_PATH =  \
-       common/components/wifi/winc3400/ble/atmel_ble_api  \
        thirdparty/CMSIS/Lib/GCC                          
 
 # List of libraries to use during linking.
 LIBS =  \
-       at_ble_api_samd21                                  \
        arm_cortexM0l_math                                
 
 # Path relative to top level directory pointing to a linker script.

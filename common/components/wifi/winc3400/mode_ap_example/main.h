@@ -3,7 +3,7 @@
  *
  * \brief MAIN configuration.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -44,11 +44,11 @@ extern "C" {
 /** AP mode Settings */
 #define MAIN_WLAN_SSID           "DEMO_AP" /* < SSID */
 #if USE_WEP
-#define MAIN_WLAN_AUTH           M2M_WIFI_SEC_WEP /* < Security manner */
+#define MAIN_WLAN_AUTH           M2M_WIFI_SEC_WEP /* < Security type */
 #define MAIN_WLAN_WEP_KEY        "1234567890" /* < Security Key in WEP Mode */
 #define MAIN_WLAN_WEP_KEY_INDEX  (0)
 #else
-#define MAIN_WLAN_AUTH           M2M_WIFI_SEC_OPEN /* < Security manner */
+#define MAIN_WLAN_AUTH           M2M_WIFI_SEC_OPEN /* < Security type */
 #endif
 #define MAIN_WLAN_CHANNEL        (6) /* < Channel number */
 

@@ -100,6 +100,7 @@ CSRCS = \
        thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_kr.c \
        thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_na.c \
        thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_multiband.c \
+       thirdparty/wireless/lorawan/sal/src/sal.c          \
        thirdparty/wireless/lorawan/services/aes/src/hw/sam0/aes_engine.c \
        thirdparty/wireless/lorawan/services/edbg_eui/edbg_eui.c \
        thirdparty/wireless/lorawan/services/pds/src/pds_interface.c \
@@ -174,6 +175,7 @@ INC_PATH = \
        thirdparty/wireless/lorawan/pmm/inc                \
        thirdparty/wireless/lorawan/regparams/inc          \
        thirdparty/wireless/lorawan/regparams/multiband/inc \
+       thirdparty/wireless/lorawan/sal/inc                \
        thirdparty/wireless/lorawan/services/aes/inc       \
        thirdparty/wireless/lorawan/services/edbg_eui      \
        thirdparty/wireless/lorawan/services/pds/inc       \

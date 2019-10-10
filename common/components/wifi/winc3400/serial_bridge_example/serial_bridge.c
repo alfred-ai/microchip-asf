@@ -1,9 +1,10 @@
 /**
+ *
  * \file
  *
- * \brief Configurations for the WINC3400 Serial Bridge Application
+ * \brief Serial Bridge.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -31,501 +32,349 @@
  *
  */
 
-/** \mainpage
+ /** \mainpage
  * \section intro Introduction
- * This example demonstrates the use of the WINC3400 with the SAMD21 Xplained Pro
- * board to behave as a station.<br>
+ * This example demonstrates how to implement a EDBG UART to WINC3400 SPI
+ * bridge.<br>
  * It uses the following hardware:
- * - the SAMD21 Xplained Pro.
+ * - the SAM Xplained Pro.
  * - the WINC3400 on EXT1.
  *
  * \section files Main Files
- * - Serial Bridge.c : Initialize the WINC3400 and creates the serial bridge interface between UART and SPI interface.
+ * - serial_bridge.c : Initialize the WINC3400 perform bridge operation.
  *
  * \section usage Usage
- * 
- * \endcode
  * -# Build the program and download it into the board.
- * -# On the computer, open and configure a terminal application as the follows.
- * \code
- *    Baud Rate : 115200
- *    Data : 8bit
- *    Parity bit : none
- *    Stop bit : 1bit
- *    Flow control : none
- * \endcode
- * -# Start the application.
- * -# Now serial bridge application is ready to communicate with WINC3400 module with PC GUI tool.
+ * -# Run download_all.bat script in firmware_update_project
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
- * <A href="http://www.atmel.com">Atmel</A>.\n
+ * <A href="http://www.microchip.com">Microchip</A>.\n
  */
+
 #include <asf.h>
 #include "common/include/nm_common.h"
-#include "bsp/include/nm_bsp_samd21.h"
 #include "bus_wrapper/include/nm_bus_wrapper.h"
 #include "driver/source/nmbus.h"
 #include "driver/include/m2m_wifi.h"
-#include "stdio_serial.h"
-#include "conf_winc.h"
-#include "serial_bridge.h"
+#include "buffered_uart.h"
+#include <string.h>
 
-#define STRING_EOL    "\r\n"
-#define STRING_HEADER "-- Wifi Firmware Downloader --"STRING_EOL \
-"-- "BOARD_NAME" --"STRING_EOL \
-"-- Compiled: "__DATE__" "__TIME__" --"STRING_EOL
+tstrWifiInitParam gstrWifiParam;
+
+struct nm_command {
+	uint16_t cmd;
+	uint16_t size;
+	uint32_t addr;
+	uint32_t val;
+} __attribute__ ((packed));
+
+struct serial_bridge_frame {
+	uint8_t op_code;
+	uint8_t cmd[sizeof(struct nm_command)];
+} __attribute__ ((packed));
 
 
-/** UART COMMAND */
-enum nm_usart_event_types {
-	USART_PKT_RECEIVED = 0,
-	USART_PKT_TRANSMITTED,
-	USART_ERROR_ON_RECEPTION,	
+#define PACKET_QUEUE_BUFFER_SIZE 2048
+struct serial_bridge_frame_buffer {
+	uint8_t buffer[PACKET_QUEUE_BUFFER_SIZE];
+	uint32_t size;
 };
-enum nm_usart_cmd_process_states {
-	INIT = 0,
-	WAIT_SYNC,
-	WAITING,
-	COLLECTING_HDR,
-	COLLECTING_PAYLOAD,
-	PROCESSING,
-};
-typedef struct uart_cmd_hdr_t {
-	unsigned long cmd;
-	unsigned long addr;
-	unsigned long val;
-}uart_cmd_hdr;
 
-#define READ_REG	0
-#define WRITE_REG	1
-#define READ_BUFF	2
-#define WRITE_BUFF	3
-#define RESET		4
-#define RECONFIGURE_UART	5
+static struct serial_bridge_frame_buffer frame_buffer;
 
-/** UART module for debug. */
-struct usart_module cdc_uart_module;
-
-#define CONF_STDIO_USART_MODULE  EDBG_CDC_MODULE
-#define CONF_STDIO_MUX_SETTING   EDBG_CDC_SERCOM_MUX_SETTING
-#define CONF_STDIO_PINMUX_PAD0   EDBG_CDC_SERCOM_PINMUX_PAD0
-#define CONF_STDIO_PINMUX_PAD1   EDBG_CDC_SERCOM_PINMUX_PAD1
-#define CONF_STDIO_PINMUX_PAD2   EDBG_CDC_SERCOM_PINMUX_PAD2
-#define CONF_STDIO_PINMUX_PAD3   EDBG_CDC_SERCOM_PINMUX_PAD3
-#define CONF_STDIO_BAUDRATE      115200
-
-
-static uint16_t usart_cmd_recv_buffer[8];
-static uint16_t usart_payload_buffer[512];
-static uint8_t usart_tx_buffer[16];
-static uint8_t serial_command_pending = 0;
-static uint8_t usart_pkt_received = 0;
-static uint8_t usart_err_on_reception = 0;
-static uint8 *uart_cmd_buf;
-static uart_cmd_hdr uart_cmd;
-uint16_t schedule_rx_length = 0;
-static uint8_t schedule_rx = 0;
-static uint16_t *schedule_rx_buffer = NULL;
-static uint8_t *usart_pkt = NULL;
-static uint8_t usart_prot_handler_status = INIT;
-static uint8_t new_state = INIT;
-static uint8_t change_state = 0;
-static uint8_t uart_reconfigure = 0;
-static uint8_t MYDEVICETYPE = 0x5b;
-#ifdef CHAMBER_BUILD
-static uint8_t watchdog_counter = 0;
-#endif
-#define USART_CMD_HDR_LENGTH	sizeof(uart_cmd_hdr)
-#define SPI_TRANSFER_SIZE	512
-
-static void usart_tx_complete_handler(struct usart_module *const module)
+static void serial_bridge_frame_buffer_pop(struct serial_bridge_frame_buffer *frame, int size)
 {
-	if(schedule_rx) {
-		if(schedule_rx_length == 1) {
-			usart_read_job((struct usart_module *)module, schedule_rx_buffer);
-		}
-		else {
-			usart_read_buffer_job((struct usart_module *)module, (uint8_t *)schedule_rx_buffer, schedule_rx_length);
-		}
-		schedule_rx = 0;
+	if (size < 0 || size > frame->size) {
+		size = frame->size;
 	}
-	if(change_state) {
-		usart_prot_handler_status = new_state;
-		change_state = 0;
+	frame->size -= size;
+	if (frame->size) {
+		memmove(frame->buffer, &frame->buffer[size], frame->size);
 	}
 }
 
-static void usart_rx_complete_handler(struct usart_module *const module)
+static int serial_bridge_frame_receive(struct serial_bridge_frame_buffer *frame, uint16_t len)
 {
-	usart_pkt_received = 1;
-	usart_pkt = (uint8_t *)(module->rx_buffer_ptr - schedule_rx_length);
-	if(change_state) {
-		usart_prot_handler_status = new_state;
-		change_state = 0;
+	while (frame->size < len) {
+		frame->size += buffered_uart_rx(&frame->buffer[frame->size], 255);
 	}
+	return 0;
 }
 
-static void nm_usart_send_regval(struct usart_module *module,uint8_t *tx_data,uint16_t length)
-{
-	uint8_t temp,i,j;
-	for(i=0,j=(length-1);i<j;i++,j--) {
-		temp = tx_data[i];
-		tx_data[i] = tx_data[j];
-		tx_data[j] = temp;
-	}
-	usart_write_buffer_job(module,tx_data,length);
-}
-
-static void nm_usart_protocol_handler(struct usart_module *module,enum nm_usart_event_types event_name)
-{
-	static uint16_t payload_length = 0;
-	uint8 checksum = 0;
-	uint8 i;
-
-switch(usart_prot_handler_status) {
-	case INIT:
-		if((event_name == USART_PKT_RECEIVED) && (schedule_rx_length == 1)) {
-			if((usart_pkt[0] == 0x12)) {
-				usart_prot_handler_status = WAIT_SYNC;
-				usart_cmd_recv_buffer[0] = 0xFF;
-				usart_tx_buffer[0] = MYDEVICETYPE;
-			}
-			else if((usart_pkt[0] == 0x13)) {
-				system_reset();
-			}
-			else {
-				usart_tx_buffer[0] = usart_pkt[0];
-			}
-		}
-		else {
-			usart_cmd_recv_buffer[0] = 0xFF;
-			usart_tx_buffer[0] = 0xEA;
-		}
-		schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-		schedule_rx_length = 1;
-		schedule_rx = 1;
-		usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);		
-		break;
-	case WAIT_SYNC:
-		if(event_name == USART_PKT_RECEIVED) {
-			if(usart_pkt[0] == 0xA5) {
-				uint8 * usart_cmd_recv_buffer_u8 = (uint8*)&usart_cmd_recv_buffer[0];
-				usart_prot_handler_status = WAITING;
-				usart_cmd_recv_buffer_u8[4] = 0xFF;
-				schedule_rx_length = 1;
-				usart_read_job(module, &usart_cmd_recv_buffer[2]);
-			}
-			else if(usart_pkt[0] == 0x12) {	//uart identification command
-				usart_tx_buffer[0] = MYDEVICETYPE;
-				usart_cmd_recv_buffer[0] = 0xFF;
-				schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-				schedule_rx_length = 1;
-				schedule_rx = 1;
-				usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-			}
-			else if((usart_pkt[0] == 0x13)) {
-				system_reset();
-			}
-			else {
-				if(!uart_reconfigure) {
-					usart_tx_buffer[0] = 0x5A;
-					usart_cmd_recv_buffer[0] = 0xFF;
-					schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-					schedule_rx_length = 1;
-					schedule_rx = 1;
-					usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-                    #ifdef CHAMBER_BUILD
-					if(++watchdog_counter>100) { system_reset(); } // if endless errors reboot
-                    #endif
-				}
-				else {
-					schedule_rx_length = 1;
-					usart_read_job(module, &usart_cmd_recv_buffer[0]);
-                    #ifdef CHAMBER_BUILD
-					watchdog_counter = 0; // zero out error count
-                    #endif
-				}
-			}
-		}
-			break;
-	case WAITING:
-		if(event_name == USART_PKT_RECEIVED) {
-			usart_prot_handler_status = COLLECTING_HDR;
-			uart_cmd_buf = usart_pkt;
-			schedule_rx_length = (USART_CMD_HDR_LENGTH - 1);
-			usart_read_buffer_job(module, (uint8_t *)module->rx_buffer_ptr, (USART_CMD_HDR_LENGTH - 1));
-		}
-		else {
-			usart_prot_handler_status = WAIT_SYNC;
-			schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-			schedule_rx = 1;
-			schedule_rx_length = 1;
-			usart_tx_buffer[0] = 0xEA;
-			usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-		}
-		break;
-	case COLLECTING_HDR:
-		if(event_name == USART_PKT_RECEIVED) {
-			//Verify check sum
-			for(i=0;i<(USART_CMD_HDR_LENGTH);i++) {
-				checksum ^= *(((uint8_t *)uart_cmd_buf)+i);
-			}
-			if(checksum != 0) {
-				usart_prot_handler_status = WAIT_SYNC;
-				usart_cmd_recv_buffer[0] = 0xFF;
-				schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-				schedule_rx_length = 1;
-				schedule_rx = 1;
-				usart_tx_buffer[0] = 0x5A;
-				usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-                #ifdef CHAMBER_BUILD
-				if(++watchdog_counter>100) { system_reset(); } // if endless errors reboot
-                #endif
-			}
-			else {
-                #ifdef CHAMBER_BUILD
-				watchdog_counter = 0; // zero out error count
-                #endif
-				memcpy(&uart_cmd, uart_cmd_buf, sizeof(uart_cmd_hdr));
-				//Process the Command.
-				if((uart_cmd.cmd & 0xFF) == WRITE_BUFF) {
-					usart_prot_handler_status = COLLECTING_PAYLOAD;
-					payload_length = (uart_cmd.cmd >> 16) & 0xFFFF;
-					schedule_rx = 1;
-					schedule_rx_buffer = &usart_payload_buffer[0];
-					schedule_rx_length = payload_length;
-					usart_tx_buffer[0] = 0xAC;
-					usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-				} 
-				else if((uart_cmd.cmd & 0xFF) == WRITE_REG) {
-					serial_command_pending = 1;
-					usart_prot_handler_status = PROCESSING;
-				}
-				else {
-					serial_command_pending = 1;
-					change_state = 1;
-					new_state = PROCESSING;
-					usart_tx_buffer[0] = 0xAC;
-					usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-				}
-			}
-		}
-		else if(event_name == USART_ERROR_ON_RECEPTION) {
-			usart_prot_handler_status = WAIT_SYNC;
-			schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-			schedule_rx = 1;
-			schedule_rx_length = 1;
-			usart_tx_buffer[0] = 0xEA;
-			usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-		}
-		break;
-	case COLLECTING_PAYLOAD:
-		if((event_name == USART_PKT_RECEIVED) && (schedule_rx_length == payload_length)) {
-			serial_command_pending = 1;
-			usart_prot_handler_status = PROCESSING;
-            #ifdef CHAMBER_BUILD
-			watchdog_counter = 0; // zero out error count
-            #endif  
-		}
-		else if(event_name == USART_ERROR_ON_RECEPTION) {
-			usart_prot_handler_status = WAIT_SYNC;
-			usart_tx_buffer[0] = 0xEA;
-			usart_cmd_recv_buffer[0] = 0xFF;
-			schedule_rx_length = 1;
-			schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-			schedule_rx = 1;
-			usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-            #ifdef CHAMBER_BUILD
-			if(++watchdog_counter>100) { system_reset(); } // if endless errors reboot
-            #endif
-		}
-		else {
-			usart_prot_handler_status = WAIT_SYNC;
-			usart_tx_buffer[0] = 0x5A;
-			usart_cmd_recv_buffer[0] = 0xFF;
-			schedule_rx_length = 1;
-			schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-			schedule_rx = 1;
-			usart_write_job(module, (uint16_t *)&usart_tx_buffer[0]);
-            #ifdef CHAMBER_BUILD
-			if(++watchdog_counter>100) { system_reset(); } // if endless errors reboot
-            #endif
-		}
-		break;
-	default:
-		usart_prot_handler_status = WAIT_SYNC;		
-		break;
-	}
-}
 /**
- *  Configure UART console.
+ * \brief Read out the first 13bytes and copy into cmd buffer after checking the frame.
+ *  frame buffer pointer is pop'ed by this function.
  */
-static void configure_console(uint32_t baud)
+static int serial_bridge_frame_get_nm_command(struct serial_bridge_frame *frame, struct nm_command *cmd)
 {
-	struct usart_config usart_conf;
+	uint8 checksum = 0;
+	int i;
 
-	usart_get_config_defaults(&usart_conf);
-	usart_conf.mux_setting = CONF_STDIO_MUX_SETTING;
-	usart_conf.pinmux_pad0 = CONF_STDIO_PINMUX_PAD0;
-	usart_conf.pinmux_pad1 = CONF_STDIO_PINMUX_PAD1;
-	usart_conf.pinmux_pad2 = CONF_STDIO_PINMUX_PAD2;
-	usart_conf.pinmux_pad3 = CONF_STDIO_PINMUX_PAD3;
-	usart_conf.baudrate    = baud;
 
-	usart_serial_init(&cdc_uart_module, CONF_STDIO_USART_MODULE, &usart_conf);
-	usart_register_callback(&cdc_uart_module,usart_rx_complete_handler,USART_CALLBACK_BUFFER_RECEIVED);
-	usart_register_callback(&cdc_uart_module,usart_tx_complete_handler,USART_CALLBACK_BUFFER_TRANSMITTED);
-	usart_enable_callback(&cdc_uart_module,USART_CALLBACK_BUFFER_RECEIVED);
-	usart_enable_callback(&cdc_uart_module,USART_CALLBACK_BUFFER_TRANSMITTED);
+	for (i = 0; i < sizeof(struct nm_command); i++) {
+		checksum ^= frame->cmd[i];
+	}
+	if (checksum == 0) {
+		union {
+			uint32_t i;
+			char c[4];
+		}
+		bint = {0x01020304};
 
-	usart_enable(&cdc_uart_module);
-	schedule_rx_length = 1;
-	usart_read_job(&cdc_uart_module,&usart_cmd_recv_buffer[0]);
+		if (bint.c[0] == 1) {
+			/* Big endian. */
+			cmd->cmd  = ((uint32)((frame->cmd[0]) << 8)  |\
+			             (uint32)((frame->cmd[1]) << 0)  );
+			cmd->size = ((uint32)((frame->cmd[2]) << 8)  |\
+						 (uint32)((frame->cmd[3]) << 0)  );
+			cmd->addr = ((uint32)((frame->cmd[4]) << 24) |\
+			             (uint32)((frame->cmd[5]) << 16) |\
+						 (uint32)((frame->cmd[6]) << 8)  |\
+						 (uint32)((frame->cmd[7]) << 0)  );
+			cmd->val  = ((uint32)((frame->cmd[8]) << 24) |\
+			             (uint32)((frame->cmd[9]) << 16) |\
+						 (uint32)((frame->cmd[10])<< 8)  |\
+						 (uint32)((frame->cmd[11])<< 0)  );
+		} else {
+			/* Little endian. */
+			memcpy(cmd, frame->cmd, sizeof(struct nm_command));
+		}
+	}
+	serial_bridge_frame_buffer_pop(frame, sizeof(struct serial_bridge_frame));
+	return checksum;
 }
 
-
-sint8 wifi_firmware_download_loop()
+/**
+ * \brief Handles the UART frame from nm_sync_cmd() in nmuart.c
+ */
+static int serial_bridge_process_sync_cmd(struct serial_bridge_frame *frame)
 {
-	sint8 ret = M2M_SUCCESS;
+	serial_bridge_frame_buffer_pop(frame, 1);
+	buffered_uart_putchar(0x5B);
+	return 0;
+}
 
-	//Program the WiFi chip here
-	while(1) {
-		if(usart_pkt_received) {
-			usart_pkt_received = 0;
-			nm_usart_protocol_handler(&cdc_uart_module,USART_PKT_RECEIVED);
-		}
-		if(usart_err_on_reception) {
-			usart_err_on_reception = 0;
-			nm_usart_protocol_handler(&cdc_uart_module,USART_ERROR_ON_RECEPTION);
-		}
-		if(serial_command_pending && (usart_prot_handler_status == PROCESSING)) {
-			uint32_t temp;
-			switch((uart_cmd.cmd) & 0xFF) {
-				//Forward it to SERCOM0 SPI
-				case READ_REG:
-					//Transalate it to SPI Read register
-					temp = nm_read_reg(uart_cmd.addr);
-					usart_tx_buffer[0] = (uint8)(temp >> 0);
-					usart_tx_buffer[1] = (uint8)(temp >> 8);
-					usart_tx_buffer[2] = (uint8)(temp >> 16);
-					usart_tx_buffer[3] = (uint8)(temp >> 24);
-					schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-					schedule_rx_length = 1;
-					schedule_rx = 1;
-					usart_prot_handler_status = WAIT_SYNC;
-					nm_usart_send_regval(&cdc_uart_module,&usart_tx_buffer[0],sizeof(uint32_t));
-					break;
-				case WRITE_REG:
-					//Transalate it to SPI Write register
-					nm_write_reg(uart_cmd.addr,uart_cmd.val);
-					schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-					schedule_rx_length = 1;
-					schedule_rx = 1;
-					usart_tx_buffer[0] = 0xAC;
-					usart_prot_handler_status = WAIT_SYNC;
-					usart_write_job(&cdc_uart_module, (uint16_t *)&usart_tx_buffer[0]);
-					break;
-				case READ_BUFF:
-				//Transalate it to SPI Read buffer
-					nm_read_block(uart_cmd.addr, (uint8 *)&usart_payload_buffer[0],((uart_cmd.cmd >> 16) & 0xFFFF));
-					schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-					schedule_rx_length = 1;
-					schedule_rx = 1;
-					usart_prot_handler_status = WAIT_SYNC;
-					usart_write_buffer_job(&cdc_uart_module, (uint8 *)&usart_payload_buffer[0],((uart_cmd.cmd >> 16) & 0xFFFF));
-					break;
-				case WRITE_BUFF:
-					//Transalate it to SPI Write buffer
-					nm_write_block(uart_cmd.addr, (uint8 *)&usart_payload_buffer[0],((uart_cmd.cmd >> 16) & 0xFFFF));
-					schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-					schedule_rx_length = 1;
-					schedule_rx = 1;
-					usart_tx_buffer[0] = 0xAC;
-					usart_prot_handler_status = WAIT_SYNC;
-					usart_write_job(&cdc_uart_module, (uint16_t *)&usart_tx_buffer[0]);
-					break;
-				case RECONFIGURE_UART:
-				    #ifndef AT_SB_JOINT
-					// Send the ack back
-					usart_prot_handler_status = WAIT_SYNC;
-					uart_reconfigure = 1;
-					usart_disable(&cdc_uart_module);
-					configure_console(uart_cmd.val);
-				    #endif
-					break;
-				case 10:
-				//GPIO read command
-					usart_tx_buffer[0] = port_pin_get_input_level(PIN_PB09);
-					schedule_rx_buffer = &usart_cmd_recv_buffer[0];
-					schedule_rx_length = 1;
-					schedule_rx = 1;
-					usart_prot_handler_status = WAIT_SYNC;
-					usart_write_job(&cdc_uart_module, (uint16_t *)&usart_tx_buffer[0]);
-					break;
-				default:
-					break;
+static int serial_bridge_process_reboot_cmd(struct serial_bridge_frame *frame)
+{
+	NVIC_SystemReset();
+	return 0;
+}
+
+/**
+ * \brief Handles the UART frame from nm_read_reg_with_ret() in nmuart.c
+ */
+ static int serial_bridge_process_read_reg_with_ret(struct serial_bridge_frame *frame)
+{
+	struct nm_command cmd;
+	uint32_t val;
+
+	if (serial_bridge_frame_get_nm_command(frame, &cmd) != 0) {
+		buffered_uart_putchar(0x5A);
+		return -1;
+	}
+	buffered_uart_putchar(0xAC);
+
+	val = nm_read_reg(cmd.addr);
+
+	buffered_uart_putchar((uint8_t)(val >> 24));
+	buffered_uart_putchar((uint8_t)(val >> 16));
+	buffered_uart_putchar((uint8_t)(val >> 8));
+	buffered_uart_putchar((uint8_t)(val >> 0));
+	return 0;
+}
+
+/**
+ * \brief Handles the UART frame from nm_write_reg() in nmuart.c
+ */
+static int serial_bridge_process_write_reg(struct serial_bridge_frame *frame)
+{
+	struct nm_command cmd;
+
+	if (serial_bridge_frame_get_nm_command(frame, &cmd) != 0) {
+		buffered_uart_putchar(0x5A);
+		return -1;
+	}
+	buffered_uart_putchar(0xAC);
+
+	nm_write_reg(cmd.addr, cmd.val);
+	return 0;
+}
+
+/**
+ * \brief Handles the UART frame from nm_read_block() in nmuart.c
+ */
+static int serial_bridge_process_read_block(struct serial_bridge_frame *frame)
+{
+	struct nm_command cmd;
+	uint8_t reg_buffer[PACKET_QUEUE_BUFFER_SIZE];
+
+	if (serial_bridge_frame_get_nm_command(frame, &cmd) != 0) {
+		buffered_uart_putchar(0x5A);
+		return -1;
+	}
+	buffered_uart_putchar(0xAC);
+
+	nm_read_block(cmd.addr, reg_buffer, cmd.size);
+	buffered_uart_tx(reg_buffer, cmd.size);
+	return 0;
+}
+
+/**
+ * \brief Handles frame from nm_uart_write_block() in nmuart.c
+ */
+static int serial_bridge_process_write_block(struct serial_bridge_frame *frame)
+{
+	struct nm_command cmd;
+	sint8 r;
+
+	if (serial_bridge_frame_get_nm_command(frame, &cmd) != 0) {
+		buffered_uart_putchar(0x5A);
+		return -1;
+	}
+	buffered_uart_putchar(0xAC);
+
+	serial_bridge_frame_receive(frame, cmd.size);
+	r = nm_write_block(cmd.addr, (uint8_t*)frame, cmd.size);
+	serial_bridge_frame_buffer_pop(frame, cmd.size);
+	buffered_uart_putchar(r? 0x5A : 0xAC);
+
+	return 0;
+}
+
+/**
+ * \brief Handles the UART frame from nm_reconfigure() in nmuart.c
+ */
+static int serial_bridge_process_reconfigure(struct serial_bridge_frame *frame)
+{
+	struct nm_command cmd;
+
+	if (serial_bridge_frame_get_nm_command(frame, &cmd) != 0) {
+		buffered_uart_putchar(0x5A);
+		return -1;
+	}
+
+	buffered_uart_putchar(0xAC);
+	delay_ms(1);
+	buffered_uart_term();
+	buffered_uart_init(cmd.val);
+	return 0;
+}
+
+struct serial_bridge_frame_lookup {
+	uint8_t header[4];
+	uint32_t header_size;
+	uint32_t min_size;
+	int (*handler)(struct serial_bridge_frame *);
+};
+
+struct serial_bridge_frame_lookup serial_bridge_lookup_table[] = {
+	{{0x12      }, 1, 1,                                  serial_bridge_process_sync_cmd         },
+	{{0x13      }, 1, 1,                                  serial_bridge_process_reboot_cmd       },
+	{{0xa5, 0x00}, 2, sizeof(struct serial_bridge_frame), serial_bridge_process_read_reg_with_ret},
+	{{0xa5, 0x01}, 2, sizeof(struct serial_bridge_frame), serial_bridge_process_write_reg        },
+	{{0xa5, 0x02}, 2, sizeof(struct serial_bridge_frame), serial_bridge_process_read_block       },
+	{{0xa5, 0x03}, 2, sizeof(struct serial_bridge_frame), serial_bridge_process_write_block      },
+	{{0xa5, 0x05}, 2, sizeof(struct serial_bridge_frame), serial_bridge_process_reconfigure      },
+};
+
+#define SERIAL_BRIDGE_LOOKUP_TABLE_ENTRIES sizeof(serial_bridge_lookup_table) / sizeof(struct serial_bridge_frame_lookup)
+
+/**
+ * \brief Parse incoming frame and find the handler to process the request.
+ */
+static void serial_bridge_process_frame(void)
+{
+	uint32_t i;
+
+	for (i = 0; i < SERIAL_BRIDGE_LOOKUP_TABLE_ENTRIES; i++) {
+		if (frame_buffer.size >= serial_bridge_lookup_table[i].min_size
+		&&  !memcmp(serial_bridge_lookup_table[i].header, frame_buffer.buffer, serial_bridge_lookup_table[i].header_size)) {
+			if (serial_bridge_lookup_table[i].handler((struct serial_bridge_frame*)(frame_buffer.buffer)) == 0) {
+				return;
+			} else {
+				break;
 			}
-			serial_command_pending = 0;
 		}
 	}
-	return ret;
+
+	if (frame_buffer.buffer[0] == 0xFF) {
+		serial_bridge_frame_buffer_pop(&frame_buffer, -1);
+	} else if (frame_buffer.buffer[0] != 0x12 && frame_buffer.buffer[0] != 0xA5) {
+		buffered_uart_putchar(0xEA); //??
+		serial_bridge_frame_buffer_pop(&frame_buffer, -1);
+	}
 }
 
-sint8 enter_wifi_firmware_download()
+/**
+ * \brief Process input UART command and forward to SPI.
+ */
+static sint8 enter_wifi_firmware_download(void)
 {
-	sint8 ret;
+	int n;
 
-// The version where the AT cmd app also supports the serial bridge app defines AT_SB_JOINT
-	// download code with initialization.
-	ret = m2m_wifi_download_mode();
+	if (nm_cpu_start() != M2M_SUCCESS) {
+		puts("Failed to put the WiFi Chip in download mode!\n");
+		return M2M_ERR_INIT;
+	}
 
-	if(ret != M2M_SUCCESS)
-	{
-		M2M_ERR("Failed to put the WiFi Chip in download mode\n");
-		ret = M2M_ERR_INIT;
+	frame_buffer.size = 0;
+	memset(frame_buffer.buffer, 0, sizeof(frame_buffer.buffer));
+
+	serial_bridge_process_sync_cmd(&frame_buffer);
+
+	/* Process UART input command and forward to SPI. */
+	while (1) {
+		n = buffered_uart_rx(&frame_buffer.buffer[frame_buffer.size], 255);
+		if (n) {
+		    frame_buffer.size += n;
+			serial_bridge_process_frame();
+		}
 	}
-	else
-	{
-		ret = wifi_firmware_download_loop();
-	}
-	return ret;
+	return 0;
 }
 
-// The version where the AT cmd app also supports the serial bridge app defines this
+/**
+ * \brief Main application function.
+ *
+ * Application entry point.
+ *
+ * \return program return value.
+ */
 int main (void)
 {
+    sint8 ret = M2M_SUCCESS;
 
-	sint8 ret = 0;
-	system_init();
-	/* Initialize the UART console. */
-	configure_console(CONF_STDIO_BAUDRATE);
-	/* Output example information */
+	/* Initialize the system. */
+    sysclk_init();
+    board_init();
 
-	
-	while(1)
-	{
-		nm_bsp_init();
-		{
-			
-			struct extint_chan_conf config_extint_chan;
+    /* Initialize the UART console. */
+    buffered_uart_init(115200);
 
-			extint_chan_get_config_defaults(&config_extint_chan);
-			config_extint_chan.gpio_pin = CONF_WINC_SPI_INT_PIN;
-			config_extint_chan.gpio_pin_mux = CONF_WINC_SPI_INT_MUX;
-			config_extint_chan.gpio_pin_pull = EXTINT_PULL_UP;
-			config_extint_chan.detection_criteria = EXTINT_DETECT_FALLING;
+	/* Initialize WINC IOs. */
+    ret = nm_bsp_init();
+    if(ret != M2M_SUCCESS) {
+	    M2M_ERR("\r\nFailed to initialize BSP.");
+	    goto HALT;
+    }
 
-			extint_chan_set_config(CONF_WINC_SPI_INT_EIC, &config_extint_chan);
-		}
-
-		ret = enter_wifi_firmware_download();
+	/* Initialize WINC driver. */
+	ret = m2m_wifi_init(&gstrWifiParam);
+	if(ret != M2M_SUCCESS) {
+		M2M_ERR("\r\nFailed to initialize WINC driver.");
+		goto HALT;
 	}
-	return ret;	
+
+	/* Enter WiFi firmware download mode. */
+	enter_wifi_firmware_download();
+
+    HALT:
+    while(1) {
+	    continue;
+    }
 }
-
-

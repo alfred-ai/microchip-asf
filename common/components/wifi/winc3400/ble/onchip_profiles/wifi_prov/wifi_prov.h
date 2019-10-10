@@ -3,7 +3,7 @@
  *
  * \brief WiFi Provisioning Declarations
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -31,19 +31,25 @@
  *
  */
 
+/*
+ * Support and FAQ: visit <a href="https://www.microchip.com/support/">Atmel
+ *Support</a>
+ */
+
 #ifndef __WIFIPROV_PROFI_H__
 #define __WIFIPROV_PROFI_H__
 
 #include <asf.h>
 #include "wifiprov_api.h"
 #include "driver/include/m2m_wifi.h"
+#include "string.h"
 
 #define	CREDENTIALS_NOT_VALID			0
 #define CREDENTIALS_VALID				1
 
 // states of WiFi provision state machine here
 #define WIFI_PROV_IDLE					0xFF
-#define WIFI_PROV_SUCCESS				0x00	// Should be same as what is in at_ble_wifiprov_complete_ind
+#define WIFI_PROV_SUCCESS				0x00	// Should be the same as what is in at_ble_wifiprov_complete_ind
 
 //status to be returned to application
 #define PROVISION_NULL					0x00

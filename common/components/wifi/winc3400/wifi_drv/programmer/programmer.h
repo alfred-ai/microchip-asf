@@ -39,7 +39,7 @@
 * Include
 */
 #include "spi_flash_map.h"
-#include "spi_flash/include/spi_flash.h"
+#include "spi_flash.h"
 #include "programmer_apis.h"
 
 #define ROOT_CERT_SIZE M2M_TLS_ROOTCER_FLASH_SZ
@@ -48,6 +48,6 @@
 #define	programmer_write(pu8Buf, u32Offset, u32Sz)		spi_flash_write(pu8Buf, u32Offset, u32Sz)
 #define	programmer_erase(u32Offset, u32Sz)				spi_flash_erase(u32Offset, u32Sz)
 #define	programmer_eraseall()							programmer_erase(0, programmer_get_flash_size())
-#define	programmer_read(pu8Buf, u32Offset, u32Sz)		spi_flash_read(pu8Buf, u32Offset, u32Sz)	
+#define	programmer_read(pu8Buf, u32Offset, u32Sz)		spi_flash_read(pu8Buf, u32Offset, u32Sz)
 
 #endif /* IMAGE_DOWNLOADER_H_ */

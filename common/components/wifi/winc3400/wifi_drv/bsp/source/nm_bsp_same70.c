@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAME70 BSP APIs implementation.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -100,7 +100,7 @@ sint8 nm_bsp_deinit(void)
 
 /**
  *	@fn		nm_bsp_reset
- *	@brief	Reset WINC1500 SoC by setting CHIP_EN and RESET_N signals low,
+ *	@brief	Reset the WINC SoC by setting CHIP_EN and RESET_N signals low,
  *           CHIP_EN high then RESET_N high
  */
 void nm_bsp_reset(void)

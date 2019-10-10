@@ -159,10 +159,13 @@ uint8_t bandTable[] =
 static uint32_t demoDevAddr = DEMO_DEVICE_ADDRESS;
 static uint8_t demoNwksKey[16] = DEMO_NETWORK_SESSION_KEY;
 static uint8_t demoAppsKey[16] = DEMO_APPLICATION_SESSION_KEY;
+
+#ifndef CRYPTO_DEV_ENABLED
 /* OTAA join parameters */
 static uint8_t demoDevEui[8] = DEMO_DEVICE_EUI;
 static uint8_t demoAppEui[8] = DEMO_APPLICATION_EUI;
 static uint8_t demoAppKey[16] = DEMO_APPLICATION_KEY;
+#endif
 
 static LorawanSendReq_t lorawanSendReq;
 static char serialBuffer;
@@ -201,7 +204,6 @@ static void runCertApp(void);
 static void appWakeup(uint32_t sleptDuration);
 static void app_resources_uninit(void);
 #endif
-static void dev_eui_read(void);
 /************************** FUNCTION PROTOTYPES ********************************/
 SYSTEM_TaskStatus_t APP_TaskHandler(void);
 static float convert_celsius_to_fahrenheit(float cel_val);
@@ -572,8 +574,7 @@ void mote_demo_init(void)
     bool status = false;
     /* Initialize the resources */
     resource_init();
-	/* Read DEV EUI from EDBG */
-	dev_eui_read();
+
 	startReceiving = false;
     /* Initialize the LORAWAN Stack */
     LORAWAN_Init(demo_appdata_callback, demo_joindata_callback);
@@ -1094,8 +1095,8 @@ SYSTEM_TaskStatus_t APP_TaskHandler(void)
  ************************************************************************/
 StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
 {
-    StackRetStatus_t status;
-
+    StackRetStatus_t status = LORAWAN_SUCCESS;
+	
     printf("\n********************Join Parameters********************\n\r");
 
     if(ACTIVATION_BY_PERSONALIZATION == activation_type)
@@ -1122,6 +1123,7 @@ StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
     }
     else
     {
+#ifndef CRYPTO_DEV_ENABLED
         status = LORAWAN_SetAttr (DEV_EUI, demoDevEui);
         if (LORAWAN_SUCCESS == status)
         {
@@ -1134,15 +1136,16 @@ StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
         {
             printf("\nAppEUI : ");
             print_array((uint8_t *)&demoAppEui, sizeof(demoAppEui));
-            status = LORAWAN_SetAttr (APP_KEY, demoAppKey);
+			status = LORAWAN_SetAttr (APP_KEY, demoAppKey);          
         }
-
         if (LORAWAN_SUCCESS == status)
         {
             printf("\nAppKey : ");
             print_array((uint8_t *)&demoAppKey, sizeof(demoAppKey));
         }
+#endif
     }
+
     return status;
 }
 
@@ -1278,6 +1281,11 @@ StackRetStatus_t mote_set_parameters(IsmBand_t ismBand, const uint16_t index)
     /*Disabled Join backoff in Demo application
 	Needs to be enabled in Production Environment Ref Section */
     LORAWAN_SetAttr(JOIN_BACKOFF_ENABLE,&joinBackoffEnable);
+
+#ifdef CRYPTO_DEV_ENABLED
+	bool cryptoDevEnabled = true;
+	LORAWAN_SetAttr(CRYPTODEVICE_ENABLED, &cryptoDevEnabled);
+#endif
 
     /* Initialize the join parameters for Demo application */
     status = set_join_parameters(DEMO_APP_ACTIVATION_TYPE);
@@ -1455,8 +1463,9 @@ static float convert_celsius_to_fahrenheit(float celsius_val)
 /*********************************************************************//*
  \brief      Reads the DEV EUI if it is flashed in EDBG MCU
  ************************************************************************/
-static void dev_eui_read(void)
+void dev_eui_read(void)
 {
+#ifndef CRYPTO_DEV_ENABLED
 #if (EDBG_EUI_READ == 1)
 	uint8_t invalidEDBGDevEui[8];
 	uint8_t EDBGDevEUI[8];
@@ -1469,6 +1478,7 @@ static void dev_eui_read(void)
 		/* Set EUI addr in EDBG if there */
 		memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
 	}
+#endif
 #endif
 }
 

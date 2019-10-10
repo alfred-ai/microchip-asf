@@ -3,7 +3,7 @@
 *
 * \brief Client Notify implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -69,7 +69,11 @@ const otauClientInfoIndication_t clientInfo = {
 	.device_type = "EndDevice ",
 #endif
 	.firmware = "MiWi Mesh ",
-	.firmware_version = "6.2.0",
+	.firmware_version[0] = MIWI_MAJOR_VERSION,
+	.firmware_version[1] = '.',
+	.firmware_version[2] = MIWI_MINOR_VERSION,
+	.firmware_version[3] = '.',
+	.firmware_version[4] = '0',
 #ifdef PHY_AT86RF212B
 	.board = "SAMR30    ",
 #else
@@ -97,7 +101,7 @@ void otauNotifyRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t leng
 			otauClientNotifyInterval = clientDiscReq.interval;
 			otauClientNotifyJitterPercent = clientDiscReq.jitter_percent;
 			otauClientNotifyRetryCount = clientDiscReq.retry_count;
-			otauSetServerDetails(src_addr);
+			otauSetServerDetails(addr_mode, src_addr);
 			otauClientStartTimer();
 			break;
 		}
@@ -107,14 +111,14 @@ void otauNotifyRcvdFrame(addr_mode_t addr_mode, uint8_t *src_addr, uint16_t leng
 			{
 				otauNotifyConfirmWait = 1;
 				notifyState = NOTIFY_CLIENT_INFO_STATE;
-				otauSetServerDetails(src_addr);
+				otauSetServerDetails(addr_mode, src_addr);
 				otauDataSend(addr_mode, src_addr, (uint8_t *)&clientInfo, sizeof(otauClientInfoIndication_t));
 			}
 			break;
 		}
 		case OTA_IDENTIFY_REQ:
 		{
-			otauSetServerDetails(src_addr);
+			otauSetServerDetails(addr_mode, src_addr);
 			otauTimerStart(DOMAIN_OTAU_NOTIFY, LED_TOGGLE_INTERVAL_MILLISEC, TIMER_MODE_PERIODIC);
 			notifyTimerState = CLIENT_IDENTIFY_STATE;
 			otauLedToggleCount = LED_TOGGLE_COUNT;
@@ -178,7 +182,7 @@ static void otauClientSendNotify(void)
 	memcpy((uint8_t *)&clientNotify.ieee_addr, get_node_address(EXTENDED_ADDR_MODE), EXTENDED_ADDR_SIZE);
 	clientNotify.pan_id = MY_PAN_ID;
 	clientNotify.parent_addr_mode = NATIVE_ADDR_MODE;
-	clientNotify.parent_short_addr = MiApp_MeshGetNextHopAddr(serverShortAddress);
+	clientNotify.parent_short_addr = MiApp_MeshGetNextHopAddr(serverAddress.native_addr);
 	otauNotifyConfirmWait = 1;
 	notifyState = NOTIFY_CLIENT_NOTIFY_STATE;
 	clientNotify.domainId = DOMAIN_OTAU_NOTIFY;

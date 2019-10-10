@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 UDP Client Example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -79,7 +79,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -160,7 +160,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: CONNECTED\r\n");
-			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("wifi_cb: M2M_WIFI_RESP_CON_STATE_CHANGED: DISCONNECTED\r\n");
 			m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
@@ -243,14 +242,14 @@ int main(void)
 	/* Initialize socket module */
 	socketInit();
 
-	/* Connect to router. */
+	/* Connect to AP. */
 	m2m_wifi_connect((char *)MAIN_WLAN_SSID, sizeof(MAIN_WLAN_SSID), MAIN_WLAN_AUTH, (char *)MAIN_WLAN_PSK, M2M_WIFI_CH_ALL);
 
 	while (1) {
 		if (packetCnt == MAIN_WIFI_M2M_PACKET_COUNT) {
 			close(tx_socket);
 			tx_socket = -1;
-			continue;
+			break;
 		}
 
 		m2m_wifi_handle_events(NULL);

@@ -3,7 +3,7 @@
 *
 * \brief Queue handling for MiWi Protocol interface
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -88,17 +88,6 @@ typedef struct MiQueue
 	miQueueBuffer_t *head;
 	/** Pointer to tail of queue */
 	miQueueBuffer_t *tail;
-#ifdef ENABLE_QUEUE_CAPACITY
-
-	/**
-	 * Maximum number of buffers that can be accommodated in the current
-	 * queue
-	 * Note: This is only required if the queue capacity shall be different
-	 * from 255.
-	 */
-	uint8_t capacity;
-#endif  /* ENABLE_QUEUE_CAPACITY */
-
 	/**
 	 * Number of buffers present in the current queue
 	 */
@@ -123,13 +112,7 @@ extern "C"
  * @param q The queue which should be initialized.
  *
  */
-#ifdef ENABLE_QUEUE_CAPACITY
-void miQueueInit(MiQueue_t *q, uint8_t capacity);
-
-#else
 void miQueueInit(MiQueue_t *q);
-
-#endif  /* ENABLE_QUEUE_CAPACITY */
 
 /**
  * @brief Appends a buffer into the queue.
@@ -141,13 +124,7 @@ void miQueueInit(MiQueue_t *q);
  * @param buf Pointer to the buffer that should be appended into the queue.
  *
  */
-#ifdef ENABLE_QUEUE_CAPACITY
-bool miQueueAppend(MiQueue_t *q, miQueueBuffer_t *buf);
-
-#else
-void miQueueAppend(MiQueue_t *q, miQueueBuffer_t *buf);
-
-#endif  /* ENABLE_QUEUE_CAPACITY */
+void miQueueAppend(MiQueue_t *q, void *buf);
 
 /**
  * @brief Removes a buffer from queue.

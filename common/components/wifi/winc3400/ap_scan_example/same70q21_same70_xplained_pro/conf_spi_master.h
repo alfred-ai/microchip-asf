@@ -3,7 +3,7 @@
  *
  * \brief Spi Master configuration.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -37,7 +37,7 @@
 #ifndef CONF_SPI_MASTER_H_INCLUDED
 #define CONF_SPI_MASTER_H_INCLUDED
 
-/* Possibility to change low-level configurations here */
+/* Low-level configurations can be changed here */
 
 //! Default Config Spi Master Delay BCS
 #define CONFIG_SPI_MASTER_DELAY_BCS            0

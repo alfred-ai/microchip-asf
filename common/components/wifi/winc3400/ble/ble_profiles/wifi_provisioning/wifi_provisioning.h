@@ -3,7 +3,7 @@
 *
 * \brief WiFi Provisioning Profile declarations
 *
-* Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -41,7 +41,6 @@
 #include "ble_manager.h"
 #include "driver/include/m2m_wifi.h"
 #include "wifi_con.h"
-#include "wifi_scan.h"
 /****************************************************************************************
 *                                       Macros                                         *
 ****************************************************************************************/
@@ -59,7 +58,7 @@
 #define WIFI_PROVISION_SCP_TYPE_MORE_128_BIT_UUID		(0x06)
 /** @brief WIFI_PROVISION_ADV_DATA_NAME_TYPE the gap ad data type */
 #define WIFI_PROVISION_ADV_DATA_NAME_TYPE				(0x09)
-/** @brief WIFI_PROVISION_ADV_DATA_NAME_LEN the  length of the device name */
+/** @brief WIFI_PROVISION_ADV_DATA_NAME_LEN the length of the device name */
 #define WIFI_PROVISION_ADV_DATA_NAME_LEN				(11)
 /* @brief WIFI_PROVISION_ADV_DATA_NAME_DATA the actual name of device */
 #define WIFI_PROVISION_ADV_DATA_NAME_DATA				("3400-DEMO")
@@ -76,17 +75,26 @@
 /** @brief maximum ssid length */
 #define WIFI_PROVISION_MAX_SSID_LENGTH					(32)
 /** @brief maximum pass phrase length */
-#define WIFI_PROVISION_MAX_PASS_LENGTH					(63)
+#define WIFI_PROVISION_MAX_PASS_LENGTH					(64)
+/** @brief maximum username length */
+#define WIFI_PROVISION_MAX_USERNAME_LENGTH				(34)
+/** @brief maximum TLS CERT length */
+#define WIFI_PROVISION_TLS_CERT_LENGTH					((1024*2)-32)
+/** @brief maximum TLS key length */
+#define WIFI_PROVISION_TLS_KEY_LENGTH				(1024*2)
+
 typedef struct _scanitem {
 	uint8_t sec_type;
 	uint8_t rssi;
 	uint8_t ssid[WIFI_PROVISION_MAX_SSID_LENGTH];
 } scanitem;
-struct wifi_provision_scanlist
+
+typedef struct
 {
 	uint8_t num_valid;
 	scanitem scandetails[WIFI_PROVISION_MAX_AP_NUM];
-};
+} wifi_provision_scanlist;
+
 typedef struct
 {
 	uint8_t sec_type;
@@ -95,6 +103,29 @@ typedef struct
 	uint8_t passphrase_length;
 	uint8_t passphrase[WIFI_PROVISION_MAX_PASS_LENGTH];
 } credentials;
+
+typedef struct
+{
+	uint8_t sec_type;
+	uint8_t ssid_length;
+	uint8_t ssid[WIFI_PROVISION_MAX_SSID_LENGTH];
+	uint8_t certificate_length;
+	uint8_t certificate[WIFI_PROVISION_TLS_CERT_LENGTH];
+	uint8_t keydata_length;
+	uint8_t keydata[WIFI_PROVISION_TLS_KEY_LENGTH];
+} credentials_tls;
+
+typedef struct
+{
+	uint8_t sec_type;
+	uint8_t ssid_length;
+	uint8_t ssid[WIFI_PROVISION_MAX_SSID_LENGTH];
+	uint8_t passphrase_length;
+	uint8_t passphrase[WIFI_PROVISION_MAX_PASS_LENGTH];
+	uint8_t username_length;
+	uint8_t username[WIFI_PROVISION_MAX_USERNAME_LENGTH];
+} credentials_mschapv2;
+
 typedef at_ble_status_t (*wifi_provision_scanning_callback_t)(void);
 typedef void (*wifi_provision_u8_callback_t)(uint8_t);
 typedef at_ble_status_t (*wifi_provision_cred_callback_t)(credentials *);
@@ -117,7 +148,7 @@ enum
 *							        Function Prototypes	                                     							*
 ****************************************************************************************/
 /** @brief Initialize the profile, includes all initializations and start up routines of the profiles
-  * 
+  *
   *
   * @param[in] void
   *
@@ -127,7 +158,7 @@ enum
   */
 void wifi_provision_init(void *param);
 /** @brief profile services definition to the attribute data base
-  * 
+  *
   * @param[in] void
   *
   * @pre Must be called after ref wifi_provision_init
@@ -137,7 +168,7 @@ void wifi_provision_init(void *param);
   */
 at_ble_status_t wifi_provision_define (void);
 /** @brief character changed handler
-  * 
+  *
   * @param[in] at_ble_characteristic_changed_t which includes handle,new value
   *
   * @pre Must be called when character change event occurred
@@ -167,7 +198,7 @@ void inform_wifi_connection_state(uint8_t s);
 /** @brief application updates the wifi scan list
   * @param[in] wifi scanlist
   */
-uint8_t wifi_provision_scanlist_receive(struct wifi_provision_scanlist *param);
+uint8_t wifi_provision_scanlist_receive(wifi_provision_scanlist *param);
 /** @brief application to register the scanning function callback
   * @param[in] application's scanning function
   */

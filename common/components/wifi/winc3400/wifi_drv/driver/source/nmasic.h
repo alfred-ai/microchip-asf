@@ -4,7 +4,7 @@
  *
  * \brief This module contains WINC3400 ASIC specific internal APIs.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -37,34 +37,34 @@
 #include "common/include/nm_common.h"
 
 #define NMI_PERIPH_REG_BASE     0x1000
-#define NMI_CHIPID	            (NMI_PERIPH_REG_BASE)
-#define rNMI_GP_REG_0			(0x149c)
-#define rNMI_GP_REG_1			(0x14A0)
-#define rNMI_GLB_RESET			(0x1400)
-#define rNMI_BOOT_RESET_MUX		(0x1118)
-#define NMI_STATE_REG			(0x108c)
-#define BOOTROM_REG				(0xc000c)
-#define NMI_REV_REG  			(0x207ac)	/*Also, Used to load ATE firmware from SPI Flash and to ensure that it is running too*/
-#define M2M_WAIT_FOR_HOST_REG 	(0x207bc)
-#define M2M_FINISH_INIT_STATE 	0x02532636UL
-#define M2M_FINISH_BOOT_ROM   	 0x10add09eUL
-#define M2M_START_FIRMWARE   	 0xef522f61UL
-#define M2M_START_PS_FIRMWARE    0x94992610UL
+#define NMI_CHIPID                  (NMI_PERIPH_REG_BASE)
+#define rNMI_GP_REG_0               (0x149c)
+#define rNMI_GP_REG_1               (0x14A0)
+#define rNMI_GLB_RESET              (0x1400)
+#define rNMI_BOOT_RESET_MUX         (0x1118)
+#define NMI_STATE_REG               (0x108c)
+#define BOOTROM_REG                 (0xc000c)
+#define NMI_REV_REG                 (0x207ac)   /*Also, Used to load ATE firmware from SPI Flash and to ensure that it is running too*/
+#define M2M_WAIT_FOR_HOST_REG       (0x207bc)
+#define M2M_FINISH_INIT_STATE       0x02532636UL
+#define M2M_FINISH_BOOT_ROM         0x10add09eUL
+#define M2M_START_FIRMWARE          0xef522f61UL
+#define M2M_START_PS_FIRMWARE       0x94992610UL
 
-#define M2M_ATE_FW_START_VALUE	(0x3C1CD57D)	/*Also, Change this value in boot_firmware if it will be changed here*/
-#define M2M_ATE_FW_IS_UP_VALUE	(0xD75DC1C3)	/*Also, Change this value in ATE (Burst) firmware if it will be changed here*/
+#define M2M_ATE_FW_START_VALUE      (0x3C1CD57D)    /*Also, Change this value in boot_firmware if it will be changed here*/
+#define M2M_ATE_FW_IS_UP_VALUE      (0xD75DC1C3)    /*Also, Change this value in ATE (Burst) firmware if it will be changed here*/
 
-#define REV_2B0        (0x2B0)
-#define REV_B0         (0x2B0)
-#define REV_3A0        (0x3A0)
-#define CHIP_ID_3000D  (0x3000D0)
+#define REV_2B0                     (0x2B0)
+#define REV_B0                      (0x2B0)
+#define REV_3A0                     (0x3A0)
+#define CHIP_ID_3000D               (0x3000D0)
 
-#define GET_CHIPID()	nmi_get_chipid()
-#define ISNMC1000(id)   (((id & 0xfffff000) == 0x100000) ? 1 : 0)
-#define ISNMC1500(id)   (((id & 0xfffff000) == 0x150000) ? 1 : 0)
-#define ISNMC3400(id)	(((id & 0xfff0f000) == 0x300000) ? 1 : 0)
-#define REV(id)         ( ((id) & 0x00000fff ) )
-#define EFUSED_MAC(value) (value & 0xffff0000)
+#define GET_CHIPID()                nmi_get_chipid()
+#define ISNMC1000(id)               (((id & 0xfffff000) == 0x100000) ? 1 : 0)
+#define ISNMC1500(id)               (((id & 0xfffff000) == 0x150000) ? 1 : 0)
+#define ISNMC3400(id)               (((id & 0xfff0f000) == 0x300000) ? 1 : 0)
+#define REV(id)                     ( ((id) & 0x00000fff ) )
+#define EFUSED_MAC(value)           (value & 0xffff0000)
 
 #define rHAVE_SDIO_IRQ_GPIO_BIT     (NBIT0)
 #define rHAVE_USE_PMU_BIT           (NBIT1)
@@ -72,25 +72,27 @@
 #define rHAVE_SLEEP_CLK_SRC_XO_BIT  (NBIT3)
 #define rHAVE_EXT_PA_INV_TX_RX      (NBIT4)
 #define rHAVE_LEGACY_RF_SETTINGS    (NBIT5)
-#define rHAVE_LOGS_DISABLED_BIT		(NBIT6)
+#define rHAVE_LOGS_DISABLED_BIT     (NBIT6)
+#define rHAVE_ETHERNET_MODE_BIT     (NBIT7)
 
-typedef struct{
-	uint32 u32Mac_efuse_mib;
-	uint32 u32Firmware_Ota_rev;
-}tstrGpRegs;
+typedef struct {
+    uint32 u32Mac_efuse_mib;
+    uint32 u32Firmware_Ota_rev;
+} tstrGpRegs;
 
 #ifdef __cplusplus
-     extern "C" {
- #endif
+extern "C" {
+#endif
 /**
-*	@fn		nm_clkless_wake
-*	@brief	Wakeup the chip using clockless registers
-*	@return	ZERO in case of success and M2M_ERR_BUS_FAIL in case of failure
-*	@author	Samer Sarhan
-*/
+ *  @fn     nm_clkless_wake
+ *  @brief  Wakeup the chip using clockless registers
+ *  @return ZERO in case of success and M2M_ERR_BUS_FAIL in case of failure
+ */
 sint8 nm_clkless_wake(void);
 
 sint8 chip_wake(void);
+
+sint8 chip_sleep(void);
 
 void chip_idle(void);
 
@@ -135,7 +137,7 @@ sint8 nmi_get_mac_address(uint8 *pu8MacAddr);
 sint8 chip_apply_conf(uint32 u32conf);
 
 #ifdef __cplusplus
-	 }
- #endif
+}
+#endif
 
-#endif	/*_NMASIC_H_*/
+#endif  /*_NMASIC_H_*/

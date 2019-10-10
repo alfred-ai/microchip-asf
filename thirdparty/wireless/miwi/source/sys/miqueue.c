@@ -3,7 +3,7 @@
 *
 * \brief Queue handling for MiWi Protocol implementation
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -66,18 +66,11 @@ static miQueueBuffer_t *miQueueReadOrRemove(MiQueue_t *q,
  *
  * @param q The queue which should be initialized.
  */
-#ifdef ENABLE_QUEUE_CAPACITY
-void miQueueInit(MiQueue_t *q, uint8_t capacity)
-#else
 void miQueueInit(MiQueue_t *q)
-#endif  /* ENABLE_QUEUE_CAPACITY */
 {
 	q->head = NULL;
 	q->tail = NULL;
 	q->size = 0;
-#ifdef ENABLE_QUEUE_CAPACITY
-	q->capacity = capacity;
-#endif  /* ENABLE_QUEUE_CAPACITY */
 }
 
 /**
@@ -90,55 +83,29 @@ void miQueueInit(MiQueue_t *q)
  * @param buf Pointer to the buffer that should be appended into the queue.
  * 
  */
-#ifdef ENABLE_QUEUE_CAPACITY
-bool miQueueAppend(MiQueue_t *q, miQueueBuffer_t *buf)
-#else
-void miQueueAppend(MiQueue_t *q, miQueueBuffer_t *buf)
-#endif  /* ENABLE_QUEUE_CAPACITY */
+void miQueueAppend(MiQueue_t *q, void *buf)
 {
-#ifdef ENABLE_QUEUE_CAPACITY
-	bool status;
-#endif  /* ENABLE_QUEUE_CAPACITY */
-
+	miQueueBuffer_t *bufPtr = (miQueueBuffer_t *) buf;
 	cpu_irq_disable();
-
-#ifdef ENABLE_QUEUE_CAPACITY
-	/* Check if queue is full */
-	if (q->size == q->capacity) {
-		/* Buffer cannot be appended as queue is full */
-		//status = QUEUE_FULL;
-		status = false;
-	} else
-#endif  /* ENABLE_QUEUE_CAPACITY */
-	{
-		/* Check whether queue is empty */
-		if (q->size == 0) {
-			/* Add the buffer at the head */
-			q->head = buf;
-		} else {
-			/* Add the buffer at the end */
-			q->tail->nextItem = buf;
-		}
-
-		/* Update the list */
-		q->tail = buf;
-
-		/* Terminate the list */
-		buf->nextItem = NULL;
-
-		/* Update size */
-		q->size++;
-
-#ifdef ENABLE_QUEUE_CAPACITY
-		status = true;
-#endif  /* ENABLE_QUEUE_CAPACITY */
+	/* Check whether queue is empty */
+	if (q->size == 0) {
+		/* Add the buffer at the head */
+		q->head = bufPtr;
+	} else {
+		/* Add the buffer at the end */
+		q->tail->nextItem = bufPtr;
 	}
 
-	cpu_irq_enable();
+	/* Update the list */
+	q->tail = bufPtr;
 
-#ifdef ENABLE_QUEUE_CAPACITY
-	return (status);
-#endif
+	/* Terminate the list */
+	bufPtr->nextItem = NULL;
+
+	/* Update size */
+	q->size++;
+
+	cpu_irq_enable();
 } /* miQueueAppend */
 
 /*

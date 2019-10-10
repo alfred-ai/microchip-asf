@@ -4,7 +4,7 @@
  *
  * \brief WINC3400 OTA firmware upgrade example.
  *
- * Copyright (c) 2017-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -48,8 +48,8 @@
  * server must have the "m2m_ota_3400.bin" OTA firmware accessible at this location:
  * http://SERVER_IP_ADDRESS/m2m_ota_3400.bin
  *
- * Note: 
- * - the OTA firmware file is included in this project under the firwmare
+ * Note:
+ * - the OTA firmware file is included in this project under the firmware
  * folder.
  * - the server IP address must be set via the MAIN_OTA_URL macro from main.h file.
  *
@@ -89,7 +89,7 @@
  *
  * \section compinfo Compilation Information
  * This software was written for the GNU GCC compiler using Atmel Studio 6.2
- * Other compilers may or may not work.
+ * Other compilers are not guaranteed to work.
  *
  * \section contactinfo Contact Information
  * For further information, visit
@@ -146,7 +146,6 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
 	{
 		tstrM2mWifiStateChanged *pstrWifiState = (tstrM2mWifiStateChanged *)pvMsg;
 		if (pstrWifiState->u8CurrState == M2M_WIFI_CONNECTED) {
-			m2m_wifi_request_dhcp_client();
 		} else if (pstrWifiState->u8CurrState == M2M_WIFI_DISCONNECTED) {
 			printf("Wi-Fi disconnected\r\n");
 
@@ -183,11 +182,11 @@ static void wifi_cb(uint8_t u8MsgType, void *pvMsg)
  * - [SW_STATUS](@ref SW_STATUS)
  * - [RB_STATUS](@ref RB_STATUS)
  * \param[in] u8OtaUpdateStatus type of OTA update status detail. Possible types are:
- * - [OTA_STATUS_SUCSESS](@ref OTA_STATUS_SUCSESS)
+ * - [OTA_STATUS_SUCCESS](@ref OTA_STATUS_SUCCESS)
  * - [OTA_STATUS_FAIL](@ref OTA_STATUS_FAIL)
- * - [OTA_STATUS_INVAILD_ARG](@ref OTA_STATUS_INVAILD_ARG)
- * - [OTA_STATUS_INVAILD_RB_IMAGE](@ref OTA_STATUS_INVAILD_RB_IMAGE)
- * - [OTA_STATUS_INVAILD_FLASH_SIZE](@ref OTA_STATUS_INVAILD_FLASH_SIZE)
+ * - [OTA_STATUS_INVALID_ARG](@ref OTA_STATUS_INVALID_ARG)
+ * - [OTA_STATUS_INVALID_RB_IMAGE](@ref OTA_STATUS_INVALID_RB_IMAGE)
+ * - [OTA_STATUS_INVALID_FLASH_SIZE](@ref OTA_STATUS_INVALID_FLASH_SIZE)
  * - [OTA_STATUS_AlREADY_ENABLED](@ref OTA_STATUS_AlREADY_ENABLED)
  * - [OTA_STATUS_UPDATE_INPROGRESS](@ref OTA_STATUS_UPDATE_INPROGRESS)
  */
@@ -199,7 +198,7 @@ static void OtaUpdateCb(uint8 u8OtaUpdateStatusType ,uint8 u8OtaUpdateStatus)
 
 	switch(u8OtaUpdateStatusType) {
 		case DL_STATUS:
-		 if(u8OtaUpdateStatus == OTA_STATUS_SUCSESS) 
+		 if(u8OtaUpdateStatus == OTA_STATUS_SUCCESS)
 		 {
 			M2M_INFO("OTA download succeeded\n");
 			s8tmp = m2m_wifi_check_ota_rb();
@@ -214,7 +213,7 @@ static void OtaUpdateCb(uint8 u8OtaUpdateStatusType ,uint8 u8OtaUpdateStatus)
 				//	In this case the application MAY WANT TO update the host driver before calling
 				//	@ref m2m_ota_switch_firmware(). Switching firmware image and resetting without updating host
 				//	driver may lead to suboptimal functionality.
-				
+
 				/* Start Host Controller OTA HERE ... Before switching.... */
 			}
 			else {
@@ -232,7 +231,7 @@ static void OtaUpdateCb(uint8 u8OtaUpdateStatusType ,uint8 u8OtaUpdateStatus)
 		break;
 		case SW_STATUS:
 		case RB_STATUS:
-		if(u8OtaUpdateStatus == OTA_STATUS_SUCSESS) {
+		if(u8OtaUpdateStatus == OTA_STATUS_SUCCESS) {
 			printf("OTA Success. Press reset your board.\r\n");
 			/* system_reset(); */
 		}
@@ -279,7 +278,7 @@ int main(void)
 	/* Initialize Wi-Fi driver with data and status callbacks. */
 	param.pfAppWifiCb = wifi_cb;
 	ret = m2m_wifi_init(&param);
-	
+
 	if(ret == M2M_ERR_FW_VER_MISMATCH) {
 		ret = m2m_wifi_check_ota_rb();
 		if(ret == M2M_SUCCESS) {
@@ -287,7 +286,7 @@ int main(void)
 			//	after initializing the OTA module.
 			rollback_required = true;
 		}
-	}	
+	}
 	else if (M2M_SUCCESS != ret) {
 		printf("main: m2m_wifi_init call error!(%d)\r\n", ret);
 		while (1) {

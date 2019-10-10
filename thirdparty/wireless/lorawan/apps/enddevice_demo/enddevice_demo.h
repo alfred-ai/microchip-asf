@@ -138,5 +138,10 @@ void check_stack_status(void);
 *************************************************************************/
 void serial_data_handler(void);
 
+/*********************************************************************//**
+\brief    Reads the MAC EUI from the EDBG Controller of the XPro Board
+*************************************************************************/
+void dev_eui_read(void);
+
 #endif /* DEMO_APP_H_ */
 

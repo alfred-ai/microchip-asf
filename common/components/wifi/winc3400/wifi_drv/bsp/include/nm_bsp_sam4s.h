@@ -4,7 +4,7 @@
  *
  * \brief This module contains SAM4S BSP APIs declarations.
  *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2018-2019 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -35,11 +35,14 @@
 #ifndef _NM_BSP_SAM4S_H_
 #define _NM_BSP_SAM4S_H_
 
+#include "bsp/include/nm_bsp.h"
 #include "conf_winc.h"
+#include <math.h>
 
+//#define NM_EDGE_INTERRUPT     (1)
 #define NM_LEVEL_INTERRUPT		(1)
 
-#define NM_DEBUG				CONF_WINC_DEBUG
-#define NM_BSP_PRINTF			CONF_WINC_PRINTF
+#define NM_DEBUG              CONF_WIFI_M2M_DEBUG
+#define NM_BSP_PRINTF         CONF_WIFI_M2M_PRINTF
 
 #endif /* _NM_BSP_SAM4S_H_ */

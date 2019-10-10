@@ -3,7 +3,7 @@
 *
 * \brief OTAU interface
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -77,6 +77,151 @@
 
 #define DATA_HANDLE_TABLE_SIZE   20
 
+typedef enum{
+	ENTRY = 0,
+	EXIT
+}SHORTENUM error_code_t;
+
+typedef enum{
+	TRACE_ENTRY = 0,
+	TRACE_EXIT
+}SHORTENUM trace_type_t;
+
+typedef enum{
+	LOG_INFO = 0x01,
+	LOG_WARNING = 0x02,
+	LOG_ERROR = 0x04,
+	LOG_ASSERT = 0x08
+}SHORTENUM log_type_t;
+
+typedef enum {
+	MIWI_NWK,
+	MIWI_PHY,
+	MIWI_SYS,
+	MIWI_APP
+}SHORTENUM module_id_t;
+
+/**
+ * The mask for the ACK request bit of the FCF
+ */
+#define FCF_ACK_REQUEST                 (1 << 5)
+
+/**
+ * The mask for the PAN ID compression bit of the FCF
+ */
+#define FCF_PAN_ID_COMPRESSION          (1 << 6)
+
+/**
+ * Address Mode: NO ADDRESS
+ */
+#define FCF_NO_ADDR                     (0x00)
+
+/**
+ * Address Mode: RESERVED
+ */
+#define FCF_RESERVED_ADDR               (0x01)
+
+/**
+ * Address Mode: SHORT
+ */
+#define FCF_SHORT_ADDR                  (0x02)
+
+/**
+ * Address Mode: LONG
+ */
+#define FCF_LONG_ADDR                   (0x03)
+
+/**
+ * Defines the offset of the destination address
+ */
+#define FCF_DEST_ADDR_OFFSET            (10)
+
+/**
+ * Defines the offset of the source address
+ */
+#define FCF_SOURCE_ADDR_OFFSET          (14)
+
+/**
+ * Macro to set the source address mode
+ */
+#define FCF_SET_SOURCE_ADDR_MODE(x)     ((unsigned int)((x) << \
+	FCF_SOURCE_ADDR_OFFSET))
+
+/**
+ * Macro to set the destination address mode
+ */
+#define FCF_SET_DEST_ADDR_MODE(x)       ((unsigned int)((x) << \
+	FCF_DEST_ADDR_OFFSET))
+
+/**
+ * Defines a mask for the frame type. (Table 65 IEEE 802.15.4 Specification)
+ */
+#define FCF_FRAMETYPE_MASK              (0x07)
+
+/**
+ * A macro to set the frame type.
+ */
+#define FCF_SET_FRAMETYPE(x)            (x)
+
+/**
+ * The mask for the security enable bit of the FCF.
+ */
+#define FCF_SECURITY_ENABLED            (1 << 3)
+
+/**
+ * Macro to get the frame type.
+ */
+#define FCF_GET_FRAMETYPE(x)            ((x) & FCF_FRAMETYPE_MASK)
+
+/*
+ * Defines the mask for the FCF address mode
+ */
+#define FCF_ADDR_MASK                   (3)
+
+/*
+ * Macro to get the source address mode.
+ */
+#define FCF_GET_SOURCE_ADDR_MODE(x) \
+	(((x) >> FCF_SOURCE_ADDR_OFFSET) & FCF_ADDR_MASK)
+
+/*
+ * Macro to get the destination address mode.
+ */
+#define FCF_GET_DEST_ADDR_MODE(x) \
+	(((x) >> FCF_DEST_ADDR_OFFSET) & FCF_ADDR_MASK)
+/**
+ * Length (in octets) of FCF
+ */
+#define FCF_LEN                             (2)
+
+/**
+ * Length (in octets) of FCS
+ */
+#define FCS_LEN                             (2)
+
+/**
+ * Length of the sequence number field
+ */
+#define SEQ_NUM_LEN                         (1)
+
+/**
+ * Length (in octets) of extended address
+ */
+#define EXT_ADDR_LEN                        (8)
+
+
+/**
+ * Length (in octets) of PAN ID
+ */
+#define PAN_ID_LEN                          (2)
+
+/**
+ * Default value for PIB macShortAddress
+ */
+#define macShortAddress_def             (0xFFFF)
+
+#define FRAME_OVERHEAD                      (3)
+
 
 typedef enum {
 	OTAU_SUCCESS = 0x00,
@@ -101,6 +246,7 @@ typedef enum {
 typedef enum {
 	DOMAIN_OTAU_NOTIFY = 0x80,
 	DOMAIN_OTAU_UPGRADE,
+	DOMAIN_OTAU_DEBUG,
 }SHORTENUM otau_domain_t;
 
 typedef enum {
@@ -133,11 +279,16 @@ typedef struct {
 }otau_rcvd_frame_t;
 COMPILER_PACK_RESET()
 
-extern uint16_t serverShortAddress;
+typedef struct {
+	uint8_t extended_addr[8];
+	uint16_t native_addr;
+}node_address_t;
+
+extern node_address_t serverAddress;
 
 void otauInit(void);
 void otauTask(void);
-void otauHandleMsg(otau_domain_msg_t *otau_msg);
+void otauHandleMsg(otau_domain_msg_t *otau_domain_msg);
 void otauRcvdFrame(otau_rcvd_frame_t *rcvd_frame);
 void otau_sent_frame(uint8_t addr_mode, uint8_t *addr, uint8_t domainId, uint8_t status);
 void otauDataSend(addr_mode_t addr_mode, uint8_t *addr, void *payload, uint16_t len);
@@ -148,8 +299,10 @@ void otauLed(otau_led_t led_state);
 void otauResetDevice(void);
 void reverseMemcpy(uint8_t *dst, uint8_t *src, uint8_t len);
 #ifndef OTAU_SERVER
-void otauSetServerDetails(uint8_t *addr);
-void otauGetServerDetails(uint8_t *addr);
+void otauSetServerDetails(addr_mode_t addr_mode,uint8_t *addr);
+void otauGetServerDetails(addr_mode_t addr_mode,uint8_t *addr);
 #endif
+void otau_log(uint8_t log_type, module_id_t module_id, error_code_t error_code, uint8_t len, uint8_t* user_log);
+void otau_trace(trace_type_t trace_type);
 #endif /* OTAU_H */
 

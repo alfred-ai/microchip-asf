@@ -51,8 +51,8 @@ INCLUDES
 FUNCTION PROTOTYPES
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
-NMI_API void Socket_ReadSocketData(SOCKET sock, tstrSocketRecvMsg *pstrRecv,uint8 u8SocketMsg,
-								uint32 u32StartAddress,uint16 u16ReadCount);
+NMI_API void Socket_ReadSocketData(SOCKET sock, tstrSocketRecvMsg *pstrRecv, uint8 u8SocketMsg,
+                                   uint32 u32StartAddress, uint16 u16ReadCount);
 
 #ifdef  __cplusplus
 }
