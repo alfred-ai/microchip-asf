@@ -4,7 +4,7 @@
 * \brief Security Abstraction Layer file
 *
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -378,10 +378,10 @@ SalStatus_t SAL_Read(salItems_t key_type, uint8_t* key)
  *         SAL_FAILURE			-- when CMAC calculation is failed
  *		   SAL_INVALID_KEY_TYPE -- when invalid key_type is given as input parameter
  */
-SalStatus_t SAL_AESCmac(uint8_t* key, salItems_t key_type, uint8_t* output, uint8_t* input, uint8_t size)
+SalStatus_t SAL_AESCmac(uint8_t* key, salItems_t key_type, uint8_t* output, uint8_t* input, uint16_t size)
 {
 	SalStatus_t sal_status = SAL_SUCCESS;
-	uint8_t n = 0, i = 0, j =0;
+	uint16_t n = 0, i = 0, j =0;
 	bool flag = false;
 	uint8_t k1[16], k2[16];
 	uint8_t x[16], y[16], mLast[16], padded[16];

@@ -86,7 +86,7 @@ sint8 os_m2m_wifi_get_connection_info(void);
 sint8 os_m2m_wifi_set_mac_address(uint8* au8MacAddress0, uint8* au8MacAddress1);
 sint8 os_m2m_wifi_wps(uint8 u8TriggerType, const char* pcPinNumber);
 sint8 os_m2m_wifi_wps_disable(void);
-sint8 os_m2m_wifi_p2p(uint8 u8Channel);
+sint8 os_m2m_wifi_p2p(uint8 u8Channel, tenuP2PTrigger enuTrigger, uint16 u16WPS_CfgMehods);
 sint8 os_m2m_wifi_p2p_disconnect(void);
 sint8 os_m2m_wifi_disable_ap(void);
 sint8 os_m2m_wifi_ap_get_assoc_info(void);

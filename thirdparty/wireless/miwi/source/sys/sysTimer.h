@@ -3,7 +3,7 @@
 *
 * \brief System timer interface
 *
-* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -104,6 +104,7 @@ void SYS_TimerStop(SYS_Timer_t *timer);
 bool SYS_TimerStarted(SYS_Timer_t *timer);
 void SYS_TimerTaskHandler(void);
 void SYS_TimerAdjust_SleptTime(uint32_t sleeptime);
+uint32_t SYS_TimerRemainingTimeout(struct SYS_Timer_t *timer);
 
 uint32_t MiWi_TickGet(void);
 uint32_t MiWi_TickGetDiff(MIWI_TICK current_tick, MIWI_TICK previous_tick);

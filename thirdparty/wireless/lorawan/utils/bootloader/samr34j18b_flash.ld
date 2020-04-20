@@ -4,7 +4,7 @@
 * \brief Linker script for running in internal FLASH on the SAMR34J18B
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -43,7 +43,7 @@ SEARCH_DIR(.)
 /* Memory Spaces Definitions */
 MEMORY
 {
-  rom      (rx)  : ORIGIN = 0x00002000, LENGTH = 0x0003e000
+  rom      (rx)  : ORIGIN = 0x00004000, LENGTH = 0x0003c000
   ram      (rwx) : ORIGIN = 0x20000000, LENGTH = 0x00008000
   lpram    (rwx) : ORIGIN = 0x30000000, LENGTH = 0x00002000
 }

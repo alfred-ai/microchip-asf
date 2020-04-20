@@ -3,7 +3,7 @@
 *
 * \brief Application Program Interface for MiWi Protocols.
 *
-* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -44,7 +44,7 @@
 #endif
 
 #define MIWI_MAJOR_VERSION    '6'
-#define MIWI_MINOR_VERSION    '4'
+#define MIWI_MINOR_VERSION    '5'
 
 #define INPUT
 #define OUTPUT
@@ -421,6 +421,8 @@ typedef struct __defaultParametersRomOrRam
 	CoordHopCount_t *coordinatorHopCount;
 	RebroadcastTable_t *rebroadcastTable;
 
+	uint32_t indirectDataWaitInterval;
+
 	uint16_t keepAliveCoordSendInterval;
 	uint16_t keepAliveCoordTimeoutSec;
 
@@ -432,8 +434,6 @@ typedef struct __defaultParametersRomOrRam
 
 	uint8_t routeUpdateInterval;
 	uint8_t routeReqWaitInterval;
-
-	uint8_t indirectDataWaitInterval;
 
 	uint8_t rebroadcastTableSize;
 	uint8_t rebroadcastTimeout;
@@ -451,6 +451,7 @@ typedef struct __defaultParametersRomOrRam
 	uint8_t edLinkFailureAttempts;
 	uint8_t connRespWaitInSec;
 	uint8_t frameRetry;
+	uint8_t joinWish;
 #ifndef PAN_COORDINATOR
 	searchConf_t* searchConfMem;
 	uint8_t maxNoOfBeacons;

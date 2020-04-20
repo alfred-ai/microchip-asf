@@ -3,7 +3,7 @@
 *
 * \brief MiWi Mesh Protocol Application Handling implementation
 *
-* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -59,6 +59,13 @@ uint8_t networkKey[SECURITY_KEY_SIZE] = NETWORK_KEY_DEFAULT;
 /* Holds the default public key of the network */
 uint8_t publicKey[SECURITY_KEY_SIZE] = PUBLIC_KEY_DEFAULT;
 
+/* Holds the long address of the device */
+#if MY_ADDRESS_LENGTH == 8
+uint8_t myLongAddress[MY_ADDRESS_LENGTH] = {EUI_0,EUI_1,EUI_2,EUI_3, EUI_4, EUI_5,EUI_6,EUI_7};
+#else
+#error "Address length not supported"
+#endif
+
 #ifndef PAN_COORDINATOR
 /* Holds the memory for storing beacon results */
 searchConf_t searchConfirmMem;
@@ -103,6 +110,7 @@ defaultParametersRomOrRam_t defaultParamsRomOrRam = {
 	.connRespWaitInSec = CONNECTION_RESPONSE_WAIT_IN_SEC,
 
 	.frameRetry = FRAME_RETRY,
+	.joinWish = JOIN_WISH,
 #ifndef PAN_COORDINATOR
     .searchConfMem = &searchConfirmMem,
 	.maxNoOfBeacons = MAX_BEACON_RESULTS,

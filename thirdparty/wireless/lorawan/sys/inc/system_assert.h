@@ -3,7 +3,7 @@
 *
 * \brief This has all the dependencies for LoRaWAN system assertion
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -70,6 +70,8 @@ typedef void(*SystemAssertCb_t)(SystemAssertLevel_t level, uint16_t assertNum);
 #define ASSERT_HAL      (0x0300)
 
 /* Module specific asserts */
+/* APP */
+#define ASSERT_APP_GPSTIMEUNKNOWN_FAIL          (ASSERT_APP|1)
 /* MAC */
 #define ASSERT_MAC_RX1CALLBACK_RXFAIL           (ASSERT_MAC|1)
 #define ASSERT_MAC_TXRETRY_RXSTOPFAIL           (ASSERT_MAC_RX1CALLBACK_RXFAIL+1)

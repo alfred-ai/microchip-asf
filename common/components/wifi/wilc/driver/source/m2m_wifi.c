@@ -624,8 +624,11 @@ sint8 m2m_wifi_send_ethernet_pkt(uint8* pu8Packet, uint16 u16PacketSize, uint8	u
 		strTxPkt->u16HeaderLength = NM_BSP_B_L_16(M2M_ETHERNET_HDR_LEN);
 		strTxPkt->u8IfcId = u8IfcId;
 		u16TotalPacketSize = M2M_ETHERNET_HDR_OFFSET + M2M_ETH_PAD_SIZE + u16PacketSize;
-		s8Ret = hif_send_optimized(M2M_REQ_GRP_WIFI,
-				M2M_WIFI_REQ_SEND_ETHERNET_PACKET | M2M_REQ_DATA_PKT, pu8Packet, u16TotalPacketSize);
+		if(u16TotalPacketSize < M2M_HIF_MAX_PACKET_SIZE)
+			s8Ret = hif_send_optimized(M2M_REQ_GRP_WIFI,
+					M2M_WIFI_REQ_SEND_ETHERNET_PACKET | M2M_REQ_DATA_PKT, pu8Packet, u16TotalPacketSize);
+		else
+			M2M_ERR("Packet discarded. size %d is too big\r\n", u16TotalPacketSize);
 	}
 	return s8Ret;
 }

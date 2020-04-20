@@ -180,7 +180,7 @@ void isi_size_configure(Isi *p_isi, uint32_t image_hsize, uint32_t image_vsize,
 
 	p_isi->ISI_PSIZE &= (~ISI_PSIZE_PREV_VSIZE_Msk);
 	p_isi->ISI_PSIZE &= (~ISI_PSIZE_PREV_HSIZE_Msk);
-	p_isi->ISI_PSIZE |= ISI_PSIZE_PREV_VSIZE(preview_hsize - 1) | ISI_PSIZE_PREV_HSIZE(preview_vsize - 1);
+	p_isi->ISI_PSIZE |= ISI_PSIZE_PREV_VSIZE(preview_vsize - 1) | ISI_PSIZE_PREV_HSIZE(preview_hsize - 1);
 
 	uint32_t hRatio;
 	hRatio = 1600 * image_hsize / preview_hsize;

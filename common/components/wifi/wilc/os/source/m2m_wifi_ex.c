@@ -313,14 +313,26 @@ sint8 os_m2m_wifi_wps_disable(void)
 	return params.dispatch.retval;
 }
 
-
-sint8 os_m2m_wifi_p2p(uint8 u8Channel)
+struct wifi_p2p_params {
+	struct params_dispatch dispatch;
+	uint8 u8Channel;
+	tenuP2PTrigger enuTrigger;
+	uint16 u16WPS_CfgMehods;
+};
+static void os_m2m_wifi_p2p_imp(void *pv)
 {
-	struct uint_params params;
+	struct wifi_p2p_params *p = (struct wifi_p2p_params *) pv;
+	p->dispatch.retval = m2m_wifi_p2p(p->u8Channel, p->enuTrigger, p->u16WPS_CfgMehods);
+	OS_WIFI_NOTIFY(p);
+}
+sint8 os_m2m_wifi_p2p(uint8 u8Channel, tenuP2PTrigger enuTrigger, uint16 u16WPS_CfgMehods)
+{
+	struct wifi_p2p_params params;
 	params.dispatch.retval = M2M_ERR_TIME_OUT;
-	params.arg = u8Channel;
-	params.fn = m2m_wifi_p2p;
-	OS_WIFI_DISPATCH_WAIT(func_uint_imp, &params);
+	params.u8Channel = u8Channel;
+	params.enuTrigger = enuTrigger;
+	params.u16WPS_CfgMehods = u16WPS_CfgMehods;
+	OS_WIFI_DISPATCH_WAIT(os_m2m_wifi_p2p_imp, &params);
 	return params.dispatch.retval;
 }
 

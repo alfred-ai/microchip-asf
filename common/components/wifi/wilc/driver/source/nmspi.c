@@ -567,7 +567,7 @@ static int spi_cmd_complete(uint8_t cmd, uint32_t adr, uint8_t *b, uint32_t sz, 
 	rsp = rb[rix++];
 
 
-	if (rsp != cmd) {
+	if (rsp != cmd && !clockless) {
 		M2M_ERR("[nmi spi]: Failed cmd response, cmd (%02x), resp (%02x)\n", cmd, rsp);
 		result = N_FAIL;
 		return result;
@@ -577,7 +577,7 @@ static int spi_cmd_complete(uint8_t cmd, uint32_t adr, uint8_t *b, uint32_t sz, 
 	State response
 	**/
 	rsp = rb[rix++];
-	if (rsp != 0x00) {
+	if (rsp != 0x00 && !clockless) {
 		M2M_ERR("[nmi spi]: Failed cmd state response state (%02x)\n", rsp);
 		result = N_FAIL;
 		return result;
@@ -604,7 +604,7 @@ static int spi_cmd_complete(uint8_t cmd, uint32_t adr, uint8_t *b, uint32_t sz, 
 					break;
 			} while (retry--);
 
-			if (retry <= 0) {
+			if (retry <= 0 && !clockless) {
 				M2M_ERR("[nmi spi]: Error, data read response (%02x)\n", rsp);
 				result = N_RESET;
 				return result;

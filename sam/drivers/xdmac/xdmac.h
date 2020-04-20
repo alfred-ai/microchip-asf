@@ -350,15 +350,15 @@ static inline void xdmac_channel_enable(Xdmac *xdmac, uint32_t channel_num)
 {
 	Assert(xdmac);
 	Assert(channel_num < XDMACCHID_NUMBER);
-#ifdef CONF_BOARD_ENABLE_CACHE_AT_INIT
+
 	/*Featurized as per https://jira.microchip.com:8443/browse/WSH-149 */
 	/*
 	All the data transfers, block or non-block (data transfer < 512 bytes), to and from SDIO module takes place through XDMAC and no CPU is involved.
 	We must be cautious when CACHE is enabled.
 	*/
 	/* Update DCache before DMA transmit */
-	SCB_CleanInvalidateDCache();  //SMB - commented to fix the dma write delay
-#endif
+	//SCB_CleanInvalidateDCache();
+
 	xdmac->XDMAC_GE = (XDMAC_GE_EN0 << channel_num);
 }
 

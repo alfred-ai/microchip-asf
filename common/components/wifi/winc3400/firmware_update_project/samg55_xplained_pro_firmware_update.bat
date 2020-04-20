@@ -10,13 +10,16 @@ echo Checking for Python support.
 where /q python.exe
 if ERRORLEVEL 1 GOTO NOPYTHON
 goto :HASPYTHON
+:HASPYTHON
+python -V > tmpFile 
+set /p myvar= < tmpFile 
+del tmpFile 
+ECHO %myvar%
+echo.%myvar%|findstr /C:"2." >nul 2>&1
+if not ERRORLEVEL 0 GOTO NOPYTHON
 :NOPYTHON
 echo Require Python v2.x
 exit /b 2
-:HASPYTHON
-where python.exe
-echo OK
-echo.
 
 Echo Checking Atmel Studio Installation
 python firmware\handler_search.py atsln atmelstudio > atmelstudiopath.txt

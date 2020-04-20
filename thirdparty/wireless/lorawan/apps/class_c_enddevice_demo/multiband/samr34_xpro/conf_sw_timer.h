@@ -3,7 +3,7 @@
 *
 * \brief Software Timer configuration
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -44,6 +44,9 @@
  */
 /* ! @{ */
 #define TOTAL_NUMBER_OF_SW_TIMERS     (TOTAL_NUMBER_OF_TIMERS)
+/* ! @} */
+/* ! @{ */
+#define TOTAL_NUMBER_SW_TIMESTAMPS    (2u)
 /* ! @} */
 
 #endif /* CONF_SW_TIMER_H_INCLUDED */

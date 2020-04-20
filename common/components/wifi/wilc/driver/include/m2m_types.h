@@ -4,7 +4,7 @@
  *
  * \brief WILC Application Interface Internal Types.
  *
- * Copyright (c) 2016-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2016-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -69,11 +69,11 @@ MACROS
 */
 
 
-#define M2M_FIRMWARE_VERSION_MINOR_NO					(4)
+#define M2M_FIRMWARE_VERSION_MINOR_NO					(5)
 /*!< Firmware Minor release version number.
 */
 
-#define M2M_FIRMWARE_VERSION_PATCH_NO					(2)
+#define M2M_FIRMWARE_VERSION_PATCH_NO					(5)
 /*!< Firmware patch release version number.
 */
 
@@ -90,11 +90,11 @@ MACROS
 */
 
 
-#define M2M_DRIVER_VERSION_MINOR_NO					(4)
+#define M2M_DRIVER_VERSION_MINOR_NO					(5)
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO					(2)
+#define M2M_DRIVER_VERSION_PATCH_NO					(5)
 /*!< Driver patch release version number.
 */
 
@@ -790,6 +790,12 @@ typedef enum {
 	*/
 }tenuAntSelGpio;
 
+#pragma pack(push, 1) // exact fit - no padding
+
+/*!< Padding bytes for forcing 4-byte alignment
+*/
+#define PAD_SZ(x) (4 - ((x) % 4))
+
 /*!
 @struct	\
 	tstrM2mWifiWepParams
@@ -810,7 +816,7 @@ typedef struct{
 	uint8	u8WepAuthType;
 	/*!< WEP Security Authentication Type.
 	*/
-	uint8	__PAD24__[2];
+	uint8	__PAD__[PAD_SZ(WEP_104_KEY_STRING_SIZE + 1 + 3)];
 	/*!< Padding bytes to keep the structure word alligned.
 	*/
 }tstrM2mWifiWepParams;
@@ -829,6 +835,9 @@ typedef struct{
 	*/
 	uint8	au8Passwd[M2M_1X_PWD_MAX];
 	/*!< Password corresponding to the user name. It must be Null terminated string.
+	*/
+	uint8	__PAD__[PAD_SZ(M2M_1X_USR_NAME_MAX + M2M_1X_PWD_MAX)];
+	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstr1xAuthCredentials;
 
@@ -873,9 +882,7 @@ typedef struct{
 	uint8				u8IsPMKUsed;
 	/*!< set to true if the PMK is calculated on the host .
 	*/
-	#define __SEC_INFO_PAD_SIZE__		(4 - ((sizeof(tuniM2MWifiAuth) + 2) % 4))
-
-	uint8				__PAD__[__SEC_INFO_PAD_SIZE__];
+	uint8	__PAD__[PAD_SZ(sizeof(tuniM2MWifiAuth) + 2)];
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MWifiSecInfo;
@@ -898,8 +905,7 @@ typedef struct{
 	uint8				au8SSID[M2M_MAX_SSID_LEN];
 	/*!< SSID of the desired AP. It must be NULL terminated string.
 	*/
-#define __CONN_PAD_SIZE__		(4 - ((sizeof(tstrM2MWifiSecInfo) + M2M_MAX_SSID_LEN + 2) % 4))
-	uint8				__PAD__[__CONN_PAD_SIZE__];
+	uint8	__PAD__[PAD_SZ(sizeof(tstrM2MWifiSecInfo) + M2M_MAX_SSID_LEN + 2)];
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mWifiConnect;
@@ -919,10 +925,10 @@ typedef struct {
 	uint8 	u8TriggerType;
 	/*!< WPS triggering method (Push button or PIN)
 	*/
-	char         acPinNumber[8];
+	char	acPinNumber[8];
 	/*!< WPS PIN No (for PIN method)
 	*/
-	uint8	__PAD24__[3];
+	uint8	__PAD__[PAD_SZ(1 + 8)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MWPSConnect;
@@ -957,6 +963,9 @@ typedef struct{
 	uint8	au8PSK[M2M_MAX_PSK_LEN];
 	/*!< PSK for the network obtained from WPS.
 	*/
+	uint8	__PAD__[PAD_SZ(2 + M2M_MAX_SSID_LEN + M2M_MAX_PSK_LEN)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MWPSInfo;
 
 /*!
@@ -972,6 +981,9 @@ typedef struct{
 	uint16	u16CfgMethods;
 	/*!< WSC config methods requested by peer methods
 	*/
+	uint8	__PAD__[PAD_SZ(2)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/	
 }tstrM2MP2pDevInfo;
 /*!
 @struct	\
@@ -993,8 +1005,9 @@ typedef struct {
 		when that time increaseed number of AP will increased in the scan results
 		min time is 10 ms and the max is 250 ms 
 	*/
-	uint8 __PAD16__[2];
-
+	uint8	__PAD__[PAD_SZ(2)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MScanOption;
 
 /*!
@@ -1011,8 +1024,9 @@ typedef struct {
 	uint8   u8ScanRegion;
 	/*|< Specifies the number of channels allowed in the region (e.g. North America = 11 ... etc.).
 	*/
-	uint8 __PAD24__[3];
-
+	uint8	__PAD__[PAD_SZ(1)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MScanRegion;
 
 /*!
@@ -1032,8 +1046,9 @@ typedef struct {
 	uint8 au8ChannelList[14];
 	/*|< Channel List.
 	*/
-	uint8 __PAD24__[1];
-
+	uint8	__PAD__[PAD_SZ(1 + 14)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MScanList;
 
 
@@ -1048,17 +1063,17 @@ typedef struct {
 	tenuM2mScanCh
 */
 typedef struct {
-	tenuM2mScanCh 	u8ChNum;
+	uint8 	u8ChNum;
 	/*!< The Wi-Fi RF Channel number
+		@ref tenuM2mScanCh for possible channel values
 	*/
 	uint8 	au8SSID[M2M_MAX_SSID_LEN];
 	/*!< SSID of the favorite Ap. If this AP is found after scan is completed, 
 		WILC will connect to it.	
 	*/
-	uint8	__PAD24__[3];
+	uint8	__PAD__[PAD_SZ(1 + M2M_MAX_SSID_LEN)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
-
 }tstrM2MScan;
 
 
@@ -1076,7 +1091,7 @@ typedef struct{
 	sint8 	s8ScanState;
 	/*!< Scan status
 	*/
-	uint8	__PAD16__[2];
+	uint8	__PAD__[PAD_SZ(2)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mScanDone;
@@ -1094,7 +1109,7 @@ typedef struct {
 	uint8 	u8Index;
 	/*!< Index of the desired scan result
 	*/
-	uint8	__PAD24__[3];
+	uint8	__PAD__[PAD_SZ(1)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mReqScanResult;
@@ -1130,7 +1145,7 @@ typedef struct {
 	uint8 	au8DeviceName[M2M_DEVICE_NAME_MAX]; 
 	/*! < P2P Device Name
 	*/
-	uint8 	_PAD8_;
+	uint8	__PAD__[PAD_SZ(4 + 6 + M2M_MAX_SSID_LEN + M2M_DEVICE_NAME_MAX)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mWifiscanResult;
@@ -1163,7 +1178,7 @@ typedef struct {
 	uint8  u8MAcAddr[6];
 	/*! < Mac Address of the STA/AP involved in state change
 	*/
-	uint8	__PAD24__[2];
+	uint8	__PAD__[PAD_SZ(4 + 6)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mWifiStateChanged;
@@ -1186,7 +1201,7 @@ typedef struct{
 	uint8 	u8BcastEn;
 	/*!<
 	*/
-	uint8	__PAD16__[2];
+	uint8	__PAD__[PAD_SZ(2)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mPsType;
@@ -1205,7 +1220,7 @@ typedef struct {
 	uint16 	u16LsnInt;
 	/*!< Listen interval in Beacon period count.
 	*/
-	uint8	__PAD16__[2];
+	uint8	__PAD__[PAD_SZ(2)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2mLsnInt;
@@ -1251,7 +1266,7 @@ typedef struct{
 	uint8	u8EnRecvHdr;
 	/*!< Enable reception of the full mac header before the payload
 	*/
-	uint8	__PAD24__[2];
+	uint8	__PAD__[PAD_SZ(3 + 6 + 6 + 6 + 1)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MWifiMonitorModeCtrl;
@@ -1268,6 +1283,18 @@ typedef struct{
 	assigned in this structure.
 */
 typedef struct{
+	uint32	u32DataRateKbps;
+	/*!< Data Rate in Kbps.
+	*/
+	uint16	u16DataLength;
+	/*!< Data payload length (Header excluded).
+	*/
+	uint16	u16FrameLength;
+	/*!< Total frame length (Header + Data).
+	*/
+	uint16	u16SeqNo;
+	/*!< Frame Seq Number.
+	*/
 	uint8	u8FrameType;
 	/*!< It must use values from tenuWifiFrameType. 
 	*/
@@ -1286,6 +1313,7 @@ typedef struct{
 	uint8	u8CipherType;
 	/*!< Encryption type for the rx packet.
 	*/
+	sint8	s8RSSI;
 	uint8	au8SrcMacAddress[6];
 	/* !< ZERO means DO NOT FILTER Source address.
 	*/
@@ -1295,22 +1323,7 @@ typedef struct{
 	uint8	au8BSSID[6];
 	/* !< ZERO means DO NOT FILTER BSSID.
 	*/
-	uint16	u16DataLength;
-	/*!< Data payload length (Header excluded).
-	*/
-	uint16	u16FrameLength;
-	/*!< Total frame length (Header + Data).
-	*/
-	uint32	u32DataRateKbps;
-	/*!< Data Rate in Kbps.
-	*/
-	sint8		s8RSSI;
-	/*!< RSSI.
-	*/	
-	uint16	u16SeqNo;
-		/*!< Frame Seq Number.
-	*/
-	uint8	__PAD24__[1];
+	uint8	__PAD__[PAD_SZ(4 + 6 + 7 + 6 + 6 + 6)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MWifiRxPacketInfo;
@@ -1335,7 +1348,7 @@ typedef struct{
 	uint8	u8IfcId;
 	/*!< Interface ID to which this frame belongs.
 	*/
-	uint8	__PAD24__[3];
+	uint8	__PAD__[PAD_SZ(4 + 1)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MWifiTxPacketInfo;
@@ -1347,19 +1360,17 @@ typedef struct{
 
  @brief		
  	Set the device to operate in the Wi-Fi Direct (P2P) mode.
+ 	tenuP2PTrigger
 */
 typedef struct {
-	uint8 	u8ListenChannel; 
-	/*!< P2P Listen Channel (1, 6 or 11)
-	*/
-	tenuP2PTrigger enuTrigger;
-	/*!< P2P trigger type @ref tenuP2PTrigger
-	*/
 	uint16 u16WPS_CfgMethods;
 	/*!< P2P config methods
 	*/
-	uint8	__PAD24__[2];
-	/*!< Padding bytes for forcing 4-byte alignment
+	uint8 	u8ListenChannel; 
+	/*!< P2P Listen Channel (1, 6 or 11)
+	*/
+	uint8 enuTrigger;
+	/*!< P2P trigger type @ref tenuP2PTrigger
 	*/
 }tstrM2MP2PConnect;
 
@@ -1377,12 +1388,12 @@ typedef struct {
 	/*!<
 		Configuration parameters for the WiFi AP.
 	*/
-	uint8 	au8SSID[M2M_MAX_SSID_LEN]; 
-	/*!< AP SSID
-	*/
 	uint16 	u16BeaconInterval; 
 	/*!< Time between two consecutive beacons in TUs (1024 usec).
 		A value of 0 would use the FW default
+	*/
+	uint8 	au8SSID[M2M_MAX_SSID_LEN]; 
+	/*!< AP SSID
 	*/
 	uint8 	u8ListenChannel; 
 	/*!< Wi-Fi RF Channel which the AP will operate on
@@ -1401,13 +1412,11 @@ typedef struct {
 	/*!< Max supported stations for AP. Val 0 considered as default 8 stations
 	 * 							  Val > 8 are considered upto 8 stations
 	*/
-	tuniM2MWifiAuth 	uniAuth;
+	tuniM2MWifiAuth	uniAuth;
 	/*!< Union holding all possible authentication parameters corresponding the current security types.
 	*/
-
-	#define __AP_CONFIG_PAD_SIZE__		(4 - ((sizeof(tuniM2MWifiAuth) + 2) % 4))
-	uint8				__PAD__[__AP_CONFIG_PAD_SIZE__];
-	/*!< Padding bytes for forcing alignment
+	uint8	__PAD__[PAD_SZ(2 + M2M_MAX_SSID_LEN + 5 + sizeof(tuniM2MWifiAuth))];   
+	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MAPConfig;
 
@@ -1429,6 +1438,9 @@ typedef struct {
 	uint8 	au8Mac1[6]; 
 	/*!< MAC address 2 array 
 	*/
+	uint8	__PAD__[PAD_SZ(6 + 6)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2mSetMacAddress;
 
 
@@ -1445,6 +1457,9 @@ typedef struct {
 	uint8 	au8DeviceName[M2M_DEVICE_NAME_MAX];
 	/*!< NULL terminated device name
 	*/
+	uint8	__PAD__[PAD_SZ(M2M_DEVICE_NAME_MAX)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MDeviceNameConfig;
 
 /*!
@@ -1459,6 +1474,9 @@ typedef struct {
 typedef struct {
 	uint8 	au8Pin[P2P_MAX_PIN_SIZE+1];
 	/*!< NULL terminated pin number
+	*/
+	uint8	__PAD__[PAD_SZ(P2P_MAX_PIN_SIZE + 1)];   
+	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MPinInfo;
 
@@ -1513,7 +1531,9 @@ typedef struct{
 	uint16	u16PktSz;
 	uint16	u16PktOffset;
 	uint8	u8IfcId;
-	uint8	__PAD24__[3];
+	/*!< Interface Id 
+	*/
+	uint8	__PAD__[PAD_SZ(4 + 1)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 } tstrM2mIpRsvdPkt;
@@ -1530,10 +1550,12 @@ typedef struct{
 	/*!< AP connection SSID name  */
 	uint8	u8SecType;
 	/*!< Security type */
-	sint8		s8RSSI;
-	/*!< Connection RSSI signal */
-	uint8	__PAD8__;
-	/*!< Padding bytes for forcing 4-byte alignment */
+	sint8	s8RSSI;
+	/*!< Connection RSSI signal 
+	*/
+	uint8	__PAD__[PAD_SZ(M2M_MAX_SSID_LEN + 2)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MConnInfo;
 
 /*!
@@ -1547,7 +1569,11 @@ typedef struct{
 	uint8	BSSID[6];
 	/*!<BSSID of the connected station*/
 	sint8		s8RSSI;
-	/*!< Connection RSSI signal */
+	/*!< Connection RSSI signal 
+	*/
+	uint8	__PAD__[PAD_SZ(6 + 1)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MAssocEntryInfo;
 
 /*!
@@ -1562,6 +1588,9 @@ typedef struct{
 	/*!<No of connected stations*/
 	tstrM2MAssocEntryInfo astrM2MAssocEntryInfo[8];
 	/*!< array of the associated stations*/
+	uint8	__PAD__[PAD_SZ(1 + (sizeof(tstrM2MAssocEntryInfo) * 8))];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrM2MAPAssocInfo;
 
 /*!
@@ -1578,6 +1607,9 @@ typedef struct{
 	uint8	u8Hour;
 	uint8	u8Minute;
 	uint8	u8Second;
+	uint8	__PAD__[PAD_SZ(2 + 5)];   
+	/*!< Padding bytes for forcing 4-byte alignment
+	*/
 }tstrSystemTime;
 
 /*!
@@ -1596,7 +1628,7 @@ typedef struct{
 	/*!<
 		set by 1 to add or 0 to remove from filter.
 	*/
-	uint8	__PAD8__;
+	uint8	__PAD__[PAD_SZ(M2M_MAC_ADDRES_LEN + 1)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MMulticastMac;
@@ -1613,7 +1645,7 @@ typedef struct{
 	/*!<
 		Interface ID.
 	*/
-	uint8	__PAD24__[3];
+	uint8	__PAD__[PAD_SZ(1)];   
 	/*!< Padding bytes for forcing 4-byte alignment
 	*/
 }tstrM2MIfId;
@@ -1629,7 +1661,7 @@ typedef struct{
 	 uint8	 u8TxPwrLevel; 
 	 /*!< Tx power level
 	 */
-	 uint8	 __PAD24__[3];
+	 uint8	 __PAD__[PAD_SZ(1)];   
 	 /*!< Padding bytes for forcing 4-byte alignment
 	 */
  }tstrM2mTxPwrLevel;
@@ -1661,5 +1693,7 @@ typedef struct{
 	 /*!< Antenna GPIO Switch mode - Single=1, Dual=2 or None=0
 	 */
  }tstrM2mAntDivParams;
+
+#pragma pack(pop) //back to whatever the previous packing mode was
 
 #endif

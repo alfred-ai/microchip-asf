@@ -3,7 +3,7 @@
 *
 * \brief WSNDemo application implementation
 *
-* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -484,15 +484,14 @@ static void APP_TaskHandler(void)
 		    MiApp_ReadyToSleep(&timeToSleep)
 		   )
 		{
-			if (SYS_TimerStarted(&appDataSendingTimer) && (timeToSleep > appDataSendingTimer.timeout))
+			if (SYS_TimerStarted(&appDataSendingTimer) && (timeToSleep > SYS_TimerRemainingTimeout(&appDataSendingTimer)))
 			{
-				timeToSleep = appDataSendingTimer.timeout;
+				timeToSleep = SYS_TimerRemainingTimeout(&appDataSendingTimer);
 			}
 			else if(timeToSleep > APP_SENDING_INTERVAL)
 			{
 				timeToSleep = APP_SENDING_INTERVAL;
 			}
-			
 			sleepMgr_sleep(timeToSleep);
 		}
 	}

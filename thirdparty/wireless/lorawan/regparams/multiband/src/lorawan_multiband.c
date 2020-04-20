@@ -4,7 +4,7 @@
 * \brief LoRaWAN Multiband file
 *		
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -1953,6 +1953,11 @@ static void UpdateMinMaxChDataRate (MinMaxDr_t* minmax_val)
 		{
 			maxDataRate = RegParams.pChParams[i].dataRange.max;
 		}
+	}
+	
+	if ((RegParams.cmnParams.paramsType2.txParams.uplinkDwellTime == 1) && ((((1 << RegParams.band) & (ISM_ASBAND)) || ((1 << RegParams.band) & (1 << ISM_JPN923))) != 0))
+	{
+		minDataRate = DR2;
 	}
 	
 	minmax_val->minDr = minDataRate;
@@ -3912,6 +3917,14 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 	memcpy(&updateTxParams,attrInput,sizeof(TxParams_t));
 	
 	RegParams.cmnParams.paramsType2.txParams.uplinkDwellTime = updateTxParams.uplinkDwellTime;
+	if (RegParams.cmnParams.paramsType2.txParams.uplinkDwellTime == 1)
+	{
+		RegParams.maxDataRate = DR2;
+	}
+	else
+	{
+		RegParams.maxDataRate = DR0;
+	}
 	RegParams.cmnParams.paramsType2.txParams.downlinkDwellTime = updateTxParams.downlinkDwellTime;
 	RegParams.maxTxPwr = updateTxParams.maxEIRP;
 	

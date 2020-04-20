@@ -4,7 +4,7 @@
 * \brief LORAWAN Certification Application
 *		
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -434,8 +434,10 @@ static void cert_joindata_callback(StackRetStatus_t status)
 static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_type)
 {
     StackRetStatus_t status;
-	bool cryptoDevEnabled = false;
+#ifdef CRYPTO_DEV_ENABLED
+	bool cryptoDevEnabled = true;
 	LORAWAN_SetAttr(CRYPTODEVICE_ENABLED, &cryptoDevEnabled );
+#endif /* #ifdef CRYPTO_DEV_ENABLED */
 	uint8_t dataRate = DR0;
 	status = LORAWAN_SetAttr (CURRENT_DATARATE, &dataRate);
 

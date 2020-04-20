@@ -4,7 +4,7 @@
 * \brief This is the implementation of LoRaWAN power management module
 *
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -104,6 +104,11 @@ PMM_Status_t PMM_Sleep(PMM_SleepReq_t *req)
         canSleep = SYSTEM_ReadyToSleep();
         canSleep = canSleep && validateSleepDuration( req->sleepTimeMs );
 
+        if ( false == canSleep )
+        {
+            return status;
+        }
+
         if ( SLEEP_MODE_BACKUP == req->sleep_mode )
         {
             canSleep = canSleep && ( SWTIMER_INVALID_TIMEOUT == SwTimerNextExpiryDuration() );
@@ -120,7 +125,7 @@ PMM_Status_t PMM_Sleep(PMM_SleepReq_t *req)
             }
         }
 
-        if ( canSleep )
+        if ( canSleep && SYSTEM_ReadyToSleep() )
         {
             /* Start of sleep preparation */
             SystemTimerSuspend();

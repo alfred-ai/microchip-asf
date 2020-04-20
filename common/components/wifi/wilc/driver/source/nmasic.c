@@ -379,16 +379,15 @@ sint8 chip_wake(void)
 	volatile uint32 reg = 0, clk_status_reg = 0,trials = 0;
 
 #ifdef CONF_WILC_USE_1000_REV_B
-	ret = nm_read_reg_with_ret(WILC_FROM_INTERFACE_TO_WF_REG, (uint32*)&reg);
+
+	/*USE bit 0 to indicate host wakeup*/
+	ret = nm_write_reg(WILC_FROM_INTERFACE_TO_WF_REG, WILC_FROM_INTERFACE_TO_WF_BIT);
 	if(ret != M2M_SUCCESS)goto _WAKE_EXIT;
-	
-	if(!(reg & WILC_FROM_INTERFACE_TO_WF_BIT))
-	{
-		/*USE bit 0 to indicate host wakeup*/
-		ret = nm_write_reg(WILC_FROM_INTERFACE_TO_WF_REG, reg|WILC_FROM_INTERFACE_TO_WF_BIT);
-		if(ret != M2M_SUCCESS)goto _WAKE_EXIT;
-	}
-#endif
+
+	ret = nm_write_reg(WILC_WAKEUP_REG, WILC_WAKEUP_BIT);
+	if(ret != M2M_SUCCESS) goto _WAKE_EXIT;
+
+#else
 	ret = nm_read_reg_with_ret(WILC_WAKEUP_REG, (uint32*)&reg);
 	if(ret != M2M_SUCCESS)goto _WAKE_EXIT;
 	/* Set bit 1 */
@@ -397,7 +396,7 @@ sint8 chip_wake(void)
 		ret = nm_write_reg(WILC_WAKEUP_REG, reg | WILC_WAKEUP_BIT);
 		if(ret != M2M_SUCCESS) goto _WAKE_EXIT;	
 	}
-
+#endif
 	do
 	{
 		ret = nm_read_reg_with_ret(WILC_CLK_STATUS_REG, (uint32*)&clk_status_reg);

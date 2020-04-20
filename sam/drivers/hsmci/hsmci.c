@@ -481,6 +481,7 @@ bool hsmci_adtc_start(sdmmc_cmd_def_t cmd, uint32_t arg, uint16_t block_size, ui
 
 #if (SAMV70 || SAMV71 || SAME70 || SAMS70)
 #ifdef HSMCI_DMA_DMAEN
+#if DMA_NOT_BY_DEFAULT
 	if (access_block) {
 		// Enable DMA for HSMCI
 		HSMCI->HSMCI_DMA = HSMCI_DMA_DMAEN;
@@ -488,6 +489,9 @@ bool hsmci_adtc_start(sdmmc_cmd_def_t cmd, uint32_t arg, uint16_t block_size, ui
 		// Disable DMA for HSMCI
 		HSMCI->HSMCI_DMA = 0;
 	}
+#else
+	HSMCI->HSMCI_DMA = HSMCI_DMA_DMAEN;
+#endif	 
 #endif
 #endif
 	// Enabling Read/Write Proof allows to stop the HSMCI Clock during

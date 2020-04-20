@@ -3,7 +3,7 @@
 *
 * \brief Configuration file for MiWi Mesh Protocol.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -85,6 +85,7 @@
     #define RXOFF_DEVICE_TIMEOUT_IN_SEC      DATA_REQUEST_SEND_INTERVAL * 20
 
 
+	/* Used to store the IEEE address of devices in PAN Coordinator for generating bloom filter only */
 	#define MAX_NUMBER_OF_DEVICES_IN_NETWORK     32
 
     /* Capability of Device Types - Macros - Don't Change */
@@ -111,11 +112,11 @@
 	#define ROLE_UPGRADE_INTERVAL_IN_SEC     25
 	#define CONNECTION_RESPONSE_WAIT_IN_SEC  5
 
-    /* Maximum number of coordinators in the network - Configurable  */
+    /* Maximum number of coordinators in the network including 1 PAN Coordinator - Configurable  */
     #define NUM_OF_COORDINATORS         64
-    /* Maximum number of Non Sleep End devices in the network - Configurable  */
+    /* Maximum number of Non Sleep End devices per Coordinator in the network - Configurable  */
     #define NUM_OF_NONSLEEPING_ENDDEVICES        5
-    /* Maximum number of Sleeping End devices in the network - Configurable  */
+    /* Maximum number of Sleeping End devices per Coordinator in the network - Configurable  */
     #define NUM_OF_SLEEPING_ENDDEVICES           5
     /* The Periodic Route Update Initiation interval - Configurable  */
 	#define ROUTE_UPDATE_INTERVAL       60

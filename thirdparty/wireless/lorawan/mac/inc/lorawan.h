@@ -4,7 +4,7 @@
 * \brief LoRaWAN header file
 *		
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -204,6 +204,47 @@ typedef enum _EdClass
     CLASS_C = 1 << 2u
 } EdClass_t;
 
+/* GPS Epoch Time values */
+typedef struct _GPSEpochTime
+{
+    /* Time in seconds since GPS Epoch value - 4 bytes */
+    uint32_t secondsSinceEpoch;
+    /* Fractional second value in milliseconds - 1 byte */
+    uint8_t  fractionalSecond;
+} GPSEpochTime_t;
+
+/** Device time value in relation to GPS Epoch.
+*
+* This structure contains the value of GPS Epoch value and
+* corresponding system time value when the GPS Epoch
+* value is received by the stack
+**/
+typedef struct _DevTime
+{
+    /* Flag to indicate Device Time request mac command is sent */
+    bool isDevTimeReqSent;
+    /* Index of SwTimestamp_t that stores the system time corresponding to `gpsEpochTime` */
+    uint8_t sysEpochTimeIndex;
+    /* GPS Epoch time received in DeviceTimeAnswer MAC Command */
+    GPSEpochTime_t gpsEpochTime;
+} DevTime_t;
+
+typedef union _StackVersion_t
+{
+    uint32_t value;
+    COMPILER_PACK_SET(1)
+    struct
+    {
+        uint32_t reserved1 : 14;
+        uint32_t iteration :  4;
+        uint32_t qualifier :  2;
+        uint32_t minor     :  4;
+        uint32_t major     :  4;
+        uint32_t reserved2 :  4;
+    };
+    COMPILER_PACK_RESET()
+} StackVersion_t;
+
 /* LORAWAN Status information*/
 typedef union _LorawanStatus
 {
@@ -339,11 +380,39 @@ typedef struct _LorawanMcastFcnt
 	uint32_t fcntValue;
 }LorawanMcastFcnt_t;
 
+typedef struct _LorawanMcastDatarate
+{
+    uint8_t groupId;
+    uint8_t datarate;
+} LorawanMcastDatarate_t;
+
+typedef struct _LorawanMcastDlFreqeuncy
+{
+    uint8_t groupId;
+    uint32_t dlFrequency;
+} LorawanMcastDlFreqeuncy_t;
+
+typedef struct _LorawanMcastPeriodicity
+{
+    uint8_t groupId;
+    uint8_t periodicity;
+} LorawanMcastPeriodicity_t;
+
 typedef struct _LorawanMcastStatus
 {
 	uint8_t groupId;
 	bool status;
 }LorawanMcastStatus_t;
+
+typedef struct _TimeOnAirParams
+{
+    uint8_t dr;
+    uint8_t impHdrMode;
+    uint8_t crcOn;
+    uint8_t cr;
+    uint8_t pktLen;
+    uint16_t preambleLen;
+} TimeOnAirParams_t;
 
 /* List of LORAWAN attributes */
 typedef enum _LorawanAttributes
@@ -455,8 +524,18 @@ typedef enum _LorawanAttributes
 	MCAST_NWKS_KEY,
 	/* Multicast Application Session Key - 16 byte key to decrypt the Multicast application packets */
 	MCAST_APPS_KEY,
-	/* Multicast DL Frame counter */
-	MCAST_FCNT_DOWN,
+    /* Multicast DL Frame counter */
+    MCAST_FCNT_DOWN,
+	/* Multicast DL Frame counter min */
+	MCAST_FCNT_DOWN_MIN,
+	/* Multicast DL Frame counter max */
+	MCAST_FCNT_DOWN_MAX,
+    /* Multicast downlink Frequency */
+    MCAST_FREQUENCY,
+    /* Multicast downlink datarate */
+    MCAST_DATARATE,
+    /* Multicast class-B periodicity */
+    MCAST_PERIODICITY,
 	/*Enables Test Mode which Disable Duty Cycle for a Device, Override Features Supported by Regulatory*/
 	TEST_MODE_ENABLE,
 	/*Enables Join backoff support as per in Specification */
@@ -492,8 +571,16 @@ typedef enum _LorawanAttributes
 	 */
 	MAX_FCNT_PDS_UPDATE_VAL,
 	/* Informing MAC that Crypto device is used for keyStorage */
-	CRYPTODEVICE_ENABLED
-}LorawanAttributes_t;
+	CRYPTODEVICE_ENABLED,
+    /* If set, ED shall send DeviceTimeReq cmd in next TX */
+    SEND_DEVICE_TIME_CMD,
+    /* Returns the software version of the running stack */
+    STACK_VERSION,
+    /* Returns the gps epoch time handle */
+    DEVICE_GPS_EPOCH_TIME,
+    /* Returns the packet time on air */
+    PACKET_TIME_ON_AIR
+} LorawanAttributes_t;
 
 /* Structure holding Receive window2 parameters*/
 /* This can be used for setting/getting RX2_WINDOW_PARAMS attribute */

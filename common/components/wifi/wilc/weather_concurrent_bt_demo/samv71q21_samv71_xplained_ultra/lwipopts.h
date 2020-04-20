@@ -259,7 +259,13 @@ extern int random_number(void);
 /**
  * LWIP_AUTOIP==1: Enable AUTOIP module.
  */
-#define LWIP_AUTOIP					1
+#define LWIP_AUTOIP						1
+
+/**
+ * LWIP_DHCP_AUTOIP_COOP==1: Allow DHCP and AUTOIP to be both enabled on
+ * the same interface at the same time.
+ */
+#define LWIP_DHCP_AUTOIP_COOP           1
 
 /*
    ------------------------------------

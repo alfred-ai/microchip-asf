@@ -4,7 +4,7 @@
 * \brief This is the implementation of LoRaWAN SW Timer module
 *		
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -44,6 +44,10 @@
 #include "conf_sw_timer.h"
 #include "common_hw_timer.h"
 #include "sw_timer.h"
+
+#ifndef TOTAL_NUMBER_SW_TIMESTAMPS
+#define TOTAL_NUMBER_SW_TIMESTAMPS (2u)
+#endif /* #ifndef TOTAL_NUMBER_SW_TIMESTAMPS */
 
 #if (TOTAL_NUMBER_OF_SW_TIMERS > 0)
 
@@ -87,6 +91,9 @@ volatile bool isTimerTriggered;
 
 /* This is the timer array. */
 SwTimer_t swTimers[TOTAL_NUMBER_OF_SW_TIMERS];
+ 
+/* This is the timestamp array */
+SwTimestamp_t swTimestamp[TOTAL_NUMBER_SW_TIMESTAMPS];
 
 /******************************************************************************
                      Static variables section
@@ -105,6 +112,9 @@ static uint_fast8_t expiredTimerQueueTail;
 
 /* This is the count of timers that are allocated at the instance. */
 static uint8_t allocatedTimerId = 0;
+
+/* This is the count of timestamps that are allocated at the instance. */
+static uint8_t allocatedTimestampId = 0;
 
 /* This is the last known system time saved before sleep */
 static uint64_t sysTimeLastKnown = 0;
@@ -407,7 +417,8 @@ void SystemTimerInit(void)
     SwTimerReset();
 
     /* initialize system time parameters */
-    sysTimeOvf = sysTime = 0u;
+    sysTimeOvf = 0x00000000;
+    sysTime = 0x0000;
 
     common_tc_init();
     set_common_tc_overflow_callback(hwTimerOverflowCallback);
@@ -563,12 +574,10 @@ uint32_t SwTimerReadValue(uint8_t timerId)
     uint32_t remainingTime = 0u;
     uint32_t timerExpiryTime = 0u;
     uint32_t currentSysTime = 0u;
-    
     if ( NULL != swTimers[timerId].timerCb )
     {
 	    timerExpiryTime = swTimers[timerId].absoluteExpiryTime;
 	    currentSysTime = (uint32_t) gettime();
-
 	    if ( currentSysTime <= timerExpiryTime )
 	    {
 		    remainingTime = timerExpiryTime - currentSysTime;
@@ -577,8 +586,13 @@ uint32_t SwTimerReadValue(uint8_t timerId)
 	    {
 		    remainingTime = (UINT32_MAX - currentSysTime) + timerExpiryTime;
 	    }
+
+        if (remainingTime >= SWTIMER_MAX_TIMEOUT)
+        {
+            /* Diff cannot be more than max timeout */
+            remainingTime = 0;
+        }
     }
-    
     return remainingTime;
 }
 
@@ -898,6 +912,83 @@ void SystemTimerSync(uint64_t timeToSync)
         }
     }
 }
+
+
+/**************************************************************************//**
+\brief Returns a timestamp id to be used before using it
+
+\param[out] timestampId Value of the id returned by the function
+
+\return LORAWAN_SUCCESS if new timerId is allocated
+        LORAWAN_RESOURCE_UNAVAILABLE if there is no more timerId to allocate
+******************************************************************************/
+StackRetStatus_t SwTimerTimestampCreate(uint8_t *timestampId)
+{
+    StackRetStatus_t retVal = LORAWAN_SUCCESS;
+
+    if (allocatedTimestampId < TOTAL_NUMBER_SW_TIMESTAMPS)
+    {
+        ATOMIC_SECTION_ENTER
+        *timestampId = allocatedTimestampId;
+        allocatedTimestampId++;
+        ATOMIC_SECTION_EXIT
+    }
+    else
+    {
+        /*
+        * If you reach this spot it means the TOTAL_NUMBER_SW_TIMESTAMPS
+        * is #defined to a lower value than the number of timers that have
+        * been SwTimerTimestampCreate()
+        */
+        SYS_ASSERT_FATAL(ASSERT_HAL_TIMESTAMPID_EXHAUSTED);
+        retVal = LORAWAN_RESOURCE_UNAVAILABLE;
+    }
+
+    return retVal;
+}
+
+/**************************************************************************//**
+\brief Returns the timestamp stored in the given timestamp index
+\param[in] index Index of the system timestamp
+\param[out] *timestamp Pointer-to-timestamp to be read from the given index
+******************************************************************************/
+void SwTimerReadTimestamp(uint8_t index, SwTimestamp_t *timestamp)
+{
+	*timestamp = swTimestamp[index];
+}
+
+/**************************************************************************//**
+\brief Stores the timestamp in the given timestamp index
+\param[in] index Index of the system timestamp
+\param[in] *timestamp Pointer-to-timestamp to be stored in the given index
+******************************************************************************/
+void SwTimerWriteTimestamp(uint8_t index, SwTimestamp_t *timestamp)
+{
+    swTimestamp[index] = *timestamp;
+}
+
+/**************************************************************************//**
+\brief Difference between the given timestamps
+\param[in] *earlier  Pointer-to-timestamp of known-to-be-earlier time
+\param[in] *later    Pointer-to-timestamp of known-to-be-later time
+\return SwTimestamp_t - time difference between later and earlier timestamps
+******************************************************************************/
+SwTimestamp_t SwTimerTimeDiff(SwTimestamp_t *earlier, SwTimestamp_t *later)
+{
+	SwTimestamp_t diff = SW_TIMESTAMP_INVALID;
+
+    if (*later >= *earlier)
+	{
+		diff = *later - *earlier;
+	}
+	else
+	{
+		diff = (UINT64_MAX - *earlier) + *later;
+	}
+	
+	return diff;
+}
+
 #endif /* #if (TOTAL_NUMBER_OF_SW_TIMERS > 0) */
 
 /* EOF sw_timer.c */

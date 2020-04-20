@@ -3,7 +3,7 @@
 *
 * \brief Main file for WSN Demo Example on MiWi Mesh.
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -88,7 +88,7 @@
 #define NVM_UID_ADDRESS   ((volatile uint16_t *)(0x00804008U))
 #endif
 
-#if (BOARD == SAMR30_MODULE_XPLAINED_PRO)
+#if (BOARD == SAMR30_MODULE_XPLAINED_PRO) || (BOARD == SAMR21B18_MODULE) || (BOARD == SAMR21G18_MODULE)
 #define NVM_UID_ADDRESS   ((volatile uint16_t *)(0x0080400AU))
 #endif
 
@@ -182,7 +182,7 @@ int main ( void )
 **********************************************************************/
 void ReadMacAddress(void)
 {
-#if ((BOARD == SAMR21ZLL_EK) || (BOARD == SAMR30_MODULE_XPLAINED_PRO))
+#if ((BOARD == SAMR21ZLL_EK) || (BOARD == SAMR30_MODULE_XPLAINED_PRO) || (BOARD == SAMR21B18_MODULE) || (BOARD == SAMR21G18_MODULE))
    uint8_t i = 0, j = 0;
    for (i = 0; i < 8; i += 2, j++)
    {

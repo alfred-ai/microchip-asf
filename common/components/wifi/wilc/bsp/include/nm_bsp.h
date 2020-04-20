@@ -73,6 +73,13 @@ typedef void (*tpfNmBspIsr)(void);
 *    Void Pointer to '0' in case of NULL is not defined. 
 */
 
+#ifndef FALSE
+#define FALSE   (0)
+#endif
+
+#ifndef TRUE
+#define TRUE    (1)
+#endif
 
 #define BSP_MIN(x,y) ((x)>(y)?(y):(x))
 /*!< 

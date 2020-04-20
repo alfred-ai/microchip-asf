@@ -3,7 +3,7 @@
 *
 * \brief System timer implementation
 *
-* Copyright (c) 2018 - 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018 - 2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -283,6 +283,23 @@ static void SYS_HwOverflow_Cb(void)
 	}
 }
 
+/*********************************************************************
+* Function:         void SYS_TimerAdjust_SleptTime
+*
+* PreCondition:     none
+*
+* Input:		    sleeptime  - Total time slept by Application in  
+*                                milliseconds
+*
+* Output:		    none
+*
+* Side Effects:	    none
+*
+* Overview:		    This function adjusts the duration for which
+*                   application slept and correct the timers
+*
+* Note:			    none
+********************************************************************/
 void SYS_TimerAdjust_SleptTime(uint32_t sleeptime)
 {
     irqflags_t flags;
@@ -300,4 +317,36 @@ void SYS_TimerAdjust_SleptTime(uint32_t sleeptime)
     set_common_tc_expiry_callback(SYS_HwExpiry_Cb);
     common_tc_init();
     common_tc_delay(SYS_TIMER_INTERVAL * MS);
+}
+
+/*********************************************************************
+* Function:         uint32_t SYS_TimerRemainingTimeout
+*
+* PreCondition:     none
+*
+* Input:		    SYS_Timer_t *timer  - Timer for which the 
+*                                         remaining timeout is required
+*
+* Output:		    uint32_t - Total remaining timeout
+*
+* Side Effects:	    none
+*
+* Overview:		    This function returns total timeout for the requested
+*                   timer to expire by traversing through the list
+*
+* Note:			    none
+********************************************************************/
+uint32_t SYS_TimerRemainingTimeout(struct SYS_Timer_t *timer)
+{
+	uint32_t remainingTime = 0;
+	SYS_Timer_t *currTimer = timers;
+	while (currTimer){
+		remainingTime += currTimer->timeout;
+		if (currTimer == timer)
+		{
+			return remainingTime;
+		}
+		currTimer = currTimer->next;
+	}
+	return 0;
 }

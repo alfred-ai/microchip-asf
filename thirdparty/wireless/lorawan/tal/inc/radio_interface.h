@@ -4,7 +4,7 @@
 * \brief This is the Radio Interface header file which contains 
 *        LoRa-specific Radio interface functions declarations and defines
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -55,6 +55,7 @@ extern "C" {
 #define TIME_ON_AIR_LOAD_VALUE              ((uint32_t)20000)
 #define RADIO_WATCHDOG_TIMEOUT              ((uint32_t)15000)
 #define RADIO_PHY_PREAMBLE_LENGTH           (8u)
+#define RADIO_PHY_FSK_PREAMBLE_BYTES_LENGTH (5u)
 #define RADIO_OPMODE_MASK					(0x07)
 #define RADIO_RX_DONE_CALLBACK_MASK         (1 << 0)
 #define RADIO_TX_DONE_CALLBACK_MASK         (1 << 1)

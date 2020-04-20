@@ -4,7 +4,7 @@
 * \brief This is the implementation of LoRaWAN SW Timer module
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -85,6 +85,11 @@ typedef struct _SwTimer {
 	bool loaded;
 } SwTimer_t;
 
+/*
+* This defines the type of the system timestamp
+*/
+typedef uint64_t SwTimestamp_t;
+
 /******************************************************************************
                      Macros section
 ******************************************************************************/
@@ -137,6 +142,16 @@ typedef struct _SwTimer {
 * Macro to convert microseconds to milliseconds
 */
 #define US_TO_MS(u)                  ((u) / (1000))
+
+/*
+* Invalid value for the timestamp
+*/
+#define SW_TIMESTAMP_INVALID         (UINT64_MAX)
+
+/*
+* Maximum value in the timestamp
+*/
+#define SW_TIMESTAMP_MAX             (UINT64_MAX)
 
 /******************************************************************************
                      Prototypes section
@@ -244,6 +259,38 @@ void SystemTimerSuspend(void);
 \param[in] timeToSync Amount of duration to offset from known system time
 ******************************************************************************/
 void SystemTimerSync(uint64_t timeToSync);
+
+/**************************************************************************//**
+\brief Returns a timestamp id to be used before using it
+
+\param[out] timestampId Value of the id returned by the function
+
+\return LORAWAN_SUCCESS if new timerId is allocated
+        LORAWAN_RESOURCE_UNAVAILABLE if there is no more timerId to allocate
+******************************************************************************/
+StackRetStatus_t SwTimerTimestampCreate(uint8_t *timestampId);
+
+/**************************************************************************//**
+\brief Returns the timestamp stored in the given timestamp index
+\param[in] index Index of the system timestamp
+\param[out] *timestamp Pointer-to-timestamp to be read from the given index
+******************************************************************************/
+void SwTimerReadTimestamp(uint8_t index, SwTimestamp_t *timestamp);
+
+/**************************************************************************//**
+\brief Stores the timestamp in the given timestamp index
+\param[in] index Index of the system timestamp
+\param[in] *timestamp Pointer-to-timestamp to be stored in the given index
+******************************************************************************/
+void SwTimerWriteTimestamp(uint8_t index, SwTimestamp_t *timestamp);
+
+/**************************************************************************//**
+\brief Difference between the given timestamps
+\param[in] *earlier  Pointer-to-timestamp of known-to-be-earlier time
+\param[in] *later    Pointer-to-timestamp of known-to-be-later time
+\return SwTimestamp_t - time difference between later and earlier timestamps
+******************************************************************************/
+SwTimestamp_t SwTimerTimeDiff(SwTimestamp_t *earlier, SwTimestamp_t *later);
 
 #endif /* COMMON_SW_TIMER_H */
 

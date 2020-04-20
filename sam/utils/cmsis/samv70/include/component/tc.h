@@ -320,23 +320,30 @@ typedef struct {
 #define TC_BMR_MAXFILT_Pos 20
 #define TC_BMR_MAXFILT_Msk (0x3fu << TC_BMR_MAXFILT_Pos) /**< \brief (TC_BMR) Maximum Filter */
 #define TC_BMR_MAXFILT(value) ((TC_BMR_MAXFILT_Msk & ((value) << TC_BMR_MAXFILT_Pos)))
+#define TC_BMR_MAXCMP_Pos 26 /**< (TC_BMR) Maximum Consecutive Missing Pulses Position */
+#define TC_BMR_MAXCMP_Msk (0xfu << TC_BMR_MAXCMP_Pos) /**< (TC_BMR) Maximum Consecutive Missing Pulses Mask */
+#define TC_BMR_MAXCMP(value) (TC_BMR_MAXCMP_Msk & ((value) << TC_BMR_MAXCMP_Pos))
 /* -------- TC_QIER : (TC Offset: 0xC8) QDEC Interrupt Enable Register -------- */
 #define TC_QIER_IDX (0x1u << 0) /**< \brief (TC_QIER) Index */
 #define TC_QIER_DIRCHG (0x1u << 1) /**< \brief (TC_QIER) Direction Change */
 #define TC_QIER_QERR (0x1u << 2) /**< \brief (TC_QIER) Quadrature Error */
+#define TC_QIER_MPE (0x1u << 3) /**< \brief (TC_QIER) Consecutive Missing Pulse Error */
 /* -------- TC_QIDR : (TC Offset: 0xCC) QDEC Interrupt Disable Register -------- */
 #define TC_QIDR_IDX (0x1u << 0) /**< \brief (TC_QIDR) Index */
 #define TC_QIDR_DIRCHG (0x1u << 1) /**< \brief (TC_QIDR) Direction Change */
 #define TC_QIDR_QERR (0x1u << 2) /**< \brief (TC_QIDR) Quadrature Error */
+#define TC_QIDR_MPE (0x1u << 3) /**< \brief (TC_QIDR) Consecutive Missing Pulse Error */
 /* -------- TC_QIMR : (TC Offset: 0xD0) QDEC Interrupt Mask Register -------- */
 #define TC_QIMR_IDX (0x1u << 0) /**< \brief (TC_QIMR) Index */
 #define TC_QIMR_DIRCHG (0x1u << 1) /**< \brief (TC_QIMR) Direction Change */
 #define TC_QIMR_QERR (0x1u << 2) /**< \brief (TC_QIMR) Quadrature Error */
+#define TC_QIMR_MPE (0x1u << 3) /**< \brief (TC_QIMR) Consecutive Missing Pulse Error */
 /* -------- TC_QISR : (TC Offset: 0xD4) QDEC Interrupt Status Register -------- */
 #define TC_QISR_IDX (0x1u << 0) /**< \brief (TC_QISR) Index */
 #define TC_QISR_DIRCHG (0x1u << 1) /**< \brief (TC_QISR) Direction Change */
 #define TC_QISR_QERR (0x1u << 2) /**< \brief (TC_QISR) Quadrature Error */
 #define TC_QISR_DIR (0x1u << 8) /**< \brief (TC_QISR) Direction */
+#define TC_QISR_MPE (0x1u << 3) /**< \brief (TC_QISR) Consecutive Missing Pulse Error */
 /* -------- TC_FMR : (TC Offset: 0xD8) Fault Mode Register -------- */
 #define TC_FMR_ENCF0 (0x1u << 0) /**< \brief (TC_FMR) Enable Compare Fault Channel 0 */
 #define TC_FMR_ENCF1 (0x1u << 1) /**< \brief (TC_FMR) Enable Compare Fault Channel 1 */
