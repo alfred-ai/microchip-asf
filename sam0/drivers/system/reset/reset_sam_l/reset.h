@@ -3,7 +3,7 @@
  *
  * \brief SAM Reset functionality
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -62,7 +62,7 @@ enum system_reset_cause {
 	SYSTEM_RESET_CAUSE_WDT            = RSTC_RCAUSE_WDT,
 	/** The system was last reset because the external reset line was pulled low */
 	SYSTEM_RESET_CAUSE_EXTERNAL_RESET = RSTC_RCAUSE_EXT,
-#if SAML21 || SAMR30 || (SAMR34) || (SAMR35)
+#if SAML21 || SAMR30 || (SAMR34) || (SAMR35) || (WLR089)
 	/** The system was last reset by the BOD33. */
 	SYSTEM_RESET_CAUSE_BOD33          = RSTC_RCAUSE_BOD33,
 	/** The system was last reset by the BOD12 */
@@ -83,7 +83,7 @@ enum system_reset_cause {
  * List of possible backup exit source.
  */
 enum system_reset_backup_exit_source {
-#if SAML21 || SAMR30 || (SAMR34) || (SAMR35)
+#if SAML21 || SAMR30 || (SAMR34) || (SAMR35) || (WLR089)
 	/** The backup exit source was external wakeup. */
 	SYSTEM_RESET_BACKKUP_EXIT_EXTWAKE    = RSTC_BKUPEXIT_EXTWAKE,
 #endif
@@ -93,7 +93,7 @@ enum system_reset_backup_exit_source {
 	SYSTEM_RESET_BACKKUP_EXIT_BBPS       = RSTC_BKUPEXIT_BBPS,
 };
 
-#if SAML21 || SAMR30 || (SAMR34) || (SAMR35)
+#if SAML21 || SAMR30 || (SAMR34) || (SAMR35) || (WLR089)
 /**
  * \brief Wakeup debounce counter value.
  *
@@ -167,7 +167,7 @@ static inline enum system_reset_backup_exit_source system_get_backup_exit_source
 	return (enum system_reset_backup_exit_source)RSTC->BKUPEXIT.reg;
 }
 
-#if SAML21 || SAMR30 || (SAMR34) || (SAMR35)
+#if SAML21 || SAMR30 || (SAMR34) || (SAMR35) || (WLR089)
 /**
  * \brief Set wakeup debounce counter.
  *

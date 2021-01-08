@@ -421,7 +421,7 @@ typedef enum _LorawanAttributes
     /* Device EUI - a global end-device ID in IEEE EUI64 address space that uniquely identifies end-device */
     DEV_EUI = 0,
     /* Application EUI - a global application ID in IEEE EUI64 address space that uniquely identifies the application provider (i.e., owner) of the end-device. */
-    APP_EUI,
+    JOIN_EUI,
     /* Device Address - a 32bit identifier of the end-device within the current network */
     DEV_ADDR,
     /* Application Key - an AES-128 application key specific for the end-device
@@ -470,14 +470,16 @@ typedef enum _LorawanAttributes
     ADR_ACKLIMIT,
     /* ADR Acknowledgment Delay - Refer LORa Regional parameters spec for more information on default value */
     ADR_ACKDELAY,
-    /* Acknowledgment Timeout - Refer LORa Regional parameters spec for more information on default value */
-    ACKTIMEOUT,
+    /* Retranmsission Timeout - Refer LORa Regional parameters spec for more information on default value */
+    RETRANSMITTIMEOUT,
     /* No of Retransmission for the confirmed uplink messages */
     CNF_RETRANSMISSION_NUM,
 	/* No of Repetition for the unconfirmed uplink messages */
 	UNCNF_REPETITION_NUM,
     /* Receive Window2 configurable parameters - RX2 window frequency and Datarate*/
     RX2_WINDOW_PARAMS,
+	/* Class C receive window configurable parameters - RXC window frequency and Datarate*/
+	RXC_WINDOW_PARAMS,
     /* Automatic Reply - If set, response to ACK and MAC command will be sent immediately */
     AUTOREPLY,
     /* Battery level of the device */
@@ -552,8 +554,10 @@ typedef enum _LorawanAttributes
 	LAST_CH_ID,
 	/* Duty Cycle pending interval */
 	PENDING_DUTY_CYCLE_TIME,
-	/* Number of retries in one transactions */
-	RETRY_COUNTER,
+	/* Number of confirmed retries in one transactions */
+	RETRY_COUNTER_CNF,
+	/* Number of unconfirmed retries in one transactions */
+	RETRY_COUNTER_UNCNF,
 	/* Next Payload size */
 	NEXT_PAYLOAD_SIZE,
 	/* Pending Join Back Off time */
@@ -579,7 +583,11 @@ typedef enum _LorawanAttributes
     /* Returns the gps epoch time handle */
     DEVICE_GPS_EPOCH_TIME,
     /* Returns the packet time on air */
-    PACKET_TIME_ON_AIR
+    PACKET_TIME_ON_AIR,
+    /* Enable or disable duty cycle feature separately */
+    REGIONAL_DUTY_CYCLE,
+    /* If set, ED shall send LinkCheckReq cmd in next TX */
+    SEND_LINK_CHECK_CMD,
 } LorawanAttributes_t;
 
 /* Structure holding Receive window2 parameters*/
@@ -845,6 +853,22 @@ void LORAWAN_SetCallbackBitmask(uint32_t evtmask);
  *  bool status = LORAWAN_ReadyToSleep(false);
 */
 bool LORAWAN_ReadyToSleep(bool deviceResetAfterSleep);
+
+/**
+ * @Summary
+    LORAWAN Set Multicast Param
+ * @Description
+    This function is used to set the various Mcast attributes specific from application.
+ * @Preconditions
+    None
+ * @Param
+    attrType - represents the attribute type; can be any of the MCAST parameters in (LorawanAttributes_t)
+	attrValue - pointer that is used to get the attribute value
+ * @Returns
+    The error condition for getting a given attribute.
+ * @Example
+*/
+StackRetStatus_t LORAWAN_SetMulticastParam(LorawanAttributes_t attrType, void *attrValue);
 
 #ifdef	__cplusplus
 }

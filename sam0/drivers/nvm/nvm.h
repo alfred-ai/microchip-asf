@@ -3,7 +3,7 @@
  *
  * \brief SAM Non-Volatile Memory driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -283,12 +283,12 @@ extern "C" {
  * Define NVM features set according to the different device families.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(SAMD21_64K) || (SAMHA1) || (SAMR34) \
+#if (SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(SAMD21_64K) || (SAMHA1) || (WLR089) || (SAMR34) \
 	|| defined(__DOXYGEN__)
 /** Read while write EEPROM emulation feature. */
 #  define FEATURE_NVM_RWWEE
 #endif
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** Brown-out detector internal to the voltage regulator for VDDCORE. */
 #define FEATURE_BOD12
 #endif

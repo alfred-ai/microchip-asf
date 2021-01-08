@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC - Timer Counter for Control Applications Driver
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -765,7 +765,7 @@
  * Define port features set according to different device family.
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** Generate DMA triggers */
 #  define FEATURE_TCC_GENERATE_DMA_TRIGGER
 #endif
@@ -2031,12 +2031,12 @@ static inline void tcc_dma_trigger_command(
 			/* Wait for sync */
 	}
 	
-#if !(SAML21 || SAML22 || SAMR30 || SAMR34 || SAMR35)
+#if !(SAML21 || SAML22 || SAMR30 || SAMR34 || SAMR35 || WLR089)
 	/* Write command to execute */
 	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD_DMATRG;
 #endif
 
-#if (SAML21XXXB) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21XXXB) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/* Write command to execute */
 	tcc_module->CTRLBSET.reg = TCC_CTRLBSET_CMD_DMAOS;
 #endif

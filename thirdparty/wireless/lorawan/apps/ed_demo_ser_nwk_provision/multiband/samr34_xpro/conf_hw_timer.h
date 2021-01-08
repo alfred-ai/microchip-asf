@@ -3,7 +3,7 @@
 *
 * \brief SAMR34 Hardware Timer configuration
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -42,7 +42,7 @@
 /* ! @} */
 /* ! \name Configuration for SAML21, SAMR34 */
 /* ! @{ */
-#if (SAML21 || SAMR30 || SAMR34)
+#if (SAML21 || SAMR30 || SAMR34 ||(WLR089))
 #define TIMER      (TC0)
 #endif
 /* ! @} */

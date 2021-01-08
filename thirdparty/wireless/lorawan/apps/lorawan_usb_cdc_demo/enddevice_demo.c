@@ -4,7 +4,7 @@
 * \brief Getting Started LoRaWAN [USB_CDC] Demo Application
 *
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -41,10 +41,10 @@
 * LORAWAN Getting Started LoRaWAN USB_CDC Demo Application main file available from Atmel Studio examples,
 * this application is used to illustrate the use of the Target USB_CDC peripheral while sending temperature sensor data through a LoRaWAN network to the network server.
 * <P>• This example provides an option for the  user to configure the regional band at run time.</P>
-* <P>• Using this example application, allows the user to make use of the SAMR34 USB peripheral in USB_CDC mode.</P>
-* <P>• This example also showcases the functionality of the LoRaWAN Stack, and the SAMR34 XPRO Hardware.</P>
+* <P>• Using this example application, allows the user to make use of the SAMR34/WLR089 USB peripheral in USB_CDC mode.</P>
+* <P>• This example also showcases the functionality of the LoRaWAN Stack, and the SAMR34/WLR089 Xplained Pro Hardware.</P>
 * <P>• This example demonstrates storing stack parameters in NVM using PDS. </P>
-* <P>• This example uses the SW0 pushbutton of the SAMR34 XPRO to adjust DR(Data Rate) and TX PWR level settings. </P>
+* <P>• This example uses the SW0 pushbutton of the SAMR34/WLR089 Xplained Pro to adjust DR(Data Rate) and TX PWR level settings. </P>
 */
 
 /****************************** INCLUDES **************************************/
@@ -166,7 +166,7 @@ static uint8_t demoNwksKey[16] = DEMO_NETWORK_SESSION_KEY;
 static uint8_t demoAppsKey[16] = DEMO_APPLICATION_SESSION_KEY;
 /* OTAA join parameters */
 static uint8_t demoDevEui[8] = DEMO_DEVICE_EUI;
-static uint8_t demoAppEui[8] = DEMO_APPLICATION_EUI;
+static uint8_t demoJoinEui[8] = DEMO_JOIN_EUI;
 static uint8_t demoAppKey[16] = DEMO_APPLICATION_KEY;
 
 static LorawanSendReq_t lorawanSendReq;
@@ -177,6 +177,7 @@ static bool demoMcastEnable = DEMO_APP_MCAST_ENABLE;
 static uint32_t demoMcastDevAddr = DEMO_APP_MCAST_GROUP_ADDRESS;
 static uint8_t demoMcastNwksKey[16] = DEMO_APP_MCAST_NWK_SESSION_KEY;
 static uint8_t demoMcastAppsKey[16] = DEMO_APP_MCAST_APP_SESSION_KEY;
+static uint8_t demoMcastGroupId = DEMO_APP_MCAST_GROUPID;
 /************************** EXTERN VARIABLES ***********************************/
 
 extern bool factory_reset;
@@ -354,6 +355,9 @@ static SYSTEM_TaskStatus_t buttonTask(void)
 	uint8_t rate;
 	uint8_t pIndex;
 	uint8_t band;
+	uint8_t CurrentMinDataRate;
+    uint8_t CurrentMaxDataRate;
+    MinMaxDr_t CurrentMinMaxDr;
 
 	switch(appTaskState)
 	{
@@ -365,8 +369,12 @@ static SYSTEM_TaskStatus_t buttonTask(void)
 		case LONGBUTTON_PRESS_STATE:
 			status = LORAWAN_GetAttr(CURRENT_DATARATE, 0, &rate);
 			rate++;			// adjust rate ( increment)
+			
+			LORAREG_GetAttr(MIN_MAX_DR,NULL,&(CurrentMinMaxDr));
+			CurrentMinDataRate = CurrentMinMaxDr.minDr;
+			CurrentMaxDataRate = CurrentMinMaxDr.maxDr;
 			// ck for NA region
-			if(rate > RegParams.minDataRate)
+			if(rate > CurrentMaxDataRate)
 				rate = 0;	// force rate back to DR0
 
 			status = 0;
@@ -380,7 +388,7 @@ static SYSTEM_TaskStatus_t buttonTask(void)
 				}
 				else
 				{ // added check for EU region where max data rate is based upon channel
-					rate = RegParams.maxDataRate;  // force back to lowest data rate setting
+					rate = CurrentMinDataRate;  // force back to current lowest data rate setting
 				}
 			}while(status != LORAWAN_SUCCESS);
 
@@ -1052,6 +1060,7 @@ void sendData(TransmissionType_t type)
 {
 
     int status = -1;
+	uint8_t avail_payload;
     /* Read temperature sensor value */
 	int i;
 	int celavg;
@@ -1075,6 +1084,13 @@ void sendData(TransmissionType_t type)
     lorawanSendReq.bufferLength = data_len - 1;
     lorawanSendReq.confirmed = type;
     lorawanSendReq.port = DEMO_APP_FPORT;
+	LORAWAN_GetAttr(NEXT_PAYLOAD_SIZE, NULL, &avail_payload);
+	if (avail_payload < lorawanSendReq.bufferLength)
+	{
+		// At DR0 for NA and AU regions Max payload = 3 bytes or less, due to FHDR(7) and FPORT(1) byte 
+		printf("\r\nSending %d bytes of payload - DR limitation\r\n", avail_payload);
+		lorawanSendReq.bufferLength = avail_payload;
+	}
     status = LORAWAN_Send(&lorawanSendReq);
     if (LORAWAN_SUCCESS == status)
     {
@@ -1229,13 +1245,13 @@ StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
         {
             USB_printf("\nDevEUI : ");
             print_array((uint8_t *)&demoDevEui, sizeof(demoDevEui));
-            status = LORAWAN_SetAttr (APP_EUI, demoAppEui);
+            status = LORAWAN_SetAttr (JOIN_EUI, demoJoinEui);
         }
 
         if (LORAWAN_SUCCESS == status)
         {
-            USB_printf("\nAppEUI : ");
-            print_array((uint8_t *)&demoAppEui, sizeof(demoAppEui));
+            USB_printf("\nJoinEUI : ");
+            print_array((uint8_t *)&demoJoinEui, sizeof(demoJoinEui));
             status = LORAWAN_SetAttr (APP_KEY, demoAppKey);
         }
 
@@ -1269,50 +1285,81 @@ StackRetStatus_t set_device_type(EdClass_t ed_class)
 }
 
 /*********************************************************************//*
- \brief      Function to Initialize the Multicast parameters (not used during range testing )
+ \brief      Function to Initialize the Multicast parameters
  ************************************************************************/
 void set_multicast_params (void)
 {
     StackRetStatus_t status;
-
-    USB_printf("\n****************Multicast Parameters***********\n\r");
-
-
-    status = LORAWAN_SetAttr(MCAST_APPS_KEY, &demoMcastAppsKey);
+    LorawanMcastDevAddr_t dMcastDevAddr;
+    LorawanMcastAppSkey_t mcastAppSKey;
+    LorawanMcastNwkSkey_t mcastNwkSKey;
+	LorawanMcastDlFreqeuncy_t mcastDlFreq;
+	LorawanMcastDatarate_t mcastDatarate;
+    LorawanMcastStatus_t  mcastStatus;
+	ReceiveWindow2Params_t receivewindow2param;
+	
+    printf("\n***************Multicast Parameters********************\n\r");
+    
+    dMcastDevAddr.groupId = demoMcastGroupId;
+    mcastAppSKey.groupId  = demoMcastGroupId;
+    mcastNwkSKey.groupId  = demoMcastGroupId;
+	mcastDlFreq.groupId   = demoMcastGroupId;
+	mcastDatarate.groupId = demoMcastGroupId;
+    mcastStatus.groupId   = demoMcastGroupId;
+	
+    memcpy(&(mcastAppSKey.mcastAppSKey), &demoMcastAppsKey,LORAWAN_SESSIONKEY_LENGTH);
+    dMcastDevAddr.mcast_dev_addr = demoMcastDevAddr;
+    memcpy(&(mcastNwkSKey.mcastNwkSKey), &demoMcastNwksKey,LORAWAN_SESSIONKEY_LENGTH);
+    memcpy(&(mcastStatus.status),&demoMcastEnable,sizeof(demoMcastEnable));
+	LORAWAN_GetAttr(RX2_WINDOW_PARAMS ,NULL, &receivewindow2param);
+	mcastDatarate.datarate = receivewindow2param.dataRate;
+	mcastDlFreq.dlFrequency = receivewindow2param.frequency;
+	
+    
+    status = LORAWAN_SetAttr(MCAST_APPS_KEY, &mcastAppSKey);
     if (status == LORAWAN_SUCCESS)
     {
-        USB_printf("\nMcastAppSessionKey : ");
-        print_array((uint8_t *)&demoMcastAppsKey, sizeof(demoMcastAppsKey));
-        status = LORAWAN_SetAttr(MCAST_NWKS_KEY, &demoMcastNwksKey);
+	    printf("\nMcastAppSessionKey : ");
+	    print_array((uint8_t *)&(mcastAppSKey.mcastAppSKey), LORAWAN_SESSIONKEY_LENGTH);
+	    status = LORAWAN_SetAttr(MCAST_NWKS_KEY, &mcastNwkSKey);
     }
 
     if(status == LORAWAN_SUCCESS)
     {
-        USB_printf("\nMcastNwkSessionKey : ");
-        print_array((uint8_t *)&demoMcastNwksKey, sizeof(demoMcastNwksKey));
-        status = LORAWAN_SetAttr(MCAST_GROUP_ADDR, &demoMcastDevAddr);
+	    printf("\nMcastNwkSessionKey : ");
+	    print_array((uint8_t *)&(mcastNwkSKey.mcastNwkSKey), LORAWAN_SESSIONKEY_LENGTH);
+	    status = LORAWAN_SetAttr(MCAST_GROUP_ADDR, &dMcastDevAddr);
     }
-
     if (status == LORAWAN_SUCCESS)
     {
-        USB_sprintf(pstr1,"\nMcastGroupAddr : 0x%lx\n\r", demoMcastDevAddr);
-        status = LORAWAN_SetAttr(MCAST_ENABLE, &demoMcastEnable);
+	    printf("\nMcastGroupAddr : 0x%lx\n\r", dMcastDevAddr.mcast_dev_addr);
+	    status = LORAWAN_SetAttr(MCAST_ENABLE, &mcastStatus);
+    }
+	if (status == LORAWAN_SUCCESS)
+	{
+	  status = LORAWAN_SetMulticastParam(MCAST_DATARATE , &mcastDatarate);
+	}
+	if (status == LORAWAN_SUCCESS)
+	{
+	   status = LORAWAN_SetMulticastParam(MCAST_FREQUENCY , &mcastDlFreq);
+	}
+    else
+    {
+	    printf("\nMcastGroupAddrStatus : Failed\n\r");
+    }
+	
+    if (status == LORAWAN_SUCCESS)
+    {
+	    printf("\nMulticastStatus : Enabled\n\r");
     }
     else
     {
-        USB_printf("\nMcastGroupAddrStatus : Failed\n\r");
+	    printf("\nMulticastStatus : Failed\n\r");
     }
+	
+	 printf("\n********************************************************\n\r");
 
-    if (status == LORAWAN_SUCCESS)
-    {
-        USB_printf("\nMulticastStatus : Enabled\n\r");
-    }
-    else
-    {
-        USB_printf("\nMulticastStatus : Failed\n\r");
-    }
 }
-
 
 /***********************************************************************
  \brief      Function to Initialize set default parameters
@@ -1583,26 +1630,42 @@ static float convert_celsius_to_fahrenheit(float celsius_val)
 
 }
 
-/*********************************************************************//*
- \brief      Reads the DEV EUI if it is flashed in EDBG MCU
- ************************************************************************/
+/*************************************************************************************************//*
+ \brief      Reads the DEV EUI if it is flashed in EDBG MCU(SAMR34 Xplained Pro)/ Module(WLR089) 
+ **************************************************************************************************/
 static void dev_eui_read(void)
 {
-#if (EDBG_EUI_READ == 1)
-	uint8_t invalidEDBGDevEui[8];
-	uint8_t EDBGDevEUI[8];
-	edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
-	memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
-	/* If EDBG does not have DEV EUI, the value read will be  all 0xFF,
-	   Set devEUI in conf_app.h in that case */
-	if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
-	{
-		/* Set EUI addr in EDBG if there */
-		memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
-	}
-#endif
+	#if (EDBG_EUI_READ == 1)
+		uint8_t invalidEDBGDevEui[8];
+		uint8_t EDBGDevEUI[8];
+		edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
+		memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
+		/* If EDBG doesnot have DEV EUI, the read value will be of all 0xFF,
+		   Set devEUI in conf_app.h in that case */
+		if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
+		{
+			/* Set EUI addr in EDBG if there */
+			memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
+		}
+	#elif (MODULE_EUI_READ == 1)
+		uint8_t i = 0, j = 0;
+		uint8_t invalidMODULEDevEui[8];
+		uint8_t moduleDevEUI[8];
+		for (i = 0; i < 8; i += 2, j++)
+		{
+			moduleDevEUI[i] = (NVM_UID_ADDRESS[j] & 0xFF);
+			moduleDevEUI[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
+		}
+		memset(&invalidMODULEDevEui, 0xFF, sizeof(invalidMODULEDevEui));
+		/* If Module doesnot have DEV EUI, the read value will be of all 0xFF,
+		Set devEUI in conf_app.h in that case */
+		if(0 != memcmp(&moduleDevEUI, &invalidMODULEDevEui, sizeof(demoDevEui)))
+		{
+			/* Set EUI addr in Module if there */
+			memcpy(demoDevEui, moduleDevEUI, sizeof(demoDevEui));
+		}
+	#endif
 }
-
 void USB_printf(const char* str)
 {
 	serialUSBsend(str);

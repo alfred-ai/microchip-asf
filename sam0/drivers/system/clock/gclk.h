@@ -3,7 +3,7 @@
  *
  * \brief SAM Generic Clock Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -197,7 +197,7 @@ static inline void system_gclk_gen_get_config_defaults(
 	/* Default configuration values */
 	config->division_factor    = 1;
 	config->high_when_disabled = false;
-#if SAML21 || SAML22  || SAMR30 || SAMR34 || SAMR35
+#if SAML21 || SAML22  || SAMR30 || SAMR34 || SAMR35 || (WLR089)
 	config->source_clock       = GCLK_SOURCE_OSC16M;
 #elif (SAMC20) || (SAMC21)
 	config->source_clock       = GCLK_SOURCE_OSC48M;

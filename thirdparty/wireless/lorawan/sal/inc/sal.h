@@ -53,8 +53,8 @@ typedef enum _salItems
 	/* Key Encryption Key - This key will be used while reading the Session keys 
 	 * from ECC608 in a secured way */
 	SAL_KEY_ENC_KEY			= 0x05,
-	/* Application EUI */
-	SAL_APP_EUI				= 0x06,
+	/* JOIN EUI */
+	SAL_JOIN_EUI				= 0x06,
 	/* Device EUI */
 	SAL_DEV_EUI				= 0x07,
 	//New key or item should be added before SAL_MAX_KEYS

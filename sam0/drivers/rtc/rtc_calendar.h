@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Driver (Calendar Mode)
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -375,7 +375,7 @@ extern "C" {
  * Define port features set according to different device family
  * @{
 */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** RTC periodic interval interrupt. */
 #  define FEATURE_RTC_PERIODIC_INT
 /** RTC prescaler is off. */
@@ -759,7 +759,7 @@ struct rtc_calendar_config {
 	bool clock_24h;
 	/** Initial year for counter value 0 */
 	uint16_t year_init_value;
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/** Enable count read synchronization. The CLOCK value requires
 	 * synchronization when reading. Disabling the synchronization
 	 * will prevent the CLOCK value from displaying the current value. */
@@ -833,7 +833,7 @@ static inline void rtc_calendar_get_config_defaults(
 #endif
 	config->clock_24h           = false;
 	config->year_init_value     = 2000;
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	config->enable_read_sync    = true;
 #endif
 	for (uint8_t i = 0; i < RTC_NUM_OF_ALARMS; i++) {
@@ -1376,7 +1376,7 @@ void rtc_tamper_get_stamp (struct rtc_module *const module,
  *	<tr>
  *		<td>42126E</td>
  *		<td>12/2015</td>
- *		<td>Added support for SAM L21/L22, SAMR30, SAMR34, SAMR35, SAM C21, SAM D09, and SAM DA1</td>
+ *		<td>Added support for SAM L21/L22, SAMR30, SAMR34, SAMR35, SAM C21, SAM D09, WLR089 and SAM DA1</td>
  *	</tr>
  *	<tr>
  *		<td>42126D</td>

@@ -3,7 +3,7 @@
  *
  * \brief SAM Pin Multiplexer Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -194,7 +194,7 @@ extern "C" {
 #endif
 
 /*@{*/ 
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || (SAMD10) || (SAMD11) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAMD21) || (SAMD10) || (SAMD11) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** Output Driver Strength Selection feature support */
 #  define FEATURE_SYSTEM_PINMUX_DRIVE_STRENGTH
 #endif

@@ -3,7 +3,7 @@
  *
  * \brief SAM I2C Slave Driver
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -164,8 +164,8 @@ enum status_code i2c_slave_init(
 
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
 	uint32_t pm_index, gclk_index; 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	if (sercom_index == 5) {
 		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
 		gclk_index   = SERCOM5_GCLK_ID_CORE;
@@ -183,7 +183,7 @@ enum status_code i2c_slave_init(
 #endif
 	
 	/* Turn on module in PM */
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	if (sercom_index == 5) {
 		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, 1 << pm_index);
 	} else {

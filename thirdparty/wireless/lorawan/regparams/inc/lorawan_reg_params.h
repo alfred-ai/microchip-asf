@@ -36,10 +36,9 @@
 #define RECEIVE_DELAY2						2000UL
 #define JOIN_ACCEPT_DELAY1					5000UL
 #define JOIN_ACCEPT_DELAY2					6000UL
-#define MAX_FCNT_GAP						16384
 #define ADR_ACK_LIMIT						64
 #define ADR_ACK_DELAY						32
-#define ACK_TIMEOUT							2000
+#define RETRANSMIT_TIMEOUT							1000+(rand()%2001)
 /* Join dutycycle Prescalar for first 1hr*/
 #define JOIN_BACKOFF_PRESCALAR_1HR          100
 /*Join dutycycle prescalar for 2nd hour from start to 11th hr*/
@@ -106,10 +105,9 @@ typedef enum _LorawanRegionalAttributes
 	MAC_RECEIVE_DELAY2,
 	MAC_JOIN_ACCEPT_DELAY1,
 	MAC_JOIN_ACCEPT_DELAY2,
-	MAC_ACK_TIMEOUT,
+	MAC_RETRANSMIT_TIMEOUT,
 	MAC_ADR_ACK_DELAY,
 	MAC_ADR_ACK_LIMIT,
-	MAC_MAX_FCNT_GAP,
 	NEW_TX_CHANNEL_CONFIG,
 	FREE_CHANNEL,
 	CURRENT_CHANNEL_INDEX,
@@ -124,6 +122,7 @@ typedef enum _LorawanRegionalAttributes
 	REG_JOIN_SUCCESS,
 	REG_JOIN_ENABLE_ALL,
 	CHLIST_DEFAULTS,
+	DEF_TX_PWR,
 	REG_NUM_ATTRIBUTES	
 }LorawanRegionalAttributes_t;
 
@@ -134,6 +133,7 @@ typedef enum _LORAWAN_ERR_ATTR_e
 {
 	UNSUPPORTED_BAND = -((CHMASK_CHCNTL) + 2),
     INVLD_ATTR_CHMASK_CHCNTL = -((CHMASK_CHCNTL) + 1),
+	INVLD_ATTR_DEF_TX_PWR,
     INVLD_ATTR_REG_DEF_TX_DATARATE,
     INVLD_ATTR_REG_DEF_TX_POWER,
     INVLD_ATTR_TX_PARAMS,
@@ -143,10 +143,9 @@ typedef enum _LORAWAN_ERR_ATTR_e
     INVLD_ATTR_CURRENT_CHANNEL_INDEX,
     INVLD_ATTR_FREE_CHANNEL,
     INVLD_ATTR_NEW_TX_CHANNEL_CONFIG,
-    INVLD_ATTR_MAC_MAX_FCNT_GAP,
     INVLD_ATTR_MAC_ADR_ACK_LIMIT,
     INVLD_ATTR_MAC_ADR_ACK_DELAY,
-    INVLD_ATTR_MAC_ACK_TIMEOUT,
+    INVLD_ATTR_MAC_RETRANSMIT_TIMEOUT,
     INVLD_ATTR_MAC_JOIN_ACCEPT_DELAY2,
     INVLD_ATTR_MAC_JOIN_ACCEPT_DELAY1,
     INVLD_ATTR_MAC_RECEIVE_DELAY2,
@@ -362,7 +361,8 @@ StackRetStatus_t LORAREG_UnInit(void);
  *	LORAWAN_INVALID_PARAMETER if Initialization is failed
  */
 StackRetStatus_t LORAREG_SupportedBands(uint16_t *bands);
-
+StackRetStatus_t LORAREG_EnableallChannels(IsmBand_t ismBand);
+StackRetStatus_t setDefaultTxPower(IsmBand_t ismBand);
 #endif	/* _LORAWAN_REG_PARAMS_H */
 
 

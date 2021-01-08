@@ -3,7 +3,7 @@
 *
 * \brief Serial Provisioning of LoRaWAN Demo Application
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -60,10 +60,7 @@
 #include "conf_sio2host.h"
 #include "pds_interface.h"
 
-#if (CERT_APP == 1)
-#include "conf_certification.h"
-#include "enddevice_cert.h"
-#endif
+
 #if (EDBG_EUI_READ == 1)
 #include "edbg_eui.h"
 #endif
@@ -76,7 +73,7 @@
 static bool joinTypeSelection = false;
 static bool keyConfigSelection = false;
 static bool devEuiSelectionDone = false;
-static bool appEuiSelectionDone = false;
+static bool joinEuiSelectionDone = false;
 static bool appKeySelectionDone = false;
 static bool devAddrSelectionDone = false;
 static bool appSkeySelectionDone = false;
@@ -173,7 +170,7 @@ static uint8_t demoNwksKey[16];
 static uint8_t demoAppsKey[16];
 /* OTAA join parameters */
 static uint8_t demoDevEui[8];
-static uint8_t demoAppEui[8];
+static uint8_t demoJoinEui[8];
 static uint8_t demoAppKey[16];
 
 static LorawanSendReq_t lorawanSendReq;
@@ -210,14 +207,10 @@ static void displayRunRestoreBand(void);
 static void displayAppConfigMenu(void);
 static void displayJoinAndSend(void);
 static void displayRunDemoApp(void);
-#if (CERT_APP == 1)
-static void runCertApp(void);
-#endif
 #ifdef CONF_PMM_ENABLE
 static void appWakeup(uint32_t sleptDuration);
 static void app_resources_uninit(void);
 #endif
-static void dev_eui_read(void);
 /************************** FUNCTION PROTOTYPES ********************************/
 SYSTEM_TaskStatus_t APP_TaskHandler(void);
 static float convert_celsius_to_fahrenheit(float cel_val);
@@ -320,8 +313,8 @@ static void displaySelectedAppConfig(void)
 		printf("Device EUI: 0x");
 		for (i=0;i<8;i++) printf("%x",demoDevEui[i]);
 		printf("\r\n");
-		printf("Application EUI: 0x");
-		for (i=0;i<8;i++) printf("%x",demoAppEui[i]);
+		printf("Join EUI: 0x");
+		for (i=0;i<8;i++) printf("%x",demoJoinEui[i]);
 		printf("\r\n");
 		printf("Application Key: 0x");
 		for (i=0;i<16;i++) printf("%x",demoAppKey[i]);
@@ -354,10 +347,10 @@ static void demoAddr_keyconfig_handler(void)
 			serial_read_appConfig(demoDevEui, 8);
 			devEuiSelectionDone = true;
 		}
-		else if (appEuiSelectionDone == false)
+		else if (joinEuiSelectionDone == false)
 		{
-			serial_read_appConfig(demoAppEui, 8);
-			appEuiSelectionDone = true;
+			serial_read_appConfig(demoJoinEui, 8);
+			joinEuiSelectionDone = true;
 		}
 		else if (appKeySelectionDone == false)
 		{
@@ -426,12 +419,6 @@ static void processRunDemoCertApp(void)
 		appTaskState = DEMO_APP_STATE;
 		appPostTask(DISPLAY_TASK_HANDLER);
 	}
-	#if (CERT_APP == 1)
-	else if(serialBuffer == '2')
-	{
-		runCertApp();
-	}
-	#endif
 	else
 	{
 		printf("Please enter a valid choice\r\n");
@@ -642,7 +629,7 @@ static void processAppConfig(void)
 	else if (joinTypeSelection == true &&  keyConfigSelection == false)
 	{
 		demoAddr_keyconfig_handler();
-		if ((devEuiSelectionDone && appEuiSelectionDone && appKeySelectionDone) ||
+		if ((devEuiSelectionDone && joinEuiSelectionDone && appKeySelectionDone) ||
 		(devAddrSelectionDone && appSkeySelectionDone && nwkSkeySelectionDone)) keyConfigSelection = true;
 		appPostTask(DISPLAY_TASK_HANDLER);
 	}
@@ -657,7 +644,7 @@ static void processAppConfig(void)
 			joinTypeSelection = false;
 			keyConfigSelection = false;
 			devEuiSelectionDone = false;
-			appEuiSelectionDone = false;
+			joinEuiSelectionDone = false;
 			appKeySelectionDone = false;
 			devAddrSelectionDone = false;
 			appSkeySelectionDone = false;
@@ -677,9 +664,6 @@ static void displayRunDemoCertApp(void)
 	set_LED_data(LED_GREEN,&off);
 	printf("\r\n--Choose Application Type--\r\n");
 	printf("1. Demo application\r\n");
-	#if (CERT_APP == 1)
-	printf("2. Certification application\r\n");
-	#endif
 	printf("\r\n Select Application : ");
 	startReceiving = true;
 }
@@ -714,7 +698,7 @@ static void displayAppConfigMenu(void)
 		if (demoJoinActivationType == OVER_THE_AIR_ACTIVATION)
 		{
 			if (devEuiSelectionDone == false) printf("\r\nEnter Device EUI(hex 0-F): ");
-			else if (appEuiSelectionDone == false) printf("\r\nEnter Application EUI(hex 0-F): ");
+			else if (joinEuiSelectionDone == false) printf("\r\nEnter Join EUI(hex 0-F): ");
 			else if (appKeySelectionDone == false) printf("\r\nEnter Application Key(hex 0-F): ");
 		}
 		else if (demoJoinActivationType == ACTIVATION_BY_PERSONALIZATION)
@@ -790,9 +774,7 @@ void mote_demo_init(void)
     bool status = false;
     /* Initialize the resources */
     resource_init();
-	/* Read DEV EUI from EDBG */
-	dev_eui_read();
-	startReceiving = false;
+	  startReceiving = false;
     /* Initialize the LORAWAN Stack */
     LORAWAN_Init(demo_appdata_callback, demo_joindata_callback);
     printf("\n\n\r*******************************************************\n\r");
@@ -1105,6 +1087,18 @@ void demo_joindata_callback(StackRetStatus_t status)
 		set_LED_data(LED_AMBER,&on);
 		printf("\n No Free Channel found");
 	}
+  else if (LORAWAN_MIC_ERROR == status)
+	{
+		joined = false;
+		set_LED_data(LED_AMBER,&on);
+		printf("\n MIC Error");
+	}
+	else if (LORAWAN_TX_TIMEOUT == status)
+	{
+		joined = false;
+		set_LED_data(LED_AMBER,&on);
+		printf("\n Transmission Timeout");
+	}
     else
     {
         joined = false;
@@ -1130,6 +1124,7 @@ void lTimerCb(void *data)
 void sendData(void)
 {
     int status = -1;
+	uint8_t avail_payload;
     /* Read temperature sensor value */
     get_resource_data(TEMP_SENSOR,(uint8_t *)&cel_val);
     fahren_val = convert_celsius_to_fahrenheit(cel_val);
@@ -1142,6 +1137,13 @@ void sendData(void)
     lorawanSendReq.bufferLength = data_len - 1;
     lorawanSendReq.confirmed = DEMO_APP_TRANSMISSION_TYPE;
     lorawanSendReq.port = DEMO_APP_FPORT;
+	LORAWAN_GetAttr(NEXT_PAYLOAD_SIZE, NULL, &avail_payload);
+	if (avail_payload < lorawanSendReq.bufferLength)
+	{
+		// At DR0 for NA and AU regions Max payload = 3 bytes or less, due to FHDR(7) and FPORT(1) byte 
+		printf("\r\nSending %d bytes of payload - DR limitation\r\n", avail_payload);
+		lorawanSendReq.bufferLength = avail_payload;
+	}
     status = LORAWAN_Send(&lorawanSendReq);
     if (LORAWAN_SUCCESS == status)
     {
@@ -1188,16 +1190,6 @@ static void app_resources_uninit(void)
 }
 #endif
 
-#if (CERT_APP == 1)
-/*********************************************************************//*
- \brief      Function to runs certification application.
- ************************************************************************/
-static void  runCertApp(void)
-{
-    certAppEnabled = true;
-    cert_app_init();
-}
-#endif
 /*********************************************************************//*
  \brief      Timer callback for demo application.
              Used during the initial 5 sec wait period.
@@ -1332,13 +1324,13 @@ StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
         {
             printf("\nDevEUI : ");
             print_array((uint8_t *)&demoDevEui, sizeof(demoDevEui));
-            status = LORAWAN_SetAttr (APP_EUI, demoAppEui);
+            status = LORAWAN_SetAttr (JOIN_EUI, demoJoinEui);
         }
 
         if (LORAWAN_SUCCESS == status)
         {
-            printf("\nAppEUI : ");
-            print_array((uint8_t *)&demoAppEui, sizeof(demoAppEui));
+            printf("\nJoinEUI : ");
+            print_array((uint8_t *)&demoJoinEui, sizeof(demoJoinEui));
             status = LORAWAN_SetAttr (APP_KEY, demoAppKey);
         }
 
@@ -1380,19 +1372,27 @@ void set_multicast_params (void)
     LorawanMcastDevAddr_t dMcastDevAddr;
     LorawanMcastAppSkey_t mcastAppSKey;
     LorawanMcastNwkSkey_t mcastNwkSKey;
+    LorawanMcastDlFreqeuncy_t mcastDlFreq;
+	  LorawanMcastDatarate_t mcastDatarate;
     LorawanMcastStatus_t  mcastStatus;
+    ReceiveWindow2Params_t receivewindow2param;
 
     printf("\n***************Multicast Parameters********************\n\r");
 
     dMcastDevAddr.groupId = demoMcastGroupId;
     mcastAppSKey.groupId  = demoMcastGroupId;
     mcastNwkSKey.groupId  = demoMcastGroupId;
+    mcastDlFreq.groupId   = demoMcastGroupId;
+	  mcastDatarate.groupId = demoMcastGroupId;
     mcastStatus.groupId   = demoMcastGroupId;
 
     memcpy(&(mcastAppSKey.mcastAppSKey), &demoMcastAppsKey,LORAWAN_SESSIONKEY_LENGTH);
     dMcastDevAddr.mcast_dev_addr = demoMcastDevAddr;
     memcpy(&(mcastNwkSKey.mcastNwkSKey), &demoMcastNwksKey,LORAWAN_SESSIONKEY_LENGTH);
     memcpy(&(mcastStatus.status),&demoMcastEnable,sizeof(demoMcastEnable));
+    	LORAWAN_GetAttr(RX2_WINDOW_PARAMS ,NULL, &receivewindow2param);
+	mcastDatarate.datarate = receivewindow2param.dataRate;
+	mcastDlFreq.dlFrequency = receivewindow2param.frequency;
 
     status = LORAWAN_SetAttr(MCAST_APPS_KEY, &mcastAppSKey);
     if (status == LORAWAN_SUCCESS)
@@ -1413,6 +1413,14 @@ void set_multicast_params (void)
 	    printf("\nMcastGroupAddr : 0x%lx\n\r", dMcastDevAddr.mcast_dev_addr);
 	    status = LORAWAN_SetAttr(MCAST_ENABLE, &mcastStatus);
     }
+    if (status == LORAWAN_SUCCESS)
+	  {
+	    status = LORAWAN_SetMulticastParam(MCAST_DATARATE , &mcastDatarate);
+	  }
+	  if (status == LORAWAN_SUCCESS)
+	  {
+	   status = LORAWAN_SetMulticastParam(MCAST_FREQUENCY , &mcastDlFreq);
+	  }
     else
     {
 	    printf("\nMcastGroupAddrStatus : Failed\n\r");
@@ -1655,25 +1663,6 @@ static float convert_celsius_to_fahrenheit(float celsius_val)
 
 }
 
-/*********************************************************************//*
- \brief      Reads the DEV EUI if it is flashed in EDBG MCU
- ************************************************************************/
-static void dev_eui_read(void)
-{
-#if (EDBG_EUI_READ == 1)
-	uint8_t invalidEDBGDevEui[8];
-	uint8_t EDBGDevEUI[8];
-	edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
-	memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
-	/* If EDBG doesnot have DEV EUI, the read value will be of all 0xFF,
-	   Set devEUI in conf_app.h in that case */
-	if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
-	{
-		/* Set EUI addr in EDBG if there */
-		memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
-	}
-#endif
-}
 
 
 /* eof demo_app.c */

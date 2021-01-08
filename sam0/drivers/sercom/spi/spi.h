@@ -3,7 +3,7 @@
  *
  * \brief SAM Serial Peripheral Interface Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -382,7 +382,7 @@ extern "C" {
  * @{
  */
 #  if (SAMD21) || (SAMR21) || (SAMD11) || (SAMD10) || (SAML21) || (SAMDA1) || (SAMHA1) ||\
-	   (SAMHA0) || (SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || (SAMR34) || (SAMR35)|| defined(__DOXYGEN__)
+	   (SAMHA0) || (SAML22) || (SAMC20) || (SAMC21) || (SAMD09) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** SPI slave select low detection. */
 #  define FEATURE_SPI_SLAVE_SELECT_LOW_DETECT
 /** Slave select can be controlled by hardware. */

@@ -84,7 +84,6 @@ CSRCS = \
        sam0/utils/stdio/write.c                           \
        sam0/utils/syscalls/gcc/syscalls.c                 \
        thirdparty/wireless/addons/sio2host/uart/sio2host.c \
-       thirdparty/wireless/lorawan/apps/ed_demo_ser_nwk_provision/enddevice_cert.c \
        thirdparty/wireless/lorawan/apps/ed_demo_ser_nwk_provision/enddevice_demo.c \
        thirdparty/wireless/lorawan/apps/ed_demo_ser_nwk_provision/main.c \
        thirdparty/wireless/lorawan/hal/src/radio_driver_hal.c \
@@ -243,9 +242,8 @@ CPPFLAGS = \
        -D AS_BAND=1                                       \
        -D AU_BAND=1                                       \
        -D BOARD=SAMR34_XPLAINED_PRO                       \
-       -D CERT_APP=1                                      \
        -D CONF_PMM_ENABLE                                 \
-       -D EDBG_EUI_READ=1                                 \
+       -D EDBG_EUI_READ=0                                 \
        -D ENABLE_PDS=1                                    \
        -D EU_BAND=1                                       \
        -D EXTINT_CALLBACK_MODE=true                       \
@@ -253,6 +251,7 @@ CPPFLAGS = \
        -D IND_BAND=1                                      \
        -D JPN_BAND=1                                      \
        -D KR_BAND=1                                       \
+       -D MODULE_EUI_READ=0                               \
        -D NA_BAND=1                                       \
        -D RANDOM_NW_ACQ=0                                 \
        -D RTC_COUNT_ASYNC=true                            \

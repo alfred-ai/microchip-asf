@@ -128,6 +128,7 @@ StackRetStatus_t LORAReg_InitIN(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType2.minNonDefChId = 3;
 	RegParams.Rx1DrOffset = 7;
 	RegParams.maxTxPwrIndx = 10;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_IN;
 	RegParams.maxTxPwr = DEFAULT_EIRP_IN;
 	RegParams.pJoinDutyCycleTimer->timerId = regTimerId[0];
 	RegParams.pJoinDutyCycleTimer->remainingtime = 0;

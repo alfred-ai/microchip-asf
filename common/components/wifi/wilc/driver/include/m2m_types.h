@@ -69,11 +69,11 @@ MACROS
 */
 
 
-#define M2M_FIRMWARE_VERSION_MINOR_NO					(5)
+#define M2M_FIRMWARE_VERSION_MINOR_NO					(6)
 /*!< Firmware Minor release version number.
 */
 
-#define M2M_FIRMWARE_VERSION_PATCH_NO					(5)
+#define M2M_FIRMWARE_VERSION_PATCH_NO					(2)
 /*!< Firmware patch release version number.
 */
 
@@ -90,11 +90,11 @@ MACROS
 */
 
 
-#define M2M_DRIVER_VERSION_MINOR_NO					(5)
+#define M2M_DRIVER_VERSION_MINOR_NO					(6)
 /*!< Driver Minor release version number.
 */
 
-#define M2M_DRIVER_VERSION_PATCH_NO					(5)
+#define M2M_DRIVER_VERSION_PATCH_NO					(2)
 /*!< Driver patch release version number.
 */
 
@@ -1314,6 +1314,8 @@ typedef struct{
 	/*!< Encryption type for the rx packet.
 	*/
 	sint8	s8RSSI;
+	/*!< RSSI.
+	*/
 	uint8	au8SrcMacAddress[6];
 	/* !< ZERO means DO NOT FILTER Source address.
 	*/
@@ -1360,6 +1362,7 @@ typedef struct{
 
  @brief		
  	Set the device to operate in the Wi-Fi Direct (P2P) mode.
+ @sa
  	tenuP2PTrigger
 */
 typedef struct {
@@ -1529,7 +1532,11 @@ typedef struct {
  */
 typedef struct{
 	uint16	u16PktSz;
+	/*!< Packet size
+	*/
 	uint16	u16PktOffset;
+	/*!< Packet offset
+	*/
 	uint8	u8IfcId;
 	/*!< Interface Id 
 	*/
@@ -1546,10 +1553,12 @@ typedef struct{
  	M2M Provisioning Information obtained from the HTTP Provisioning server.
  */
 typedef struct{
-	char		acSSID[M2M_MAX_SSID_LEN];
-	/*!< AP connection SSID name  */
+	char	acSSID[M2M_MAX_SSID_LEN];
+	/*!< AP connection SSID name  
+	*/
 	uint8	u8SecType;
-	/*!< Security type */
+	/*!< Security type 
+	*/
 	sint8	s8RSSI;
 	/*!< Connection RSSI signal 
 	*/
@@ -1567,8 +1576,9 @@ typedef struct{
  */
 typedef struct{
 	uint8	BSSID[6];
-	/*!<BSSID of the connected station*/
-	sint8		s8RSSI;
+	/*!<BSSID of the connected station
+	*/
+	sint8	s8RSSI;
 	/*!< Connection RSSI signal 
 	*/
 	uint8	__PAD__[PAD_SZ(6 + 1)];   
@@ -1697,3 +1707,4 @@ typedef struct{
 #pragma pack(pop) //back to whatever the previous packing mode was
 
 #endif
+

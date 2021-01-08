@@ -4,7 +4,7 @@
  *
  * \brief SAM SERCOM USART Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -277,7 +277,7 @@ extern "C" {
 
 #if (SAMD21) || (SAMR21) || (SAMD09) || (SAMD10) || (SAMD11) || \
 	(SAML21) || (SAML22) || (SAMDA1) || (SAMC20) || (SAMC21) || \
-	(SAMR30) || (SAMHA1) || (SAMHA0) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
+	(SAMR30) || (SAMHA1) || (SAMHA0) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** USART sync scheme version 2. */
 #  define FEATURE_USART_SYNC_SCHEME_V2
 /** USART oversampling. */

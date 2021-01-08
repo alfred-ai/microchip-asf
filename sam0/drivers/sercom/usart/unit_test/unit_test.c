@@ -3,7 +3,7 @@
  *
  * \brief SAM USART Unit test
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -72,6 +72,7 @@
  *  - SAM R30 Xplained Pro board
  *  - SAM R30 Module Xplained Pro board
  *  - SAM R34 Xplained Pro board
+ *  - WLR 089 Xplained Pro board
  *
  * \section appdoc_sam0_usart_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -94,6 +95,8 @@
  *  - \b TX/RX: EXT PIN13 (PA14) <--> EXT PIN15  (PA17)
 =======
  * - SAM R34 Xplained Pro board
+ *  - \b TX/RX: EXT1 PIN11 (PA16) <--> EXT1 PIN17  (PB02)
+ * - WLR 089 Xplained Pro board
  *  - \b TX/RX: EXT1 PIN11 (PA16) <--> EXT1 PIN17  (PB02)
 >>>>>>> 3518a2958ff4695a84f9222901de2da524b4520d
  *

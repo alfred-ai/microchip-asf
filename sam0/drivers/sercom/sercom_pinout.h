@@ -4,7 +4,7 @@
  * \brief SAM SERCOM Module Pinout Definitions
  *
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -484,7 +484,7 @@
 	#define SERCOM5_PAD2_DEFAULT      PINMUX_PA20C_SERCOM5_PAD2
 	#define SERCOM5_PAD3_DEFAULT      PINMUX_PA21C_SERCOM5_PAD3
 
-#elif (SAML21E) || (SAMR34) || (SAMR35) 
+#elif (SAML21E) || (SAMR34) || (SAMR35) || (WLR089)
 
 	/* SERCOM0 */
  	#define SERCOM0_PAD0_DEFAULT      PINMUX_PA04D_SERCOM0_PAD0

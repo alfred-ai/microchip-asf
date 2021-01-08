@@ -189,7 +189,7 @@ static void wifi_cb(uint8 msg_type, void *msg)
 #ifdef P2P_STA_CONCURRENCY
 					os_m2m_wifi_set_device_name("Direct_WILC3000",strlen("Direct_WILC3000"));
 					os_m2m_wifi_set_p2p_control_ifc(P2P_STA_CONCURRENCY_INTERFACE);
-					os_m2m_wifi_p2p(M2M_WIFI_CH_11);
+					os_m2m_wifi_p2p(M2M_WIFI_CH_11, P2P_PBC, CONF_METHOD_PHYSICAL_PBC|CONF_METHOD_LABEL);
 #endif
 					// Power save will not be enabled by the FW since AP will be running for this app
 					//os_m2m_wifi_set_sleep_mode(M2M_PS_DEEP_AUTOMATIC, true);
@@ -198,7 +198,6 @@ static void wifi_cb(uint8 msg_type, void *msg)
 					tuniM2MWifiAuth sta_auth_param;
 					gbConnectedWifi = false;
 					osprintf("wifi_cb: M2M_WIFI_DISCONNECTED\r\n");
-					osprintf("wifi_cb: reconnecting...\r\n");
 					net_interface_down(NET_IF_STA);
 					/* Enable STA mode and connect to AP. */
 					utf8_STA_mode_SSID = u8_encode(STA_WLAN_SSID);
@@ -206,14 +205,14 @@ static void wifi_cb(uint8 msg_type, void *msg)
 						osprint("sta_task: STA mode utf8 SSID encode error! returning\r\n");
 						return;
 					}
-					
 #if defined(STA_ONLY) || defined(P2P_STA_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
+						osprintf("wifi_cb: reconnecting...\r\n");
 					if (STA_WLAN_AUTH == M2M_WIFI_SEC_OPEN) {
 						strcpy((char*)sta_auth_param.au8PSK, "");
 						os_m2m_wifi_connect((char *) utf8_STA_mode_SSID, strlen(utf8_STA_mode_SSID),
 							STA_WLAN_AUTH, &sta_auth_param, M2M_WIFI_CH_ALL);
 					}
-					if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
+					else if (STA_WLAN_AUTH != M2M_WIFI_SEC_WEP) {
 						utf8_STA_mode_PSK = u8_encode(STA_WLAN_PSK);
 						if (utf8_STA_mode_PSK == NULL) {
 							osprint("sta_task: STA mode utf8 PSK encode error! returning\r\n");
@@ -459,9 +458,9 @@ void sta_task(void *argument)
 
 #if defined(P2P_ONLY) || defined(P2P_AP_CONCURRENCY)
 //	os_m2m_wifi_set_sleep_mode(M2M_PS_DEEP_AUTOMATIC,1);
-os_m2m_wifi_set_device_name("Direct_WILC3000",strlen("Direct_WILC3000"));
-os_m2m_wifi_set_p2p_control_ifc(P2P_AP_CONCURRENCY_INTERFACE);
-os_m2m_wifi_p2p(M2M_WIFI_CH_11);
+	os_m2m_wifi_set_device_name("Direct_WILC3000",strlen("Direct_WILC3000"));
+	os_m2m_wifi_set_p2p_control_ifc(P2P_AP_CONCURRENCY_INTERFACE);
+	os_m2m_wifi_p2p(M2M_WIFI_CH_11, P2P_PBC, CONF_METHOD_PHYSICAL_PBC|CONF_METHOD_LABEL);
 #endif
 #if defined(STA_ONLY) || defined(P2P_STA_CONCURRENCY) || defined(AP_STA_CONCURRENCY)
 	/* Enable STA mode and connect to AP. */

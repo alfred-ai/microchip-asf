@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Driver (Count Mode)
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -203,9 +203,9 @@ static enum status_code _rtc_count_set_config(
 
 	Rtc *const rtc_module = module->hw;
 
-#if SAML21 || SAMR30 || (SAMR34) || (SAMR35)
+#if SAML21 || SAMR30 || (SAMR34) || (SAMR35) || (WLR089)
 	rtc_module->MODE0.CTRLA.reg = RTC_MODE0_CTRLA_MODE(0)
-#if (SAML21XXXB) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21XXXB) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 				    | (config->enable_read_sync << RTC_MODE0_CTRLA_COUNTSYNC_Pos)
 #endif
 				    | config->prescaler;

@@ -937,6 +937,7 @@ typedef struct _RegParams
     int8_t maxDrParams;
     int8_t Rx1DrOffset;
     int8_t maxTxPwrIndx;
+	int8_t defTxPwrIndx;
     uint8_t band;
 
 
@@ -989,6 +990,12 @@ void LORAREG_InitValidateAttrFnPtrsAU(void);
 void LORAREG_InitValidateAttrFnPtrsIN(void);
 void LORAREG_InitValidateAttrFnPtrsJP(void);
 void LORAREG_InitValidateAttrFnPtrsKR(void);
+void InitDefault868Channels (void);
+void InitDefault433Channels (void);
+void InitDefault920Channels (void);
+void InitDefault923Channels (void);
+void InitDefault920ChannelsKR (void);
+void Enableallchannels(void);
 
 void LORAREG_InitSetAttrFnPtrsNA(void);
 void LORAREG_InitSetAttrFnPtrsEU(void);

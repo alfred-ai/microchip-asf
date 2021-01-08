@@ -3,7 +3,7 @@
  *
  * \brief SAM Watchdog Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -50,7 +50,7 @@
  * \retval STATUS_ERR_INVALID_ARG   If invalid argument(s) were supplied
  * \retval STATUS_ERR_IO  If the Watchdog module is locked to be always on
  */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 enum status_code wdt_set_config(
 		const struct wdt_conf *const config)
 {

@@ -3,7 +3,7 @@
  *
  * \brief SAM Analog Comparator Driver
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -121,7 +121,7 @@ enum status_code ac_init(
 	/* Initialize device instance */
 	module_inst->hw = hw;
 
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/* Turn on the digital interface clock */
 	system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, MCLK_APBDMASK_AC);
 #else

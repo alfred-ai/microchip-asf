@@ -3,7 +3,7 @@
 *
 * \brief LORAWAN Class C Demo Application
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -39,10 +39,10 @@
 * \section preface Preface
 * LORAWAN Class C Demo Application main file available from Atmel Studio examples,
 * this is used to send the temperature sensor data through the LoRaWAN network to the network server.
-* <P>• This example provides an option for user to control the Amber and Green LED's on SAM R34 Xplained Pro .</P>
+* <P>• This example provides an option for user to control the Amber and Green LED's on SAM R34 Xplained Pro/WLR089 Xplained Pro.</P>
 * <P>• 0x55 and 0x50 sent from Network Server of LoRaWAN Application control the Amber LED on and off status respectively.</P>
 * <P>• 0xAA and 0xA0 sent from Network Server of LoRaWAN Application control the Green LED on and off status respectively.</P>
-* <P>• This example uses the SW0 pushbutton of the SAMR34 XPRO to initiate a manual unconfirmed message transmission</P>
+* <P>• This example uses the SW0 pushbutton of the SAMR34/WLR089 Xplained Pro to initiate a manual unconfirmed message transmission</P>
 */
 
 /****************************** INCLUDES **************************************/
@@ -155,7 +155,7 @@ static uint8_t demoNwksKey[16] = DEMO_NETWORK_SESSION_KEY;
 static uint8_t demoAppsKey[16] = DEMO_APPLICATION_SESSION_KEY;
 /* OTAA join parameters */
 static uint8_t demoDevEui[8] = DEMO_DEVICE_EUI;
-static uint8_t demoAppEui[8] = DEMO_APPLICATION_EUI;
+static uint8_t demoJoinEui[8] = DEMO_JOIN_EUI;
 static uint8_t demoAppKey[16] = DEMO_APPLICATION_KEY;
 
 static LorawanSendReq_t lorawanSendReq;
@@ -380,12 +380,32 @@ static void displayRunRestoreBand(void)
 *************************************************************************/
 static void displayJoinAndSend(void)
 {
-	printf("\r\nPress SW0 to Send Packet\r\n");
-	printf("Send Downlink Payload 0x55 to turn Amber LED ON\r\n");
-	printf("Send Downlink Payload 0xAA to turn Green LED ON\r\n");
-	printf("Send Downlink Payload 0x50 to turn Amber LED OFF\r\n");
-	printf("Send Downlink Payload 0xA0 to turn Green LED OFF\r\n");
-	appPostTask(PROCESS_TASK_HANDLER);
+	if (joined == true)
+	{
+		printf("\r\nPress SW0 to Send Packet\r\n");
+		printf("Send Downlink Payload 0x55 to turn Amber LED ON\r\n");
+		printf("Send Downlink Payload 0xAA to turn Green LED ON\r\n");
+		printf("Send Downlink Payload 0x50 to turn Amber LED OFF\r\n");
+		printf("Send Downlink Payload 0xA0 to turn Green LED OFF\r\n");
+		appPostTask(PROCESS_TASK_HANDLER);
+	}
+	else
+	{
+		StackRetStatus_t status;
+	    /* Send Join request for Demo application */
+	    status = LORAWAN_Join(DEMO_APP_ACTIVATION_TYPE);
+
+	    if (LORAWAN_SUCCESS == status && BAND_NUM < sizeof(bandTable))
+	    {
+		    printf("\nJoin Request Sent for %s\n\r",bandStrings[BAND_NUM]);
+	    }
+	    else
+	    {
+		    print_stack_status(status);
+		    appTaskState = JOIN_SEND_STATE;
+		    appPostTask(DISPLAY_TASK_HANDLER);
+	    }
+	}
 }
 
 /*********************************************************************//**
@@ -755,6 +775,7 @@ void lTimerCb(void *data)
 void sendData(void)
 {
     int status = -1;
+	uint8_t avail_payload;
     /* Read temperature sensor value */
     get_resource_data(TEMP_SENSOR,(uint8_t *)&cel_val);
     fahren_val = convert_celsius_to_fahrenheit(cel_val);
@@ -767,6 +788,13 @@ void sendData(void)
     lorawanSendReq.bufferLength = data_len - 1;
     lorawanSendReq.confirmed = DEMO_APP_TRANSMISSION_TYPE;
     lorawanSendReq.port = DEMO_APP_FPORT;
+	LORAWAN_GetAttr(NEXT_PAYLOAD_SIZE, NULL, &avail_payload);
+	if (avail_payload < lorawanSendReq.bufferLength)
+	{
+		// At DR0 for NA and AU regions Max payload = 3 bytes or less, due to FHDR(7) and FPORT(1) byte 
+		printf("\r\nSending %d bytes of payload - DR limitation\r\n", avail_payload);
+		lorawanSendReq.bufferLength = avail_payload;
+	}
     status = LORAWAN_Send(&lorawanSendReq);
     if (LORAWAN_SUCCESS == status)
     {
@@ -916,14 +944,14 @@ StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
         {
             printf("\nDevEUI : ");
             print_array((uint8_t *)&demoDevEui, sizeof(demoDevEui));
-            status = LORAWAN_SetAttr (APP_EUI, demoAppEui);
+            status = LORAWAN_SetAttr (JOIN_EUI, demoJoinEui);
         }
 
         if (LORAWAN_SUCCESS == status)
         {
-            printf("\nAppEUI : ");
-            print_array((uint8_t *)&demoAppEui, sizeof(demoAppEui));
-            status = LORAWAN_SetAttr (APP_KEY, demoAppKey);
+            printf("\nJoinEUI : ");
+            print_array((uint8_t *)&demoJoinEui, sizeof(demoJoinEui));
+			status = LORAWAN_SetAttr (APP_KEY, demoAppKey);          
         }
 
         if (LORAWAN_SUCCESS == status)
@@ -1239,24 +1267,41 @@ static float convert_celsius_to_fahrenheit(float celsius_val)
 
 }
 
-/*********************************************************************//*
- \brief      Reads the DEV EUI if it is flashed in EDBG MCU
- ************************************************************************/
+/*************************************************************************************************//*
+ \brief      Reads the DEV EUI if it is flashed in EDBG MCU(SAMR34 Xplained Pro)/ Module(WLR089) 
+ **************************************************************************************************/
 static void dev_eui_read(void)
 {
-#if (EDBG_EUI_READ == 1)
-	uint8_t invalidEDBGDevEui[8];
-	uint8_t EDBGDevEUI[8];
-	edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
-	memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
-	/* If EDBG doesnot have DEV EUI, the read value will be of all 0xFF,
-	   Set devEUI in conf_app.h in that case */
-	if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
-	{
-		/* Set EUI addr in EDBG if there */
-		memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
-	}
-#endif
+	#if (EDBG_EUI_READ == 1)
+		uint8_t invalidEDBGDevEui[8];
+		uint8_t EDBGDevEUI[8];
+		edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
+		memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
+		/* If EDBG doesnot have DEV EUI, the read value will be of all 0xFF,
+		   Set devEUI in conf_app.h in that case */
+		if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
+		{
+			/* Set EUI addr in EDBG if there */
+			memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
+		}
+	#elif (MODULE_EUI_READ == 1)
+		uint8_t i = 0, j = 0;
+		uint8_t invalidMODULEDevEui[8];
+		uint8_t moduleDevEUI[8];
+		for (i = 0; i < 8; i += 2, j++)
+		{
+			moduleDevEUI[i] = (NVM_UID_ADDRESS[j] & 0xFF);
+			moduleDevEUI[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
+		}
+		memset(&invalidMODULEDevEui, 0xFF, sizeof(invalidMODULEDevEui));
+		/* If Module doesnot have DEV EUI, the read value will be of all 0xFF,
+		Set devEUI in conf_app.h in that case */
+		if(0 != memcmp(&moduleDevEUI, &invalidMODULEDevEui, sizeof(demoDevEui)))
+		{
+			/* Set EUI addr in Module if there */
+			memcpy(demoDevEui, moduleDevEUI, sizeof(demoDevEui));
+		}
+	#endif
 }
 
 

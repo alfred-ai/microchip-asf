@@ -115,8 +115,8 @@ typedef union _MessageState_t
         */
         uint16_t rxPending  : 1;
         /*
-        * 0 -> no new message received in class-C RX2_CONT window
-        * 1 -> new message received in class-C RX2_CONT window and pending
+        * 0 -> no new message received in class-C RXC_CONT window
+        * 1 -> new message received in class-C RXC_CONT window and pending
         */
         uint16_t classRx2Dl : 1;
     };

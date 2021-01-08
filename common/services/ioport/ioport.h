@@ -4,7 +4,7 @@
  * \brief Common IOPORT service main header file for AVR, UC3 and ARM
  *        architectures.
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -129,7 +129,7 @@ enum ioport_sense {
 #elif SAM
 # if SAM4L
 #  include "sam/ioport_gpio.h"
-# elif (SAMD20 | SAMD21 | SAML21| SAMR34 |SAMR35)
+# elif (SAMD20 | SAMD21 | SAML21| SAMR34 |SAMR35 | WLR089)
 #  include "sam0/ioport.h"
 # else
 #  include "sam/ioport_pio.h"

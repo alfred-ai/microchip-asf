@@ -1,10 +1,10 @@
 /**
 * \file  low_power_demo.c
 *
-* \brief SAMR34 Low Power Application
+* \brief SAMR34/WLR089 Low Power Application
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -62,9 +62,10 @@
  *
  * This application has been tested on following boards:
  * - SAMR34 Xplained Pro
+ * - WLR089 Xplained Pro
  *
  * \section appdoc_sam0_low_power_setup Hardware Setup
- * This application of SAMR34 use (AIN6(PA06, EXT1 pin3)) as ADC input channel.
+ * This application of SAMR34/WLR089 use (AIN6(PA06, EXT1 pin3)) as ADC input channel.
  * BUTTON0 is used to wake up system from standby mode and IDLE mode.
  *
  *
@@ -724,7 +725,7 @@ int main(void)
 
 	/* BOD33 disabled */
 	SUPC->BOD33.reg &= ~SUPC_BOD33_ENABLE;
-#if !(SAMR34 || SAMR35)
+#if !(SAMR34 || SAMR35 || WLR089)
 	/* VDDCORE is supplied BUCK converter */
 	SUPC->VREG.bit.SEL = SUPC_VREG_SEL_BUCK_Val;
 #endif

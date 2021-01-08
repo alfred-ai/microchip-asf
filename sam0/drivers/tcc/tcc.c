@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC - Timer Counter for Control Applications Driver
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -62,7 +62,7 @@
 #if !defined(__DOXYGEN__)
 
 #  define _TCC_GCLK_ID(n,unused)           TPASTE3(TCC,n,_GCLK_ID),
-#  if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#  if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 #    define _TCC_APBCMASK(n,unused)        TPASTE2(MCLK_APBCMASK_TCC,n),
 #  else
 #    define _TCC_APBCMASK(n,unused)        TPASTE2(PM_APBCMASK_TCC,n),
@@ -627,7 +627,7 @@ enum status_code tcc_init(
 
 	hw->DRVCTRL.reg = drvctrl;
 
-#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30) && (!SAMR34) && (!SAMR35)
+#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30) && (!SAMR34) && (!SAMR35) && !(WLR089)
 	while (hw->SYNCBUSY.reg & (TCC_SYNCBUSY_WAVE | TCC_SYNCBUSY_WAVEB)) {
 		/* Wait for sync */
 	}
@@ -639,7 +639,7 @@ enum status_code tcc_init(
 	}
 	hw->COUNT.reg = config->counter.count;
 
-#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30) && (!SAMR34) && (!SAMR35)
+#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30) && (!SAMR34) && (!SAMR35) && !(WLR089)
 	while (hw->SYNCBUSY.reg & (TCC_SYNCBUSY_PER | TCC_SYNCBUSY_PERB)) {
 		/* Wait for sync */
 	}
@@ -647,7 +647,7 @@ enum status_code tcc_init(
 	hw->PER.reg = (config->counter.period);
 
 	for (i = 0; i <  _tcc_cc_nums[module_index]; i ++) {
-#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30) && (!SAMR34) && (!SAMR35)
+#if (!SAML21) && (!SAMC20) && (!SAMC21) && (!SAML22) && (!SAMR30) && (!SAMR34) && (!SAMR35) && !(WLR089)
 		while (hw->SYNCBUSY.reg & (
 			(TCC_SYNCBUSY_CC0 | TCC_SYNCBUSY_CCB0) << i)) {
 			/* Wait for sync */
@@ -1053,7 +1053,7 @@ static enum status_code _tcc_set_compare_value(
 	}
 
 	if (double_buffering_enabled) {
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 		tcc_module->CCBUF[channel_index].reg = compare;
 #else
 		while(tcc_module->STATUS.reg  &
@@ -1182,7 +1182,7 @@ static enum status_code _tcc_set_top_value(
 	}
 
 	if (double_buffering_enabled) {
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 		tcc_module->PERBUF.reg = top_value;
 #else
 		while(tcc_module->SYNCBUSY.reg  & TCC_SYNCBUSY_PERB) {
@@ -1332,7 +1332,7 @@ enum status_code tcc_set_pattern(
 	}
 
 	if (module_inst->double_buffering_enabled) {
-#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMC20) || (SAMC21) || (SAML22) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 		tcc_module->PATTBUF.reg = patt_value;
 #else
 		while(tcc_module->SYNCBUSY.reg  & TCC_SYNCBUSY_PATTB) {

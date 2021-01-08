@@ -3,7 +3,7 @@
 *
 * \brief SAMR34 Xplained Pro Board Configuration
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *

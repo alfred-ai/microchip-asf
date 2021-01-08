@@ -40,7 +40,7 @@
 
 #if (KR_BAND == 1)
 /*Init Functions's*/
-static void InitDefault920Channels (void);
+
 
 
 /*****************************CONSTANTS ***************************************/
@@ -127,6 +127,7 @@ StackRetStatus_t LORAReg_InitKR(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType2.minNonDefChId = 3;
 	RegParams.Rx1DrOffset = 5;
 	RegParams.maxTxPwrIndx = 7;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_KR;
 	RegParams.maxTxPwr = DEFAULT_EIRP_KR_HF;
 	RegParams.cmnParams.paramsType2.LBTTimer.timerId = regTimerId[0];
 	RegParams.pJoinBackoffTimer->timerId = regTimerId[1];
@@ -139,7 +140,7 @@ StackRetStatus_t LORAReg_InitKR(IsmBand_t ismBand)
 	
 	if(ismBand == ISM_KR920)
 	{
-		InitDefault920Channels();
+		InitDefault920ChannelsKR();
 
 		memcpy (RegParams.pDrParams, DefaultDrParamsKR, sizeof(DefaultDrParamsKR) );
 		for(int8_t dataRate = 0; dataRate < RegParams.maxDataRate; dataRate++)
@@ -185,7 +186,7 @@ StackRetStatus_t LORAReg_InitKR(IsmBand_t ismBand)
  * \brief This function initializes all the IN865 Channels to default values
  */
 #if (KR_BAND == 1)
-static void InitDefault920Channels (void)
+void InitDefault920ChannelsKR (void)
 {
     uint8_t i;
     memset (RegParams.pChParams, 0, sizeof(DefaultChannels920KR) );

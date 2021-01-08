@@ -3,7 +3,7 @@
  *
  * \brief SERCOM SPI master with vectored I/O driver implementation
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -139,7 +139,7 @@ enum status_code spi_master_vec_init(struct spi_master_vec_module *const module,
 	struct system_gclk_chan_config gclk_chan_conf;
 	uint16_t tmp_baud;
 	uint32_t sercom_index = _sercom_get_sercom_inst_index((Sercom *)spi_hw);
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	uint32_t pm_index = sercom_index + MCLK_APBCMASK_SERCOM0_Pos;
 #else
 	uint32_t pm_index = sercom_index + PM_APBCMASK_SERCOM0_Pos;

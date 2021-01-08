@@ -258,7 +258,7 @@ CPPFLAGS = \
        -D AU_BAND=1                                       \
        -D BOARD=SAMR34_XPLAINED_PRO                       \
        -D CONF_PMM_ENABLE                                 \
-       -D EDBG_EUI_READ=1                                 \
+       -D EDBG_EUI_READ=0                                 \
        -D ENABLE_PDS=1                                    \
        -D EU_BAND=1                                       \
        -D EXTINT_CALLBACK_MODE=true                       \
@@ -266,6 +266,7 @@ CPPFLAGS = \
        -D IND_BAND=1                                      \
        -D JPN_BAND=1                                      \
        -D KR_BAND=1                                       \
+       -D MODULE_EUI_READ=0                               \
        -D NA_BAND=1                                       \
        -D RANDOM_NW_ACQ=0                                 \
        -D RTC_COUNT_ASYNC=true                            \

@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM I2C Slave Driver
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -470,7 +470,7 @@ static inline void _i2c_slave_set_ctrlb_ackact(
 	SercomI2cs *const i2c_hw = &(module->hw->I2CS);
 
 #if (SAMD20 || SAMD21 || SAMD09 || SAMD10 || SAMD11 || SAML21 || SAMDA1 ||  \
-		SAML22 || SAMC20 || SAMC21 || SAMHA1 || (SAMHA0) || SAMR30 || SAMR34 || SAMR35)
+		SAML22 || SAMC20 || SAMC21 || SAMHA1 || (SAMHA0) || SAMR30 || SAMR34 || SAMR35) || (WLR089)
 	/* Workaround, Following two write are atomic */
 	system_interrupt_enter_critical_section();
 	i2c_hw->STATUS.reg = 0;
@@ -516,7 +516,7 @@ static inline void _i2c_slave_set_ctrlb_cmd3(
 	SercomI2cs *const i2c_hw = &(module->hw->I2CS);
 
 #if (SAMD20 || SAMD21 || SAMD09 || SAMD10 || SAMD11 || SAML21 || SAML22 || \
-		SAMDA1 || SAMC20 || SAMC21 || SAMR30 || SAMHA1 || (SAMHA0) || SAMR34 || SAMR35)
+		SAMDA1 || SAMC20 || SAMC21 || SAMR30 || SAMHA1 || (SAMHA0) || SAMR34 || SAMR35) || (WLR089)
 	/* Workaround */
 	/*
 	 * Below code instead i2c_hw->CTRLB.reg = SERCOM_I2CS_CTRLB_CMD(0x3);

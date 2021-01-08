@@ -1,9 +1,9 @@
 /**
 * \file  conf_app.h
 *
-* \brief LORAWAN Demo Application include file
+* \brief Getting Started LORAWAN [Serial_NWK_Provision] Demo Application include file
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *

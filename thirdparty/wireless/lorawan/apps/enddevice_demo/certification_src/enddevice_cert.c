@@ -43,6 +43,7 @@
 #include "lorawan.h"
 #include "system_task_manager.h"
 #include "enddevice_cert.h"
+#include "enddevice_cpc.h"
 #include "conf_certification.h"
 #include "sio2host.h"
 #include "sw_timer.h"
@@ -50,29 +51,58 @@
 #include "pds_interface.h"
 #endif
 
+/************************** GLOBAL VARIABLES ***********************************/
+uint8_t testMode = OFF;
+uint8_t sendData[100];
+uint16_t sendDataLen;
+uint16_t downlinkCtr = 0;
+bool bTxCnf = false;
+uint8_t uplinkTestNoResp = 0;
+bool pktRxd = false;
+uint8_t certAppTimerId;
+uint32_t certAppTimeout = CERT_APP_TIMEOUT;
+TransmissionType_t txType = CERT_APP_TRANSMISSION_TYPE;
+LorawanSendReq_t lorawanSendReq;
+IsmBand_t current_band;
+bool clear_linkcheck = false;
+uint8_t tx_cw_timer;
+//bool reset_test_mode = false;
+bool cnfTxInProgress = false;
+uint8_t sendFport = CERT_APP_FPORT;
+
 /************************** STATIC VARIABLES ***********************************/
-static uint8_t testMode = OFF;
-static uint8_t sendData[100];
-static uint16_t sendDataLen;
-static uint16_t downlinkCtr = 0;
-static bool bTxCnf = false;
-static uint8_t uplinkTestNoResp = 0;
-static bool pktRxd = false;
-static uint8_t certAppTimerId;
-static LorawanSendReq_t lorawanSendReq;
 /*ABP Join Parameters */
 static uint32_t devAddr = CERT_DEVICE_ADDRESS;
 static uint8_t nwksKey[16] = CERT_NETWORK_SESSION_KEY;
 static uint8_t appsKey[16] = CERT_APPLICATION_SESSION_KEY;
 /* OTAA join parameters */
-static uint8_t devEui[8] = CERT_DEVICE_EUI;
-static uint8_t appEui[8] = CERT_APPLICATION_EUI;
-static uint8_t appKey[16] = CERT_APPLICATION_KEY;
+uint8_t devEui[8] = CERT_DEVICE_EUI;
+uint8_t joinEui[8] = CERT_APPLICATION_EUI;
+uint8_t appKey[16] = CERT_APPLICATION_KEY;
 static const char* bandStrings[] =
 {
-    #if (EU_BAND == 1)
-    "EU868",
-    #endif
+	"0xFF",
+	#if (EU_BAND == 1)
+	"EU868",
+	#endif
+	#if (NA_BAND == 1)
+	"NA915",
+	#endif
+	#if (AU_BAND == 1)
+	"AU915",
+	#endif
+	#if (AS_BAND == 1)
+	"AS923",
+	#endif
+	#if (JPN_BAND == 1)
+	"JPN923",
+	#endif
+	#if (KR_BAND == 1)
+	"KR920",
+	#endif
+	#if (IND_BAND == 1)
+	"IND865",
+	#endif
 };
 
 
@@ -82,6 +112,64 @@ static uint8_t bandTable[] =
     #if (EU_BAND == 1)
     ISM_EU868,
     #endif
+    #if (NA_BAND == 1)
+    ISM_NA915,
+    #endif
+    #if (AU_BAND == 1)
+    ISM_AU915,
+    #endif
+    #if (AS_BAND == 1)
+    ISM_THAI923,
+    #endif
+    #if (JPN_BAND == 1)
+    ISM_JPN923,
+    #endif
+    #if (KR_BAND == 1)
+    ISM_KR920,
+    #endif
+    #if (IND_BAND == 1)
+    ISM_IND865,
+    #endif
+};
+
+const char * status_message[] = {
+    "radio_success",
+    "radio_no_data",
+    "radio_data_size",
+    "radio_invalid_req",
+    "radio_busy",
+    "radio_out_of_range",
+    "radio_unsupported_attr",
+    "radio_channel_busy",
+    "success",
+    "nwk_not_joined",
+    "invalid_parameter",
+    "keys_not_initialized",
+    "silent_immediately_active",
+    "fcntr_error_rejoin_needed",
+    "invalid_buffer_length",
+    "mac_paused",
+    "no_channels_found",
+    "busy",
+    "no_ack",
+    "nwk_join_in_progress",
+    "resource_unavailable",
+    "invalid_request",
+    "unsupported_band",
+    "fcntr_error",
+    "mic_error",
+    "invalid_mtype,",
+    "mcast_hdr_invalid",
+    "tx_timeout",
+    "radio_tx_timeout",
+    "max_mcast_group_reached",
+    "invalid_packet",
+    "rxpkt_encryption_failed",
+    "txpkt_encryption_failed",
+    "skey_derivation_failed",
+    "mic_calculation_failed",
+    "skey_read_failed",
+    "join_nonce_error"
 };
 
 /************************** EXTERN VARIABLES ***********************************/
@@ -95,6 +183,11 @@ static uint8_t bandTable[] =
              True, otherwise
  ************************************************************************/
 static bool cert_select_band(void);
+/*********************************************************************//*
+ \brief      Enable channels if NA or AU band is selected
+ \return     None
+ ************************************************************************/
+static void cert_enable_channels(void);
 /*********************************************************************//*
  \brief      Function that processes the Rx data
  \param[in]  data - Rx data payload
@@ -119,19 +212,6 @@ static void cert_joindata_callback(StackRetStatus_t status);
              LORAWAN_INVALID_PARAMETER, otherwise
  ************************************************************************/
 static StackRetStatus_t cert_set_mac_parameters(void);
-
-/*********************************************************************//*
- \brief      Set join parameters function
- \param[in]  activation type - notifies the activation type (OTAA/ABP)
- \return     LORAWAN_SUCCESS, if successfully set the join parameters
-             LORAWAN_INVALID_PARAMETER, otherwise
- ************************************************************************/
-static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_type);
-
-/*********************************************************************//*
- \brief    Certification Timer Callback
- ************************************************************************/
-static void cert_app_timer_callback(uint8_t param);
 
 /*********************************************************************//*
  \brief    Activates Test Mode
@@ -161,9 +241,7 @@ void cert_app_init(void)
     StackRetStatus_t status;
 
 #if (ENABLE_PDS == 1)
-    PDS_DeleteAll();
-
-    PDS_UnInit();
+    PDS_RestoreAll();
 #endif
 
     status = SwTimerCreate(&certAppTimerId);
@@ -173,16 +251,24 @@ void cert_app_init(void)
         printf("\r\nUnable to start certification timer. Pls check");
         while(1);
     }
+    
+    status = SwTimerCreate(&tx_cw_timer);
+    if(status!=LORAWAN_SUCCESS)
+    {
+        printf("\r\nUnable to create CW TX timer. Pls check");
+        while(1);
+    }
 
     /* Initialize the LORAWAN Stack */
     LORAWAN_Init(cert_appdata_callback, cert_joindata_callback);
 
+/*
     if (sizeof(bandTable) < 2)
     {
         printf("\nCertification cannot be run for the current regional band configuration\n\r");
         while(1);
     }
-
+*/
     while(!cert_select_band());
 
     status = cert_set_mac_parameters();
@@ -207,7 +293,7 @@ void cert_app_init(void)
     status = LORAWAN_Join(CERT_APP_ACTIVATION_TYPE);
     if (status == LORAWAN_SUCCESS)
     {
-        printf("\nJoin Request Sent\n\r");
+        printf("\n%s Join Request Sent\n\r", (LORAWAN_OTAA == CERT_APP_ACTIVATION_TYPE) ? "OTAA" : "ABP");
     }
     else
     {
@@ -230,23 +316,68 @@ static bool cert_select_band(void)
     printf("Select Regional Band : ");
 
     char rxChar;
-    uint8_t choice;
     rxChar = sio2host_getchar();
     const char *charPtr = &rxChar;
-    choice = atoi(charPtr);
-    if ( (choice >= sizeof(bandTable)) || (choice == 0) )
+    current_band = atoi(charPtr);
+    if ( (current_band >= sizeof(bandTable)) || (current_band == 0) )
     {
         return false;
     }
     else
     {
-        LORAWAN_Reset(bandTable[choice]);
+      LORAWAN_Reset(bandTable[current_band]);
+	  #if (NA_BAND == 1 || AU_BAND == 1)
+	  if ((bandTable[current_band] == ISM_NA915) || (bandTable[current_band] == ISM_AU915))
+	  {
+		  cert_enable_channels();
+	  }
+	 #endif
     }
 
-    printf("\n\n\r*******************************************************\n\r");
+    printf("\n\n\r........................................\n\r");
 //    printf("\n\rMicrochip LoRaWAN Stack %s\r\n",STACK_VER);
     printf("\r\nInit - Successful\r\n");
     return true;
+}
+
+/*********************************************************************//*
+ \brief      Enable channels if NA or AU band is selected
+ \return     None
+ ************************************************************************/
+static void cert_enable_channels(void)
+{
+	#if (RANDOM_NW_ACQ == 0)
+		#define MAX_NA_CHANNELS 72
+		#define MAX_SUBBAND_CHANNELS 8
+
+		ChannelParameters_t ch_params;
+
+		uint8_t allowed_min_125khz_ch,allowed_max_125khz_ch,allowed_500khz_channel;
+
+		allowed_min_125khz_ch = (SUBBAND-1)*MAX_SUBBAND_CHANNELS;
+
+		allowed_max_125khz_ch = ((SUBBAND-1)*MAX_SUBBAND_CHANNELS) + 7 ;
+
+		allowed_500khz_channel = SUBBAND+63;
+
+		for (ch_params.channelId = 0; ch_params.channelId < MAX_NA_CHANNELS; ch_params.channelId++)
+		{
+			if((ch_params.channelId >= allowed_min_125khz_ch) && (ch_params.channelId <= allowed_max_125khz_ch))
+			{
+				ch_params.channelAttr.status = true;
+			}
+			else if(ch_params.channelId == allowed_500khz_channel)
+			{
+				ch_params.channelAttr.status = true;
+			}
+			else
+			{
+				ch_params.channelAttr.status = false;
+			}
+
+			LORAWAN_SetAttr(CH_PARAM_STATUS, &ch_params);
+		}
+	#endif	
 }
 
 /*********************************************************************//*
@@ -255,58 +386,8 @@ static bool cert_select_band(void)
  ************************************************************************/
 static void print_stack_status(StackRetStatus_t status)
 {
-    switch(status)
-    {
-        case LORAWAN_SUCCESS:
-             printf("\nlorawan_success\n\r");
-        break;
+    printf("\n>> %s\n\r", status_message[status]);
 
-        case LORAWAN_BUSY:
-             printf("\nlorawan_state : stack_Busy\n\r");
-        break;
-
-        case LORAWAN_NWK_NOT_JOINED:
-            printf("\ndevice_not_joined_to_network\n\r");
-        break;
-
-        case LORAWAN_INVALID_PARAMETER:
-            printf("\ninvalid_parameter\n\r");
-        break;
-
-        case LORAWAN_KEYS_NOT_INITIALIZED:
-            printf("\nkeys_not_initialized\n\r");
-        break;
-
-        case LORAWAN_SILENT_IMMEDIATELY_ACTIVE:
-            printf("\nsilent_immediately_active\n\r");
-        break;
-
-        case LORAWAN_FCNTR_ERROR_REJOIN_NEEDED:
-            printf("\nframecounter_error_rejoin_needed\n\r");
-        break;
-
-        case LORAWAN_INVALID_BUFFER_LENGTH:
-            printf("\ninvalid_buffer_length\n\r");
-        break;
-
-        case LORAWAN_MAC_PAUSED:
-            printf("\nMAC_paused\n\r");
-        break;
-
-        case LORAWAN_NO_CHANNELS_FOUND:
-            printf("\nno_free_channels_found\n\r");
-        break;
-
-        case LORAWAN_INVALID_REQUEST:
-            printf("\nrequest_invalid\n\r");
-        break;
-        case LORAWAN_NWK_JOIN_IN_PROGRESS:
-            printf("\nprev_join_request_in_progress\n\r");
-        break;
-        default:
-           printf("\nrequest_failed %d\n\r",status);
-        break;
-    }
 }
 
 /*********************************************************************//**
@@ -320,37 +401,36 @@ static void cert_appdata_callback(void *appHandle, appCbParams_t *appdata)
         uint8_t *pData = appdata->param.rxData.pData;
         uint8_t dataLength = appdata->param.rxData.dataLength;
         StackRetStatus_t status = appdata->param.rxData.status;
-        uint32_t devAddress = appdata->param.rxData.devAddr;
+        uint32_t downcounter;
+        LORAWAN_GetAttr(DOWNLINK_COUNTER, NULL, &downcounter);
 
         switch(status)
         {
             case LORAWAN_SUCCESS:
             {
                  pktRxd = true;
+                 cnfTxInProgress = false;
                  //Successful transmission
                  if((dataLength > 0U) && (NULL != pData))
                  {
-
-                     printf("*** Received DL Data ***\n\r");
-                     printf("\nFrame Received at port %d\n\r",pData[0]);
-                     printf("\nFrame Length - %d\n\r",dataLength);
-                     printf("\nAddress - 0x%lx\n\r", devAddress);
-                     printf ("\nPayload: ");
-                     for (uint8_t i =0; i<dataLength - 1; i++)
+                     printf("\n--------------- Downlink ---------------\n\r");
+                     printf("\n  Fport : %d", pData[0]);
+                     printf("\nPayload : ");
+                     for (uint8_t i = 0; i < dataLength - 1; i++)
                      {
-                         printf("%x",pData[i+1]);
+                         printf("%02X", pData[i+1]);
                      }
-                     printf("\r\n*************************\r\n");
+                     printf("\n\r");
 
                      if(pData[0] == TEST_PORT_NB)
                      {
-                       cert_handle_cert_rx_data(pData+1,dataLength-1);
+                        cert_handle_cert_rx_data(pData+1,dataLength-1);
                      }
                  }
                  else
                  {
                      uplinkTestNoResp++;
-                     printf("Received ACK for Confirmed data\r\n");
+                     printf("\nReceived ACK for Confirmed data\r\n");
                  }
                  uplinkTestNoResp = 0;
 
@@ -359,19 +439,37 @@ static void cert_appdata_callback(void *appHandle, appCbParams_t *appdata)
 
 
             default:
-                printf("\r\nMAC NOK! - %d", status);
+                ;
             break;
         }
+        print_stack_status(status);
     }
     else if(LORAWAN_EVT_TRANSACTION_COMPLETE == appdata->evt)
     {
+        uint8_t lastchid;
+        uint32_t upcounter;
+        LORAWAN_GetAttr(UPLINK_COUNTER, NULL, &upcounter);
+        LORAWAN_GetAttr(LAST_CH_ID, NULL, &lastchid);
+        printf("\n--------- Transaction Complete ---------\n\r");
+        printf("\nLast uplink channel: %d, fcntup: %04X\n\r", lastchid, (uint16_t)((upcounter-1) & 0x0000FFFF));
         switch(appdata->param.transCmpl.status)
         {
             case LORAWAN_SUCCESS:
             {
+                if (cnfTxInProgress)
+                {
+                    if (false == pktRxd)
+                    {
+                        /*
+                        * In case a CNF uplink receives ACK in empty frame
+                        */
+                        downlinkCtr++;
+                    }                   
+                    cnfTxInProgress = false;
+                }
                 if(pktRxd == false)
                 {
-                    printf("Transmission Success\r\n");
+                    //printf("\nTransmission Success\r\n");
                     // No answer received from the server side
                     // Increment no response counter
                     uplinkTestNoResp++;
@@ -384,12 +482,12 @@ static void cert_appdata_callback(void *appHandle, appCbParams_t *appdata)
             break;
 
             default:
-                printf("\r\nMAC NOK! - %d", appdata->param.transCmpl.status );
+                ;//printf("\r\nMAC NOK! - %d", appdata->param.transCmpl.status );
             break;
         }
-        printf("\n\r*************************************************\n\r");
+        print_stack_status(appdata->param.transCmpl.status);
+        printf("\n========================================\n\r");
     }
-
 }
 
 /*********************************************************************//*
@@ -397,32 +495,26 @@ static void cert_appdata_callback(void *appHandle, appCbParams_t *appdata)
  ************************************************************************/
 static void cert_joindata_callback(StackRetStatus_t status)
 {
+    uint32_t devaddr;
     StackRetStatus_t stackRetStatus;
     /* This is called every time the join process is finished */
     if(LORAWAN_SUCCESS == status)
     {
-        printf("\nJoining Successful\n\r");
-
+        printf("\nJoin Successful\n\r");
+        LORAWAN_GetAttr(DEV_ADDR, NULL, &devaddr);
+        printf("\nNew DeviceAddr: %08X\n\r", (unsigned int)devaddr);
         /*Start the Timer to send data periodically*/
-        stackRetStatus = SwTimerStart(certAppTimerId, MS_TO_US(CERT_APP_TIMEOUT), SW_TIMEOUT_RELATIVE, (void*)cert_app_timer_callback, NULL);
-        if(stackRetStatus != LORAWAN_SUCCESS)
-        {
-            printf("ERROR : Unable to start Certification Timer\r\n");
-        }
+        stackRetStatus = SwTimerStart(certAppTimerId, MS_TO_US(certAppTimeout), SW_TIMEOUT_RELATIVE, (void*)cert_app_timer_callback, NULL);
+        printf("\nStart certAppTimerId\n\r");
     }
     else
     {
+        printf("\nJoin Denied\n\r");
+        print_stack_status(status);
         stackRetStatus = LORAWAN_Join(LORAWAN_OTAA);
-        if (stackRetStatus == LORAWAN_SUCCESS)
-        {
-            printf("\nOTAA Join Request Sent\n\r");
-        }
-        else
-        {
-            print_stack_status(stackRetStatus);
-        }
+        printf("\nOTAA Join Request Sent\n\r");
+        print_stack_status(stackRetStatus);
     }
-    printf("\n\r*******************************************************\n\r");
 }
 
 /*********************************************************************//*
@@ -431,17 +523,23 @@ static void cert_joindata_callback(StackRetStatus_t status)
  \return     LORAWAN_SUCCESS, if successfully set the join parameters
              LORAWAN_INVALID_PARAMETER, otherwise
  ************************************************************************/
-static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_type)
+StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_type)
 {
     StackRetStatus_t status;
 #ifdef CRYPTO_DEV_ENABLED
 	bool cryptoDevEnabled = true;
 	LORAWAN_SetAttr(CRYPTODEVICE_ENABLED, &cryptoDevEnabled );
 #endif /* #ifdef CRYPTO_DEV_ENABLED */
-	uint8_t dataRate = DR0;
+	uint8_t dataRate;
+	
+	if(bandTable[current_band] == ISM_THAI923 || bandTable[current_band] == ISM_JPN923)
+	dataRate = DR2;
+	else
+	dataRate = DR0;
+	
 	status = LORAWAN_SetAttr (CURRENT_DATARATE, &dataRate);
 
-    printf("\n********************Join Parameters********************\n\r");
+    printf("\n----------- Join Parameters ------------\n\r");
 
     if(ACTIVATION_BY_PERSONALIZATION == activation_type)
     {
@@ -482,13 +580,13 @@ static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_typ
         {
             printf("\nDevice EUI - ");
             print_array((uint8_t *)&devEui, sizeof(devEui));
-            status = LORAWAN_SetAttr (APP_EUI, appEui);
+            status = LORAWAN_SetAttr (JOIN_EUI, joinEui);
         }
 
         if (LORAWAN_SUCCESS == status)
         {
             printf("\nApplication EUI - ");
-            print_array((uint8_t *)&appEui, sizeof(appEui));
+            print_array((uint8_t *)&joinEui, sizeof(joinEui));
             status = LORAWAN_SetAttr (APP_KEY, appKey);
         }
 
@@ -507,11 +605,10 @@ static StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_typ
  \param[in]   length - Length of the array
  ************************************************************************/
 static void print_array (uint8_t *array, uint8_t length)
-{
-    printf("0x");
+{     
     for (uint8_t i =0; i < length; i++)
     {
-        printf("%02x", *array);
+        printf("%02X", *array);
         array++;
     }
     printf("\n\r");
@@ -520,38 +617,45 @@ static void print_array (uint8_t *array, uint8_t length)
 /*********************************************************************//*
  \brief    Certification Timer Callback
  ************************************************************************/
-static void cert_app_timer_callback(uint8_t param)
+void cert_app_timer_callback(uint8_t param)
 {
     StackRetStatus_t status;
-    SwTimerStart(certAppTimerId, MS_TO_US(CERT_APP_TIMEOUT), SW_TIMEOUT_RELATIVE, (void *)cert_app_timer_callback, NULL);
-
-    if(testMode == OFF)
+    uint32_t upcounter;
+    uint8_t datarate;
+    SwTimerStart(certAppTimerId, MS_TO_US(certAppTimeout), SW_TIMEOUT_RELATIVE, (void *)cert_app_timer_callback, NULL);
+    LORAWAN_GetAttr(UPLINK_COUNTER, NULL, &upcounter);
+    LORAWAN_GetAttr(CURRENT_DATARATE, NULL, &datarate);
+    
+    if (clear_linkcheck)
     {
-        lorawanSendReq.buffer = sendData;
-        lorawanSendReq.bufferLength = sendDataLen;
-        lorawanSendReq.confirmed = CERT_APP_TRANSMISSION_TYPE;
-        lorawanSendReq.port = CERT_APP_FPORT;
-        status = LORAWAN_Send(&lorawanSendReq);
-    }
-    else
-    {
-        lorawanSendReq.buffer = sendData;
-        lorawanSendReq.bufferLength = sendDataLen;
-        lorawanSendReq.confirmed = bTxCnf;
-        lorawanSendReq.port = TEST_PORT_NB;
-        status = LORAWAN_Send(&lorawanSendReq);
+      uint16_t lcp = 0;
+      clear_linkcheck = false;
+      LORAWAN_SetAttr(LINK_CHECK_PERIOD, &lcp);
     }
 
+    lorawanSendReq.buffer = sendData;
+    lorawanSendReq.bufferLength = sendDataLen;
+    lorawanSendReq.confirmed = bTxCnf;
+    lorawanSendReq.port = sendFport;
+    status = LORAWAN_Send(&lorawanSendReq);
+    sendFport = CERT_APP_FPORT;
+    
+    printf("\n---------------- Uplink ----------------\n\r");
+    printf("\n     DR : %d", datarate);
+    printf("\n   Type : %s", lorawanSendReq.confirmed ? "Cnf" : "UnCnf");
+    printf("\n  Fport : %d", lorawanSendReq.port);
+    printf("\n FCntUp : %ld (%08X)", upcounter, (unsigned int)upcounter);
+    printf("\nPayload : ");
+    print_array(lorawanSendReq.buffer,lorawanSendReq.bufferLength);
     if (LORAWAN_SUCCESS == status)
     {
         pktRxd = false;
-        printf("\nFrame Sent:");
-        print_array(lorawanSendReq.buffer,lorawanSendReq.bufferLength);
+        if (lorawanSendReq.confirmed)
+        {
+            cnfTxInProgress = true;
+        }
     }
-    else
-    {
-        print_stack_status(status);
-    }
+    print_stack_status(status);
 }
 
 /*********************************************************************//*
@@ -608,99 +712,106 @@ static void cert_handle_cert_rx_data(uint8_t* data,uint8_t dataLen)
         sendData[0] = (uint8_t) (downlinkCtr >> 8);
         sendData[1] = (uint8_t) (downlinkCtr);
         sendDataLen = 2;
-
-        switch (data[0])
+        
+        if (enddevice_cpc_is_payload_valid(data, dataLen))
         {
-            case DEACTIVATE_MODE:
-            {
-                if (dataLen == 1) {
-                    //Deactivated test mode
-                    testMode = OFF;
-                }
-            }
-            break;
-
-            case ACTIVATE_MODE:
-            {
-                bool bPayloadValid = false;
-                if (dataLen == 4)
-                {
-                    for (uint8_t i = 0; i < 4; i++)
-                    {
-                        if (data[i] == 1)
-                        {
-                            bPayloadValid = true;
-                        }
-                        else
-                        {
-                            bPayloadValid = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (bPayloadValid)
-                {
-                    //Activated test mode
-                    cert_enter_test_mode();
-                }
-            }
-            break;
-
-            case CNF_MODE:
-            {
-                if (dataLen == 1)
-                {
-                    //Confirmed frames
-                    bTxCnf = true;
-                }
-            }
-            break;
-
-            case UNCNF_MODE:
-            {
-                if (dataLen == 1)
-                {
-                    //Unconfirmed frames
-                    bTxCnf = false;
-                }
-            }
-            break;
-
-            case CRYPTO_MODE:
-            {
-                if (dataLen <= 33) {
-                    //Cryptography tests
-                    sendData[0] = 0x04;
-
-                    for (uint8_t i = 1; i < dataLen; i++)
-                    {
-                        sendData[i] = (((uint16_t) data[i]) + 1) % 256;
-                    }
-                    sendDataLen = dataLen;
-                }
-            }
-            break;
-
-            case OTAA_TRIGGER_MODE:
-            {
-                status = LORAWAN_Join(LORAWAN_OTAA);
-                if (status == LORAWAN_SUCCESS)
-                {
-                    testMode = OFF;
-                    SwTimerStop(certAppTimerId);
-                    printf("\nOTAA Join Request Sent\n\r");
-                }
-                else
-                {
-                    print_stack_status(status);
-                }
-            }
-            break;
-
-            default:
-            break;
+            enddevice_cpc_execute_command(data, dataLen);
         }
+        else
+        {
+            switch (data[0])
+            {
+                case DEACTIVATE_MODE:
+                {
+                    if (dataLen == 1) {
+                        //Deactivated test mode
+                        testMode = OFF;
+                    }
+                }
+                break;
+
+                case ACTIVATE_MODE:
+                {
+                    bool bPayloadValid = false;
+                    if (dataLen == 4)
+                    {
+                        for (uint8_t i = 0; i < 4; i++)
+                        {
+                            if (data[i] == 1)
+                            {
+                                bPayloadValid = true;
+                            }
+                            else
+                            {
+                                bPayloadValid = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (bPayloadValid)
+                    {
+                        //Activated test mode
+                        cert_enter_test_mode();
+                    }
+                }
+                break;
+
+                case CNF_MODE:
+                {
+                    if (dataLen == 1)
+                    {
+                        //Confirmed frames
+                        bTxCnf = true;
+                    }
+                }
+                break;
+
+                case UNCNF_MODE:
+                {
+                    if (dataLen == 1)
+                    {
+                        //Unconfirmed frames
+                        bTxCnf = false;
+                    }
+                }
+                break;
+
+                case CRYPTO_MODE:
+                {
+                    if (dataLen <= 33) {
+                        //Cryptography tests
+                        sendData[0] = 0x04;
+
+                        for (uint8_t i = 1; i < dataLen; i++)
+                        {
+                            sendData[i] = (((uint16_t) data[i]) + 1) % 256;
+                        }
+                        sendDataLen = dataLen;
+                    }
+                }
+                break;
+
+                case OTAA_TRIGGER_MODE:
+                {
+                    status = LORAWAN_Join(LORAWAN_OTAA);
+                    if (status == LORAWAN_SUCCESS)
+                    {
+                        testMode = OFF;
+                        SwTimerStop(certAppTimerId);
+                        printf("\nOTAA Join Request Sent\n\r");
+                    }
+                    else
+                    {
+                        print_stack_status(status);
+                    }
+                }
+                break;
+
+                default:
+                break;
+            }
+        }        
     }
 }
 

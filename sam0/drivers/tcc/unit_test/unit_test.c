@@ -3,7 +3,7 @@
  *
  * \brief SAM TCC Unit test
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -78,6 +78,8 @@
  * - SAM R30 Module Xplained Pro:
  *  - \b EXTINT 8 (PA28, EXT pin 10 ) <-----> TCC0 WO0 (PA08, EXT pin 11)
  * - SAM R34 Xplained Pro:
+ *  - \b EXTINT 7 (PA28, EXT1 pin 6 ) <-----> TCC0 WO0 (PA08, EXT1 pin 5)
+ * - WLR 089 Xplained Pro:
  *  - \b EXTINT 7 (PA28, EXT1 pin 6 ) <-----> TCC0 WO0 (PA08, EXT1 pin 5)
  *
  * To run the test:
@@ -403,7 +405,7 @@ static void run_capture_and_compare_test(const struct test_case *test)
 	extint_chan_config.gpio_pin            = CONF_EIC_PIN;
 	extint_chan_config.gpio_pin_mux        = CONF_EIC_MUX;
 	extint_chan_config.gpio_pin_pull       = EXTINT_PULL_UP;
-#if (!SAML21 && !SAMC21 && !SAMR30 && !SAMR34)
+#if (!SAML21 && !SAMC21 && !SAMR30 && !SAMR34 && !(WLR089)) 
 	extint_chan_config.wake_if_sleeping    = false;
 #endif
 	extint_chan_config.filter_input_signal = false;

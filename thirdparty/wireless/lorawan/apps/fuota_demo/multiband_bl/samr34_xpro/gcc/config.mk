@@ -246,7 +246,7 @@ CPPFLAGS = \
        -D AU_BAND=1                                       \
        -D BOARD=SAMR34_XPLAINED_PRO                       \
        -D CONF_PMM_ENABLE                                 \
-       -D EDBG_EUI_READ=1                                 \
+       -D EDBG_EUI_READ=0                                 \
        -D ENABLE_PDS=1                                    \
        -D EU_BAND=1                                       \
        -D EXTINT_CALLBACK_MODE=true                       \

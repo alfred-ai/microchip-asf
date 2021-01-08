@@ -3,7 +3,7 @@
  *
  * \brief SAM Event System Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -355,7 +355,7 @@ struct events_config {
 	uint8_t                    generator;
 	/** Clock source for the event channel */
 	uint8_t                    clock_source;
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/** Run in standby mode for the channel */
 	bool                       run_in_standby;
 	/** Run On Demand */
@@ -378,7 +378,7 @@ struct events_config {
  *
  * @{
  */
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 #  define _EVENTS_START_OFFSET_BUSY_BITS           16
 #  define _EVENTS_START_OFFSET_USER_READY_BIT      0
 #  define _EVENTS_START_OFFSET_DETECTION_BIT       16

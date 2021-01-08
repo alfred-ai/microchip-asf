@@ -38,8 +38,7 @@
 #include "lorawan_multiband.h"
 
 #if (EU_BAND == 1)
-static void InitDefault868Channels (void);
-static void InitDefault433Channels (void);
+
 
 
 static const ChannelParams_t DefaultChannels868[] =
@@ -168,6 +167,7 @@ StackRetStatus_t LORAReg_InitEU(IsmBand_t ismBand)
 	RegParams.maxDataRate = MAC_DATARATE_MAX_EU;
 	RegParams.Rx1DrOffset = 5;
 	RegParams.maxTxPwrIndx = 7;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_EU;
 	RegParams.cmnParams.paramsType2.minNonDefChId = 3;
 	RegParams.maxTxPwr = DEFAULT_EIRP_EU;
 	RegParams.pDutyCycleTimer->timerId = regTimerId[0];
@@ -241,7 +241,7 @@ StackRetStatus_t LORAReg_InitEU(IsmBand_t ismBand)
  * \brief This function initializes all the EU868 Channels to default values
  */
 #if (EU_BAND == 1)
-static void InitDefault868Channels (void)
+void InitDefault868Channels (void)
 {
     uint8_t i;
 
@@ -264,7 +264,7 @@ static void InitDefault868Channels (void)
 /*
  * \brief This function initializes all the EU433 Channels to default values
  */
-static void InitDefault433Channels (void)
+void InitDefault433Channels (void)
 {
     uint8_t i;
 

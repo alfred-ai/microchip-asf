@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Driver (Calendar Mode)
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -297,7 +297,7 @@ static void _rtc_calendar_set_config(
 	/* Set to calendar mode and set the prescaler. */
 	tmp_reg = RTC_MODE2_CTRLA_MODE(2) | config->prescaler;
 
-#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21XXXB) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	if(config->enable_read_sync) {
 		tmp_reg |= RTC_MODE2_CTRLA_CLOCKSYNC;
 	}

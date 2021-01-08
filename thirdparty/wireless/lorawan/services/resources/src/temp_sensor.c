@@ -4,7 +4,7 @@
 * \brief Temperature Sensor service
 *		
 *
-* Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2018-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -199,7 +199,7 @@ static void load_calibration_data(void)
 	temp_log_row_ptr++;
 	val2 = *temp_log_row_ptr;
 
-#if SAML21 || SAMR34 || SAMR35
+#if SAML21 || SAMR34 || SAMR35 || WLR089U0
 	room_temp_val_int = (uint8_t)((val1 & FUSES_ROOM_TEMP_VAL_INT_Msk) >> FUSES_ROOM_TEMP_VAL_INT_Pos);
 	
 	room_temp_val_dec = (uint8_t)((val1 & FUSES_ROOM_TEMP_VAL_DEC_Msk) >> FUSES_ROOM_TEMP_VAL_DEC_Pos);

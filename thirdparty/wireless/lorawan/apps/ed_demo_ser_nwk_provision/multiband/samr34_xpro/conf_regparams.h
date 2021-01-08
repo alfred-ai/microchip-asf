@@ -3,7 +3,7 @@
 *
 * \brief LORAWAN Regional Parameter Configuration
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -102,7 +102,7 @@
 #define MAC_DATARATE_MAX_JP                  (DR0)
 
 #define LBT_RSSI_SAMPLES_COUNT_JP		   	 (5)
-#define FEATURES_SUPPORTED_JP                (LBT_SUPPORT | PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
+#define FEATURES_SUPPORTED_JP                (LBT_SUPPORT| DUTY_CYCLE_SUPPORT | PA_SUPPORT|JOIN_BACKOFF_SUPPORT)
 #endif
 
 #if (KR_BAND == 1)

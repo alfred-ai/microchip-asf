@@ -4,7 +4,7 @@
 * \brief This is the radio_transaction header file which contains Transmit,
 *        Receive and Interrupt handling interfaces.
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -175,6 +175,8 @@ void Radio_ResetClockInput(void);
 \return     - none
 *************************************************************************/
 void Radio_FSKTxPayloadHandler(uint8_t *buffer, uint8_t bufferLen);
+
+
 
 #endif  /*_RADIO_TRANSACTION_H*/
 

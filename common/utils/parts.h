@@ -3,7 +3,7 @@
  *
  * \brief Atmel part identification macros
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -974,11 +974,22 @@
 		SAM_PART_IS_DEFINED(SAMR35J17B) || \
 		SAM_PART_IS_DEFINED(SAMR35J16B) \
 )
+
 /* Group for SAMR35 B variant: SAMR35J [16/17/18]B */
 #define SAMR35JXXB ( \
 		SAM_PART_IS_DEFINED(SAMR35J18B) || \
 		SAM_PART_IS_DEFINED(SAMR35J17B) || \
 		SAM_PART_IS_DEFINED(SAMR35J16B) \
+)
+
+/* Group for SAMR35 B variant: SAMR35J [16/17/18]B */
+#define WLR089U ( \
+		SAM_PART_IS_DEFINED(WLR089U0) \
+)
+
+/* Group for WLR089U variant: SAMR35U [0] */
+#define WLR089U0 ( \
+		SAM_PART_IS_DEFINED(WLR089U0) \
 )
 
 /**
@@ -1674,6 +1685,9 @@
 /** SAMR35 Family */
 #define SAMR35 (SAMR35J)
 
+/** SAMR35 Family */
+#define WLR089 (WLR089U)
+
 /** SAMB11 Family */
 #define SAMB11 (SAMB11G || BTLC1000)
 
@@ -1737,7 +1751,7 @@
 /** SAM0 product line (cortex-m0+) */
 #define SAM0 (SAMD20 || SAMD21 || SAMR21 || SAMD10 || SAMD11 || SAML21 ||\
 		SAMDA1 || SAMC20 || SAMC21 || SAML22 || SAMD09 || SAMR30 || SAMHA1 ||\
-		SAMHA0 || SAMR34 || SAMR35)
+		SAMHA0 || SAMR34 || SAMR35 || WLR089)
 
 /** @} */
 

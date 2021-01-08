@@ -6,7 +6,7 @@
  * This file includes the appropriate board header file according to the
  * defined board (parameter BOARD).
  *
- * Copyright (c) 2009-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2009-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -158,6 +158,7 @@ extern "C" {
 #define SAMR30_MODULE_XPLAINED_PRO 102 //!< SAM R30 Module Xplained Pro board.
 #define SAMR21G18_MODULE           103 //!< SAMR21G18-MR210UA Module.
 #define SAMR21B18_MODULE           104 //!< SAMR21B18-MZ210PA Module.
+#define WLR089_XPLAINED_PRO        105 //!< WLR089_XPLAINED_PRO board.
 //! @}
 
 /*! \name Extension Boards
@@ -382,6 +383,8 @@ extern "C" {
 # include "samr21b18_module/samr21b18_module.h"
 #elif BOARD == SAMR34_XPLAINED_PRO && defined(__SAMR34J18B__)
 #  include "samr34_xplained_pro/samr34_xplained_pro.h"
+#elif BOARD == WLR089_XPLAINED_PRO && defined(__WLR089U0__)
+#  include "wlr089_xplained_pro/wlr089_xplained_pro.h"
 #elif BOARD == USER_BOARD
 // User-reserved area: #include the header file of your board here (if any).
 #  include "user_board.h"

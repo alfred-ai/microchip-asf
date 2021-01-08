@@ -125,6 +125,7 @@ CSRCS = \
        thirdparty/cryptolib/host/atca_host.c              \
        thirdparty/wireless/addons/sio2host/uart/sio2host.c \
        thirdparty/wireless/lorawan/apps/enddevice_demo/certification_src/enddevice_cert.c \
+       thirdparty/wireless/lorawan/apps/enddevice_demo/certification_src/enddevice_cpc.c \
        thirdparty/wireless/lorawan/apps/enddevice_demo/enddevice_demo.c \
        thirdparty/wireless/lorawan/apps/enddevice_demo/main.c \
        thirdparty/wireless/lorawan/hal/src/radio_driver_hal.c \
@@ -292,7 +293,7 @@ CPPFLAGS = \
        -D CERT_APP=1                                      \
        -D CONF_PMM_ENABLE                                 \
        -D CRYPTO_DEV_ENABLED                              \
-       -D EDBG_EUI_READ=1                                 \
+       -D EDBG_EUI_READ=0                                 \
        -D ENABLE_PDS=1                                    \
        -D EU_BAND=1                                       \
        -D EXTINT_CALLBACK_MODE=true                       \
@@ -300,6 +301,7 @@ CPPFLAGS = \
        -D IND_BAND=1                                      \
        -D JPN_BAND=1                                      \
        -D KR_BAND=1                                       \
+       -D MODULE_EUI_READ=0                               \
        -D NA_BAND=1                                       \
        -D RANDOM_NW_ACQ=1                                 \
        -D RTC_COUNT_ASYNC=true                            \

@@ -40,7 +40,7 @@
 
 #if (AS_BAND == 1)
 /*Init Functions's*/
-static void InitDefault923Channels (void);
+
 
 
 /*****************************CONSTANTS ***************************************/
@@ -142,6 +142,7 @@ StackRetStatus_t LORAReg_InitAS(IsmBand_t ismBand)
 	RegParams.maxDataRate = MAC_DATARATE_MAX_AS;
 	RegParams.Rx1DrOffset = 7;
 	RegParams.maxTxPwrIndx = MAX_TX_PWR_INDEX_AS;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_AS;
 	RegParams.maxTxPwr = DEFAULT_EIRP_AS;
 	RegParams.cmnParams.paramsType2.minNonDefChId = 2;
 	RegParams.pDutyCycleTimer->timerId = regTimerId[0];
@@ -204,7 +205,7 @@ StackRetStatus_t LORAReg_InitAS(IsmBand_t ismBand)
  * \brief This function initializes all the AS923 Channels to default values
  */
 #if(AS_BAND == 1)
-static void InitDefault923Channels (void)
+void InitDefault923Channels (void)
 {
 	uint8_t i;
 

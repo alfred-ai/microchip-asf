@@ -3,7 +3,7 @@
  *
  * \brief SAM NVM Unit test
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -71,6 +71,7 @@
  *  - SAM R30 Xplained Pro board
  *  - SAM R30 Module Xplained Pro board
  *  - SAM R34 Xplained Pro board
+ *  - WLR 089 Xplained Pro board
  *
  * \section appdoc_sam0_nvm_unit_test_setup Setup
  * The following connections has to be made using wires:

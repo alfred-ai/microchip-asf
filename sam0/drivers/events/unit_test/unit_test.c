@@ -3,7 +3,7 @@
  *
  * \brief SAM Event System Unit test
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -79,6 +79,7 @@
  *      - SAM R30 Xplained Pro board
  *      - SAM R30 Module Xplained Pro board
  *      - SAM R34 Xplained Pro board
+ *      - WLR 089 Xplained Pro board
  *
  * \section appdoc_sam0_events_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -121,7 +122,7 @@
 #include "conf_test.h"
 
 /* Event user being TC3 or TC1 */
-#if SAMR30 || SAMR34 || SAMR35 
+#if SAMR30 || SAMR34 || SAMR35 || (WLR089)
 #define TEST_EVENT_USER   EVSYS_ID_USER_TC1_EVU
 #else
 #define TEST_EVENT_USER   EVSYS_ID_USER_TC3_EVU
@@ -186,7 +187,7 @@ static void test_event_gen_user_init(void)
 		= (0xFFFF / 4);
 
 	/* Initialize the TC3 or TC1 */
-#if SAMR30 || SAMR34 || SAMR35
+#if SAMR30 || SAMR34 || SAMR35 || (WLR089)
 	status = tc_init(&tc_inst, TC1, &config_tc);
 #else
 	status = tc_init(&tc_inst, TC3, &config_tc);

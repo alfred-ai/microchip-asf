@@ -408,7 +408,7 @@ static void processRxDataAvailable( void *appHandle, appCbParams_t *params )
     if (CLASS_C == class)
     {
         msgState.classRx2Dl = true;
-        LOGLINE_DEBUG("DOWNLINK in class-C RX2_CONT");
+        LOGLINE_DEBUG("DOWNLINK in class-C RXC_CONT");
     }
     
     SYSTEM_PostTask(APP_TASK_ID);

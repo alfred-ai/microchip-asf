@@ -3,7 +3,7 @@
  *
  * \brief SAM Watchdog Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -246,7 +246,7 @@ struct wdt_conf {
 	bool always_on;
 	/** Enable/Disable the Watchdog Timer */
 	bool enable;
-#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35)
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35) && !(WLR089)
 	/** GCLK generator used to clock the peripheral except SAM L21/L22/C21/C20/R30*/
 	enum gclk_generator clock_source;
 #endif
@@ -281,7 +281,7 @@ static inline bool wdt_is_syncing(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	if (WDT_module->SYNCBUSY.reg) {
 #else
 	if (WDT_module->STATUS.reg & WDT_STATUS_SYNCBUSY) {
@@ -319,7 +319,7 @@ static inline void wdt_get_config_defaults(
 	/* Default configuration values */
 	config->always_on            = false;
 	config->enable               = true;
-#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35)
+#if !(SAML21) && !(SAML22) && !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35) && !(WLR089)
 	config->clock_source         = GCLK_GENERATOR_4;
 #endif
 	config->timeout_period       = WDT_PERIOD_16384CLK;
@@ -341,7 +341,7 @@ static inline bool wdt_is_locked(void)
 {
 	Wdt *const WDT_module = WDT;
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	return (WDT_module->CTRLA.reg & WDT_CTRLA_ALWAYSON);
 #else
 	return (WDT_module->CTRL.reg & WDT_CTRL_ALWAYSON);

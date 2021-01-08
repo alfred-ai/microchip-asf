@@ -762,9 +762,18 @@ sint8 m2m_wifi_set_sleep_mode(uint8 PsTyp, uint8 BcastEn)
 	tstrM2mPsType* pstrPs = &guCtrlStruct.strM2mPsType;
 	pstrPs->u8PsType = PsTyp;
 	pstrPs->u8BcastEn = BcastEn;
-	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SLEEP, (uint8*)pstrPs,sizeof(tstrM2mPsType), NULL, 0, 0);
-	M2M_INFO("POWER SAVE %d\n",PsTyp);
+	
+	if (hif_get_sleep_mode() == PsTyp)
+		return ret;
+	
 	hif_set_sleep_mode(PsTyp);
+	ret = hif_send(M2M_REQ_GRP_WIFI, M2M_WIFI_REQ_SLEEP, (uint8*)pstrPs,sizeof(tstrM2mPsType), NULL, 0, 0);
+	
+	if (ret != M2M_SUCCESS)
+		hif_set_sleep_mode(M2M_NO_PS);
+
+	M2M_INFO("POWER SAVE %d\n",PsTyp);
+
 	return ret;
 }
 /*!

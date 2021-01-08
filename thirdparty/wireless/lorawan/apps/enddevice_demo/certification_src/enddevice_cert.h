@@ -51,5 +51,18 @@
 *************************************************************************/
 void cert_app_init(void);
 
+/*********************************************************************//*
+ \brief    Certification Timer Callback
+ ************************************************************************/
+void cert_app_timer_callback(uint8_t param);
+
+/*********************************************************************//*
+ \brief      Set join parameters function
+ \param[in]  activation type - notifies the activation type (OTAA/ABP)
+ \return     LORAWAN_SUCCESS, if successfully set the join parameters
+             LORAWAN_INVALID_PARAMETER, otherwise
+ ************************************************************************/
+StackRetStatus_t cert_set_join_parameters(ActivationType_t activation_type);
+
 #endif /* CERT_APP == 1 */
 #endif /* CERT_APP_H_ */

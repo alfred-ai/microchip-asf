@@ -3,7 +3,7 @@
  *
  * \brief USB Device wrapper layer for compliance with common driver UDD
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -54,7 +54,7 @@
 #  error The High speed mode is not supported on this part, please remove USB_DEVICE_HS_SUPPORT in conf_usb.h
 #endif
 
-#if !(SAMD21) && !(SAMR21) && !(SAMD11) && !(SAML21) && !(SAML22) && !(SAMDA1) && !(SAMR30) && !(SAMR34)
+#if !(SAMD21) && !(SAMR21) && !(SAMD11) && !(SAML21) && !(SAML22) && !(SAMDA1) && !(SAMR30) && !(SAMR34) && !(WLR089)
 # error The current USB Device Driver supports only SAMD21/R21/D11/L21/L22/DA1/R34
 #endif
 
@@ -87,7 +87,7 @@ struct usb_module usb_device;
  * @{
  */
 #ifndef UDD_CLOCK_GEN
-#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (WLR089) 
 #  define UDD_CLOCK_GEN      GCLK_GENERATOR_3
 #elif (SAMDA1)
 #  define UDD_CLOCK_GEN      GCLK_GENERATOR_1
@@ -102,7 +102,7 @@ static inline void udd_wait_clock_ready(void)
 {
 
 	if (UDD_CLOCK_SOURCE == SYSTEM_CLOCK_SOURCE_DPLL) {
-#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (WLR089)
 	#define DPLL_READY_FLAG (OSCCTRL_DPLLSTATUS_CLKRDY | OSCCTRL_DPLLSTATUS_LOCK)
 
 		while((OSCCTRL->DPLLSTATUS.reg & DPLL_READY_FLAG) != DPLL_READY_FLAG);
@@ -116,7 +116,7 @@ static inline void udd_wait_clock_ready(void)
 #endif
 
 	if (UDD_CLOCK_SOURCE == SYSTEM_CLOCK_SOURCE_DFLL) {
-#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34)
+#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (WLR089)
 #define DFLL_READY_FLAG (OSCCTRL_STATUS_DFLLRDY | \
 		OSCCTRL_STATUS_DFLLLCKF | OSCCTRL_STATUS_DFLLLCKC)
 
@@ -166,7 +166,7 @@ static void udd_sleep_mode(enum udd_usb_state_enum new_state)
 {
 	enum sleepmgr_mode sleep_mode[] = {
 		SLEEPMGR_ACTIVE,  /* UDD_STATE_OFF (not used) */
-	#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34)
+	#if (SAML21) || (SAML22) || (SAMR30) || (SAMR34) || (WLR089)
 		SLEEPMGR_IDLE,  /* UDD_STATE_SUSPEND */
 		SLEEPMGR_IDLE,  /* UDD_STATE_SUSPEND_LPM */
 		SLEEPMGR_IDLE,  /* UDD_STATE_IDLE */
@@ -460,7 +460,7 @@ void udd_ep_abort(udd_ep_id_t ep)
 
 bool udd_is_high_speed(void)
 {
-#if SAMD21 || SAMR21 || SAMD11 || SAML21  || SAML22 || SAMDA1 || SAMR30 || (SAMR34)
+#if SAMD21 || SAMR21 || SAMD11 || SAML21  || SAML22 || SAMDA1 || SAMR30 || (SAMR34) || (WLR089)
 	return false;
 #endif
 }

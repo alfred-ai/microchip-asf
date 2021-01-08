@@ -341,14 +341,17 @@ sint8 chip_sleep(void)
 {
 	uint32 reg;
 	sint8 ret = M2M_SUCCESS;
+	uint32 trials = 110;	
 	
 #ifdef CONF_WILC_USE_1000_REV_B
-	while(1)
+	while(trials--)
 	{
 		ret = nm_read_reg_with_ret(WILC_TO_INTERFACE_FROM_WF_REG,&reg);
 		if(ret != M2M_SUCCESS) goto ERR1;
 		if((reg & WILC_TO_INTERFACE_FROM_WF_BIT) == 0) break;
 	}
+	if (!trials)
+		M2M_ERR("FW not responding\n");
 #endif
 	/* Clear bit 1 */
 	ret = nm_read_reg_with_ret(WILC_WAKEUP_REG, &reg);

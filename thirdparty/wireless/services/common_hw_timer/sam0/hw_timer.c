@@ -4,7 +4,7 @@
  * @brief
  *
  *
- * Copyright (c) 2013-2019 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -37,7 +37,7 @@
 #include "tc.h"
 #include "tc_interrupt.h"
 #include "hw_timer.h"
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35 || (WLR089)
 #include "clock.h"
 #include <system_interrupt.h>
 #else

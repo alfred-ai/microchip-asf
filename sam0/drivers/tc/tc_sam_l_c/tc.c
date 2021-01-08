@@ -3,7 +3,7 @@
  *
  * \brief SAM TC - Timer Counter Driver
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -116,7 +116,7 @@ enum status_code tc_init(
 									SYSTEM_CLOCK_APB_APBC, MCLK_APBCMASK_TC2,
 									SYSTEM_CLOCK_APB_APBC, MCLK_APBCMASK_TC3,
 									SYSTEM_CLOCK_APB_APBC, MCLK_APBCMASK_TC4};
-#elif (SAML21J) || (SAMR34J) || (SAMR35J)
+#elif (SAML21J) || (SAMR34J) || (SAMR35J) || (WLR089U0)
 	/* Array of GLCK ID for different TC instances */
 	uint8_t inst_gclk_id[] = {TC0_GCLK_ID, TC1_GCLK_ID, TC2_GCLK_ID, TC3_GCLK_ID, TC4_GCLK_ID};
 	/* Array of MCLK APB mask bit position for different TC instances */

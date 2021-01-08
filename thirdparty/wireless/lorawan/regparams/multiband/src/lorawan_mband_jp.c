@@ -40,7 +40,7 @@
 
 #if (JPN_BAND == 1)
 /*Init Functions's*/
-static void InitDefault920Channels (void);
+
 
 
 /*****************************CONSTANTS ***************************************/
@@ -145,6 +145,7 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType2.minNonDefChId = 2;
 	RegParams.Rx1DrOffset = 7;
 	RegParams.maxTxPwrIndx = 7;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_JP;
 	RegParams.maxTxPwr = DEFAULT_EIRP_JP;
 	RegParams.cmnParams.paramsType2.LBTTimer.timerId = regTimerId[0];
 	RegParams.pDutyCycleTimer->timerId = regTimerId[1];
@@ -201,7 +202,7 @@ StackRetStatus_t LORAReg_InitJP(IsmBand_t ismBand)
  * \brief This function initializes all the IN865 Channels to default values
  */
 #if (JPN_BAND == 1)
-static void InitDefault920Channels (void)
+void InitDefault920Channels (void)
 {
     uint8_t i;
     memset (RegParams.pChParams, 0, sizeof(DefaultChannels923JP) );

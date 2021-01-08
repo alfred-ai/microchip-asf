@@ -316,7 +316,7 @@ SalStatus_t SAL_Read(salItems_t key_type, uint8_t* key)
 			
 		}
 		break;
-		case SAL_APP_EUI:
+		case SAL_JOIN_EUI:
 		{	
 			/** \brief Used to read an arbitrary number of bytes from any zone configured
 			 *          for clear reads.

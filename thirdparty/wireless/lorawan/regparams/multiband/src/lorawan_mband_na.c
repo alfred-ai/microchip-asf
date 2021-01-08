@@ -141,6 +141,7 @@ StackRetStatus_t LORAReg_InitNA(IsmBand_t ismBand)
 	RegParams.cmnParams.paramsType1.DownStreamCh0Freq = DOWNSTREAM_CH0_NA;
 	RegParams.Rx1DrOffset = 3;
 	RegParams.maxTxPwrIndx = 10;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_NA;
 	RegParams.cmnParams.paramsType1.lastUsedSB = 0;
 
 	RegParams.pJoinBackoffTimer->timerId = regTimerId[0];

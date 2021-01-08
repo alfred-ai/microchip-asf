@@ -1,9 +1,9 @@
 /**
 * \file  conf_app.h
 *
-* \brief LORAWAN Demo Application include file
+* \brief Getting started LORAWAN [Class_C] Demo Application include file
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries.
 *
 * \asf_license_start
 *
@@ -100,7 +100,7 @@ EU_BAND = NA_BAND = AU_BAND = AS_BAND = JPN_BAND = KR_BAND = IND_BAND = 1*/
 /* if EDBG_EUI_READ = 1 in symbols devEUI defined in the macro will be overwritten
 by the unique MAC address available on the backside of ATSAMR34-XPRO */
 #define DEMO_DEVICE_EUI                         {0xde, 0xaf, 0xfa, 0xce, 0xde, 0xaf, 0xfa, 0xce}
-#define DEMO_APPLICATION_EUI                    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05}
+#define DEMO_JOIN_EUI                    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05}
 #define DEMO_APPLICATION_KEY                    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05}
 
 /* Multicast Parameters */

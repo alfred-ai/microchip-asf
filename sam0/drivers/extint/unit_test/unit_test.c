@@ -3,7 +3,7 @@
  *
  * \brief SAM External Interrupt Unit test
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -79,6 +79,8 @@
  * - SAM R30 Module Xplained Pro
  *  - EXT \b Pin 10 (PA28) <-----> EXT Pin 3 (PA06)
  * - SAM R34 Xplained Pro
+ *  - EXT1 \b Pin 9 (PA22) <-----> EXT3 Pin 10 (PA08)
+ * - WLR 089 Xplained Pro
  *  - EXT1 \b Pin 9 (PA22) <-----> EXT3 Pin 10 (PA08)
  *
  * To run the test:

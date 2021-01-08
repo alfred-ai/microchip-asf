@@ -3,7 +3,7 @@
  *
  * \brief SAM SERCOM I2C Unit test
  *
- * Copyright (c) 2015-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2015-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -69,6 +69,7 @@
  *  - SAM D20 Xplained Pro board
  *  - SAM R30 Xplained Pro board
  *  - SAM R34 Xplained Pro board
+ *  - WLR 089 Xplained Pro board
  *
  * \section asfdoc_sam0_i2c_unit_test_setup Setup
  * The following connections has to be made using wires:
@@ -91,6 +92,9 @@
  *  - \b PA22 (EXT1 PIN9) <-----> PA16 (EXT1 PIN11)
  *  - \b PA23 (EXT1 PIN10) <-----> PA17 (EXT1 PIN12)
  * - SAM R34 Xplained Pro board
+ *  - \b PB02 (EXT1 PIN17) <-----> PA16 (EXT1 PIN11)
+ *  - \b PA23 (EXT1 PIN15) <-----> PA17 (EXT1 PIN12)
+ * - WLR 089 Xplained Pro board
  *  - \b PB02 (EXT1 PIN17) <-----> PA16 (EXT1 PIN11)
  *  - \b PA23 (EXT1 PIN15) <-----> PA17 (EXT1 PIN12)
  *
@@ -244,7 +248,7 @@ static void run_i2c_init_test(const struct test_case *test)
 	config_i2c_slave.address        = SLAVE_ADDRESS;
 	config_i2c_slave.address_mode   = I2C_SLAVE_ADDRESS_MODE_MASK;
 	config_i2c_slave.buffer_timeout = 10000;
-#if SAMR30 || SAMR34 || SAMR35
+#if SAMR30 || SAMR34 || SAMR35 || (WLR089)
 	config_i2c_slave.pinmux_pad0    = CONF_SLAVE_SDA_PINMUX;
 	config_i2c_slave.pinmux_pad1    = CONF_SLAVE_SCK_PINMUX;
 #endif	

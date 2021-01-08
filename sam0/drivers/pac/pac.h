@@ -3,7 +3,7 @@
  *
  * \brief SAM Peripheral Access Controller Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -678,7 +678,7 @@ __no_inline enum status_code system_peripheral_unlock(
 		const uint32_t key);
 /** @}  */
 
-#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || defined(__DOXYGEN__)
+#if (SAML21) || (SAML22) || (SAMC20) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089) || defined(__DOXYGEN__)
 /** \name APIs available for SAM L21/L22/C20/C21.
  * @{
  */

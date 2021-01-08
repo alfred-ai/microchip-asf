@@ -3,7 +3,7 @@
  *
  * \brief Sleep manager
  *
- * Copyright (c) 2010-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2010-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -51,7 +51,7 @@
 # include "mega/sleepmgr.h"
 #elif (SAMD20 || SAMD21 || SAMR21 || SAMD11 || SAMDA1)
 # include "samd/sleepmgr.h"
-#elif (SAML21 || SAML22 || SAMR30 || SAMR34 || SAMR35)
+#elif (SAML21 || SAML22 || SAMR30 || SAMR34 || SAMR35 || WLR089)
 # include "saml/sleepmgr.h"
 #elif (SAMC21)
 # include "samc/sleepmgr.h"

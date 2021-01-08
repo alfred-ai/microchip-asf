@@ -161,7 +161,7 @@ static StackRetStatus_t ValidateChannelIdT2 (LorawanRegionalAttributes_t attr, v
 static StackRetStatus_t ValidateChannelMaskT2 (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t ValidateChannelMaskCntlT2 (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t ValidateChMaskChCntlT2 (LorawanRegionalAttributes_t attr, void *attrInput);
-
+static StackRetStatus_t LORAREG_GetAttr_DefTxPwr(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t setDataRangeT2 (LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t setFrequency(LorawanRegionalAttributes_t attr, void *attrInput);
 static StackRetStatus_t setNewChannel(LorawanRegionalAttributes_t attr, void *attrInput);
@@ -235,10 +235,9 @@ static StackRetStatus_t LORAREG_GetAttr_MacRecvDelay1(LorawanRegionalAttributes_
 static StackRetStatus_t LORAREG_GetAttr_MacRecvDelay2(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_MacJoinAcptDelay1(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_MacJoinAcptDelay2(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
-static StackRetStatus_t LORAREG_GetAttr_MacAckTimeout(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
+static StackRetStatus_t LORAREG_GetAttr_MacRetransmitTimeout(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_MacAdrAckDelay(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_MacAdrAckLimit(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
-static StackRetStatus_t LORAREG_GetAttr_MacMaxFcntGap(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_RegDefTxPwr(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_RegDefTxDR(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
 static StackRetStatus_t LORAREG_GetAttr_CurChIndx(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput);
@@ -308,14 +307,14 @@ void LORAREG_InitGetAttrFnPtrsNA(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT1;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel1;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
 }
 #endif
@@ -348,15 +347,15 @@ void LORAREG_InitGetAttrFnPtrsEU(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT2;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel2;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
     pGetAttr[DL_FREQUENCY] = LORAREG_GetAttr_DlFrequency;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
 }
 #endif
@@ -388,15 +387,15 @@ void LORAREG_InitGetAttrFnPtrsAS(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT2;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel2;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
     pGetAttr[DL_FREQUENCY] = LORAREG_GetAttr_DlFrequency;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
     pGetAttr[DUTY_CYCLE] = LORAREG_GetAttr_DutyCycleT2;
     pGetAttr[MIN_DUTY_CYCLE_TIMER] = LORAREG_GetAttr_DutyCycleTimer;
@@ -431,14 +430,14 @@ void LORAREG_InitGetAttrFnPtrsAU(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT1;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel1;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
 }
 #endif
@@ -469,15 +468,15 @@ void LORAREG_InitGetAttrFnPtrsIN(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT2;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel2;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
     pGetAttr[DL_FREQUENCY] = LORAREG_GetAttr_DlFrequency;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
 }
 #endif
@@ -508,10 +507,9 @@ void LORAREG_InitGetAttrFnPtrsJP(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT2;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel2;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
@@ -519,6 +517,7 @@ void LORAREG_InitGetAttrFnPtrsJP(void)
     pGetAttr[MIN_LBT_CHANNEL_PAUSE_TIMER] = LORAREG_GetAttr_minLBTChPauseTimer;
     pGetAttr[DL_FREQUENCY] = LORAREG_GetAttr_DlFrequency;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
 	pGetAttr[DUTY_CYCLE] = LORAREG_GetAttr_DutyCycleT2;
 	pGetAttr[MIN_DUTY_CYCLE_TIMER] = LORAREG_GetAttr_DutyCycleTimer;
@@ -551,10 +550,9 @@ void LORAREG_InitGetAttrFnPtrsKR(void)
     pGetAttr[MAC_RECEIVE_DELAY2] = LORAREG_GetAttr_MacRecvDelay2;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY1] = LORAREG_GetAttr_MacJoinAcptDelay1;
     pGetAttr[MAC_JOIN_ACCEPT_DELAY2] = LORAREG_GetAttr_MacJoinAcptDelay2;
-    pGetAttr[MAC_ACK_TIMEOUT] = LORAREG_GetAttr_MacAckTimeout;
+    pGetAttr[MAC_RETRANSMIT_TIMEOUT] = LORAREG_GetAttr_MacRetransmitTimeout;
     pGetAttr[MAC_ADR_ACK_DELAY] = LORAREG_GetAttr_MacAdrAckDelay;
     pGetAttr[MAC_ADR_ACK_LIMIT] = LORAREG_GetAttr_MacAdrAckLimit;
-    pGetAttr[MAC_MAX_FCNT_GAP] = LORAREG_GetAttr_MacMaxFcntGap;
     pGetAttr[NEW_TX_CHANNEL_CONFIG] = LORAREG_GetAttr_NewTxChConfigT2;
     pGetAttr[FREE_CHANNEL] = LORAREG_GetAttr_FreeChannel2;
     pGetAttr[CURRENT_CHANNEL_INDEX] = LORAREG_GetAttr_CurChIndx;
@@ -562,6 +560,7 @@ void LORAREG_InitGetAttrFnPtrsKR(void)
     pGetAttr[MIN_LBT_CHANNEL_PAUSE_TIMER] = LORAREG_GetAttr_minLBTChPauseTimer;
     pGetAttr[DL_FREQUENCY] = LORAREG_GetAttr_DlFrequency;
     pGetAttr[REG_DEF_TX_POWER] = LORAREG_GetAttr_RegDefTxPwr;
+	pGetAttr[DEF_TX_PWR] = LORAREG_GetAttr_DefTxPwr;
     pGetAttr[REG_DEF_TX_DATARATE] = LORAREG_GetAttr_RegDefTxDR;
 }
 #endif
@@ -1246,9 +1245,9 @@ static StackRetStatus_t LORAREG_GetAttr_MacJoinAcptDelay2(LorawanRegionalAttribu
 	return LORAWAN_SUCCESS;
 }
 
-static StackRetStatus_t LORAREG_GetAttr_MacAckTimeout(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
+static StackRetStatus_t LORAREG_GetAttr_MacRetransmitTimeout(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
 {
-	*(uint16_t *)attrOutput = ACK_TIMEOUT;
+	*(uint16_t *)attrOutput = RETRANSMIT_TIMEOUT;
 	return LORAWAN_SUCCESS;
 }
 
@@ -1264,15 +1263,15 @@ static StackRetStatus_t LORAREG_GetAttr_MacAdrAckLimit(LorawanRegionalAttributes
 	return LORAWAN_SUCCESS;
 }
 
-static StackRetStatus_t LORAREG_GetAttr_MacMaxFcntGap(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
-{
-	*(uint16_t *)attrOutput = MAX_FCNT_GAP;
-	return LORAWAN_SUCCESS;
-}
-
 static StackRetStatus_t LORAREG_GetAttr_RegDefTxPwr(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
 {
 	*(uint8_t *)attrOutput = RegParams.MacTxPower;
+	return LORAWAN_SUCCESS;
+}
+
+static StackRetStatus_t LORAREG_GetAttr_DefTxPwr(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
+{
+	*(uint8_t *)attrOutput = RegParams.defTxPwrIndx;
 	return LORAWAN_SUCCESS;
 }
 
@@ -2339,10 +2338,13 @@ static StackRetStatus_t ValidateTxPower (LorawanRegionalAttributes_t attr, void 
 	uint8_t txPowerNew = *(uint8_t *)attrInput;
 	
 	//if ((txPowerNew < 5) || (txPowerNew > 10) || (txPowerNew == 6))
-	if (txPowerNew > RegParams.maxTxPwrIndx)
-	{
-		result = LORAWAN_INVALID_PARAMETER;
-	}
+    if (0xf != txPowerNew)
+    { /* 0xF means keep the current settings & ignore this cmd */
+	    if (txPowerNew > RegParams.maxTxPwrIndx)
+	    {
+		    result = LORAWAN_INVALID_PARAMETER;
+	    }
+    }    
 
 	return result;
 }
@@ -2903,9 +2905,12 @@ static StackRetStatus_t ValidateDataRate (LorawanRegionalAttributes_t attr, void
 	
 	uint8_t dataRate = *(uint8_t *)attrInput;
 
-    if ( dataRate > RegParams.minDataRate )
-    {
-        result = LORAWAN_INVALID_PARAMETER;
+    if (0xf != dataRate)
+    { /* 0xF means keep the current settings & ignore this cmd */
+        if ( dataRate > RegParams.minDataRate )
+        {
+            result = LORAWAN_INVALID_PARAMETER;
+        }        
     }
 
     return result;
@@ -3149,7 +3154,42 @@ static StackRetStatus_t setDataRange (LorawanRegionalAttributes_t attr, void *at
 	return retVal;
 }
 #endif
-
+StackRetStatus_t setDefaultTxPower(IsmBand_t ismBand)
+{   
+	StackRetStatus_t result = LORAWAN_SUCCESS;
+	if(ismBand == ISM_EU868)
+	{
+			RegParams.MacTxPower = MAC_DEF_TX_POWER_EU;
+	}
+	else if(ismBand == ISM_JPN923)
+	{
+		RegParams.MacTxPower = MAC_DEF_TX_POWER_JP;
+	}
+	else if (ismBand == ISM_KR920)
+	{
+		RegParams.MacTxPower = MAC_DEF_TX_POWER_KR;
+	}
+	else if (ismBand == ISM_ASBAND)
+	{
+		RegParams.MacTxPower = MAC_DEF_TX_POWER_AS;
+	}
+	else if(ismBand == ISM_AU915)
+	{
+		RegParams.MacTxPower = MAC_DEF_TX_POWER_AU;
+	}
+	else if(ismBand == ISM_NA915)
+	{
+		RegParams.MacTxPower = MAC_DEF_TX_POWER_NA;
+	}
+	else
+	{
+		result = LORAWAN_INVALID_PARAMETER;
+	}
+#if (ENABLE_PDS==1)
+	PDS_STORE(RegParams.MacTxPower);
+#endif
+	return result;
+}
 #if (EU_BAND == 1 || AS_BAND == 1 || IND_BAND == 1 || JPN_BAND == 1 || KR_BAND == 1)
 static StackRetStatus_t setDataRangeT2 (LorawanRegionalAttributes_t attr, void *attrInput)
 {
@@ -3347,7 +3387,7 @@ static void UpdateChannelIdStatus(uint8_t chid, bool statusNew)
 #if ((EU_BAND) == 1)
 static void UpdateChannelIdStatusT2(uint8_t chid, bool statusNew)
 {
-	if(chid < RegParams.maxChannels && chid >= RegParams.cmnParams.paramsType2.minNonDefChId &&
+	if(chid < RegParams.maxChannels && /* chid >= RegParams.cmnParams.paramsType2.minNonDefChId && */
 	   (RegParams.pOtherChParams[chid].parametersDefined & (FREQUENCY_DEFINED | DATA_RANGE_DEFINED)) == (FREQUENCY_DEFINED | DATA_RANGE_DEFINED))
 	{
 		RegParams.pChParams[chid].status = statusNew;
@@ -4157,3 +4197,46 @@ static StackRetStatus_t setChlistDefaultState(LorawanRegionalAttributes_t attr, 
 	return status;
 }
 #endif
+void Enableallchannels()
+{
+	for(uint8_t i = 0; i < (NO_OF_CH_IN_SUBBAND * (MAX_SUBBANDS + 1)); i++)
+	{
+		RegParams.pChParams[i].status = ENABLED;
+	}
+	RegParams.cmnParams.paramsType1.lastUsedSB = 0;
+#if (ENABLE_PDS == 1)
+	PDS_STORE(RegParams.regParamItems.ch_param_1_item_id);
+	PDS_STORE(RegParams.regParamItems.lastUsedSB);
+#endif
+}
+StackRetStatus_t LORAREG_EnableallChannels(IsmBand_t ismBand)
+{
+	StackRetStatus_t result = LORAWAN_SUCCESS;
+	if(ismBand == ISM_EU868)
+	{
+		 InitDefault868Channels();
+	}
+	else if (ismBand == ISM_EU433)
+	{
+		 InitDefault433Channels();
+	}
+	else if(ismBand == ISM_JPN923)
+	{
+		 InitDefault920Channels();	
+	}
+	else if (ismBand == ISM_KR920)
+	{
+		 InitDefault920ChannelsKR();
+	}
+	else if (ismBand == ISM_ASBAND)
+	{
+		 InitDefault923Channels ();
+	}
+	else if(ismBand == ISM_AU915 || ismBand == ISM_NA915)
+	{
+		 Enableallchannels();
+	}
+	return result;
+}
+
+

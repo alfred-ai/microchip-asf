@@ -3,7 +3,7 @@
  *
  * \brief SAM ADC functionality
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -101,7 +101,7 @@ enum adc_reference {
 	ADC_REFERENCE_INTVCC1 = ADC_REFCTRL_REFSEL_INTVCC1,
 	/** External reference A */
 	ADC_REFERENCE_AREFA   = ADC_REFCTRL_REFSEL_AREFA,
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/** External reference B */
 	ADC_REFERENCE_AREFB   = ADC_REFCTRL_REFSEL_AREFB,
 #endif
@@ -250,7 +250,7 @@ enum adc_positive_input {
 	ADC_POSITIVE_INPUT_PIN18         = ADC_INPUTCTRL_MUXPOS_AIN18,
 	/** ADC19 pin */
 	ADC_POSITIVE_INPUT_PIN19         = ADC_INPUTCTRL_MUXPOS_AIN19,
-#if !(SAML22 || SAMR30 || SAMR34 || SAMR35)
+#if !(SAML22 || SAMR30 || SAMR34 || SAMR35 || (WLR089))
 	/** ADC20 pin. */
 	ADC_POSITIVE_INPUT_PIN20         = ADC_INPUTCTRL_MUXPOS_AIN20,
 	/** ADC21 pin */
@@ -269,7 +269,7 @@ enum adc_positive_input {
 	ADC_POSITIVE_INPUT_SCALEDCOREVCC = ADC_INPUTCTRL_MUXPOS_SCALEDCOREVCC,
 	/** 1/4 scaled I/O supply */
 	ADC_POSITIVE_INPUT_SCALEDIOVCC   = ADC_INPUTCTRL_MUXPOS_SCALEDIOVCC,
-#if !(SAML22|| SAMR30 || SAMR34 || SAMR35)
+#if !(SAML22|| SAMR30 || SAMR34 || SAMR35 || (WLR089))
 	/** DAC input */
 	ADC_POSITIVE_INPUT_DAC           = ADC_INPUTCTRL_MUXPOS_DAC,
 #endif
@@ -309,7 +309,7 @@ enum adc_negative_input {
 	ADC_NEGATIVE_INPUT_PIN4          = ADC_INPUTCTRL_MUXNEG_AIN4,
 	/** ADC5 pin */
 	ADC_NEGATIVE_INPUT_PIN5          = ADC_INPUTCTRL_MUXNEG_AIN5,
-#if !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35)
+#if !(SAMC20) && !(SAMC21) && !(SAMR30) && !(SAMR34) && !(SAMR35) && !(WLR089)
 	/** ADC6 pin */
 	ADC_NEGATIVE_INPUT_PIN6          = ADC_INPUTCTRL_MUXNEG_AIN6,
 	/** ADC7 pin */

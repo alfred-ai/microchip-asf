@@ -3,7 +3,7 @@
  *
  * \brief USB peripheral host wrapper for ASF Stack USB Host Driver (UHD)
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -99,7 +99,7 @@ static void _uhd_pipe_finish_job(uint8_t pipe, uhd_trans_status_t status);
 #  error The High speed mode is not supported on this part, please remove USB_HOST_HS_SUPPORT in conf_usb_host.h
 #endif
 
-#if (!(SAMD21) && !(SAMR21) && !(SAML21)) && !(SAMDA1) && !(SAMR30) && !(SAMR34)
+#if (!(SAMD21) && !(SAMR21) && !(SAML21)) && !(SAMDA1) && !(SAMR30) && !(SAMR34) && !(WLR089)
 # error The current USB Host Driver supports only SAMD21/R21/L21/R30/R34
 #endif
 
@@ -132,7 +132,7 @@ enum uhd_usb_state_enum {
 
 enum sleepmgr_mode sleep_mode[] = {
 	SLEEPMGR_STANDBY,  // UHD_STATE_OFF (not used)
-#if SAML21 || SAMR30 || SAMR34
+#if SAML21 || SAMR30 || SAMR34  || (WLR089)
 	SLEEPMGR_IDLE,   // UHD_STATE_WAIT_ID_HOST
 	SLEEPMGR_IDLE,   // UHD_STATE_NO_VBUS
 	SLEEPMGR_IDLE,   // UHD_STATE_DISCONNECT

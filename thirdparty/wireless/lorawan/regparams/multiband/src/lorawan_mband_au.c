@@ -139,6 +139,7 @@ StackRetStatus_t LORAReg_InitAU(IsmBand_t ismBand)
 	RegParams.pJoinBackoffTimer = &RegParams.joinBackoffTimer;
     RegParams.Rx1DrOffset = 5;
 	RegParams.maxTxPwrIndx = 10;
+	RegParams.defTxPwrIndx = MAC_DEF_TX_POWER_AU;
 	RegParams.maxTxPwr = DEFAULT_EIRP_AU;
 	RegParams.cmnParams.paramsType1.lastUsedSB = 0;
 

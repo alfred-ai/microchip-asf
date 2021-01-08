@@ -3,7 +3,7 @@
  *
  * \brief SAM Serial Peripheral Interface Driver
  *
- * Copyright (c) 2012-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2012-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -503,7 +503,7 @@ enum status_code spi_init(
 
 	uint32_t sercom_index = _sercom_get_sercom_inst_index(module->hw);
 	uint32_t pm_index, gclk_index;
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	if (sercom_index == 5) {
 #  ifdef ID_SERCOM5
 		pm_index     = MCLK_APBDMASK_SERCOM5_Pos;
@@ -536,7 +536,7 @@ enum status_code spi_init(
 #endif
 
 	/* Turn on module in PM */
-#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	if (sercom_index == 5) {
 #  ifdef ID_SERCOM5
 		system_apb_clock_set_mask(SYSTEM_CLOCK_APB_APBD, 1 << pm_index);

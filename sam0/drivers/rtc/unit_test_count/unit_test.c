@@ -3,7 +3,7 @@
  *
  * \brief SAM RTC Count Unit test
  *
- * Copyright (c) 2015-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2015-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -70,6 +70,7 @@
  *  - SAM R30 Xplained Pro board
  *  - SAM R30 Module Xplained Pro board
  *  - SAM R34 Xplained Pro board
+ *  - WLR 089 Xplained Pro board
  *  
  * \section asfdoc_sam0_rtc_unit_test_setup Setup
  *

@@ -4,7 +4,7 @@
 * \brief LORAWAN Demo Application
 *		
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -163,7 +163,7 @@ static uint8_t demoAppsKey[16] = DEMO_APPLICATION_SESSION_KEY;
 #ifndef CRYPTO_DEV_ENABLED
 /* OTAA join parameters */
 static uint8_t demoDevEui[8] = DEMO_DEVICE_EUI;
-static uint8_t demoAppEui[8] = DEMO_APPLICATION_EUI;
+static uint8_t demoJoinEui[8] = DEMO_JOIN_EUI;
 static uint8_t demoAppKey[16] = DEMO_APPLICATION_KEY;
 #endif
 
@@ -1129,13 +1129,13 @@ StackRetStatus_t set_join_parameters(ActivationType_t activation_type)
         {
             printf("\nDevEUI : ");
             print_array((uint8_t *)&demoDevEui, sizeof(demoDevEui));
-            status = LORAWAN_SetAttr (APP_EUI, demoAppEui);
+            status = LORAWAN_SetAttr (JOIN_EUI, demoJoinEui);
         }
 
         if (LORAWAN_SUCCESS == status)
         {
-            printf("\nAppEUI : ");
-            print_array((uint8_t *)&demoAppEui, sizeof(demoAppEui));
+            printf("\nJoinEUI : ");
+            print_array((uint8_t *)&demoJoinEui, sizeof(demoJoinEui));
 			status = LORAWAN_SetAttr (APP_KEY, demoAppKey);          
         }
         if (LORAWAN_SUCCESS == status)
@@ -1178,19 +1178,28 @@ void set_multicast_params (void)
     LorawanMcastDevAddr_t dMcastDevAddr;
     LorawanMcastAppSkey_t mcastAppSKey;
     LorawanMcastNwkSkey_t mcastNwkSKey;
+	LorawanMcastDlFreqeuncy_t mcastDlFreq;
+	LorawanMcastDatarate_t mcastDatarate;
     LorawanMcastStatus_t  mcastStatus;
+	ReceiveWindow2Params_t receivewindow2param;
 	
     printf("\n***************Multicast Parameters********************\n\r");
     
     dMcastDevAddr.groupId = demoMcastGroupId;
     mcastAppSKey.groupId  = demoMcastGroupId;
     mcastNwkSKey.groupId  = demoMcastGroupId;
+	mcastDlFreq.groupId   = demoMcastGroupId;
+	mcastDatarate.groupId = demoMcastGroupId;
     mcastStatus.groupId   = demoMcastGroupId;
 	
     memcpy(&(mcastAppSKey.mcastAppSKey), &demoMcastAppsKey,LORAWAN_SESSIONKEY_LENGTH);
     dMcastDevAddr.mcast_dev_addr = demoMcastDevAddr;
     memcpy(&(mcastNwkSKey.mcastNwkSKey), &demoMcastNwksKey,LORAWAN_SESSIONKEY_LENGTH);
     memcpy(&(mcastStatus.status),&demoMcastEnable,sizeof(demoMcastEnable));
+	LORAWAN_GetAttr(RX2_WINDOW_PARAMS ,NULL, &receivewindow2param);
+	mcastDatarate.datarate = receivewindow2param.dataRate;
+	mcastDlFreq.dlFrequency = receivewindow2param.frequency;
+	
     
     status = LORAWAN_SetAttr(MCAST_APPS_KEY, &mcastAppSKey);
     if (status == LORAWAN_SUCCESS)
@@ -1211,6 +1220,14 @@ void set_multicast_params (void)
 	    printf("\nMcastGroupAddr : 0x%lx\n\r", dMcastDevAddr.mcast_dev_addr);
 	    status = LORAWAN_SetAttr(MCAST_ENABLE, &mcastStatus);
     }
+	if (status == LORAWAN_SUCCESS)
+	{
+	  status = LORAWAN_SetMulticastParam(MCAST_DATARATE , &mcastDatarate);
+	}
+	if (status == LORAWAN_SUCCESS)
+	{
+	   status = LORAWAN_SetMulticastParam(MCAST_FREQUENCY , &mcastDlFreq);
+	}
     else
     {
 	    printf("\nMcastGroupAddrStatus : Failed\n\r");
@@ -1460,26 +1477,43 @@ static float convert_celsius_to_fahrenheit(float celsius_val)
 
 }
 
-/*********************************************************************//*
- \brief      Reads the DEV EUI if it is flashed in EDBG MCU
- ************************************************************************/
+/*************************************************************************************************//*
+ \brief      Reads the DEV EUI if it is flashed in EDBG MCU(SAMR34 Xplained Pro)/ Module(WLR089) 
+ **************************************************************************************************/
 void dev_eui_read(void)
 {
-#ifndef CRYPTO_DEV_ENABLED
-#if (EDBG_EUI_READ == 1)
-	uint8_t invalidEDBGDevEui[8];
-	uint8_t EDBGDevEUI[8];
-	edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
-	memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
-	/* If EDBG doesnot have DEV EUI, the read value will be of all 0xFF, 
-	   Set devEUI in conf_app.h in that case */
-	if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
-	{
-		/* Set EUI addr in EDBG if there */
-		memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
-	}
-#endif
-#endif
+	#ifndef CRYPTO_DEV_ENABLED
+		#if (EDBG_EUI_READ == 1)
+			uint8_t invalidEDBGDevEui[8];
+			uint8_t EDBGDevEUI[8];
+			edbg_eui_read_eui64((uint8_t *)&EDBGDevEUI);
+			memset(&invalidEDBGDevEui, 0xFF, sizeof(invalidEDBGDevEui));
+			/* If EDBG doesnot have DEV EUI, the read value will be of all 0xFF,
+			   Set devEUI in conf_app.h in that case */
+			if(0 != memcmp(&EDBGDevEUI, &invalidEDBGDevEui, sizeof(demoDevEui)))
+			{
+				/* Set EUI addr in EDBG if there */
+				memcpy(demoDevEui, EDBGDevEUI, sizeof(demoDevEui));
+			}
+		#elif (MODULE_EUI_READ == 1)
+			uint8_t i = 0, j = 0;
+			uint8_t invalidMODULEDevEui[8];
+			uint8_t moduleDevEUI[8];
+			for (i = 0; i < 8; i += 2, j++)
+			{
+				moduleDevEUI[i] = (NVM_UID_ADDRESS[j] & 0xFF);
+				moduleDevEUI[i + 1] = (NVM_UID_ADDRESS[j] >> 8);
+			}
+			memset(&invalidMODULEDevEui, 0xFF, sizeof(invalidMODULEDevEui));
+			/* If Module doesnot have DEV EUI, the read value will be of all 0xFF,
+			Set devEUI in conf_app.h in that case */
+			if(0 != memcmp(&moduleDevEUI, &invalidMODULEDevEui, sizeof(demoDevEui)))
+			{
+				/* Set EUI addr in Module if there */
+				memcpy(demoDevEui, moduleDevEUI, sizeof(demoDevEui));
+			}
+		#endif
+	#endif
 }
 
 

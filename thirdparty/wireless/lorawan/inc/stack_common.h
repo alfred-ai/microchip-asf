@@ -4,7 +4,7 @@
 * \brief LORAWAN Stack common include file
 *		
 *
-* Copyright (c) 2019 Microchip Technology Inc. and its subsidiaries. 
+* Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries. 
 *
 * \asf_license_start
 *
@@ -50,7 +50,7 @@ extern "C" {
 #define MAJOR_NUM                 "1"
 #define MINOR_NUM                 "0"
 #define BUILD_TYPE                "P"                /* E or P */
-#define BUILD_NUM                 "4"
+#define BUILD_NUM                 "5"
 
 /* Release Version Information */
 #define STACK_VER    PRODUCT"_"MAJOR_NUM"_"MINOR_NUM"_"BUILD_TYPE"_"BUILD_NUM
@@ -92,7 +92,7 @@ Example:
  Reserved  stack  stack  qual. iteration    Reserved
            major  minor 
 ******************************************************************************/
-#define STACK_VERSION_VALUE     (0x01050000) // MLS_SDK_1_0_P_4
+#define STACK_VERSION_VALUE     (0x01054000) // MLS_SDK_1_0_P_4
 
 /***************************** TYPEDEFS ***************************************/
 typedef enum _StackRetStatus
@@ -132,7 +132,8 @@ typedef enum _StackRetStatus
 	LORAWAN_TXPKT_ENCRYPTION_FAILED				,
 	LORAWAN_SKEY_DERIVATION_FAILED				,
 	LORAWAN_MIC_CALCULATION_FAILED				,
-	LORAWAN_SKEY_READ_FAILED      
+	LORAWAN_SKEY_READ_FAILED      ,
+    LORAWAN_JOIN_NONCE_ERROR
 } StackRetStatus_t;
 
 /* ISM Band Types*/

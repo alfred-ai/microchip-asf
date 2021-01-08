@@ -3,7 +3,7 @@
  *
  * \brief SAM External Interrupt Driver
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -302,7 +302,7 @@ void extint_chan_set_config(
 		= (EIC_module->CONFIG[channel / 8].reg &
 			~((EIC_CONFIG_SENSE0_Msk | EIC_CONFIG_FILTEN0) << config_pos)) |
 			(new_config << config_pos);
-#if (SAML22) || (SAML21XXXB) || (SAMC20) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML22) || (SAML21XXXB) || (SAMC20) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/* Config asynchronous edge detection */
 	if (config->enable_async_edge_detection) {
 		EIC_module->ASYNCH.reg |= (1UL << channel);
@@ -370,7 +370,7 @@ enum status_code extint_nmi_set_config(
 		new_config |= EIC_NMICTRL_NMIFILTEN;
 	}
 
-#if (SAML21XXXB) || (SAML22) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35)
+#if (SAML21XXXB) || (SAML22) || (SAMC21) || (SAMR30) || (SAMR34) || (SAMR35) || (WLR089)
 	/* Enable asynchronous edge detection if requested in the config */
 	if (config->enable_async_edge_detection) {
 		new_config |= EIC_NMICTRL_NMIASYNCH;

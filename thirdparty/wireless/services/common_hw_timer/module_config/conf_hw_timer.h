@@ -3,7 +3,7 @@
  *
  * \brief Common Hardware Timer configuration
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2014-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -83,7 +83,7 @@
 /* ! @} */
 /* ! \name Configuration for SAML21 */
 /* ! @{ */
-#if (SAML21 || SAMR30 || SAMR34 || SAMR35)
+#if (SAML21 || SAMR30 || SAMR34 || SAMR35 || WLR089)
 #define TIMER      (TC0)
 #endif
 /* ! @} */

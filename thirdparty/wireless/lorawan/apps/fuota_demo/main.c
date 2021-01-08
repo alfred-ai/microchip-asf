@@ -383,7 +383,7 @@ static void appConfig( void )
         memcpy( &fuotaDemo.activation.appKey[0], appKey, sizeof(fuotaDemo.activation.appKey) );
         
         LORAWAN_SetAttr(DEV_EUI, &fuotaDemo.activation.devEui[0]);
-        LORAWAN_SetAttr(APP_EUI, &fuotaDemo.activation.appEui[0]);
+        LORAWAN_SetAttr(JOIN_EUI, &fuotaDemo.activation.appEui[0]);
         LORAWAN_SetAttr(APP_KEY, &fuotaDemo.activation.appKey[0]);
 
         PDS_StoreAll();
@@ -424,7 +424,7 @@ static void appConfig( void )
         {
             LOGMSG_INFO("%02X", eui[i]);
         }
-        LORAWAN_GetAttr(APP_EUI, NULL, &eui);
+        LORAWAN_GetAttr(JOIN_EUI, NULL, &eui);
         LOGLINE_INFO("AppEUI = ");
         for (uint8_t i = 0; i < 8; i++)
         {

@@ -3,7 +3,7 @@
  *
  * \brief Event handling Serial I/O  Functionalities
  *
- * Copyright (c) 2013-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2013-2020 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -109,7 +109,7 @@ void sio2host_disable(void);
  */
 void sio2host_enable(void);
 
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
+#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35 || (WLR089)
 void USART_HOST_ISR_VECT(uint8_t instance);
 
 #endif
